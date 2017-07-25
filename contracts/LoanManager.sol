@@ -23,7 +23,7 @@ contract LoanManager is owned {
         uint loanCoverageRatio;  // colleteral usd value to ucd coverageRatio
                                     // in parts per million , ie. 10,000 = 1%
         uint minLoanAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
-        uint gracePeriod; // number of seconds after maturity before default can be executed
+        uint repayPeriod; // number of seconds after maturity before default can be executed
         bool isActive;
     }
 
@@ -49,10 +49,10 @@ contract LoanManager is owned {
     }
 
     function addProduct(uint _term, uint _discountRate, uint _loanCoverageRatio,
-            uint _minLoanAmountInUcd, uint _gracePeriod, bool _isActive) onlyOwner returns (uint newProductId) {
+            uint _minLoanAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
         newProductId = products.push( Product( {term: _term, discountRate: _discountRate,
                 loanCoverageRatio: _loanCoverageRatio, minLoanAmountInUcd: _minLoanAmountInUcd,
-                gracePeriod: _gracePeriod, isActive: _isActive }) );
+                repayPeriod: _repayPeriod, isActive: _isActive }) );
 
         return newProductId - 1;
         // TODO: emit event
@@ -81,7 +81,7 @@ contract LoanManager is owned {
 
         // Create new loan contract
         address loanContractAddress = new EthBackedLoan(msg.sender, products[productId].term,
-                    disbursedLoanInUcd, ucdDueAtMaturity, products[productId].gracePeriod);
+                    disbursedLoanInUcd, ucdDueAtMaturity, products[productId].repayPeriod);
 
         // Store ref to new loan contract in this contract
         uint idx = loanPointers.push( LoanPointer(loanContractAddress, LoanState.Open) );

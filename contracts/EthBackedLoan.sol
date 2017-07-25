@@ -20,7 +20,7 @@ contract EthBackedLoan {
     uint public term; // duration of loan
     uint public disbursementDate;
     uint public maturity; // disbursementDate + term
-    uint public gracePeriod; // number of seconds after maturity before default can be executed
+    uint public repayPeriod; // number of seconds after maturity before default can be executed
 
     int8 public constant SUCCESS = 1;
     int8 public constant ERR_DEFAULT_NOT_DUE_YET = -1;
@@ -33,14 +33,14 @@ contract EthBackedLoan {
     function() payable { } // to accept ETH collateral sent
 
     function EthBackedLoan(address _borrower, uint _term, uint _disbursedLoanInUcd,
-                            uint _ucdDueAtMaturity, uint _gracePeriod) {
+                            uint _ucdDueAtMaturity, uint _repayPeriod) {
         loanManager = LoanManager(msg.sender);
         owner = _borrower;
         tokenUcd = loanManager.tokenUcd();
         term = _term;
         disbursementDate = now;
         maturity = disbursementDate + term;
-        gracePeriod = _gracePeriod;
+        repayPeriod = _repayPeriod;
         disbursedLoanInUcd = _disbursedLoanInUcd;
         ucdDueAtMaturity = _ucdDueAtMaturity;
         loanState = LoanState.Open;
@@ -77,7 +77,7 @@ contract EthBackedLoan {
             return ERR_LOAN_NOT_OPEN;
         }
 
-        if(now < maturity + gracePeriod) {
+        if(now < maturity + repayPeriod) {
             return ERR_DEFAULT_NOT_DUE_YET;
         }
 
