@@ -1,7 +1,7 @@
 {
-  "name": "truffle-init-webpack",
+  "name": "ucd-poc",
   "version": "0.0.1",
-  "description": "Frontend example using truffle v3",
+  "description": "US Crypto Dollar - Proof of Concept",
   "scripts": {
     "lint": "eslint ./",
     "build": "webpack",
@@ -21,9 +21,10 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "babel-register": "^6.24.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.4",
     "eslint": "^4.3.0",
@@ -34,10 +35,14 @@
     "eslint-plugin-standard": "^3.0.1",
     "html-webpack-plugin": "^2.29.0",
     "json-loader": "^0.5.7",
+    "raw-loader": "^0.5.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "style-loader": "^0.18.2",
     "truffle-contract": "^2.0.3",
     "web3": "^1.0.0-beta.11",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.6.1"
-  }
+  },
+  "dependencies": {}
 }
