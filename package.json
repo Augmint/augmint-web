@@ -37,18 +37,17 @@
     "html-webpack-plugin": "^2.29.0",
     "json-loader": "^0.5.7",
     "raw-loader": "^0.5.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
     "style-loader": "^0.18.2",
     "truffle-contract": "^2.0.3",
     "url-loader": "^0.5.9",
-    "web3": "^1.0.0-beta.11",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.6.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "react": "^15.6.1",
     "react-bootstrap": "^0.31.1",
+    "react-dom": "^15.6.1",
     "web3-eth": "^1.0.0-beta.11",
     "web3-utils": "^1.0.0-beta.11"
   }
