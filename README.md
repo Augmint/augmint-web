@@ -45,7 +45,7 @@ Proof of concept implementation of a subscription bill collector
 
 ### Concept, initial version
 * [szerintedmi](https://github.com/szerintedmi)
-* Charlie
+* [Charlie](https://github.com/krosza)
 
 ## Licence
 This project is licensed under the GNU General Public License v3.0 license - see the [LICENSE](LICENSE) file for details.
