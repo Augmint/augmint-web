@@ -80,7 +80,7 @@ contract LoanManager is owned {
         require(disbursedLoanInUcd >= products[productId].minLoanAmountInUcd);
 
         // Create new loan contract
-        address loanContractAddress = new EthBackedLoan(this, msg.sender, products[productId].term,
+        address loanContractAddress = new EthBackedLoan(msg.sender, products[productId].term,
                     disbursedLoanInUcd, ucdDueAtMaturity, products[productId].gracePeriod);
 
         // Store ref to new loan contract in this contract

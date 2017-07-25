@@ -32,9 +32,9 @@ contract EthBackedLoan {
 
     function() payable { } // to accept ETH collateral sent
 
-    function EthBackedLoan(address _loanManager, address _borrower, uint _term, uint _disbursedLoanInUcd,
+    function EthBackedLoan(address _borrower, uint _term, uint _disbursedLoanInUcd,
                             uint _ucdDueAtMaturity, uint _gracePeriod) {
-        loanManager = LoanManager(_loanManager);
+        loanManager = LoanManager(msg.sender);
         owner = _borrower;
         tokenUcd = loanManager.tokenUcd();
         term = _term;
