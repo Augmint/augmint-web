@@ -22,7 +22,7 @@
         - use safe maths and/or use ds-math: https://blog.dapphub.com/ds-math/
         - move ERR all error code constants to lib/separate contract
 */
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.11;
 import "./Owned.sol";
 import "./ERC20Impl.sol";
 

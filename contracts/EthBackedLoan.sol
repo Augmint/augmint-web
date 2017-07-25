@@ -1,7 +1,7 @@
 /* contract for each loan given in UCD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
 */
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.11;
 
 import "./TokenUcd.sol";
 import "./LoanManager.sol";

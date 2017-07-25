@@ -1,6 +1,6 @@
 // mock implamentation of ETH/USD exchange rate oracle
 // all usd values are with 4 decimals (paramaters and return values too)
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.11;
 
 import "./Owned.sol";
 

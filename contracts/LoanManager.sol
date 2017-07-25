@@ -1,5 +1,7 @@
-/* Contract to manage UCD loan contracts */
-pragma solidity ^0.4.13;
+/* Contract to manage UCD loan contracts
+    TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
+*/
+pragma solidity ^0.4.11;
 import "./Owned.sol";
 import "./Rates.sol";
 import "./TokenUcd.sol";

@@ -1,5 +1,5 @@
 /* ERC20 Implementaion */
-pragma solidity ^0.4.13;
+pragma solidity ^0.4.11;
 contract ERC20Impl {
 
     /*  This is a slight change to the ERC20 base standard.
