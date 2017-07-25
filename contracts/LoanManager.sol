@@ -88,8 +88,7 @@ contract LoanManager is owned {
         m_loanPointers[msg.sender].push(idx - 1 );
 
         // Send ETH collateral to loan contract
-        EthBackedLoan loanContract = EthBackedLoan(loanContractAddress);
-        loanContract.transfer(msg.value);
+        loanContractAddress.transfer(msg.value);
 
         // Issue UCD and send to borrower
         int8 res = tokenUcd.issueAndDisburseUcd( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd);
