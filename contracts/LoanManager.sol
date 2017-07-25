@@ -105,6 +105,9 @@ contract LoanManager is owned {
     function repay(uint loanId) returns (int8 result) {
         // note that loanId is idx in borrower's array (ie. 0...n for each borrower)
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
+        // TODO: check if we could do this without "direct" access to borrower's UCD balance
+        //       eg. transfer UCD to loanContract initiates repayment? or using ECR20 transfer approval?
+        //       it wouldn't restrict access more but would be better seperation of functions
         if(m_loanPointers[msg.sender].length == 0
             || m_loanPointers[msg.sender].length <= loanId) {
             return ERR_NO_LOAN;
