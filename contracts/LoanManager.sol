@@ -20,8 +20,9 @@ contract LoanManager is owned {
     struct Product {
         uint term;
         uint discountRate; // discountRate in parts per million , ie. 10,000 = 1%
-        uint loanCoverageRatio;  // colleteral usd value to ucd coverageRatio
+        uint loanCoverageRatio;  // colleteral usd value / ucd loan amount
                                     // in parts per million , ie. 10,000 = 1%
+                                    // TODO: it means 1/loanCoverageRatio, rename it accordingly
         uint minLoanAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
         uint repayPeriod; // number of seconds after maturity before default can be executed
         bool isActive;
@@ -80,6 +81,7 @@ contract LoanManager is owned {
         require(disbursedLoanInUcd >= products[productId].minLoanAmountInUcd);
 
         // Create new loan contract
+        // TODO: check if it's better to pass productId or Product struct
         address loanContractAddress = new EthBackedLoan(msg.sender, products[productId].term,
                     disbursedLoanInUcd, ucdDueAtMaturity, products[productId].repayPeriod);
 
@@ -102,6 +104,7 @@ contract LoanManager is owned {
     event e_repayed(address loanContractAddress);
     function repay(uint loanId) returns (int8 result) {
         // note that loanId is idx in borrower's array (ie. 0...n for each borrower)
+        // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         if(m_loanPointers[msg.sender].length == 0
             || m_loanPointers[msg.sender].length <= loanId) {
             return ERR_NO_LOAN;
@@ -137,6 +140,7 @@ contract LoanManager is owned {
     function defaulted(uint loanIdx) returns (int8 result) {
         // note that loanIdx is idx in loanPointer[]  (ie. global idx for all loans 0...n )
         // anyone can call it.
+        // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         if(loanPointers.length == 0
             || loanPointers.length <= loanIdx) {
             return ERR_NO_LOAN;
