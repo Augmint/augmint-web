@@ -47,6 +47,11 @@ contract EthBackedLoan {
     }
 
     function repay() returns (int8 result) {
+        // TODO: * consider moving all repay functionality here from loanManager to make it self contained
+        //          - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
+        //          - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
+        //          - consider sending UCD to loanContract address first
+        //       * rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
         if( msg.sender != address(loanManager)) {
             // repayment is only through loanManager.
             // loanManager only allows owner to repay loan
@@ -61,13 +66,14 @@ contract EthBackedLoan {
         }
 
         loanState = LoanState.Repaid;
-         // send back collateral held in this contract
+         // send back ETH collateral held in this contract
         owner.transfer(this.balance);
 
         return SUCCESS;
     }
 
     function defaulted() returns (int8 result) {
+        // TODO: rename this function, eg. takeOverCollateralWhenDefaulted closeDefaulted collateral?
         if( msg.sender != address(loanManager)) {
             // default is only through loanManager
             return ERR_NOT_AUTHORISED;
