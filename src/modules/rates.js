@@ -2,10 +2,10 @@ import store from '../store.js'
 import SolidityContract from './SolidityContract';
 import rates_artifacts from '../contractsBuild/Rates.json' ;
 
-export const RATES_CONNECT_REQUESTED = 'contracts/RATES_CONNECT_REQUESTED'
+export const RATES_CONNECT_REQUESTED = 'ethBase/RATES_CONNECT_REQUESTED'
 export const RATES_CONNECTED= 'ethBase/RATES_CONNECTED'
 
-export const RATES_REFRESH_REQUESTED = 'contracts/RATES_REFRESH_REQUESTED'
+export const RATES_REFRESH_REQUESTED = 'ethBase/RATES_REFRESH_REQUESTED'
 export const RATES_REFRESHED= 'ethBase/RATES_REFRESHED'
 
 const initialState = {
