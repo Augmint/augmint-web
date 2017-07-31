@@ -2,6 +2,9 @@
 require('babel-register')
 
 module.exports = {
+  contracts_build_directory: './src/contractsBuild',
+  working_directory: './contracts',
+  //migrations_directory: './migrations',
   networks: {
     development: {
       host: 'localhost',
