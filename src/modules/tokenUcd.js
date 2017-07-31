@@ -10,6 +10,7 @@ export const TOKENUCD_REFRESHED= 'tokenUcd/TOKENUCD_REFRESHED'
 
 const initialState = {
     contract: null,
+    owner: '?',
     balance: '?',
     ucdBalance: '?',
     totalSupply: '?',
@@ -42,6 +43,7 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: false,
+            owner: action.owner,
             ucdBalance: action.ucdBalance,
             balance: action.balance,
             totalSupply: action.totalSupply,
@@ -73,7 +75,8 @@ export const refreshTokenUcd =  () => {
         })
         let tokenUcd = store.getState().tokenUcd.contract.instance;
         let web3 = store.getState().ethBase.web3Instance;
-        var balance; //, totalSupply, loanManagerAddress;
+        var balance;
+        let owner = await tokenUcd.owner();
         let totalSupply = await tokenUcd.totalSupply();
         let loanManagerAddress = await tokenUcd.loanManagerAddress();
         return web3.eth.getBalance(tokenUcd.address, function(error, bal) {
@@ -82,6 +85,7 @@ export const refreshTokenUcd =  () => {
 
                 dispatch({
                     type: TOKENUCD_REFRESHED,
+                    owner: owner,
                     ucdBalance: ucdBalance.toNumber(),
                     balance: web3.fromWei( balance.toNumber()),
                     totalSupply: totalSupply.toNumber(),

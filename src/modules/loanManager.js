@@ -11,6 +11,7 @@ export const LOANMANAGER_REFRESHED= 'loanManager/LOANMANAGER_REFRESHED'
 const initialState = {
     contract: null,
     balance: '?',
+    owner: '?',
     ratesAddress: '?',
     tokenUcdAddress: '?',
     loanCount: '?',
@@ -44,6 +45,7 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: false,
+            owner: action.owner,
             balance: action.balance,
             loanCount: action.loanCount,
             productCount: action.productCount,
@@ -95,10 +97,12 @@ export const refreshLoanManager =  () => {
         }
         let tokenUcdAddress = await loanManager.tokenUcd();
         let ratesAddress = await loanManager.rates();
+        let owner = await loanManager.owner();
 
         return web3.eth.getBalance(loanManager.address, function(error, balance) {
             dispatch({
                 type: LOANMANAGER_REFRESHED,
+                owner: owner,
                 balance: web3.fromWei( balance.toNumber()),
                 loanCount: loanCount.toNumber(),
                 products: products,

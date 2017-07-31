@@ -113,6 +113,8 @@ class underTheHood extends React.Component {
                                     <p>ETH/USD: {this.props.ethUsdRate}</p>
                                     <p>USD/ETH: {this.props.usdEthRate} </p>
                                     <p><small>Contract: { this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
+                                    <p><small>Owner: { this.props.ratesOwner}</small></p>
+                                    <p><small>Balance: { this.props.ratesBalance } ETH</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
                                     </ButtonToolbar>
@@ -124,6 +126,7 @@ class underTheHood extends React.Component {
                                     <p>ETH Reserve: {this.props.tokenUcdEthBalance} ETH</p>
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
                                     <p><small>Contract: { this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</small></p>
+                                    <p><small>Owner: { this.props.tokenUcdOwner}</small></p>
                                     <p><small>LoanManager: { this.props.tokenUcdLoanManagerAddress == null ? "No contract" :  this.props.tokenUcdLoanManagerAddress }</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh info</Button>
@@ -137,6 +140,7 @@ class underTheHood extends React.Component {
                                     <p>ProductCount: {this.props.productCount} </p>
                                     <p>LoanCount: {this.props.loanCount} </p>
                                     <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
+                                    <p><small>Owner: { this.props.loanManagerOwner}</small></p>
                                     <p><small>Balance: { this.props.loanManagerBalance } ETH</small></p>
                                     <p><small>Rates contract: { this.props.loanManagerRatesContractAddress }</small></p>
                                     <p><small>TokenUcd contract: { this.props.loanManagerTokenUcdContractAddress }</small></p>
@@ -175,17 +179,21 @@ const mapStateToProps = state => ({
     web3Instance: state.ethBase.web3Instance,
 
     ratesContract: state.rates.contract,
+    ratesBalance: state.rates.balance,
+    ratesOwner: state.rates.owner,
     usdWeiRate: state.rates.usdWeiRate,
     usdEthRate: state.rates.usdEthRate,
     ethUsdRate: state.rates.ethUsdRate,
 
     tokenUcdContract: state.tokenUcd.contract,
+    tokenUcdOwner: state.tokenUcd.owner,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
     tokenUcdEthBalance: state.tokenUcd.balance,
     tokenUcdTotalSupply: state.tokenUcd.totalSupply,
     tokenUcdLoanManagerAddress: state.tokenUcd.loanManagerAddress,
 
     loanManagerContract: state.loanManager.contract,
+    loanManagerOwner: state.loanManager.owner,
     loanManagerBalance: state.loanManager.balance,
     loanCount: state.loanManager.loanCount,
     productCount: state.loanManager.productCount,

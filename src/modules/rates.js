@@ -10,6 +10,8 @@ export const RATES_REFRESHED= 'ethBase/RATES_REFRESHED'
 
 const initialState = {
     contract: null,
+    balance: '?',
+    owner: '?',
     usdWeiRate: null,
     isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
 }
@@ -39,6 +41,8 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: false,
+            balance: action.balance,
+            owner: action.owner,
             usdWeiRate: action.usdWeiRate,
             usdEthRate: action.usdEthRate,
             ethUsdRate: action.ethUsdRate
@@ -67,13 +71,20 @@ export const refreshRates =  () => {
         dispatch({
             type: RATES_REFRESH_REQUESTED
         })
-        let usdWeiRate = (await store.getState().rates.contract.instance.usdWeiRate() ).toNumber();
-        let usdEthRate = store.getState().ethBase.web3Instance.fromWei(usdWeiRate);
-        return dispatch({
-            type: RATES_REFRESHED,
-            usdWeiRate: usdWeiRate,
-            usdEthRate: usdEthRate,
-            ethUsdRate: 1 / usdEthRate
-        })
+        let web3 = store.getState().ethBase.web3Instance;
+        let rates = store.getState().rates.contract.instance;
+        let usdWeiRate = (await rates.usdWeiRate() ).toNumber();
+        let usdEthRate = web3.fromWei(usdWeiRate);
+        let owner = await rates.owner();
+        return web3.eth.getBalance(rates.address, function(error, balance) {
+            return dispatch({
+                type: RATES_REFRESHED,
+                balance: web3.fromWei( balance.toNumber()),
+                usdWeiRate: usdWeiRate,
+                usdEthRate: usdEthRate,
+                ethUsdRate: 1 / usdEthRate,
+                owner: owner
+            })
+        });
     }
 }
