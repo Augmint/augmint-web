@@ -20,15 +20,10 @@ const tokenUcdTitle = ( <h3>TokenUcd contract</h3> );
 function AccountList(props) {
     const accounts = props.accounts;
     const listItems = accounts.map( (number, index) =>
-        //<li key={number}>
-        // <small>
-        // <span key={number} >[{index}] {number}</span><br/>
-        // </small>
-        //</li>
-        <tr><td key={number}><small>[{index}] {number}</small></td></tr>
+        <tr key={number}><td ><small>[{index}] {number}</small></td></tr>
     );
     return (
-        <Table condensed>
+        <Table condensed striped>
             <tbody>
                 {listItems}
             </tbody>
@@ -91,10 +86,10 @@ class underTheHood extends React.Component {
                         <Row>
                             <Col xs={6} md={6}>
                                 <Panel header={ratesTitle}>
-                                    <p>{ this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</p>
                                     <p>USD/WEI: {this.props.usdWeiRate} </p>
                                     <p>ETH/USD: {this.props.ethUsdRate}</p>
                                     <p>USD/ETH: {this.props.usdEthRate} </p>
+                                    <p><small>Contract: { this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
                                     </ButtonToolbar>
@@ -102,12 +97,13 @@ class underTheHood extends React.Component {
                             </Col>
                             <Col xs={6} md={6}>
                                 <Panel header={tokenUcdTitle}>
-                                    <p>{ this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</p>
+                                    <p>Total token supply: {this.props.tokenUcdTotalSupply} UCD</p>
                                     <p>ETH Reserve: {this.props.tokenUcdEthBalance} ETH</p>
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
-
+                                    <p><small>Contract: { this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</small></p>
+                                    <p><small>LoanManager: { this.props.loanManagerAddress == null ? "No contract" :  this.props.loanManagerAddress }</small></p>
                                     <ButtonToolbar>
-                                        <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balances</Button>
+                                        <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh info</Button>
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
@@ -144,7 +140,9 @@ const mapStateToProps = state => ({
 
     tokenUcdContract: state.tokenUcd.contract,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.balance
+    tokenUcdEthBalance: state.tokenUcd.balance,
+    tokenUcdTotalSupply: state.tokenUcd.totalSupply,
+    loanManagerAddress: state.tokenUcd.loanManagerAddress
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
