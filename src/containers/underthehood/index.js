@@ -119,6 +119,7 @@ class underTheHood extends React.Component {
                         <Row>
                             <Col xs={6} md={6}>
                                 <Panel header={loanManagerTitle}>
+                                    <p>ProductCount: {this.props.productCount} </p>
                                     <p>LoanCount: {this.props.loanCount} </p>
                                     <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
                                     <p><small>Balance: { this.props.loanManagerBalance } ETH</small></p>
@@ -169,6 +170,7 @@ const mapStateToProps = state => ({
     loanManagerContract: state.loanManager.contract,
     loanManagerBalance: state.loanManager.balance,
     loanCount: state.loanManager.loanCount,
+    productCount: state.loanManager.productCount,
     loanManagerRatesContractAddress: state.loanManager.ratesAddress,
     loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress
 

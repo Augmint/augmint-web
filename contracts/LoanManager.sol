@@ -49,6 +49,10 @@ contract LoanManager is owned {
         return loanPointers.length;
     }
 
+    function getProductCount() constant returns (uint ct) {
+        return products.length;
+    }
+
     function addProduct(uint _term, uint _discountRate, uint _loanCoverageRatio,
             uint _minLoanAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
         newProductId = products.push( Product( {term: _term, discountRate: _discountRate,

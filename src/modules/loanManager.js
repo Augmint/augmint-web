@@ -14,6 +14,7 @@ const initialState = {
     ratesAddress: '?',
     tokenUcdAddress: '?',
     loanCount: '?',
+    productCount: '?',
     isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
 }
 
@@ -44,6 +45,7 @@ export default (state = initialState, action) => {
             isLoading: false,
             balance: action.balance,
             loanCount: action.loanCount,
+            productCount: action.productCount,
             ratesAddress: action.ratesAddress,
             tokenUcdAddress: action.tokenUcdAddress
         }
@@ -73,7 +75,9 @@ export const refreshLoanManager =  () => {
         })
         let loanManager = store.getState().loanManager.contract.instance;
         let web3 = store.getState().ethBase.web3Instance;
+        // TODO: make calls paralel
         let loanCount = await loanManager.getLoanCount();
+        let productCount = await loanManager.getProductCount();
         let tokenUcdAddress = await loanManager.tokenUcd();
         let ratesAddress = await loanManager.rates();
         return web3.eth.getBalance(loanManager.address, function(error, balance) {
@@ -81,6 +85,7 @@ export const refreshLoanManager =  () => {
                 type: LOANMANAGER_REFRESHED,
                 balance: web3.fromWei( balance.toNumber()),
                 loanCount: loanCount.toNumber(),
+                productCount: productCount.toNumber(),
                 tokenUcdAddress: tokenUcdAddress,
                 ratesAddress: ratesAddress
             });
