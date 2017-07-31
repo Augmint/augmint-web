@@ -127,6 +127,7 @@ class underTheHood extends React.Component {
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
                                     <p><small>Contract: { this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</small></p>
                                     <p><small>Owner: { this.props.tokenUcdOwner}</small></p>
+                                    <p><small>Decimals: {this.props.tokenUcdDecimals} (Decimals divider: {this.props.tokenUcdDecimalsDiv})</small></p>
                                     <p><small>LoanManager: { this.props.tokenUcdLoanManagerAddress == null ? "No contract" :  this.props.tokenUcdLoanManagerAddress }</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh info</Button>
@@ -187,6 +188,8 @@ const mapStateToProps = state => ({
 
     tokenUcdContract: state.tokenUcd.contract,
     tokenUcdOwner: state.tokenUcd.owner,
+    tokenUcdDecimals: state.tokenUcd.decimals,
+    tokenUcdDecimalsDiv: state.tokenUcd.decimalsDiv,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
     tokenUcdEthBalance: state.tokenUcd.balance,
     tokenUcdTotalSupply: state.tokenUcd.totalSupply,

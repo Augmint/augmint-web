@@ -12,6 +12,8 @@ const initialState = {
     contract: null,
     owner: '?',
     balance: '?',
+    decimals: '?',
+    decimalsDiv: '?',
     ucdBalance: '?',
     totalSupply: '?',
     loanManagerAddress: '?',
@@ -44,6 +46,8 @@ export default (state = initialState, action) => {
             ...state,
             isLoading: false,
             owner: action.owner,
+            decimals: action.decimals,
+            decimalsDiv: action.decimalsDiv,
             ucdBalance: action.ucdBalance,
             balance: action.balance,
             totalSupply: action.totalSupply,
@@ -76,9 +80,12 @@ export const refreshTokenUcd =  () => {
         let tokenUcd = store.getState().tokenUcd.contract.instance;
         let web3 = store.getState().ethBase.web3Instance;
         var balance;
+        // TODO: make these paralel
         let owner = await tokenUcd.owner();
         let totalSupply = await tokenUcd.totalSupply();
         let loanManagerAddress = await tokenUcd.loanManagerAddress();
+        let decimals = (await tokenUcd.decimals()).toNumber();
+        let decimalsDiv = 10**decimals;
         return web3.eth.getBalance(tokenUcd.address, function(error, bal) {
             balance = bal;
             return web3.eth.getBalance(tokenUcd.address, function(error, ucdBalance) {
@@ -86,7 +93,9 @@ export const refreshTokenUcd =  () => {
                 dispatch({
                     type: TOKENUCD_REFRESHED,
                     owner: owner,
-                    ucdBalance: ucdBalance.toNumber(),
+                    decimals: decimals,
+                    decimalsDiv: decimalsDiv,
+                    ucdBalance: ucdBalance.toNumber() / decimalsDiv,
                     balance: web3.fromWei( balance.toNumber()),
                     totalSupply: totalSupply.toNumber(),
                     loanManagerAddress: loanManagerAddress
