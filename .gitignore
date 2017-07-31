@@ -1,5 +1,5 @@
-# temp fix for npm issues
-package-lock.json
+# contracts' build folder for yarn build (temp hack)
+contractsBuild/
 
 .node-xmlhttprequest-sync-*
 
