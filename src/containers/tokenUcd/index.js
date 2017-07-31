@@ -2,10 +2,9 @@ import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
 import {refreshTokenUcd} from '../../modules/tokenUcd'
-import { ButtonToolbar, Button, Grid, Row, Col, Panel, Table, PageHeader} from 'react-bootstrap';
+import { Grid, Row, Col, Panel, PageHeader} from 'react-bootstrap';
 
-import store from '../../store' /// for debug
-
+const baseInfoTitle = ( <h3>Base Info</h3> );
 const reservesTitle = ( <h3>Reserves</h3> );
 
 class TokenUcd extends React.Component {
@@ -30,15 +29,18 @@ class TokenUcd extends React.Component {
                     <Col xs={8} md={8}>
                         <Row>
                             <Col xs={6} md={6}>
+                                <Panel header={baseInfoTitle}>
+                                    <p>Total token supply: {this.props.tokenUcdTotalSupply} UCD</p>
+
+                                </Panel>
+                            </Col>
+                            <Col xs={6} md={6}>
                                 <Panel header={reservesTitle}>
 
-                                    <p>ETH Reserve: {this.props.tokenUcdEthBalance} ETH</p>
+                                    <p>ETH Reserve: {this.props.tokenUcdEthBalance} ETH
+                                        ({this.props.usdEthRate * this.props.tokenUcdEthBalance} USD)</p>
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
-                                    <p><small>{ this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</small></p>
 
-                                    <ButtonToolbar>
-                                        <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balances</Button>
-                                    </ButtonToolbar>
                                 </Panel>
                             </Col>
                         </Row>
@@ -66,7 +68,10 @@ const mapStateToProps = state => ({
 
     tokenUcdContract: state.tokenUcd.contract,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.balance
+    tokenUcdEthBalance: state.tokenUcd.balance,
+    tokenUcdTotalSupply: state.tokenUcd.totalSupply,
+    loanManagerAddress: state.tokenUcd.loanManagerAddress
+
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({

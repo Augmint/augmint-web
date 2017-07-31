@@ -5,8 +5,8 @@ import React from 'react';
 import store from '../../store'
 import watch from 'redux-watch'
 import { setupWeb3, refreshBalance } from '../../modules/ethBase'
-import { connectRates } from '../../modules/rates';
-import { connectTokenUcd} from '../../modules/tokenUcd';
+import { connectRates, refreshRates } from '../../modules/rates';
+import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link } from 'react-router-dom';
@@ -27,10 +27,25 @@ class App extends React.Component {
     handleLoad() {
         store.dispatch(setupWeb3()); // we do it on load event to avoid timing issues with injected web3
 
-        let w = watch(store.getState, 'ethBase.web3ConnectionId')
-        store.subscribe(w((newVal, oldVal, objectPath) => {
+        let w1 = watch(store.getState, 'ethBase.web3ConnectionId')
+        store.subscribe(w1((newVal, oldVal, objectPath) => {
+            store.dispatch(refreshBalance(store.getState().ethBase.userAccount));
             store.dispatch(connectRates());
             store.dispatch(connectTokenUcd());
+        }))
+
+        let w2 = watch(store.getState, 'rates.contract')
+        store.subscribe(w2((newVal, oldVal, objectPath) => {
+            if(newVal) {
+                store.dispatch(refreshRates());
+            }
+        }))
+
+        let w3 = watch(store.getState, 'tokenUcd.contract')
+        store.subscribe(w3((newVal, oldVal, objectPath) => {
+            if(newVal) {
+                store.dispatch(refreshTokenUcd());
+            }
         }))
     }
 
@@ -97,7 +112,7 @@ class App extends React.Component {
 //     isConnected: state.ethBase.isConnected
 // })
 
-// TODO: move web3 connect here but this causing navigation to break:
+// TODO:  this causing navigation to break:
 // export default connect(
 //     mapStateToProps
 // )(App)

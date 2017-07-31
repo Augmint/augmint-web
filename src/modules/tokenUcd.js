@@ -10,7 +10,10 @@ export const TOKENUCD_REFRESHED= 'tokenUcd/TOKENUCD_REFRESHED'
 
 const initialState = {
     contract: null,
-    ucdBalance: null,
+    balance: '?',
+    ucdBalance: '?',
+    totalSupply: '?',
+    loanManagerAddress: '?',
     isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
 }
 
@@ -40,7 +43,9 @@ export default (state = initialState, action) => {
             ...state,
             isLoading: false,
             ucdBalance: action.ucdBalance,
-            balance: action.balance
+            balance: action.balance,
+            totalSupply: action.totalSupply,
+            loanManagerAddress: action.loanManagerAddress
         }
 
         default:
@@ -68,15 +73,19 @@ export const refreshTokenUcd =  () => {
         })
         let tokenUcd = store.getState().tokenUcd.contract.instance;
         let web3 = store.getState().ethBase.web3Instance;
-        var balance;
-
+        var balance; //, totalSupply, loanManagerAddress;
+        let totalSupply = await tokenUcd.totalSupply();
+        let loanManagerAddress = await tokenUcd.loanManagerAddress();
         return web3.eth.getBalance(tokenUcd.address, function(error, bal) {
             balance = bal;
             return web3.eth.getBalance(tokenUcd.address, function(error, ucdBalance) {
+
                 dispatch({
                     type: TOKENUCD_REFRESHED,
                     ucdBalance: ucdBalance.toNumber(),
-                    balance: web3.fromWei( balance.toNumber())
+                    balance: web3.fromWei( balance.toNumber()),
+                    totalSupply: totalSupply.toNumber(),
+                    loanManagerAddress: loanManagerAddress
                 });
             });
         });
