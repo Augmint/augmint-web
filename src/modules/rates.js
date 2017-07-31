@@ -10,7 +10,8 @@ export const RATES_REFRESHED= 'ethBase/RATES_REFRESHED'
 
 const initialState = {
     contract: null,
-    usdWeiRate: null
+    usdWeiRate: null,
+    isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
 }
 
 export default (state = initialState, action) => {

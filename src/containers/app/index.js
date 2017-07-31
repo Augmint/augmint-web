@@ -5,7 +5,8 @@ import React from 'react';
 import store from '../../store'
 import watch from 'redux-watch'
 import { setupWeb3, refreshBalance } from '../../modules/ethBase'
-import { connectRates } from '../../modules/rates'
+import { connectRates } from '../../modules/rates';
+import { connectTokenUcd} from '../../modules/tokenUcd';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link } from 'react-router-dom';
@@ -28,6 +29,7 @@ class App extends React.Component {
         let w = watch(store.getState, 'ethBase.web3ConnectionId')
         store.subscribe(w((newVal, oldVal, objectPath) => {
             store.dispatch(connectRates());
+            store.dispatch(connectTokenUcd());
         }))
     }
 

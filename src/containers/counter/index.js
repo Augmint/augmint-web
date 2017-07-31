@@ -8,13 +8,13 @@ import {
     decrement,
     decrementAsync
 } from '../../modules/counter'
-import {Grid, Row, Col} from 'react-bootstrap'
+import {Grid, Row, Col, PageHeader} from 'react-bootstrap'
 
 const Counter = props => (
     <Grid>
         <Row>
             <Col>
-                <h1>Counter</h1>
+                <PageHeader>Counter</PageHeader>
                 <p>Count: {props.count}</p>
 
                 <p>
@@ -29,7 +29,7 @@ const Counter = props => (
                     <button onClick={props.decrement} disabled={props.isDecrementing}>Decrement</button>
                     <button onClick={props.decrementAsync} disabled={props.isDecrementing}>Decrement Async</button>
                 </p>
-                
+
                 <p><button onClick={() => props.changePage()}>Go to about page via redux</button></p>
             </Col>
         </Row>

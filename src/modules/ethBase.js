@@ -10,7 +10,7 @@ const initialState = {
     userAccount: '0x0',
     accounts: [],
     balance: '?',
-    isLoading: false,
+    isLoading: false,  // TODO: isLoading & isConnected need to be refactored to work with other actions
     isConnected: false
 }
 
