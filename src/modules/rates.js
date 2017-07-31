@@ -38,7 +38,9 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: false,
-            usdWeiRate: action.usdWeiRate
+            usdWeiRate: action.usdWeiRate,
+            usdEthRate: action.usdEthRate,
+            ethUsdRate: action.ethUsdRate
         }
 
         default:
@@ -64,9 +66,13 @@ export const refreshRates =  () => {
         dispatch({
             type: RATES_REFRESH_REQUESTED
         })
+        let usdWeiRate = (await store.getState().rates.contract.instance.usdWeiRate() ).toNumber();
+        let usdEthRate = store.getState().ethBase.web3Instance.fromWei(usdWeiRate);
         return dispatch({
             type: RATES_REFRESHED,
-            usdWeiRate: (await store.getState().rates.contract.instance.usdWeiRate() ).toNumber()
+            usdWeiRate: usdWeiRate,
+            usdEthRate: usdEthRate,
+            ethUsdRate: 1 / usdEthRate
         })
     }
 }

@@ -75,7 +75,9 @@ class underTheHood extends React.Component {
                         <Panel header={ratesTitle}>
 
                             <p>{ this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</p>
-                            <p>USD/WEI rate: {this.props.usdWeiRate} </p>
+                            <p>USD/WEI: {this.props.usdWeiRate} </p>
+                            <p>ETH/USD: {this.props.ethUsdRate}</p>
+                            <p>USD/ETH: {this.props.usdEthRate} </p>
                             <ButtonToolbar>
                                 <Button onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
                             </ButtonToolbar>
@@ -103,7 +105,9 @@ const mapStateToProps = state => ({
     web3Instance: state.ethBase.web3Instance,
 
     ratesContract: state.rates.contract,
-    usdWeiRate: state.rates.usdWeiRate
+    usdWeiRate: state.rates.usdWeiRate,
+    usdEthRate: state.rates.usdEthRate,
+    ethUsdRate: state.rates.ethUsdRate
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
