@@ -7,6 +7,7 @@ import watch from 'redux-watch'
 import { setupWeb3, refreshBalance } from '../../modules/ethBase'
 import { connectRates, refreshRates } from '../../modules/rates';
 import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
+import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link } from 'react-router-dom';
@@ -32,6 +33,7 @@ class App extends React.Component {
             store.dispatch(refreshBalance(store.getState().ethBase.userAccount));
             store.dispatch(connectRates());
             store.dispatch(connectTokenUcd());
+            store.dispatch(connectloanManager());
         }))
 
         let w2 = watch(store.getState, 'rates.contract')
@@ -45,6 +47,13 @@ class App extends React.Component {
         store.subscribe(w3((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshTokenUcd());
+            }
+        }))
+
+        let w4 = watch(store.getState, 'loanManager.contract')
+        store.subscribe(w4((newVal, oldVal, objectPath) => {
+            if(newVal) {
+                store.dispatch(refreshLoanManager());
             }
         }))
     }

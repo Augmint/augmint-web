@@ -1,3 +1,4 @@
+/* TODO: split panels into components */
 import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
@@ -7,6 +8,7 @@ import {
 } from '../../modules/ethBase'
 import {refreshRates} from '../../modules/rates'
 import {refreshTokenUcd} from '../../modules/tokenUcd'
+import {refreshLoanManager} from '../../modules/loanManager'
 import { ButtonToolbar, Button, Grid, Row, Col, Panel, Table, PageHeader} from 'react-bootstrap';
 
 import store from '../../store' /// for debug
@@ -16,6 +18,7 @@ const userAccountTitle = ( <h3>User Account</h3> );
 const availableAccountsTitle = ( <h3>Accounts</h3> );
 const ratesTitle = ( <h3>Rates contract</h3> );
 const tokenUcdTitle = ( <h3>TokenUcd contract</h3> );
+const loanManagerTitle = ( <h3>LoanManager contract</h3> );
 
 function AccountList(props) {
     const accounts = props.accounts;
@@ -48,6 +51,11 @@ class underTheHood extends React.Component {
     handleTokenUcdRefreshClick = e => {
         e.preventDefault()
         this.props.refreshTokenUcd();
+    }
+
+    handleLoanManagerRefreshClick = e => {
+        e.preventDefault()
+        this.props.refreshLoanManager();
     }
 
     render() {
@@ -101,9 +109,23 @@ class underTheHood extends React.Component {
                                     <p>ETH Reserve: {this.props.tokenUcdEthBalance} ETH</p>
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
                                     <p><small>Contract: { this.props.tokenUcdContract == null ? "No contract" :  this.props.tokenUcdContract.instance.address }</small></p>
-                                    <p><small>LoanManager: { this.props.loanManagerAddress == null ? "No contract" :  this.props.loanManagerAddress }</small></p>
+                                    <p><small>LoanManager: { this.props.tokenUcdLoanManagerAddress == null ? "No contract" :  this.props.tokenUcdLoanManagerAddress }</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh info</Button>
+                                    </ButtonToolbar>
+                                </Panel>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={6} md={6}>
+                                <Panel header={loanManagerTitle}>
+                                    <p>LoanCount: {this.props.loanCount} </p>
+                                    <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
+                                    <p><small>Balance: { this.props.loanManagerBalance } ETH</small></p>
+                                    <p><small>Rates contract: { this.props.loanManagerRatesContractAddress }</small></p>
+                                    <p><small>TokenUcd contract: { this.props.loanManagerTokenUcdContractAddress }</small></p>
+                                    <ButtonToolbar>
+                                        <Button bsSize="small" onClick={this.handleLoanManagerRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh info</Button>
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
@@ -142,14 +164,22 @@ const mapStateToProps = state => ({
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
     tokenUcdEthBalance: state.tokenUcd.balance,
     tokenUcdTotalSupply: state.tokenUcd.totalSupply,
-    loanManagerAddress: state.tokenUcd.loanManagerAddress
+    tokenUcdLoanManagerAddress: state.tokenUcd.loanManagerAddress,
+
+    loanManagerContract: state.loanManager.contract,
+    loanManagerBalance: state.loanManager.balance,
+    loanCount: state.loanManager.loanCount,
+    loanManagerRatesContractAddress: state.loanManager.ratesAddress,
+    loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress
+
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setupWeb3,
     refreshBalance,
     refreshRates,
-    refreshTokenUcd
+    refreshTokenUcd,
+    refreshLoanManager
 }, dispatch)
 
 export default connect(
