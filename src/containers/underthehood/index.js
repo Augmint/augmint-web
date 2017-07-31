@@ -19,11 +19,26 @@ const availableAccountsTitle = ( <h3>Accounts</h3> );
 const ratesTitle = ( <h3>Rates contract</h3> );
 const tokenUcdTitle = ( <h3>TokenUcd contract</h3> );
 const loanManagerTitle = ( <h3>LoanManager contract</h3> );
+const productsTitle = ( <h3>Loan Products</h3> );
 
 function AccountList(props) {
     const accounts = props.accounts;
     const listItems = accounts.map( (number, index) =>
         <tr key={number}><td ><small>[{index}] {number}</small></td></tr>
+    );
+    return (
+        <Table condensed striped>
+            <tbody>
+                {listItems}
+            </tbody>
+        </Table>
+    );
+}
+
+function ProductList(props) {
+    const products = props.products;
+    const listItems = products.map( (prod, index) =>
+        <tr key={index}><td className="white-space:pre-wrap"><small>[{index}] {JSON.stringify(prod, null, 4)}</small></td></tr>
     );
     return (
         <Table condensed striped>
@@ -130,14 +145,17 @@ class underTheHood extends React.Component {
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
+                            <Col xs={6} md={6}>
+                                <Panel header={productsTitle}>
+                                    <ProductList products={this.props.loanProducts} />
+                                </Panel>
+                            </Col>
                         </Row>
                     </Col>
 
                     <Col xs={4} md={4}>
-
                         <Panel header={availableAccountsTitle}>
                             <AccountList accounts={this.props.accounts} />
-
                         </Panel>
                     </Col>
 
@@ -172,7 +190,8 @@ const mapStateToProps = state => ({
     loanCount: state.loanManager.loanCount,
     productCount: state.loanManager.productCount,
     loanManagerRatesContractAddress: state.loanManager.ratesAddress,
-    loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress
+    loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress,
+    loanProducts: state.loanManager.products
 
 })
 
