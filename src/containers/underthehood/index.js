@@ -74,7 +74,7 @@ class underTheHood extends React.Component {
                                     <p>{this.props.isConnected ? "connected" : "not connected" }</p>
                                     <p>Provider: { this.props.web3Instance ? JSON.stringify(this.props.web3Instance.currentProvider) : "No web3 Instance"}</p>
                                     <p>Internal Connection Id: {this.props.web3ConnectionId}</p>
-                                    <Button onClick={this.props.setupWeb3} disabled={this.props.isLoading}>Reconnect web3</Button>
+                                    <Button bsSize="small" onClick={this.props.setupWeb3} disabled={this.props.isLoading}>Reconnect web3</Button>
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
@@ -83,7 +83,7 @@ class underTheHood extends React.Component {
                                     <p>{this.props.userAccount}</p>
                                     <p>Balance: {this.props.balance} ETH</p>
                                     <ButtonToolbar>
-                                        <Button onClick={this.handleBalanceRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balance</Button>
+                                        <Button bsSize="small" onClick={this.handleBalanceRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balance</Button>
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
@@ -96,7 +96,7 @@ class underTheHood extends React.Component {
                                     <p>ETH/USD: {this.props.ethUsdRate}</p>
                                     <p>USD/ETH: {this.props.usdEthRate} </p>
                                     <ButtonToolbar>
-                                        <Button onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
+                                        <Button bsSize="small" onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
@@ -107,7 +107,7 @@ class underTheHood extends React.Component {
                                     <p>UCD Reserve: {this.props.tokenUcdUcdBalance} UCD </p>
 
                                     <ButtonToolbar>
-                                        <Button onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
+                                        <Button bsSize="small" onClick={this.handleTokenUcdRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balances</Button>
                                     </ButtonToolbar>
                                 </Panel>
                             </Col>
