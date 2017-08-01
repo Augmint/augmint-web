@@ -6,7 +6,7 @@ import "./Owned.sol";
 
 contract Rates is owned {
     // 1 ETH = 1000000000000000000 WEI
-    uint public usdWeiRate = 5128205128205130;  // 1/195 ether ;
+    uint public usdWeiRate = 512820512821;  // ca. 1/195 ether ;
     uint8 public constant decimals = 4; // USD value decimal places
     uint32 public constant decimalMul = 10000;  // 10 ^ decimals;
 
@@ -23,7 +23,7 @@ contract Rates is owned {
     }
 
     function convertWeiToUsd(uint weiValue) constant returns(uint usdValue) {
-        // TODO: safe divide + multiply
-        return weiValue / usdWeiRate * decimalMul;
+        // TODO: safe divide
+        return weiValue / usdWeiRate ;
     }
 }
