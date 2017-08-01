@@ -11,7 +11,7 @@ module.exports = function(deployer, network) {
             console.log("   On testrpc. Adding test loanProducts ");
             LoanManager.deployed()
             .then( res => {
-                // term (in sec), discountRate, loanCoverageRatio, minLoanAmountInUcd (w/ 4 decimals), gracePerdio, isActive
+                // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmountInUcd (w/ 4 decimals), gracePerdio, isActive
                 res.addProduct( 1, 950000, 800000, 200000, 1, true);
                 res.addProduct(60, 900000, 600000, 100000, 60, true);
             });

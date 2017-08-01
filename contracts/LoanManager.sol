@@ -23,7 +23,7 @@ contract LoanManager is owned {
         uint loanCoverageRatio;  // colleteral usd value / ucd loan amount
                                     // in parts per million , ie. 10,000 = 1%
                                     // TODO: it means 1/loanCoverageRatio, rename it accordingly
-        uint minLoanAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
+        uint minDisbursedAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
         uint repayPeriod; // number of seconds after maturity before default can be executed
         bool isActive;
     }
@@ -54,9 +54,9 @@ contract LoanManager is owned {
     }
 
     function addProduct(uint _term, uint _discountRate, uint _loanCoverageRatio,
-            uint _minLoanAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
+            uint _minDisbursedAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
         newProductId = products.push( Product( {term: _term, discountRate: _discountRate,
-                loanCoverageRatio: _loanCoverageRatio, minLoanAmountInUcd: _minLoanAmountInUcd,
+                loanCoverageRatio: _loanCoverageRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
                 repayPeriod: _repayPeriod, isActive: _isActive }) );
 
         return newProductId - 1;
@@ -82,7 +82,7 @@ contract LoanManager is owned {
         uint usdValue = rates.convertWeiToUsd(msg.value);
         uint ucdDueAtMaturity = usdValue * products[productId].loanCoverageRatio / 1000000;
         uint disbursedLoanInUcd = ucdDueAtMaturity * products[productId].discountRate / 1000000;
-        require(disbursedLoanInUcd >= products[productId].minLoanAmountInUcd);
+        require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
 
         // Create new loan contract
         // TODO: check if it's better to pass productId or Product struct
