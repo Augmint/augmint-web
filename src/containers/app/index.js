@@ -12,9 +12,11 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link } from 'react-router-dom';
 import Home from '../home';
+import GetLoan from '../getLoan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
+import StatusMessages from './StatusMessages'
 
 class App extends React.Component {
 
@@ -80,10 +82,13 @@ class App extends React.Component {
                         </Navbar.Header>
                         <Navbar.Collapse>
                             <Nav>
+                                <LinkContainer to="/getLoan">
+                                    <NavItem eventKey={1} href="/getLoan">Get UCD Loan</NavItem>
+                                </LinkContainer>
                                 <LinkContainer to="/tokenUcd">
-                                    <NavItem eventKey={1} href="/tokenUcd">TokenUcd</NavItem>
+                                    <NavItem eventKey={2} href="/tokenUcd">TokenUcd</NavItem>
                                 </LinkContainer>
-                                </LinkContainer>
+
                             </Nav>
                             <Nav pullRight>
                                 <LinkContainer to="/about-us">
@@ -99,8 +104,10 @@ class App extends React.Component {
                 </header>
 
                 <main>
+                    <StatusMessages />
                     <Route exact path="/" component={Home} />
                     <Route exact path="/tokenUcd" component={TokenUcd} />
+                    <Route path="/getLoan" component={GetLoan} />
                     <Route exact path="/about-us" component={About} />
                     <Route exact path="/under-the-hood" component={UnderTheHood} />
                 </main>
@@ -110,15 +117,4 @@ class App extends React.Component {
     }
 }
 
-// const mapStateToProps = state => ({
-//     address: state.ethBase.address,
-//     balance: state.ethBase.balance,
-//     isLoading: state.ethBase.isLoading,
-//     isConnected: state.ethBase.isConnected
-// })
-
-// TODO:  this causing navigation to break:
-// export default connect(
-//     mapStateToProps
-// )(App)
 export default App

@@ -1,12 +1,24 @@
-import store from '../store.js'
+/*  TODO: add gasLimit and gasPrice params
+    TODO: cleare up states, eg. isLoading is not used
+    TODO: split action creator and reducer
+    TODO: change action creatators to get payload so won't need to maintain attributes at two places here when adding/changing
+    TODO: use selectors. eg: https://github.com/reactjs/reselect */
+
+import store from './../store'
 import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
+import moment from 'moment';
 
+const NEW_LOAN_GAS = 3000000;
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
 
 export const LOANMANAGER_REFRESH_REQUESTED = 'loanManager/LOANMANAGER_REFRESH_REQUESTED'
 export const LOANMANAGER_REFRESHED= 'loanManager/LOANMANAGER_REFRESHED'
+
+export const LOANMANAGER_NEWLOAN_REQUESTED = 'loanManager/LOANMANAGER_NEWLOAN_REQUESTED'
+export const LOANMANAGER_NEWLOAN_CREATED = 'loanManager/LOANMANAGER_NEWLOAN_CREATED'
+export const LOANMANAGER_NEWLOAN_ERROR = 'loanManager/LOANMANAGER_NEWLOAN_ERROR'
 
 const initialState = {
     contract: null,
@@ -16,8 +28,11 @@ const initialState = {
     tokenUcdAddress: '?',
     loanCount: '?',
     productCount: '?',
-    products: [],
-    isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
+    products: null,
+    isLoading: false,  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
+    isSubmitting: false,
+    error: null,
+    loanContractAddress: null
 }
 
 export default (state = initialState, action) => {
@@ -54,6 +69,28 @@ export default (state = initialState, action) => {
             tokenUcdAddress: action.tokenUcdAddress
         }
 
+        case LOANMANAGER_NEWLOAN_REQUESTED:
+        return {
+            ...state,
+            isSubmitting: true,
+            error: null,
+            loanContractAddress: null
+        }
+
+        case LOANMANAGER_NEWLOAN_ERROR:
+        return {
+            ...state,
+            isSubmitting: false,
+            error: action.error
+        }
+
+        case LOANMANAGER_NEWLOAN_CREATED:
+        return {
+            ...state,
+            isSubmitting: false,
+            loanContractAddress: action.loanContractAddress
+        }
+
         default:
             return state
     }
@@ -80,18 +117,25 @@ export const refreshLoanManager =  () => {
         let loanManager = store.getState().loanManager.contract.instance;
         let web3 = store.getState().ethBase.web3Instance;
         // TODO: make calls paralel
+        let decimalsDiv = 10 ** (await store.getState().tokenUcd.contract.instance.decimals()).toNumber(); // TODO: get this from store.tokenUcd (timing issues on first load..)
         let loanCount = await loanManager.getLoanCount();
         let productCount = await loanManager.getProductCount();
         let products = [];
         for (let i=0; i < productCount; i++) {
             let p = await loanManager.products(i);
+            let term = p[0].toNumber();
+            // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+            let termText = moment.duration(term, "seconds").humanize();
+            let repayPeriod = p[4].toNumber();
             let prod = {
-                term: p[0].toNumber(),
+                id: i,
+                term: term,
+                termText: termText,
                 discountRate: p[1].toNumber() / 1000000,
                 loanCoverageRatio: p[2].toNumber() / 1000000,
-                minLoanAmountInUcd: p[3].toNumber(),
-                repayPeriod: p[4].toNumber(),
                 minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
+                repayPeriod: repayPeriod,
+                repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
                 isActive: p[5]
             }
             products.push(prod);
@@ -110,6 +154,36 @@ export const refreshLoanManager =  () => {
                 productCount: productCount.toNumber(),
                 tokenUcdAddress: tokenUcdAddress,
                 ratesAddress: ratesAddress
+            });
+        });
+    }
+}
+
+export function newLoan(productId, ethAmount) {
+    return async dispatch =>  {
+        // TODO: shall we emmit error if already state.loanManager.isSubmitting or enoguh to disable submit on form?
+        dispatch({
+            type: LOANMANAGER_NEWLOAN_REQUESTED,
+            ethAmount: ethAmount,
+            productId: productId
+        })
+        let web3 = store.getState().ethBase.web3Instance;
+        let loanManager = store.getState().loanManager.contract.instance;
+        let userAccount = store.getState().ethBase.userAccount;
+        // TODO: refresh loanCount
+        return loanManager.newEthBackedLoan(productId,
+                    {value: web3.toWei(ethAmount), from: userAccount, gas: NEW_LOAN_GAS} )
+        .then( res => {
+            let loanContractAddress = res.logs[0].args.loanContract;
+            console.log("disbursed UCD: ", res.logs[0].args.disbursedLoanInUcd.toNumber(), loanContractAddress);
+            return dispatch({
+                type: LOANMANAGER_NEWLOAN_CREATED,
+                loanContractAddress: loanContractAddress
+            });
+        }).catch( error => {
+            return dispatch({
+                type: LOANMANAGER_NEWLOAN_ERROR,
+                error: error
             });
         });
     }

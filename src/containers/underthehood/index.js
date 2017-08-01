@@ -37,16 +37,18 @@ function AccountList(props) {
 
 function ProductList(props) {
     const products = props.products;
-    const listItems = products.map( (prod, index) =>
-        <tr key={index}><td className="white-space:pre-wrap"><small>[{index}] {JSON.stringify(prod, null, 4)}</small></td></tr>
-    );
-    return (
-        <Table condensed striped>
-            <tbody>
-                {listItems}
-            </tbody>
-        </Table>
-    );
+    const listItems = products ?
+        products.map( (prod, index) =>
+            <tr key={index}><td className="white-space:pre-wrap"><small>[{index}] {JSON.stringify(prod, null, 4)}</small></td></tr>
+        ) : null;
+        return (
+            <Table condensed striped>
+                <tbody>
+                    {listItems}
+                </tbody>
+            </Table>
+        );
+
 }
 
 class underTheHood extends React.Component {
@@ -109,7 +111,7 @@ class underTheHood extends React.Component {
                         <Row>
                             <Col xs={6} md={6}>
                                 <Panel header={ratesTitle}>
-                                    <p>USD/WEI: {this.props.usdWeiRate} </p>
+                                    <p>USD/WEI: {this.props.usdcWeiRate} </p>
                                     <p>ETH/USD: {this.props.ethUsdRate}</p>
                                     <p>USD/ETH: {this.props.usdEthRate} </p>
                                     <p><small>Contract: { this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
@@ -182,7 +184,7 @@ const mapStateToProps = state => ({
     ratesContract: state.rates.contract,
     ratesBalance: state.rates.balance,
     ratesOwner: state.rates.owner,
-    usdWeiRate: state.rates.usdWeiRate,
+    usdcWeiRate: state.rates.usdcWeiRate,
     usdEthRate: state.rates.usdEthRate,
     ethUsdRate: state.rates.ethUsdRate,
 

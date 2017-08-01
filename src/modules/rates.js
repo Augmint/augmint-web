@@ -1,3 +1,4 @@
+/* TODO: use BigNumber for conversions */
 import store from '../store.js'
 import SolidityContract from './SolidityContract';
 import rates_artifacts from '../contractsBuild/Rates.json' ;
@@ -43,9 +44,9 @@ export default (state = initialState, action) => {
             isLoading: false,
             balance: action.balance,
             owner: action.owner,
-            usdWeiRate: action.usdWeiRate,
+            usdcWeiRate: action.usdcWeiRate,
             usdEthRate: action.usdEthRate,
-            ethUsdRate: action.ethUsdRate
+            ethUsdRate: action.ethUsdRate,
         }
 
         default:
@@ -73,16 +74,22 @@ export const refreshRates =  () => {
         })
         let web3 = store.getState().ethBase.web3Instance;
         let rates = store.getState().rates.contract.instance;
-        let usdWeiRate = (await rates.usdWeiRate() ).toNumber();
-        let usdEthRate = web3.fromWei(usdWeiRate);
+        let usdDecimalsMul = 10 ** (await rates.decimals()).toNumber();
+        let usdcWeiRate = (await rates.usdWeiRate() ).toNumber();
+        // let weiUsdcRate = 1/usdcWeiRate;
+        let usdcEthRate = web3.fromWei(usdcWeiRate);
+        let usdEthRate = usdcEthRate * usdDecimalsMul;
+        let ethUsdcRate = 1/ usdcEthRate;
+        let ethUsdRate = ethUsdcRate / usdDecimalsMul;
         let owner = await rates.owner();
+
         return web3.eth.getBalance(rates.address, function(error, balance) {
             return dispatch({
                 type: RATES_REFRESHED,
                 balance: web3.fromWei( balance.toNumber()),
-                usdWeiRate: usdWeiRate,
+                usdcWeiRate: usdcWeiRate,
                 usdEthRate: usdEthRate,
-                ethUsdRate: 1 / usdEthRate,
+                ethUsdRate: ethUsdRate,
                 owner: owner
             })
         });
