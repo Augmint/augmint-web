@@ -4,6 +4,7 @@ import ethBase from './ethBase'
 import rates from './rates'
 import tokenUcd from './tokenUcd'
 import loanManager from './loanManager'
+import balances from './balances'
 import { reducer as formReducer } from 'redux-form'
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
     rates,
     tokenUcd,
     loanManager,
+    balances,
     form: formReducer
 })

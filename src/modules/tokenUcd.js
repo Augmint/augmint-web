@@ -97,7 +97,7 @@ export const refreshTokenUcd =  () => {
                     decimalsDiv: decimalsDiv,
                     ucdBalance: ucdBalance.toNumber() / decimalsDiv,
                     balance: web3.fromWei( balance.toNumber()),
-                    totalSupply: totalSupply.toNumber(),
+                    totalSupply: totalSupply.toNumber() / decimalsDiv,
                     loanManagerAddress: loanManagerAddress
                 });
             });

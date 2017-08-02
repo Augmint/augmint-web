@@ -5,6 +5,7 @@ import store from '../../store'
 import { SubmissionError } from 'redux-form'
 import { newLoan, LOANMANAGER_NEWLOAN_ERROR} from '../../modules/loanManager'
 import LoanProductDetails from '../../components/LoanProductDetails'
+import AccountInfo from '../../components/AccountInfo'
 import NewLoanForm from './NewLoanForm'
 import NewLoanSuccess from './NewLoanSuccess';
 
@@ -71,8 +72,17 @@ class NewLoanPage extends React.Component {
                 <Grid>
                     <Row>
                         <Col xs={4} md={4}>
-                            <h4>Selected Loan</h4>
-                            <LoanProductDetails product={this.state.product} />
+                            <Row>
+                                <Col>
+                                    <h4>Selected Loan</h4>
+                                    <LoanProductDetails product={this.state.product} />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <AccountInfo title={<h2>My Account</h2>} account={this.props.userAccount}/>
+                                </Col>
+                            </Row>
                         </Col>
                         <Col xs={8} md={8}>
                             {!this.state.submitSucceeded &&
@@ -95,7 +105,8 @@ class NewLoanPage extends React.Component {
 const mapStateToProps = state => ({
     products: state.loanManager.products,
     rates: state.rates,
-    submitSucceeded: state.submitSucceeded
+    submitSucceeded: state.submitSucceeded,
+    userAccount: state.balances.account
 })
 
 export default connect(

@@ -2,10 +2,8 @@
 import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
-import {
-    setupWeb3,
-    refreshBalance
-} from '../../modules/ethBase'
+import { setupWeb3 } from '../../modules/ethBase'
+import { getBalance } from '../../modules/balances'
 import {refreshRates} from '../../modules/rates'
 import {refreshTokenUcd} from '../../modules/tokenUcd'
 import {refreshLoanManager} from '../../modules/loanManager'
@@ -55,7 +53,7 @@ class underTheHood extends React.Component {
 
     handleBalanceRefreshClick = e => {
         e.preventDefault()
-        this.props.refreshBalance(this.props.userAccount);
+        this.props.getBalance(this.props.userAccount);
         console.log(store.getState());
         //console.log(this.props.rates)
     }
@@ -99,9 +97,9 @@ class underTheHood extends React.Component {
                             </Col>
                             <Col xs={6} md={6}>
                                 <Panel header={userAccountTitle}>
-
                                     <p>{this.props.userAccount}</p>
-                                    <p>Balance: {this.props.balance} ETH</p>
+                                    <p>ETH Balance: {this.props.userAccountBal.ethBalance} ETH</p>
+                                    <p>UCD Balance: {this.props.userAccountBal.ucdBalance} UCD</p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleBalanceRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh balance</Button>
                                     </ButtonToolbar>
@@ -175,7 +173,7 @@ class underTheHood extends React.Component {
 const mapStateToProps = state => ({
     userAccount: state.ethBase.userAccount,
     accounts: state.ethBase.accounts,
-    balance: state.ethBase.balance,
+    userAccountBal: state.balances.account,
     isLoading: state.ethBase.isLoading,
     isConnected: state.ethBase.isConnected,
     web3ConnectionId: state.ethBase.web3ConnectionId,
@@ -210,7 +208,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setupWeb3,
-    refreshBalance,
+    getBalance,
     refreshRates,
     refreshTokenUcd,
     refreshLoanManager

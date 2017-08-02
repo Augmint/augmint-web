@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import React from 'react';
 import store from '../../store'
 import watch from 'redux-watch'
-import { setupWeb3, refreshBalance } from '../../modules/ethBase'
+import { setupWeb3 } from '../../modules/ethBase'
+import { getBalance } from '../../modules/balances'
 import { connectRates, refreshRates } from '../../modules/rates';
 import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
 import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
@@ -31,7 +32,6 @@ class App extends React.Component {
 
         let w1 = watch(store.getState, 'ethBase.web3ConnectionId')
         store.subscribe(w1((newVal, oldVal, objectPath) => {
-            store.dispatch(refreshBalance(store.getState().ethBase.userAccount));
             store.dispatch(connectRates());
             store.dispatch(connectTokenUcd());
             store.dispatch(connectloanManager());
@@ -48,6 +48,7 @@ class App extends React.Component {
         store.subscribe(w3((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshTokenUcd());
+                store.dispatch(getBalance(store.getState().ethBase.userAccount));
             }
         }))
 
@@ -63,7 +64,7 @@ class App extends React.Component {
         if (nextProps.isConnected && nextProps.userAccount !== this.props.userAccount ) {
             // TODO: this doesn't work yet: we need a timer to watch defaultAccount change
             // TODO handle this more generically (ie. watch all contract balances in ethBase, maybe cached? )
-            refreshBalance(nextProps.userAccount)
+            getBalance(nextProps.userAccount)
         }
     }
 
