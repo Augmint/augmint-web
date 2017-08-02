@@ -5,7 +5,7 @@ export default function NewLoanSuccess(props) {
 
     const { address,  disbursedLoanInUcd, eth } = props.loanCreated;
     return (
-        <Panel header="You've got a loan" bsStyle="success">
+        <Panel header={<h3>You've got a loan</h3>} bsStyle="success">
             <p>Your loan contract address: {address}</p>
             <p>Disbursed: {disbursedLoanInUcd / 10000} UCD</p>
             <p>Don't forget to pay it back on maturity.</p>

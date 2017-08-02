@@ -29,11 +29,6 @@ class NewLoanForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            disbursedUcdAmount: '',
-            loanUcdAmount: '',
-            ethAmount: ''
-        }
         this.onDisbursedUcdAmountChange = this.onDisbursedUcdAmountChange.bind(this);
         this.onLoanUcdAmountChange = this.onLoanUcdAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
@@ -55,12 +50,9 @@ class NewLoanForm extends React.Component {
 
     onEthAmountChange(e) {
         let loanUcdAmount = e.target.value * this.props.product.loanCoverageRatio * this.props.rates.ethUsdRate
-        this.setState({
-            input: 'ETH',
-            disbursedUcdAmount: loanUcdAmount * this.props.product.discountRate,
-            loanUcdAmount: loanUcdAmount,
-            ethAmount: e.target.value
-        });
+        let disbursedUcdAmount = loanUcdAmount * this.props.product.discountRate;
+        this.props.change("disbursedUcdAmount", disbursedUcdAmount);
+        this.props.change("loanUcdAmount", loanUcdAmount )
     }
 
     stringifyError (err, filter, space) { // TODO: move this (together with error Panel) to a common place
