@@ -10,7 +10,7 @@ import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
 import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import Home from '../home';
 import GetLoan from '../getLoan';
 import TokenUcd from '../tokenUcd';
@@ -105,11 +105,13 @@ class App extends React.Component {
 
                 <main>
                     <StatusMessages />
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/tokenUcd" component={TokenUcd} />
-                    <Route path="/getLoan" component={GetLoan} />
-                    <Route exact path="/about-us" component={About} />
-                    <Route exact path="/under-the-hood" component={UnderTheHood} />
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/tokenUcd" component={TokenUcd} />
+                        <Route path="/getLoan" component={GetLoan} />
+                        <Route exact path="/about-us" component={About} />
+                        <Route exact path="/under-the-hood" component={UnderTheHood} />
+                    </Switch>
                 </main>
 
             </div>

@@ -9,7 +9,7 @@ import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
 import moment from 'moment';
 
-const NEW_LOAN_GAS = 3000000;
+const NEW_LOAN_GAS = 700000;  // on testRPC: 665514
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
 
@@ -30,9 +30,8 @@ const initialState = {
     productCount: '?',
     products: null,
     isLoading: false,  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
-    isSubmitting: false,
     error: null,
-    loanContractAddress: null
+    loanCreated: null
 }
 
 export default (state = initialState, action) => {
@@ -72,23 +71,20 @@ export default (state = initialState, action) => {
         case LOANMANAGER_NEWLOAN_REQUESTED:
         return {
             ...state,
-            isSubmitting: true,
             error: null,
-            loanContractAddress: null
+            loanCreated: null
         }
 
         case LOANMANAGER_NEWLOAN_ERROR:
         return {
             ...state,
-            isSubmitting: false,
             error: action.error
         }
 
         case LOANMANAGER_NEWLOAN_CREATED:
         return {
             ...state,
-            isSubmitting: false,
-            loanContractAddress: action.loanContractAddress
+            loanCreated: action.loanCreated
         }
 
         default:
@@ -161,7 +157,7 @@ export const refreshLoanManager =  () => {
 
 export function newLoan(productId, ethAmount) {
     return async dispatch =>  {
-        // TODO: shall we emmit error if already state.loanManager.isSubmitting or enoguh to disable submit on form?
+        // TODO: shall we emmit error if already submitting or enough as it is (submit disabled on form)
         dispatch({
             type: LOANMANAGER_NEWLOAN_REQUESTED,
             ethAmount: ethAmount,
@@ -174,11 +170,17 @@ export function newLoan(productId, ethAmount) {
         return loanManager.newEthBackedLoan(productId,
                     {value: web3.toWei(ethAmount), from: userAccount, gas: NEW_LOAN_GAS} )
         .then( res => {
-            let loanContractAddress = res.logs[0].args.loanContract;
-            console.log("disbursed UCD: ", res.logs[0].args.disbursedLoanInUcd.toNumber(), loanContractAddress);
+            // console.log(JSON.stringify(res, null, 4), res.logs[0].args.disbursedLoanInUcd.toNumber())
+            let loanCreated = {
+                address: res.logs[0].args.loanContract,
+                disbursedLoanInUcd: res.logs[0].args.disbursedLoanInUcd.toNumber(),
+                eth: { // TODO: add txhash etc.
+                    gasUsed: res.receipt.gasUsed // TODO: could we make it more generic?
+                }
+            }
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_CREATED,
-                loanContractAddress: loanContractAddress
+                loanCreated: loanCreated
             });
         }).catch( error => {
             return dispatch({
