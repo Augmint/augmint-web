@@ -9,21 +9,9 @@ FIXME: Rounding issues. Eg. 20UCD entered to disbursed is not enough for minDisb
         - Introduce BigNumbers + figure out rounding (here and rates too)  */
 
 import React from 'react'
-import {Panel,FormGroup, FormControl, InputGroup, ControlLabel, Button, HelpBlock} from 'react-bootstrap';
+import {Panel,FormGroup, InputGroup, ControlLabel, Button, HelpBlock} from 'react-bootstrap';
 import { Form, Field, reduxForm } from 'redux-form'
-
-const FieldInput = ({ input, meta, type, placeholder, min, max}) => {
-    return (
-        <FormControl
-            id={input.name}
-            type={type}
-            placeholder={placeholder}
-            min={min}
-            max={max}
-            value={input.value}
-            onChange={input.onChange} />
-    )
-}
+import {FieldInput} from '../../components/FieldInput'
 
 class NewLoanForm extends React.Component {
 
