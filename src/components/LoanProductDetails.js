@@ -1,7 +1,6 @@
 import React from 'react'
 import {Table, ListGroupItem} from 'react-bootstrap';
 import ToolTip from './ToolTip';
-import { Link } from 'react-router-dom'
 
 export default function LoanProductDetails(props) {
     let prod = props.product;
@@ -46,7 +45,7 @@ export default function LoanProductDetails(props) {
             </tr>
             </tbody>
         </Table>
-        { props.showSelect ? <Link key="prod.id" className="btn btn-primary" to={`/getLoan/${prod.id}`}>Select</Link> : ""}
+        { props.selectComponent }
     </ListGroupItem>
     );
 }

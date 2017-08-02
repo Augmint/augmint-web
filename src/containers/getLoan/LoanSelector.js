@@ -2,6 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import LoanProductDetails from '../../components/LoanProductDetails'
 import { ListGroup, Panel, Well, Grid, Row, Col} from 'react-bootstrap';
+import { Link } from 'react-router-dom'
+
+function SelectLoanButton (props) {
+    return(
+        <Link key={props.productId} className="btn btn-primary" to={`/getLoan/${props.productId}`}>
+            Select
+        </Link>)
+}
 
 function LoanProductList(props) {
     let products = props.products;
@@ -9,7 +17,7 @@ function LoanProductList(props) {
     const listItems = products == null ? <p>Loading products...</p> :
         products.filter( (item) => { return item.isActive}).map( (prod, index) =>
             <div key={`loanProdDiv-${prod.id}`}>
-                <LoanProductDetails product={prod} showSelect={true}/>
+                <LoanProductDetails product={prod} selectComponent={<SelectLoanButton productId={prod.id}/>}/>
             </div>
     );
 

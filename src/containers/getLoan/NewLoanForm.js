@@ -10,7 +10,7 @@ FIXME: Rounding issues. Eg. 20UCD entered to disbursed is not enough for minDisb
 
 import React from 'react'
 import {Panel,FormGroup, FormControl, InputGroup, ControlLabel, Button, HelpBlock} from 'react-bootstrap';
-import { Form, Field, reduxForm, formValues } from 'redux-form'
+import { Form, Field, reduxForm } from 'redux-form'
 
 const FieldInput = ({ input, meta, type, placeholder, min, max}) => {
     return (
