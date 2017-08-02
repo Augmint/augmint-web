@@ -1,5 +1,4 @@
 /*  TODO: add gasLimit and gasPrice params
-    TODO: check if all gas used when submitting tx
     TODO: split action creator and reducer
     TODO: split REFRESH and REFRESH PRODUCTS (and add event listener to refresh when one changed or added...)
     TODO: change action creatators to get payload so won't need to maintain attributes at two places here when adding/changing
@@ -164,23 +163,28 @@ export function newLoan(productId, ethAmount) {
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate;
         if( store.getState().loanManager.loanCount === 0 ) {
-            gasEstimate = NEW_LOAN_GAS;
+            gasEstimate = NEW_FIRST_LOAN_GAS ;
         } else {
-            gasEstimate = NEW_FIRST_LOAN_GAS;
+            gasEstimate = NEW_LOAN_GAS;
         }
         let userAccount = store.getState().ethBase.userAccount;
-        // TODO: refresh loanCount
         return loanManager.newEthBackedLoan(productId,
                     {value: web3.toWei(ethAmount), from: userAccount, gas: gasEstimate } )
         .then( res => {
             // console.log(JSON.stringify(res, null, 4), res.logs[0].args.disbursedLoanInUcd.toNumber())
+            if( res.receipt.gasUsed === gasEstimate) { // Neeed for testnet behaviour (TODO: test it!)
+                throw(new Error( "Create loan error, all gas provided was used:  " + res.receipt.gasUsed));
+            }
             let loanCreated = {
                 address: res.logs[0].args.loanContract,
                 disbursedLoanInUcd: res.logs[0].args.disbursedLoanInUcd.toNumber(),
+                // TODO: could we make eth params more genericly (and gasUsed check above too...)?
                 eth: { // TODO: add txhash etc.
-                    gasUsed: res.receipt.gasUsed // TODO: could we make it more generic?
+                    gasProvided: gasEstimate,
+                    gasUsed: res.receipt.gasUsed
                 }
             }
+            // TODO: refresh loanCount ( call refreshLoanManager + getLoans actions on new loan events)
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_CREATED,
                 loanCreated: loanCreated
