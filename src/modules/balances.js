@@ -40,7 +40,6 @@ export function getBalance(address) {
         let ucdBalance = '?';
 
         if (store.getState().tokenUcd.contract != null ) {
-            console.log("getBalance tokenUcd exists")
             let tokenUcd = store.getState().tokenUcd.contract.instance;
             ucdBalance = (await tokenUcd.balanceOf(address)).toNumber() / 10000 // TODO: use store.getState().tokenUcd.decimalsDiv (timing issues);
         }

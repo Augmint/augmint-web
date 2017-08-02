@@ -9,7 +9,6 @@ const myLoansTitle = ( <h3>My UCD Loans</h3> );
 class Home extends React.Component {
 
     render () {
-        console.log( "Render this.state.userAccount:", this.props.userAccount)
         return(
             <Grid>
                 <Row>

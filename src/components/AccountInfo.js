@@ -2,7 +2,6 @@ import React from 'react'
 import {Panel} from 'react-bootstrap';
 
 export default function AccountInfo(props) {
-    console.log(props)
     return(
         <Panel header={props.title}>
         <p>Account: {props.account.address}</p>
