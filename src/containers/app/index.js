@@ -17,7 +17,6 @@ import GetLoan from '../getLoan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
-import StatusMessages from './StatusMessages'
 
 class App extends React.Component {
 
@@ -105,7 +104,6 @@ class App extends React.Component {
                 </header>
 
                 <main>
-                    <StatusMessages />
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
