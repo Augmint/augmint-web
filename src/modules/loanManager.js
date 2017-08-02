@@ -1,7 +1,7 @@
 /*  TODO: add gasLimit and gasPrice params
     TODO: check if all gas used when submitting tx
-    TODO: cleare up states, eg. isLoading is not used
     TODO: split action creator and reducer
+    TODO: split REFRESH and REFRESH PRODUCTS (and add event listener to refresh when one changed or added...)
     TODO: change action creatators to get payload so won't need to maintain attributes at two places here when adding/changing
     TODO: use selectors. eg: https://github.com/reactjs/reselect */
 
@@ -31,7 +31,6 @@ const initialState = {
     loanCount: '?',
     productCount: '?',
     products: null,
-    isLoading: false,  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
     error: null,
     loanCreated: null
 }
@@ -40,27 +39,23 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case LOANMANAGER_CONNECT_REQUESTED:
         return {
-            ...state,
-            isLoading: true
+            ...state
         }
 
         case LOANMANAGER_CONNECTED:
         return {
             ...state,
-            isLoading: false,
             contract: action.contract
         }
 
         case LOANMANAGER_REFRESH_REQUESTED:
         return {
-            ...state,
-            isLoading: true
+            ...state
         }
 
         case LOANMANAGER_REFRESHED:
         return {
             ...state,
-            isLoading: false,
             owner: action.owner,
             balance: action.balance,
             loanCount: action.loanCount,
