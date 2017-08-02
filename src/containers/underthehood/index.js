@@ -142,7 +142,7 @@ class underTheHood extends React.Component {
                                 <Panel header={loanManagerTitle}>
                                     <p>ProductCount: {this.props.productCount} </p>
                                     <p>LoanCount: {this.props.loanCount} </p>
-                                    <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
+                                    <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.loanManagerContract.instance.address }</small></p>
                                     <p><small>Owner: { this.props.loanManagerOwner}</small></p>
                                     <p><small>Balance: { this.props.loanManagerBalance } ETH</small></p>
                                     <p><small>Rates contract: { this.props.loanManagerRatesContractAddress }</small></p>
