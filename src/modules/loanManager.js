@@ -1,4 +1,5 @@
 /*  TODO: add gasLimit and gasPrice params
+    TODO: check if all gas used when submitting tx
     TODO: cleare up states, eg. isLoading is not used
     TODO: split action creator and reducer
     TODO: change action creatators to get payload so won't need to maintain attributes at two places here when adding/changing
@@ -9,7 +10,8 @@ import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
 import moment from 'moment';
 
-const NEW_LOAN_GAS = 700000;  // on testRPC: 665514
+const NEW_LOAN_GAS = 700000;  // on testRPC: first= 725514  additional = 665514
+const NEW_FIRST_LOAN_GAS = 760000;
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
 
@@ -165,10 +167,16 @@ export function newLoan(productId, ethAmount) {
         })
         let web3 = store.getState().ethBase.web3Instance;
         let loanManager = store.getState().loanManager.contract.instance;
+        let gasEstimate;
+        if( store.getState().loanManager.loanCount === 0 ) {
+            gasEstimate = NEW_LOAN_GAS;
+        } else {
+            gasEstimate = NEW_FIRST_LOAN_GAS;
+        }
         let userAccount = store.getState().ethBase.userAccount;
         // TODO: refresh loanCount
         return loanManager.newEthBackedLoan(productId,
-                    {value: web3.toWei(ethAmount), from: userAccount, gas: NEW_LOAN_GAS} )
+                    {value: web3.toWei(ethAmount), from: userAccount, gas: gasEstimate } )
         .then( res => {
             // console.log(JSON.stringify(res, null, 4), res.logs[0].args.disbursedLoanInUcd.toNumber())
             let loanCreated = {
