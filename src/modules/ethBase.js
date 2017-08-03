@@ -5,8 +5,8 @@ export const WEB3_SETUP= 'ethBase/WEB3_SETUP'
 const initialState = {
     web3Instance: null,
     web3ConnectionId: null, // workaround so that we don't need deep compare web3Instance to detecet change
-    userAccount: '0x0',
-    accounts: [],
+    userAccount: '?',
+    accounts: null,
     isLoading: false,  // TODO: isLoading & isConnected need to be refactored to work with other actions
     isConnected: false
 }

@@ -22,13 +22,19 @@ const productsTitle = ( <h3>Loan Products</h3> );
 
 function AccountList(props) {
     const accounts = props.accounts;
-    const listItems = accounts.map( (number, index) =>
-        <tr key={number}><td ><small>[{index}] {number}</small></td></tr>
-    );
+    const listItems = accounts == null ?
+            <tr><td>Loading...</td></tr>
+        : accounts.map( (number, index) =>
+            <tr key={number}><td ><small>[{index}] {number}</small></td></tr>
+        );
+
     return (
         <Table condensed striped>
             <tbody>
-                {listItems}
+                { accounts != null && accounts.length === 0 ?
+                    <div><tr><td>No accounts</td></tr></div>
+                : listItems
+                }
             </tbody>
         </Table>
     );
@@ -174,7 +180,10 @@ class underTheHood extends React.Component {
                 <Row>
                     <Col xs={6} md={6}>
                         <Panel header={<h3>Loans for userAccount</h3>}>
-                            <ObjDump items={this.props.loans} />
+                            { this.props.loans == null ?
+                                <p>Loading...</p>
+                                : <ObjDump items={this.props.loans} />
+                            }
                         </Panel>
                     </Col>
                 </Row>
