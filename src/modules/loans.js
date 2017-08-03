@@ -13,7 +13,7 @@ export const LOANS_LOANLIST_REQUESTED = 'loans/LOANS_LOANLIST_REQUESTED'
 export const LOANS_LOANLIST_RECEIVED = 'loans/LOANS_LOANLIST_RECEIVED'
 
 const initialState = {
-    loans: []
+    loans: null
 }
 
 export default (state = initialState, action) => {
@@ -77,7 +77,7 @@ export async function fetchLoanDetails(loanId) {
     let disbursementDate = l[7].toNumber();
     let disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
     let maturity = l[8].toNumber();
-    let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm:ss");
+    let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
     let repayPeriod = l[9].toNumber();
     let loan = {
         ethBalance: ethBalance,
@@ -100,7 +100,7 @@ export async function fetchLoanDetails(loanId) {
         repayPeriod: repayPeriod,  // 9
         repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
         repayBy: repayPeriod + maturity,
-        repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm:ss")
+        repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm")
     }
     return loan;
 }

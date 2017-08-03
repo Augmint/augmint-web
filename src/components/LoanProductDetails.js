@@ -2,7 +2,7 @@ import React from 'react'
 import {Table, ListGroupItem} from 'react-bootstrap';
 import { DiscountRateToolTip, LoanCoverageRatioToolTip, RepayPeriodToolTip } from './LoanToolTips';
 
-export default function LoanDetails(props) {
+export default function LoanProductDetails(props) {
     let prod = props.product;
     return(
         <ListGroupItem  header={"Product " + (prod.id +1)  + " - Repay in " + prod.termText} key={prod.id}>

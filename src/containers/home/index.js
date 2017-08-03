@@ -1,10 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {Grid, Row, Col, Jumbotron, Panel} from 'react-bootstrap'
+import {Grid, Row, Col, Jumbotron} from 'react-bootstrap'
 import AccountInfo from '../../components/AccountInfo'
-
-//const myAccountTitle = ( <h3>My UCD Account</h3> );
-const myLoansTitle = ( <h3>My UCD Loans</h3> );
+import LoanList from '../../components/LoanList'
 
 class Home extends React.Component {
 
@@ -26,10 +24,8 @@ class Home extends React.Component {
                         <AccountInfo title={<h2>My Account</h2>} account={this.props.userAccount}/>
                     </Col>
 
-                    <Col xs={4} md={4}>
-                        <Panel header={myLoansTitle}>
-                            <p>TODO</p>
-                        </Panel>
+                    <Col xs={6} md={6}>
+                        <LoanList title={<h3>My UCD Loans</h3>} loans={this.props.loans}/>
                     </Col>
                 </Row>
             </Grid>
@@ -38,7 +34,8 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.userBalances.account
+    userAccount: state.userBalances.account,
+    loans: state.loans.loans
 })
 
 export default connect(
