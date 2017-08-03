@@ -9,8 +9,9 @@ import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
 import moment from 'moment';
 
-const NEW_LOAN_GAS = 700000;  // on testRPC: first= 725514  additional = 665514
-const NEW_FIRST_LOAN_GAS = 760000;
+// TODO: set gasEstimates when it settled. As of now it's on testRPC: first= 762376  additional = 702376
+const NEW_LOAN_GAS = 2000000;
+const NEW_FIRST_LOAN_GAS = 2000000;
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
 
