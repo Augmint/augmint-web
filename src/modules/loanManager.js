@@ -129,7 +129,7 @@ export const refreshLoanManager =  () => {
                 loanCoverageRatio: p[2].toNumber() / 1000000,
                 minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
                 repayPeriod: repayPeriod,
-                repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
+                repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
                 isActive: p[5]
             }
             products.push(prod);
