@@ -7,7 +7,7 @@ import store from './../store'
 import ethBackedLoan_artifacts from '../contractsBuild/EthBackedLoan.json' ;
 import SolidityContract from './SolidityContract';
 import moment from 'moment';
-// import asyncGetBalance from './balances'
+import { asyncGetBalance, getUcdBalance } from './ethHelper'
 
 export const LOANS_LOANLIST_REQUESTED = 'loans/LOANS_LOANLIST_REQUESTED'
 export const LOANS_LOANLIST_RECEIVED = 'loans/LOANS_LOANLIST_RECEIVED'
@@ -30,20 +30,6 @@ export default (state = initialState, action) => {
         default:
         return state;
     }
-}
-
-//TODO: move asyncGetBalance to balances.js (?) and change all balance gets to use that
-export async function asyncGetBalance( address) {
-    return new Promise( function (resolve, reject) {
-        let web3 = store.getState().ethBase.web3Instance;
-        web3.eth.getBalance(address, function(error, bal) {
-            if(error) {
-                reject(error);
-            } else {
-                resolve(bal.toNumber());
-            }
-        });
-    });
 }
 
 export function getLoans(userAccount) {
@@ -72,6 +58,7 @@ export async function fetchLoanDetails(loanId) {
     let res = await loanManager.loanPointers(loanId);
     let loanContractAddress = res[0];
     let ethBalance = await asyncGetBalance( loanContractAddress);
+    let ucdBalance = await getUcdBalance(loanContractAddress);
 
     let loanContract = await SolidityContract.connectNewAt(
         store.getState().ethBase.web3Instance.currentProvider, ethBackedLoan_artifacts,
@@ -94,6 +81,7 @@ export async function fetchLoanDetails(loanId) {
     let repayPeriod = l[9].toNumber();
     let loan = {
         ethBalance: ethBalance,
+        ucdBalance: ucdBalance,
         loanId: loanId.toNumber(),
         loanContract: loanContract,
         borrower: l[0], // 0 the borrower

@@ -1,8 +1,10 @@
-/* ETH and UCD balance
+/* ETH and UCD balance for the active userAccount
+    TODO: make this generic? ie. to use this for any address balances?
     TODO: refresh balances on certain events (all balances on new block? or try to be smart?)
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
-import store from './../store'
+import { asyncGetBalance, getUcdBalance } from './ethHelper'
+
 export const BALANCE_REQUESTED = 'balances/BALANCE_REQUESTED'
 export const BALANCE_RECEIVED  = 'balances/BALANCE_RECEIVED'
 
@@ -37,22 +39,15 @@ export function getBalance(address) {
             type: BALANCE_REQUESTED
         })
 
-        let ucdBalance = '?';
-
-        if (store.getState().tokenUcd.contract != null ) {
-            let tokenUcd = store.getState().tokenUcd.contract.instance;
-            ucdBalance = (await tokenUcd.balanceOf(address)).toNumber() / 10000 // TODO: use store.getState().tokenUcd.decimalsDiv (timing issues);
-        }
-        let web3 = store.getState().ethBase.web3Instance;
-        return web3.eth.getBalance(address, function(error, bal) {
-            dispatch({
+        let ucdBalance = await getUcdBalance(address);
+        let ethBalance = await asyncGetBalance(address);
+        return dispatch({
                 type: BALANCE_RECEIVED,
                 account: {
                     address: address,
-                    ethBalance: web3.fromWei(bal).toNumber(),
+                    ethBalance: ethBalance,
                     ucdBalance: ucdBalance
                 }
-            })
         });
     }
 }

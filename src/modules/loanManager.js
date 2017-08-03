@@ -8,6 +8,7 @@ import store from './../store'
 import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
 import moment from 'moment';
+import {asyncGetBalance , getUcdBalance} from './ethHelper'
 
 // TODO: set gasEstimates when it settled. As of now it's on testRPC: first= 762376  additional = 702376
 const NEW_LOAN_GAS = 2000000;
@@ -24,7 +25,8 @@ export const LOANMANAGER_NEWLOAN_ERROR = 'loanManager/LOANMANAGER_NEWLOAN_ERROR'
 
 const initialState = {
     contract: null,
-    balance: '?',
+    ucdBalance: '?',
+    ethBalance: '?',
     owner: '?',
     ratesAddress: '?',
     tokenUcdAddress: '?',
@@ -57,7 +59,8 @@ export default (state = initialState, action) => {
         return {
             ...state,
             owner: action.owner,
-            balance: action.balance,
+            ethBalance: action.ethBalance,
+            ucdBalance: action.ucdBalance,
             loanCount: action.loanCount,
             productCount: action.productCount,
             products: action.products,
@@ -108,7 +111,6 @@ export const refreshLoanManager =  () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         })
         let loanManager = store.getState().loanManager.contract.instance;
-        let web3 = store.getState().ethBase.web3Instance;
         // TODO: make calls paralel
         let decimalsDiv = 10 ** (await store.getState().tokenUcd.contract.instance.decimals()).toNumber(); // TODO: get this from store.tokenUcd (timing issues on first load..)
         let loanCount = await loanManager.getLoanCount();
@@ -136,17 +138,18 @@ export const refreshLoanManager =  () => {
         let ratesAddress = await loanManager.rates();
         let owner = await loanManager.owner();
 
-        return web3.eth.getBalance(loanManager.address, function(error, balance) {
-            dispatch({
+        let ethBalance = await asyncGetBalance(loanManager.address);
+        let ucdBalance = await getUcdBalance(loanManager.address);
+        return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 owner: owner,
-                balance: web3.fromWei( balance.toNumber()),
+                ethBalance: ethBalance,
+                ucdBalance: ucdBalance,
                 loanCount: loanCount.toNumber(),
                 products: products,
                 productCount: productCount.toNumber(),
                 tokenUcdAddress: tokenUcdAddress,
                 ratesAddress: ratesAddress
-            });
         });
     }
 }

@@ -7,7 +7,7 @@ export default function NewLoanSuccess(props) {
     return (
         <Panel header={<h3>You've got a loan</h3>} bsStyle="success">
             <p>Your loan contract address: {address}</p>
-            <p>Disbursed: {disbursedLoanInUcd / 10000} UCD</p>
+            <p>Disbursed: {disbursedLoanInUcd } UCD</p>
             <p>Don't forget to pay it back on maturity.</p>
             <p>You can always check your loan's status on the home page</p>
             <p><small>Gas used: {eth.gasUsed}</small></p>

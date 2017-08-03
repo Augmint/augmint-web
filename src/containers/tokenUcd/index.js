@@ -68,7 +68,7 @@ const mapStateToProps = state => ({
 
     tokenUcdContract: state.tokenUcd.contract,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.balance,
+    tokenUcdEthBalance: state.tokenUcd.ethBalance,
     tokenUcdTotalSupply: state.tokenUcd.totalSupply,
     loanManagerAddress: state.tokenUcd.loanManagerAddress
 

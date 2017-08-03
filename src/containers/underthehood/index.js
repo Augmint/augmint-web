@@ -120,7 +120,7 @@ class underTheHood extends React.Component {
                                     <p>USD/ETH: {this.props.usdEthRate} </p>
                                     <p><small>Contract: { this.props.ratesContract == null ? "No contract" :  this.props.ratesContract.instance.address }</small></p>
                                     <p><small>Owner: { this.props.ratesOwner}</small></p>
-                                    <p><small>Balance: { this.props.ratesBalance } ETH</small></p>
+                                    <p><small>Balance: { this.props.ratesEthBalance} ETH | { this.props.ratesUcdBalance} UCD</small></p>
                                     <ButtonToolbar>
                                         <Button bsSize="small" onClick={this.handleRatesRefreshClick} disabled={this.props.isLoading || !this.props.isConnected}>Refresh rates</Button>
                                     </ButtonToolbar>
@@ -148,7 +148,7 @@ class underTheHood extends React.Component {
                                     <p>LoanCount: {this.props.loanCount} </p>
                                     <p><small>Contract: { this.props.loanManagerContract == null ? "No contract" :  this.props.loanManagerContract.instance.address }</small></p>
                                     <p><small>Owner: { this.props.loanManagerOwner}</small></p>
-                                    <p><small>Balance: { this.props.loanManagerBalance } ETH</small></p>
+                                    <p><small>Balance: { this.props.loanManagerEthBalance} ETH | { this.props.loanManagerUcdBalance} UCD </small></p>
                                     <p><small>Rates contract: { this.props.loanManagerRatesContractAddress }</small></p>
                                     <p><small>TokenUcd contract: { this.props.loanManagerTokenUcdContractAddress }</small></p>
                                     <ButtonToolbar>
@@ -193,7 +193,8 @@ const mapStateToProps = state => ({
     web3Instance: state.ethBase.web3Instance,
 
     ratesContract: state.rates.contract,
-    ratesBalance: state.rates.balance,
+    ratesUcdBalance: state.rates.ucdBalance,
+    ratesEthBalance: state.rates.ethBalance,
     ratesOwner: state.rates.owner,
     usdcWeiRate: state.rates.usdcWeiRate,
     usdEthRate: state.rates.usdEthRate,
@@ -204,13 +205,14 @@ const mapStateToProps = state => ({
     tokenUcdDecimals: state.tokenUcd.decimals,
     tokenUcdDecimalsDiv: state.tokenUcd.decimalsDiv,
     tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.balance,
+    tokenUcdEthBalance: state.tokenUcd.ethBalance,
     tokenUcdTotalSupply: state.tokenUcd.totalSupply,
     tokenUcdLoanManagerAddress: state.tokenUcd.loanManagerAddress,
 
     loanManagerContract: state.loanManager.contract,
     loanManagerOwner: state.loanManager.owner,
-    loanManagerBalance: state.loanManager.balance,
+    loanManagerEthBalance: state.loanManager.ethBalance,
+    loanManagerUcdBalance: state.loanManager.ucdBalance,
     loanCount: state.loanManager.loanCount,
     productCount: state.loanManager.productCount,
     loanManagerRatesContractAddress: state.loanManager.ratesAddress,
