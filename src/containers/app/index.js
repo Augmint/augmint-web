@@ -1,3 +1,13 @@
+/*
+Wrapper for the whole App
+    main navigation
+    Web3 & contracts initialisation
+    Listeners and handlers to web3 events
+
+TODO: consider moving event listeners  to a separate component
+TODO: make REDUX connect work here (it messes up navigation) so that we don't need all of these store.getStates()
+*/
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
@@ -57,9 +67,50 @@ class App extends React.Component {
             if(newVal) {
                 store.dispatch(refreshLoanManager());
                 store.dispatch(fetchLoans( store.getState().ethBase.userAccount));
+                this.setupListeners();
             }
         }))
     }
+
+    async setupListeners() {
+        let web3 = store.getState().ethBase.web3Instance;
+        // TODO: think over UX how to display confirmed ("latest") and "pending" TXs
+        //        Pending needed for quick UI refresh after tx submitted but we want to show when was it mined
+        this.filterAllBlocks = web3.eth.filter("pending");
+		this.filterAllBlocks.watch(this.onNewBlock.bind(this));
+
+        let loanManager = store.getState().loanManager.contract.instance;
+
+        // e_newLoan(uint8 productId, address borrower, address loanContract, uint disbursedLoanInUcd );
+        loanManager.e_newLoan( {fromBlock: "latest", toBlock: "pending"}).watch(this.onNewLoan.bind(this));
+
+        // TODO: add & handle loan repay & defaulted  events
+        // TODO: add & handle loanproduct change events
+    }
+
+    onNewBlock() {
+        console.debug("onNewBlock: dispatching fetchUserBalance & refreshTokenUcd");
+        store.dispatch(refreshRates()); // not too expensive but should consider a  separate listener for rate change event
+        store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
+        store.dispatch(refreshTokenUcd());
+
+    }
+
+    onNewLoan(error, result) {
+        // TODO: add refresh LoanManager to update loanCount?
+        let userAccount = store.getState().ethBase.userAccount
+        if (result.args.borrower === userAccount) {
+            console.debug("onNewLoan: loan for current user , dispatching fetchLoans")
+            // TODO: it can be expensive, should create a separate fetchNewLoans action
+            store.dispatch(fetchLoans( userAccount));
+        }
+    }
+
+	componentWillUnmount() {
+		this.filterAllBlocks.stopWatching();
+        let loanManager = store.getState().loanManager.contract.instance;
+        loanManager.e_newLoan().stopWatching();
+	}
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.isConnected && nextProps.userAccount !== this.props.userAccount ) {
