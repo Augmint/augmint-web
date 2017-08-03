@@ -1,6 +1,5 @@
 import React from 'react'
 import {Table} from 'react-bootstrap';
-import { DiscountRateToolTip, LoanCoverageRatioToolTip } from './LoanToolTips';
 
 export default function LoanDetails(props) {
     let loan = props.loan;
