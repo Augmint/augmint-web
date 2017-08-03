@@ -46,6 +46,32 @@ contract EthBackedLoan {
         loanState = LoanState.Open;
     }
 
+    function getDetails() constant returns (
+                                    address _owner,
+                                    LoanManager _loanManager,
+                                    TokenUcd _tokenUcd,
+                                    LoanState _loanState,
+                                    uint _ucdDueAtMaturity,
+                                    uint _disbursedLoanInUcd,
+                                    uint _term,
+                                    uint _disbursementDate,
+                                    uint _maturity,
+                                    uint _repayPeriod
+        ) {
+            return (
+                owner, // 0 the borrower
+                loanManager, // 1 loan manager contract instance
+                tokenUcd, // 2 tokenUcd instance
+                loanState, // 3
+                ucdDueAtMaturity, // 4 nominal loan amount in UCD (non discounted amount)
+                disbursedLoanInUcd, // 5
+                term, // 6 duration of loan
+                disbursementDate, // 7
+                maturity, // 8 disbursementDate + term
+                repayPeriod // 9
+            );
+    }
+
     function repay() returns (int8 result) {
         // TODO: * consider moving all repay functionality here from loanManager to make it self contained
         //          - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
