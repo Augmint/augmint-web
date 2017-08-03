@@ -57,8 +57,9 @@ class App extends React.Component {
         let w3 = watch(store.getState, 'tokenUcd.contract')
         store.subscribe(w3((newVal, oldVal, objectPath) => {
             if(newVal) {
-                store.dispatch(refreshTokenUcd());
-                store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
+                store.dispatch(refreshTokenUcd()); // tokenUCD refresh required for loanManager refresh
+                // it's being called first by the listener
+                //store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
             }
         }))
 
@@ -72,7 +73,7 @@ class App extends React.Component {
         }))
     }
 
-    async setupListeners() {
+    setupListeners() {
         let web3 = store.getState().ethBase.web3Instance;
         // TODO: think over UX how to display confirmed ("latest") and "pending" TXs
         //        Pending needed for quick UI refresh after tx submitted but we want to show when was it mined
@@ -117,6 +118,7 @@ class App extends React.Component {
             // TODO: this doesn't work yet: we need a timer to watch defaultAccount change
             // TODO handle this more generically (ie. watch all contract balances in ethBase, maybe cached? )
             store.dispatch(fetchUserBalance(nextProps.userAccount))
+            // TODO: reset filters
         }
     }
 
