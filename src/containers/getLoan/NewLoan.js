@@ -41,9 +41,9 @@ class NewLoanPage extends React.Component {
         } else {
             this.setState({submitSucceeded: true, loanCreated: res.loanCreated });
             // this causing weird behavour:
-            // store.dispatch(push('/getLoan/getLoanSuccess', { loanCreated: res.loanCreated}));
+            // store.dispatch(push('/getLoan/fetchLoansuccess', { loanCreated: res.loanCreated}));
             //this just doesnt upted browser URL:
-            // store.history.push('/getLoan/getLoanSuccess', { submitSucceeded: true, loanCreated: res.loanCreated })
+            // store.history.push('/getLoan/fetchLoansuccess', { submitSucceeded: true, loanCreated: res.loanCreated })
             return res;
         }
     }
@@ -91,7 +91,7 @@ class NewLoanPage extends React.Component {
                             }
                             {this.state.submitSucceeded &&
                                 /* couldn't make this work yet:
-                                <Redirect path="/getLoan/getLoanSuccess" push component={GetLoanSuccess}/> */
+                                <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
                                 <NewLoanSuccess loanCreated={this.state.loanCreated} />
                             }
                         </Col>
@@ -106,7 +106,7 @@ const mapStateToProps = state => ({
     products: state.loanManager.products,
     rates: state.rates,
     submitSucceeded: state.submitSucceeded,
-    userAccount: state.balances.account
+    userAccount: state.userBalances.account
 })
 
 export default connect(

@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
     }
 }
 
-export function getLoans(userAccount) {
+export function fetchLoans(userAccount) {
     return async dispatch => {
 
         dispatch({

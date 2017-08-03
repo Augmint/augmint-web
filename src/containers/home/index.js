@@ -38,7 +38,7 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.balances.account
+    userAccount: state.userBalances.account
 })
 
 export default connect(

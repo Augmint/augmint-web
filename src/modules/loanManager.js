@@ -187,7 +187,7 @@ export function newLoan(productId, ethAmount) {
                     gasUsed: res.receipt.gasUsed
                 }
             }
-            // TODO: refresh loanCount ( call refreshLoanManager + getLoans actions on new loan events)
+            // TODO: refresh loanCount ( call refreshLoanManager + fetchLoans actions on new loan events)
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_CREATED,
                 loanCreated: loanCreated

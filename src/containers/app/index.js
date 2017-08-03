@@ -5,11 +5,11 @@ import React from 'react';
 import store from '../../store'
 import watch from 'redux-watch'
 import { setupWeb3 } from '../../modules/ethBase'
-import { getBalance } from '../../modules/balances'
+import { fetchUserBalance } from '../../modules/userBalances'
 import { connectRates, refreshRates } from '../../modules/rates';
 import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
 import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
-import { getLoans } from '../../modules/loans'
+import { fetchLoans } from '../../modules/loans'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
@@ -48,7 +48,7 @@ class App extends React.Component {
         store.subscribe(w3((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshTokenUcd());
-                store.dispatch(getBalance(store.getState().ethBase.userAccount));
+                store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
             }
         }))
 
@@ -56,7 +56,7 @@ class App extends React.Component {
         store.subscribe(w4((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshLoanManager());
-                store.dispatch(getLoans( store.getState().ethBase.userAccount));
+                store.dispatch(fetchLoans( store.getState().ethBase.userAccount));
             }
         }))
     }
@@ -65,7 +65,7 @@ class App extends React.Component {
         if (nextProps.isConnected && nextProps.userAccount !== this.props.userAccount ) {
             // TODO: this doesn't work yet: we need a timer to watch defaultAccount change
             // TODO handle this more generically (ie. watch all contract balances in ethBase, maybe cached? )
-            getBalance(nextProps.userAccount)
+            store.dispatch(fetchUserBalance(nextProps.userAccount))
         }
     }
 

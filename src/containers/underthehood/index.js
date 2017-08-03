@@ -3,7 +3,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
 import { setupWeb3 } from '../../modules/ethBase'
-import { getBalance } from '../../modules/balances'
+import { fetchUserBalance } from '../../modules/userBalances'
 import {refreshRates} from '../../modules/rates'
 import {refreshTokenUcd} from '../../modules/tokenUcd'
 import {refreshLoanManager} from '../../modules/loanManager'
@@ -186,7 +186,7 @@ class underTheHood extends React.Component {
 const mapStateToProps = state => ({
     userAccount: state.ethBase.userAccount,
     accounts: state.ethBase.accounts,
-    userAccountBal: state.balances.account,
+    userAccountBal: state.userBalances.account,
     isLoading: state.ethBase.isLoading,
     isConnected: state.ethBase.isConnected,
     web3ConnectionId: state.ethBase.web3ConnectionId,
@@ -225,7 +225,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setupWeb3,
-    getBalance,
+    fetchUserBalance,
     refreshRates,
     refreshTokenUcd,
     refreshLoanManager
