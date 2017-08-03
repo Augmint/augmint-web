@@ -118,12 +118,11 @@ export const refreshLoanManager =  () => {
             let p = await loanManager.products(i);
             let term = p[0].toNumber();
             // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            let termText = moment.duration(term, "seconds").humanize();
             let repayPeriod = p[4].toNumber();
             let prod = {
                 id: i,
                 term: term,
-                termText: termText,
+                termText: moment.duration(term, "seconds").humanize(),
                 discountRate: p[1].toNumber() / 1000000,
                 loanCoverageRatio: p[2].toNumber() / 1000000,
                 minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
@@ -178,7 +177,7 @@ export function newLoan(productId, ethAmount) {
             }
             let loanCreated = {
                 address: res.logs[0].args.loanContract,
-                disbursedLoanInUcd: res.logs[0].args.disbursedLoanInUcd.toNumber(),
+                disbursedLoanInUcd: res.logs[0].args.disbursedLoanInUcd.toNumber() / 10000,
                 // TODO: could we make eth params more genericly (and gasUsed check above too...)?
                 eth: { // TODO: add txhash etc.
                     gasProvided: gasEstimate,
