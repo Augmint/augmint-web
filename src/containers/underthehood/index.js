@@ -98,7 +98,7 @@ class underTheHood extends React.Component {
                                     <p>{this.props.isConnected ? "connected" : "not connected" }</p>
                                     <p>Provider: { this.props.web3Instance ? JSON.stringify(this.props.web3Instance.currentProvider) : "No web3 Instance"}</p>
                                     <p>Internal Connection Id: {this.props.web3ConnectionId}</p>
-                                    <Button bsSize="small" onClick={this.props.setupWeb3} disabled={this.props.isLoading}>Reconnect web3</Button>
+                                    <Button bsSize="small" onClick={this.props.setupWeb3} >Reconnect web3</Button>
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
