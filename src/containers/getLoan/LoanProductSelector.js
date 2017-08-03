@@ -28,7 +28,7 @@ function LoanProductList(props) {
     );
 }
 
-class LoanSelector extends React.Component {
+class LoanProductSelector extends React.Component {
 
 render() {
     return(
@@ -58,4 +58,4 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps
-)(LoanSelector)
+)(LoanProductSelector)
