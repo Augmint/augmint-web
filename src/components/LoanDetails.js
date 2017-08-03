@@ -7,7 +7,7 @@ export default function LoanDetails(props) {
         <Table condensed>
             <thead>
                 <tr>
-                    <th>
+                    <th colSpan="2">
                         {loan.loanStateText} loan #{loan.loanId}
                     </th>
                 </tr>

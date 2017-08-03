@@ -66,9 +66,20 @@ export async function fetchLoanDetails(loanId) {
     let l = await loanContract.instance.getDetails(); // tuple with loan details
     let loanState = l[3].toNumber();
     let loanStateText;
+    let maturity = l[8].toNumber();
+    let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
+    let repayPeriod = l[9].toNumber();
+    let repayBy = repayPeriod + maturity;
     switch (loanState)
     {
-        case 0: loanStateText = 'Open'; break;
+        case 0:
+            if( repayBy < moment().utc().unix()) {
+                loanState = 2;
+                loanStateText = 'Defaulted (not yet collected)';
+            } else {
+                loanStateText = 'Open';
+            }
+            break;
         case 1: loanStateText = 'Repaid'; break;
         case 2: loanStateText = 'Defaulted'; break;
         default: loanStateText =  'Invalid state';
@@ -76,9 +87,6 @@ export async function fetchLoanDetails(loanId) {
 
     let disbursementDate = l[7].toNumber();
     let disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
-    let maturity = l[8].toNumber();
-    let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
-    let repayPeriod = l[9].toNumber();
     let loan = {
         ethBalance: ethBalance,
         ucdBalance: ucdBalance,
@@ -99,7 +107,7 @@ export async function fetchLoanDetails(loanId) {
         maturityText: maturityText,
         repayPeriod: repayPeriod,  // 9
         repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
-        repayBy: repayPeriod + maturity,
+        repayBy: repayBy,
         repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm")
     }
     return loan;
