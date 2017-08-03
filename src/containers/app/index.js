@@ -9,6 +9,7 @@ import { getBalance } from '../../modules/balances'
 import { connectRates, refreshRates } from '../../modules/rates';
 import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
 import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
+import { getLoans } from '../../modules/loans'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
@@ -55,6 +56,7 @@ class App extends React.Component {
         store.subscribe(w4((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshLoanManager());
+                store.dispatch(getLoans( store.getState().ethBase.userAccount));
             }
         }))
     }

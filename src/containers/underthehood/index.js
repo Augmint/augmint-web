@@ -8,6 +8,7 @@ import {refreshRates} from '../../modules/rates'
 import {refreshTokenUcd} from '../../modules/tokenUcd'
 import {refreshLoanManager} from '../../modules/loanManager'
 import { ButtonToolbar, Button, Grid, Row, Col, Panel, Table, PageHeader} from 'react-bootstrap';
+import stringifier from 'stringifier'
 
 import store from '../../store' /// for debug
 
@@ -33,11 +34,16 @@ function AccountList(props) {
     );
 }
 
-function ProductList(props) {
-    const products = props.products;
-    const listItems = products ?
-        products.map( (prod, index) =>
-            <tr key={index}><td className="white-space:pre-wrap"><small>[{index}] {JSON.stringify(prod, null, 4)}</small></td></tr>
+function ObjDump(props) {
+    const items = props.items;
+    const stringify = stringifier( {maxDepth: 2, indent: '   '});
+    const listItems = items ?
+        items.map( (item, index) =>
+            <tr key={index}>
+                <td className="white-space:pre-wrap">
+                    <small>[{index}] {stringify(item) }</small>
+                </td>
+            </tr>
         ) : null;
         return (
             <Table condensed striped>
@@ -152,7 +158,7 @@ class underTheHood extends React.Component {
                             </Col>
                             <Col xs={6} md={6}>
                                 <Panel header={productsTitle}>
-                                    <ProductList products={this.props.loanProducts} />
+                                    <ObjDump items={this.props.loanProducts} />
                                 </Panel>
                             </Col>
                         </Row>
@@ -164,6 +170,13 @@ class underTheHood extends React.Component {
                         </Panel>
                     </Col>
 
+                </Row>
+                <Row>
+                    <Col xs={6} md={6}>
+                        <Panel header={<h3>Loans for userAccount</h3>}>
+                            <ObjDump items={this.props.loans} />
+                        </Panel>
+                    </Col>
                 </Row>
             </Grid>
         )
@@ -202,7 +215,9 @@ const mapStateToProps = state => ({
     productCount: state.loanManager.productCount,
     loanManagerRatesContractAddress: state.loanManager.ratesAddress,
     loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress,
-    loanProducts: state.loanManager.products
+    loanProducts: state.loanManager.products,
+
+    loans: state.loans.loans
 
 })
 

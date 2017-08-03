@@ -5,6 +5,7 @@ import rates from './rates'
 import tokenUcd from './tokenUcd'
 import loanManager from './loanManager'
 import balances from './balances'
+import loans from './loans'
 import { reducer as formReducer } from 'redux-form'
 
 export default combineReducers({
@@ -14,5 +15,6 @@ export default combineReducers({
     tokenUcd,
     loanManager,
     balances,
+    loans,
     form: formReducer
 })

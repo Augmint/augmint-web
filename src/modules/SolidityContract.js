@@ -12,4 +12,11 @@ export default class SolidityContract {
             // TODO: check if this contract exists (ie. deployed() doesn't return error when contract is not deployed)
             return new SolidityContract(instance) ;
         }
+
+        static async connectNewAt(provider, artifacts, address) {
+            let contractDef = Contract(artifacts);
+            contractDef.setProvider(provider);
+            let instance = await contractDef.at(address);
+            return new SolidityContract(instance) ;
+        }
 }
