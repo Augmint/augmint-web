@@ -1,4 +1,5 @@
 /* Contract to manage UCD loan contracts
+    TODO: store loanId (idx in loanPointers)  in EthBackedLoan + change repay param to loanId
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
 */
 pragma solidity ^0.4.11;
@@ -51,6 +52,10 @@ contract LoanManager is owned {
 
     function getProductCount() constant returns (uint ct) {
         return products.length;
+    }
+
+    function getLoanIds(address borrower) constant returns (uint[] loans) {
+        return m_loanPointers[borrower];
     }
 
     function addProduct(uint _term, uint _discountRate, uint _loanCoverageRatio,
