@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import LoanProductList from '../../components/LoanProductList'
-import { Well, Grid, Row, Col} from 'react-bootstrap';
+import { Well, Row, Col} from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
 export function SelectLoanButton (props) {
@@ -31,7 +31,7 @@ render() {
                         filter={(item) => { return item.isActive} }/>
                 </Col>
             </Row>
-        
+
     )
 }
 }
