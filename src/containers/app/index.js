@@ -28,6 +28,7 @@ import GetLoan from '../getLoan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
+import {PageNotFound} from '../PageNotFound'
 
 class App extends React.Component {
 
@@ -163,6 +164,7 @@ class App extends React.Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
                         <Route path="/getLoan" component={GetLoan} />
+                        <Route path="/loan/repay" component={RepayLoan} />
                         <Route exact path="/about-us" component={About} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
                     </Switch>
