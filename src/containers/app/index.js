@@ -167,6 +167,7 @@ class App extends React.Component {
                         <Route path="/loan/repay" component={RepayLoan} />
                         <Route exact path="/about-us" component={About} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
+                        <Route component={PageNotFound}/>
                     </Switch>
                 </main>
 
