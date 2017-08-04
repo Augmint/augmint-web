@@ -25,7 +25,7 @@ class Home extends React.Component {
                     </Col>
 
                     <Col xs={6} md={6}>
-                        <LoanList title={<h3>My UCD Loans</h3>} loans={this.props.loans}/>
+                        <LoanList header={<h3>My UCD Loans</h3>} loans={this.props.loans}/>
                     </Col>
                 </Row>
             </Grid>
