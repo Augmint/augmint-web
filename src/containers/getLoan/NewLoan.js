@@ -17,17 +17,39 @@ class NewLoanPage extends React.Component {
     constructor(props) {
         super(props);
         let productId = this.props.match.params.loanProductId;
-        let product = this.props.products ? this.props.products[productId] : null;
         this.state = {
-            product: product, // workaround b/c  componentWillReceiveProps is not triggered when landing from LoanSelector
-            productId: productId
+            product: null,
+            productId: productId,
+            isLoading: true
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillReceiveProps(nextProps)  {
-        let product = nextProps.products ? nextProps.products[this.state.productId] : null;
-        this.setState( {product: product});
+    componentDidUpdate(prevProps, prevState) {
+        if( prevProps.products !== this.props.products) {
+            this.setProduct(); // needed when landing from on URL directly
+        }
+    }
+
+    componentDidMount() {
+        this.setProduct(); // needed when landing from Link within App
+    }
+
+    setProduct() {
+        // workaround b/c landing directly on URL and from LoanSelector triggers different events.
+        if (this.props.products == null) { return; } // not loaded yet
+        let isProductFound ;
+        let product = this.props.products[this.state.productId];
+        if (typeof product === 'undefined') {
+            isProductFound = false;
+        } else {
+            isProductFound = true;
+        }
+        this.setState ({
+            isLoading: false,
+            product: product,
+            isProductFound: isProductFound
+        })
     }
 
     async handleSubmit(values) {
@@ -36,7 +58,7 @@ class NewLoanPage extends React.Component {
         let res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
         if( res.type === LOANMANAGER_NEWLOAN_ERROR) {
             throw new SubmissionError({
-              _error: { title: 'Ethereum transaction Failed', details: res.error}
+                _error: { title: 'Ethereum transaction Failed', details: res.error}
             })
         } else {
             this.setState({submitSucceeded: true, loanCreated: res.loanCreated });
@@ -51,54 +73,54 @@ class NewLoanPage extends React.Component {
     render() {
         //const {submitSucceeded } = this.state
 
-        switch (this.state.product) {
-            case null:
+        if (this.state.isLoading) {
             return (
                 <p>Fetching data (loan product id: {this.state.productId})...</p>
-            )
+            );
+        }
 
-            case -1:
+        if (!this.state.isProductFound ) {
             return (
                 <p>Can't find this loan product (loan product id: {this.state.productId}) </p>
             )
+        }
 
-            case -2:
+        if (!this.state.product.isActive) {
             return (
                 <p>This loan product is not active currently (loan product id: {this.state.productId}) </p>
             )
-
-            default:
-            return(
-                <Grid>
-                    <Row>
-                        <Col xs={4} md={4}>
-                            <Row>
-                                <Col>
-                                    <h4>Selected Loan</h4>
-                                    <LoanProductDetails product={this.state.product} />
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <AccountInfo title={<h2>My Account</h2>} account={this.props.userAccount}/>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col xs={8} md={8}>
-                            {!this.state.submitSucceeded &&
-                                <NewLoanForm product={this.state.product} rates={this.props.rates}
-                                    onSubmit={this.handleSubmit}/>
-                            }
-                            {this.state.submitSucceeded &&
-                                /* couldn't make this work yet:
-                                <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                                <NewLoanSuccess loanCreated={this.state.loanCreated} />
-                            }
-                        </Col>
-                    </Row>
-                </Grid>
-            )
         }
+
+        return (
+            <Grid>
+                <Row>
+                    <Col xs={4} md={4}>
+                        <Row>
+                            <Col>
+                                <h4>Selected Loan</h4>
+                                <LoanProductDetails product={this.state.product} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <AccountInfo title={<h2>My Account</h2>} account={this.props.userAccount}/>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col xs={8} md={8}>
+                        {!this.state.submitSucceeded &&
+                            <NewLoanForm product={this.state.product} rates={this.props.rates}
+                                onSubmit={this.handleSubmit}/>
+                        }
+                        {this.state.submitSucceeded &&
+                            /* couldn't make this work yet:
+                            <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
+                            <NewLoanSuccess loanCreated={this.state.loanCreated} />
+                        }
+                    </Col>
+                </Row>
+            </Grid>
+        )
     }
 }
 
