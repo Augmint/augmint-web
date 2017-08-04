@@ -1,6 +1,13 @@
 /* contract for each loan given in UCD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
+    TODO: consider storing collateral amount when loan created for easier tracking after repayment
+    TODO: consider store loanId (maintened in loanManager)
+    TODO: consider moving all repay functionality here from loanManager to make it self contained
+         - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
+         - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
+         - consider sending UCD to this loanContract  first?
 */
+
 pragma solidity ^0.4.11;
 
 import "./TokenUcd.sol";
@@ -31,6 +38,8 @@ contract EthBackedLoan {
     int8 public constant ERR_EXT_ERRCODE_BASE = -10; // used to pass on error code returned fro mexternal calls
 
     function() payable { } // to accept ETH collateral sent
+    // TODO: should it refuse any other amount sent after?
+    //       doens't seem to be a real issue as all ETH is going to be release after maturity anyway..
 
     function EthBackedLoan(address _borrower, uint _term, uint _disbursedLoanInUcd,
                             uint _ucdDueAtMaturity, uint _repayPeriod) {
@@ -73,11 +82,7 @@ contract EthBackedLoan {
     }
 
     function repay() returns (int8 result) {
-        // TODO: * consider moving all repay functionality here from loanManager to make it self contained
-        //          - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
-        //          - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
-        //          - consider sending UCD to loanContract address first
-        //       * rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
+        //  TODO: rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
         if( msg.sender != address(loanManager)) {
             // repayment is only through loanManager.
             // loanManager only allows owner to repay loan
