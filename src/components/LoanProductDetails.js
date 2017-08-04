@@ -30,7 +30,9 @@ export default function LoanProductDetails(props) {
             </tr>
             </tbody>
         </Table>
-        { props.selectComponent }
+        { props.selectComponent &&
+            <props.selectComponent productId={prod.id}/>
+        }
     </ListGroupItem>
     );
 }

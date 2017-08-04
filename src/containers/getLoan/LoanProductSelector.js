@@ -1,31 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import LoanProductDetails from '../../components/LoanProductDetails'
-import { ListGroup, Panel, Well, Grid, Row, Col} from 'react-bootstrap';
+import LoanProductList from '../../components/LoanProductList'
+import { Well, Grid, Row, Col} from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
-function SelectLoanButton (props) {
+export function SelectLoanButton (props) {
     return(
         <Link key={props.productId} className="btn btn-primary" to={`/getLoan/${props.productId}`}>
             Select
         </Link>)
-}
-
-function LoanProductList(props) {
-    let products = props.products;
-    // TODO: this causing a warning, table nested in <p>. Bootstrap has class for table within panel...
-    const listItems = products == null ? <p>Loading products...</p> :
-        products.filter( (item) => { return item.isActive}).map( (prod, index) =>
-            <div key={`loanProdDiv-${prod.id}`}>
-                <LoanProductDetails product={prod} selectComponent={<SelectLoanButton productId={prod.id}/>}/>
-            </div>
-    );
-
-    return (
-        <ListGroup>
-            { listItems }
-        </ListGroup>
-    );
 }
 
 class LoanProductSelector extends React.Component {
@@ -42,9 +25,10 @@ render() {
                     </Well>
                 </Col>
                 <Col xs={8} md={8}>
-                    <Panel header={<h2>Select your loan product</h2>}>
-                        <LoanProductList products={this.props.loanProducts} />
-                    </Panel>
+                    <LoanProductList products={this.props.loanProducts}
+                        header={<h2>Select your loan product</h2>}
+                        selectComponent={SelectLoanButton}
+                        filter={(item) => { return item.isActive} }/>
                 </Col>
             </Row>
         </Grid>
