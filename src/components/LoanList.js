@@ -4,16 +4,16 @@ import LoanDetails from './LoanDetails'
 
 export default function LoanList(props) {
     const listItems = props.loans == null ? <p>Loading...</p> :
-        props.loans.map( (loan, index) =>
+        props.loans.filter( props.filter ? props.filter : () => {return true}).map( (loan, index) =>
             <ListGroupItem key={`loanDiv-${loan.loanId}`}>
-                <LoanDetails loan={loan} />
+                <LoanDetails loan={loan} selectComponent={props.selectComponent}/>
             </ListGroupItem>
     );
 
     return (
-        <Panel header={props.title}>
-            { props.loans != null && props.loans.length === 0 ?
-                <p>You have no loans.</p>
+        <Panel header={props.header}>
+            { props.loans != null && listItems.length === 0 ?
+                props.noItemMessage
             :
             <ListGroup>
                 { listItems }

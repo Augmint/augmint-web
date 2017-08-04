@@ -4,6 +4,7 @@ import {Table} from 'react-bootstrap';
 export default function LoanDetails(props) {
     let loan = props.loan;
     return(
+        <div>
         <Table condensed>
             <thead>
                 <tr>
@@ -45,5 +46,9 @@ export default function LoanDetails(props) {
 
             </tbody>
         </Table>
+        { props.selectComponent &&
+            <props.selectComponent loanId={loan.loanId}/>
+        }
+    </div>
     );
 }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {Grid, Row, Col} from 'react-bootstrap';
 import store from '../../store'
 import { SubmissionError } from 'redux-form'
-import { newLoan, LOANMANAGER_NEWLOAN_ERROR} from '../../modules/loanManager'
+import { newLoan, LOANMANAGER_NEWLOAN_CREATED} from '../../modules/loanManager'
 import LoanProductDetails from '../../components/LoanProductDetails'
 import AccountInfo from '../../components/AccountInfo'
 import NewLoanForm from './NewLoanForm'
@@ -56,12 +56,16 @@ class NewLoanPage extends React.Component {
         // e.preventDefault(); // not needed with redux-form?
         // TODO: add productId to Form and change state ref here to values.prodcutId ?
         let res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
-        if( res.type === LOANMANAGER_NEWLOAN_ERROR) {
+        if( res.type !== LOANMANAGER_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: { title: 'Ethereum transaction Failed', details: res.error}
             })
         } else {
-            this.setState({submitSucceeded: true, loanCreated: res.loanCreated });
+            console.log(res);
+            this.setState({
+                submitSucceeded: true,
+                result: res.result
+            });
             // this causing weird behavour:
             // store.dispatch(push('/getLoan/fetchLoansuccess', { loanCreated: res.loanCreated}));
             //this just doesnt upted browser URL:
@@ -115,7 +119,7 @@ class NewLoanPage extends React.Component {
                         {this.state.submitSucceeded &&
                             /* couldn't make this work yet:
                             <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                            <NewLoanSuccess loanCreated={this.state.loanCreated} />
+                            <NewLoanSuccess result={this.state.result} />
                         }
                     </Col>
                 </Row>

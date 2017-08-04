@@ -9,7 +9,8 @@ FIXME: Rounding issues. Eg. 20UCD entered to disbursed is not enough for minDisb
         - Introduce BigNumbers + figure out rounding (here and rates too)  */
 
 import React from 'react'
-import {Panel,FormGroup, InputGroup, ControlLabel, Button, HelpBlock} from 'react-bootstrap';
+import {FormGroup, InputGroup, ControlLabel, Button, HelpBlock} from 'react-bootstrap';
+import {EthSubmissionErrorPanel} from '../../components/MsgPanels'
 import { Form, Field, reduxForm } from 'redux-form'
 import {FieldInput} from '../../components/FieldInput'
 
@@ -43,26 +44,12 @@ class NewLoanForm extends React.Component {
         this.props.change("loanUcdAmount", loanUcdAmount )
     }
 
-    stringifyError (err, filter, space) { // TODO: move this (together with error Panel) to a common place
-        var plainObject = {};
-        Object.getOwnPropertyNames(err).forEach(function(key) {
-            plainObject[key] = err[key];
-        });
-        return JSON.stringify(plainObject, filter, space);
-    };
-
     render () {
         const { error, handleSubmit, pristine, submitting} = this.props
         return(
             <Form onSubmit={handleSubmit}>
                 {error &&
-                    <Panel header={`Submission error ${error.title ? ": " + error.title : error } `}
-                        bsStyle="danger" collapsible={true}>
-                        {/* TODO: this doesn't wrap */}
-                        <div className="white-space: pre-wrap">
-                            {this.stringifyError( error.details, null, "\t") }
-                        </div>
-                    </Panel>
+                    <EthSubmissionErrorPanel error={error} />
                 }
                 <fieldset disabled={submitting} >
                     <legend>Loan parameters</legend>

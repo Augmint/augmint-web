@@ -1,18 +1,16 @@
-/*  TODO: add gasLimit and gasPrice params
+/*
     TODO: split action creator and reducer
+    TODO: handle race conditions
     TODO: split REFRESH and REFRESH PRODUCTS (and add event listener to refresh when one changed or added...)
-    TODO: change action creatators to get payload so won't need to maintain attributes at two places here when adding/changing
-    TODO: use selectors. eg: https://github.com/reactjs/reselect */
+    TODO: use selectors. eg: https://github.com/reactjs/reselect
+*/
 
 import store from './../store'
 import SolidityContract from './SolidityContract';
 import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
 import moment from 'moment';
-import {asyncGetBalance , getUcdBalance} from './ethHelper'
+import {asyncGetBalance , getUcdBalance, repayLoanTx, newEthBackedLoanTx} from './ethHelper'
 
-// TODO: set gasEstimates when it settled. As of now it's on testRPC: first= 762376  additional = 702376
-const NEW_LOAN_GAS = 2000000;
-const NEW_FIRST_LOAN_GAS = 2000000;
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
 
@@ -22,6 +20,10 @@ export const LOANMANAGER_REFRESHED= 'loanManager/LOANMANAGER_REFRESHED'
 export const LOANMANAGER_NEWLOAN_REQUESTED = 'loanManager/LOANMANAGER_NEWLOAN_REQUESTED'
 export const LOANMANAGER_NEWLOAN_CREATED = 'loanManager/LOANMANAGER_NEWLOAN_CREATED'
 export const LOANMANAGER_NEWLOAN_ERROR = 'loanManager/LOANMANAGER_NEWLOAN_ERROR'
+
+export const LOANMANAGER_REPAY_REQUESTED = 'loanManager/LOANMANAGER_REPAY_REQUESTED'
+export const LOANMANAGER_REPAY_SUCCESS = 'loanManager/LOANMANAGER_REPAY_SUCCESS'
+export const LOANMANAGER_REPAY_ERROR = 'loanManager/LOANMANAGER_REPAY_ERROR'
 
 const initialState = {
     contract: null,
@@ -34,7 +36,7 @@ const initialState = {
     productCount: '?',
     products: null,
     error: null,
-    loanCreated: null
+    result: null
 }
 
 export default (state = initialState, action) => {
@@ -72,7 +74,9 @@ export default (state = initialState, action) => {
         return {
             ...state,
             error: null,
-            loanCreated: null
+            result: null,
+            ethAmount: action.ethAmount,
+            productId: action.productId
         }
 
         case LOANMANAGER_NEWLOAN_ERROR:
@@ -84,7 +88,27 @@ export default (state = initialState, action) => {
         case LOANMANAGER_NEWLOAN_CREATED:
         return {
             ...state,
-            loanCreated: action.loanCreated
+            result: action.result
+        }
+
+        case LOANMANAGER_REPAY_REQUESTED:
+        return {
+            ...state,
+            loanId: action.loandId,
+            error: null,
+            result: null
+        }
+
+        case LOANMANAGER_REPAY_SUCCESS:
+        return {
+            ...state,
+            result: action.result
+        }
+
+        case LOANMANAGER_REPAY_ERROR:
+        return {
+            ...state,
+            error: action.error
         }
 
         default:
@@ -162,41 +186,41 @@ export function newLoan(productId, ethAmount) {
             ethAmount: ethAmount,
             productId: productId
         })
-        let web3 = store.getState().ethBase.web3Instance;
-        let loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate;
-        if( store.getState().loanManager.loanCount === 0 ) {
-            gasEstimate = NEW_FIRST_LOAN_GAS ;
-        } else {
-            gasEstimate = NEW_LOAN_GAS;
-        }
-        let userAccount = store.getState().ethBase.userAccount;
-        return loanManager.newEthBackedLoan(productId,
-                    {value: web3.toWei(ethAmount), from: userAccount, gas: gasEstimate } )
-        .then( res => {
-            // console.log(JSON.stringify(res, null, 4), res.logs[0].args.disbursedLoanInUcd.toNumber())
-            if( res.receipt.gasUsed === gasEstimate) { // Neeed for testnet behaviour (TODO: test it!)
-                throw(new Error( "Create loan error, all gas provided was used:  " + res.receipt.gasUsed));
-            }
-            let loanCreated = {
-                address: res.logs[0].args.loanContract,
-                disbursedLoanInUcd: res.logs[0].args.disbursedLoanInUcd.toNumber() / 10000,
-                // TODO: could we make eth params more genericly (and gasUsed check above too...)?
-                eth: { // TODO: add txhash etc.
-                    gasProvided: gasEstimate,
-                    gasUsed: res.receipt.gasUsed
-                }
-            }
-            // TODO: refresh loanCount ( call refreshLoanManager + fetchLoans actions on new loan events)
+
+        try {
+            let result = await newEthBackedLoanTx(productId, ethAmount);
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_CREATED,
-                loanCreated: loanCreated
+                result: result
             });
-        }).catch( error => {
+        } catch( error)  {
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_ERROR,
                 error: error
             });
-        });
+        }
+    }
+}
+
+export function repayLoan(loanId) {
+    return async dispatch =>  {
+        dispatch({
+            type: LOANMANAGER_REPAY_REQUESTED,
+            loanId: loanId
+        })
+
+        // FIXME: per user loanId vs.  global loan id - need to be fixed in contracts
+        try {
+            let result = await repayLoanTx(loanId);
+            return dispatch({
+                type: LOANMANAGER_REPAY_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: LOANMANAGER_REPAY_ERROR,
+                error: error
+            })
+        }
     }
 }

@@ -25,6 +25,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
 import Home from '../home';
 import GetLoan from '../getLoan';
+import RepayLoan from '../repayLoan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
@@ -99,7 +100,7 @@ class App extends React.Component {
     }
 
     onNewLoan(error, result) {
-        // TODO: add refresh LoanManager to update loanCount?
+        // TODO: add refresh LoanManager (when fetchproducts are separated) to update loanCount
         let userAccount = store.getState().ethBase.userAccount
         if (result.args.borrower === userAccount) {
             console.debug("onNewLoan: loan for current user , dispatching fetchLoans")
