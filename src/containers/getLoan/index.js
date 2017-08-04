@@ -5,25 +5,21 @@ import LoanProductSelector from './LoanProductSelector'
 import NewLoan from './NewLoan'
 
 const getLoanMain = () => (
-    <div>
-        <header>
-            <PageHeader>
-                Get a UCD loan
-            </PageHeader>
-        </header>
-        <main>
-            <Grid>
-                <Row>
-                    <Col>
-                        <Switch>
-                            <Route exact path='/getLoan' component={LoanProductSelector}/>
-                            <Route path='/getLoan/:loanProductId' component={NewLoan}/>
-                        </Switch>
-                    </Col>
-                </Row>
-            </Grid>
-        </main>
-    </div>
+    <Grid>
+        <Row>
+            <Col>
+                <PageHeader>
+                    Get a UCD loan
+                </PageHeader>
+            </Col>
+        </Row>
+
+                <Switch>
+                    <Route exact path='/getLoan' component={LoanProductSelector}/>
+                    <Route path='/getLoan/:loanProductId' component={NewLoan}/>
+                </Switch>
+
+    </Grid>
 )
 
 

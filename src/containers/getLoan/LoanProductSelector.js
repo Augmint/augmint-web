@@ -15,7 +15,7 @@ class LoanProductSelector extends React.Component {
 
 render() {
     return(
-        <Grid>
+
             <Row>
                 <Col xs={4} md={4}>
                     <Well>
@@ -26,12 +26,12 @@ render() {
                 </Col>
                 <Col xs={8} md={8}>
                     <LoanProductList products={this.props.loanProducts}
-                        header={<h2>Select your loan product</h2>}
+                        header={<h2>Select type of loan</h2>}
                         selectComponent={SelectLoanButton}
                         filter={(item) => { return item.isActive} }/>
                 </Col>
             </Row>
-        </Grid>
+        
     )
 }
 }
