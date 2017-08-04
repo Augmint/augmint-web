@@ -64,26 +64,35 @@ export async function fetchLoanDetails(loanId) {
         store.getState().ethBase.web3Instance.currentProvider, ethBackedLoan_artifacts,
         loanContractAddress);
     let l = await loanContract.instance.getDetails(); // tuple with loan details
-    let loanState = l[3].toNumber();
+    let solidityLoanState = l[3].toNumber();
     let loanStateText;
     let maturity = l[8].toNumber();
     let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
     let repayPeriod = l[9].toNumber();
     let repayBy = repayPeriod + maturity;
-    switch (loanState)
+    let currentTime = moment().utc().unix();
+    let loanState = null;
+    let isDue = false;
+    switch (solidityLoanState)
     {
         case 0:
-            if( repayBy < moment().utc().unix()) {
-                loanState = 2;
+            if( repayBy < currentTime) {
+                loanState = 21;
                 loanStateText = 'Defaulted (not yet collected)';
+            } else if ( maturity < currentTime && repayBy > currentTime){
+                isDue = true;
+                loanStateText = 'Payment Due';
+                loanState = 5;
             } else {
+                loanState = 0
                 loanStateText = 'Open';
             }
             break;
-        case 1: loanStateText = 'Repaid'; break;
-        case 2: loanStateText = 'Defaulted'; break;
+        case 1: loanState = 10; loanStateText = 'Repaid'; break;
+        case 2: loanState = 20; loanStateText = 'Defaulted'; break;
         default: loanStateText =  'Invalid state';
     }
+    // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
     let disbursementDate = l[7].toNumber();
     let disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
@@ -96,6 +105,7 @@ export async function fetchLoanDetails(loanId) {
         loanManagerAddress: l[1], // 1 loan manager contract instance
         tokenUcdAddress: l[2], // 2 tokenUcd instance
         loanState: loanState, // 3
+        solidityLoanState: solidityLoanState,
         loanStateText: loanStateText,
         ucdDueAtMaturity: l[4].toNumber() / 10000, // 4 nominal loan amount in UCD (non discounted amount)
         disbursedLoanInUcd: l[5].toNumber() / 10000, // 5
@@ -108,7 +118,8 @@ export async function fetchLoanDetails(loanId) {
         repayPeriod: repayPeriod,  // 9
         repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
         repayBy: repayBy,
-        repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm")
+        repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm"),
+        isDue: isDue
     }
     return loan;
 }
