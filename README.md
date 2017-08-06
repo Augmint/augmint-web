@@ -38,6 +38,10 @@ TODO
 
  ## Contribution
  We are seeking for great minds to extend our core team. Contribution in any area is much appreciated: development, testing, UX&UI design, legal, marketing etc.
+
+
+**[Development environment setup](docs/developmentEnvironmnet.md)**
+
 ## Authors
 ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
