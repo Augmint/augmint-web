@@ -1,5 +1,5 @@
 echo "launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)"
-n use 8.1.0 $(npm config get prefix)/bin/testrpc --^
+nvm use 8.1.0 $(npm config get prefix)/bin/testrpc --^
 --gasLimit 0x47D5DE ^
 --network-id 999 ^
 -m "hello build tongue rack parade express shine salute glare rate spice stock" ^
