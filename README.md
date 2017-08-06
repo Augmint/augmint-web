@@ -4,7 +4,7 @@ Proof of concept implementation of an Ethereum based stable crypto currency.
 _a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
 ## Concept
-TODO
+TODO: a short paragraph + link to whitepaper
 
 ## Glossary
 TODO
@@ -36,6 +36,8 @@ TODO
   * Holds loan state and all loan parameters
   * Holds ETH collateral
 
+ ## Contribution
+ We are seeking for great minds to extend our core team. Contribution in any area is much appreciated: development, testing, UX&UI design, legal, marketing etc.
 ## Authors
 ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
