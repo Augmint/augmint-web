@@ -4,7 +4,7 @@ Proof of concept implementation of an Ethereum based stable crypto currency.
 _a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
 ## Concept
-TODO
+https://docs.google.com/document/d/16QgZM1WJDKH-vEPqldajwYYi3s355jF62AG98VH9iL8/edit?usp=sharing
 
 ## Glossary
 TODO
