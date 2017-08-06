@@ -24,7 +24,7 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
 import Home from '../home';
-import Loan from '../loan';
+import LoanMain from '../loan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
@@ -163,7 +163,7 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
-                        <Route path="/loan" component={Loan} />
+                        <Route path="/loan" component={LoanMain} />
                         <Route exact path="/about-us" component={About} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
                         <Route component={PageNotFound}/>

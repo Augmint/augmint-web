@@ -1,57 +1,20 @@
 import React from "react";
-import { connect } from "react-redux";
-import LoanList from "../../../components/LoanList";
-import { PageHeader, Grid, Row, Col, Well } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import {Route} from 'react-router-dom'
+import RepayLoanPage from './RepayLoanPage';
+import LoanSelector from './LoanSelector'
+import { PageHeader, Grid, Row, Col } from "react-bootstrap";
 
-function SelectLoanButton(props) {
-    return (
-        <Link
-            key={props.loanId}
-            className="btn btn-primary"
-            to={`/loan/${props.loanId}/repay`}
-        >
-            Select loan to repay
-        </Link>
-    );
-}
+const repayLoanMain = () =>
+    <Grid>
+        <Row>
+            <Col>
+                <PageHeader>Repay loan</PageHeader>
+            </Col>
+        </Row>
+        <Row>
+            <Route exact path='/loan/repay' component={LoanSelector}/>
+            <Route path='/loan/repay/:loanId' component={RepayLoanPage}/>
+        </Row>
+    </Grid>;
 
-class LoanSelector extends React.Component {
-    render() {
-        return (
-            <Grid>
-                <Row>
-                    <Col>
-                        <PageHeader>Repay your loan</PageHeader>
-                    </Col>
-                </Row>
-
-                <Row>
-                    <Col xs={4} md={4}>
-                        <Well>.... TODO some description ...</Well>
-                    </Col>
-                    <Col xs={8} md={8}>
-                        <LoanList
-                            header={<h2>Select your loan to repay</h2>}
-                            noItemMessage={
-                                <p>None of your loans is due currently.</p>
-                            }
-                            loans={this.props.loans}
-                            filter={item => {
-                                return item.isDue;
-                            }}
-                            selectComponent={SelectLoanButton}
-                        />
-                    </Col>
-                </Row>
-            </Grid>
-        );
-    }
-}
-
-const mapStateToProps = state => ({
-    userAccount: state.userBalances.account,
-    loans: state.loans.loans
-});
-
-export default connect(mapStateToProps)(LoanSelector);
+export default repayLoanMain;

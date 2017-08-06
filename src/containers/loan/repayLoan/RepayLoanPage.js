@@ -3,7 +3,7 @@
 */
 import React from 'react'
 import { connect } from 'react-redux'
-import {Grid, Row, Col, Button} from 'react-bootstrap';
+import { Row, Col, Button} from 'react-bootstrap';
 import store from '../../../store'
 import { repayLoan, LOANMANAGER_REPAY_SUCCESS} from '../../../modules/loanManager'
 import LoanDetails from '../../../components/LoanDetails'
@@ -119,7 +119,6 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Grid>
                 <Row>
                     <Col xs={4} md={4}>
                         <Row>
@@ -149,7 +148,6 @@ class RepayLoanPage extends React.Component {
                         }
                     </Col>
                 </Row>
-            </Grid>
         )
     }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import store from "../../../store";
 import { SubmissionError } from "redux-form";
 import {
@@ -114,40 +114,36 @@ class NewLoanPage extends React.Component {
         }
 
         return (
-            <Grid>
-                <Row>
-                    <Col xs={4} md={4}>
-                        <Row>
-                            <Col>
-                                <h4>Selected Loan</h4>
-                                <LoanProductDetails
-                                    product={this.state.product}
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <AccountInfo
-                                    title={<h2>My Account</h2>}
-                                    account={this.props.userAccount}
-                                />
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col xs={8} md={8}>
-                        {!this.state.submitSucceeded &&
-                            <NewLoanForm
-                                product={this.state.product}
-                                rates={this.props.rates}
-                                onSubmit={this.handleSubmit}
-                            />}
-                        {this.state.submitSucceeded &&
-                            /* couldn't make this work yet:
+            <Row>
+                <Col xs={4} md={4}>
+                    <Row>
+                        <Col>
+                            <h4>Selected Loan</h4>
+                            <LoanProductDetails product={this.state.product} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <AccountInfo
+                                title={<h2>My Account</h2>}
+                                account={this.props.userAccount}
+                            />
+                        </Col>
+                    </Row>
+                </Col>
+                <Col xs={8} md={8}>
+                    {!this.state.submitSucceeded &&
+                        <NewLoanForm
+                            product={this.state.product}
+                            rates={this.props.rates}
+                            onSubmit={this.handleSubmit}
+                        />}
+                    {this.state.submitSucceeded &&
+                        /* couldn't make this work yet:
                             <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                            <NewLoanSuccess result={this.state.result} />}
-                    </Col>
-                </Row>
-            </Grid>
+                        <NewLoanSuccess result={this.state.result} />}
+                </Col>
+            </Row>
         );
     }
 }
