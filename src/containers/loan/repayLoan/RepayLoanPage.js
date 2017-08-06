@@ -4,12 +4,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {Grid, Row, Col, Button} from 'react-bootstrap';
-import store from '../../store'
-import { repayLoan, LOANMANAGER_REPAY_SUCCESS} from '../../modules/loanManager'
-import LoanDetails from '../../components/LoanDetails'
-import AccountInfo from '../../components/AccountInfo'
+import store from '../../../store'
+import { repayLoan, LOANMANAGER_REPAY_SUCCESS} from '../../../modules/loanManager'
+import LoanDetails from '../../../components/LoanDetails'
+import AccountInfo from '../../../components/AccountInfo'
 import { SubmissionError, reduxForm } from 'redux-form'
-import {EthSubmissionErrorPanel, ErrorPanel, EthSubmissionSuccessPanel, WarningPanel} from '../../components/MsgPanels'
+import {EthSubmissionErrorPanel, ErrorPanel, EthSubmissionSuccessPanel, WarningPanel} from '../../../components/MsgPanels'
 
 // TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
 //import { push } from 'react-router-redux'

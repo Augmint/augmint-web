@@ -25,7 +25,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
 import Home from '../home';
 import GetLoan from '../getLoan';
-import RepayLoan from '../repayLoan';
+import Loan from '../loan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
 import UnderTheHood from '../underthehood';
@@ -165,7 +165,7 @@ class App extends React.Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
                         <Route path="/getLoan" component={GetLoan} />
-                        <Route path="/loan/repay" component={RepayLoan} />
+                        <Route path="/loan" component={Loan} />
                         <Route exact path="/about-us" component={About} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
                         <Route component={PageNotFound}/>
