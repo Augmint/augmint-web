@@ -23,12 +23,14 @@
     "web3": "0.20.1"
   },
   "scripts": {
-    "start": "set NODE_PATH=./src; react-scripts start",
+    "//" : "simple 'cross_env NODE_PATH' doesn't work for some reason",
+    "start": "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+     "cross-env": "^5.0.4",
     "redux-logger": "^3.0.6"
   }
 }

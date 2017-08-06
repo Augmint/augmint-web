@@ -16,9 +16,12 @@ Note: these steps are likely to work on linux too but it's not tested yet
 ### Windows
 1. [Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/installing-windows-powershell?view=powershell-6) or [Git Bash](https://git-for-windows.github.io/) (required for truffle)
 1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
-1. [Ethereum CLI](https://www.ethereum.org/cli)
+1. [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
+
+in Git bash:
 1. `nvm install 8.2.1`
+1. `nvm use 8.2.1`
 1. `npm install -g ethereumjs-testrpc`
 1. `npm install -g truffle`
 1. `git clone https://github.com/DecentLabs/ucd-poc.git`
@@ -30,12 +33,16 @@ TODO: test install steps with [Chocolatey](https://chocolatey.org/)
 ## Launch
 ### On testrpc
 
+Update to latest ucd-poc:
 1. `git pull` for latest ucd-poc version
-1. Launch testrpc in separate terminal window:  
-   1. `nvm use 8.2.1`
-   1. `./runtestrpc` on windows: `runtestrpc.bat`
-1. `tuffle migrate` to overwrite existing migration: `truffle migrate --reset`
-1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: see [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
+1. `npm install` if there were any node package changes in packages.json
+
+Launching:
+1. `./runtestrpc` or on windows: `./runtestrpc.bat`
+1. in separate console:  
+  `tuffle migrate` or  
+  `truffle migrate --reset` to overwrite existing migration
+1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
 1. `yarn start`
 
 ### On testnet
