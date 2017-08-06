@@ -12,23 +12,23 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import React from 'react';
-import store from '../../store'
+import store from 'store.js'
 import watch from 'redux-watch'
-import { setupWeb3 } from '../../modules/ethBase'
-import { fetchUserBalance } from '../../modules/userBalances'
-import { connectRates, refreshRates } from '../../modules/rates';
-import { connectTokenUcd, refreshTokenUcd} from '../../modules/tokenUcd';
-import { connectloanManager, refreshLoanManager} from '../../modules/loanManager';
-import { fetchLoans } from '../../modules/loans'
+import { setupWeb3 } from 'modules/ethBase'
+import { fetchUserBalance } from 'modules/userBalances'
+import { connectRates, refreshRates } from 'modules/rates';
+import { connectTokenUcd, refreshTokenUcd} from 'modules/tokenUcd';
+import { connectloanManager, refreshLoanManager} from 'modules/loanManager';
+import { fetchLoans } from 'modules/loans'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
-import Home from '../home';
-import LoanMain from '../loan';
-import TokenUcd from '../tokenUcd';
-import About from '../about';
-import UnderTheHood from '../underthehood';
-import {PageNotFound} from '../PageNotFound'
+import Home from 'containers/home';
+import LoanMain from 'containers/loan';
+import TokenUcd from 'containers/tokenUcd';
+import About from 'containers/about';
+import UnderTheHood from 'containers/underthehood';
+import {PageNotFound} from 'containers/PageNotFound'
 
 class App extends React.Component {
 

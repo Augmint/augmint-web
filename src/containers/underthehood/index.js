@@ -2,15 +2,15 @@
 import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
-import { setupWeb3 } from '../../modules/ethBase'
-import { fetchUserBalance } from '../../modules/userBalances'
-import {refreshRates} from '../../modules/rates'
-import {refreshTokenUcd} from '../../modules/tokenUcd'
-import {refreshLoanManager} from '../../modules/loanManager'
+import { setupWeb3 } from 'modules/ethBase'
+import { fetchUserBalance } from 'modules/userBalances'
+import {refreshRates} from 'modules/rates'
+import {refreshTokenUcd} from 'modules/tokenUcd'
+import {refreshLoanManager} from 'modules/loanManager'
 import { ButtonToolbar, Button, Grid, Row, Col, Panel, Table, PageHeader} from 'react-bootstrap';
 import stringifier from 'stringifier'
 
-import store from '../../store' /// for debug
+import store from 'store.js' /// for debug
 
 const web3Title = ( <h3>Web3 connection</h3> );
 const userAccountTitle = ( <h3>User Account</h3> );

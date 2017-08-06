@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { EthSubmissionSuccessPanel } from "../../../components/MsgPanels";
+import { EthSubmissionSuccessPanel } from "components/MsgPanels";
 
 export default function NewLoanSuccess(props) {
     const { address, disbursedLoanInUcd, eth } = props.result;

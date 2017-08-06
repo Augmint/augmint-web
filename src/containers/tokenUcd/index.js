@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux' // TODO: do we really need this or shall we use the store directly?
 import { connect } from 'react-redux'
-import {refreshTokenUcd} from '../../modules/tokenUcd'
+import {refreshTokenUcd} from 'modules/tokenUcd'
 import { Grid, Row, Col, Panel, PageHeader} from 'react-bootstrap';
 
 const baseInfoTitle = ( <h3>Base Info</h3> );

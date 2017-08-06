@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-import store from "../../../store";
+import store from "store";
 import { SubmissionError } from "redux-form";
 import {
     newLoan,
     LOANMANAGER_NEWLOAN_CREATED
-} from "../../../modules/loanManager";
-import LoanProductDetails from "../../../components/LoanProductDetails";
-import AccountInfo from "../../../components/AccountInfo";
+} from "modules/loanManager";
+import LoanProductDetails from "components/LoanProductDetails";
+import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";
 import NewLoanSuccess from "./NewLoanSuccess";
 

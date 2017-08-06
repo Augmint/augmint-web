@@ -16,9 +16,9 @@ import {
     Button,
     HelpBlock
 } from "react-bootstrap";
-import { EthSubmissionErrorPanel } from "../../../components/MsgPanels";
+import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Form, Field, reduxForm } from "redux-form";
-import { FieldInput } from "../../../components/FieldInput";
+import { FieldInput } from "components/FieldInput";
 
 class NewLoanForm extends React.Component {
     constructor(props) {

@@ -1,6 +1,6 @@
-import store from '../store.js'
+import store from 'store.js'
 import SolidityContract from './SolidityContract';
-import tokenUcd_artifacts from '../contractsBuild/TokenUcd.json' ;
+import tokenUcd_artifacts from 'contractsBuild/TokenUcd.json' ;
 import {asyncGetBalance, getUcdBalance } from "./ethHelper";
 
 export const TOKENUCD_CONNECT_REQUESTED = 'tokenUcd/TOKENUCD_CONNECT_REQUESTED'

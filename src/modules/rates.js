@@ -1,7 +1,7 @@
 /* TODO: use BigNumber for conversions */
-import store from '../store.js'
+import store from 'store.js'
 import SolidityContract from './SolidityContract';
-import rates_artifacts from '../contractsBuild/Rates.json' ;
+import rates_artifacts from 'contractsBuild/Rates.json' ;
 import {asyncGetBalance, getUcdBalance} from './ethHelper'
 
 export const RATES_CONNECT_REQUESTED = 'ethBase/RATES_CONNECT_REQUESTED'

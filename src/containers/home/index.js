@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {Grid, Row, Col, Jumbotron} from 'react-bootstrap'
-import AccountInfo from '../../components/AccountInfo'
-import LoanList from '../../components/LoanList'
+import AccountInfo from 'components/AccountInfo'
+import LoanList from 'components/LoanList'
 
 class Home extends React.Component {
 

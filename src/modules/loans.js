@@ -4,7 +4,7 @@
     TODO: move formating to separate lib (from all modules)
 */
 import store from './../store'
-import ethBackedLoan_artifacts from '../contractsBuild/EthBackedLoan.json' ;
+import ethBackedLoan_artifacts from 'contractsBuild/EthBackedLoan.json' ;
 import SolidityContract from './SolidityContract';
 import moment from 'moment';
 import { asyncGetBalance, getUcdBalance } from './ethHelper'

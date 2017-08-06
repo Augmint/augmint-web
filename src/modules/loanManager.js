@@ -7,7 +7,7 @@
 
 import store from './../store'
 import SolidityContract from './SolidityContract';
-import loanManager_artifacts from '../contractsBuild/LoanManager.json' ;
+import loanManager_artifacts from 'contractsBuild/LoanManager.json' ;
 import moment from 'moment';
 import {asyncGetBalance , getUcdBalance, repayLoanTx, newEthBackedLoanTx} from './ethHelper'
 
