@@ -24,7 +24,6 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Route, Link, Switch } from 'react-router-dom';
 import Home from '../home';
-import GetLoan from '../getLoan';
 import Loan from '../loan';
 import TokenUcd from '../tokenUcd';
 import About from '../about';
@@ -139,8 +138,8 @@ class App extends React.Component {
                         </Navbar.Header>
                         <Navbar.Collapse>
                             <Nav>
-                                <LinkContainer to="/getLoan">
-                                    <NavItem eventKey={1} href="/getLoan">Get UCD Loan</NavItem>
+                                <LinkContainer to="/loan/new">
+                                    <NavItem eventKey={1} href="/loan/new">Get UCD Loan</NavItem>
                                 </LinkContainer>
                                 <LinkContainer to="/tokenUcd">
                                     <NavItem eventKey={2} href="/tokenUcd">TokenUcd</NavItem>
@@ -164,7 +163,6 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
-                        <Route path="/getLoan" component={GetLoan} />
                         <Route path="/loan" component={Loan} />
                         <Route exact path="/about-us" component={About} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
