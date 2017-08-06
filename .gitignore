@@ -1,6 +1,3 @@
-# contracts' build folder for yarn build (temp hack)
-contractsBuild/
-
 .node-xmlhttprequest-sync-*
 
 build
