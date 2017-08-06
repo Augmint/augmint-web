@@ -82,6 +82,7 @@ contract EthBackedLoan {
     }
 
     function repay() returns (int8 result) {
+        // TODO: don't allow repayment when repayPeriod is over
         //  TODO: rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
         if( msg.sender != address(loanManager)) {
             // repayment is only through loanManager.
@@ -104,6 +105,8 @@ contract EthBackedLoan {
     }
 
     function defaulted() returns (int8 result) {
+        // TODO: payback collateral over the UCD value
+        // TODO: add fee when defult
         // TODO: rename this function, eg. takeOverCollateralWhenDefaulted closeDefaulted collateral?
         if( msg.sender != address(loanManager)) {
             // default is only through loanManager

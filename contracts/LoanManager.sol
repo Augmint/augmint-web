@@ -1,5 +1,6 @@
 /* Contract to manage UCD loan contracts
     TODO: store loanId (idx in loanPointers)  in EthBackedLoan + change repay param to loanId
+    TODO: consider to add early repayment
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
 */
 pragma solidity ^0.4.11;
