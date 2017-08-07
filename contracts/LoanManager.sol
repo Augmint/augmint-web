@@ -80,7 +80,7 @@ contract LoanManager is owned {
         // TODO: emit event
     }
 
-    event e_newLoan(uint8 productId, address borrower, address loanContract, uint disbursedLoanInUcd );
+    event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
     function newEthBackedLoan(uint8 productId) payable {
         // valid productId?
         require( products[productId].isActive);
@@ -92,13 +92,14 @@ contract LoanManager is owned {
         require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
 
         // Create new loan contract
+        uint loanId = loanPointers.push( LoanPointer(address(0), LoanState.Open) ) - 1;
         // TODO: check if it's better to pass productId or Product struct
-        address loanContractAddress = new EthBackedLoan(msg.sender, products[productId].term,
+        address loanContractAddress = new EthBackedLoan(loanId, msg.sender, products[productId].term,
                     disbursedLoanInUcd, ucdDueAtMaturity, products[productId].repayPeriod);
+        loanPointers[loanId].contractAddress = loanContractAddress;
 
         // Store ref to new loan contract in this contract
-        uint idx = loanPointers.push( LoanPointer(loanContractAddress, LoanState.Open) );
-        m_loanPointers[msg.sender].push(idx - 1 );
+        m_loanPointers[msg.sender].push(loanId );
 
         // Send ETH collateral to loan contract
         loanContractAddress.transfer(msg.value);
@@ -109,7 +110,7 @@ contract LoanManager is owned {
             revert(); // can't return error code b/c changes need to be reverted
         }
 
-        e_newLoan(productId, msg.sender, loanContractAddress,disbursedLoanInUcd );
+        e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
     }
 
     event e_repayed(address loanContractAddress);

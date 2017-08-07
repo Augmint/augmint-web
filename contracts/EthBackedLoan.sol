@@ -22,6 +22,7 @@ contract EthBackedLoan {
     TokenUcd public tokenUcd; // tokenUcd instance
 
     LoanState public loanState;
+    uint public loanId;
     uint public ucdDueAtMaturity; // nominal loan amount in UCD (non discounted amount)
     uint public disbursedLoanInUcd;
     uint public term; // duration of loan
@@ -41,8 +42,9 @@ contract EthBackedLoan {
     // TODO: should it refuse any other amount sent after?
     //       doens't seem to be a real issue as all ETH is going to be release after maturity anyway..
 
-    function EthBackedLoan(address _borrower, uint _term, uint _disbursedLoanInUcd,
+    function EthBackedLoan(uint _loanId, address _borrower, uint _term, uint _disbursedLoanInUcd,
                             uint _ucdDueAtMaturity, uint _repayPeriod) {
+        loanId = _loanId;
         loanManager = LoanManager(msg.sender);
         owner = _borrower;
         tokenUcd = loanManager.tokenUcd();
@@ -65,7 +67,8 @@ contract EthBackedLoan {
                                     uint _term,
                                     uint _disbursementDate,
                                     uint _maturity,
-                                    uint _repayPeriod
+                                    uint _repayPeriod,
+                                    uint _loanId
         ) {
             return (
                 owner, // 0 the borrower
@@ -77,7 +80,8 @@ contract EthBackedLoan {
                 term, // 6 duration of loan
                 disbursementDate, // 7
                 maturity, // 8 disbursementDate + term
-                repayPeriod // 9
+                repayPeriod, // 9
+                loanId // 10
             );
     }
 

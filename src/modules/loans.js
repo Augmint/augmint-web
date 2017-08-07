@@ -57,6 +57,10 @@ export async function fetchLoanDetails(loanId) {
     let loanManager = store.getState().loanManager.contract.instance;
     let res = await loanManager.loanPointers(loanId);
     let loanContractAddress = res[0];
+    return fetchLoanDetailsByAddress(loanContractAddress);
+}
+
+export async function fetchLoanDetailsByAddress(loanContractAddress) {
     let ethBalance = await asyncGetBalance( loanContractAddress);
     let ucdBalance = await getUcdBalance(loanContractAddress);
 
@@ -99,7 +103,7 @@ export async function fetchLoanDetails(loanId) {
     let loan = {
         ethBalance: ethBalance,
         ucdBalance: ucdBalance,
-        loanId: loanId.toNumber(),
+        loanId: l[10].toNumber(), 
         loanContract: loanContract,
         borrower: l[0], // 0 the borrower
         loanManagerAddress: l[1], // 1 loan manager contract instance

@@ -56,11 +56,13 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         if( !result.logs || !result.logs[0] || result.logs[0].event !== "e_newLoan") {
             throw(new Error( "e_repayed wasn't event received. Check tx :  " + result.tx));
         }
-        console.log( )
         return (
             {
                 txResult: result,
                 address: result.logs[0].args.loanContract,
+                loanId: result.logs[0].args.loanId.toNumber(),
+                productId: result.logs[0].args.productId.toNumber(),
+                borrower: result.logs[0].args.borrower,
                 disbursedLoanInUcd: result.logs[0].args.disbursedLoanInUcd.toNumber() / 10000,
                 eth : {
                     gasProvided: gasEstimate,
@@ -84,7 +86,6 @@ export async function repayLoanTx(loanId) {
             // TODO: add more tx info
             throw(new Error( "All gas provided was used:  " + result.receipt.gasUsed));
         }
-        console.log(result);
         if( !result.logs || !result.logs[0] || result.logs[0].event !== "e_repayed") {
             throw(new Error( "e_repayed wasn't event received. Check tx :  " + result.tx));
         }
