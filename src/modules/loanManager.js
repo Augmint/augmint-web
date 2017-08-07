@@ -9,7 +9,15 @@ import store from './../store'
 import SolidityContract from './SolidityContract';
 import loanManager_artifacts from 'contractsBuild/LoanManager.json' ;
 import moment from 'moment';
-import {asyncGetBalance , getUcdBalance, repayLoanTx, newEthBackedLoanTx} from './ethHelper'
+import {
+    asyncGetBalance,
+    getUcdBalance,
+    repayLoanTx,
+    newEthBackedLoanTx,
+    collectLoansTx,
+    fetchLoansToCollectTx
+} from "./ethHelper";
+
 
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
 export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
@@ -24,6 +32,14 @@ export const LOANMANAGER_NEWLOAN_ERROR = 'loanManager/LOANMANAGER_NEWLOAN_ERROR'
 export const LOANMANAGER_REPAY_REQUESTED = 'loanManager/LOANMANAGER_REPAY_REQUESTED'
 export const LOANMANAGER_REPAY_SUCCESS = 'loanManager/LOANMANAGER_REPAY_SUCCESS'
 export const LOANMANAGER_REPAY_ERROR = 'loanManager/LOANMANAGER_REPAY_ERROR'
+
+export const LOANMANAGER_COLLECT_REQUESTED = 'loanManager/LOANMANAGER_COLLECT_REQUESTED'
+export const LOANMANAGER_COLLECT_SUCCESS = 'loanManager/LOANMANAGER_COLLECT_SUCCESS'
+export const LOANMANAGER_COLLECT_ERROR = 'loanManager/LOANMANAGER_COLLECT_ERROR'
+
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED = 'loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED'
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED = 'loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED'
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR = 'loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR'
 
 const initialState = {
     contract: null,
@@ -106,6 +122,35 @@ export default (state = initialState, action) => {
         }
 
         case LOANMANAGER_REPAY_ERROR:
+        return {
+            ...state,
+            error: action.error
+        }
+
+        case LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED:
+        return state;
+
+        case LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED:
+        return {
+            ...state,
+            loansToCollect: action.result
+        }
+
+        case LOANMANAGER_COLLECT_REQUESTED:
+        return {
+            ...state,
+            loansToCollect: action.loansToCollect,
+            error: null,
+            result: null
+        }
+
+        case LOANMANAGER_COLLECT_SUCCESS:
+        return {
+            ...state,
+            result: action.result
+        }
+
+        case LOANMANAGER_COLLECT_ERROR:
         return {
             ...state,
             error: action.error
@@ -219,6 +264,49 @@ export function repayLoan(loanId) {
         } catch (error) {
             return dispatch({
                 type: LOANMANAGER_REPAY_ERROR,
+                error: error
+            })
+        }
+    }
+}
+
+export function fetchLoansToCollect() {
+    return async dispatch =>  {
+        dispatch({
+            type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED
+        })
+
+        try {
+            let result = await fetchLoansToCollectTx();
+            return dispatch({
+                type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR,
+                error: error
+            })
+        }
+    }
+}
+
+export function collectLoans(loansToCollect) {
+    return async dispatch =>  {
+        dispatch({
+            type: LOANMANAGER_COLLECT_REQUESTED,
+            loansToCollect: loansToCollect
+        })
+
+        try {
+            let result = await collectLoansTx(loansToCollect);
+            return dispatch({
+                type: LOANMANAGER_COLLECT_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: LOANMANAGER_COLLECT_ERROR,
                 error: error
             })
         }

@@ -4,6 +4,7 @@
   "description": "US Crypto Dollar - Proof of Concept",
   "private": true,
   "dependencies": {
+    "bignumber.js": "^4.0.2",
     "bootstrap": "3",
     "moment": "^2.18.1",
     "react": "^15.6.1",

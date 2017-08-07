@@ -1,12 +1,15 @@
 /*
  TODO: gasPrice param
  */
-import store from './../store'
+import store from 'store'
+import BigNumber from 'bignumber.js';
+import { fetchLoanDetailsByAddress } from 'modules/loans'
 
 // TODO: set gasEstimates when it settled.
 const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  additional = 702376
 const NEW_FIRST_LOAN_GAS = 2000000;
 const REPAY_GAS = 200000;
+const COLLECT_GAS = 300000;
 
 export function asyncGetBalance( address) {
     return new Promise( function (resolve, reject) {
@@ -103,5 +106,77 @@ export async function repayLoanTx(loanId) {
     } catch (error) {
         // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
         throw(new Error( "Repay loan failed. Error: " + error));
+    }
+}
+
+export async function fetchLoansToCollectTx() {
+    try {
+        let loanManager = store.getState().loanManager.contract.instance;
+        let loanCount = (await loanManager.getLoanCount()).toNumber()
+        let loansToCollect = [];
+        for (let i = 0; i < loanCount; i++) {
+            let loanManagerContractTuple= await loanManager.loanPointers(i);
+            let loanState = loanManagerContractTuple[1].toNumber();
+            if (loanState === 0 ) { // TODO: get enum from contract
+                let loanContractAddress = loanManagerContractTuple[0];
+                let loan = await fetchLoanDetailsByAddress(loanContractAddress)
+                if (loan.loanState === 21) {
+                    loansToCollect.push(loan);
+                }
+            }
+        }
+        return loansToCollect;
+    } catch (error) {
+        throw(new Error( "fetchLoansToCollectTx failed. Error: " + error));
+    }
+}
+
+export async function collectLoansTx(loansToCollect) {
+    try {
+        let userAccount = store.getState().ethBase.userAccount;
+        let loanManager = store.getState().loanManager.contract.instance;
+        let gasEstimate = COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
+        let converted = loansToCollect.map( item => { return new BigNumber(item.loanId)})
+        console.log(converted)
+        let result = await loanManager.collect( converted, { from: userAccount, gas: gasEstimate })
+        console.log(result);
+        if( result.receipt.gasUsed === gasEstimate) { // Neeed for testnet behaviour (TODO: test it!)
+            // TODO: add more tx info
+            throw(new Error( "All gas provided was used:  " + result.receipt.gasUsed));
+        }
+        if( !result.logs || result.logs.length === 0 ) {
+            throw(new Error( "no e_collected events received. Check tx :  " + result.tx));
+        }
+
+        result.logs.map( (logItem, index)=> {
+            if ( !logItem.event || logItem.event !== "e_collected" ) {
+                throw(new Error( "Likely not all loans has been collected.\n"
+                + "One of the events recevied is not e_collected.\n"
+                + "logs[" + index + "] recevied: " + logItem + "\n"
+                + "Check tx :  " + result.tx));
+            }
+            return true;
+        })
+
+        if (result.logs.length !== loansToCollect.length) {
+            throw(new Error( "Likely not all loans has been collected.\n"
+            + "Number of e_collected events != loansToCollect passed.\n"
+            + "Received: " + result.logs.length + " events. Expected: " + loansToCollect.length + "\n"
+            + "Check tx :  " + result.tx));
+        }
+
+        return (
+            {
+                txResult: result,
+                eth: { // TODO:  make it mre generic for all txs
+                    gasProvided: gasEstimate,
+                    gasUsed: result.receipt.gasUsed,
+                    tx: result.tx
+                }
+            }
+        )
+    } catch (error) {
+        // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
+        throw(new Error( "Collect loan failed. Error: " + error));
     }
 }
