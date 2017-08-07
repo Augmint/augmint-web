@@ -1,5 +1,5 @@
 /* Contract to manage UCD loan contracts
-    TODO: store loanId (idx in loanPointers)  in EthBackedLoan + change repay param to loanId
+    TODO: store loanId (idx in loanPointers)  in EthBackedLoan
     TODO: consider to add early repayment
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
 */
@@ -11,8 +11,10 @@ import "./EthBackedLoan.sol";
 
 contract LoanManager is owned {
     int8 public constant SUCCESS = 1;
+    int8 public constant ERR_NOT_OWNER = -2;
     int8 public constant ERR_NO_LOAN = -3;
     int8 public constant ERR_LOAN_NOT_OPEN = -4;
+
     int8 public constant ERR_EXT_ERRCODE_BASE = -10;
 
     Rates public rates; // instance of ETH/USD rate provider contract
@@ -112,23 +114,28 @@ contract LoanManager is owned {
 
     event e_repayed(address loanContractAddress);
     function repay(uint loanId) returns (int8 result) {
-        // note that loanId is idx in borrower's array (ie. 0...n for each borrower)
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         // TODO: check if we could do this without "direct" access to borrower's UCD balance
         //       eg. transfer UCD to loanContract initiates repayment? or using ECR20 transfer approval?
         //       it wouldn't restrict access more but would be better seperation of functions
-        if(m_loanPointers[msg.sender].length == 0
-            || m_loanPointers[msg.sender].length <= loanId) {
+        if(loanPointers.length <= loanId + 1) {
             return ERR_NO_LOAN;
         }
 
-        uint loanIdx = m_loanPointers[msg.sender][loanId];
-        if(loanPointers[loanIdx].loanState != LoanState.Open) {
+        if(loanPointers[loanId].loanState != LoanState.Open) {
             return ERR_LOAN_NOT_OPEN;
         }
 
-        address loanContractAddress = loanPointers[ loanIdx ].contractAddress;
+        if(m_loanPointers[msg.sender].length == 0) {
+            return ERR_NOT_OWNER;
+        }
+
+        address loanContractAddress = loanPointers[ loanId ].contractAddress;
         EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
+
+        if(loanContract.owner() != msg.sender) {
+            return ERR_NOT_OWNER;
+        }
 
         int8 res = tokenUcd.repayAndBurnUcd(msg.sender, loanContract.ucdDueAtMaturity());
         if(res != tokenUcd.SUCCESS() ) {
@@ -143,7 +150,7 @@ contract LoanManager is owned {
            revert();
         }
 
-        loanPointers[loanIdx].loanState = LoanState.Repaid;
+        loanPointers[loanId].loanState = LoanState.Repaid;
         e_repayed(loanContractAddress);
         return SUCCESS;
     }
