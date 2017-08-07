@@ -155,31 +155,38 @@ contract LoanManager is owned {
         return SUCCESS;
     }
 
-    event e_collected(address loanContractAddress);
-    function collect(uint loanIdx) returns (int8 result) {
-        // note that loanIdx is idx in loanPointer[]  (ie. global idx for all loans 0...n )
-        // anyone can call it.
-        // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
-        if(loanPointers.length == 0
-            || loanPointers.length <= loanIdx) {
+    event e_collected(address loanOwner, address loanContractAddress);
+    function collect(uint[] loanIds) returns (int8 result) {
+        /* when there are a lots of loans to be collected then
+             the client need to call it in batches to make sure tx won't exceed block gas limit.
+         Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted
+         TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
+        */
+        if(loanPointers.length == 0) {
             return ERR_NO_LOAN;
         }
-        if(loanPointers[loanIdx].loanState != LoanState.Open) {
-            return ERR_LOAN_NOT_OPEN;
+        for (uint i = 0; i < loanIds.length; i++) {
+            uint loanId = loanIds[i];
+            if (loanPointers.length <= loanId) {
+                return ERR_NO_LOAN;
+            }
+            if(loanPointers[loanId].loanState != LoanState.Open) {
+                return ERR_LOAN_NOT_OPEN;
+            }
+
+            address loanContractAddress = loanPointers[ loanId ].contractAddress;
+            EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
+
+            int8 res = loanContract.collect();
+            if (res != loanContract.SUCCESS() ) {
+                // if EthBackedLoan.collect returned an error then no state changes could have happen yet
+                // ie. no revert required
+                return ERR_EXT_ERRCODE_BASE + res;
+            }
+
+            loanPointers[loanId].loanState = LoanState.Defaulted;
+            e_collected(loanContract.owner(), loanContractAddress);
         }
-
-        address loanContractAddress = loanPointers[ loanIdx ].contractAddress;
-        EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
-
-        int8 res = loanContract.collect();
-        if (res != loanContract.SUCCESS() ) {
-            // no state changes can happen up to this point
-            // ie. no revert required
-            return ERR_EXT_ERRCODE_BASE + res;
-        }
-
-        loanPointers[loanIdx].loanState = LoanState.Defaulted;
-        e_collected(loanContractAddress);
         return SUCCESS;
     }
 

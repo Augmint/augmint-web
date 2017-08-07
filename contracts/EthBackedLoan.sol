@@ -105,8 +105,13 @@ contract EthBackedLoan {
     }
 
     function collect() returns (int8 result) {
-        // TODO: payback collateral over the UCD value
-        // TODO: add fee when defult
+        /* This function is only callable by loanManager contract.
+           It MUST throw an exception if there is an error after any state change happened here.
+                It's to ensure that any changes made in loanmanager before this call are reverted too.
+                see loanManager.collect() for more details.
+        TODO: payback collateral over the UCD value
+        TODO: deduct fee
+        */
         if( msg.sender != address(loanManager)) {
             // default is only through loanManager
             return ERR_NOT_AUTHORISED;
