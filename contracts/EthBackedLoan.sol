@@ -27,10 +27,10 @@ contract EthBackedLoan {
     uint public term; // duration of loan
     uint public disbursementDate;
     uint public maturity; // disbursementDate + term
-    uint public repayPeriod; // number of seconds after maturity before default can be executed
+    uint public repayPeriod; // number of seconds after maturity before collect can be executed
 
     int8 public constant SUCCESS = 1;
-    int8 public constant ERR_DEFAULT_NOT_DUE_YET = -1;
+    int8 public constant ERR_COLLECT_NOT_DUE_YET = -1;
     int8 public constant ERR_REPAY_NOT_DUE_YET = -2;
     int8 public constant ERR_UCD_BALANCE_NOT_ENOUGH = -3;
     int8 public constant ERR_NOT_AUTHORISED = -4;
@@ -104,10 +104,9 @@ contract EthBackedLoan {
         return SUCCESS;
     }
 
-    function defaulted() returns (int8 result) {
+    function collect() returns (int8 result) {
         // TODO: payback collateral over the UCD value
         // TODO: add fee when defult
-        // TODO: rename this function, eg. takeOverCollateralWhenDefaulted closeDefaulted collateral?
         if( msg.sender != address(loanManager)) {
             // default is only through loanManager
             return ERR_NOT_AUTHORISED;
@@ -118,7 +117,7 @@ contract EthBackedLoan {
         }
 
         if(now < maturity + repayPeriod) {
-            return ERR_DEFAULT_NOT_DUE_YET;
+            return ERR_COLLECT_NOT_DUE_YET;
         }
 
         loanState = LoanState.Defaulted;

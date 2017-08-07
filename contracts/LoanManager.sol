@@ -25,7 +25,7 @@ contract LoanManager is owned {
         uint loanCollateralRatio;  // ucd loan amount / colleteral usd value
                                     // in parts per million , ie. 10,000 = 1%
         uint minDisbursedAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
-        uint repayPeriod; // number of seconds after maturity before default can be executed
+        uint repayPeriod; // number of seconds after maturity before collect can be executed
         bool isActive;
     }
 
@@ -148,8 +148,8 @@ contract LoanManager is owned {
         return SUCCESS;
     }
 
-    event e_defaulted(address loanContractAddress);
-    function defaulted(uint loanIdx) returns (int8 result) {
+    event e_collected(address loanContractAddress);
+    function collect(uint loanIdx) returns (int8 result) {
         // note that loanIdx is idx in loanPointer[]  (ie. global idx for all loans 0...n )
         // anyone can call it.
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
@@ -164,7 +164,7 @@ contract LoanManager is owned {
         address loanContractAddress = loanPointers[ loanIdx ].contractAddress;
         EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
 
-        int8 res = loanContract.defaulted();
+        int8 res = loanContract.collect();
         if (res != loanContract.SUCCESS() ) {
             // no state changes can happen up to this point
             // ie. no revert required
@@ -172,7 +172,7 @@ contract LoanManager is owned {
         }
 
         loanPointers[loanIdx].loanState = LoanState.Defaulted;
-        e_defaulted(loanContractAddress);
+        e_collected(loanContractAddress);
         return SUCCESS;
     }
 
