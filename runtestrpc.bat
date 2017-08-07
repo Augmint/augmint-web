@@ -1,5 +1,5 @@
 echo "launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)"
-nvm 8.2.1
+nvm use 8.2.1
 testrpc ^
 --gasLimit 0x47D5DE ^
 --network-id 999 ^
