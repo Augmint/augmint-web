@@ -22,9 +22,8 @@ contract LoanManager is owned {
     struct Product {
         uint term;
         uint discountRate; // discountRate in parts per million , ie. 10,000 = 1%
-        uint loanCoverageRatio;  // colleteral usd value / ucd loan amount
+        uint loanCollateralRatio;  // ucd loan amount / colleteral usd value
                                     // in parts per million , ie. 10,000 = 1%
-                                    // TODO: it means 1/loanCoverageRatio, rename it accordingly
         uint minDisbursedAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
         uint repayPeriod; // number of seconds after maturity before default can be executed
         bool isActive;
@@ -59,10 +58,10 @@ contract LoanManager is owned {
         return m_loanPointers[borrower];
     }
 
-    function addProduct(uint _term, uint _discountRate, uint _loanCoverageRatio,
+    function addProduct(uint _term, uint _discountRate, uint _loanCollateralRatio,
             uint _minDisbursedAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
         newProductId = products.push( Product( {term: _term, discountRate: _discountRate,
-                loanCoverageRatio: _loanCoverageRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
+                loanCollateralRatio: _loanCollateralRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
                 repayPeriod: _repayPeriod, isActive: _isActive }) );
 
         return newProductId - 1;
@@ -86,7 +85,7 @@ contract LoanManager is owned {
 
         // calculate UCD loan values based on ETH sent in with Tx
         uint usdValue = rates.convertWeiToUsd(msg.value);
-        uint ucdDueAtMaturity = usdValue * products[productId].loanCoverageRatio / 1000000;
+        uint ucdDueAtMaturity = usdValue * products[productId].loanCollateralRatio / 1000000;
         uint disbursedLoanInUcd = ucdDueAtMaturity * products[productId].discountRate / 1000000;
         require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
 

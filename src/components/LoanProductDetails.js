@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { mListGroupItem } from "components/mListGroups";
 import {
     DiscountRateToolTip,
-    LoanCoverageRatioToolTip,
+    LoanCollateralRatioToolTip,
     RepayPeriodToolTip
 } from "./LoanToolTips";
 
@@ -24,23 +24,23 @@ export default function LoanProductDetails(props) {
                 </Col>
             </Row>
             <Row>
-                <Col sm={8}>Loan coverage ratio: </Col>
+                <Col sm={8}>Loan/collateral ratio: </Col>
                 <Col sm={4}>
-                    {prod.loanCoverageRatio * 100}%
-                    <LoanCoverageRatioToolTip
-                        loanCoverageRatio={prod.loanCoverageRatio}
+                    {prod.loanCollateralRatio * 100}%
+                    <LoanCollateralRatioToolTip
+                        loanCollateralRatio={prod.loanCollateralRatio}
                     />
                 </Col>
             </Row>
             <Row>
-                <Col sm={8}>Min disbursed loan amount:</Col>
+                <Col sm={8}>Min. payout:</Col>
                 <Col sm={4}>
                     {prod.minDisbursedAmountInUcd} UCD
                 </Col>
             </Row>
             <Row>
                 <Col sm={8}>
-                    Repay period:
+                    Repayment period:
                 </Col>
                 <Col sm={4}>
                     {prod.repayPeriodText} <RepayPeriodToolTip />

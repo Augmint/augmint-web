@@ -35,7 +35,7 @@ class NewLoanForm extends React.Component {
             e.target.value * (1 / this.props.product.discountRate);
         let ethAmount =
             loanUcdAmount /
-            this.props.product.loanCoverageRatio *
+            this.props.product.loanCollateralRatio *
             this.props.rates.usdEthRate;
         this.props.change("loanUcdAmount", loanUcdAmount);
         this.props.change("ethAmount", ethAmount);
@@ -46,7 +46,7 @@ class NewLoanForm extends React.Component {
             e.target.value * this.props.product.discountRate;
         let ethAmount =
             e.target.value /
-            this.props.product.loanCoverageRatio *
+            this.props.product.loanCollateralRatio *
             this.props.rates.usdEthRate;
         this.props.change("disbursedUcdAmount", disbursedUcdAmount);
         this.props.change("ethAmount", ethAmount);
@@ -55,7 +55,7 @@ class NewLoanForm extends React.Component {
     onEthAmountChange(e) {
         let loanUcdAmount =
             e.target.value *
-            this.props.product.loanCoverageRatio *
+            this.props.product.loanCollateralRatio *
             this.props.rates.ethUsdRate;
         let disbursedUcdAmount =
             loanUcdAmount * this.props.product.discountRate;
@@ -109,7 +109,7 @@ class NewLoanForm extends React.Component {
                     </FormGroup>
 
                     <FormGroup bsSize="large">
-                        <ControlLabel>Collateral</ControlLabel>
+                        <ControlLabel>Collateral (goes to escrow)</ControlLabel>
                         <InputGroup>
                             <Field
                                 name="ethAmount"

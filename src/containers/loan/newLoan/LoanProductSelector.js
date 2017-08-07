@@ -22,11 +22,30 @@ class LoanProductSelector extends React.Component {
             <Row>
                 <Col xs={4} md={4}>
                     <Well>
-                        You can get UCD for ETH collateral. <br />
-                        When you repay the UCD on maturity you will get back all
-                        of your ETH.<br />
-                        If you decide not to repay the UCD loan then your ETH
-                        will be taken to the UCD reserves.
+                        <p>
+                            You can get UCD for placing your ETH in escrow
+                            (collateral).{" "}
+                        </p>
+                        <p>
+                            <strong>Repayment</strong>
+                            <br />
+                            When you repay the UCD on maturity you will get back
+                            all of your ETH.
+                        </p>
+                        <p>
+                            <strong>Default (non payment)</strong>
+                            <br />
+                            If you decide not to repay the UCD loan at maturity
+                            then your ETH will be taken to the system (tokenUcd)
+                            reserves.
+                        </p>
+                        <p>
+                            TODO, Not yet implemented: <br />
+                            If the value of your ETH (at the moment of
+                            collection) is higher than the UCD value of your
+                            loan + fees for the default then the leftover ETH
+                            will be transfered back to your ETH account.
+                        </p>
                     </Well>
                 </Col>
                 <Col xs={8} md={8}>

@@ -150,7 +150,7 @@ export const refreshLoanManager =  () => {
                 term: term,
                 termText: moment.duration(term, "seconds").humanize(),
                 discountRate: p[1].toNumber() / 1000000,
-                loanCoverageRatio: p[2].toNumber() / 1000000,
+                loanCollateralRatio: p[2].toNumber() / 1000000,
                 minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
                 repayPeriod: repayPeriod,
                 repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
