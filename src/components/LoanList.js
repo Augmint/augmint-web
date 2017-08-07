@@ -1,23 +1,36 @@
-import React from 'react'
-import {Panel, ListGroup, ListGroupItem} from 'react-bootstrap'
-import LoanDetails from './LoanDetails'
+import React from "react";
+import { Panel } from "react-bootstrap";
+import { mListGroup, mListGroupItem } from "components/mListGroups";
+import LoanListDetails from "./LoanListDetails";
 
 export default function LoanList(props) {
-    const listItems = props.loans == null ? <p>Loading...</p> :
-        props.loans.filter( props.filter ? props.filter : () => {return true}).map( (loan, index) =>
-            <ListGroupItem key={`loanDiv-${loan.loanId}`}>
-                <LoanDetails loan={loan} selectComponent={props.selectComponent}/>
-            </ListGroupItem>
-    );
+    const listItems =
+        props.loans == null
+            ? <p>Loading...</p>
+            : props.loans
+                  .filter(
+                      props.filter
+                          ? props.filter
+                          : () => {
+                                return true; // no filter passed
+                            }
+                  )
+                  .map((loan, index) =>
+                      <mListGroupItem key={`loanDiv-${loan.loanId}`}>
+                          <LoanListDetails
+                              loan={loan}
+                              selectComponent={props.selectComponent}
+                          />
+                      </mListGroupItem>
+                  );
 
     return (
         <Panel header={props.header}>
-            { props.loans != null && listItems.length === 0 ?
-                props.noItemMessage
-            :
-            <ListGroup>
-                { listItems }
-            </ListGroup> }
+            {props.loans != null && listItems.length === 0
+                ? props.noItemMessage
+                : <mListGroup>
+                      {listItems}
+                  </mListGroup>}
         </Panel>
     );
 }

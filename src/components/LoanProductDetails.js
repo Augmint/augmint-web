@@ -1,38 +1,59 @@
-import React from 'react'
-import {Table, ListGroupItem} from 'react-bootstrap';
-import { DiscountRateToolTip, LoanCoverageRatioToolTip, RepayPeriodToolTip } from './LoanToolTips';
+import React from "react";
+import { Row, Col } from "react-bootstrap";
+import { mListGroupItem } from "components/mListGroups";
+import {
+    DiscountRateToolTip,
+    LoanCoverageRatioToolTip,
+    RepayPeriodToolTip
+} from "./LoanToolTips";
+
+import "./LoanProductDetails.css";
 
 export default function LoanProductDetails(props) {
     let prod = props.product;
-    return(
-        <ListGroupItem  header={"Product " + (prod.id +1)  + " - Repay in " + prod.termText} key={prod.id}>
-        <Table condensed>
-            <tbody>
-            <tr>
-                <td>
-                    Discount rate: <DiscountRateToolTip discountRate={prod.discountRate} />
-                </td>
-                <td>{prod.discountRate * 100}%</td>
-            </tr>
-            <tr>
-                <td>Loan coverage ratio: <LoanCoverageRatioToolTip loanCoverageRatio={prod.loanCoverageRatio} />
-                </td>
-                <td>{prod.loanCoverageRatio * 100}%</td>
-            </tr>
-            <tr>
-                <td><small>Min disbursed loan amount:</small></td>
-                <td><small>{prod.minDisbursedAmountInUcd} UCD</small></td>
-            </tr>
-            <tr>
-                <td><small>Repay period: <RepayPeriodToolTip/></small>
-                </td>
-                <td><small>{prod.repayPeriodText}</small></td>
-            </tr>
-            </tbody>
-        </Table>
-        { props.selectComponent &&
-            <props.selectComponent productId={prod.id}/>
-        }
-    </ListGroupItem>
+    return (
+        <mListGroupItem
+            header={"Product " + (prod.id + 1) + " - Repay in " + prod.termText}
+            key={prod.id}
+        >
+            <Row>
+                <Col sm={8}>Discount rate: </Col>
+                <Col sm={4}>
+                    {prod.discountRate * 100}%
+                    <DiscountRateToolTip discountRate={prod.discountRate} />
+                </Col>
+            </Row>
+            <Row>
+                <Col sm={8}>Loan coverage ratio: </Col>
+                <Col sm={4}>
+                    {prod.loanCoverageRatio * 100}%
+                    <LoanCoverageRatioToolTip
+                        loanCoverageRatio={prod.loanCoverageRatio}
+                    />
+                </Col>
+            </Row>
+            <Row>
+                <Col sm={8}>Min disbursed loan amount:</Col>
+                <Col sm={4}>
+                    {prod.minDisbursedAmountInUcd} UCD
+                </Col>
+            </Row>
+            <Row>
+                <Col sm={8}>
+                    Repay period:
+                </Col>
+                <Col sm={4}>
+                    {prod.repayPeriodText} <RepayPeriodToolTip />
+                </Col>
+            </Row>
+
+            {props.selectComponent &&
+                <Row>
+                    <Col sm={12}>
+                        <props.selectComponent productId={prod.id} />
+                    </Col>
+                </Row>}
+            <Row bsClass="rowSeparator" />
+        </mListGroupItem>
     );
 }

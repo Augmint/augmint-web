@@ -137,7 +137,7 @@ class RepayLoanPage extends React.Component {
                                 <LoanDetailsWithStatusCheck loan={this.state.loan} />
                                 <Button type="submit" bsStyle="primary"
                                     disabled={this.props.submitting}>
-                                    Repay {this.state.loan.loanAmount} UCD
+                                    Confirm to repay {this.state.loan.disbursedLoanInUcd} UCD
                                 </Button>
                             </form>
                         }

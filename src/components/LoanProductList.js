@@ -1,10 +1,10 @@
 import React from 'react'
-import {Panel, ListGroup} from 'react-bootstrap'
+import {Panel, } from 'react-bootstrap'
+import {mListGroup} from 'components/mListGroups'
 import LoanProductDetails from './LoanProductDetails'
 
 export default function LoanProductList(props) {
     let products = props.products;
-    // TODO: this causing a warning, table nested in <p>. Bootstrap has class for table within panel...
     const listItems = products == null ? <p>Loading products...</p> :
         products.filter( props.filter ? props.filter : () => {return true}).map( (prod, index) =>
                 <LoanProductDetails key={`loanProdDiv-${prod.id}`}
@@ -13,9 +13,9 @@ export default function LoanProductList(props) {
 
     return (
         <Panel header={props.header}>
-            <ListGroup>
+            <mListGroup>
                 { listItems }
-            </ListGroup>
+            </mListGroup>
         </Panel>
     );
 }
