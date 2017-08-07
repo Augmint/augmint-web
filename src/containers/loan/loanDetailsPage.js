@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 class LoanDetailsPage extends React.Component {
     constructor(props) {
         super(props);
-        let loanId = this.props.match.params.loanId;
+        let loanId = parseInt(this.props.match.params.loanId, 10);
         this.state = {
             loan: null,
             loanId: loanId,
@@ -37,7 +37,9 @@ class LoanDetailsPage extends React.Component {
             return;
         } // not loaded yet
         let isLoanFound;
-        let loan = this.props.loans[this.state.loanId];
+        let loan = this.props.loans.find(item => {
+            return item.loanId === this.state.loanId;
+        });
         if (typeof loan === "undefined") {
             isLoanFound = false;
         } else {
@@ -70,8 +72,8 @@ class LoanDetailsPage extends React.Component {
                             <ErrorPanel
                                 header={
                                     <h3>
-                                        Can't find loan (loan id:{" "}
-                                        {this.state.loanId})
+                                        Can't find loan #{this.state.loanId} for current account{" "}
+                                        {this.props.userAccount}
                                     </h3>
                                 }
                             />}
@@ -98,7 +100,7 @@ class LoanDetailsPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
-    userAccount: state.userBalances.account
+    userAccount: state.ethBase.userAccount
 });
 
 export default (LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage));

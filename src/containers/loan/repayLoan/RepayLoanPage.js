@@ -49,7 +49,7 @@ function LoanDetailsWithStatusCheck (props) {
 class RepayLoanPage extends React.Component {
     constructor(props) {
         super(props);
-        let loanId = this.props.match.params.loanId;
+        let loanId = parseInt(this.props.match.params.loanId, 10);
         this.state = {
             loan: null,
             loanId: loanId,
@@ -73,7 +73,9 @@ class RepayLoanPage extends React.Component {
         // workaround b/c landing directly on URL and from LoanSelector triggers different events.
         if (this.props.loans == null) {  return; } // not loaded yet
         let isLoanFound ;
-        let loan = this.props.loans[this.state.loanId];
+        let loan = this.props.loans.find(item => {
+            return item.loanId === this.state.loanId;
+        });
         if (typeof loan === 'undefined') {
             isLoanFound = false;
         } else {
@@ -114,7 +116,14 @@ class RepayLoanPage extends React.Component {
 
         if (!this.state.isLoanFound ) {
             return (
-                <ErrorPanel header={<h3>Can't find loan  (loan id: {this.state.loanId})</h3>} />
+                <ErrorPanel
+                    header={
+                        <h3>
+                            Can't find loan #{this.state.loanId} for current account{" "}
+                            {this.props.userAccount}
+                        </h3>
+                    }
+                />
             )
         }
 
@@ -154,7 +163,7 @@ class RepayLoanPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
-    userAccount: state.userBalances.account
+    userAccount: state.ethBase.userAccount
 })
 
 RepayLoanPage = connect(
