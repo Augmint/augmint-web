@@ -20,6 +20,8 @@ const tokenUcdTitle = ( <h3>TokenUcd contract</h3> );
 const loanManagerTitle = ( <h3>LoanManager contract</h3> );
 const productsTitle = ( <h3>Loan Products</h3> );
 
+const stringify = stringifier( {maxDepth: 2, indent: '   '});
+
 function AccountList(props) {
     const accounts = props.accounts;
     const listItems = accounts == null ?
@@ -42,7 +44,7 @@ function AccountList(props) {
 
 function ObjDump(props) {
     const items = props.items;
-    const stringify = stringifier( {maxDepth: 2, indent: '   '});
+
     const listItems = items ?
         items.map( (item, index) =>
             <tr key={index}>
@@ -102,7 +104,9 @@ class underTheHood extends React.Component {
                             <Col xs={6} md={6}>
                                 <Panel header={web3Title}>
                                     <p>{this.props.isConnected ? "connected" : "not connected" }</p>
-                                    <p>Provider: { this.props.web3Instance ? JSON.stringify(this.props.web3Instance.currentProvider) : "No web3 Instance"}</p>
+                                        <p className="white-space:pre-wrap">
+                                            Provider: <small>{ this.props.web3Instance ? stringify(this.props.web3Instance.currentProvider) : "No web3 Instance"}</small>
+                                        </p>
                                     <p>Internal Connection Id: {this.props.web3ConnectionId}</p>
                                     <Button bsSize="small" onClick={this.props.setupWeb3} >Reconnect web3</Button>
                                 </Panel>
