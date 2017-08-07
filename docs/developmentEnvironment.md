@@ -14,7 +14,7 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. `npm install`
 
 ### Windows
-1. [Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/installing-windows-powershell?view=powershell-6) or [Git Bash](https://git-for-windows.github.io/) (required for truffle)
+1. [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
 1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
 1. [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
@@ -40,7 +40,7 @@ Update to latest ucd-poc:
 Launching:
 1. `./runtestrpc` or on windows: `./runtestrpc.bat`
 1. in separate console:  
-  `tuffle migrate` or  
+  `truffle migrate` or  
   `truffle migrate --reset` to overwrite existing migration
 1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
 1. `yarn start`
