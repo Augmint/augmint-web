@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "react-bootstrap";
-import { mListGroup, mListGroupItem } from "components/mListGroups";
+import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
 import LoanListDetails from "./LoanListDetails";
 
 export default function LoanList(props) {
@@ -16,21 +16,21 @@ export default function LoanList(props) {
                             }
                   )
                   .map((loan, index) =>
-                      <mListGroupItem key={`loanDiv-${loan.loanId}`}>
+                      <MyListGroupItem key={`loanDiv-${loan.loanId}`}>
                           <LoanListDetails
                               loan={loan}
                               selectComponent={props.selectComponent}
                           />
-                      </mListGroupItem>
+                  </MyListGroupItem>
                   );
 
     return (
         <Panel header={props.header}>
             {props.loans != null && listItems.length === 0
                 ? props.noItemMessage
-                : <mListGroup>
+                : <MyListGroup>
                       {listItems}
-                  </mListGroup>}
+                  </MyListGroup>}
         </Panel>
     );
 }

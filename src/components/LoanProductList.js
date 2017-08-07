@@ -1,6 +1,6 @@
 import React from 'react'
 import {Panel, } from 'react-bootstrap'
-import {mListGroup} from 'components/mListGroups'
+import {MyListGroup} from 'components/MyListGroups'
 import LoanProductDetails from './LoanProductDetails'
 
 export default function LoanProductList(props) {
@@ -13,9 +13,9 @@ export default function LoanProductList(props) {
 
     return (
         <Panel header={props.header}>
-            <mListGroup>
+            <MyListGroup>
                 { listItems }
-            </mListGroup>
+            </MyListGroup>
         </Panel>
     );
 }

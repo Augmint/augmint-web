@@ -1,18 +1,16 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { mListGroupItem } from "components/mListGroups";
+import { MyListGroupItem } from "components/MyListGroups";
 import {
     DiscountRateToolTip,
     LoanCollateralRatioToolTip,
     RepayPeriodToolTip
 } from "./LoanToolTips";
 
-import "./LoanProductDetails.css";
-
 export default function LoanProductDetails(props) {
     let prod = props.product;
     return (
-        <mListGroupItem
+        <MyListGroupItem
             header={"Product " + (prod.id + 1) + " - Repay in " + prod.termText}
             key={prod.id}
         >
@@ -53,7 +51,6 @@ export default function LoanProductDetails(props) {
                         <props.selectComponent productId={prod.id} />
                     </Col>
                 </Row>}
-            <Row bsClass="rowSeparator" />
-        </mListGroupItem>
+        </MyListGroupItem>
     );
 }

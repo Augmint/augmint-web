@@ -1,7 +1,0 @@
-.rowSeparator:after {
-    content: "";
-    display: block;
-   margin-top: 10px;
-   margin-bottom: 20px;
-   border-bottom: 1px solid #d0d0d0;
-}

@@ -1,12 +1,11 @@
-/* TODO: this is somehow not working: component renders but none of these props / children are being used.
-        Altough it seems the same as MsgPanels
+/* TODO: remove shadows and borders 
  */
 
 import React from "react";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import "./mListGroups.css";
+import "./MyListGroups.css";
 
-export function mListGroup(props) {
+export function MyListGroup(props) {
     const { children, ...other } = props;
     return (
         <ListGroup {...other}>
@@ -15,7 +14,7 @@ export function mListGroup(props) {
     );
 }
 
-export function mListGroupItem(props) {
+export function MyListGroupItem(props) {
     const { children, ...other } = props;
     return (
         <ListGroupItem {...other}>
