@@ -7,7 +7,7 @@ export default function LoanProductList(props) {
     let products = props.products;
     let listItems;
     if (products == null) {
-        listItems = <p>Loading products...</p>;
+        listItems = <span>Loading products...</span>;
     } else {
         let filteredProducts = products.filter(
             props.filter
@@ -17,7 +17,7 @@ export default function LoanProductList(props) {
                   }
         );
         if (filteredProducts.length === 0) {
-            listItems = <p>No products</p>;
+            listItems = <span>No products</span>;
         } else {
             listItems = filteredProducts.map((prod, index) =>
                 <LoanProductDetails

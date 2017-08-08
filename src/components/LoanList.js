@@ -6,7 +6,7 @@ import LoanListDetails from "./LoanListDetails";
 export default function LoanList(props) {
     const listItems =
         props.loans == null
-            ? <p>Loading...</p>
+            ? <span>Loading...</span>
             : props.loans
                   .filter(
                       props.filter

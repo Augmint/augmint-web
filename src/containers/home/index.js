@@ -26,7 +26,7 @@ class Home extends React.Component {
 
                     <Col xs={6} md={6}>
                         <LoanList header={<h3>My UCD Loans</h3>}
-                            noItemMessage={<p>You have no loans</p>}
+                            noItemMessage={<span>You have no loans</span>}
                             loans={this.props.loans}/>
                     </Col>
                 </Row>
