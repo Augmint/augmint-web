@@ -113,7 +113,7 @@ contract LoanManager is owned {
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
     }
 
-    event e_repayed(address loanContractAddress);
+    event e_repayed(address loanContractAddress, address borrower);
     function repay(uint loanId) returns (int8 result) {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         // TODO: check if we could do this without "direct" access to borrower's UCD balance
@@ -152,11 +152,11 @@ contract LoanManager is owned {
         }
 
         loanPointers[loanId].loanState = LoanState.Repaid;
-        e_repayed(loanContractAddress);
+        e_repayed(loanContractAddress, loanContract.owner());
         return SUCCESS;
     }
 
-    event e_collected(address loanOwner, address loanContractAddress);
+    event e_collected(address borrower, address loanContractAddress);
     function collect(uint[] loanIds) returns (int8 result) {
         /* when there are a lots of loans to be collected then
              the client need to call it in batches to make sure tx won't exceed block gas limit.
