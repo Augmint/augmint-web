@@ -43,7 +43,7 @@ function ArrayDump(props) {
         listItems = items.map((item, index) =>
             <tr key={index}>
                 <td>
-                    <pre style={{fontSize: 10 + "px"}}>
+                    <pre style={{ fontSize: 10 + "px" }}>
                         [{index}] {stringify(item)}
                     </pre>
                 </td>

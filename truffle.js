@@ -1,5 +1,5 @@
 // Allows us to use ES6 in our migrations and tests.
-require('babel-register')
+require("babel-register");
 
 module.exports = {
     /* TODO: tempfix because of issue: https://github.com/trufflesuite/truffle-migrate/issues/10
@@ -10,10 +10,10 @@ module.exports = {
     //migrations_directory: './migrations',
     networks: {
         development: {
-            host: 'localhost',
+            host: "localhost",
             port: 8545,
-            network_id: '*', // Match any network id
+            network_id: "*", // Match any network id
             gas: 4707806
         }
     }
-}
+};

@@ -3,10 +3,7 @@ import { connect } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import store from "store";
 import { SubmissionError } from "redux-form";
-import {
-    newLoan,
-    LOANMANAGER_NEWLOAN_CREATED
-} from "modules/loanManager";
+import { newLoan, LOANMANAGER_NEWLOAN_CREATED } from "modules/loanManager";
 import LoanProductDetails from "components/LoanProductDetails";
 import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";

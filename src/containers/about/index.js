@@ -1,7 +1,7 @@
-import React from 'react'
-import {Grid, Row, Col, Jumbotron} from 'react-bootstrap'
+import React from "react";
+import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
 
-export default () => (
+export default () =>
     <Grid>
         <Row>
             <Col>
@@ -12,5 +12,4 @@ export default () => (
                 </Jumbotron>
             </Col>
         </Row>
-    </Grid>
-)
+    </Grid>;

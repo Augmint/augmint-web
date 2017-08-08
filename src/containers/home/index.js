@@ -1,13 +1,12 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import {Grid, Row, Col, Jumbotron} from 'react-bootstrap'
-import AccountInfo from 'components/AccountInfo'
-import LoanList from 'components/LoanList'
+import React from "react";
+import { connect } from "react-redux";
+import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
+import AccountInfo from "components/AccountInfo";
+import LoanList from "components/LoanList";
 
 class Home extends React.Component {
-
-    render () {
-        return(
+    render() {
+        return (
             <Grid>
                 <Row>
                     <Col>
@@ -21,25 +20,28 @@ class Home extends React.Component {
 
                 <Row>
                     <Col xs={6} md={6}>
-                        <AccountInfo title={<h2>My Account</h2>} account={this.props.userAccount}/>
+                        <AccountInfo
+                            title={<h2>My Account</h2>}
+                            account={this.props.userAccount}
+                        />
                     </Col>
 
                     <Col xs={6} md={6}>
-                        <LoanList header={<h3>My UCD Loans</h3>}
+                        <LoanList
+                            header={<h3>My UCD Loans</h3>}
                             noItemMessage={<span>You have no loans</span>}
-                            loans={this.props.loans}/>
+                            loans={this.props.loans}
+                        />
                     </Col>
                 </Row>
             </Grid>
-        )
+        );
     }
 }
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans.loans
-})
+});
 
-export default connect(
-    mapStateToProps
-)(Home)
+export default connect(mapStateToProps)(Home);

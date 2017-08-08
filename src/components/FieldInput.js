@@ -3,10 +3,10 @@
 usage:
    <Field name="fieldname" component={FieldInput} type="number" onChange={this.onFieldChange}  />
     */
-import React from 'react'
-import {FormControl} from 'react-bootstrap';
+import React from "react";
+import { FormControl } from "react-bootstrap";
 
-export const FieldInput = ({ input, meta, type, placeholder, min, max}) => {
+export const FieldInput = ({ input, meta, type, placeholder, min, max }) => {
     return (
         <FormControl
             id={input.name}
@@ -15,6 +15,7 @@ export const FieldInput = ({ input, meta, type, placeholder, min, max}) => {
             min={min}
             max={max}
             value={input.value}
-            onChange={input.onChange} />
-    )
-}
+            onChange={input.onChange}
+        />
+    );
+};

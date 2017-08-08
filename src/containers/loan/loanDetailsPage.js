@@ -72,25 +72,24 @@ class LoanDetailsPage extends React.Component {
                             <ErrorPanel
                                 header={
                                     <h3>
-                                        Can't find loan #{this.state.loanId} for current account{" "}
-                                        {this.props.userAccount}
+                                        Can't find loan #{this.state.loanId} for
+                                        current account {this.props.userAccount}
                                     </h3>
                                 }
                             />}
 
                         {this.state.isLoanFound &&
-                            <LoanDetails loan={this.state.loan} />
-                        }
+                            <LoanDetails loan={this.state.loan} />}
 
-                        {  this.state.isLoanFound &&  this.state.loan.isDue &&
-                                    <Link
-                                        key={"repaybtn-" + this.state.loan.loanId}
-                                        className="btn btn-primary"
-                                        to={`/loan/repay/${this.state.loan.loanId}`}
-                                    >
-                                        Repay
-                                    </Link>}
-
+                        {this.state.isLoanFound &&
+                            this.state.loan.isDue &&
+                            <Link
+                                key={"repaybtn-" + this.state.loan.loanId}
+                                className="btn btn-primary"
+                                to={`/loan/repay/${this.state.loan.loanId}`}
+                            >
+                                Repay
+                            </Link>}
                     </Col>
                 </Row>
             </Grid>

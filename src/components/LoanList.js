@@ -21,7 +21,7 @@ export default function LoanList(props) {
                               loan={loan}
                               selectComponent={props.selectComponent}
                           />
-                  </MyListGroupItem>
+                      </MyListGroupItem>
                   );
 
     return (

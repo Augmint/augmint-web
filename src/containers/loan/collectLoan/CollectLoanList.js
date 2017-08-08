@@ -49,13 +49,16 @@ class CollectLoanList extends React.Component {
 
     componentDidMount() {
         // needed when landing from Link within App
-        if( this.props.loanManager  ) {
+        if (this.props.loanManager) {
             store.dispatch(fetchLoansToCollect());
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if( this.props.loanManager  && prevProps.loanManager !== this.props.loanManager ) {
+        if (
+            this.props.loanManager &&
+            prevProps.loanManager !== this.props.loanManager
+        ) {
             // loanManager mounted
             store.dispatch(fetchLoansToCollect());
         }
@@ -75,7 +78,7 @@ class CollectLoanList extends React.Component {
                         <EthSubmissionErrorPanel error={this.props.error} />}
 
                     {!this.state.submitSucceeded &&
-                        !this.props.isLoading  &&
+                        !this.props.isLoading &&
                         <form
                             onSubmit={this.props.handleSubmit(
                                 this.handleSubmit
@@ -101,15 +104,11 @@ class CollectLoanList extends React.Component {
                             eth={this.state.result.eth}
                         />}
 
-                    { this.props.isLoading &&
-                        <p>Loading loans to collect...</p>
-                    }
+                    {this.props.isLoading && <p>Loading loans to collect...</p>}
                     <LoanList
                         header={<h2>Loans to collect</h2>}
                         noItemMessage={
-                            <p>
-                                No defaulted and uncollected loan.
-                            </p>
+                            <p>No defaulted and uncollected loan.</p>
                         }
                         loans={this.props.loansToCollect}
                     />

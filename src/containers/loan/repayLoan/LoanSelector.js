@@ -8,9 +8,12 @@ class LoanSelector extends React.Component {
         return (
             <Row>
                 <Col xs={12} md={4}>
-                    <Well>.... TODO some description (and make this break on small devices properly) ...</Well>
+                    <Well>
+                        .... TODO some description (and make this break on small
+                        devices properly) ...
+                    </Well>
                 </Col>
-                <Clearfix visibleSmBlock/>
+                <Clearfix visibleSmBlock />
                 <Col xs={12} md={8}>
                     <LoanList
                         header={<h2>Select your loan to repay</h2>}

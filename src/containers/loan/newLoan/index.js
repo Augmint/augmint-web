@@ -1,7 +1,7 @@
 import React from "react";
-import {Route} from 'react-router-dom'
-import NewLoanPage from './NewLoanPage';
-import LoanProductSelector from './LoanProductSelector'
+import { Route } from "react-router-dom";
+import NewLoanPage from "./NewLoanPage";
+import LoanProductSelector from "./LoanProductSelector";
 import { PageHeader, Grid, Row, Col } from "react-bootstrap";
 
 const newLoanMain = () =>
@@ -12,8 +12,8 @@ const newLoanMain = () =>
             </Col>
         </Row>
         <Row>
-            <Route exact path='/loan/new' component={LoanProductSelector}/>
-            <Route path='/loan/new/:loanProductId' component={NewLoanPage}/>
+            <Route exact path="/loan/new" component={LoanProductSelector} />
+            <Route path="/loan/new/:loanProductId" component={NewLoanPage} />
         </Row>
     </Grid>;
 

@@ -49,7 +49,10 @@ export class EthereumState extends React.Component {
         } else if (ethBase.error) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect Ethereum network</h3>}>
-                    <p>To use this app you need an Ethereum capable browser (eg. Mist) or Chrome with Metamask plugin</p>
+                    <p>
+                        To use this app you need an Ethereum capable browser
+                        (eg. Mist) or Chrome with Metamask plugin
+                    </p>
                     <LocalInstallInstructions ethBase={this.props.ethBase} />
                     <p>Error details:</p>
                     <pre>
@@ -62,17 +65,22 @@ export class EthereumState extends React.Component {
             msg = (
                 <ErrorPanel header={<h3>Not on local testrpc</h3>}>
                     <p>
-                        Your browser seems to be connected to {ethBase.network.name}{" "}
-                        (id: {ethBase.network.id}).
+                        Your browser seems to be connected to{" "}
+                        {ethBase.network.name} (id: {ethBase.network.id}).
                     </p>
-                    <LocalInstallInstructions ethBase={this.props.ethBase}/>
+                    <LocalInstallInstructions ethBase={this.props.ethBase} />
                 </ErrorPanel>
             );
-        } else if (loanManager.connectionError || rates.connectionError || tokenUcd.connectionError) {
+        } else if (
+            loanManager.connectionError ||
+            rates.connectionError ||
+            tokenUcd.connectionError
+        ) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
                     <p>
-                        You seem to be connected to local testrpc but can't find UCD contracts.<br />
+                        You seem to be connected to local testrpc but can't find
+                        UCD contracts.<br />
                         Do you have all the contracts deployed?
                         <br />
                         <pre>
@@ -94,8 +102,12 @@ export class EthereumState extends React.Component {
                             {loanManager.connectionError
                                 ? loanManager.connectionError.message + "\n"
                                 : ""}
-                            {rates.connectionError ? rates.connectionError.message + "\n" : ""}
-                            {tokenUcd.connectionError ? tokenUcd.connectionError.message : ""}
+                            {rates.connectionError
+                                ? rates.connectionError.message + "\n"
+                                : ""}
+                            {tokenUcd.connectionError
+                                ? tokenUcd.connectionError.message
+                                : ""}
                         </pre>
                     </p>
                 </ErrorPanel>

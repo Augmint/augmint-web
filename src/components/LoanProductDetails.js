@@ -37,9 +37,7 @@ export default function LoanProductDetails(props) {
                 </Col>
             </Row>
             <Row>
-                <Col sm={8}>
-                    Repayment period:
-                </Col>
+                <Col sm={8}>Repayment period:</Col>
                 <Col sm={4}>
                     {prod.repayPeriodText} <RepayPeriodToolTip />
                 </Col>
