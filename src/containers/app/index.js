@@ -5,7 +5,6 @@ Wrapper for the whole App
     Listeners and handlers to web3 events
 
 TODO: consider moving event listeners  to a separate component
-TODO: make REDUX connect work here (it messes up navigation) so that we don't need all of these store.getStates()
 */
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -61,7 +60,7 @@ class App extends React.Component {
             if(newVal) {
                 store.dispatch(refreshTokenUcd()); // tokenUCD refresh required for loanManager refresh
                 // it's being called first by the listener
-                //store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
+                //store.dispatch(fetchUserBalance(this.props.userAccount));
             }
         }))
 
@@ -69,7 +68,7 @@ class App extends React.Component {
         store.subscribe(w4((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshLoanManager());
-                store.dispatch(fetchLoans( store.getState().ethBase.userAccount));
+                store.dispatch(fetchLoans( this.props.userAccount));
                 this.setupListeners();
             }
         }))
@@ -82,10 +81,9 @@ class App extends React.Component {
         this.filterAllBlocks = web3.eth.filter("pending");
 		this.filterAllBlocks.watch(this.onNewBlock.bind(this));
 
-        let loanManager = store.getState().loanManager.contract.instance;
 
         // e_newLoan(uint8 productId, address borrower, address loanContract, uint disbursedLoanInUcd );
-        loanManager.e_newLoan( {fromBlock: "latest", toBlock: "pending"}).watch(this.onNewLoan.bind(this));
+        this.props.loanManager.instance.e_newLoan( {fromBlock: "latest", toBlock: "pending"}).watch(this.onNewLoan.bind(this));
 
         // TODO: add & handle loan repay & defaulted  events
         // TODO: add & handle loanproduct change events
@@ -94,25 +92,23 @@ class App extends React.Component {
     onNewBlock() {
         console.debug("onNewBlock: dispatching fetchUserBalance & refreshTokenUcd");
         store.dispatch(refreshRates()); // not too expensive but should consider a  separate listener for rate change event
-        store.dispatch(fetchUserBalance(store.getState().ethBase.userAccount));
+        store.dispatch(fetchUserBalance(this.props.userAccount));
         store.dispatch(refreshTokenUcd());
 
     }
 
     onNewLoan(error, result) {
         // TODO: add refresh LoanManager (when fetchproducts are separated) to update loanCount
-        let userAccount = store.getState().ethBase.userAccount
-        if (result.args.borrower === userAccount) {
+        if (result.args.borrower === this.props.userAccount) {
             console.debug("onNewLoan: loan for current user , dispatching fetchLoans")
             // TODO: it can be expensive, should create a separate fetchNewLoans action
-            store.dispatch(fetchLoans( userAccount));
+            store.dispatch(fetchLoans( this.props.userAccount));
         }
     }
 
 	componentWillUnmount() {
 		this.filterAllBlocks.stopWatching();
-        let loanManager = store.getState().loanManager.contract.instance;
-        loanManager.e_newLoan().stopWatching();
+        this.props.loanManager.instance.e_newLoan().stopWatching();
 	}
 
     componentWillReceiveProps(nextProps) {
@@ -179,7 +175,9 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    network: state.ethBase.network
+    network: state.ethBase.network,
+    userAccount: state.ethBase.userAccount,
+    loanManager: state.loanManager.contract
 });
 
 export default (App = withRouter(connect(mapStateToProps)(App)));
