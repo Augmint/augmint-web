@@ -5,12 +5,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { Button, Grid, Row, Col } from "react-bootstrap";
 import { ErrorPanel, InfoPanel } from "components/MsgPanels";
-import stringifier from "stringifier";
+//import stringifier from "stringifier";
 
-const stringify = stringifier({ maxDepth: 3, indent: "   " });
+//const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function LocalInstallInstructions(props) {
-    const { ethBase } = props;
     return (
         <div>
             <p>
