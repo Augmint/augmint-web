@@ -163,7 +163,7 @@ class RepayLoanPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
-    userAccount: state.ethBase.userAccount
+    userAccount: state.userBalances.account
 })
 
 RepayLoanPage = connect(
