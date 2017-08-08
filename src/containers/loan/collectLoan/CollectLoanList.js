@@ -18,7 +18,9 @@ class CollectLoanList extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
         this.setState({ isSubmitting: true });
-        let res = await store.dispatch(collectLoans(this.state.loansToCollect));
+        let res = await store.dispatch(collectLoans(this.props.loansToCollect));
+        store.dispatch(fetchLoansToCollect());
+
         if (res.type !== LOANMANAGER_COLLECT_SUCCESS) {
             throw new SubmissionError({
                 _error: {
@@ -40,7 +42,6 @@ class CollectLoanList extends React.Component {
         super(props);
         this.state = {
             submitSucceeded: false,
-            isLoading: true,
             loansToCollect: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,11 +58,6 @@ class CollectLoanList extends React.Component {
         if( this.props.loanManager  && prevProps.loanManager !== this.props.loanManager ) {
             // loanManager mounted
             store.dispatch(fetchLoansToCollect());
-        } else if (prevProps.loansToCollect !== this.props.loansToCollect) {
-            this.setState({
-                loansToCollect: this.props.loansToCollect,
-                isLoading: false
-            });
         }
     }
 
@@ -79,8 +75,7 @@ class CollectLoanList extends React.Component {
                         <EthSubmissionErrorPanel error={this.props.error} />}
 
                     {!this.state.submitSucceeded &&
-                        !this.state.isLoading &&
-                        this.state.loansToCollect.length > 0 &&
+                        !this.props.isLoading  &&
                         <form
                             onSubmit={this.props.handleSubmit(
                                 this.handleSubmit
@@ -100,12 +95,15 @@ class CollectLoanList extends React.Component {
                             header={
                                 <h3>
                                     Successful collection of{" "}
-                                    {this.state.loansToCollect.length} loans
+                                    {this.props.loansToCollect.length} loans
                                 </h3>
                             }
                             eth={this.state.result.eth}
                         />}
 
+                    { this.props.isLoading &&
+                        <p>Loading loans to collect...</p>
+                    }
                     <LoanList
                         header={<h2>Loans to collect</h2>}
                         noItemMessage={
@@ -113,7 +111,7 @@ class CollectLoanList extends React.Component {
                                 No defaulted and uncollected loan.
                             </p>
                         }
-                        loans={this.state.loansToCollect}
+                        loans={this.props.loansToCollect}
                     />
                 </Col>
             </Col>
@@ -123,7 +121,8 @@ class CollectLoanList extends React.Component {
 
 const mapStateToProps = state => ({
     loansToCollect: state.loanManager.loansToCollect,
-    loanManager: state.loanManager.contract
+    loanManager: state.loanManager.contract,
+    isLoading: state.loanManager.isLoading
 });
 
 CollectLoanList = connect(mapStateToProps)(CollectLoanList);

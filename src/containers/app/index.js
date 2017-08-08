@@ -84,10 +84,10 @@ class App extends React.Component {
 		this.filterAllBlocks.watch(this.onNewBlock.bind(this));
 
 
-        // e_newLoan(uint8 productId, address borrower, address loanContract, uint disbursedLoanInUcd );
         this.props.loanManager.instance.e_newLoan( {fromBlock: "latest", toBlock: "pending"}).watch(this.onNewLoan.bind(this));
+        this.props.loanManager.instance.e_repayed( {fromBlock: "latest", toBlock: "pending"}).watch(this.onRepayed.bind(this));
+        this.props.loanManager.instance.e_collected( {fromBlock: "latest", toBlock: "pending"}).watch(this.onCollected.bind(this));
 
-        // TODO: add & handle loan repay & defaulted  events
         // TODO: add & handle loanproduct change events
     }
 
@@ -100,10 +100,30 @@ class App extends React.Component {
     }
 
     onNewLoan(error, result) {
-        // TODO: add refresh LoanManager (when fetchproducts are separated) to update loanCount
+        // event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
+        console.debug("onNewLoan: dispatching refreshLoanManager")
+        store.dispatch(refreshLoanManager()); // to update loanCount
         if (result.args.borrower === this.props.userAccount) {
-            console.debug("onNewLoan: loan for current user , dispatching fetchLoans")
-            // TODO: it can be expensive, should create a separate fetchNewLoans action
+            console.debug("onNewLoan: new loan for current user. Dispatching fetchLoans")
+            // TODO: it can be expensive, should create a separate single fetchLoan action
+            store.dispatch(fetchLoans( this.props.userAccount));
+        }
+    }
+
+    onRepayed(error, result) {
+        // e_repayed(loanContractAddress, loanContract.owner());
+        if (result.args.borrower === this.props.userAccount) {
+            console.debug("onRepayed: loan repayed for current user. Dispatching fetchLoans")
+            // TODO: it can be expensive, should create a separate single fetchLoan action
+            store.dispatch(fetchLoans( this.props.userAccount));
+        }
+    }
+
+    onCollected(error, result) {
+        // event e_collected(address borrower, address loanContractAddress);
+        if (result.args.borrower === this.props.userAccount) {
+            console.debug("onCollected: loan collected for current user. Dispatching fetchLoans")
+            // TODO: it can be expensive, should create a separate single fetchLoan action
             store.dispatch(fetchLoans( this.props.userAccount));
         }
     }
