@@ -130,6 +130,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         maturityText: maturityText,
         repayPeriod: repayPeriod, // 9
         repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
+        repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
         repayBy: repayBy,
         repayByText: moment
             .unix(repayPeriod + maturity)
