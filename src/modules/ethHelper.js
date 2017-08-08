@@ -4,6 +4,7 @@
 import store from 'store'
 import BigNumber from 'bignumber.js';
 import { fetchLoanDetailsByAddress } from 'modules/loans'
+import moment from 'moment';
 
 // TODO: set gasEstimates when it settled.
 const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  additional = 702376
@@ -112,6 +113,38 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         )
     } catch (error) {
         throw(new Error( "Create loan failed. Error: " + error));
+    }
+}
+
+export async function fetchProductsTx() {
+    try {
+        let loanManager = store.getState().loanManager.contract.instance;
+        let productCount = await loanManager.getProductCount();
+        // TODO: get this from store.tokenUcd (timing issues on first load..)
+        let decimalsDiv = 10 ** (await store.getState().tokenUcd.contract.instance.decimals()).toNumber();
+
+        let products = [];
+        for (let i=0; i < productCount; i++) {
+            let p = await loanManager.products(i);
+            let term = p[0].toNumber();
+            // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+            let repayPeriod = p[4].toNumber();
+            let prod = {
+                id: i,
+                term: term,
+                termText: moment.duration(term, "seconds").humanize(),
+                discountRate: p[1].toNumber() / 1000000,
+                loanCollateralRatio: p[2].toNumber() / 1000000,
+                minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
+                repayPeriod: repayPeriod,
+                repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
+                isActive: p[5]
+            }
+            products.push(prod);
+        }
+        return products;
+    } catch (error) {
+        throw(new Error( "fetchProductsTx failed. Error: " + error));
     }
 }
 

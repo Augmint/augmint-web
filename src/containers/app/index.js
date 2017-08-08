@@ -18,7 +18,7 @@ import { setupWeb3 } from 'modules/ethBase'
 import { fetchUserBalance } from 'modules/userBalances'
 import { connectRates, refreshRates } from 'modules/rates';
 import { connectTokenUcd, refreshTokenUcd} from 'modules/tokenUcd';
-import { connectloanManager, refreshLoanManager} from 'modules/loanManager';
+import { connectloanManager, refreshLoanManager, fetchProducts} from 'modules/loanManager';
 import { fetchLoans } from 'modules/loans'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -69,6 +69,7 @@ class App extends React.Component {
         store.subscribe(w4((newVal, oldVal, objectPath) => {
             if(newVal) {
                 store.dispatch(refreshLoanManager());
+                store.dispatch(fetchProducts());
                 store.dispatch(fetchLoans( this.props.userAccount));
                 this.setupListeners();
             }

@@ -1,21 +1,21 @@
 /*
     TODO: split action creator and reducer
     TODO: handle race conditions
-    TODO: split REFRESH and REFRESH PRODUCTS (and add event listener to refresh when one changed or added...)
+    TODO: add event listener to refresh product list on e_product.. events
     TODO: use selectors. eg: https://github.com/reactjs/reselect
 */
 
 import store from './../store'
 import SolidityContract from './SolidityContract';
 import loanManager_artifacts from 'contractsBuild/LoanManager.json' ;
-import moment from 'moment';
 import {
     asyncGetBalance,
     getUcdBalance,
     repayLoanTx,
     newEthBackedLoanTx,
     collectLoansTx,
-    fetchLoansToCollectTx
+    fetchLoansToCollectTx,
+    fetchProductsTx
 } from "./ethHelper";
 
 
@@ -25,6 +25,10 @@ export const LOANMANAGER_CONNECT_ERROR = 'loanManager/LOANMANAGER_CONNECT_ERROR'
 
 export const LOANMANAGER_REFRESH_REQUESTED = 'loanManager/LOANMANAGER_REFRESH_REQUESTED'
 export const LOANMANAGER_REFRESHED= 'loanManager/LOANMANAGER_REFRESHED'
+
+export const LOANMANAGER_PRODUCTLIST_REQUESTED = 'loanManager/LOANMANAGER_PRODUCTLIST_REQUESTED'
+export const LOANMANAGER_PRODUCTLIST_RECEIVED = 'loanManager/LOANMANAGER_PRODUCTLIST_RECEIVED'
+export const LOANMANAGER_PRODUCTLIST_ERROR = 'loanManager/LOANMANAGER_PRODUCTLIST_ERROR'
 
 export const LOANMANAGER_NEWLOAN_REQUESTED = 'loanManager/LOANMANAGER_NEWLOAN_REQUESTED'
 export const LOANMANAGER_NEWLOAN_CREATED = 'loanManager/LOANMANAGER_NEWLOAN_CREATED'
@@ -86,20 +90,41 @@ export default (state = initialState, action) => {
 
         case LOANMANAGER_REFRESH_REQUESTED:
         return {
-            ...state
+            ...state,
+            isLoading: true
         }
 
         case LOANMANAGER_REFRESHED:
         return {
             ...state,
+            isLoading: false,
             owner: action.owner,
             ethBalance: action.ethBalance,
             ucdBalance: action.ucdBalance,
             loanCount: action.loanCount,
             productCount: action.productCount,
-            products: action.products,
             ratesAddress: action.ratesAddress,
             tokenUcdAddress: action.tokenUcdAddress
+        }
+
+        case LOANMANAGER_PRODUCTLIST_REQUESTED:
+        return {
+            ...state,
+            isLoading: true
+        }
+
+        case LOANMANAGER_PRODUCTLIST_RECEIVED:
+        return {
+            ...state,
+            isLoading: false,
+            products: action.products
+        }
+
+        case LOANMANAGER_PRODUCTLIST_ERROR:
+        return {
+            ...state,
+            isLoading: false,
+            error: action.error
         }
 
         case LOANMANAGER_NEWLOAN_REQUESTED:
@@ -209,28 +234,9 @@ export const refreshLoanManager =  () => {
         })
         let loanManager = store.getState().loanManager.contract.instance;
         // TODO: make calls paralel
-        let decimalsDiv = 10 ** (await store.getState().tokenUcd.contract.instance.decimals()).toNumber(); // TODO: get this from store.tokenUcd (timing issues on first load..)
         let loanCount = await loanManager.getLoanCount();
         let productCount = await loanManager.getProductCount();
-        let products = [];
-        for (let i=0; i < productCount; i++) {
-            let p = await loanManager.products(i);
-            let term = p[0].toNumber();
-            // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            let repayPeriod = p[4].toNumber();
-            let prod = {
-                id: i,
-                term: term,
-                termText: moment.duration(term, "seconds").humanize(),
-                discountRate: p[1].toNumber() / 1000000,
-                loanCollateralRatio: p[2].toNumber() / 1000000,
-                minDisbursedAmountInUcd: p[3].toNumber() / decimalsDiv,
-                repayPeriod: repayPeriod,
-                repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
-                isActive: p[5]
-            }
-            products.push(prod);
-        }
+
         let tokenUcdAddress = await loanManager.tokenUcd();
         let ratesAddress = await loanManager.rates();
         let owner = await loanManager.owner();
@@ -243,11 +249,32 @@ export const refreshLoanManager =  () => {
                 ethBalance: ethBalance,
                 ucdBalance: ucdBalance,
                 loanCount: loanCount.toNumber(),
-                products: products,
                 productCount: productCount.toNumber(),
                 tokenUcdAddress: tokenUcdAddress,
                 ratesAddress: ratesAddress
         });
+    }
+}
+
+export function fetchProducts() {
+    return async dispatch =>  {
+        console.log( "adadsadas")
+        dispatch({
+            type: LOANMANAGER_PRODUCTLIST_REQUESTED
+        })
+
+        try {
+            let result = await fetchProductsTx();
+            return dispatch({
+                type: LOANMANAGER_PRODUCTLIST_RECEIVED,
+                products: result
+            });
+        } catch( error)  {
+            return dispatch({
+                type: LOANMANAGER_PRODUCTLIST_ERROR,
+                error: error
+            });
+        }
     }
 }
 
