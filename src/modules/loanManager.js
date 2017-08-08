@@ -260,7 +260,6 @@ export const refreshLoanManager =  () => {
 
 export function fetchProducts() {
     return async dispatch =>  {
-        console.log( "adadsadas")
         dispatch({
             type: LOANMANAGER_PRODUCTLIST_REQUESTED
         })

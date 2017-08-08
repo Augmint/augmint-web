@@ -206,9 +206,7 @@ export async function collectLoansTx(loansToCollect) {
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate = COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
         let converted = loansToCollect.map( item => { return new BigNumber(item.loanId)})
-        console.log(converted)
         let result = await loanManager.collect( converted, { from: userAccount, gas: gasEstimate })
-        console.log(result);
         if( result.receipt.gasUsed === gasEstimate) { // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
             throw(new Error( "All gas provided was used:  " + result.receipt.gasUsed));

@@ -71,7 +71,6 @@ class NewLoanPage extends React.Component {
                 }
             });
         } else {
-            console.log(res);
             this.setState({
                 submitSucceeded: true,
                 result: res.result
