@@ -119,7 +119,8 @@ contract LoanManager is owned {
         // TODO: check if we could do this without "direct" access to borrower's UCD balance
         //       eg. transfer UCD to loanContract initiates repayment? or using ECR20 transfer approval?
         //       it wouldn't restrict access more but would be better seperation of functions
-        if(loanPointers.length <= loanId + 1) {
+        if(loanPointers.length < loanId + 1) {
+            e_error(ERR_NO_LOAN);
             return ERR_NO_LOAN;
         }
 
