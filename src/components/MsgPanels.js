@@ -29,6 +29,14 @@ export function SuccessPanel(props) {
     )
 }
 
+export function InfoPanel(props) {
+    var { bsStyle, ...other } = props;
+    const _bsStyle = bsStyle ? bsStyle : "info"
+    return(
+        <MsgPanel bsStyle={_bsStyle} {...other}/>
+    )
+}
+
 export function WarningPanel(props) {
     var { bsStyle, ...other } = props;
     const _bsStyle = bsStyle ? bsStyle : "warning"

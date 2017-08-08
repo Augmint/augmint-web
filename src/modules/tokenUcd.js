@@ -4,13 +4,17 @@ import tokenUcd_artifacts from 'contractsBuild/TokenUcd.json' ;
 import {asyncGetBalance, getUcdBalance } from "./ethHelper";
 
 export const TOKENUCD_CONNECT_REQUESTED = 'tokenUcd/TOKENUCD_CONNECT_REQUESTED'
-export const TOKENUCD_CONNECTED= 'tokenUcd/TOKENUCD_CONNECTED'
+export const TOKENUCD_CONNECT_SUCCESS = 'tokenUcd/TOKENUCD_CONNECT_SUCESS'
+export const TOKENUCD_CONNECT_ERROR = 'tokenUcd/TOKENUCD_CONNECT_ERROR'
 
 export const TOKENUCD_REFRESH_REQUESTED = 'tokenUcd/TOKENUCD_REFRESH_REQUESTED'
 export const TOKENUCD_REFRESHED= 'tokenUcd/TOKENUCD_REFRESHED'
 
 const initialState = {
     contract: null,
+    isLoading: true,
+    isConnected: false,
+    error: null,
     owner: '?',
     ethBalance: '?',
     decimals: '?',
@@ -18,7 +22,7 @@ const initialState = {
     ucdBalance: '?',
     totalSupply: '?',
     loanManagerAddress: '?',
-    isLoading: false  // TODO: this is not in use - need to refactored (see ethBase.isLoading + isConnected)
+
 }
 
 export default (state = initialState, action) => {
@@ -26,14 +30,25 @@ export default (state = initialState, action) => {
         case TOKENUCD_CONNECT_REQUESTED:
         return {
             ...state,
-            isLoading: true
+            isLoading: true,
+            error: null
         }
 
-        case TOKENUCD_CONNECTED:
+        case TOKENUCD_CONNECT_SUCCESS:
         return {
             ...state,
             isLoading: false,
+            isConnected: true,
+            error: null,
             contract: action.contract
+        }
+
+        case TOKENUCD_CONNECT_ERROR:
+        return {
+            ...state,
+            isLoading: false,
+            isConnected: false,
+            error: action.error
         }
 
         case TOKENUCD_REFRESH_REQUESTED:
@@ -65,11 +80,19 @@ export const connectTokenUcd =  () => {
         dispatch({
             type: TOKENUCD_CONNECT_REQUESTED
         })
+
+        try {
         return dispatch({
-            type: TOKENUCD_CONNECTED,
+            type: TOKENUCD_CONNECT_SUCCESS,
             contract: await SolidityContract.connectNew(
                 store.getState().ethBase.web3Instance.currentProvider, tokenUcd_artifacts)
         })
+    } catch(error) {
+        return dispatch({
+            type: TOKENUCD_CONNECT_ERROR,
+            error: error
+        });
+    }
     }
 }
 

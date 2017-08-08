@@ -20,7 +20,8 @@ import {
 
 
 export const LOANMANAGER_CONNECT_REQUESTED = 'loanManager/LOANMANAGER_CONNECT_REQUESTED'
-export const LOANMANAGER_CONNECTED= 'loanManager/LOANMANAGER_CONNECTED'
+export const LOANMANAGER_CONNECT_SUCCESS = 'loanManager/LOANMANAGER_CONNECT_SUCCESS'
+export const LOANMANAGER_CONNECT_ERROR = 'loanManager/LOANMANAGER_CONNECT_ERROR'
 
 export const LOANMANAGER_REFRESH_REQUESTED = 'loanManager/LOANMANAGER_REFRESH_REQUESTED'
 export const LOANMANAGER_REFRESHED= 'loanManager/LOANMANAGER_REFRESHED'
@@ -43,6 +44,8 @@ export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR = 'loanManager/LOANMANAGER
 
 const initialState = {
     contract: null,
+    isConnected: false,
+    isLoading: true,
     ucdBalance: '?',
     ethBalance: '?',
     owner: '?',
@@ -59,13 +62,26 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case LOANMANAGER_CONNECT_REQUESTED:
         return {
-            ...state
+            ...state,
+            isLoading: true,
+            error: null
         }
 
-        case LOANMANAGER_CONNECTED:
+        case LOANMANAGER_CONNECT_SUCCESS:
         return {
             ...state,
-            contract: action.contract
+            contract: action.contract,
+            isConnected: true,
+            isLoading: false,
+            error: null
+        }
+
+        case LOANMANAGER_CONNECT_ERROR:
+        return {
+            ...state,
+            error: action.error,
+            isConnected: false,
+            isLoading: false
         }
 
         case LOANMANAGER_REFRESH_REQUESTED:
@@ -161,18 +177,30 @@ export default (state = initialState, action) => {
     }
 }
 
-export const connectloanManager =  () => {
+export const connectloanManager = () => {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_CONNECT_REQUESTED
-        })
-        return dispatch({
-            type: LOANMANAGER_CONNECTED,
-            contract: await SolidityContract.connectNew(
-                store.getState().ethBase.web3Instance.currentProvider, loanManager_artifacts)
-        })
-    }
-}
+        });
+        try {
+            let contract = await SolidityContract.connectNew(
+                store.getState().ethBase.web3Instance.currentProvider,
+                loanManager_artifacts
+            );
+
+            return dispatch({
+                type: LOANMANAGER_CONNECT_SUCCESS,
+                contract: contract
+            });
+        } catch (error) {
+            return dispatch({
+                type: LOANMANAGER_CONNECT_ERROR,
+                error: error
+            });
+        }
+    };
+};
+
 
 export const refreshLoanManager =  () => {
     return async dispatch => {

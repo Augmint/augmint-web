@@ -29,6 +29,7 @@ import TokenUcd from 'containers/tokenUcd';
 import About from 'containers/about';
 import UnderTheHood from 'containers/underthehood';
 import {PageNotFound} from 'containers/PageNotFound'
+import {EthereumState} from './EthereumState'
 
 class App extends React.Component {
 
@@ -145,7 +146,6 @@ class App extends React.Component {
                             </Nav>
                             <Navbar.Text pullRight><small>on {this.props.network.name}</small></Navbar.Text>;
                             <Nav pullRight>
-
                                 <LinkContainer to="/about-us">
                                     <NavItem eventKey={1} href="/about-us">About</NavItem>
                                 </LinkContainer>
@@ -159,6 +159,7 @@ class App extends React.Component {
                 </header>
 
                 <main>
+                    <EthereumState />
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
