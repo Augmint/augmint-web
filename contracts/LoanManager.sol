@@ -113,6 +113,7 @@ contract LoanManager is owned {
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
     }
 
+    event e_error(int8 errorCode);
     event e_repayed(address loanContractAddress, address borrower);
     function repay(uint loanId) returns (int8 result) {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
@@ -125,10 +126,12 @@ contract LoanManager is owned {
         }
 
         if(loanPointers[loanId].loanState != LoanState.Open) {
+            e_error(ERR_LOAN_NOT_OPEN);
             return ERR_LOAN_NOT_OPEN;
         }
 
         if(m_loanPointers[msg.sender].length == 0) {
+            e_error(ERR_NOT_OWNER);
             return ERR_NOT_OWNER;
         }
 
@@ -136,6 +139,7 @@ contract LoanManager is owned {
         EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
 
         if(loanContract.owner() != msg.sender) {
+            e_error(ERR_NOT_OWNER);
             return ERR_NOT_OWNER;
         }
 
@@ -143,6 +147,7 @@ contract LoanManager is owned {
         if(res != tokenUcd.SUCCESS() ) {
             // no state changes can happen up to this point
             // ie. no revert required
+            e_error(ERR_EXT_ERRCODE_BASE + res);
             return ERR_EXT_ERRCODE_BASE + res;
         }
 
@@ -165,14 +170,17 @@ contract LoanManager is owned {
          TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         */
         if(loanPointers.length == 0) {
+            e_error(ERR_NO_LOAN);
             return ERR_NO_LOAN;
         }
         for (uint i = 0; i < loanIds.length; i++) {
             uint loanId = loanIds[i];
             if (loanPointers.length <= loanId) {
+                e_error(ERR_NO_LOAN);
                 return ERR_NO_LOAN;
             }
             if(loanPointers[loanId].loanState != LoanState.Open) {
+                e_error(ERR_LOAN_NOT_OPEN);
                 return ERR_LOAN_NOT_OPEN;
             }
 
@@ -183,6 +191,7 @@ contract LoanManager is owned {
             if (res != loanContract.SUCCESS() ) {
                 // if EthBackedLoan.collect returned an error then no state changes could have happen yet
                 // ie. no revert required
+                e_error(ERR_EXT_ERRCODE_BASE + res);
                 return ERR_EXT_ERRCODE_BASE + res;
             }
 
