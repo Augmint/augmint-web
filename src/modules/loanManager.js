@@ -59,6 +59,7 @@ const initialState = {
     productCount: '?',
     products: null,
     error: null,
+    connectionError: null,
     result: null
 }
 
@@ -68,6 +69,7 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: true,
+            connectionError: null,
             error: null
         }
 
@@ -77,13 +79,13 @@ export default (state = initialState, action) => {
             contract: action.contract,
             isConnected: true,
             isLoading: false,
-            error: null
+            connectionError: null
         }
 
         case LOANMANAGER_CONNECT_ERROR:
         return {
             ...state,
-            error: action.error,
+            connectionError: action.error,
             isConnected: false,
             isLoading: false
         }

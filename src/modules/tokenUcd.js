@@ -15,6 +15,7 @@ const initialState = {
     isLoading: true,
     isConnected: false,
     error: null,
+    connectionError: null,
     owner: '?',
     ethBalance: '?',
     decimals: '?',
@@ -31,6 +32,7 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isLoading: true,
+            connectionError: null,
             error: null
         }
 
@@ -40,6 +42,7 @@ export default (state = initialState, action) => {
             isLoading: false,
             isConnected: true,
             error: null,
+            connectionError: null,
             contract: action.contract
         }
 
@@ -48,7 +51,7 @@ export default (state = initialState, action) => {
             ...state,
             isLoading: false,
             isConnected: false,
-            error: action.error
+            connectionError: action.error
         }
 
         case TOKENUCD_REFRESH_REQUESTED:

@@ -68,7 +68,7 @@ export class EthereumState extends React.Component {
                     <LocalInstallInstructions ethBase={this.props.ethBase}/>
                 </ErrorPanel>
             );
-        } else if (loanManager.error || rates.error || tokenUcd.error) {
+        } else if (loanManager.connectionError || rates.connectionError || tokenUcd.connectionError) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
                     <p>
@@ -91,11 +91,11 @@ export class EthereumState extends React.Component {
                     <p>
                         Error(s):<br />
                         <pre>
-                            {loanManager.error
-                                ? loanManager.error.message + "\n"
+                            {loanManager.connectionError
+                                ? loanManager.connectionError.message + "\n"
                                 : ""}
-                            {rates.error ? rates.error.message + "\n" : ""}
-                            {tokenUcd.error ? tokenUcd.error.message : ""}
+                            {rates.connectionError ? rates.connectionError.message + "\n" : ""}
+                            {tokenUcd.connectionError ? tokenUcd.connectionError.message : ""}
                         </pre>
                     </p>
                 </ErrorPanel>

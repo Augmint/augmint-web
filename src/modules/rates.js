@@ -1,4 +1,7 @@
-/* TODO: use BigNumber for conversions */
+/*
+    TODO: use BigNumber for conversions
+    TODO: add RATES_REFRESH_ERROR
+    */
 import store from "store.js";
 import SolidityContract from "./SolidityContract";
 import rates_artifacts from "contractsBuild/Rates.json";
@@ -14,6 +17,7 @@ export const RATES_REFRESHED = "ethBase/RATES_REFRESHED";
 const initialState = {
     contract: null,
     error: null,
+    connectionError: null,
     isLoading: true,
     isConnected: false,
     ethBalance: "?",
@@ -28,6 +32,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
+                connectionError: null,
                 error: null
             };
 
@@ -37,6 +42,7 @@ export default (state = initialState, action) => {
                 contract: action.contract,
                 isLoading: false,
                 isConnected: true,
+                connectionError: null,
                 error: null
             };
 
@@ -45,7 +51,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isConnected: false,
-                error: action.error
+                connectionError: action.error
             };
 
         case RATES_REFRESH_REQUESTED:
