@@ -1,15 +1,18 @@
 import { default as Web3} from 'web3';
+import { asyncGetNetwork} from 'modules/ethHelper'
+
 export const WEB3_SETUP_REQUESTED = 'ethBase/WEB3_SETUP_REQUESTED'
 export const WEB3_SETUP= 'ethBase/WEB3_SETUP'
 
 const initialState = {
     web3Instance: null,
     web3ConnectionId: null, // workaround so that we don't need deep compare web3Instance to detecet change
-    userAccount: '?',
+    userAccount: "?",
     accounts: null,
-    isLoading: false,  // TODO: isLoading & isConnected need to be refactored to work with other actions
-    isConnected: false
-}
+    isLoading: false, // TODO: isLoading & isConnected need to be refactored to work with other actions
+    isConnected: false,
+    network: { id: "?", name: "?" }
+};
 
 var web3;
 
@@ -29,7 +32,8 @@ export default (state = initialState, action) => {
             web3ConnectionId: state.web3ConnectionId + 1,
             userAccount: action.accounts[0],
             accounts: action.accounts,
-            web3Instance: action.web3Instance
+            web3Instance: action.web3Instance,
+            network: action.network
         }
 
         default:
@@ -38,19 +42,20 @@ export default (state = initialState, action) => {
 }
 
 export const setupWeb3 = () => {
-    return dispatch => {
+    return async dispatch => {
         dispatch({
             type: WEB3_SETUP_REQUESTED
         })
         if (typeof window.web3 !== 'undefined') {
-            console.warn("Using web3 detected from external source.");
+            console.debug("Using web3 detected from external source.");
             web3 = new Web3(window.web3.currentProvider);
         } else {
             // set the provider you want from Web3.providers
-            console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+            console.debug("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
 
+        let network = await asyncGetNetwork(web3);
         return web3.eth.getAccounts( (error, accounts) => {
             if (error) { // TODO: proper error handling
                 throw error;
@@ -58,9 +63,10 @@ export const setupWeb3 = () => {
             // TODO: could we use web3.eth.defaultAccount?
             dispatch({
                 type: WEB3_SETUP,
-                web3Instance: web3,  // Object.assign({}, web3),
+                web3Instance: web3,
                 userAccount: accounts[0],
-                accounts: accounts
+                accounts: accounts,
+                network: network
             })
         });
     }

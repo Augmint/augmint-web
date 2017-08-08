@@ -11,7 +11,7 @@ const NEW_FIRST_LOAN_GAS = 2000000;
 const REPAY_GAS = 200000;
 const COLLECT_GAS = 300000;
 
-export function asyncGetBalance( address) {
+export function asyncGetBalance(address) {
     return new Promise( function (resolve, reject) {
         let web3 = store.getState().ethBase.web3Instance;
         web3.eth.getBalance(address, function(error, bal) {
@@ -23,6 +23,42 @@ export function asyncGetBalance( address) {
         });
     });
 }
+
+export function asyncGetNetwork(web3) {
+    return new Promise(function(resolve, reject) {
+        web3.version.getNetwork((error, networkId) => {
+            if (error) {
+                reject(error);
+            } else {
+                let networkName;
+                switch (networkId) {
+                    case "1":
+                        networkName = "Main";
+                        break;
+                    case "2":
+                        networkName = "Morden";
+                        break;
+                    case "3":
+                        networkName = "Ropsten";
+                        break;
+                    case "4":
+                            networkName = "Rinkeby";
+                            break;
+                    case "42":
+                            networkName = "Kovan";
+                            break;
+                    case "999":
+                            networkName = "Testrpc";
+                            break;
+                    default:
+                        networkName = "Unknown";
+                }
+                resolve({ id: networkId, name: networkName });
+            }
+        });
+    });
+}
+
 
 export async function getUcdBalance( address) {
     let tokenUcd = store.getState().tokenUcd;

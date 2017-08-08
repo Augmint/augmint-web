@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import React from 'react';
+import { connect } from "react-redux";
 import store from 'store.js'
 import watch from 'redux-watch'
 import { setupWeb3 } from 'modules/ethBase'
@@ -22,7 +23,7 @@ import { connectloanManager, refreshLoanManager} from 'modules/loanManager';
 import { fetchLoans } from 'modules/loans'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Link, Switch, withRouter} from 'react-router-dom';
 import Home from 'containers/home';
 import LoanMain from 'containers/loan';
 import TokenUcd from 'containers/tokenUcd';
@@ -146,7 +147,9 @@ class App extends React.Component {
                                 </LinkContainer>
 
                             </Nav>
+                            <Navbar.Text pullRight><small>on {this.props.network.name}</small></Navbar.Text>;
                             <Nav pullRight>
+
                                 <LinkContainer to="/about-us">
                                     <NavItem eventKey={1} href="/about-us">About</NavItem>
                                 </LinkContainer>
@@ -175,4 +178,8 @@ class App extends React.Component {
     }
 }
 
-export default App
+const mapStateToProps = state => ({
+    network: state.ethBase.network
+});
+
+export default (App = withRouter(connect(mapStateToProps)(App)));

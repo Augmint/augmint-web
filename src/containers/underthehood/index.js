@@ -104,6 +104,7 @@ class underTheHood extends React.Component {
                             <Col xs={6} md={6}>
                                 <Panel header={web3Title}>
                                     <p>{this.props.isConnected ? "connected" : "not connected" }</p>
+                                        <p>Network: {this.props.network.name} Id: {this.props.network.id}</p>
                                         <p className="white-space:pre-wrap">
                                             Provider: <small>{ this.props.web3Instance ? stringify(this.props.web3Instance.currentProvider) : "No web3 Instance"}</small>
                                         </p>
@@ -204,6 +205,7 @@ const mapStateToProps = state => ({
     isConnected: state.ethBase.isConnected,
     web3ConnectionId: state.ethBase.web3ConnectionId,
     web3Instance: state.ethBase.web3Instance,
+    network: state.ethBase.network,
 
     ratesContract: state.rates.contract,
     ratesUcdBalance: state.rates.ucdBalance,
