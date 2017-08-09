@@ -19,7 +19,8 @@
         - decision making mechanism (ie. replace all onlyOwner)
         - implement ETH selling (ie. separate auction contract)
         - consider moving reserve to a separate contract
-        - use safe maths and/or use ds-math: https://blog.dapphub.com/ds-math/
+        - use safe maths and/or use ds-math: https://blog.dapphub.com/ds-math/ or zeppelin safe math: https://github.com/OpenZeppelin/zeppelin-solidity
+        - check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices
         - move ERR all error code constants to lib/separate contract
 */
 pragma solidity ^0.4.11;
