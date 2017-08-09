@@ -86,9 +86,10 @@ contract LoanManager is owned {
         require( products[productId].isActive);
 
         // calculate UCD loan values based on ETH sent in with Tx
-        uint usdValue = rates.convertWeiToUsd(msg.value);
-        uint ucdDueAtMaturity = usdValue * products[productId].loanCollateralRatio / 1000000;
-        uint disbursedLoanInUcd = ucdDueAtMaturity * products[productId].discountRate / 1000000;
+        uint usdcValue = rates.convertWeiToUsdc(msg.value);
+        // rounding to 4 decimals
+        uint ucdDueAtMaturity = (usdcValue * products[productId].loanCollateralRatio + 555555)/ 1000000 ;
+        uint disbursedLoanInUcd = (ucdDueAtMaturity * products[productId].discountRate + 555555) / 1000000;
         require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
 
         // Create new loan contract
