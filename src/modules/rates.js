@@ -6,6 +6,7 @@ import store from "store.js";
 import SolidityContract from "./SolidityContract";
 import rates_artifacts from "contractsBuild/Rates.json";
 import { asyncGetBalance, getUcdBalance } from "./ethHelper";
+//import BigNumber from "bignumber.js";
 
 export const RATES_CONNECT_REQUESTED = "ethBase/RATES_CONNECT_REQUESTED";
 export const RATES_CONNECT_SUCCESS = "ethBase/RATES_CONNECT_SUCCESS";
@@ -20,10 +21,18 @@ const initialState = {
     connectionError: null,
     isLoading: true,
     isConnected: false,
-    ethBalance: "?",
-    ucdBalance: "?",
-    owner: "?",
-    usdWeiRate: null
+    info: {
+        bn_ethBalance: null,
+        ethBalance: "?",
+        bn_ucdBalance: null,
+        ucdBalance: "?",
+        bn_ethUsdcRate: null,
+        ethUsdcRate: "?",
+        bn_ethUsdRate: null,
+        ethUsdRate: "?",
+        owner: "?",
+        usdScale: null
+    }
 };
 
 export default (state = initialState, action) => {
@@ -62,12 +71,7 @@ export default (state = initialState, action) => {
         case RATES_REFRESHED:
             return {
                 ...state,
-                ethBalance: action.ethBalance,
-                ucdBalance: action.ucdBalance,
-                owner: action.owner,
-                usdcWeiRate: action.usdcWeiRate,
-                usdEthRate: action.usdEthRate,
-                ethUsdRate: action.ethUsdRate
+                info: action.result
             };
 
         default:
@@ -102,27 +106,29 @@ export const refreshRates = () => {
         dispatch({
             type: RATES_REFRESH_REQUESTED
         });
-        let web3 = store.getState().ethBase.web3Instance;
+        //let web3 = store.getState().ethBase.web3Instance;
         let rates = store.getState().rates.contract.instance;
-        let usdDecimalsMul = 10 ** (await rates.decimals()).toNumber();
-        let usdcWeiRate = (await rates.usdWeiRate()).toNumber();
-        // let weiUsdcRate = 1/usdcWeiRate;
-        let usdcEthRate = web3.fromWei(usdcWeiRate);
-        let usdEthRate = usdcEthRate * usdDecimalsMul;
-        let ethUsdcRate = 1 / usdcEthRate;
-        let ethUsdRate = ethUsdcRate / usdDecimalsMul;
+        let usdScale = await rates.USD_SCALE();
+        let bn_ethUsdcRate = await rates.ethUsdcRate();
+        let bn_ethUsdRate = bn_ethUsdcRate.div(usdScale);
         let owner = await rates.owner();
 
-        let ethBalance = await asyncGetBalance(rates.address);
-        let ucdBalance = await getUcdBalance(rates.address);
+        let bn_ethBalance = await asyncGetBalance(rates.address);
+        let bn_ucdBalance = await getUcdBalance(rates.address);
         return dispatch({
             type: RATES_REFRESHED,
-            ethBalance: ethBalance,
-            ucdBalance: ucdBalance,
-            usdcWeiRate: usdcWeiRate,
-            usdEthRate: usdEthRate,
-            ethUsdRate: ethUsdRate,
-            owner: owner
+            result: {
+                bn_ethBalance: bn_ethBalance,
+                ethBalance: bn_ethBalance.toNumber(),
+                bn_ucdBalance: bn_ucdBalance,
+                ucdBalance: bn_ucdBalance.toNumber(),
+                bn_ethUsdcRate: bn_ethUsdcRate,
+                ethUsdcRate: bn_ethUsdcRate.toNumber(),
+                bn_ethUsdRate: bn_ethUsdRate,
+                ethUsdRate: bn_ethUsdRate.toNumber(),
+                usdScale: usdScale.toNumber(),
+                owner: owner
+            }
         });
     };
 };

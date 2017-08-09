@@ -60,8 +60,8 @@ export async function fetchLoanDetails(loanId) {
 }
 
 export async function fetchLoanDetailsByAddress(loanContractAddress) {
-    let ethBalance = await asyncGetBalance(loanContractAddress);
-    let ucdBalance = await getUcdBalance(loanContractAddress);
+    let bn_ethBalance = await asyncGetBalance(loanContractAddress);
+    let bn_ucdBalance = await getUcdBalance(loanContractAddress);
 
     let loanContract = await SolidityContract.connectNewAt(
         store.getState().ethBase.web3Instance.currentProvider,
@@ -110,8 +110,8 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         .unix(disbursementDate)
         .format("D MMM YYYY HH:mm:ss");
     let loan = {
-        ethBalance: ethBalance,
-        ucdBalance: ucdBalance,
+        ethBalance: bn_ethBalance.toNumber(),
+        ucdBalance: bn_ucdBalance.toNumber(),
         loanId: l[10].toNumber(),
         loanContract: loanContract,
         borrower: l[0], // 0 the borrower
@@ -129,7 +129,6 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         maturity: maturity, // 8 disbursementDate + term
         maturityText: maturityText,
         repayPeriod: repayPeriod, // 9
-        repayPeriodText: moment.duration(repayPeriod, "minutes").humanize(),
         repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
         repayBy: repayBy,
         repayByText: moment

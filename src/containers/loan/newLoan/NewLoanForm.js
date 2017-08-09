@@ -19,6 +19,7 @@ import {
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Form, Field, reduxForm } from "redux-form";
 import { FieldInput } from "components/FieldInput";
+import BigNumber from "bignumber.js";
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -28,39 +29,64 @@ class NewLoanForm extends React.Component {
         );
         this.onLoanUcdAmountChange = this.onLoanUcdAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
+        BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_HALF_UP });
     }
 
     onDisbursedUcdAmountChange(e) {
-        let loanUcdAmount =
-            e.target.value * (1 / this.props.product.discountRate);
-        let ethAmount =
-            loanUcdAmount /
-            this.props.product.loanCollateralRatio *
-            this.props.rates.usdEthRate;
-        this.props.change("loanUcdAmount", loanUcdAmount);
-        this.props.change("ethAmount", ethAmount);
+        try {
+            let BN_1 = new BigNumber(1);
+            let bn_loanUcdAmount = BN_1.div(
+                this.props.product.bn_discountRate
+            ).times(e.target.value);
+            let bn_ethAmount = bn_loanUcdAmount
+                .div(this.props.product.bn_loanCollateralRatio)
+                .times(BN_1.div(this.props.rates.info.ethUsdRate));
+
+            this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
+            this.props.change("ethAmount", bn_ethAmount.round(18));
+        } catch (error) {
+            this.props.change("loanUcdAmount", "");
+            this.props.change("ethAmount", "");
+        }
     }
 
     onLoanUcdAmountChange(e) {
-        let disbursedUcdAmount =
-            e.target.value * this.props.product.discountRate;
-        let ethAmount =
-            e.target.value /
-            this.props.product.loanCollateralRatio *
-            this.props.rates.usdEthRate;
-        this.props.change("disbursedUcdAmount", disbursedUcdAmount);
-        this.props.change("ethAmount", ethAmount);
+        try {
+            let bn_disbursedUcdAmount = this.props.product.bn_discountRate
+                .mul(e.target.value)
+                .round(4);
+            let bn_ethAmount = new BigNumber(e.target.value)
+                .div(this.props.product.bn_loanCollateralRatio)
+                .times(this.props.rates.info.bn_usdEthRate);
+            this.props.change(
+                "disbursedUcdAmount",
+                bn_disbursedUcdAmount.round(4)
+            );
+            this.props.change("ethAmount", bn_ethAmount.round(18));
+        } catch (error) {
+            this.props.change("disbursedUcdAmount", "");
+            this.props.change("ethAmount", "");
+        }
     }
 
     onEthAmountChange(e) {
-        let loanUcdAmount =
-            e.target.value *
-            this.props.product.loanCollateralRatio *
-            this.props.rates.ethUsdRate;
-        let disbursedUcdAmount =
-            loanUcdAmount * this.props.product.discountRate;
-        this.props.change("disbursedUcdAmount", disbursedUcdAmount);
-        this.props.change("loanUcdAmount", loanUcdAmount);
+        try {
+            let val = new BigNumber(e.target.value);
+            let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio
+                .times(this.props.rates.info.bn_ethUsdRate)
+                .times(val);
+            let bn_disbursedUcdAmount = bn_loanUcdAmount
+                .times(this.props.product.bn_discountRate)
+                .round(4);
+            this.props.change(
+                "disbursedUcdAmount",
+                bn_disbursedUcdAmount.round(4)
+            );
+            this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
+        } catch (error) {
+            this.props.change("disbursedUcdAmount", "");
+            this.props.change("loanUcdAmount", "");
+        }
     }
 
     render() {
@@ -123,8 +149,9 @@ class NewLoanForm extends React.Component {
                             ETH to be held as collateral = UCD Loan Amount /
                             ETHUSD rate x (1 / Coverage ratio)
                             <br />( ETH/USD Rate ={" "}
-                            {Math.round(this.props.rates.ethUsdRate * 100) /
-                                100}{" "}
+                            {Math.round(
+                                this.props.rates.info.ethUsdRate * 100
+                            ) / 100}{" "}
                             )
                         </HelpBlock>
                     </FormGroup>

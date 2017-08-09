@@ -35,8 +35,12 @@ class TokenUcd extends React.Component {
                         <Panel header={reservesTitle}>
                             <p>
                                 ETH Reserve: {this.props.tokenUcdEthBalance} ETH
-                                ({this.props.usdEthRate *
-                                    this.props.tokenUcdEthBalance}{" "}
+                                ({this.props.bn_ethUsdRate == null ||
+                                this.props.tokenUcdBn_ethBalance == null
+                                    ? "?"
+                                    : this.props.bn_ethUsdRate
+                                          .mul(this.props.tokenUcdBn_ethBalance)
+                                          .toString()}{" "}
                                 USD)
                             </p>
                             <p>
@@ -65,15 +69,14 @@ const mapStateToProps = state => ({
     web3Instance: state.ethBase.web3Instance,
 
     ratesContract: state.rates.contract,
-    usdWeiRate: state.rates.usdWeiRate,
-    usdEthRate: state.rates.usdEthRate,
-    ethUsdRate: state.rates.ethUsdRate,
+    bn_ethUsdRate: state.rates.info.bn_ethUsdRate,
 
     tokenUcdContract: state.tokenUcd.contract,
-    tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.ethBalance,
-    tokenUcdTotalSupply: state.tokenUcd.totalSupply,
-    loanManagerAddress: state.tokenUcd.loanManagerAddress
+    tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
+    tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
+    tokenUcdBn_ethBalance: state.tokenUcd.info.bn_ethBalance,
+    tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
+    loanManagerAddress: state.tokenUcd.info.loanManagerAddress
 });
 
 const mapDispatchToProps = dispatch =>

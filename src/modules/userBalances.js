@@ -39,14 +39,16 @@ export function fetchUserBalance(address) {
             type: USER_BALANCE_REQUESTED
         });
 
-        let ucdBalance = await getUcdBalance(address);
-        let ethBalance = await asyncGetBalance(address);
+        let bn_ucdBalance = await getUcdBalance(address);
+        let bn_ethBalance = await asyncGetBalance(address);
         return dispatch({
             type: USER_BALANCE_RECEIVED,
             account: {
                 address: address,
-                ethBalance: ethBalance,
-                ucdBalance: ucdBalance
+                bn_ethBalance: bn_ethBalance,
+                ethBalance: bn_ethBalance.toNumber(),
+                bn_ucdBalance: bn_ucdBalance,
+                ucdBalance: bn_ucdBalance.toNumber()
             }
         });
     };

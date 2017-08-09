@@ -164,13 +164,13 @@ class underTheHood extends React.Component {
                             <Col xs={6} md={6}>
                                 <Panel header={ratesTitle}>
                                     <p>
-                                        USD/WEI: {this.props.usdcWeiRate}{" "}
-                                    </p>
-                                    <p>
                                         ETH/USD: {this.props.ethUsdRate}
                                     </p>
                                     <p>
-                                        USD/ETH: {this.props.usdEthRate}{" "}
+                                        ETH/USDc: {this.props.ethUsdcRate}
+                                    </p>
+                                    <p>
+                                        USD scale: {this.props.usdScale}
                                     </p>
                                     <p>
                                         <small>
@@ -377,30 +377,30 @@ const mapStateToProps = state => ({
     network: state.ethBase.network,
 
     ratesContract: state.rates.contract,
-    ratesUcdBalance: state.rates.ucdBalance,
-    ratesEthBalance: state.rates.ethBalance,
-    ratesOwner: state.rates.owner,
-    usdcWeiRate: state.rates.usdcWeiRate,
-    usdEthRate: state.rates.usdEthRate,
-    ethUsdRate: state.rates.ethUsdRate,
+    ratesUcdBalance: state.rates.info.ucdBalance,
+    ratesEthBalance: state.rates.info.ethBalance,
+    ratesOwner: state.rates.info.owner,
+    usdScale: state.rates.info.usdScale,
+    ethUsdcRate: state.rates.info.ethUsdcRate,
+    ethUsdRate: state.rates.info.ethUsdRate,
 
     tokenUcdContract: state.tokenUcd.contract,
-    tokenUcdOwner: state.tokenUcd.owner,
-    tokenUcdDecimals: state.tokenUcd.decimals,
-    tokenUcdDecimalsDiv: state.tokenUcd.decimalsDiv,
-    tokenUcdUcdBalance: state.tokenUcd.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.ethBalance,
-    tokenUcdTotalSupply: state.tokenUcd.totalSupply,
-    tokenUcdLoanManagerAddress: state.tokenUcd.loanManagerAddress,
+    tokenUcdOwner: state.tokenUcd.info.owner,
+    tokenUcdDecimals: state.tokenUcd.info.decimals,
+    tokenUcdDecimalsDiv: state.tokenUcd.info.decimalsDiv,
+    tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
+    tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
+    tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
+    tokenUcdLoanManagerAddress: state.tokenUcd.info.loanManagerAddress,
 
     loanManagerContract: state.loanManager.contract,
-    loanManagerOwner: state.loanManager.owner,
-    loanManagerEthBalance: state.loanManager.ethBalance,
-    loanManagerUcdBalance: state.loanManager.ucdBalance,
-    loanCount: state.loanManager.loanCount,
-    productCount: state.loanManager.productCount,
-    loanManagerRatesContractAddress: state.loanManager.ratesAddress,
-    loanManagerTokenUcdContractAddress: state.loanManager.tokenUcdAddress,
+    loanManagerOwner: state.loanManager.info.owner,
+    loanManagerEthBalance: state.loanManager.info.ethBalance,
+    loanManagerUcdBalance: state.loanManager.info.ucdBalance,
+    loanCount: state.loanManager.info.loanCount,
+    productCount: state.loanManager.info.productCount,
+    loanManagerRatesContractAddress: state.loanManager.info.ratesAddress,
+    loanManagerTokenUcdContractAddress: state.loanManager.info.tokenUcdAddress,
     loanProducts: state.loanManager.products,
 
     loans: state.loans.loans

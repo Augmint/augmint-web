@@ -1,6 +1,7 @@
 import store from "store.js";
 import SolidityContract from "./SolidityContract";
 import tokenUcd_artifacts from "contractsBuild/TokenUcd.json";
+import BigNumber from "bignumber.js";
 import { asyncGetBalance, getUcdBalance } from "./ethHelper";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
@@ -16,13 +17,17 @@ const initialState = {
     isConnected: false,
     error: null,
     connectionError: null,
-    owner: "?",
-    ethBalance: "?",
-    decimals: "?",
-    decimalsDiv: "?",
-    ucdBalance: "?",
-    totalSupply: "?",
-    loanManagerAddress: "?"
+    info: {
+        owner: "?",
+        ethBalance: "?",
+        bn_ethBalance: null,
+        decimals: "?",
+        decimalsDiv: "?",
+        bn_decimalsDiv: null,
+        ucdBalance: "?",
+        totalSupply: "?",
+        loanManagerAddress: "?"
+    }
 };
 
 export default (state = initialState, action) => {
@@ -63,13 +68,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                owner: action.owner,
-                decimals: action.decimals,
-                decimalsDiv: action.decimalsDiv,
-                ucdBalance: action.ucdBalance,
-                ethBalance: action.ethBalance,
-                totalSupply: action.totalSupply,
-                loanManagerAddress: action.loanManagerAddress
+                info: action.result
             };
 
         default:
@@ -108,22 +107,26 @@ export const refreshTokenUcd = () => {
         let tokenUcd = store.getState().tokenUcd.contract.instance;
         // TODO: make these paralel
         let owner = await tokenUcd.owner();
-        let totalSupply = await tokenUcd.totalSupply();
+        let bn_totalSupply = await tokenUcd.totalSupply();
         let loanManagerAddress = await tokenUcd.loanManagerAddress();
-        let decimals = (await tokenUcd.decimals()).toNumber();
-        let decimalsDiv = 10 ** decimals;
-        let ethBalance = await asyncGetBalance(tokenUcd.address);
-        let ucdBalance = await getUcdBalance(tokenUcd.address);
+        let bn_decimals = await tokenUcd.decimals();
+        let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
+        let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
+        let bn_ucdBalance = await getUcdBalance(tokenUcd.address);
 
         return dispatch({
             type: TOKENUCD_REFRESHED,
-            owner: owner,
-            decimals: decimals,
-            decimalsDiv: decimalsDiv,
-            ucdBalance: ucdBalance,
-            ethBalance: ethBalance,
-            totalSupply: totalSupply.toNumber() / decimalsDiv,
-            loanManagerAddress: loanManagerAddress
+            result: {
+                owner: owner,
+                decimals: bn_decimals.toNumber(),
+                bn_decimalsDiv: bn_decimalsDiv,
+                decimalsDiv: bn_decimalsDiv.toNumber(),
+                ucdBalance: bn_ucdBalance.toNumber(),
+                ethBalance: bn_ethBalance.toNumber(),
+                bn_ethBalance: bn_ethBalance,
+                totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
+                loanManagerAddress: loanManagerAddress
+            }
         });
     };
 };

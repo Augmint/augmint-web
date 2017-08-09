@@ -67,17 +67,19 @@ const initialState = {
     contract: null,
     isConnected: false,
     isLoading: true,
-    ucdBalance: "?",
-    ethBalance: "?",
-    owner: "?",
-    ratesAddress: "?",
-    tokenUcdAddress: "?",
-    loanCount: "?",
-    productCount: "?",
-    products: null,
-    error: null,
     connectionError: null,
-    result: null
+    result: null,
+    error: null,
+    products: null,
+    info: {
+        ucdBalance: "?",
+        ethBalance: "?",
+        owner: "?",
+        ratesAddress: "?",
+        tokenUcdAddress: "?",
+        loanCount: "?",
+        productCount: "?"
+    }
 };
 
 export default (state = initialState, action) => {
@@ -117,13 +119,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                owner: action.owner,
-                ethBalance: action.ethBalance,
-                ucdBalance: action.ucdBalance,
-                loanCount: action.loanCount,
-                productCount: action.productCount,
-                ratesAddress: action.ratesAddress,
-                tokenUcdAddress: action.tokenUcdAddress
+                info: action.result
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
@@ -264,17 +260,21 @@ export const refreshLoanManager = () => {
         let ratesAddress = await loanManager.rates();
         let owner = await loanManager.owner();
 
-        let ethBalance = await asyncGetBalance(loanManager.address);
-        let ucdBalance = await getUcdBalance(loanManager.address);
+        let bn_ethBalance = await asyncGetBalance(loanManager.address);
+        let bn_ucdBalance = await getUcdBalance(loanManager.address);
         return dispatch({
             type: LOANMANAGER_REFRESHED,
-            owner: owner,
-            ethBalance: ethBalance,
-            ucdBalance: ucdBalance,
-            loanCount: loanCount.toNumber(),
-            productCount: productCount.toNumber(),
-            tokenUcdAddress: tokenUcdAddress,
-            ratesAddress: ratesAddress
+            result: {
+                owner: owner,
+                bn_ethBalance: bn_ethBalance,
+                ethBalance: bn_ethBalance.toNumber(),
+                bn_ucdBalance: bn_ucdBalance,
+                ucdBalance: bn_ucdBalance.toNumber(),
+                loanCount: loanCount.toNumber(),
+                productCount: productCount.toNumber(),
+                tokenUcdAddress: tokenUcdAddress,
+                ratesAddress: ratesAddress
+            }
         });
     };
 };
