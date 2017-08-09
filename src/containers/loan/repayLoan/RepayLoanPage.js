@@ -135,7 +135,7 @@ class RepayLoanPage extends React.Component {
                     header={
                         <h3>
                             Can't find loan #{this.state.loanId} for current
-                            account {this.props.userAccount}
+                            account {this.props.userAccount.address}
                         </h3>
                     }
                 />
@@ -171,10 +171,14 @@ class RepayLoanPage extends React.Component {
                             <Button
                                 type="submit"
                                 bsStyle="primary"
-                                disabled={this.props.submitting}
+                                disabled={
+                                    this.props.submitting ||
+                                    !this.state.isLoanFound ||
+                                    this.state.loan.loanState !== 5
+                                }
                             >
                                 Confirm to repay{" "}
-                                {this.state.loan.disbursedLoanInUcd} UCD
+                                {this.state.loan.ucdDueAtMaturity} UCD
                             </Button>
                         </form>}
 
