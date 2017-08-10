@@ -37,17 +37,27 @@ export function fetchLoans(userAccount) {
         dispatch({
             type: LOANS_LOANLIST_REQUESTED
         });
+        let loanIds, loanManager;
+        try {
+            loanManager = store.getState().loanManager.contract.instance;
+            loanIds = await loanManager.getLoanIds(userAccount);
 
-        let loanManager = store.getState().loanManager.contract.instance;
-        let loanIds = await loanManager.getLoanIds(userAccount);
+            let actions = loanIds.map(fetchLoanDetails);
+            let loans = await Promise.all(actions); // queries in paralel...
 
-        let actions = loanIds.map(fetchLoanDetails);
-        let loans = await Promise.all(actions); // queries in paralel...
-
-        return dispatch({
-            type: LOANS_LOANLIST_RECEIVED,
-            loans: loans
-        });
+            return dispatch({
+                type: LOANS_LOANLIST_RECEIVED,
+                loans: loans
+            });
+        } catch (error) {
+            let err = new Error(
+                "Error in fetchLoans. \n userAccount: " + userAccount,
+                +"\n loanIds: " + loanIds,
+                +"\n error: " + error
+            );
+            console.error(err);
+            throw err;
+        }
     };
 }
 
