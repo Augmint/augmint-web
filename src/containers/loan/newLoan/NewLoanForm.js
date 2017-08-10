@@ -33,60 +33,64 @@ class NewLoanForm extends React.Component {
     }
 
     onDisbursedUcdAmountChange(e) {
+        let BN_1 = new BigNumber(1);
+        let val;
         try {
-            let BN_1 = new BigNumber(1);
-            let bn_loanUcdAmount = BN_1.div(
-                this.props.product.bn_discountRate
-            ).times(e.target.value);
-            let bn_ethAmount = bn_loanUcdAmount
-                .div(this.props.product.bn_loanCollateralRatio)
-                .times(BN_1.div(this.props.rates.info.ethUsdRate));
-
-            this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
-            this.props.change("ethAmount", bn_ethAmount.round(18));
+            val = new BigNumber(e.target.value);
         } catch (error) {
             this.props.change("loanUcdAmount", "");
             this.props.change("ethAmount", "");
+            return;
         }
+        let bn_loanUcdAmount = BN_1.div(
+            this.props.product.bn_discountRate
+        ).times(val);
+        let bn_ethAmount = bn_loanUcdAmount
+            .div(this.props.product.bn_loanCollateralRatio)
+            .times(BN_1.div(this.props.rates.info.ethUsdRate));
+
+        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
+        this.props.change("ethAmount", bn_ethAmount.round(18));
     }
 
     onLoanUcdAmountChange(e) {
+        let BN_1 = new BigNumber(1);
+        let val;
         try {
-            let bn_disbursedUcdAmount = this.props.product.bn_discountRate
-                .mul(e.target.value)
-                .round(4);
-            let bn_ethAmount = new BigNumber(e.target.value)
-                .div(this.props.product.bn_loanCollateralRatio)
-                .times(this.props.rates.info.bn_usdEthRate);
-            this.props.change(
-                "disbursedUcdAmount",
-                bn_disbursedUcdAmount.round(4)
-            );
-            this.props.change("ethAmount", bn_ethAmount.round(18));
+            val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("disbursedUcdAmount", "");
+            this.props.change("loanUcdAmount", "");
             this.props.change("ethAmount", "");
+            return;
         }
+
+        let bn_disbursedUcdAmount = this.props.product.bn_discountRate
+            .mul(val)
+            .round(4);
+        let bn_ethAmount = new BigNumber(val)
+            .div(this.props.product.bn_loanCollateralRatio)
+            .times(BN_1.div(this.props.rates.info.ethUsdRate));
+        this.props.change("disbursedUcdAmount", bn_disbursedUcdAmount.round(4));
+        this.props.change("ethAmount", bn_ethAmount.round(18));
     }
 
     onEthAmountChange(e) {
+        let val;
         try {
-            let val = new BigNumber(e.target.value);
-            let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio
-                .times(this.props.rates.info.bn_ethUsdRate)
-                .times(val);
-            let bn_disbursedUcdAmount = bn_loanUcdAmount
-                .times(this.props.product.bn_discountRate)
-                .round(4);
-            this.props.change(
-                "disbursedUcdAmount",
-                bn_disbursedUcdAmount.round(4)
-            );
-            this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
+            val = new BigNumber(e.target.value);
         } catch (error) {
             this.props.change("disbursedUcdAmount", "");
             this.props.change("loanUcdAmount", "");
+            return;
         }
+        let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio
+            .times(this.props.rates.info.bn_ethUsdRate)
+            .times(val);
+        let bn_disbursedUcdAmount = bn_loanUcdAmount
+            .times(this.props.product.bn_discountRate)
+            .round(4);
+        this.props.change("disbursedUcdAmount", bn_disbursedUcdAmount.round(4));
+        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
     }
 
     render() {
