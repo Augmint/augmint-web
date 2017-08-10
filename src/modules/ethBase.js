@@ -1,5 +1,5 @@
 import { default as Web3 } from "web3";
-import { asyncGetNetwork } from "modules/ethHelper";
+import { asyncGetNetwork, asyncGetAccounts } from "modules/ethHelper";
 
 export const WEB3_SETUP_REQUESTED = "ethBase/WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "ethBase/WEB3_SETUP_SUCCESS";
@@ -74,19 +74,14 @@ export const setupWeb3 = () => {
             }
 
             let network = await asyncGetNetwork(web3);
-            return web3.eth.getAccounts((error, accounts) => {
-                if (error) {
-                    // TODO: proper error handling
-                    throw new Error("Can't get account list" + error);
-                }
-                // TODO: could we use web3.eth.defaultAccount?
-                dispatch({
-                    type: WEB3_SETUP_SUCCESS,
-                    web3Instance: web3,
-                    userAccount: accounts[0],
-                    accounts: accounts,
-                    network: network
-                });
+            let accounts = await asyncGetAccounts(web3);
+
+            dispatch({
+                type: WEB3_SETUP_SUCCESS,
+                web3Instance: web3,
+                userAccount: accounts[0], // TODO: could we use web3.eth.defaultAccount?
+                accounts: accounts,
+                network: network
             });
         } catch (error) {
             return dispatch({

@@ -1,5 +1,6 @@
 /*
  TODO: gasPrice param
+ TODO: clean up thrown errors
  */
 import store from "store";
 import BigNumber from "bignumber.js";
@@ -19,9 +20,40 @@ export function asyncGetBalance(address) {
         let web3 = store.getState().ethBase.web3Instance;
         web3.eth.getBalance(address, function(error, bal) {
             if (error) {
-                reject(error);
+                reject(
+                    new Error(
+                        "Can't get balance from web3 (asyncGetBalance). Address: ",
+                        address + " Error: " + error
+                    )
+                );
             } else {
                 resolve(web3.fromWei(bal));
+            }
+        });
+    });
+}
+
+export function asyncGetAccounts(web3) {
+    return new Promise(function(resolve, reject) {
+        web3.eth.getAccounts((error, accounts) => {
+            if (error) {
+                reject(
+                    new Error(
+                        "Can't get account list from web3 (asyncGetAccounts)." +
+                            "\nError: " +
+                            error
+                    )
+                );
+            } else {
+                if (!web3.isAddress(accounts[0])) {
+                    reject(
+                        new Error(
+                            "Can't get default account from web3 (asyncGetAccounts)." +
+                                "\nIf you are using Metamask make sure it's unlocked with your password."
+                        )
+                    );
+                }
+                resolve(accounts);
             }
         });
     });
@@ -31,7 +63,12 @@ export function asyncGetNetwork(web3) {
     return new Promise(function(resolve, reject) {
         web3.version.getNetwork((error, networkId) => {
             if (error) {
-                reject(error);
+                reject(
+                    new Error(
+                        "Can't get network from web3 (asyncGetNetwork). Error: " +
+                            error
+                    )
+                );
             } else {
                 let networkName;
                 switch (networkId) {
