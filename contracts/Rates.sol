@@ -29,11 +29,8 @@ contract Rates is owned {
 
     function convertWeiToUsdc(uint weiValue) constant returns(uint usdcValue) {
         // TODO: safe divide & multiply
-        usdcValue = weiValue * ethUsdcRate / ONE_ETH;
-        if( (weiValue * ethUsdcRate) % ONE_ETH >= ONE_ETH / 2) {
-            usdcValue++;
-        }
-        return usdcValue ;
+        // rounded conversion
+        return  (weiValue * ethUsdcRate * 10 + ONE_ETH/2 )  / (ONE_ETH * 10);
     }
 
 }

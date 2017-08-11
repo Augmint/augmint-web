@@ -6,7 +6,7 @@ import store from "store.js";
 import SolidityContract from "./SolidityContract";
 import rates_artifacts from "contractsBuild/Rates.json";
 import { asyncGetBalance, getUcdBalance } from "./ethHelper";
-//import BigNumber from "bignumber.js";
+import BigNumber from "bignumber.js";
 
 export const RATES_CONNECT_REQUESTED = "ethBase/RATES_CONNECT_REQUESTED";
 export const RATES_CONNECT_SUCCESS = "ethBase/RATES_CONNECT_SUCCESS";
@@ -29,6 +29,8 @@ const initialState = {
         bn_ethUsdcRate: null,
         ethUsdcRate: "?",
         bn_ethUsdRate: null,
+        usdEthRate: "?",
+        bn_usdEthRate: null,
         ethUsdRate: "?",
         owner: "?",
         usdScale: null
@@ -111,6 +113,8 @@ export const refreshRates = () => {
         let usdScale = await rates.USD_SCALE();
         let bn_ethUsdcRate = await rates.ethUsdcRate();
         let bn_ethUsdRate = bn_ethUsdcRate.div(usdScale);
+        let BN_1 = new BigNumber(1);
+        let bn_usdEthRate = BN_1.div(bn_ethUsdcRate).times(usdScale);
         let owner = await rates.owner();
 
         let bn_ethBalance = await asyncGetBalance(rates.address);
@@ -126,6 +130,8 @@ export const refreshRates = () => {
                 ethUsdcRate: bn_ethUsdcRate.toNumber(),
                 bn_ethUsdRate: bn_ethUsdRate,
                 ethUsdRate: bn_ethUsdRate.toNumber(),
+                bn_usdEthRate: bn_usdEthRate,
+                usdEthRate: bn_usdEthRate.toNumber(),
                 usdScale: usdScale.toNumber(),
                 owner: owner
             }

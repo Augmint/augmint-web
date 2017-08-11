@@ -1,12 +1,7 @@
 /*
-TODO: move this to containers b/c it's not stateless
-TODO: form validation. eg: http://redux-form.com or more: https://react.rocks/tag/Validation
-FIXME:  clear success and error states after submit
-FIXME: Rounding issues. Eg. 20UCD entered to disbursed is not enough for minDisbursedAmountInUcd
-                            100 UCD requested to disbursed is 99.9999 actual
-        - handle different values calculated here & in contract at tx.
-        - rates precision is too high?
-        - Introduce BigNumbers + figure out rounding (here and rates too)  */
+TODO: form client side validation. min loan amount, eth balance
+TODO: input formatting: decimals, thousand separators
+  */
 
 import React from "react";
 import {
@@ -21,6 +16,9 @@ import { Form, Field, reduxForm } from "redux-form";
 import { FieldInput } from "components/FieldInput";
 import BigNumber from "bignumber.js";
 
+const ETH_DECIMALS = 5;
+const UCD_DECIMALS = 2;
+
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
@@ -33,7 +31,6 @@ class NewLoanForm extends React.Component {
     }
 
     onDisbursedUcdAmountChange(e) {
-        let BN_1 = new BigNumber(1);
         let val;
         try {
             val = new BigNumber(e.target.value);
@@ -42,36 +39,46 @@ class NewLoanForm extends React.Component {
             this.props.change("ethAmount", "");
             return;
         }
-        let bn_loanUcdAmount = BN_1.div(
-            this.props.product.bn_discountRate
-        ).times(val);
-        let bn_ethAmount = bn_loanUcdAmount
-            .div(this.props.product.bn_loanCollateralRatio)
-            .times(BN_1.div(this.props.rates.info.ethUsdRate));
+        let bn_loanUcdAmount = val.div(this.props.product.bn_discountRate);
+        let usdcValue = bn_loanUcdAmount.div(
+            this.props.product.bn_loanCollateralRatio
+        );
 
-        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
-        this.props.change("ethAmount", bn_ethAmount.round(18));
+        let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
+
+        this.props.change(
+            "loanUcdAmount",
+            bn_loanUcdAmount.round(UCD_DECIMALS)
+        );
+        this.props.change(
+            "ethAmount",
+            bn_ethAmount.round(ETH_DECIMALS) //.toFixed(18)
+        );
     }
 
     onLoanUcdAmountChange(e) {
-        let BN_1 = new BigNumber(1);
         let val;
         try {
             val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("loanUcdAmount", "");
+            this.props.change("disbursedUcdAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
+        let usdcValue = val.div(this.props.product.bn_loanCollateralRatio);
 
-        let bn_disbursedUcdAmount = this.props.product.bn_discountRate
-            .mul(val)
-            .round(4);
-        let bn_ethAmount = new BigNumber(val)
-            .div(this.props.product.bn_loanCollateralRatio)
-            .times(BN_1.div(this.props.rates.info.ethUsdRate));
-        this.props.change("disbursedUcdAmount", bn_disbursedUcdAmount.round(4));
-        this.props.change("ethAmount", bn_ethAmount.round(18));
+        let bn_disbursedUcdAmount = val.times(
+            this.props.product.bn_discountRate
+        );
+        let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
+        this.props.change(
+            "disbursedUcdAmount",
+            bn_disbursedUcdAmount.round(UCD_DECIMALS)
+        );
+        this.props.change(
+            "ethAmount",
+            bn_ethAmount.round(ETH_DECIMALS) //.toFixed(18)
+        );
     }
 
     onEthAmountChange(e) {
@@ -83,14 +90,22 @@ class NewLoanForm extends React.Component {
             this.props.change("loanUcdAmount", "");
             return;
         }
-        let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio
-            .times(this.props.rates.info.bn_ethUsdRate)
-            .times(val);
-        let bn_disbursedUcdAmount = bn_loanUcdAmount
-            .times(this.props.product.bn_discountRate)
-            .round(4);
-        this.props.change("disbursedUcdAmount", bn_disbursedUcdAmount.round(4));
-        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(4));
+        let usdcValue = val.times(this.props.rates.info.bn_ethUsdRate);
+
+        let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio.times(
+            usdcValue
+        );
+        let bn_disbursedUcdAmount = bn_loanUcdAmount.times(
+            this.props.product.bn_discountRate
+        );
+        this.props.change(
+            "disbursedUcdAmount",
+            bn_disbursedUcdAmount.round(UCD_DECIMALS)
+        );
+        this.props.change(
+            "loanUcdAmount",
+            bn_loanUcdAmount.round(UCD_DECIMALS)
+        );
     }
 
     render() {

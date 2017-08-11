@@ -80,16 +80,28 @@ contract LoanManager is owned {
         // TODO: emit event
     }
 
+    function roundedDiv(uint x, uint y) constant public returns (uint z) {
+        // TODO: move this to a lib and make rates contract to use it as well
+        z = x / y;
+        if ( x % y > y / 2) {
+            z++;
+        }
+        return z;
+    }
+
     event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
     function newEthBackedLoan(uint8 productId) payable {
-        // valid productId?
-        require( products[productId].isActive);
+        require( products[productId].isActive); // valid productId?
 
         // calculate UCD loan values based on ETH sent in with Tx
         uint usdcValue = rates.convertWeiToUsdc(msg.value);
-        // rounding to 4 decimals
-        uint ucdDueAtMaturity = (usdcValue * products[productId].loanCollateralRatio + 555555)/ 1000000 ;
-        uint disbursedLoanInUcd = (ucdDueAtMaturity * products[productId].discountRate + 555555) / 1000000;
+        uint ucdDueAtMaturity = roundedDiv( (usdcValue * products[productId].loanCollateralRatio) , 100000000);
+        ucdDueAtMaturity = ucdDueAtMaturity * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
+
+        uint mul = (products[productId].loanCollateralRatio * products[productId].discountRate) / 1000000;
+        uint disbursedLoanInUcd = roundedDiv( (usdcValue * mul) , 100000000);
+        disbursedLoanInUcd = disbursedLoanInUcd * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
+
         require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
 
         // Create new loan contract
