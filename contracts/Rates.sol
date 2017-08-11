@@ -1,16 +1,19 @@
 /*  mock implamentation of ETH/USD exchange rate oracle
-    TODO: use a real oracle (eg. piggyback Oraclize pricing contract?)
-    TODO: use save div and mul
-    TODO: implement convertUsdcToWei() - reuires higher precision. Consider using eg. Ray https://github.com/dapphub/ds-math
+TODO: use a real oracle (eg. piggyback Oraclize pricing contract?)
+TODO: use save div and mul
+TODO: implement convertUsdcToWei()
+TODO: Consider using eg. Ray https://github.com/dapphub/ds-math
 
 */
 pragma solidity ^0.4.11;
 
 import "./Owned.sol";
+import "./SafeMath.sol";
 
 contract Rates is owned {
+    using SafeMath for uint256;
 
-    uint constant ONE_ETH = 1000000000000000000; // 1 ETH = 1000000000000000000 WEI
+    uint constant ONE_ETH = 1000000000000000000; // 1 ETH in WEI
 
     // 1 USD = 10000 USDc
     uint8 public constant USD_DECIMALS = 4; // USD values decimal places
@@ -18,7 +21,6 @@ contract Rates is owned {
 
     // TODO: remove this when connected to an Oracle
     uint public ethUsdcRate = 1950000   ;  //  1/195ETH = 512,820,512,821 WEI;
-
 
     event e_ethToUsdcChanged(uint newEthUsdcRate);
     function ethToUsdc(uint newEthUsdcRate) onlyOwner {
@@ -30,7 +32,6 @@ contract Rates is owned {
     function convertWeiToUsdc(uint weiValue) constant returns(uint usdcValue) {
         // TODO: safe divide & multiply
         // rounded conversion
-        return  (weiValue * ethUsdcRate * 10 + ONE_ETH/2 )  / (ONE_ETH * 10);
+        return  (weiValue * ethUsdcRate).roundedDiv(ONE_ETH);
     }
-
 }
