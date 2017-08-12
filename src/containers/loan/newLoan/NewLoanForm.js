@@ -12,8 +12,8 @@ import {
     HelpBlock
 } from "react-bootstrap";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
-import { Form, Field, reduxForm } from "redux-form";
-import { FieldInput } from "components/FieldInput";
+import { Field, reduxForm } from "redux-form";
+import { FieldInput, Form } from "components/BaseComponents";
 import BigNumber from "bignumber.js";
 
 const ETH_DECIMALS = 5;

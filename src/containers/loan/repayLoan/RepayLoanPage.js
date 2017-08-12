@@ -15,6 +15,7 @@ import {
     EthSubmissionSuccessPanel,
     WarningPanel
 } from "components/MsgPanels";
+import { Form } from "components/BaseComponents";
 
 // TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
 //import { push } from 'react-router-redux'
@@ -160,7 +161,7 @@ class RepayLoanPage extends React.Component {
 
                     {!this.state.submitSucceeded &&
                         !this.state.isLoading &&
-                        <form
+                        <Form
                             onSubmit={this.props.handleSubmit(
                                 this.handleSubmit
                             )}
@@ -180,7 +181,7 @@ class RepayLoanPage extends React.Component {
                                 Confirm to repay{" "}
                                 {this.state.loan.ucdDueAtMaturity} UCD
                             </Button>
-                        </form>}
+                        </Form>}
 
                     {this.state.submitSucceeded &&
                         <EthSubmissionSuccessPanel

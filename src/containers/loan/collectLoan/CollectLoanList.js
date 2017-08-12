@@ -13,6 +13,7 @@ import {
     EthSubmissionErrorPanel,
     EthSubmissionSuccessPanel
 } from "components/MsgPanels";
+import { Form } from "components/BaseComponents";
 
 class CollectLoanList extends React.Component {
     async handleSubmit(values) {
@@ -79,7 +80,7 @@ class CollectLoanList extends React.Component {
 
                     {!this.state.submitSucceeded &&
                         !this.props.isLoading &&
-                        <form
+                        <Form
                             onSubmit={this.props.handleSubmit(
                                 this.handleSubmit
                             )}
@@ -91,7 +92,7 @@ class CollectLoanList extends React.Component {
                             >
                                 Collect all
                             </Button>
-                        </form>}
+                        </Form>}
 
                     {this.state.submitSucceeded &&
                         <EthSubmissionSuccessPanel
