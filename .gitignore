@@ -1,5 +1,7 @@
 .node-xmlhttprequest-sync-*
 
+packege-lock.json
+
 build
 .DS_Store
 chaindata
