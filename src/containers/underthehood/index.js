@@ -21,7 +21,7 @@ import stringifier from "stringifier";
 
 import store from "store.js"; /// for debug
 
-const stringify = stringifier({ maxDepth: 2, indent: "   " });
+const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function ArrayDump(props) {
     const items = props.items;
@@ -52,7 +52,51 @@ function ArrayDump(props) {
     );
 }
 
+function ContractBaseInfo(props) {
+    let { isConnected, isLoading, error, contract } = props.contract;
+    return (
+        <Table condensed striped>
+            <tbody>
+                <tr>
+                    <td colSpan="2">
+                        <small>
+                            Contract:<br />
+                            {contract == null
+                                ? "No contract"
+                                : contract.instance.address}
+                        </small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {isConnected ? "connected" : "not connected"}
+                    </td>
+                    <td>
+                        {isLoading ? "Loanding..." : "not Loading"}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        {error
+                            ? <pre style={{ fontSize: 10 + "px" }}>
+                                  stringify(error)
+                              </pre>
+                            : "No error"}
+                    </td>
+                </tr>
+            </tbody>
+        </Table>
+    );
+}
+
 class underTheHood extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            providerInfoOpen: false
+        };
+    }
+
     handleBalanceRefreshClick = e => {
         e.preventDefault();
         this.props.getBalance(this.props.userAccount);
@@ -97,21 +141,43 @@ class underTheHood extends React.Component {
                                         Network: {this.props.network.name} Id:{" "}
                                         {this.props.network.id}
                                     </p>
-                                    <p className="white-space:pre-wrap">
-                                        Provider:{" "}
-                                        <small>
-                                            {this.props.web3Instance
-                                                ? stringify(
-                                                      this.props.web3Instance
-                                                          .currentProvider
-                                                  )
-                                                : "No web3 Instance"}
-                                        </small>
-                                    </p>
                                     <p>
                                         Internal Connection Id:{" "}
                                         {this.props.web3ConnectionId}
                                     </p>
+                                    <div>
+                                        <Button
+                                            bsStyle="link"
+                                            onClick={() =>
+                                                this.setState({
+                                                    providerInfoOpen: !this
+                                                        .state.providerInfoOpen
+                                                })}
+                                        >
+                                            {this.state.providerInfoOpen
+                                                ? "<< Hide provider info"
+                                                : "Show Provider info >>"}
+                                        </Button>
+                                        <Panel
+                                            collapsible
+                                            expanded={
+                                                this.state.providerInfoOpen
+                                            }
+                                        >
+                                            <pre
+                                                style={{ fontSize: 10 + "px" }}
+                                            >
+                                                {this.props.web3Instance
+                                                    ? stringify(
+                                                          this.props
+                                                              .web3Instance
+                                                              .currentProvider
+                                                      )
+                                                    : "No web3 Instance"}
+                                            </pre>
+                                        </Panel>
+                                    </div>
+
                                     <Button
                                         bsSize="small"
                                         onClick={this.props.setupWeb3}
@@ -160,15 +226,10 @@ class underTheHood extends React.Component {
                                         {this.props.ratesInfo.ethUsdRate}
                                     </p>
 
-                                    <p>
-                                        <small>
-                                            Contract:{" "}
-                                            {this.props.ratesContract == null
-                                                ? "No contract"
-                                                : this.props.ratesContract
-                                                      .instance.address}
-                                        </small>
-                                    </p>
+                                    <ContractBaseInfo
+                                        contract={this.props.rates}
+                                    />
+
                                     <pre style={{ fontSize: 10 + "px" }}>
                                         {stringify(this.props.ratesInfo)}
                                     </pre>
@@ -204,15 +265,9 @@ class underTheHood extends React.Component {
                                         UCD Reserve:{" "}
                                         {this.props.tokenUcdInfo.ucdBalance} UCD{" "}
                                     </p>
-                                    <p>
-                                        <small>
-                                            Contract:{" "}
-                                            {this.props.tokenUcdContract == null
-                                                ? "No contract"
-                                                : this.props.tokenUcdContract
-                                                      .instance.address}
-                                        </small>
-                                    </p>
+                                    <ContractBaseInfo
+                                        contract={this.props.tokenUcd}
+                                    />
                                     <pre style={{ fontSize: 10 + "px" }}>
                                         {stringify(this.props.tokenUcdInfo)}
                                     </pre>
@@ -237,21 +292,12 @@ class underTheHood extends React.Component {
                             <Col xs={6} md={6}>
                                 <Panel header={<h3>LoanManager contract</h3>}>
                                     <p>
-                                        ProductCount: {this.props.productCount}{" "}
+                                        LoanCount:{" "}
+                                        {this.props.loanManagerInfo.loanCount}{" "}
                                     </p>
-                                    <p>
-                                        LoanCount: {this.props.loanCount}{" "}
-                                    </p>
-                                    <p>
-                                        <small>
-                                            Contract:{" "}
-                                            {this.props.loanManagerContract ==
-                                            null
-                                                ? "No contract"
-                                                : this.props.loanManagerContract
-                                                      .instance.address}
-                                        </small>
-                                    </p>
+                                    <ContractBaseInfo
+                                        contract={this.props.loanManager}
+                                    />
                                     <pre style={{ fontSize: 10 + "px" }}>
                                         {stringify(this.props.loanManagerInfo)}
                                     </pre>
@@ -263,8 +309,7 @@ class underTheHood extends React.Component {
                                                     .handleLoanManagerRefreshClick
                                             }
                                             disabled={
-                                                this.props.isLoading ||
-                                                !this.props.isConnected
+                                                this.props.loanManager.isLoading
                                             }
                                         >
                                             Refresh info
@@ -310,19 +355,15 @@ const mapStateToProps = state => ({
     web3Instance: state.ethBase.web3Instance,
     network: state.ethBase.network,
 
+    rates: state.rates,
     ratesContract: state.rates.contract,
     ratesInfo: state.rates.info,
 
+    tokenUcd: state.tokenUcd,
     tokenUcdContract: state.tokenUcd.contract,
     tokenUcdInfo: state.tokenUcd.info,
-    // tokenUcdOwner: state.tokenUcd.info.owner,
-    // tokenUcdDecimals: state.tokenUcd.info.decimals,
-    // tokenUcdDecimalsDiv: state.tokenUcd.info.decimalsDiv,
-    // tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
-    // tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
-    // tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
-    // tokenUcdLoanManagerAddress: state.tokenUcd.info.loanManagerAddress,
 
+    loanManager: state.loanManager,
     loanManagerContract: state.loanManager.contract,
     loanManagerInfo: state.loanManager.info,
     loanProducts: state.loanManager.products,
