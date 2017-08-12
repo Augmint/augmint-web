@@ -18,7 +18,6 @@ import { Form } from "components/BaseComponents";
 class CollectLoanList extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
-        this.setState({ isSubmitting: true });
         let res = await store.dispatch(collectLoans(this.props.loansToCollect));
         store.dispatch(fetchLoansToCollect());
 
@@ -90,7 +89,9 @@ class CollectLoanList extends React.Component {
                                 bsStyle="primary"
                                 disabled={this.props.submitting}
                             >
-                                Collect all
+                                {this.props.submitting
+                                    ? "Submitting..."
+                                    : "Collect all"}
                             </Button>
                         </Form>}
 

@@ -100,7 +100,6 @@ class RepayLoanPage extends React.Component {
 
     async handleSubmit(values) {
         //values.preventDefault();
-        this.setState({ isSubmitting: true });
         let res = await store.dispatch(repayLoan(this.state.loanId));
         if (res.type !== LOANMANAGER_REPAY_SUCCESS) {
             throw new SubmissionError({
@@ -178,8 +177,11 @@ class RepayLoanPage extends React.Component {
                                     this.state.loan.loanState !== 5
                                 }
                             >
-                                Confirm to repay{" "}
-                                {this.state.loan.ucdDueAtMaturity} UCD
+                                {this.props.submitting
+                                    ? "Submitting..."
+                                    : "Confirm to repay " +
+                                      this.state.loan.ucdDueAtMaturity +
+                                      " UCD"}
                             </Button>
                         </Form>}
 
