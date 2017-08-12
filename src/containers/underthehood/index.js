@@ -53,39 +53,54 @@ function ArrayDump(props) {
 }
 
 function ContractBaseInfo(props) {
-    let { isConnected, isLoading, error, contract } = props.contract;
+    let { isConnected, isLoading, error, contract, info } = props.contract;
     return (
-        <Table condensed striped>
-            <tbody>
-                <tr>
-                    <td colSpan="2">
-                        <small>
-                            Contract:<br />
-                            {contract == null
-                                ? "No contract"
-                                : contract.instance.address}
-                        </small>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {isConnected ? "connected" : "not connected"}
-                    </td>
-                    <td>
-                        {isLoading ? "Loanding..." : "not Loading"}
-                    </td>
-                </tr>
-                <tr>
-                    <td colSpan="2">
-                        {error
-                            ? <pre style={{ fontSize: 10 + "px" }}>
-                                  stringify(error)
-                              </pre>
-                            : "No error"}
-                    </td>
-                </tr>
-            </tbody>
-        </Table>
+        <div>
+            <Table condensed striped>
+                <tbody>
+                    <tr>
+                        <td colSpan="2">
+                            <small>
+                                Contract:<br />
+                                {contract == null
+                                    ? "No contract"
+                                    : contract.instance.address}
+                            </small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {isConnected ? "connected" : "not connected"}
+                        </td>
+                        <td>
+                            {isLoading ? "Loanding..." : "not loading"}
+                        </td>
+                    </tr>
+                </tbody>
+            </Table>
+
+            {error
+                ? <p>
+                      Error: <br />{" "}
+                      <pre style={{ fontSize: 10 + "px" }}>
+                          stringify(error)
+                      </pre>
+                  </p>
+                : <p>No error</p>}
+
+            <p>
+                Info:<br />
+                <pre style={{ fontSize: 10 + "px" }}>{stringify(info)}</pre>
+            </p>
+
+            <Button
+                bsSize="small"
+                onClick={props.refreshCb}
+                disabled={isLoading}
+            >
+                Refresh contract
+            </Button>
+        </div>
     );
 }
 
@@ -99,9 +114,8 @@ class underTheHood extends React.Component {
 
     handleBalanceRefreshClick = e => {
         e.preventDefault();
-        this.props.getBalance(this.props.userAccount);
+        this.props.fetchUserBalance(this.props.userAccount);
         console.log(store.getState());
-        //console.log(this.props.rates)
     };
 
     handleRatesRefreshClick = e => {
@@ -134,7 +148,10 @@ class underTheHood extends React.Component {
                                 <Panel header={<h3>Web3 connection</h3>}>
                                     <p>
                                         {this.props.isConnected
-                                            ? "connected"
+                                            ? "connected - " +
+                                              this.props.web3Instance
+                                                  .currentProvider.constructor
+                                                  .name
                                             : "not connected"}
                                     </p>
                                     <p>
@@ -156,7 +173,7 @@ class underTheHood extends React.Component {
                                         >
                                             {this.state.providerInfoOpen
                                                 ? "<< Hide provider info"
-                                                : "Show Provider info >>"}
+                                                : "Show provider info >>"}
                                         </Button>
                                         <Panel
                                             collapsible
@@ -223,68 +240,38 @@ class underTheHood extends React.Component {
                                 <Panel header={<h3>Rates contract</h3>}>
                                     <p>
                                         ETH/USD:{" "}
-                                        {this.props.ratesInfo.ethUsdRate}
+                                        {this.props.rates.info.ethUsdRate}
                                     </p>
 
                                     <ContractBaseInfo
                                         contract={this.props.rates}
+                                        refreshCb={this.handleRatesRefreshClick}
                                     />
-
-                                    <pre style={{ fontSize: 10 + "px" }}>
-                                        {stringify(this.props.ratesInfo)}
-                                    </pre>
-
-                                    <ButtonToolbar>
-                                        <Button
-                                            bsSize="small"
-                                            onClick={
-                                                this.handleRatesRefreshClick
-                                            }
-                                            disabled={
-                                                this.props.isLoading ||
-                                                !this.props.isConnected
-                                            }
-                                        >
-                                            Refresh rates
-                                        </Button>
-                                    </ButtonToolbar>
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
                                 <Panel header={<h3>TokenUcd contract</h3>}>
                                     <p>
                                         Total token supply:{" "}
-                                        {this.props.tokenUcdInfo.totalSupply}{" "}
+                                        {this.props.tokenUcd.info.totalSupply}{" "}
                                         UCD
                                     </p>
                                     <p>
                                         ETH Reserve:{" "}
-                                        {this.props.tokenUcdInfo.ethBalance} ETH
+                                        {this.props.tokenUcd.info.ethBalance}{" "}
+                                        ETH
                                     </p>
                                     <p>
                                         UCD Reserve:{" "}
-                                        {this.props.tokenUcdInfo.ucdBalance} UCD{" "}
+                                        {this.props.tokenUcd.info.ucdBalance}{" "}
+                                        UCD{" "}
                                     </p>
                                     <ContractBaseInfo
                                         contract={this.props.tokenUcd}
+                                        refreshCb={
+                                            this.handleTokenUcdRefreshClick
+                                        }
                                     />
-                                    <pre style={{ fontSize: 10 + "px" }}>
-                                        {stringify(this.props.tokenUcdInfo)}
-                                    </pre>
-                                    <ButtonToolbar>
-                                        <Button
-                                            bsSize="small"
-                                            onClick={
-                                                this.handleTokenUcdRefreshClick
-                                            }
-                                            disabled={
-                                                this.props.isLoading ||
-                                                !this.props.isConnected
-                                            }
-                                        >
-                                            Refresh info
-                                        </Button>
-                                    </ButtonToolbar>
                                 </Panel>
                             </Col>
                         </Row>
@@ -293,28 +280,14 @@ class underTheHood extends React.Component {
                                 <Panel header={<h3>LoanManager contract</h3>}>
                                     <p>
                                         LoanCount:{" "}
-                                        {this.props.loanManagerInfo.loanCount}{" "}
+                                        {this.props.loanManager.info.loanCount}{" "}
                                     </p>
                                     <ContractBaseInfo
                                         contract={this.props.loanManager}
+                                        refreshCb={
+                                            this.handleLoanManagerRefreshClick
+                                        }
                                     />
-                                    <pre style={{ fontSize: 10 + "px" }}>
-                                        {stringify(this.props.loanManagerInfo)}
-                                    </pre>
-                                    <ButtonToolbar>
-                                        <Button
-                                            bsSize="small"
-                                            onClick={
-                                                this
-                                                    .handleLoanManagerRefreshClick
-                                            }
-                                            disabled={
-                                                this.props.loanManager.isLoading
-                                            }
-                                        >
-                                            Refresh info
-                                        </Button>
-                                    </ButtonToolbar>
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
@@ -356,18 +329,9 @@ const mapStateToProps = state => ({
     network: state.ethBase.network,
 
     rates: state.rates,
-    ratesContract: state.rates.contract,
-    ratesInfo: state.rates.info,
-
     tokenUcd: state.tokenUcd,
-    tokenUcdContract: state.tokenUcd.contract,
-    tokenUcdInfo: state.tokenUcd.info,
-
     loanManager: state.loanManager,
-    loanManagerContract: state.loanManager.contract,
-    loanManagerInfo: state.loanManager.info,
     loanProducts: state.loanManager.products,
-
     loans: state.loans.loans
 });
 
