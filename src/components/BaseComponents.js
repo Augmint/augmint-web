@@ -8,7 +8,7 @@ import { Form as BoostrapForm } from "react-bootstrap";
 FieldInput component, usage:
     <Field name="fieldname" component={FieldInput} type="number" onChange={this.onFieldChange}  />
 */
-export const FieldInput = ({ input, ...other }) => {
+export const FieldInput = ({ meta, input, ...other }) => {
     return (
         <FormControl
             id={input.name}
