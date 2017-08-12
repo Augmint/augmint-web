@@ -21,14 +21,6 @@ import stringifier from "stringifier";
 
 import store from "store.js"; /// for debug
 
-const web3Title = <h3>Web3 connection</h3>;
-const userAccountTitle = <h3>User Account</h3>;
-const availableAccountsTitle = <h3>Accounts</h3>;
-const ratesTitle = <h3>Rates contract</h3>;
-const tokenUcdTitle = <h3>TokenUcd contract</h3>;
-const loanManagerTitle = <h3>LoanManager contract</h3>;
-const productsTitle = <h3>Loan Products</h3>;
-
 const stringify = stringifier({ maxDepth: 2, indent: "   " });
 
 function ArrayDump(props) {
@@ -95,7 +87,7 @@ class underTheHood extends React.Component {
                     <Col xs={8} md={8}>
                         <Row>
                             <Col xs={6} md={6}>
-                                <Panel header={web3Title}>
+                                <Panel header={<h3>Web3 connection</h3>}>
                                     <p>
                                         {this.props.isConnected
                                             ? "connected"
@@ -129,7 +121,7 @@ class underTheHood extends React.Component {
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
-                                <Panel header={userAccountTitle}>
+                                <Panel header={<h3>User Account</h3>}>
                                     <p>
                                         {this.props.userAccount}
                                     </p>
@@ -162,16 +154,12 @@ class underTheHood extends React.Component {
                         </Row>
                         <Row>
                             <Col xs={6} md={6}>
-                                <Panel header={ratesTitle}>
+                                <Panel header={<h3>Rates contract</h3>}>
                                     <p>
-                                        ETH/USD: {this.props.ethUsdRate}
+                                        ETH/USD:{" "}
+                                        {this.props.ratesInfo.ethUsdRate}
                                     </p>
-                                    <p>
-                                        ETH/USDc: {this.props.ethUsdcRate}
-                                    </p>
-                                    <p>
-                                        USD scale: {this.props.usdScale}
-                                    </p>
+
                                     <p>
                                         <small>
                                             Contract:{" "}
@@ -181,18 +169,10 @@ class underTheHood extends React.Component {
                                                       .instance.address}
                                         </small>
                                     </p>
-                                    <p>
-                                        <small>
-                                            Owner: {this.props.ratesOwner}
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            Balance:{" "}
-                                            {this.props.ratesEthBalance} ETH |{" "}
-                                            {this.props.ratesUcdBalance} UCD
-                                        </small>
-                                    </p>
+                                    <pre style={{ fontSize: 10 + "px" }}>
+                                        {stringify(this.props.ratesInfo)}
+                                    </pre>
+
                                     <ButtonToolbar>
                                         <Button
                                             bsSize="small"
@@ -210,18 +190,19 @@ class underTheHood extends React.Component {
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
-                                <Panel header={tokenUcdTitle}>
+                                <Panel header={<h3>TokenUcd contract</h3>}>
                                     <p>
                                         Total token supply:{" "}
-                                        {this.props.tokenUcdTotalSupply} UCD
+                                        {this.props.tokenUcdInfo.totalSupply}{" "}
+                                        UCD
                                     </p>
                                     <p>
                                         ETH Reserve:{" "}
-                                        {this.props.tokenUcdEthBalance} ETH
+                                        {this.props.tokenUcdInfo.ethBalance} ETH
                                     </p>
                                     <p>
                                         UCD Reserve:{" "}
-                                        {this.props.tokenUcdUcdBalance} UCD{" "}
+                                        {this.props.tokenUcdInfo.ucdBalance} UCD{" "}
                                     </p>
                                     <p>
                                         <small>
@@ -232,30 +213,9 @@ class underTheHood extends React.Component {
                                                       .instance.address}
                                         </small>
                                     </p>
-                                    <p>
-                                        <small>
-                                            Owner: {this.props.tokenUcdOwner}
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            Decimals:{" "}
-                                            {this.props.tokenUcdDecimals}{" "}
-                                            (Decimals divider:{" "}
-                                            {this.props.tokenUcdDecimalsDiv})
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            LoanManager:{" "}
-                                            {this.props
-                                                .tokenUcdLoanManagerAddress ==
-                                            null
-                                                ? "No contract"
-                                                : this.props
-                                                      .tokenUcdLoanManagerAddress}
-                                        </small>
-                                    </p>
+                                    <pre style={{ fontSize: 10 + "px" }}>
+                                        {stringify(this.props.tokenUcdInfo)}
+                                    </pre>
                                     <ButtonToolbar>
                                         <Button
                                             bsSize="small"
@@ -275,7 +235,7 @@ class underTheHood extends React.Component {
                         </Row>
                         <Row>
                             <Col xs={6} md={6}>
-                                <Panel header={loanManagerTitle}>
+                                <Panel header={<h3>LoanManager contract</h3>}>
                                     <p>
                                         ProductCount: {this.props.productCount}{" "}
                                     </p>
@@ -292,35 +252,9 @@ class underTheHood extends React.Component {
                                                       .instance.address}
                                         </small>
                                     </p>
-                                    <p>
-                                        <small>
-                                            Owner: {this.props.loanManagerOwner}
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            Balance:{" "}
-                                            {this.props.loanManagerEthBalance}{" "}
-                                            ETH |{" "}
-                                            {this.props.loanManagerUcdBalance}{" "}
-                                            UCD{" "}
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            Rates contract:{" "}
-                                            {this.props.loanManagerRatesContractAddress}
-                                        </small>
-                                    </p>
-                                    <p>
-                                        <small>
-                                            TokenUcd contract:{" "}
-                                            {
-                                                this.props
-                                                    .loanManagerTokenUcdContractAddress
-                                            }
-                                        </small>
-                                    </p>
+                                    <pre style={{ fontSize: 10 + "px" }}>
+                                        {stringify(this.props.loanManagerInfo)}
+                                    </pre>
                                     <ButtonToolbar>
                                         <Button
                                             bsSize="small"
@@ -339,7 +273,7 @@ class underTheHood extends React.Component {
                                 </Panel>
                             </Col>
                             <Col xs={6} md={6}>
-                                <Panel header={productsTitle}>
+                                <Panel header={<h3>Loan Products</h3>}>
                                     <ArrayDump
                                         items={this.props.loanProducts}
                                     />
@@ -349,7 +283,7 @@ class underTheHood extends React.Component {
                     </Col>
 
                     <Col xs={4} md={4}>
-                        <Panel header={availableAccountsTitle}>
+                        <Panel header={<h3>Accounts</h3>}>
                             <ArrayDump items={this.props.accounts} />
                         </Panel>
                     </Col>
@@ -377,30 +311,20 @@ const mapStateToProps = state => ({
     network: state.ethBase.network,
 
     ratesContract: state.rates.contract,
-    ratesUcdBalance: state.rates.info.ucdBalance,
-    ratesEthBalance: state.rates.info.ethBalance,
-    ratesOwner: state.rates.info.owner,
-    usdScale: state.rates.info.usdScale,
-    ethUsdcRate: state.rates.info.ethUsdcRate,
-    ethUsdRate: state.rates.info.ethUsdRate,
+    ratesInfo: state.rates.info,
 
     tokenUcdContract: state.tokenUcd.contract,
-    tokenUcdOwner: state.tokenUcd.info.owner,
-    tokenUcdDecimals: state.tokenUcd.info.decimals,
-    tokenUcdDecimalsDiv: state.tokenUcd.info.decimalsDiv,
-    tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
-    tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
-    tokenUcdLoanManagerAddress: state.tokenUcd.info.loanManagerAddress,
+    tokenUcdInfo: state.tokenUcd.info,
+    // tokenUcdOwner: state.tokenUcd.info.owner,
+    // tokenUcdDecimals: state.tokenUcd.info.decimals,
+    // tokenUcdDecimalsDiv: state.tokenUcd.info.decimalsDiv,
+    // tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
+    // tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
+    // tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
+    // tokenUcdLoanManagerAddress: state.tokenUcd.info.loanManagerAddress,
 
     loanManagerContract: state.loanManager.contract,
-    loanManagerOwner: state.loanManager.info.owner,
-    loanManagerEthBalance: state.loanManager.info.ethBalance,
-    loanManagerUcdBalance: state.loanManager.info.ucdBalance,
-    loanCount: state.loanManager.info.loanCount,
-    productCount: state.loanManager.info.productCount,
-    loanManagerRatesContractAddress: state.loanManager.info.ratesAddress,
-    loanManagerTokenUcdContractAddress: state.loanManager.info.tokenUcdAddress,
+    loanManagerInfo: state.loanManager.info,
     loanProducts: state.loanManager.products,
 
     loans: state.loans.loans
