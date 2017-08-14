@@ -1,6 +1,7 @@
 import React from "react";
 import { Panel, Button } from "react-bootstrap";
-import stringifier from "stringifier";
+/* TODO: make \n -s in error msgs to break when placed in <pre> */
+//import stringifier from "stringifier";
 
 // export function stringifyError (err, filter, space) {
 //     var plainObject = {};
@@ -10,11 +11,11 @@ import stringifier from "stringifier";
 //     return JSON.stringify(plainObject, filter, space);
 // };
 
-const stringify = stringifier({
-    maxDepth: 3,
-    indent: "   ",
-    lineSeparator: "<br/>"
-});
+// const stringify = stringifier({
+//     maxDepth: 3,
+//     indent: "   ",
+//     lineSeparator: "<br/>"
+// });
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
