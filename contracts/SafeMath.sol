@@ -32,7 +32,7 @@ library SafeMath {
     function roundedDiv(uint a, uint b)  constant returns (uint256) {
         // assert(b > 0); // Solidity automatically throws when dividing by 0
         uint256 z = a / b;
-        if ( a % b >= 5) {
+        if ( a % b >= b / 2) {
             z++;  // no need for safe add b/c it can happen only if we divided the input
         }
         return z;
