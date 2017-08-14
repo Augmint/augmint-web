@@ -127,7 +127,6 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         let userAccount = store.getState().ethBase.userAccount;
         BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_HALF_UP });
         let weiAmount = web3.toWei(new BigNumber(ethAmount)).round();
-        console.log(web3.fromWei(weiAmount.toString()), ethAmount.toString());
         let result = await loanManager.newEthBackedLoan(productId, {
             value: weiAmount,
             from: userAccount,
@@ -220,7 +219,6 @@ export async function repayLoanTx(loanId) {
         let userAccount = store.getState().ethBase.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate = REPAY_GAS;
-        console.log("repayLoanTx", loanId, userAccount);
         let result = await loanManager.repay(loanId, {
             from: userAccount,
             gas: gasEstimate
