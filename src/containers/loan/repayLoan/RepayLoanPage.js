@@ -145,10 +145,7 @@ class RepayLoanPage extends React.Component {
                 <Col xs={4} md={4}>
                     <Row>
                         <Col>
-                            <AccountInfo
-                                title={<h2>My Account</h2>}
-                                account={this.props.userAccount}
-                            />
+                            <AccountInfo account={this.props.userAccount} />
                         </Col>
                     </Row>
                 </Col>

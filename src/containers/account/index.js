@@ -22,10 +22,7 @@ class AccountHome extends React.Component {
                 <Row>
                     <Col xs={6} md={6}>
                         <Col xs={12}>
-                            <AccountInfo
-                                title={<h2>My Account</h2>}
-                                account={this.props.userAccount}
-                            />
+                            <AccountInfo account={this.props.userAccount} />
                         </Col>
                         <Col xs={12}>
                             <UcdTransferForm />

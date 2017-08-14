@@ -21,8 +21,8 @@ class Home extends React.Component {
                 <Row>
                     <Col xs={6} md={6}>
                         <AccountInfo
-                            title={<h2>My Account</h2>}
                             account={this.props.userAccount}
+                            showMyAccountLink
                         />
                     </Col>
 
