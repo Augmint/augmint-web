@@ -12,6 +12,7 @@ import {
     Button,
     Col
 } from "react-bootstrap";
+import { connect } from "react-redux";
 import store from "store.js";
 import {
     EthSubmissionErrorPanel,
@@ -73,14 +74,16 @@ class UcdTransferForm extends React.Component {
             submitting,
             submitSucceeded,
             clearSubmitErrors,
-            reset
+            reset,
+            tokenUcdIsConnected
         } = this.props;
 
         return (
             <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
-                <fieldset disabled={submitting}>
+                <fieldset disabled={submitting || !tokenUcdIsConnected}>
                     <legend>Send UCD</legend>
-
+                    {!tokenUcdIsConnected &&
+                        <p>Connecting to tokenUcd contract...</p>}
                     {error &&
                         <EthSubmissionErrorPanel
                             error={error}
@@ -147,6 +150,13 @@ class UcdTransferForm extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    tokenUcdIsLoading: state.tokenUcd.isLoading,
+    tokenUcdIsConnected: state.tokenUcd.isConnected
+});
+
+UcdTransferForm = connect(mapStateToProps)(UcdTransferForm);
 
 export default reduxForm({
     form: "UcdTransferForm"

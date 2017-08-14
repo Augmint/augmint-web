@@ -13,18 +13,24 @@ const initialState = {
     account: {
         address: "?",
         ethBalance: "?",
-        ucdBalance: "?"
+        ucdBalance: "?",
+        isLoading: true
     }
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case USER_BALANCE_REQUESTED:
-            return state;
+            return {
+                ...state,
+                isLoading: true,
+                address: action.address
+            };
 
         case USER_BALANCE_RECEIVED:
             return {
                 ...state,
+                isLoading: false,
                 account: action.account
             };
 
@@ -36,7 +42,8 @@ export default (state = initialState, action) => {
 export function fetchUserBalance(address) {
     return async dispatch => {
         dispatch({
-            type: USER_BALANCE_REQUESTED
+            type: USER_BALANCE_REQUESTED,
+            address: address
         });
 
         let bn_ucdBalance = await getUcdBalance(address);
