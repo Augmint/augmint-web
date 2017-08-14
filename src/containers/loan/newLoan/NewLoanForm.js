@@ -109,10 +109,21 @@ class NewLoanForm extends React.Component {
     }
 
     render() {
-        const { error, handleSubmit, pristine, submitting } = this.props;
+        const {
+            error,
+            handleSubmit,
+            pristine,
+            submitting,
+            clearSubmitErrors
+        } = this.props;
         return (
             <Form onSubmit={handleSubmit}>
-                {error && <EthSubmissionErrorPanel error={error} />}
+                {error &&
+                    <EthSubmissionErrorPanel
+                        error={error}
+                        header={<h3>Create loan failed</h3>}
+                        onDismiss={() => clearSubmitErrors()}
+                    />}
                 <fieldset disabled={submitting}>
                     <legend>Loan parameters</legend>
 

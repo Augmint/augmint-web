@@ -315,10 +315,10 @@ export async function collectLoansTx(loansToCollect) {
             if (!logItem.event || logItem.event !== "e_collected") {
                 throw new Error(
                     "Likely not all loans has been collected.\n" +
-                        "One of the events recevied is not e_collected.\n" +
+                        "One of the events received is not e_collected.\n" +
                         "logs[" +
                         index +
-                        "] recevied: " +
+                        "] received: " +
                         logItem +
                         "\n" +
                         "Check tx :  " +
@@ -343,6 +343,7 @@ export async function collectLoansTx(loansToCollect) {
         }
 
         return {
+            loansCollected: loansToCollect.length,
             txResult: result,
             eth: {
                 // TODO:  make it mre generic for all txs

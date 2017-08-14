@@ -24,14 +24,13 @@ class CollectLoanList extends React.Component {
         if (res.type !== LOANMANAGER_COLLECT_SUCCESS) {
             throw new SubmissionError({
                 _error: {
-                    title: "Ethereum transaction Failed",
+                    title: "Ethereum transaction failed",
                     details: res.error,
                     eth: res.eth
                 }
             });
         } else {
             this.setState({
-                submitSucceeded: true,
                 result: res.result
             });
             return;
@@ -41,7 +40,6 @@ class CollectLoanList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            submitSucceeded: false,
             loansToCollect: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,6 +63,15 @@ class CollectLoanList extends React.Component {
     }
 
     render() {
+        const {
+            error,
+            submitSucceeded,
+            handleSubmit,
+            clearSubmitErrors,
+            isLoading,
+            submitting,
+            loansToCollect
+        } = this.props;
         return (
             <Col>
                 <Col xs={12} md={4}>
@@ -74,45 +81,47 @@ class CollectLoanList extends React.Component {
                     </Well>
                 </Col>
                 <Col xs={12} md={8}>
-                    {this.props.error &&
-                        <EthSubmissionErrorPanel error={this.props.error} />}
-
-                    {!this.state.submitSucceeded &&
-                        !this.props.isLoading &&
-                        <Form
-                            onSubmit={this.props.handleSubmit(
-                                this.handleSubmit
-                            )}
+                    {error &&
+                        <EthSubmissionErrorPanel
+                            error={error}
+                            header="Failed to collect all loans."
+                            onDismiss={() => clearSubmitErrors()}
                         >
+                            <p>One or more loan collection has failed.</p>{" "}
+                        </EthSubmissionErrorPanel>}
+
+                    {!submitSucceeded &&
+                        !isLoading &&
+                        loansToCollect != null &&
+                        <Form onSubmit={handleSubmit(this.handleSubmit)}>
                             <Button
                                 type="submit"
                                 bsStyle="primary"
-                                disabled={this.props.submitting}
+                                disabled={submitting}
                             >
-                                {this.props.submitting
-                                    ? "Submitting..."
-                                    : "Collect all"}
+                                {submitting ? "Submitting..." : "Collect all"}
                             </Button>
                         </Form>}
 
-                    {this.state.submitSucceeded &&
+                    {submitSucceeded &&
                         <EthSubmissionSuccessPanel
                             header={
                                 <h3>
                                     Successful collection of{" "}
-                                    {this.props.loansToCollect.length} loans
+                                    {this.state.result.loansCollected} loans
                                 </h3>
                             }
                             eth={this.state.result.eth}
                         />}
 
-                    {this.props.isLoading && <p>Loading loans to collect...</p>}
+                    {(isLoading || loansToCollect == null) &&
+                        <p>Refreshing list of loans to collect...</p>}
                     <LoanList
                         header={<h2>Loans to collect</h2>}
                         noItemMessage={
                             <p>No defaulted and uncollected loan.</p>
                         }
-                        loans={this.props.loansToCollect}
+                        loans={loansToCollect}
                     />
                 </Col>
             </Col>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Panel } from "react-bootstrap";
+import { Panel, Button } from "react-bootstrap";
 import stringifier from "stringifier";
 
 // export function stringifyError (err, filter, space) {
@@ -16,17 +16,42 @@ const stringify = stringifier({
     lineSeparator: "<br/>"
 });
 
-export default function MsgPanel(props) {
-    return (
-        <Panel
-            header={props.header}
-            bsStyle={props.bsStyle}
-            collapsible={props.collapsible}
-        >
-            {props.children}
-        </Panel>
-    );
+export default class MsgPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { dismissed: false };
+        this.dismiss = this.dismiss.bind(this);
+    }
+
+    dismiss() {
+        this.setState({ dismissed: true });
+        if (this.props.onDismiss) {
+            this.props.onDismiss();
+        }
+    }
+
+    render() {
+        let {
+            children,
+            eth,
+            dismissable,
+            dismissed,
+            onDismiss,
+            ...other
+        } = this.props;
+
+        return (
+            !this.state.dismissed &&
+            <Panel {...other}>
+                {children !== null && children}
+                {dismissable && <Button onClick={this.dismiss}>OK</Button>}
+            </Panel>
+        );
+    }
 }
+MsgPanel.defaultProps = {
+    dismissed: false
+};
 
 export function SuccessPanel(props) {
     var { bsStyle, ...other } = props;
@@ -52,60 +77,66 @@ export function ErrorPanel(props) {
     return <MsgPanel bsStyle={_bsStyle} {...other} />;
 }
 
-export function EthSubmissionErrorPanel(props) {
-    var { bsStyle, header, collapsible, children, error, ...other } = props;
-    let _bsStyle = bsStyle ? bsStyle : "danger";
-    let _header = props.header ? props.header : "Submission error";
-    _header += props.error.title ? ": " + props.error.title : props.error;
-    return (
-        <MsgPanel
-            header={_header}
-            bsStyle={_bsStyle}
-            collapsible={true}
-            {...other}
-        >
-            {children}
-            {error.eth &&
-                <div>
-                    <p>
-                        Tx hash: {error.eth.tx}
-                    </p>
-                    <p>
-                        Gas used: {error.eth.gasUsed} (from{" "}
-                        {error.eth.gasProvided} provided)
-                    </p>
-                </div>}
-            {/* TODO: this doesn't wrap */}
-            <div className="white-space: pre-wrap">
-                {stringify(error.details.message)}
-            </div>
-        </MsgPanel>
-    );
+export class EthSubmissionErrorPanel extends React.Component {
+    render() {
+        let { children, error, ...other } = this.props;
+        return (
+            <MsgPanel {...other}>
+                {children}
+                {error && error.title}
+                {error != null &&
+                    error.eth &&
+                    <div>
+                        <p>
+                            Tx hash: {error.eth.tx}
+                        </p>
+                        <p>
+                            Gas used: {error.eth.gasUsed} (from{" "}
+                            {error.eth.gasProvided} provided)
+                        </p>
+                    </div>}
+                {error != null &&
+                    error.details != null &&
+                    error.details.message &&
+                    <pre style={{ fontSize: 10 + "px" }}>
+                        {error.details.message}
+                    </pre>}
+            </MsgPanel>
+        );
+    }
 }
 
-export function EthSubmissionSuccessPanel(props) {
-    var { bsStyle, header, collapsible, children, eth, ...other } = props;
-    let _bsStyle = bsStyle ? bsStyle : "success";
-    let _header = props.header
-        ? props.header
-        : <h3>Successfull transaction</h3>;
-    let _collapsible = typeof collapsible === "undefined" ? false : collapsible;
-    return (
-        <MsgPanel
-            header={_header}
-            bsStyle={_bsStyle}
-            collapsible={_collapsible}
-            {...other}
-        >
-            {children}
-            <p>
-                Tx hash: {eth.tx}
-            </p>
-            <small>
-                <p>
-                    Gas used: {eth.gasUsed} (from {eth.gasProvided} provided)
-                </p>
-            </small>
-        </MsgPanel>
-    );
+EthSubmissionErrorPanel.defaultProps = {
+    bsStyle: "danger",
+    header: <h3>Submission error</h3>,
+    dismissable: true,
+    collapsible: false
+};
+
+export class EthSubmissionSuccessPanel extends React.Component {
+    render() {
+        var { children, eth, ...other } = this.props;
+
+        return (
+            <MsgPanel {...other}>
+                {children}
+                <small>
+                    <p>
+                        Tx hash: {eth.tx}
+                    </p>
+                    <p>
+                        Gas used: {eth.gasUsed} (from {eth.gasProvided}{" "}
+                        provided)
+                    </p>
+                </small>
+            </MsgPanel>
+        );
+    }
 }
+
+EthSubmissionSuccessPanel.defaultProps = {
+    bsStyle: "success",
+    header: <h3>Successfull transaction</h3>,
+    dismissable: true,
+    collapsible: false
+};

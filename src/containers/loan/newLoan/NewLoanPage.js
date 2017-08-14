@@ -147,7 +147,6 @@ class NewLoanPage extends React.Component {
 const mapStateToProps = state => ({
     products: state.loanManager.products,
     rates: state.rates,
-    submitSucceeded: state.submitSucceeded,
     userAccount: state.userBalances.account
 });
 

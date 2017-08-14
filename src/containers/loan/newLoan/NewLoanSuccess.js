@@ -15,6 +15,7 @@ export default function NewLoanSuccess(props) {
         <EthSubmissionSuccessPanel
             header={<h3>You've got a loan</h3>}
             eth={eth}
+            dismissable={false}
         >
             <p>
                 Your loan contract address: {address}

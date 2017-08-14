@@ -61,8 +61,7 @@ class RepayLoanPage extends React.Component {
         this.state = {
             loan: null,
             loanId: loanId,
-            isLoading: true,
-            submitSucceeded: false
+            isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -111,7 +110,6 @@ class RepayLoanPage extends React.Component {
             });
         } else {
             this.setState({
-                submitSucceeded: true,
                 result: res.result
             });
             return;
@@ -119,7 +117,7 @@ class RepayLoanPage extends React.Component {
     }
 
     render() {
-        //const {submitSucceeded } = this.state
+        const { submitSucceeded, clearSubmitErrors } = this.props;
 
         if (this.state.isLoading) {
             return (
@@ -156,9 +154,14 @@ class RepayLoanPage extends React.Component {
                 </Col>
                 <Col xs={8} md={8}>
                     {this.props.error &&
-                        <EthSubmissionErrorPanel error={this.props.error} />}
+                        <EthSubmissionErrorPanel
+                            error={this.props.error}
+                            header={<h3>Repay failed</h3>}
+                            collapsible={false}
+                            onDismiss={() => clearSubmitErrors()}
+                        />}
 
-                    {!this.state.submitSucceeded &&
+                    {!submitSucceeded &&
                         !this.state.isLoading &&
                         <Form
                             onSubmit={this.props.handleSubmit(
@@ -185,10 +188,11 @@ class RepayLoanPage extends React.Component {
                             </Button>
                         </Form>}
 
-                    {this.state.submitSucceeded &&
+                    {submitSucceeded &&
                         <EthSubmissionSuccessPanel
                             header={<h3>Successful repayment</h3>}
                             eth={this.state.result.eth}
+                            dismissable={false}
                         />}
                 </Col>
             </Row>
