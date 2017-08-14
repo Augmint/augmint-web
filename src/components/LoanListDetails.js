@@ -49,7 +49,7 @@ export default function LoanListDetails(props) {
                                     className="btn btn-primary"
                                     to={`/loan/repay/${loan.loanId}`}
                                 >
-                                    Repay
+                                    Repay...
                                 </Link>}
                         </td>
                     </tr>

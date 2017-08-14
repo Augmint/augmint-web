@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
 import AccountInfo from "components/AccountInfo";
-import LoanList from "components/LoanList";
+import TokenUcdInfo from "components/TokenUcdInfo";
 
 class Home extends React.Component {
     render() {
@@ -27,10 +27,9 @@ class Home extends React.Component {
                     </Col>
 
                     <Col xs={6} md={6}>
-                        <LoanList
-                            header={<h3>My UCD Loans</h3>}
-                            noItemMessage={<span>You have no loans</span>}
-                            loans={this.props.loans}
+                        <TokenUcdInfo
+                            tokenUcd={this.props.tokenUcd}
+                            showTokenUcdLink
                         />
                     </Col>
                 </Row>
@@ -41,6 +40,7 @@ class Home extends React.Component {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
+    tokenUcd: state.tokenUcd,
     loans: state.loans.loans
 });
 

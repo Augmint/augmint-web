@@ -24,8 +24,7 @@ export class AccountInfo extends React.Component {
                     Balances: {account.ethBalance} ETH | {account.ucdBalance}{" "}
                     UCD
                 </p>
-                {showMyAccountLink &&
-                    <Link to="/account">My account details</Link>}
+                {showMyAccountLink && <Link to="/account">More details</Link>}
             </Panel>
         );
     }
