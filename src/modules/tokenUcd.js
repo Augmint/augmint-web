@@ -2,7 +2,7 @@ import store from "store.js";
 import SolidityContract from "./SolidityContract";
 import tokenUcd_artifacts from "contractsBuild/TokenUcd.json";
 import BigNumber from "bignumber.js";
-import { asyncGetBalance, getUcdBalance } from "./ethHelper";
+import { asyncGetBalance, getUcdBalance, transferUcdTx } from "./ethHelper";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
 export const TOKENUCD_CONNECT_SUCCESS = "tokenUcd/TOKENUCD_CONNECT_SUCESS";
@@ -10,6 +10,11 @@ export const TOKENUCD_CONNECT_ERROR = "tokenUcd/TOKENUCD_CONNECT_ERROR";
 
 export const TOKENUCD_REFRESH_REQUESTED = "tokenUcd/TOKENUCD_REFRESH_REQUESTED";
 export const TOKENUCD_REFRESHED = "tokenUcd/TOKENUCD_REFRESHED";
+
+export const TOKENUCD_TRANSFER_REQUESTED =
+    "tokenUcd/TOKENUCD_TRANSFER_REQUESTED";
+export const TOKENUCD_TRANSFER_SUCCESS = "tokenUcd/TOKENUCD_TRANSFER_SUCCESS";
+export const TOKENUCD_TRANSFER_ERROR = "tokenUcd/TOKENUCD_TRANSFER_ERROR";
 
 const initialState = {
     contract: null,
@@ -71,6 +76,26 @@ export default (state = initialState, action) => {
                 info: action.result
             };
 
+        case TOKENUCD_TRANSFER_REQUESTED:
+            return {
+                ...state,
+                error: null,
+                ucdAmount: action.ucdAmount,
+                payee: action.payee
+            };
+
+        case TOKENUCD_TRANSFER_SUCCESS:
+            return {
+                ...state,
+                result: action.result
+            };
+
+        case TOKENUCD_TRANSFER_ERROR:
+            return {
+                ...state,
+                error: action.error
+            };
+
         default:
             return state;
     }
@@ -130,3 +155,26 @@ export const refreshTokenUcd = () => {
         });
     };
 };
+
+export function transferUcd(payee, ucdAmount) {
+    return async dispatch => {
+        dispatch({
+            type: TOKENUCD_TRANSFER_REQUESTED,
+            ucdAmount: ucdAmount,
+            payee: payee
+        });
+
+        try {
+            let result = await transferUcdTx(payee, ucdAmount);
+            return dispatch({
+                type: TOKENUCD_TRANSFER_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: TOKENUCD_TRANSFER_ERROR,
+                error: error
+            });
+        }
+    };
+}

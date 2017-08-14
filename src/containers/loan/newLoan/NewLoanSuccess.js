@@ -25,8 +25,8 @@ export default function NewLoanSuccess(props) {
             </p>
             <p>Don't forget to pay it back on maturity.</p>
             <p>
-                You can always check your loan's status on the{" "}
-                <Link to="/">Home page</Link>
+                You can always check your loan's status on {" "}
+                <Link to="/account">My account page</Link>
             </p>
             <p>
                 Loan Id: {loanId} | Product id: {productId} | borrower:{" "}

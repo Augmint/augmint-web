@@ -14,6 +14,7 @@ const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  addit
 const NEW_FIRST_LOAN_GAS = 2000000;
 const REPAY_GAS = 3000000;
 const COLLECT_GAS = 3000000;
+const TRANSFER_UCD_GAS = 3000000;
 
 export function asyncGetBalance(address) {
     return new Promise(function(resolve, reject) {
@@ -353,5 +354,53 @@ export async function collectLoansTx(loansToCollect) {
     } catch (error) {
         // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
         throw new Error("Collect loan failed. Error: " + error);
+    }
+}
+
+export async function transferUcdTx(payee, ucdAmount) {
+    try {
+        let gasEstimate = TRANSFER_UCD_GAS;
+        let userAccount = store.getState().ethBase.userAccount;
+        let tokenUcd = store.getState().tokenUcd;
+        let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
+        let result = await tokenUcd.contract.instance.transfer(
+            payee,
+            ucdcAmount,
+            {
+                from: userAccount,
+                gas: gasEstimate
+            }
+        );
+        console.log(result);
+        if (result.receipt.gasUsed === gasEstimate) {
+            // Neeed for testnet behaviour (TODO: test it!)
+            // TODO: add more tx info
+            throw new Error(
+                "UCD transfer failed. All gas provided was used:  " +
+                    result.receipt.gasUsed
+            );
+        }
+
+        /* TODO:  emmit transfer event from solidity contract + check here and display result in confirmation */
+
+        // if (
+        //     !result.logs ||
+        //     !result.logs[0] ||
+        //     result.logs[0].event !== "e_transfer"
+        // ) {
+        //     throw new Error(
+        //         "e_newLoan wasn't event received. Check tx :  " + result.tx
+        //     );
+        // }
+        return {
+            txResult: result,
+            eth: {
+                gasProvided: gasEstimate,
+                gasUsed: result.receipt.gasUsed,
+                tx: result.tx
+            }
+        };
+    } catch (error) {
+        throw new Error("UCD transfer failed. Error: " + error);
     }
 }

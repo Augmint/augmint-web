@@ -28,6 +28,7 @@ import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Route, Link, Switch, withRouter } from "react-router-dom";
 import Home from "containers/home";
+import AccountHome from "containers/account";
 import LoanMain from "containers/loan";
 import TokenUcd from "containers/tokenUcd";
 import About from "containers/about";
@@ -183,13 +184,18 @@ class App extends React.Component {
                         </Navbar.Header>
                         <Navbar.Collapse>
                             <Nav>
+                                <LinkContainer to="/account">
+                                    <NavItem eventKey={1} href="/account">
+                                        My Account
+                                    </NavItem>
+                                </LinkContainer>
                                 <LinkContainer to="/loan/new">
-                                    <NavItem eventKey={1} href="/loan/new">
+                                    <NavItem eventKey={2} href="/loan/new">
                                         Get UCD Loan
                                     </NavItem>
                                 </LinkContainer>
                                 <LinkContainer to="/tokenUcd">
-                                    <NavItem eventKey={2} href="/tokenUcd">
+                                    <NavItem eventKey={3} href="/tokenUcd">
                                         TokenUcd
                                     </NavItem>
                                 </LinkContainer>
@@ -222,6 +228,7 @@ class App extends React.Component {
                     <EthereumState />
                     <Switch>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
                         <Route path="/loan" component={LoanMain} />
                         <Route exact path="/about-us" component={About} />
