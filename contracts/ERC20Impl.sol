@@ -24,7 +24,8 @@ contract ERC20Impl {
     }
 
      // Transfer the balance from owner's account to another account
-    function transfer(address _to, uint256 _amount) returns (bool success) {
+     // This is only callable by the parent contract which emits transfer events
+    function _transfer(address _to, uint256 _amount) internal returns (bool success) {
         if (balances[msg.sender] >= _amount
             && _amount > 0
             && balances[_to] + _amount > balances[_to]) {
@@ -42,11 +43,12 @@ contract ERC20Impl {
     // fees in sub-currencies; the command should fail unless the _from account has
     // deliberately authorized the sender of the message via some mechanism; we propose
     // these standardized APIs for approval:
-    function transferFrom(
+    // This is only callable by the parent contract which emits transfer events
+    function _transferFrom(
         address _from,
         address _to,
         uint256 _amount
-    ) returns (bool success) {
+    ) internal returns (bool success) {
         if (balances[_from] >= _amount
             && allowed[_from][msg.sender] >= _amount
             && _amount > 0

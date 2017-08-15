@@ -52,6 +52,30 @@ contract TokenUcd is ERC20Impl, owned {
         return SUCCESS;
     }
 
+    event e_transfer(address indexed from, address indexed to, uint amount, string narrative);
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _amount
+    ) returns (bool success) {
+        if (_transferFrom(_from, _to, _amount)) {
+            e_transfer(_from, _to, _amount, "");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function transfer(address _to, uint256 _amount) returns (bool success) {
+        if ( _transfer(_to, _amount) ) {
+            e_transfer(msg.sender, _to, _amount, "");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // FIXME: this is only for testing, remove this function
     event e_ucdIssued(uint amount);
     function issueUcd(uint amount) onlyOwner returns (int8 result) {
         totalSupply += amount;
@@ -60,6 +84,7 @@ contract TokenUcd is ERC20Impl, owned {
         return SUCCESS;
     }
 
+    // FIXME: this is only for testing, remove this function
     event e_ucdBurned(uint amount);
     function burnUcd(uint amount) onlyOwner returns (int8 result) {
         if (amount > balances[this]) {
@@ -68,6 +93,16 @@ contract TokenUcd is ERC20Impl, owned {
         totalSupply -= amount;
         balances[this] -= amount;
         e_ucdBurned(amount);
+        return SUCCESS;
+    }
+
+    // FIXME: this is only for testing, remove this function
+    function getUcdFromReserve(uint amount) onlyOwner returns (int8 result) {
+        if (amount > balances[this]) {
+            return ERR_RESERVE_BALANCE_NOT_ENOUGH;
+        }
+        balances[this] -= amount;
+        balances[msg.sender] += amount;
         return SUCCESS;
     }
 

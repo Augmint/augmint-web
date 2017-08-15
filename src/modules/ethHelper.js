@@ -381,19 +381,23 @@ export async function transferUcdTx(payee, ucdAmount) {
             );
         }
 
-        /* TODO:  emmit transfer event from solidity contract + check here and display result in confirmation */
+        /* TODO:  display result in confirmation */
 
-        // if (
-        //     !result.logs ||
-        //     !result.logs[0] ||
-        //     result.logs[0].event !== "e_transfer"
-        // ) {
-        //     throw new Error(
-        //         "e_newLoan wasn't event received. Check tx :  " + result.tx
-        //     );
-        // }
+        if (
+            !result.logs ||
+            !result.logs[0] ||
+            result.logs[0].event !== "e_transfer"
+        ) {
+            throw new Error(
+                "e_transfer wasn't event received. Check tx :  " + result.tx
+            );
+        }
         return {
             txResult: result,
+            to: result.logs[0].to,
+            from: result.logs[0].from,
+            amount: result.logs[0].amount,
+            narrative: result.logs[0].narrative,
             eth: {
                 gasProvided: gasEstimate,
                 gasUsed: result.receipt.gasUsed,
