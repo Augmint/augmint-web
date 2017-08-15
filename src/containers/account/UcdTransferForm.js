@@ -32,10 +32,6 @@ class UcdTransferForm extends React.Component {
     }
 
     async handleSubmit(values) {
-        // this.setState({
-        //     result: null
-        // });
-        console.log("handleSubmit start");
         let amount;
         try {
             amount = new BigNumber(values.ucdAmount);
@@ -49,7 +45,6 @@ class UcdTransferForm extends React.Component {
         }
 
         let res = await store.dispatch(transferUcd(values.payee, amount));
-        console.log("handleSubmit res received:", res);
         if (res.type !== TOKENUCD_TRANSFER_SUCCESS) {
             throw new SubmissionError({
                 _error: {
