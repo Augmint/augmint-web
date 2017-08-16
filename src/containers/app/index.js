@@ -179,7 +179,7 @@ class App extends React.Component {
                         <Navbar.Header>
                             <Navbar.Brand>
                                 <LinkContainer to="/">
-                                    <Link to="/">UCD PoC</Link>
+                                    <Link to="/">Home</Link>
                                 </LinkContainer>
                             </Navbar.Brand>
                             <Navbar.Toggle />
