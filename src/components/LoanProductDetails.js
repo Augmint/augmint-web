@@ -15,19 +15,23 @@ export default function LoanProductDetails(props) {
             key={prod.id}
         >
             <Row>
-                <Col sm={8}>Discount rate: </Col>
+                <Col sm={8}>
+                    Discount rate:{" "}
+                    <DiscountRateToolTip discountRate={prod.discountRate} />
+                </Col>
                 <Col sm={4}>
                     {prod.discountRate * 100}%
-                    <DiscountRateToolTip discountRate={prod.discountRate} />
                 </Col>
             </Row>
             <Row>
-                <Col sm={8}>Loan/collateral ratio: </Col>
-                <Col sm={4}>
-                    {prod.loanCollateralRatio * 100}%
+                <Col sm={8}>
+                    Loan/collateral ratio:{" "}
                     <LoanCollateralRatioToolTip
                         loanCollateralRatio={prod.loanCollateralRatio}
                     />
+                </Col>
+                <Col sm={4}>
+                    {prod.loanCollateralRatio * 100}%
                 </Col>
             </Row>
             <Row>
@@ -37,9 +41,11 @@ export default function LoanProductDetails(props) {
                 </Col>
             </Row>
             <Row>
-                <Col sm={8}>Repayment period:</Col>
+                <Col sm={8}>
+                    Repayment period: <RepayPeriodToolTip />
+                </Col>
                 <Col sm={4}>
-                    {prod.repayPeriodText} <RepayPeriodToolTip />
+                    {prod.repayPeriodText}
                 </Col>
             </Row>
 

@@ -18,7 +18,10 @@ export default function ToolTip(props) {
             overlay={pop}
         >
             <span>
-                &nbsp;<Glyphicon glyph="question-sign" />
+                &nbsp;<Glyphicon
+                    style={{ color: "grey" }}
+                    glyph="question-sign"
+                />
             </span>
         </OverlayTrigger>
     );
