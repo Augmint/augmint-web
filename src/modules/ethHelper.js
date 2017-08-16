@@ -392,12 +392,15 @@ export async function transferUcdTx(payee, ucdAmount) {
                 "e_transfer wasn't event received. Check tx :  " + result.tx
             );
         }
+
+        let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
         return {
             txResult: result,
-            to: result.logs[0].to,
-            from: result.logs[0].from,
-            amount: result.logs[0].amount,
-            narrative: result.logs[0].narrative,
+            to: result.logs[0].args.to,
+            from: result.logs[0].args.from,
+            bn_amount: bn_amount,
+            amount: bn_amount.toString(),
+            narrative: result.logs[0].args.narrative,
             eth: {
                 gasProvided: gasEstimate,
                 gasUsed: result.receipt.gasUsed,

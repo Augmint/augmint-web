@@ -83,6 +83,7 @@ class UcdTransferForm extends React.Component {
                         <EthSubmissionErrorPanel
                             error={error}
                             collapsible={false}
+                            header={<h3>Transfer failed</h3>}
                             onDismiss={() => clearSubmitErrors()}
                         />}
 
@@ -91,7 +92,12 @@ class UcdTransferForm extends React.Component {
                             header={<h3>Successful transfer</h3>}
                             eth={this.state.result.eth}
                             onDismiss={() => reset()}
-                        />}
+                        >
+                            <p>
+                                Sent {this.state.result.amount} UCD to{" "}
+                                {this.state.result.to}
+                            </p>
+                        </EthSubmissionSuccessPanel>}
 
                     {!submitSucceeded &&
                         <div>
