@@ -1,0 +1,125 @@
+/* ETH and UCD balance for the active userAccount
+    TODO: add all user accounts?
+    TODO: make this generic? ie. to use this for any address balances?
+    TODO: refresh balances on certain events (all balances on new block? or try to be smart?)
+    TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
+*/
+import { fetchTransferListTx, processTransferTx } from "./ethHelper";
+
+export const USER_TRANSFERLIST_REQUESTED =
+    "userTransfers/USER_TRANSFERLIST_REQUESTED";
+export const USER_TRANSFERLIST_ERROR = "userBalances/USER_TRANSFERLIST_ERROR";
+export const USER_TRANSFERLIST_RECEIVED =
+    "userTransfers/USER_TRANSFERLIST_RECEIVED";
+
+export const USER_TRANSFERTX_FETCH_REQUESTED =
+    "userTransfers/USER_TRANSFERTX_FETCH_REQUESTED";
+export const USER_TRANSFERTX_FETCH_ERROR =
+    "userTransfers/USER_TRANSFERTX_FETCH_ERROR";
+export const USER_TRANSFERTX_FETCH_RECEIVED =
+    "userTransfers/USER_TRANSFERTX_FETCH_RECEIVED";
+
+const initialState = {
+    transfers: null,
+    isLoading: true
+};
+
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case USER_TRANSFERLIST_REQUESTED:
+            return {
+                ...state,
+                isLoading: true,
+                account: action.account,
+                fromBlock: action.fromBlock,
+                toBlock: action.toBlock
+            };
+
+        case USER_TRANSFERLIST_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.error
+            };
+
+        case USER_TRANSFERLIST_RECEIVED:
+            return {
+                ...state,
+                isLoading: false,
+                transfers: action.result
+            };
+
+        case USER_TRANSFERTX_FETCH_REQUESTED:
+            return {
+                ...state,
+                isLoading: true,
+                account: action.account,
+                fromBlock: action.fromBlock,
+                toBlock: action.toBlock
+            };
+
+        case USER_TRANSFERTX_FETCH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.error
+            };
+
+        case USER_TRANSFERTX_FETCH_RECEIVED:
+            return {
+                ...state,
+                isLoading: false,
+                transfers: action.result
+            };
+
+        default:
+            return state;
+    }
+};
+
+export function fetchTransferList(address, fromBlock, toBlock) {
+    return async dispatch => {
+        dispatch({
+            type: USER_TRANSFERLIST_REQUESTED,
+            address: address,
+            fromBlock: fromBlock,
+            toBlock: toBlock
+        });
+
+        let result = await fetchTransferListTx(address, fromBlock, toBlock);
+        try {
+            return dispatch({
+                type: USER_TRANSFERLIST_RECEIVED,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: USER_TRANSFERLIST_ERROR,
+                error: error
+            });
+        }
+    };
+}
+
+export function processTransfer(address, tx) {
+    return async dispatch => {
+        dispatch({
+            type: USER_TRANSFERTX_FETCH_REQUESTED,
+            address: address,
+            tx: tx
+        });
+
+        let result = await processTransferTx(address, tx);
+        try {
+            return dispatch({
+                type: USER_TRANSFERTX_FETCH_RECEIVED,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: USER_TRANSFERTX_FETCH_ERROR,
+                error: error
+            });
+        }
+    };
+}

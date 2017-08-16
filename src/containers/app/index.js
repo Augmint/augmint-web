@@ -16,6 +16,7 @@ import store from "store.js";
 import watch from "redux-watch";
 import { setupWeb3 } from "modules/ethBase";
 import { fetchUserBalance } from "modules/userBalances";
+import { fetchTransferList, processTransfer } from "modules/userTransfers";
 import { connectRates, refreshRates } from "modules/rates";
 import { connectTokenUcd, refreshTokenUcd } from "modules/tokenUcd";
 import {
@@ -69,6 +70,10 @@ class App extends React.Component {
             w3((newVal, oldVal, objectPath) => {
                 if (newVal) {
                     store.dispatch(refreshTokenUcd()); // tokenUCD refresh required for loanManager refresh
+                    // TODO: fetch latest n transactions only
+                    store.dispatch(
+                        fetchTransferList(this.props.userAccount, 0, "pending")
+                    );
                     // it's being called first by the listener
                     //store.dispatch(fetchUserBalance(this.props.userAccount));
                 }
@@ -104,6 +109,9 @@ class App extends React.Component {
         this.props.loanManager.instance
             .e_collected({ fromBlock: "latest", toBlock: "pending" })
             .watch(this.onCollected.bind(this));
+        this.props.tokenUcd.instance
+            .e_transfer({ fromBlock: "latest", toBlock: "pending" })
+            .watch(this.onTransfer.bind(this));
 
         // TODO: add & handle loanproduct change events
     }
@@ -152,11 +160,24 @@ class App extends React.Component {
         }
     }
 
+    onTransfer(error, result) {
+        if (
+            result.args.from === this.props.userAccount ||
+            result.args.to === this.props.userAccount
+        ) {
+            console.log(
+                "onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer"
+            );
+            store.dispatch(processTransfer(this.props.userAccount, result));
+        }
+    }
+
     componentWillUnmount() {
         this.filterAllBlocks.stopWatching();
         this.props.loanManager.instance.e_newLoan().stopWatching();
         this.props.loanManager.instance.e_repayed().stopWatching();
         this.props.loanManager.instance.e_collected().stopWatching();
+        this.props.tokenUcd.instance.e_transfer().stopWatching();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -250,7 +271,8 @@ class App extends React.Component {
 const mapStateToProps = state => ({
     network: state.ethBase.network,
     userAccount: state.ethBase.userAccount,
-    loanManager: state.loanManager.contract
+    loanManager: state.loanManager.contract,
+    tokenUcd: state.tokenUcd.contract
 });
 
 export default (App = withRouter(connect(mapStateToProps)(App)));

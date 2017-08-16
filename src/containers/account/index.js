@@ -4,6 +4,7 @@ import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import AccountInfo from "components/AccountInfo";
 import LoanList from "components/LoanList";
 import UcdTransferForm from "./UcdTransferForm";
+import TransferList from "components/TransferList";
 
 class AccountHome extends React.Component {
     render() {
@@ -26,7 +27,16 @@ class AccountHome extends React.Component {
                         <Col xs={12}>
                             <UcdTransferForm />
                         </Col>
+                        <Col xs={12}>
+                            <TransferList
+                                transfers={this.props.userTransfers}
+                                userAccountAddress={
+                                    this.props.userAccount.address
+                                }
+                            />
+                        </Col>
                     </Col>
+
                     <Col xs={6}>
                         <LoanList
                             header={<h3>My UCD Loans</h3>}
@@ -42,7 +52,8 @@ class AccountHome extends React.Component {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
-    loans: state.loans.loans
+    loans: state.loans.loans,
+    userTransfers: state.userTransfers
 });
 
 export default connect(mapStateToProps)(AccountHome);

@@ -232,7 +232,6 @@ export const connectloanManager = () => {
                 store.getState().ethBase.web3Instance.currentProvider,
                 loanManager_artifacts
             );
-            console.log("connectloanManager");
             return dispatch({
                 type: LOANMANAGER_CONNECT_SUCCESS,
                 contract: contract
