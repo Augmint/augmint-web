@@ -5,6 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Button, Grid, Row, Col } from "react-bootstrap";
 import { ErrorPanel, InfoPanel } from "components/MsgPanels";
+import ErrorDetails from "components/ErrorDetails";
 //import stringifier from "stringifier";
 
 //const stringify = stringifier({ maxDepth: 3, indent: "   " });
@@ -53,22 +54,29 @@ export class EthereumState extends React.Component {
                         To use this app you need an Ethereum capable browser
                         (eg. Mist) or Chrome with Metamask plugin
                     </p>
-                    <LocalInstallInstructions web3Connect={this.props.web3Connect} />
+                    <LocalInstallInstructions
+                        web3Connect={this.props.web3Connect}
+                    />
                     <p>Error details:</p>
-                    <pre>
+                    <ErrorDetails>
                         {web3Connect.error.message}
                         {web3Connect.error.stack}
-                    </pre>
+                    </ErrorDetails>
                 </ErrorPanel>
             );
-        } else if (web3Connect.isConnected && web3Connect.network.id !== "999") {
+        } else if (
+            web3Connect.isConnected &&
+            web3Connect.network.id !== "999"
+        ) {
             msg = (
                 <ErrorPanel header={<h3>Not on local testrpc</h3>}>
                     <p>
                         Your browser seems to be connected to{" "}
                         {web3Connect.network.name} (id: {web3Connect.network.id}).
                     </p>
-                    <LocalInstallInstructions web3Connect={this.props.web3Connect} />
+                    <LocalInstallInstructions
+                        web3Connect={this.props.web3Connect}
+                    />
                 </ErrorPanel>
             );
         } else if (
@@ -98,7 +106,7 @@ export class EthereumState extends React.Component {
                     </p>
                     <p>
                         Error(s):<br />
-                        <pre>
+                        <ErrorDetails>
                             {loanManager.connectionError
                                 ? loanManager.connectionError.message + "\n"
                                 : ""}
@@ -108,7 +116,7 @@ export class EthereumState extends React.Component {
                             {tokenUcd.connectionError
                                 ? tokenUcd.connectionError.message
                                 : ""}
-                        </pre>
+                        </ErrorDetails>
                     </p>
                 </ErrorPanel>
             );

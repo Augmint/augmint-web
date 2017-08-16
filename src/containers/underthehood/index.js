@@ -7,6 +7,7 @@ import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshRates } from "modules/reducers/rates";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { refreshLoanManager } from "modules/reducers/loanManager";
+import ErrorDetails from "components/ErrorDetails";
 import {
     ButtonToolbar,
     Button,
@@ -82,9 +83,9 @@ function ContractBaseInfo(props) {
             {error
                 ? <p>
                       Error: <br />{" "}
-                      <pre style={{ fontSize: 10 + "px" }}>
+                      <ErrorDetails style={{ fontSize: 10 + "px" }}>
                           stringify(error)
-                      </pre>
+                      </ErrorDetails>
                   </p>
                 : <p>No error</p>}
 

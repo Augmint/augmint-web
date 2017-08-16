@@ -1,21 +1,6 @@
 import React from "react";
 import { Panel, Button } from "react-bootstrap";
-/* TODO: make \n -s in error msgs to break when placed in <pre> */
-//import stringifier from "stringifier";
-
-// export function stringifyError (err, filter, space) {
-//     var plainObject = {};
-//     Object.getOwnPropertyNames(err).forEach(function(key) {
-//         plainObject[key] = err[key];
-//     });
-//     return JSON.stringify(plainObject, filter, space);
-// };
-
-// const stringify = stringifier({
-//     maxDepth: 3,
-//     indent: "   ",
-//     lineSeparator: "<br/>"
-// });
+import ErrorDetails from "components/ErrorDetails";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -99,9 +84,9 @@ export class EthSubmissionErrorPanel extends React.Component {
                 {error != null &&
                     error.details != null &&
                     error.details.message &&
-                    <pre style={{ fontSize: 10 + "px" }}>
+                    <ErrorDetails>
                         {error.details.message}
-                    </pre>}
+                    </ErrorDetails>}
             </MsgPanel>
         );
     }
