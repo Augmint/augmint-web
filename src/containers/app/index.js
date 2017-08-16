@@ -155,6 +155,8 @@ class App extends React.Component {
     componentWillUnmount() {
         this.filterAllBlocks.stopWatching();
         this.props.loanManager.instance.e_newLoan().stopWatching();
+        this.props.loanManager.instance.e_repayed().stopWatching();
+        this.props.loanManager.instance.e_collected().stopWatching();
     }
 
     componentWillReceiveProps(nextProps) {
