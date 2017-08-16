@@ -1,22 +1,19 @@
 /*
-    TODO: split action creator and reducer
-    TODO: handle race conditions
-    TODO: add event listener to refresh product list on e_product.. events
+    TODO: handle race conditions on isLoading: eg. split connect, product list and newloan functions
     TODO: use selectors. eg: https://github.com/reactjs/reselect
 */
 
-import store from "./../store";
-import SolidityContract from "./SolidityContract";
+import store from "modules/store";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import loanManager_artifacts from "contractsBuild/LoanManager.json";
+import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 import {
-    asyncGetBalance,
-    getUcdBalance,
     repayLoanTx,
     newEthBackedLoanTx,
     collectLoansTx,
     fetchLoansToCollectTx,
     fetchProductsTx
-} from "./ethHelper";
+} from "modules/ethereum/ethTransactions";
 
 export const LOANMANAGER_CONNECT_REQUESTED =
     "loanManager/LOANMANAGER_CONNECT_REQUESTED";
@@ -229,7 +226,7 @@ export const connectloanManager = () => {
         });
         try {
             let contract = await SolidityContract.connectNew(
-                store.getState().ethBase.web3Instance.currentProvider,
+                store.getState().web3Connect.web3Instance.currentProvider,
                 loanManager_artifacts
             );
             return dispatch({

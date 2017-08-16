@@ -1,19 +1,18 @@
 /*
-    TODO: use BigNumber for conversions
     TODO: add RATES_REFRESH_ERROR
     */
-import store from "store.js";
-import SolidityContract from "./SolidityContract";
+import store from "modules/store";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import rates_artifacts from "contractsBuild/Rates.json";
-import { asyncGetBalance, getUcdBalance } from "./ethHelper";
+import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 import BigNumber from "bignumber.js";
 
-export const RATES_CONNECT_REQUESTED = "ethBase/RATES_CONNECT_REQUESTED";
-export const RATES_CONNECT_SUCCESS = "ethBase/RATES_CONNECT_SUCCESS";
-export const RATES_CONNECT_ERROR = "ethBase/RATES_CONNECT_ERROR";
+export const RATES_CONNECT_REQUESTED = "rates/RATES_CONNECT_REQUESTED";
+export const RATES_CONNECT_SUCCESS = "rates/RATES_CONNECT_SUCCESS";
+export const RATES_CONNECT_ERROR = "rates/RATES_CONNECT_ERROR";
 
-export const RATES_REFRESH_REQUESTED = "ethBase/RATES_REFRESH_REQUESTED";
-export const RATES_REFRESHED = "ethBase/RATES_REFRESHED";
+export const RATES_REFRESH_REQUESTED = "rates/RATES_REFRESH_REQUESTED";
+export const RATES_REFRESHED = "rates/RATES_REFRESHED";
 
 const initialState = {
     contract: null,
@@ -90,7 +89,7 @@ export const connectRates = () => {
             return dispatch({
                 type: RATES_CONNECT_SUCCESS,
                 contract: await SolidityContract.connectNew(
-                    store.getState().ethBase.web3Instance.currentProvider,
+                    store.getState().web3Connect.web3Instance.currentProvider,
                     rates_artifacts
                 )
             });
@@ -108,7 +107,7 @@ export const refreshRates = () => {
         dispatch({
             type: RATES_REFRESH_REQUESTED
         });
-        //let web3 = store.getState().ethBase.web3Instance;
+        //let web3 = store.getState().web3Connect.web3Instance;
         let rates = store.getState().rates.contract.instance;
         let usdScale = await rates.USD_SCALE();
         let bn_ethUsdcRate = await rates.ethUsdcRate();

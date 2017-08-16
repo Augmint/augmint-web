@@ -1,9 +1,9 @@
 import { default as Web3 } from "web3";
-import { asyncGetNetwork, asyncGetAccounts } from "modules/ethHelper";
+import { asyncGetNetwork, asyncGetAccounts } from "modules/ethereum/ethHelper";
 
-export const WEB3_SETUP_REQUESTED = "ethBase/WEB3_SETUP_REQUESTED";
-export const WEB3_SETUP_SUCCESS = "ethBase/WEB3_SETUP_SUCCESS";
-export const WEB3_SETUP_ERROR = "ethBase/WEB3_SETUP_ERROR";
+export const WEB3_SETUP_REQUESTED = "web3Connect/WEB3_SETUP_REQUESTED";
+export const WEB3_SETUP_SUCCESS = "web3Connect/WEB3_SETUP_SUCCESS";
+export const WEB3_SETUP_ERROR = "web3Connect/WEB3_SETUP_ERROR";
 
 const initialState = {
     error: null,

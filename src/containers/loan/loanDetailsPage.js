@@ -99,7 +99,7 @@ class LoanDetailsPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
-    userAccount: state.ethBase.userAccount
+    userAccount: state.web3Connect.userAccount
 });
 
 export default (LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage));

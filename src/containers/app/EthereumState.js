@@ -39,36 +39,36 @@ function LocalInstallInstructions(props) {
 export class EthereumState extends React.Component {
     render() {
         let msg = null;
-        const { ethBase, loanManager, rates, tokenUcd } = this.props;
-        if (ethBase.isLoading) {
+        const { web3Connect, loanManager, rates, tokenUcd } = this.props;
+        if (web3Connect.isLoading) {
             msg = (
                 <InfoPanel
                     header={<h3>Connecting to Ethereum network....</h3>}
                 />
             );
-        } else if (ethBase.error) {
+        } else if (web3Connect.error) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect Ethereum network</h3>}>
                     <p>
                         To use this app you need an Ethereum capable browser
                         (eg. Mist) or Chrome with Metamask plugin
                     </p>
-                    <LocalInstallInstructions ethBase={this.props.ethBase} />
+                    <LocalInstallInstructions web3Connect={this.props.web3Connect} />
                     <p>Error details:</p>
                     <pre>
-                        {ethBase.error.message}
-                        {ethBase.error.stack}
+                        {web3Connect.error.message}
+                        {web3Connect.error.stack}
                     </pre>
                 </ErrorPanel>
             );
-        } else if (ethBase.isConnected && ethBase.network.id !== "999") {
+        } else if (web3Connect.isConnected && web3Connect.network.id !== "999") {
             msg = (
                 <ErrorPanel header={<h3>Not on local testrpc</h3>}>
                     <p>
                         Your browser seems to be connected to{" "}
-                        {ethBase.network.name} (id: {ethBase.network.id}).
+                        {web3Connect.network.name} (id: {web3Connect.network.id}).
                     </p>
-                    <LocalInstallInstructions ethBase={this.props.ethBase} />
+                    <LocalInstallInstructions web3Connect={this.props.web3Connect} />
                 </ErrorPanel>
             );
         } else if (
@@ -130,7 +130,7 @@ export class EthereumState extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    ethBase: state.ethBase,
+    web3Connect: state.web3Connect,
     loanManager: state.loanManager,
     rates: state.rates,
     tokenUcd: state.tokenUcd

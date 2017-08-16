@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import store from "store.js";
+import store from "modules/store";
 import LoanList from "components/LoanList";
 import { Col, Well, Button } from "react-bootstrap";
 import { SubmissionError, reduxForm } from "redux-form";
@@ -8,7 +8,7 @@ import {
     collectLoans,
     fetchLoansToCollect,
     LOANMANAGER_COLLECT_SUCCESS
-} from "modules/loanManager";
+} from "modules/reducers/loanManager";
 import {
     EthSubmissionErrorPanel,
     EthSubmissionSuccessPanel

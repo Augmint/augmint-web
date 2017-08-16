@@ -1,177 +1,30 @@
 /*
- TODO: gasPrice param
- TODO: clean up thrown errors
+All ethereum state changing transactions happening here.
+Only called from reducers.
+
+    TODO: consider splitting it by contract or feature
+    TODO: tune default gasPrice
+    TODO: clean up thrown errors
+    TODO: set gasEstimates when it gas consumption has settled.
  */
-import store from "store";
+import store from "modules/store";
 import BigNumber from "bignumber.js";
-import { fetchLoanDetailsByAddress } from "modules/loans";
+import { fetchLoanDetailsByAddress } from "modules/reducers/loans";
 import moment from "moment";
 import stringifier from "stringifier";
+import { asyncFilterGet, asyncGetBlock } from "modules/ethereum/ethHelper";
 
 const stringify = stringifier({ maxDepth: 5, indent: "   " });
-// TODO: set gasEstimates when it settled.
+
 const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  additional = 702376
 const NEW_FIRST_LOAN_GAS = 2000000;
 const REPAY_GAS = 3000000;
 const COLLECT_GAS = 3000000;
 const TRANSFER_UCD_GAS = 3000000;
 
-export function asyncGetBalance(address) {
-    return new Promise(function(resolve, reject) {
-        let web3 = store.getState().ethBase.web3Instance;
-        web3.eth.getBalance(address, function(error, bal) {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get balance from web3 (asyncGetBalance). Address: ",
-                        address + " Error: " + error
-                    )
-                );
-            } else {
-                resolve(web3.fromWei(bal));
-            }
-        });
-    });
-}
-
-export function asyncGetAccounts(web3) {
-    return new Promise(function(resolve, reject) {
-        web3.eth.getAccounts((error, accounts) => {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get account list from web3 (asyncGetAccounts)." +
-                            "\nError: " +
-                            error
-                    )
-                );
-            } else {
-                if (!web3.isAddress(accounts[0])) {
-                    reject(
-                        new Error(
-                            "Can't get default account from web3 (asyncGetAccounts)." +
-                                "\nIf you are using Metamask make sure it's unlocked with your password."
-                        )
-                    );
-                }
-                resolve(accounts);
-            }
-        });
-    });
-}
-
-export function asyncGetNetwork(web3) {
-    return new Promise(function(resolve, reject) {
-        web3.version.getNetwork((error, networkId) => {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get network from web3 (asyncGetNetwork). Error: " +
-                            error
-                    )
-                );
-            } else {
-                let networkName;
-                switch (networkId) {
-                    case "1":
-                        networkName = "Main";
-                        break;
-                    case "2":
-                        networkName = "Morden";
-                        break;
-                    case "3":
-                        networkName = "Ropsten";
-                        break;
-                    case "4":
-                        networkName = "Rinkeby";
-                        break;
-                    case "42":
-                        networkName = "Kovan";
-                        break;
-                    case "999":
-                        networkName = "Testrpc";
-                        break;
-                    default:
-                        networkName = "Unknown";
-                }
-                resolve({ id: networkId, name: networkName });
-            }
-        });
-    });
-}
-
-export function asyncGetBlock(blockNumber) {
-    return new Promise(function(resolve, reject) {
-        let web3 = store.getState().ethBase.web3Instance;
-        web3.eth.getBlock(blockNumber, function(error, block) {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't getBlock from web3 (asyncGetBalance). blockNumber: ",
-                        blockNumber + "\nError: " + error
-                    )
-                );
-            } else {
-                resolve(block);
-            }
-        });
-    });
-}
-
-export function asyncFilterGet(filter) {
-    return new Promise(function(resolve, reject) {
-        //let web3 = store.getState().ethBase.web3Instance;
-        filter.get(function(error, result) {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get filter from  (asyncGetBalance). Filter: ",
-                        filter + "\nError: " + error
-                    )
-                );
-            } else {
-                resolve(result);
-            }
-        });
-    });
-}
-
-// export function asyncGetTransaction(transactionHash) {
-//     return new Promise(function(resolve, reject) {
-//         let web3 = store.getState().ethBase.web3Instance;
-//         web3.getTransaction(function(error, result) {
-//             if (error) {
-//                 reject(
-//                     new Error(
-//                         "Can't get filter from  (asyncGetBalance). transactionHash: ",
-//                         transactionHash + "\nError: " + error
-//                     )
-//                 );
-//             } else {
-//                 resolve(result);
-//             }
-//         });
-//     });
-// }
-
-export async function getUcdBalance(address) {
-    let tokenUcd = store.getState().tokenUcd;
-    let bn_balance = await tokenUcd.contract.instance.balanceOf(address);
-    let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
-
-    if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
-        // this is a workround for timing issue with tokenUcd refresh
-        // TODO: figure out how to rearrange refresh to avoid these checks
-        bn_decimalsDiv = new BigNumber(10).pow(
-            await tokenUcd.contract.instance.decimals()
-        );
-    }
-    return bn_balance.div(bn_decimalsDiv);
-}
-
 export async function newEthBackedLoanTx(productId, ethAmount) {
     try {
-        let web3 = store.getState().ethBase.web3Instance;
+        let web3 = store.getState().web3Connect.web3Instance;
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate;
         if (store.getState().loanManager.loanCount === 0) {
@@ -179,7 +32,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         } else {
             gasEstimate = NEW_LOAN_GAS;
         }
-        let userAccount = store.getState().ethBase.userAccount;
+        let userAccount = store.getState().web3Connect.userAccount;
         BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_HALF_UP });
         let weiAmount = web3.toWei(new BigNumber(ethAmount)).round();
         let result = await loanManager.newEthBackedLoan(productId, {
@@ -271,7 +124,7 @@ export async function fetchProductsTx() {
 
 export async function repayLoanTx(loanId) {
     try {
-        let userAccount = store.getState().ethBase.userAccount;
+        let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate = REPAY_GAS;
         let result = await loanManager.repay(loanId, {
@@ -341,7 +194,7 @@ export async function fetchLoansToCollectTx() {
 
 export async function collectLoansTx(loansToCollect) {
     try {
-        let userAccount = store.getState().ethBase.userAccount;
+        let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate = COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
         let converted = loansToCollect.map(item => {
@@ -414,7 +267,7 @@ export async function collectLoansTx(loansToCollect) {
 export async function transferUcdTx(payee, ucdAmount) {
     try {
         let gasEstimate = TRANSFER_UCD_GAS;
-        let userAccount = store.getState().ethBase.userAccount;
+        let userAccount = store.getState().web3Connect.userAccount;
         let tokenUcd = store.getState().tokenUcd;
         let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
         let result = await tokenUcd.contract.instance.transfer(

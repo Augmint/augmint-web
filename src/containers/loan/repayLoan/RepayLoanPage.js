@@ -4,8 +4,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Row, Col, Button } from "react-bootstrap";
-import store from "store.js";
-import { repayLoan, LOANMANAGER_REPAY_SUCCESS } from "modules/loanManager";
+import store from "modules/store";
+import {
+    repayLoan,
+    LOANMANAGER_REPAY_SUCCESS
+} from "modules/reducers/loanManager";
 import LoanDetails from "components/LoanDetails";
 import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";

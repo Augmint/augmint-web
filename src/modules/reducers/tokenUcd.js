@@ -1,8 +1,12 @@
-import store from "store.js";
-import SolidityContract from "./SolidityContract";
+/*
+    TODO: separate trasnfer from here to tackle isLoading race conditions
+*/
+import store from "modules/store";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import tokenUcd_artifacts from "contractsBuild/TokenUcd.json";
 import BigNumber from "bignumber.js";
-import { asyncGetBalance, getUcdBalance, transferUcdTx } from "./ethHelper";
+import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
+import { transferUcdTx } from "modules/ethereum/ethTransactions";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
 export const TOKENUCD_CONNECT_SUCCESS = "tokenUcd/TOKENUCD_CONNECT_SUCESS";
@@ -111,7 +115,7 @@ export const connectTokenUcd = () => {
             return dispatch({
                 type: TOKENUCD_CONNECT_SUCCESS,
                 contract: await SolidityContract.connectNew(
-                    store.getState().ethBase.web3Instance.currentProvider,
+                    store.getState().web3Connect.web3Instance.currentProvider,
                     tokenUcd_artifacts
                 )
             });

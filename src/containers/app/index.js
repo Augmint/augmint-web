@@ -4,7 +4,7 @@ Wrapper for the whole App
     Web3 & contracts initialisation
     Listeners and handlers to web3 events
 
-TODO: consider moving event listeners  to a separate component
+TODO: consider moving event listeners  to a separate component (eg. to reducers?)
 */
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -12,19 +12,22 @@ import "bootstrap/dist/css/bootstrap-theme.css";
 
 import React from "react";
 import { connect } from "react-redux";
-import store from "store.js";
+import store from "modules/store";
 import watch from "redux-watch";
-import { setupWeb3 } from "modules/ethBase";
-import { fetchUserBalance } from "modules/userBalances";
-import { fetchTransferList, processTransfer } from "modules/userTransfers";
-import { connectRates, refreshRates } from "modules/rates";
-import { connectTokenUcd, refreshTokenUcd } from "modules/tokenUcd";
+import { setupWeb3 } from "modules/reducers/web3Connect";
+import { fetchUserBalance } from "modules/reducers/userBalances";
+import {
+    fetchTransferList,
+    processTransfer
+} from "modules/reducers/userTransfers";
+import { connectRates, refreshRates } from "modules/reducers/rates";
+import { connectTokenUcd, refreshTokenUcd } from "modules/reducers/tokenUcd";
 import {
     connectloanManager,
     refreshLoanManager,
     fetchProducts
-} from "modules/loanManager";
-import { fetchLoans } from "modules/loans";
+} from "modules/reducers/loanManager";
+import { fetchLoans } from "modules/reducers/loans";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Route, Link, Switch, withRouter } from "react-router-dom";
@@ -40,14 +43,14 @@ import { EthereumState } from "./EthereumState";
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.handleLoad = this.handleLoad.bind(this);
-        window.addEventListener("load", this.handleLoad);
+        this.onLoad = this.onLoad.bind(this);
+        window.addEventListener("load", this.onLoad);
     }
 
-    handleLoad() {
+    onLoad() {
         store.dispatch(setupWeb3()); // we do it on load event to avoid timing issues with injected web3
 
-        let w1 = watch(store.getState, "ethBase.web3ConnectionId");
+        let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
         store.subscribe(
             w1((newVal, oldVal, objectPath) => {
                 store.dispatch(connectRates());
@@ -94,7 +97,7 @@ class App extends React.Component {
     }
 
     setupListeners() {
-        let web3 = store.getState().ethBase.web3Instance;
+        let web3 = store.getState().web3Connect.web3Instance;
         // TODO: think over UX how to display confirmed ("latest") and "pending" TXs
         //        Pending needed for quick UI refresh after tx submitted but we want to show when was it mined
         this.filterAllBlocks = web3.eth.filter("pending");
@@ -186,7 +189,7 @@ class App extends React.Component {
             nextProps.userAccount !== this.props.userAccount
         ) {
             // TODO: this doesn't work yet: we need a timer to watch defaultAccount change
-            // TODO handle this more generically (ie. watch all contract balances in ethBase, maybe cached? )
+            // TODO handle this more generically (ie. all contract balances watched and maybe cached? )
             store.dispatch(fetchUserBalance(nextProps.userAccount));
             // TODO: reset filters
         }
@@ -269,8 +272,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    network: state.ethBase.network,
-    userAccount: state.ethBase.userAccount,
+    network: state.web3Connect.network,
+    userAccount: state.web3Connect.userAccount,
     loanManager: state.loanManager.contract,
     tokenUcd: state.tokenUcd.contract
 });

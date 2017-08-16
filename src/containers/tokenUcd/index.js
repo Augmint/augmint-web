@@ -2,7 +2,7 @@ import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { refreshTokenUcd } from "modules/tokenUcd";
+import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { Grid, Row, Col, Panel, PageHeader } from "react-bootstrap";
 
 const baseInfoTitle = <h3>Base Info</h3>;
@@ -60,13 +60,13 @@ class TokenUcd extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.ethBase.userAccount,
-    accounts: state.ethBase.accounts,
-    balance: state.ethBase.balance,
-    isLoading: state.ethBase.isLoading,
-    isConnected: state.ethBase.isConnected,
-    web3ConnectionId: state.ethBase.web3ConnectionId,
-    web3Instance: state.ethBase.web3Instance,
+    userAccount: state.web3Connect.userAccount,
+    accounts: state.web3Connect.accounts,
+    balance: state.web3Connect.balance,
+    isLoading: state.web3Connect.isLoading,
+    isConnected: state.web3Connect.isConnected,
+    web3ConnectionId: state.web3Connect.web3ConnectionId,
+    web3Instance: state.web3Connect.web3Instance,
 
     ratesContract: state.rates.contract,
     bn_ethUsdRate: state.rates.info.bn_ethUsdRate,

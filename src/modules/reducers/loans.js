@@ -3,11 +3,11 @@
     TODO: add listener to new loan event & refresh loans if it's the current users'
     TODO: move formating to separate lib (from all modules)
 */
-import store from "./../store";
+import store from "modules/store";
 import ethBackedLoan_artifacts from "contractsBuild/EthBackedLoan.json";
-import SolidityContract from "./SolidityContract";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import moment from "moment";
-import { asyncGetBalance, getUcdBalance } from "./ethHelper";
+import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 
 export const LOANS_LOANLIST_REQUESTED = "loans/LOANS_LOANLIST_REQUESTED";
 export const LOANS_LOANLIST_RECEIVED = "loans/LOANS_LOANLIST_RECEIVED";
@@ -74,7 +74,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
     let bn_ucdBalance = await getUcdBalance(loanContractAddress);
 
     let loanContract = await SolidityContract.connectNewAt(
-        store.getState().ethBase.web3Instance.currentProvider,
+        store.getState().web3Connect.web3Instance.currentProvider,
         ethBackedLoan_artifacts,
         loanContractAddress
     );

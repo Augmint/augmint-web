@@ -1,10 +1,11 @@
 /* ETH and UCD balance for the active userAccount
-    TODO: add all user accounts?
     TODO: make this generic? ie. to use this for any address balances?
-    TODO: refresh balances on certain events (all balances on new block? or try to be smart?)
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
-import { fetchTransferListTx, processTransferTx } from "./ethHelper";
+import {
+    fetchTransferListTx,
+    processTransferTx
+} from "modules/ethereum/ethTransactions";
 
 export const USER_TRANSFERLIST_REQUESTED =
     "userTransfers/USER_TRANSFERLIST_REQUESTED";
@@ -30,7 +31,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                account: action.account,
+                address: action.address,
                 fromBlock: action.fromBlock,
                 toBlock: action.toBlock
             };
@@ -53,7 +54,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                account: action.account,
+                address: action.address,
                 fromBlock: action.fromBlock,
                 toBlock: action.toBlock
             };

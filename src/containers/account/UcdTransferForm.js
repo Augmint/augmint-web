@@ -17,14 +17,17 @@ import {
     Col
 } from "react-bootstrap";
 import { connect } from "react-redux";
-import store from "store.js";
+import store from "modules/store";
 import {
     EthSubmissionErrorPanel,
     EthSubmissionSuccessPanel
 } from "components/MsgPanels";
 import { Field, reduxForm, SubmissionError } from "redux-form";
 import { FieldInput, Form } from "components/BaseComponents";
-import { transferUcd, TOKENUCD_TRANSFER_SUCCESS } from "modules/tokenUcd";
+import {
+    transferUcd,
+    TOKENUCD_TRANSFER_SUCCESS
+} from "modules/reducers/tokenUcd";
 import BigNumber from "bignumber.js";
 //import BigNumber from "bignumber.js";
 

@@ -2,11 +2,11 @@
 import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
-import { setupWeb3 } from "modules/ethBase";
-import { fetchUserBalance } from "modules/userBalances";
-import { refreshRates } from "modules/rates";
-import { refreshTokenUcd } from "modules/tokenUcd";
-import { refreshLoanManager } from "modules/loanManager";
+import { setupWeb3 } from "modules/reducers/web3Connect";
+import { fetchUserBalance } from "modules/reducers/userBalances";
+import { refreshRates } from "modules/reducers/rates";
+import { refreshTokenUcd } from "modules/reducers/tokenUcd";
+import { refreshLoanManager } from "modules/reducers/loanManager";
 import {
     ButtonToolbar,
     Button,
@@ -19,7 +19,7 @@ import {
 } from "react-bootstrap";
 import stringifier from "stringifier";
 
-import store from "store.js"; /// for debug
+import store from "modules/store"; /// for debug
 
 const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
@@ -319,14 +319,14 @@ class underTheHood extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.ethBase.userAccount,
-    accounts: state.ethBase.accounts,
+    userAccount: state.web3Connect.userAccount,
+    accounts: state.web3Connect.accounts,
     userAccountBal: state.userBalances.account,
-    isLoading: state.ethBase.isLoading,
-    isConnected: state.ethBase.isConnected,
-    web3ConnectionId: state.ethBase.web3ConnectionId,
-    web3Instance: state.ethBase.web3Instance,
-    network: state.ethBase.network,
+    isLoading: state.web3Connect.isLoading,
+    isConnected: state.web3Connect.isConnected,
+    web3ConnectionId: state.web3Connect.web3ConnectionId,
+    web3Instance: state.web3Connect.web3Instance,
+    network: state.web3Connect.network,
 
     rates: state.rates,
     tokenUcd: state.tokenUcd,
