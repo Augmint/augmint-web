@@ -25,23 +25,23 @@ const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function ArrayDump(props) {
     const items = props.items;
-    let listItems;
 
     if (items === null) {
-        listItems = <span>null</span>;
-    } else if (items.length === 0) {
-        listItems = <span>empty array</span>;
-    } else {
-        listItems = items.map((item, index) =>
-            <tr key={index}>
-                <td>
-                    <pre style={{ fontSize: 10 + "px" }}>
-                        [{index}] {stringify(item)}
-                    </pre>
-                </td>
-            </tr>
-        );
+        return <p>null</p>;
     }
+    if (items.length === 0) {
+        return <p>empty array</p>;
+    }
+
+    const listItems = items.map((item, index) =>
+        <tr key={index}>
+            <td>
+                <pre style={{ fontSize: 10 + "px" }}>
+                    [{index}] {stringify(item)}
+                </pre>
+            </td>
+        </tr>
+    );
 
     return (
         <Table condensed striped>
@@ -88,10 +88,10 @@ function ContractBaseInfo(props) {
                   </p>
                 : <p>No error</p>}
 
-            <p>
-                Info:<br />
-                <pre style={{ fontSize: 10 + "px" }}>{stringify(info)}</pre>
-            </p>
+            <p>Info:</p>
+            <pre style={{ fontSize: 10 + "px" }}>
+                {stringify(info)}
+            </pre>
 
             <Button
                 bsSize="small"
