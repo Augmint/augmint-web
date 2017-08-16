@@ -26,6 +26,7 @@ contract ERC20Impl {
      // Transfer the balance from owner's account to another account
      // This is only callable by the parent contract which emits transfer events
     function _transfer(address _to, uint256 _amount) internal returns (bool success) {
+        require(msg.sender != _to); // no need to send to myself. Makes client code simpler if we don't allow
         if (balances[msg.sender] >= _amount
             && _amount > 0
             && balances[_to] + _amount > balances[_to]) {
@@ -65,6 +66,7 @@ contract ERC20Impl {
     // Allow _spender to withdraw from your account, multiple times, up to the _value amount.
     // If this function is called again it overwrites the current allowance with _value.
     function approve(address _spender, uint256 _amount) returns (bool success) {
+        require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         return true;
     }

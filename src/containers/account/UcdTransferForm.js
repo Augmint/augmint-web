@@ -1,5 +1,9 @@
 /*
-TODO: form client side validation. UCD balance check, address format check, number  format check
+TODO: form client side validation. eg:
+    - UCD balance check
+    - address format check
+    - number  format check
+    - To: can't be the same as From:
 TODO: input formatting: decimals, thousand separators
 TODO: solidity tx  error handling transferUcdTx() - requires  change in transfer() fx in contract
   */
