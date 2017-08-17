@@ -27,7 +27,6 @@ class NewLoanForm extends React.Component {
         );
         this.onLoanUcdAmountChange = this.onLoanUcdAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
-        BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_HALF_UP });
     }
 
     onDisbursedUcdAmountChange(e) {
@@ -39,20 +38,22 @@ class NewLoanForm extends React.Component {
             this.props.change("ethAmount", "");
             return;
         }
-        let bn_loanUcdAmount = val.div(this.props.product.bn_discountRate);
-        let usdcValue = bn_loanUcdAmount.div(
-            this.props.product.bn_loanCollateralRatio
-        );
+        let bn_loanUcdAmount = val
+            .div(this.props.product.bn_discountRate)
+            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
+        let usdcValue = bn_loanUcdAmount
+            .div(this.props.product.bn_loanCollateralRatio)
+            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
 
         let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
 
         this.props.change(
             "loanUcdAmount",
-            bn_loanUcdAmount.round(UCD_DECIMALS)
+            bn_loanUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP)
         );
         this.props.change(
             "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS) //.toFixed(18)
+            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP) //.toFixed(18)
         );
     }
 
@@ -65,19 +66,21 @@ class NewLoanForm extends React.Component {
             this.props.change("ethAmount", "");
             return;
         }
-        let usdcValue = val.div(this.props.product.bn_loanCollateralRatio);
+        let usdcValue = val
+            .div(this.props.product.bn_loanCollateralRatio)
+            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
 
-        let bn_disbursedUcdAmount = val.times(
-            this.props.product.bn_discountRate
-        );
+        let bn_disbursedUcdAmount = val
+            .times(this.props.product.bn_discountRate)
+            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
         let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
         this.props.change(
             "disbursedUcdAmount",
-            bn_disbursedUcdAmount.round(UCD_DECIMALS)
+            bn_disbursedUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP)
         );
         this.props.change(
             "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS) //.toFixed(18)
+            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP) //.toFixed(18)
         );
     }
 
@@ -100,11 +103,11 @@ class NewLoanForm extends React.Component {
         );
         this.props.change(
             "disbursedUcdAmount",
-            bn_disbursedUcdAmount.round(UCD_DECIMALS)
+            bn_disbursedUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP)
         );
         this.props.change(
             "loanUcdAmount",
-            bn_loanUcdAmount.round(UCD_DECIMALS)
+            bn_loanUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP)
         );
     }
 
