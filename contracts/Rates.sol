@@ -42,8 +42,13 @@ contract Rates is owned {
 
     function convertWeiToUsdc(uint weiValue) constant returns(uint usdcValue) {
         // TODO: safe divide & multiply
-        // rounded conversion
         //return  (weiValue * ethUsdcRate).roundedDiv(ONE_ETH);
         return  roundedDiv( (weiValue * ethUsdcRate), ONE_ETH);
+    }
+
+    function convertUsdcToWei(uint usdcValue) constant returns(uint weiValue) {
+        // TODO: safe divide & multiply
+        // TODO: can we make this not loosing max scale?
+        return  roundedDiv( ONE_ETH * usdcValue , ethUsdcRate  ) ;
     }
 }
