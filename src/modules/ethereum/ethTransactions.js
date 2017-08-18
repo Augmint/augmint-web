@@ -33,8 +33,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
             gasEstimate = NEW_LOAN_GAS;
         }
         let userAccount = store.getState().web3Connect.userAccount;
-        BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_HALF_UP });
-        let weiAmount = web3.toWei(new BigNumber(ethAmount)).round();
+        let weiAmount = web3.toWei(new BigNumber(ethAmount));
         let result = await loanManager.newEthBackedLoan(productId, {
             value: weiAmount,
             from: userAccount,
