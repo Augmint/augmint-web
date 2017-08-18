@@ -1,0 +1,3 @@
+[submodule "testrpc"]
+	path = testrpc
+	url = https://github.com/raineorshine/testrpc.git
