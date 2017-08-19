@@ -38,6 +38,22 @@ contract ERC20Impl {
         }
     }
 
+    // Transfer the balance between two accounts
+    // Used for internal transfers. Only a given contract alllowed to call it (must be checked in calling contract).
+    // Exchange contract uses it solely at the moment (trhough TokenUcd.transferExchange())
+   function _transferInternal(address _from, address _to, uint256 _amount) internal returns (bool success) {
+       require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
+       if (balances[_from] >= _amount
+           && _amount > 0
+           && balances[_to] + _amount > balances[_to]) {
+               balances[_from] -= _amount;
+               balances[_to] += _amount;
+               return true;
+       } else {
+           return false;
+       }
+   }
+
     // Send _value amount of tokens from address _from to address _to
     // The transferFrom method is used for a withdraw workflow, allowing contracts to send
     // tokens on your behalf, for example to "deposit" to a contract address and/or to charge

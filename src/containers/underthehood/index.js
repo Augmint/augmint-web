@@ -7,6 +7,8 @@ import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshRates } from "modules/reducers/rates";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { refreshLoanManager } from "modules/reducers/loanManager";
+import { refreshExchange } from "modules/reducers/exchange";
+import exchangeProvider from "modules/exchangeProvider";
 import ErrorDetails from "components/ErrorDetails";
 import {
     ButtonToolbar,
@@ -74,7 +76,7 @@ function ContractBaseInfo(props) {
                             {isConnected ? "connected" : "not connected"}
                         </td>
                         <td>
-                            {isLoading ? "Loanding..." : "not loading"}
+                            {isLoading ? "Loading..." : "not loading"}
                         </td>
                     </tr>
                 </tbody>
@@ -113,6 +115,10 @@ class underTheHood extends React.Component {
         };
     }
 
+    componentDidMount() {
+        exchangeProvider();
+    }
+
     handleBalanceRefreshClick = e => {
         e.preventDefault();
         this.props.fetchUserBalance(this.props.userAccount);
@@ -132,6 +138,11 @@ class underTheHood extends React.Component {
     handleLoanManagerRefreshClick = e => {
         e.preventDefault();
         this.props.refreshLoanManager();
+    };
+
+    handleExchangeRefreshClick = e => {
+        e.preventDefault();
+        this.props.refreshExchange();
     };
 
     render() {
@@ -276,6 +287,37 @@ class underTheHood extends React.Component {
                                 </Panel>
                             </Col>
                         </Row>
+
+                        <Row>
+                            <Col xs={6} md={6}>
+                                <Panel header={<h3>Exchange contract</h3>}>
+                                    <p>
+                                        OrderCount:{" "}
+                                        {this.props.exchange.info.orderCount}
+                                    </p>
+                                    <p>
+                                        To sell:{" "}
+                                        {
+                                            this.props.exchange.info
+                                                .totalEthSellOrders
+                                        }{" "}
+                                        ETH |{" "}
+                                        {
+                                            this.props.exchange.info
+                                                .totalUcdSellOrders
+                                        }{" "}
+                                        UCD
+                                    </p>
+                                    <ContractBaseInfo
+                                        contract={this.props.exchange}
+                                        refreshCb={
+                                            this.handleExchangeRefreshClick
+                                        }
+                                    />
+                                </Panel>
+                            </Col>
+                        </Row>
+
                         <Row>
                             <Col xs={6} md={6}>
                                 <Panel header={<h3>LoanManager contract</h3>}>
@@ -333,7 +375,8 @@ const mapStateToProps = state => ({
     tokenUcd: state.tokenUcd,
     loanManager: state.loanManager,
     loanProducts: state.loanManager.products,
-    loans: state.loans.loans
+    loans: state.loans.loans,
+    exchange: state.exchange
 });
 
 const mapDispatchToProps = dispatch =>
@@ -343,7 +386,8 @@ const mapDispatchToProps = dispatch =>
             fetchUserBalance,
             refreshRates,
             refreshTokenUcd,
-            refreshLoanManager
+            refreshLoanManager,
+            refreshExchange
         },
         dispatch
     );

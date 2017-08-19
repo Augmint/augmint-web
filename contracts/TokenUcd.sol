@@ -22,6 +22,7 @@
         - use safe maths and/or use ds-math: https://blog.dapphub.com/ds-math/ or zeppelin safe math: https://github.com/OpenZeppelin/zeppelin-solidity
         - check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices
         - move ERR all error code constants to lib/separate contract
+        - any point for ECR20Impl and TokenUcd separation now?
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";
@@ -38,6 +39,7 @@ contract TokenUcd is ERC20Impl, owned {
     int8 constant public ERR_NOT_AUTHORISED = -3;
 
     address public loanManagerAddress; // used for authorisation of issuing UCD for loans
+    address public exchangeAddress; // for authorisation of transferExchange()
 
     function () payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
 
@@ -49,6 +51,13 @@ contract TokenUcd is ERC20Impl, owned {
     function setLoanManagerAddress(address newAddress) onlyOwner returns(int8 result) {
         loanManagerAddress = newAddress;
         e_loanManagerAddressChanged(newAddress);
+        return SUCCESS;
+    }
+
+    event e_exchangeAddressChanged(address newAddress);
+    function setExchangeAddress(address newAddress) onlyOwner returns(int8 result) {
+        exchangeAddress = newAddress;
+        e_exchangeAddressChanged(newAddress);
         return SUCCESS;
     }
 
@@ -72,6 +81,19 @@ contract TokenUcd is ERC20Impl, owned {
             return true;
         } else {
             return false;
+        }
+    }
+
+    function transferExchange(address _from, address _to, uint256 _amount) returns (bool success) {
+        require( msg.sender == exchangeAddress);
+        if(_from == _to) { // we don't need to throw in case of transfer b/w own accounts
+            return false;
+        }
+        if ( _transferInternal(_from, _to, _amount) ) {
+            e_transfer(_from, _to, _amount, "");
+            return true;
+            } else {
+                return false;
         }
     }
 

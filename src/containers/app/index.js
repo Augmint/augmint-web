@@ -4,7 +4,7 @@ Wrapper for the whole App
     Web3 & contracts initialisation
     Listeners and handlers to web3 events
 
-TODO: consider moving event listeners  to a separate component (eg. to reducers?)
+TODO: consider moving connection, event listeners etc to separate modul (like exchangeProvider)
 */
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -33,6 +33,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Route, Link, Switch, withRouter } from "react-router-dom";
 import Home from "containers/home";
 import AccountHome from "containers/account";
+import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import TokenUcd from "containers/tokenUcd";
 import About from "containers/about";
@@ -215,13 +216,18 @@ class App extends React.Component {
                                         My Account
                                     </NavItem>
                                 </LinkContainer>
+                                <LinkContainer to="/exchange">
+                                    <NavItem eventKey={2} href="/exchange">
+                                        Buy/Sell UCD
+                                    </NavItem>
+                                </LinkContainer>
                                 <LinkContainer to="/loan/new">
-                                    <NavItem eventKey={2} href="/loan/new">
+                                    <NavItem eventKey={3} href="/loan/new">
                                         Get UCD Loan
                                     </NavItem>
                                 </LinkContainer>
                                 <LinkContainer to="/tokenUcd">
-                                    <NavItem eventKey={3} href="/tokenUcd">
+                                    <NavItem eventKey={4} href="/tokenUcd">
                                         TokenUcd
                                     </NavItem>
                                 </LinkContainer>
@@ -255,6 +261,11 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/account" component={AccountHome} />
+                        <Route
+                            exact
+                            path="/exchange"
+                            component={ExchangeHome}
+                        />
                         <Route exact path="/tokenUcd" component={TokenUcd} />
                         <Route path="/loan" component={LoanMain} />
                         <Route exact path="/about-us" component={About} />
