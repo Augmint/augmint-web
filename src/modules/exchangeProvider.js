@@ -78,8 +78,7 @@ const onNewOrder = (error, result) => {
 const onOrderFill = (error, result) => {
     // event e_newOrder(address maker, uint weiToSell, uint ucdToSell );
     console.debug(
-        "exchangeProvider.onOrderFill: dispatching refreshExchange()",
-        result.args
+        "exchangeProvider.onOrderFill: dispatching refreshExchange()"
     );
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and

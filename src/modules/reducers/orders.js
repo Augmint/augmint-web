@@ -6,7 +6,7 @@ export const ORDERS_REFRESH_SUCCESS = "orders/ORDERS_REFRESH_SUCCESS";
 
 const initialState = {
     error: null,
-    isLoading: false,
+    isLoading: true,
     orders: null
 };
 
