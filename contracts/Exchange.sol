@@ -42,7 +42,7 @@ contract Exchange is owned {
     */
     OrdersLib.OrderList public orders;
 
-    mapping(address => uint80[]) public m_orders; // orders for an account
+    mapping(address => uint80[]) public m_orders; // orders for an account => orderId
 
     function Exchange(address _tokenUcdAddress, address _ratesAddress) owned() {
          rates = Rates(_ratesAddress);
@@ -58,22 +58,21 @@ contract Exchange is owned {
     }
 
     function getMakerOrder(address maker, uint _makerOrderIdx) constant
-            returns(uint orderId, uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
-        uint orderIdx = m_orders[maker][_makerOrderIdx];
+            returns(uint80 orderId, uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
+        orderId = m_orders[maker][_makerOrderIdx];
         return (
-                orders.orders[ orderIdx ].id,
-                orders.orders[ orderIdx ].order.makerOrderIdx,
-                orders.orders[ orderIdx ].order.orderType,
-                orders.orders[ orderIdx ].order.amount);
+                orderId,
+                orders.orders[ orderId -1].order.makerOrderIdx,
+                orders.orders[ orderId -1].order.orderType,
+                orders.orders[ orderId -1].order.amount);
     }
 
-    function getOrderByOrderIndex (uint orderIdx) constant
-            returns(address maker, uint orderId, uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
-        return (orders.orders[ orderIdx ].order.maker,
-                orders.orders[ orderIdx ].id,
-                orders.orders[ orderIdx ].order.makerOrderIdx,
-                orders.orders[ orderIdx ].order.orderType,
-                orders.orders[ orderIdx ].order.amount);
+    function getOrder(uint80 orderId) constant
+            returns(address maker,  uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
+        return (orders.orders[ orderId -1 ].order.maker,
+                orders.orders[ orderId -1 ].order.makerOrderIdx,
+                orders.orders[ orderId -1 ].order.orderType,
+                orders.orders[ orderId -1 ].order.amount);
     }
 
     function placeSellEthOrder() payable {
@@ -86,12 +85,12 @@ contract Exchange is owned {
         address maker;
         // fill as much as we can from open buy eth orders
         uint80 i;
-        uint80 nextOrderIdx = orders.iterateFirst();
-        while ( orders.iterateValid(nextOrderIdx) &&
+        uint80 nextOrderId = orders.iterateFirst();
+        while ( orders.iterateValid(nextOrderId) &&
                 weiToSellLeft > 0 && // FIXME: minAmount to rounding acc?
                 totalUcdSellOrders != 0 ) {
-            i = nextOrderIdx;
-            nextOrderIdx = orders.iterateNext(i);
+            i = nextOrderId;
+            nextOrderId = orders.iterateNext(i);
             maker = orders.orders[i-1].order.maker;
             if (orders.orders[i-1].order.amount >= ucdValueLeft) {
                 // sell order fully covered from maker buy order
@@ -108,8 +107,10 @@ contract Exchange is owned {
             fillOrder(i, msg.sender, ucdSold, weiToPay); // this pays the maker but not the taker yet
 
         }
-        // transfer the sum UCD value of all WEI sold with orderFills
-        tokenUcd.transferExchange(this, msg.sender, ucdValueTotal - ucdValueLeft );
+        if( ucdValueTotal - ucdValueLeft > 0 ) {
+            // transfer the sum UCD value of all WEI sold with orderFills
+            require(tokenUcd.transferExchange(this, msg.sender, ucdValueTotal - ucdValueLeft ));
+        }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
             // ETH amount already on contract balance
@@ -119,7 +120,7 @@ contract Exchange is owned {
 
     function placeSellUcdOrder(uint ucdAmount) {
         require(ucdAmount > 0); // FIXME: min amount?
-        tokenUcd.transferExchange(msg.sender, this, ucdAmount);
+        require(tokenUcd.transferExchange(msg.sender, this, ucdAmount) );
         uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
         uint weiValueLeft = weiValueTotal;
         uint ucdToSellLeft = ucdAmount;
@@ -128,12 +129,12 @@ contract Exchange is owned {
         address maker;
         // fill as much as we can from open buy ucd orders
         uint80 i;
-        uint80 nextOrderIdx = orders.iterateFirst();
-        while ( orders.iterateValid(nextOrderIdx) &&
+        uint80 nextOrderId = orders.iterateFirst();
+        while ( orders.iterateValid(nextOrderId) &&
                 weiValueLeft > 0 && // FIXME: minAmount to rounding acc?
                 totalEthSellOrders != 0 ) {
-            i = nextOrderIdx;
-            nextOrderIdx = orders.iterateNext(i);
+            i = nextOrderId;
+            nextOrderId = orders.iterateNext(i);
             maker = orders.orders[i-1].order.maker;
             if (orders.orders[i-1].order.amount >= weiValueLeft) {
                 // sell order fully covered from maker buy order
@@ -156,7 +157,7 @@ contract Exchange is owned {
         }
     }
 
-    event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
+    event e_newOrder(uint80 orderId, OrdersLib.OrderType orderType, address maker, uint amount);
     function addOrder(OrdersLib.OrderType orderType, address maker, uint amount) internal {
         // It's assumed that the ETH/UCD already taken from maker in calling function
         if (orderType == OrdersLib.OrderType.EthSell) {
@@ -167,21 +168,22 @@ contract Exchange is owned {
             revert();
         }
 
-        uint80 newIndex = orders.append(OrdersLib.OrderData(maker, 0, orderType, amount)) -1;
-        uint makerOrderIdx = m_orders[maker].push(newIndex);
-        orders.orders[newIndex].order.makerOrderIdx = makerOrderIdx - 1;
+        uint80 orderId = orders.append(OrdersLib.OrderData(maker, 0, orderType, amount));
+        uint80 makerOrderIdx = uint80( m_orders[maker].push(orderId));
+        orders.orders[orderId-1].order.makerOrderIdx = makerOrderIdx - 1;
 
-        e_newOrder(orders.orders[newIndex].id, orderType, maker, amount );
+        e_newOrder(orderId, orderType, maker, amount );
         return;
     }
 
-    event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
-    function fillOrder(uint80 orderIdx, address taker, uint amountToSell, uint amountToPay) internal {
+    event e_orderFill(uint80 orderId, address taker, uint amountSold, uint amountPaid);
+    function fillOrder(uint80 orderId, address taker,
+            uint amountToSell, uint amountToPay) internal {
         // we only pay the maker here. Calling function must pay the sum of all buys to taker
-        OrdersLib.OrderType orderType = orders.orders[orderIdx-1].order.orderType;
-        address maker = orders.orders[orderIdx-1].order.maker;
+        OrdersLib.OrderType orderType = orders.orders[orderId -1].order.orderType;
+        address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
-            tokenUcd.transferExchange(this, maker, amountToPay);
+            require (tokenUcd.transferExchange(this, maker, amountToPay));
             totalEthSellOrders -= amountToSell;
         } else if(orderType == OrdersLib.OrderType.UcdSell ){
             maker.transfer(amountToPay);
@@ -190,19 +192,19 @@ contract Exchange is owned {
             revert();
         }
 
-        orders.orders[orderIdx-1].order.amount -= amountToSell;
-        uint orderId = orders.orders[orderIdx-1].id;
+        orders.orders[orderId -1 ].order.amount -= amountToSell;
 
-        if (orders.orders[orderIdx-1].order.amount == 0) {
-            removeOrder(orderIdx);
+        if (orders.orders[orderId -1].order.amount == 0) {
+            removeOrder(orderId);
         }
-        e_orderFill(orderId, orderType, maker, taker, amountToSell, amountToPay);
+
+        e_orderFill(orderId, taker, amountToSell, amountToPay);
     }
 
-    function removeOrder(uint80 orderIdx) internal {
-        uint makerOrderIdx = orders.orders[orderIdx-1].order.makerOrderIdx;
-        address maker = orders.orders[orderIdx-1].order.maker;
-        orders.remove(orderIdx);
+    function removeOrder(uint80 orderId) internal {
+        uint80 makerOrderIdx = orders.orders[orderId-1].order.makerOrderIdx;
+        address maker = orders.orders[orderId-1].order.maker;
+        orders.remove(orderId);
         uint len = m_orders[maker].length;
         if(makerOrderIdx == len -1 ) {
             // last item
@@ -215,12 +217,10 @@ contract Exchange is owned {
         }
     }
 
-    function cancelOrder(uint80 makerOrderIdx, uint orderId) {
+    function cancelOrder(uint80 orderId) {
         // FIXME: to implement
-        // need both orderId to make sure we are cancelling the right one (ie. if order has been filled since getOrder)
         // transfer ETH or UCD back
-         orderId = makerOrderIdx; // to supress compiler warnings
-         // orderIdx = m_orders[msg.sender] ...
+         orderId = orderId; // to supress compiler warnings
          // FIXME: check orderId
          // removeOrder( orderIdx)
     }

@@ -17,7 +17,6 @@ library OrdersLib {
         uint80 first;
         uint80 last;
         uint80 count;
-        uint nextOrderId;
         Order[] orders;
     }
 
@@ -25,7 +24,7 @@ library OrdersLib {
     // all open orders
     struct OrderData {
         address maker;
-        uint makerOrderIdx; // idx in map(maker => [])
+        uint80 makerOrderIdx; // idx in map(maker => [])
         OrderType orderType;
         uint amount; // actual amount to sell left (WEI or UCDC depending on orderType)
 
@@ -34,14 +33,12 @@ library OrdersLib {
     struct Order  {
         uint80 prev;
         uint80 next;
-        uint id; // unique order id (!= index!)
         OrderData order;
     }
 
     /// Appends `_data` to the end of the list `self`.
     function append(OrderList storage self, OrderData _order) internal returns (uint80 index)  {
-        index = uint80(self.orders.push(Order({prev: self.last, next: None, id: self.nextOrderId, order: _order})));
-        self.nextOrderId++;
+        index = uint80(self.orders.push(Order({prev: self.last, next: None, order: _order})));
         if (self.last == None)
         {
             assert (self.first == None && self.count == 0) ;
@@ -61,6 +58,19 @@ library OrdersLib {
     /// `_index` from the list `self`.
     function remove(OrderList storage self, uint80 _index) internal {
         Order storage order = self.orders[_index - 1];
+        if (self.count == 1) {
+                self.count = 0;
+                self.first = 0;
+                self.last = 0;
+                order.prev = 0;
+                order.next = 0;
+                return;
+        }
+
+        if (order.prev == None && order.next == None  ) {
+            // this item is already deleted
+            return;
+        }
         if (order.prev == None)
             self.first = order.next;
         if (order.next == None)
@@ -69,15 +79,8 @@ library OrdersLib {
             self.orders[order.prev - 1].next = order.next;
         if (order.next != None)
             self.orders[order.next - 1].prev = order.prev;
-        if (self.count == 1) {
-            // last item, free up array
-            self.orders.length = 0;
-            self.count = 0;
-        } else {
-            // remove item. leaves a gap
-            delete self.orders[_index - 1];
-            self.count--;
-        }
+        self.count--;
+
     }
 
     // Iterator interface
