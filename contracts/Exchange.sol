@@ -56,8 +56,8 @@ contract Exchange is owned {
         return orders.count;
     }
 
-    function getMakerOrder(address maker, uint _makerOrderIdx) constant
-            returns(uint80 orderId, uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
+    function getMakerOrder(address maker, uint80 _makerOrderIdx) constant
+            returns(uint80 orderId, uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
         orderId = m_orders[maker][_makerOrderIdx];
         return (
                 orderId,
@@ -67,7 +67,7 @@ contract Exchange is owned {
     }
 
     function getOrder(uint80 orderId) constant
-            returns(address maker,  uint makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
+            returns(address maker,  uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
         return (orders.orders[ orderId -1 ].order.maker,
                 orders.orders[ orderId -1 ].order.makerOrderIdx,
                 orders.orders[ orderId -1 ].order.orderType,
