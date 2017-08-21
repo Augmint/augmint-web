@@ -5,7 +5,7 @@ TODO: form client side validation. eg:
     - number  format check
     - To: can't be the same as From:
 TODO: input formatting: decimals, thousand separators
-TODO: solidity tx  error handling transferUcdTx() - requires  change in transfer() fx in contract
+TODO: make this a pure component
   */
 
 import React from "react";
@@ -29,7 +29,6 @@ import {
     TOKENUCD_TRANSFER_SUCCESS
 } from "modules/reducers/tokenUcd";
 import BigNumber from "bignumber.js";
-//import BigNumber from "bignumber.js";
 
 class UcdTransferForm extends React.Component {
     constructor(props) {
@@ -160,7 +159,6 @@ class UcdTransferForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    tokenUcdIsLoading: state.tokenUcd.isLoading,
     tokenUcdIsConnected: state.tokenUcd.isConnected
 });
 
