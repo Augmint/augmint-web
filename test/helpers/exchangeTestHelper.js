@@ -104,8 +104,8 @@ async function contractStateAsserts(exchange, expState) {
         "orderType should be set in contract's order array"
     );
     assert.equal(
-        order[3],
-        expState.orderAmount,
+        order[3].toString(),
+        expState.orderAmount.toString(),
         "amount should be set in contract's order array"
     );
 
@@ -127,11 +127,22 @@ async function balanceAsserts(tokenUcd, expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);
         let newUcdBal = await tokenUcd.balanceOf(expBal.address);
         let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
+        console.log(
+            expBal.name,
+            newEthBal.toString(),
+            expBal.eth.toString(),
+            expGasFee
+        );
         assert.isAtMost(
             newEthBal.minus(expBal.eth).absoluteValue().toNumber(),
             expGasFee,
             expBal.name +
                 " new and initial ETH balance diferrence is higher than expecteed "
+        );
+        assert.equal(
+            newUcdBal.toString(),
+            expBal.ucd.toString(),
+            expBal.name + " new UCD balance is not as expected"
         );
     }
 }

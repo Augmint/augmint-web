@@ -16,6 +16,7 @@ before(async function() {
     rates = await Rates.deployed();
 });
 
+/* TODO: refactor this spagetthi */
 contract("Exchange order", accounts => {
     it("no sell a sellEth order below min amount ");
     it("no sell a sellUcd order below min amount ");
@@ -184,7 +185,7 @@ contract("Exchange order", accounts => {
         await exchangeTestHelper.contractStateAsserts(exchange, {
             orderCount: 1,
             orderType: ETHSELL,
-            orderAmount: sellEthAmount - expEthSold,
+            orderAmount: new BigNumber(sellEthAmount).minus(expEthSold),
             maker: maker,
             orderId: orderId
         });
@@ -374,13 +375,13 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd,
+                ucd: exchBalBefore.ucd.plus(ucdLeft),
                 eth: exchBalBefore.eth.minus(expEthSold)
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd.plus(sellUcdAmount),
+                ucd: makerBalBefore.ucd.plus(sellUcdAmount).minus(ucdLeft),
                 eth: makerBalBefore.eth
             },
 
@@ -435,8 +436,10 @@ contract("Exchange order", accounts => {
 
         let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
         let expUcdSold = sellUcdAmount;
-        let ethLeft =
-            sellEthAmount - (await rates.convertUsdcToWei(sellUcdAmount));
+        let ethLeft = new BigNumber(sellEthAmount).minus(
+            await rates.convertUsdcToWei(sellUcdAmount)
+        );
+
         let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(
             tx.logs[0],
             taker,
@@ -462,7 +465,7 @@ contract("Exchange order", accounts => {
         await exchangeTestHelper.contractStateAsserts(exchange, {
             orderCount: 1,
             orderType: ETHSELL,
-            orderAmount: ucdLeft,
+            orderAmount: ethLeft,
             maker: taker,
             orderId: newOrderId
         });
@@ -472,13 +475,13 @@ contract("Exchange order", accounts => {
                 name: "exchange contract",
                 address: exchange.address,
                 ucd: exchBalBefore.ucd.minus(expUcdSold),
-                eth: exchBalBefore.eth
+                eth: exchBalBefore.eth.plus(ethLeft)
             },
             {
                 name: "maker",
                 address: maker,
                 ucd: makerBalBefore.ucd,
-                eth: makerBalBefore.eth.plus(sellEthAmount)
+                eth: makerBalBefore.eth.plus(ethPaid)
             },
 
             {
