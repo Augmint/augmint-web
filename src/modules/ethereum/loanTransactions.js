@@ -1,18 +1,17 @@
 /*
-All ethereum state changing transactions happening here.
-Only called from reducers.
-
-    TODO: consider splitting it by contract or feature
+Loan ethereum functions
+Use only from reducers.
     TODO: tune default gasPrice
     TODO: clean up thrown errors
     TODO: set gasEstimates when it gas consumption has settled.
  */
 import store from "modules/store";
 import BigNumber from "bignumber.js";
-import { fetchLoanDetailsByAddress } from "modules/reducers/loans";
 import moment from "moment";
 import stringifier from "stringifier";
-import { asyncFilterGet, asyncGetBlock } from "modules/ethereum/ethHelper";
+import ethBackedLoan_artifacts from "contractsBuild/EthBackedLoan.json";
+import SolidityContract from "modules/ethereum/SolidityContract";
+import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 
 const stringify = stringifier({ maxDepth: 5, indent: "   " });
 
@@ -20,7 +19,6 @@ const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  addit
 const NEW_FIRST_LOAN_GAS = 2000000;
 const REPAY_GAS = 3000000;
 const COLLECT_GAS = 3000000;
-const TRANSFER_UCD_GAS = 3000000;
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     try {
@@ -263,128 +261,89 @@ export async function collectLoansTx(loansToCollect) {
     }
 }
 
-export async function transferUcdTx(payee, ucdAmount) {
-    try {
-        let gasEstimate = TRANSFER_UCD_GAS;
-        let userAccount = store.getState().web3Connect.userAccount;
-        let tokenUcd = store.getState().tokenUcd;
-        let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
-        let result = await tokenUcd.contract.instance.transfer(
-            payee,
-            ucdcAmount,
-            {
-                from: userAccount,
-                gas: gasEstimate
+export async function fetchLoanDetails(loanId) {
+    let loanManager = store.getState().loanManager.contract.instance;
+    let res = await loanManager.loanPointers(loanId);
+    let loanContractAddress = res[0];
+    return fetchLoanDetailsByAddress(loanContractAddress);
+}
+
+export async function fetchLoanDetailsByAddress(loanContractAddress) {
+    let bn_ethBalance = await asyncGetBalance(loanContractAddress);
+    let bn_ucdBalance = await getUcdBalance(loanContractAddress);
+
+    let loanContract = await SolidityContract.connectNewAt(
+        store.getState().web3Connect.web3Instance.currentProvider,
+        ethBackedLoan_artifacts,
+        loanContractAddress
+    );
+    let l = await loanContract.instance.getDetails(); // tuple with loan details
+    let solidityLoanState = l[3].toNumber();
+    let loanStateText;
+    let maturity = l[8].toNumber();
+    let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
+    let repayPeriod = l[9].toNumber();
+    let repayBy = repayPeriod + maturity;
+    let currentTime = moment().utc().unix();
+    let loanState = null;
+    let isDue = false;
+    switch (solidityLoanState) {
+        case 0:
+            if (repayBy < currentTime) {
+                loanState = 21;
+                loanStateText = "Defaulted (not yet collected)";
+            } else if (maturity < currentTime && repayBy > currentTime) {
+                isDue = true;
+                loanStateText = "Payment Due";
+                loanState = 5;
+            } else {
+                loanState = 0;
+                loanStateText = "Open";
             }
-        );
-        console.log(result);
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error(
-                "UCD transfer failed. All gas provided was used:  " +
-                    result.receipt.gasUsed
-            );
-        }
-
-        /* TODO:  display result in confirmation */
-
-        if (
-            !result.logs ||
-            !result.logs[0] ||
-            result.logs[0].event !== "e_transfer"
-        ) {
-            throw new Error(
-                "e_transfer wasn't event received. Check tx :  " + result.tx
-            );
-        }
-
-        let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
-        return {
-            txResult: result,
-            to: result.logs[0].args.to,
-            from: result.logs[0].args.from,
-            bn_amount: bn_amount,
-            amount: bn_amount.toString(),
-            narrative: result.logs[0].args.narrative,
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        throw new Error("UCD transfer failed.\n" + error);
+            break;
+        case 1:
+            loanState = 10;
+            loanStateText = "Repaid";
+            break;
+        case 2:
+            loanState = 20;
+            loanStateText = "Defaulted";
+            break;
+        default:
+            loanStateText = "Invalid state";
     }
-}
+    // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
-export async function fetchTransferListTx(address, fromBlock, toBlock) {
-    try {
-        let tokenUcd = store.getState().tokenUcd.contract.instance;
-        let outFilter = tokenUcd.e_transfer(
-            { from: address },
-            { fromBlock: fromBlock, toBlock: toBlock }
-        );
-        let filterResult = await asyncFilterGet(outFilter);
-
-        let inFilter = tokenUcd.e_transfer(
-            { to: address },
-            { fromBlock: fromBlock, toBlock: toBlock }
-        );
-        filterResult = filterResult.concat(await asyncFilterGet(inFilter));
-
-        let transfers = await Promise.all(
-            filterResult.map((tx, index) => {
-                return formatTransfer(address, tx);
-            })
-        );
-
-        transfers.sort((a, b) => {
-            return b.blockTimeStamp - a.blockTimeStamp;
-        });
-
-        return transfers;
-    } catch (error) {
-        throw new Error("fetchTransferList failed.\n" + error);
-    }
-}
-
-export async function processTransferTx(address, tx) {
-    try {
-        let transfers = store.getState().userTransfers.transfers;
-        let result = await formatTransfer(address, tx);
-        // TODO: sort and look for dupes?
-
-        if (transfers !== null) {
-            result = [result, ...transfers];
-        } else {
-            result = [result];
-        }
-        return result;
-    } catch (error) {
-        throw new Error("processTransferTx failed.\n" + error);
-    }
-}
-
-async function formatTransfer(address, tx) {
-    let direction = address === tx.args.from ? -1 : 1;
-    let blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
-    let bn_amount = tx.args.amount.div(new BigNumber(10000));
-    let result = {
-        blockNumber: tx.blockNumber,
-        transactionIndex: tx.transactionIndex,
-        transactionHash: tx.transactionHash,
-        type: tx.type,
-        bn_amount: bn_amount,
-        direction: direction === -1 ? "out" : "in",
-        amount: bn_amount.times(direction).toString(),
-        from: tx.args.from,
-        to: tx.args.to,
-        narrative: tx.args.narrative,
-        blockTimeStamp: blockTimeStamp,
-        blockTimeStampText: moment
-            .unix(blockTimeStamp)
-            .format("D MMM YYYY HH:mm")
+    let disbursementDate = l[7].toNumber();
+    let disbursementDateText = moment
+        .unix(disbursementDate)
+        .format("D MMM YYYY HH:mm:ss");
+    let loan = {
+        ethBalance: bn_ethBalance.toNumber(),
+        ucdBalance: bn_ucdBalance.toNumber(),
+        loanId: l[10].toNumber(),
+        loanContract: loanContract,
+        borrower: l[0], // 0 the borrower
+        loanManagerAddress: l[1], // 1 loan manager contract instance
+        tokenUcdAddress: l[2], // 2 tokenUcd instance
+        loanState: loanState, // 3
+        solidityLoanState: solidityLoanState,
+        loanStateText: loanStateText,
+        ucdDueAtMaturity: l[4].toNumber() / 10000, // 4 nominal loan amount in UCD (non discounted amount)
+        disbursedLoanInUcd: l[5].toNumber() / 10000, // 5
+        term: l[6].toNumber(), // 6 duration of loan
+        termText: moment.duration(l[6].toNumber(), "seconds").humanize(),
+        disbursementDate: disbursementDate,
+        disbursementDateText: disbursementDateText, // 7
+        maturity: maturity, // 8 disbursementDate + term
+        maturityText: maturityText,
+        repayPeriod: repayPeriod, // 9
+        repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
+        repayBy: repayBy,
+        repayByText: moment
+            .unix(repayPeriod + maturity)
+            .format("D MMM YYYY HH:mm"),
+        isDue: isDue
     };
-    return result;
+    return loan;
 }

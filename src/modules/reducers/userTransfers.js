@@ -5,7 +5,7 @@
 import {
     fetchTransferListTx,
     processTransferTx
-} from "modules/ethereum/ethTransactions";
+} from "modules/ethereum/transferTransactions";
 
 export const USER_TRANSFERLIST_REQUESTED =
     "userTransfers/USER_TRANSFERLIST_REQUESTED";

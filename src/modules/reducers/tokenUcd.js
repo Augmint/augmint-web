@@ -6,7 +6,7 @@ import SolidityContract from "modules/ethereum/SolidityContract";
 import tokenUcd_artifacts from "contractsBuild/TokenUcd.json";
 import BigNumber from "bignumber.js";
 import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
-import { transferUcdTx } from "modules/ethereum/ethTransactions";
+import { transferUcdTx } from "modules/ethereum/transferTransactions";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
 export const TOKENUCD_CONNECT_SUCCESS = "tokenUcd/TOKENUCD_CONNECT_SUCESS";

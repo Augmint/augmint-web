@@ -13,7 +13,7 @@ import {
     collectLoansTx,
     fetchLoansToCollectTx,
     fetchProductsTx
-} from "modules/ethereum/ethTransactions";
+} from "modules/ethereum/loanTransactions";
 
 export const LOANMANAGER_CONNECT_REQUESTED =
     "loanManager/LOANMANAGER_CONNECT_REQUESTED";

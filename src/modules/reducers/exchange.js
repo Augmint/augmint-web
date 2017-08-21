@@ -1,6 +1,3 @@
-/*
-    TODO: add EXCHANGE_REFRESH_ERROR
-    */
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import SolidityContract from "modules/ethereum/SolidityContract";
