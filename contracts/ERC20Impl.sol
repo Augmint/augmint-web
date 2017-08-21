@@ -42,8 +42,8 @@ contract ERC20Impl {
     }
 
     // Transfer the balance between two accounts
-    // Used for internal transfers. Only a given contract alllowed to call it (must be checked in calling contract).
-    // Exchange contract uses it solely at the moment (trhough TokenUcd.transferExchange())
+    // Used for internal transfers. Only system contracts allowed to call it (must be checked in calling contract!).
+    // Exchange and LoanManager contracts use it at the moment
    function _transferInternal(address _from, address _to, uint256 _amount) internal returns (bool success) {
        require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
        if (balances[_from] >= _amount

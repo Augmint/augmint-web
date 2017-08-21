@@ -3,6 +3,7 @@
     TODO: store loanId (idx in loanPointers)  in EthBackedLoan
     TODO: consider to add early repayment
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
+    TODO: add loanId to disbursement, repay and collection narrative
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";
@@ -125,7 +126,7 @@ contract LoanManager is owned {
         loanContractAddress.transfer(msg.value);
 
         // Issue UCD and send to borrower
-        int8 res = tokenUcd.issueAndDisburseUcd( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd);
+        int8 res = tokenUcd.issueAndDisburseUcd( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
         if( res != tokenUcd.SUCCESS()) {
             revert(); // can't return error code b/c changes need to be reverted
         }
@@ -163,7 +164,7 @@ contract LoanManager is owned {
             return ERR_NOT_OWNER;
         }
 
-        int8 res = tokenUcd.repayAndBurnUcd(msg.sender, loanContract.ucdDueAtMaturity());
+        int8 res = tokenUcd.repayAndBurnUcd(msg.sender, loanContract.ucdDueAtMaturity(), "Loan repayment");
         if(res != tokenUcd.SUCCESS() ) {
             // no state changes can happen up to this point
             // ie. no revert required

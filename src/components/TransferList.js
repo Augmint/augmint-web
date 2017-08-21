@@ -31,6 +31,10 @@ export default class TransferList extends React.Component {
                     <p>
                         {tx.blockTimeStampText}
                     </p>
+                    {tx.narrative &&
+                        <p>
+                            {tx.narrative}
+                        </p>}
                     <small>
                         <p>
                             blockNumber: {tx.blockNumber} | transactionIndex:{" "}

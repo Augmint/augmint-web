@@ -76,21 +76,25 @@ contract TokenUcd is ERC20Impl, owned {
     }
 
     function transfer(address _to, uint256 _amount) returns (bool success) {
+        return transferWithNarrative(_to, _amount, "");
+    }
+
+    function transferWithNarrative(address _to, uint256 _amount, string narrative) returns (bool success) {
         if ( _transfer(_to, _amount) ) {
-            e_transfer(msg.sender, _to, _amount, "");
+            e_transfer(msg.sender, _to, _amount, narrative);
             return true;
         } else {
             return false;
         }
     }
 
-    function transferExchange(address _from, address _to, uint256 _amount) returns (bool success) {
-        require( msg.sender == exchangeAddress);
+    function systemTransfer(address _from, address _to, uint256 _amount, string narrative) returns (bool success) {
+        require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
         if(_from == _to) { // we don't need to throw in case of transfer b/w own accounts
             return false;
         }
         if ( _transferInternal(_from, _to, _amount) ) {
-            e_transfer(_from, _to, _amount, "");
+            e_transfer(_from, _to, _amount, narrative);
             return true;
             } else {
                 return false;
@@ -128,29 +132,29 @@ contract TokenUcd is ERC20Impl, owned {
         return SUCCESS;
     }
 
-    function issueAndDisburseUcd(address borrower, uint ucdDueAtMaturity, uint disbursedLoanInUcd) returns (int8 result) {
+    function issueAndDisburseUcd(address borrower, uint ucdDueAtMaturity, uint disbursedLoanInUcd, string narrative) returns (int8 result) {
         if( msg.sender != loanManagerAddress) {
             return ERR_NOT_AUTHORISED;
         }
         if( ucdDueAtMaturity > disbursedLoanInUcd) {
             totalSupply += ucdDueAtMaturity;
-            balances[this] += ucdDueAtMaturity - disbursedLoanInUcd;
+            balances[this] += ucdDueAtMaturity ;
         } else {
             totalSupply += disbursedLoanInUcd;
         }
-
-        balances[borrower] += disbursedLoanInUcd;
+        require( systemTransfer(this, borrower, disbursedLoanInUcd, narrative));
+        //balances[borrower] += disbursedLoanInUcd;
         return SUCCESS;
     }
 
-    function repayAndBurnUcd(address borrower, uint ucdDueAtMaturity) returns (int8 result) {
+    function repayAndBurnUcd(address borrower, uint ucdDueAtMaturity, string narrative) returns (int8 result) {
         if( msg.sender != loanManagerAddress) {
             return ERR_NOT_AUTHORISED;
         }
         if( balances[borrower] < ucdDueAtMaturity) {
             return ERR_UCD_BALANCE_NOT_ENOUGH;
         }
-        balances[borrower] -= ucdDueAtMaturity;
+        require( systemTransfer(borrower, this, ucdDueAtMaturity, narrative));
         totalSupply -= ucdDueAtMaturity;
         return SUCCESS;
     }

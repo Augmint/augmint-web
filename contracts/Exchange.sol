@@ -8,13 +8,12 @@ TODO: add reentrancy protection
 TODO: add min exchanged amount param (set in UCD for both?)
     + what if total leftover from fills  carried over to new order but it's small than minamount?
 TODO: astronomical gas costs when filling a lot of orders
-    + optimisation (eg. events emmmitted, transfers, what to store etc)
-    + how to handle on client side (UX considerations)
+    + how to handle on client side (eg. estimate if it might be over the gas etc.)
 TODO: make orders generic, ie. more generic placeSellOrder func.
 TODO: test for rounding if could be any leftover after order fills
 TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
-TODO: add narrative to UCD transfers
+TODO: add orderId to UCD transfers
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";
@@ -109,7 +108,7 @@ contract Exchange is owned {
         }
         if( ucdValueTotal - ucdValueLeft > 0 ) {
             // transfer the sum UCD value of all WEI sold with orderFills
-            require(tokenUcd.transferExchange(this, msg.sender, ucdValueTotal - ucdValueLeft ));
+            require(tokenUcd.systemTransfer(this, msg.sender, ucdValueTotal - ucdValueLeft, "Sell UCD order fill"));
         }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
@@ -120,7 +119,7 @@ contract Exchange is owned {
 
     function placeSellUcdOrder(uint ucdAmount) {
         require(ucdAmount > 0); // FIXME: min amount?
-        require(tokenUcd.transferExchange(msg.sender, this, ucdAmount) );
+        require(tokenUcd.systemTransfer(msg.sender, this, ucdAmount, "Sell UCD order" ) );
         uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
         uint weiValueLeft = weiValueTotal;
         uint ucdToSellLeft = ucdAmount;
@@ -183,7 +182,7 @@ contract Exchange is owned {
         OrdersLib.OrderType orderType = orders.orders[orderId -1].order.orderType;
         address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
-            require (tokenUcd.transferExchange(this, maker, amountToPay));
+            require (tokenUcd.systemTransfer(this, maker, amountToPay, "Sell ETH order fill"));
             totalEthSellOrders -= amountToSell;
         } else if(orderType == OrdersLib.OrderType.UcdSell ){
             maker.transfer(amountToPay);
