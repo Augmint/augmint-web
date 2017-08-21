@@ -2,6 +2,7 @@ import store from "modules/store";
 import watch from "redux-watch";
 import { setupWeb3 } from "modules/reducers/web3Connect";
 import { connectExchange, refreshExchange } from "modules/reducers/exchange";
+import { refreshOrders } from "modules/reducers/orders";
 /*
     TODO: make it to a HOC
 */
@@ -32,6 +33,7 @@ export default () => {
                     "exchangeProvider - exchange.contract changed. Dispatching refreshExchange()"
                 );
                 store.dispatch(refreshExchange());
+                store.dispatch(refreshOrders());
                 setupListeners();
             }
         })
@@ -67,11 +69,9 @@ const setupListeners = () => {
 
 const onNewOrder = (error, result) => {
     // event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
-    console.debug(
-        "exchangeProvider.onNewOrder: dispatching refreshExchange()",
-        result.args
-    );
+    console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange()");
     store.dispatch(refreshExchange());
+    store.dispatch(refreshOrders());
 };
 
 // event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
@@ -81,6 +81,8 @@ const onOrderFill = (error, result) => {
         "exchangeProvider.onOrderFill: dispatching refreshExchange()",
         result.args
     );
-    // FIXME: shouldn't do refresh for each orderFill but no new order emmited if a sell fully covered by orders
+    // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
+    //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
+    store.dispatch(refreshOrders());
 };

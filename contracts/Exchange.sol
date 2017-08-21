@@ -74,6 +74,39 @@ contract Exchange is owned {
                 orders.orders[ orderId -1 ].order.amount);
     }
 
+    /* Helper function for client to reduce web3 calls when getting orderlist
+        Note: client should handle potential state changes in orders during iteration
+        Returns:
+            order data for orderId if order is open + next open orderId.
+            Passing 0 orderId will return first open order
+        Return values:
+         order.amount 0 returned then orderId is not open
+         nextOrderId 0 returned then no more open orders
+         For invalid orderId returns 0 order.amount and nextOrderId
+    */
+    function iterateOpenOrders(uint80 orderId) constant
+        returns (uint80 _orderId,
+                uint80 makerOrderIdx,
+                OrdersLib.OrderType orderType,
+                uint amount,
+                uint80 nextOrderId) {
+        if( orders.first == 0) { // OrdersLib.None
+            // no open orders
+            return (0,0,OrdersLib.OrderType.EthSell,0,0);
+        }
+        if(orderId == 0) {
+            //|| orders.orders[orderid-1].first == OrdersLib.None) {
+            orderId =  orders.first;
+        }
+
+        return (orderId,
+                orders.orders[ orderId -1].order.makerOrderIdx,
+                orders.orders[ orderId -1].order.orderType,
+                orders.orders[ orderId -1].order.amount
+                orders.orders[orderId-1].next);
+    }
+
+
     function placeSellEthOrder() payable {
         require(msg.value > 0); // FIXME: min amount? Shall we use min UCD amount instead of ETH value?
         uint weiToSellLeft = msg.value;

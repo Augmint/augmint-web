@@ -8,6 +8,7 @@ import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
 import exchange from "modules/reducers/exchange";
+import orders from "modules/reducers/orders";
 import { reducer as formReducer } from "redux-form";
 
 export default combineReducers({
@@ -19,6 +20,7 @@ export default combineReducers({
     userBalances,
     userTransfers,
     exchange,
+    orders,
     loans,
     form: formReducer
 });
