@@ -10,9 +10,9 @@ export async function fetchOrders() {
         let order = await exchange.iterateOpenOrders(0); // returns first open order
         let nextOrderId = 999;
         while (order[0] > 0 && nextOrderId > 0) {
-            let orderType = order[3];
+            let orderType = order[3].toNumber();
             let bn_amount, ccy;
-            if (orderType === 0) {
+            if (orderType === 1) {
                 ccy = "UCD";
                 bn_amount = order[4].div(new BigNumber(10000));
             } else {
