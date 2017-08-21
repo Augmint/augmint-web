@@ -50,10 +50,11 @@ export function fetchLoans(userAccount) {
                 loans: loans
             });
         } catch (error) {
+            // TODO: dispatch a LOANS_LOANLIST_ERROR and add an action.error state
             let err = new Error(
                 "Error in fetchLoans. \n userAccount: " + userAccount,
                 +"\n loanIds: " + loanIds,
-                +"\n error: " + error
+                +"\n" + error
             );
             console.error(err);
             throw err;

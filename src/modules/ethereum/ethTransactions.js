@@ -73,7 +73,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
             }
         };
     } catch (error) {
-        throw new Error("Create loan failed. Error: " + error);
+        throw new Error("Create loan failed.\n" + error);
     }
 }
 
@@ -117,7 +117,7 @@ export async function fetchProductsTx() {
         }
         return products;
     } catch (error) {
-        throw new Error("fetchProductsTx failed. Error: " + error);
+        throw new Error("fetchProductsTx failed.\n" + error);
     }
 }
 
@@ -164,7 +164,7 @@ export async function repayLoanTx(loanId) {
         };
     } catch (error) {
         // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
-        throw new Error("Repay loan failed. Error: " + error);
+        throw new Error("Repay loan failed.\n" + error);
     }
 }
 
@@ -187,7 +187,7 @@ export async function fetchLoansToCollectTx() {
         }
         return loansToCollect;
     } catch (error) {
-        throw new Error("fetchLoansToCollectTx failed. Error: " + error);
+        throw new Error("fetchLoansToCollectTx failed.\n" + error);
     }
 }
 
@@ -259,7 +259,7 @@ export async function collectLoansTx(loansToCollect) {
         };
     } catch (error) {
         // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
-        throw new Error("Collect loan failed. Error: " + error);
+        throw new Error("Collect loan failed.\n" + error);
     }
 }
 
@@ -314,7 +314,7 @@ export async function transferUcdTx(payee, ucdAmount) {
             }
         };
     } catch (error) {
-        throw new Error("UCD transfer failed. Error: " + error);
+        throw new Error("UCD transfer failed.\n" + error);
     }
 }
 
@@ -345,7 +345,7 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
 
         return transfers;
     } catch (error) {
-        throw new Error("fetchTransferList failed. Error: " + error);
+        throw new Error("fetchTransferList failed.\n" + error);
     }
 }
 
@@ -362,7 +362,7 @@ export async function processTransferTx(address, tx) {
         }
         return result;
     } catch (error) {
-        throw new Error("processTransferTx failed. Error: " + error);
+        throw new Error("processTransferTx failed.\n" + error);
     }
 }
 

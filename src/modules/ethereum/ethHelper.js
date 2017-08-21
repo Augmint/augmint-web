@@ -12,7 +12,7 @@ export function asyncGetBalance(address) {
                 reject(
                     new Error(
                         "Can't get balance from web3 (asyncGetBalance). Address: ",
-                        address + " Error: " + error
+                        address + "\n" + error
                     )
                 );
             } else {
@@ -28,8 +28,7 @@ export function asyncGetAccounts(web3) {
             if (error) {
                 reject(
                     new Error(
-                        "Can't get account list from web3 (asyncGetAccounts)." +
-                            "\nError: " +
+                        "Can't get account list from web3 (asyncGetAccounts).\n " +
                             error
                     )
                 );
@@ -54,7 +53,7 @@ export function asyncGetNetwork(web3) {
             if (error) {
                 reject(
                     new Error(
-                        "Can't get network from web3 (asyncGetNetwork). Error: " +
+                        "Can't get network from web3 (asyncGetNetwork).\n" +
                             error
                     )
                 );
@@ -96,7 +95,7 @@ export function asyncGetBlock(blockNumber) {
                 reject(
                     new Error(
                         "Can't getBlock from web3 (asyncGetBalance). blockNumber: ",
-                        blockNumber + "\nError: " + error
+                        blockNumber + "\n" + error
                     )
                 );
             } else {
