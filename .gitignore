@@ -2,6 +2,7 @@
 
 # TODO: check how handle this best way... having package-lock in repo causing constant issues on other deployments
 package-lock.json
+yarn.lock
 
 build
 .DS_Store
