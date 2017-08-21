@@ -86,13 +86,14 @@ contract Exchange is owned {
     */
     function iterateOpenOrders(uint80 orderId) constant
         returns (uint80 _orderId,
+                address maker,
                 uint80 makerOrderIdx,
                 OrdersLib.OrderType orderType,
                 uint amount,
                 uint80 nextOrderId) {
         if( orders.first == 0) { // OrdersLib.None
             // no open orders
-            return (0,0,OrdersLib.OrderType.EthSell,0,0);
+            return (0,address(0), 0,OrdersLib.OrderType.EthSell,0,0);
         }
         if(orderId == 0) {
             //|| orders.orders[orderid-1].first == OrdersLib.None) {
@@ -100,10 +101,11 @@ contract Exchange is owned {
         }
 
         return (orderId,
-                orders.orders[ orderId -1].order.makerOrderIdx,
-                orders.orders[ orderId -1].order.orderType,
-                orders.orders[ orderId -1].order.amount
-                orders.orders[orderId-1].next);
+                orders.orders[ orderId -1 ].order.maker,
+                orders.orders[ orderId -1 ].order.makerOrderIdx,
+                orders.orders[ orderId -1 ].order.orderType,
+                orders.orders[ orderId -1 ].order.amount
+                orders.orders[ orderId -1 ].next);
     }
 
 
