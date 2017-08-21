@@ -41,9 +41,9 @@ class NewLoanForm extends React.Component {
         let bn_loanUcdAmount = val
             .div(this.props.product.bn_discountRate)
             .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
-        let usdcValue = bn_loanUcdAmount
-            .div(this.props.product.bn_loanCollateralRatio)
-            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
+        let usdcValue = bn_loanUcdAmount.div(
+            this.props.product.bn_loanCollateralRatio
+        );
 
         let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
 
@@ -66,9 +66,7 @@ class NewLoanForm extends React.Component {
             this.props.change("ethAmount", "");
             return;
         }
-        let usdcValue = val
-            .div(this.props.product.bn_loanCollateralRatio)
-            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
+        let usdcValue = val.div(this.props.product.bn_loanCollateralRatio);
 
         let bn_disbursedUcdAmount = val
             .times(this.props.product.bn_discountRate)
