@@ -246,7 +246,7 @@ contract Exchange is owned {
         } else {
             // not the last item, overwrite with last item and shrink array
             m_orders[maker][makerOrderIdx] = m_orders[maker][len -1];
-            orders.orders[  m_orders[maker][len -1] ].order.makerOrderIdx = makerOrderIdx;
+            orders.orders[  m_orders[maker][len -1] - 1 ].order.makerOrderIdx = makerOrderIdx;
             m_orders[maker].length--;
         }
     }

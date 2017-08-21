@@ -127,12 +127,12 @@ async function balanceAsserts(tokenUcd, expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);
         let newUcdBal = await tokenUcd.balanceOf(expBal.address);
         let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
-        console.log(
-            expBal.name,
-            newEthBal.toString(),
-            expBal.eth.toString(),
-            expGasFee
-        );
+        // console.log(
+        //     expBal.name,
+        //     newEthBal.toString(),
+        //     expBal.eth.toString(),
+        //     expGasFee
+        // );
         assert.isAtMost(
             newEthBal.minus(expBal.eth).absoluteValue().toNumber(),
             expGasFee,
