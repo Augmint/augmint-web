@@ -6,6 +6,7 @@
          - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
          - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
          - consider sending UCD to this loanContract  first?
+    TODO: it costs 1094127 gas to create this contract. consider moving all functions to a library to reduce it
 */
 
 pragma solidity ^0.4.11;

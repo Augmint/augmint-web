@@ -1,4 +1,7 @@
-/* ERC20 Implementaion */
+/*
+ERC20 Implementation
+TODO: consider using this instead: https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
+ */
 pragma solidity ^0.4.11;
 contract ERC20Impl {
 
