@@ -28,6 +28,8 @@ TODO
   * Send reserve for auction (not implemented yet) when intervening
 * [Rates.sol](./contracts/Rates.sol)  
   A mock oracle contract to return USD/ETH exchange rates
+* [Exchange.sol](./contracts/Exchange.sol)  
+  A basic UCD / ETH exchange contract. Sell or buy UCD for ETH on USD/ETH market rates.
 * [LoanManager.sol](./contracts/LoanManager.sol)  
   * Maintains loan products and their parameters
   * Maintains a list of all loan contracts
@@ -48,8 +50,6 @@ TODO
 ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
 [DECENT Labs](http://www.decent.org) production
-
-Proof of concept implementation of a subscription bill collector
 
 ### Concept, initial version
 * [szerintedmi](https://github.com/szerintedmi)
