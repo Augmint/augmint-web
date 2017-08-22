@@ -6,7 +6,7 @@ _a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 ## Concept
 TODO: a short paragraph
 
-Work in progress, early draft for the [whitepaper outline](https://docs.google.com/document/d/16QgZM1WJDKH-vEPqldajwYYi3s355jF62AG98VH9iL8/edit?usp=sharing)
+**[Whitepaper outline](https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g/edit?usp=sharing)** - It's work in progress, draft document. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
 ## Glossary
 TODO
