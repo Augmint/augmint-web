@@ -143,7 +143,7 @@ contract Exchange is owned {
         }
         if( ucdValueTotal - ucdValueLeft > 0 ) {
             // transfer the sum UCD value of all WEI sold with orderFills
-            require(tokenUcd.systemTransfer(this, msg.sender, ucdValueTotal - ucdValueLeft, "Sell UCD order fill"));
+            require(tokenUcd.systemTransfer(this, msg.sender, ucdValueTotal - ucdValueLeft, "UCD sold"));
         }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
@@ -154,7 +154,7 @@ contract Exchange is owned {
 
     function placeSellUcdOrder(uint ucdAmount) {
         require(ucdAmount > 0); // FIXME: min amount?
-        require(tokenUcd.systemTransfer(msg.sender, this, ucdAmount, "Sell UCD order" ) );
+        require(tokenUcd.systemTransfer(msg.sender, this, ucdAmount, "UCD sell order placed" ) );
         uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
         uint weiValueLeft = weiValueTotal;
         uint ucdToSellLeft = ucdAmount;
@@ -217,7 +217,7 @@ contract Exchange is owned {
         OrdersLib.OrderType orderType = orders.orders[orderId -1].order.orderType;
         address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
-            require (tokenUcd.systemTransfer(this, maker, amountToPay, "Sell ETH order fill"));
+            require (tokenUcd.systemTransfer(this, maker, amountToPay, "ETH sold"));
             totalEthSellOrders -= amountToSell;
         } else if(orderType == OrdersLib.OrderType.UcdSell ){
             maker.transfer(amountToPay);
