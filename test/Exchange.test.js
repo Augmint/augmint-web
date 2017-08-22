@@ -10,10 +10,29 @@ const PLACE_ORDER_MAXFEE = web3.toWei(0.03);
 const ETHSELL = 0,
     UCDSELL = 1;
 
-let rates;
+let snapshotId;
+let rates, tokenUcd, exchange;
+let balBefore;
+let maker = web3.eth.accounts[1],
+    taker = web3.eth.accounts[2];
+let testedAccounts;
 
 before(async function() {
     rates = await Rates.deployed();
+    tokenUcd = await tokenUcdTestHelper.newTokenUcd(1000000000);
+    await tokenUcd.transfer(maker, 100000000);
+    await tokenUcd.transfer(taker, 100000000);
+    exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
+    testedAccounts = [exchange.address, maker, taker];
+});
+
+beforeEach(async function() {
+    snapshotId = await testHelper.takeSnapshot();
+    balBefore = await exchangeTestHelper.getBalances(tokenUcd, testedAccounts);
+});
+
+afterEach(async function() {
+    let res = await testHelper.revertSnapshot(snapshotId);
 });
 
 /* TODO: refactor this spagetthi */
@@ -29,19 +48,6 @@ contract("Exchange order", accounts => {
     it("place a sellEth order when no sellUcd orders", async function() {
         let orderType = ETHSELL;
         let orderAmount = web3.toWei(1);
-        let maker = web3.eth.accounts[1];
-
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd();
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
-
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
-        );
 
         let tx = await exchange.placeSellEthOrder({
             value: orderAmount,
@@ -62,20 +68,19 @@ contract("Exchange order", accounts => {
             maker: maker,
             orderId: orderId
         });
-
         let expBalances = [
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd,
-                eth: exchBalBefore.eth.plus(orderAmount)
+                ucd: balBefore[0].ucd,
+                eth: balBefore[0].eth.plus(orderAmount)
             },
             {
                 name: "maker",
                 address: maker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: makerBalBefore.ucd,
-                eth: makerBalBefore.eth.minus(orderAmount)
+                ucd: balBefore[1].ucd,
+                eth: balBefore[1].eth.minus(orderAmount)
             }
         ];
 
@@ -85,24 +90,11 @@ contract("Exchange order", accounts => {
     it("place a sellUcd when no sellETH orders", async function() {
         let orderType = UCDSELL;
         let orderAmount = 500000;
-        let maker = web3.eth.accounts[2];
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(orderAmount, maker);
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
-
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
-        );
 
         let tx = await exchange.placeSellUcdOrder(orderAmount, {
             from: maker
         });
         testHelper.logGasUse(this, tx);
-
         let orderId = await exchangeTestHelper.newOrderEventAsserts(
             tx.logs[0],
             orderType,
@@ -122,15 +114,15 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd.plus(orderAmount),
-                eth: exchBalBefore.eth
+                ucd: balBefore[0].ucd.plus(orderAmount),
+                eth: balBefore[0].eth
             },
             {
                 name: "maker",
                 address: maker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: makerBalBefore.ucd.minus(orderAmount),
-                eth: makerBalBefore.eth
+                ucd: balBefore[1].ucd.minus(orderAmount),
+                eth: balBefore[1].eth
             }
         ];
 
@@ -138,15 +130,8 @@ contract("Exchange order", accounts => {
     });
 
     it("sellUcd - fully filled from bigger open sellEth order ", async function() {
-        let taker = web3.eth.accounts[3];
-        let maker = web3.eth.accounts[4];
         let sellUcdAmount = 500000;
         let sellEthAmount = web3.toWei(1);
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(
-            sellUcdAmount,
-            taker
-        );
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
 
         let orderType = ETHSELL;
         let tx = await exchange.placeSellEthOrder({
@@ -155,17 +140,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        let takerBalBefore = await exchangeTestHelper.getBalances(
+        balBefore = await exchangeTestHelper.getBalances(
             tokenUcd,
-            taker
-        );
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
+            testedAccounts
         );
 
         orderType = UCDSELL;
@@ -194,22 +171,22 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd,
-                eth: exchBalBefore.eth.minus(expEthSold)
+                ucd: balBefore[0].ucd,
+                eth: balBefore[0].eth.minus(expEthSold)
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd.plus(sellUcdAmount),
-                eth: makerBalBefore.eth
+                ucd: balBefore[1].ucd.plus(sellUcdAmount),
+                eth: balBefore[1].eth
             },
 
             {
                 name: "taker",
                 address: taker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: takerBalBefore.ucd.minus(sellUcdAmount),
-                eth: takerBalBefore.eth.plus(expEthSold)
+                ucd: balBefore[2].ucd.minus(sellUcdAmount),
+                eth: balBefore[2].eth.plus(expEthSold)
             }
         ];
 
@@ -219,15 +196,8 @@ contract("Exchange order", accounts => {
     it("sellUcd - exactly filled from multiple sellEth order");
 
     it("sellEth - fully filled from open sellUcd order ", async function() {
-        let taker = web3.eth.accounts[5];
-        let maker = web3.eth.accounts[6];
         let sellUcdAmount = 2000000;
         let sellEthAmount = web3.toWei(1);
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(
-            sellUcdAmount,
-            maker
-        );
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
 
         let orderType = UCDSELL;
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -236,17 +206,9 @@ contract("Exchange order", accounts => {
 
         testHelper.logGasUse(this, tx);
 
-        let takerBalBefore = await exchangeTestHelper.getBalances(
+        balBefore = await exchangeTestHelper.getBalances(
             tokenUcd,
-            taker
-        );
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
+            testedAccounts
         );
 
         orderType = ETHSELL;
@@ -276,22 +238,22 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd.minus(expUcdSold),
-                eth: exchBalBefore.eth
+                ucd: balBefore[0].ucd.minus(expUcdSold),
+                eth: balBefore[0].eth
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd,
-                eth: makerBalBefore.eth.plus(sellEthAmount)
+                ucd: balBefore[1].ucd,
+                eth: balBefore[1].eth.plus(sellEthAmount)
             },
 
             {
                 name: "taker",
                 address: taker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: takerBalBefore.ucd.plus(expUcdSold),
-                eth: takerBalBefore.eth.minus(sellEthAmount)
+                ucd: balBefore[2].ucd.plus(expUcdSold),
+                eth: balBefore[2].eth.minus(sellEthAmount)
             }
         ];
 
@@ -301,15 +263,8 @@ contract("Exchange order", accounts => {
     it("sellEth - exactly filled from multiple open sellUcd orders");
 
     it("sellUcd - partially filled from smaller open sellEth order ", async function() {
-        let taker = web3.eth.accounts[7];
-        let maker = web3.eth.accounts[8];
         let sellUcdAmount = 2550000;
         let sellEthAmount = web3.toWei(1);
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(
-            sellUcdAmount,
-            taker
-        );
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
 
         let orderType = ETHSELL;
         let tx = await exchange.placeSellEthOrder({
@@ -318,17 +273,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        let takerBalBefore = await exchangeTestHelper.getBalances(
+        balBefore = await exchangeTestHelper.getBalances(
             tokenUcd,
-            taker
-        );
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
+            testedAccounts
         );
 
         orderType = UCDSELL;
@@ -341,6 +288,7 @@ contract("Exchange order", accounts => {
         let expEthSold = sellEthAmount;
         let ucdLeft =
             sellUcdAmount - (await rates.convertWeiToUsdc(sellEthAmount));
+
         let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(
             tx.logs[0],
             taker,
@@ -375,22 +323,22 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd.plus(ucdLeft),
-                eth: exchBalBefore.eth.minus(expEthSold)
+                ucd: balBefore[0].ucd.plus(ucdLeft),
+                eth: balBefore[0].eth.minus(expEthSold)
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd.plus(sellUcdAmount).minus(ucdLeft),
-                eth: makerBalBefore.eth
+                ucd: balBefore[1].ucd.plus(sellUcdAmount).minus(ucdLeft),
+                eth: balBefore[1].eth
             },
 
             {
                 name: "taker",
                 address: taker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: takerBalBefore.ucd.minus(sellUcdAmount),
-                eth: takerBalBefore.eth.plus(expEthSold)
+                ucd: balBefore[2].ucd.minus(sellUcdAmount),
+                eth: balBefore[2].eth.plus(expEthSold)
             }
         ];
 
@@ -398,15 +346,8 @@ contract("Exchange order", accounts => {
     });
 
     it("sellEth - partially filled from smaller open sellUcd order ", async function() {
-        let taker = web3.eth.accounts[8];
-        let maker = web3.eth.accounts[9];
         let sellUcdAmount = 1900000;
         let sellEthAmount = web3.toWei(1);
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(
-            sellUcdAmount,
-            maker
-        );
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
 
         let orderType = UCDSELL;
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -414,17 +355,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        let takerBalBefore = await exchangeTestHelper.getBalances(
+        balBefore = await exchangeTestHelper.getBalances(
             tokenUcd,
-            taker
-        );
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
+            testedAccounts
         );
 
         orderType = ETHSELL;
@@ -474,22 +407,22 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd.minus(expUcdSold),
-                eth: exchBalBefore.eth.plus(ethLeft)
+                ucd: balBefore[0].ucd.minus(expUcdSold),
+                eth: balBefore[0].eth.plus(ethLeft)
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd,
-                eth: makerBalBefore.eth.plus(ethPaid)
+                ucd: balBefore[1].ucd,
+                eth: balBefore[1].eth.plus(ethPaid)
             },
 
             {
                 name: "taker",
                 address: taker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: takerBalBefore.ucd.plus(expUcdSold),
-                eth: takerBalBefore.eth.minus(sellEthAmount)
+                ucd: balBefore[2].ucd.plus(expUcdSold),
+                eth: balBefore[2].eth.minus(sellEthAmount)
             }
         ];
 
@@ -497,15 +430,8 @@ contract("Exchange order", accounts => {
     });
 
     it("sellEth - fully filled from multiple open sellUcd orders", async function() {
-        let taker = web3.eth.accounts[10];
-        let maker = web3.eth.accounts[11];
         let sellUcdAmount = 200000;
         let sellEthAmount = web3.toWei(1);
-        let tokenUcd = await tokenUcdTestHelper.newTokenUcd(
-            sellUcdAmount * 2,
-            maker
-        );
-        let exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
 
         let orderType = UCDSELL;
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -518,17 +444,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        let takerBalBefore = await exchangeTestHelper.getBalances(
+        balBefore = await exchangeTestHelper.getBalances(
             tokenUcd,
-            taker
-        );
-        let makerBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            maker
-        );
-        let exchBalBefore = await exchangeTestHelper.getBalances(
-            tokenUcd,
-            exchange.address
+            testedAccounts
         );
 
         orderType = ETHSELL;
@@ -593,22 +511,22 @@ contract("Exchange order", accounts => {
             {
                 name: "exchange contract",
                 address: exchange.address,
-                ucd: exchBalBefore.ucd.minus(expUcdSold * 2),
-                eth: exchBalBefore.eth.plus(ethLeft)
+                ucd: balBefore[0].ucd.minus(expUcdSold * 2),
+                eth: balBefore[0].eth.plus(ethLeft)
             },
             {
                 name: "maker",
                 address: maker,
-                ucd: makerBalBefore.ucd,
-                eth: makerBalBefore.eth.plus(ethPaid.times(2))
+                ucd: balBefore[1].ucd,
+                eth: balBefore[1].eth.plus(ethPaid.times(2))
             },
 
             {
                 name: "taker",
                 address: taker,
                 gasFee: PLACE_ORDER_MAXFEE,
-                ucd: takerBalBefore.ucd.plus(expUcdSold * 2),
-                eth: takerBalBefore.eth.minus(sellEthAmount)
+                ucd: balBefore[2].ucd.plus(expUcdSold * 2),
+                eth: balBefore[2].eth.minus(sellEthAmount)
             }
         ];
 

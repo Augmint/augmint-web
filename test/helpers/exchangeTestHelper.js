@@ -17,11 +17,16 @@ function newExchange(tokenUcd, rates) {
         resolve(instance);
     });
 }
-async function getBalances(tokenUcd, account) {
-    return {
-        eth: await web3.eth.getBalance(account),
-        ucd: await tokenUcd.balanceOf(account)
-    };
+async function getBalances(tokenUcd, addresses) {
+    let balances = [];
+    for (let addr of addresses) {
+        balances.push({
+            eth: await web3.eth.getBalance(addr),
+            ucd: await tokenUcd.balanceOf(addr)
+        });
+    }
+
+    return balances;
 }
 
 async function newOrderEventAsserts(logItem, orderType, maker, orderAmount) {

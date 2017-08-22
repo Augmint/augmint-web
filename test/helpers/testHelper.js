@@ -3,6 +3,8 @@ var gasUseLog = new Array();
 
 module.exports = {
     stringify: stringify,
+    takeSnapshot: takeSnapshot,
+    revertSnapshot: revertSnapshot,
     logGasUse: logGasUse,
     expectThrow: expectThrow
 };
@@ -10,6 +12,87 @@ var _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function stringify(values) {
     return _stringify(values);
+}
+
+before(function() {
+    /* TODO: this way would be nicer  but throws: ReferenceError: toIntVal is not defined
+           use takeSnapshot() and revertSnapshot(snapshotId) instead.
+           Keep an eye on: https://ethereum.stackexchange.com/questions/24899/referenceerror-tointval-is-not-defined-when-extending-web3-with-evm-snapshot
+    */
+    // web3._extend({
+    //     property: "evm",
+    //     methods: [
+    //         new web3._extend.Method({
+    //             name: "snapshot",
+    //             call: "evm_snapshot",
+    //             params: 0,
+    //             outputFormatter: toIntVal
+    //         })
+    //     ]
+    // });
+    //
+    // web3._extend({
+    //     property: "evm",
+    //     methods: [
+    //         new web3._extend.Method({
+    //             name: "revert",
+    //             call: "evm_revert",
+    //             params: 1,
+    //             inputFormatter: [toIntVal]
+    //         })
+    //     ]
+    // });
+});
+
+//let snapshotCount = 0;
+function takeSnapshot() {
+    return new Promise(function(resolve, reject) {
+        web3.currentProvider.sendAsync(
+            {
+                method: "evm_snapshot",
+                params: [],
+                jsonrpc: "2.0",
+                id: new Date().getTime()
+            },
+            function(error, res) {
+                if (error) {
+                    reject(
+                        new Error("Can't take snapshot with web3\n" + error)
+                    );
+                } else {
+                    resolve(res.result);
+                }
+            }
+        );
+    });
+}
+
+function revertSnapshot(snapshotId) {
+    return new Promise(function(resolve, reject) {
+        web3.currentProvider.sendAsync(
+            {
+                method: "evm_revert",
+                params: [snapshotId],
+                jsonrpc: "2.0",
+                id: new Date().getTime()
+            },
+            function(error, res) {
+                if (error) {
+                    // TODO: this error is not bubbling up to truffle test run :/
+                    reject(
+                        new Error(
+                            "Can't revert snapshot with web3. snapshotId: " +
+                                snapshotId +
+                                "\n" +
+                                error
+                        )
+                    );
+                } else {
+                    resolve(res);
+                }
+            }
+        );
+    });
 }
 
 function logGasUse(testObj, tx) {

@@ -5,15 +5,12 @@ module.exports = {
     newTokenUcd: newTokenUcd
 };
 
-function newTokenUcd(initialUcdBalance, userAccount) {
+function newTokenUcd(initialUcdBalance) {
     return new Promise(async function(resolve, reject) {
         let instance = await TokenUcd.new();
         if (initialUcdBalance > 0) {
             await instance.issueUcd(initialUcdBalance);
             await instance.getUcdFromReserve(initialUcdBalance);
-            if (userAccount != null) {
-                await instance.transfer(userAccount, initialUcdBalance);
-            }
         }
         resolve(instance);
     });
