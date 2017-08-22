@@ -4,13 +4,14 @@ import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import exchangeProvider from "modules/exchangeProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderList from "components/OrderList";
+import PlaceOrderForm from "./components/PlaceOrderForm";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
         exchangeProvider();
     }
     render() {
-        const { orders, userAccount } = this.props;
+        const { orders, userAccount, exchange, rates } = this.props;
         return (
             <Grid>
                 <Row>
@@ -24,7 +25,11 @@ class ExchangeHome extends React.Component {
                         <Col xs={12}>
                             <AccountInfo account={userAccount} />
 
-                            <p>TODO: Sell/Buy form here...</p>
+                            <PlaceOrderForm
+                                orders={orders}
+                                exchange={exchange}
+                                rates={rates}
+                            />
 
                             <OrderList
                                 orders={orders}
@@ -51,7 +56,9 @@ class ExchangeHome extends React.Component {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
-    orders: state.orders
+    exchange: state.exchange,
+    orders: state.orders,
+    rates: state.rates
 });
 
 export default connect(mapStateToProps)(ExchangeHome);
