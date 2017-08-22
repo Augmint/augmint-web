@@ -30,6 +30,8 @@ const initialState = {
         totalUcdSellOrders: "?",
         bn_totalEthSellOrders: null,
         totalEthSellOrders: "?",
+        totalAmount: "?",
+        totalCcy: "?",
         owner: "?"
     }
 };
@@ -124,6 +126,17 @@ export const refreshExchange = () => {
             let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(
                 new BigNumber(10000)
             );
+            let totalUcdSellOrders = bn_totalUcdSellOrders.toString();
+            let totalEthSellOrders = bn_totalEthSellOrders.toString();
+            let totalAmount = 0,
+                totalCcy = "";
+            if (totalUcdSellOrders > 0) {
+                totalAmount = totalUcdSellOrders;
+                totalCcy = "UCD";
+            } else if (totalEthSellOrders > 0) {
+                totalAmount = totalEthSellOrders;
+                totalCcy = "ETH";
+            }
             let orderCount = await exchange.getOrderCount();
             return dispatch({
                 type: EXCHANGE_REFRESH_SUCCESS,
@@ -133,10 +146,12 @@ export const refreshExchange = () => {
                     bn_ucdBalance: bn_ucdBalance,
                     ucdBalance: bn_ucdBalance.toString(),
                     bn_totalEthSellOrders: bn_totalEthSellOrders,
-                    totalEthSellOrders: bn_totalEthSellOrders.toString(),
+                    totalEthSellOrders: totalEthSellOrders,
                     bn_totalUcdSellOrders: bn_totalUcdSellOrders,
-                    totalUcdSellOrders: bn_totalUcdSellOrders.toString(),
+                    totalUcdSellOrders: totalUcdSellOrders,
                     orderCount: orderCount.toNumber(),
+                    totalAmount: totalAmount,
+                    totalCcy: totalCcy,
                     owner: owner
                 }
             });

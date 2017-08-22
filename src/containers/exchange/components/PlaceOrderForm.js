@@ -10,6 +10,7 @@ import {
     FormGroup,
     InputGroup,
     ControlLabel,
+    HelpBlock,
     Button,
     Col,
     Nav,
@@ -20,7 +21,12 @@ import {
     EthSubmissionErrorPanel,
     EthSubmissionSuccessPanel
 } from "components/MsgPanels";
-import { Field, reduxForm, SubmissionError } from "redux-form";
+import {
+    Field,
+    reduxForm,
+    SubmissionError,
+    formValueSelector
+} from "redux-form";
 import { FieldInput, Form } from "components/BaseComponents";
 import {
     placeOrder,
@@ -29,6 +35,7 @@ import {
     UCDSELL
 } from "modules/reducers/orders";
 import BigNumber from "bignumber.js";
+import { connect } from "react-redux";
 
 const ETH_DECIMALS = 5;
 const UCD_DECIMALS = 2;
@@ -49,6 +56,7 @@ class PlaceOrderForm extends React.Component {
     }
 
     onUcdAmountChange(e) {
+        console.log("onucdch ", this.props.ucdAmount, this.props.ethAmount);
         let bn_ucdAmount;
         try {
             bn_ucdAmount = new BigNumber(e.target.value); //.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
@@ -69,6 +77,7 @@ class PlaceOrderForm extends React.Component {
     }
 
     onEthAmountChange(e) {
+        console.log("onethch ", this.props.ucdAmount, this.props.ethAmount);
         let bn_ethAmount;
         try {
             bn_ethAmount = new BigNumber(e.target.value); //.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP);
@@ -131,10 +140,76 @@ class PlaceOrderForm extends React.Component {
             submitting,
             submitSucceeded,
             clearSubmitErrors,
-            reset
+            reset,
+            ucdAmount,
+            ethAmount
         } = this.props;
         const { isLoading } = this.props.exchange;
+        const {
+            orderCount,
+            bn_totalUcdSellOrders,
+            bn_totalEthSellOrders,
+            totalCcy
+        } = this.props.exchange.info;
         const { orderType } = this.state;
+
+        let orderHelpText;
+        try {
+            let bn_ucdAmount = new BigNumber(ucdAmount);
+            let bn_ethAmount = new BigNumber(ethAmount);
+
+            if (orderCount === 0)
+                orderHelpText = (
+                    <p>
+                        There are no open orders.<br />
+                        You will place an order on market rate.
+                    </p>
+                );
+            else if (
+                (bn_totalUcdSellOrders.isZero() && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.isZero() && orderType === UCDSELL)
+            )
+                orderHelpText = (
+                    <p>
+                        Currently there are only sell {totalCcy} orders open.<br />
+                        Your will add an order on market rate.
+                    </p>
+                );
+            else if (
+                (bn_totalUcdSellOrders.gte(bn_ucdAmount) &&
+                    orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.gte(bn_ethAmount) &&
+                    orderType === UCDSELL)
+            )
+                orderHelpText = (
+                    <p>
+                        Current open sell {totalCcy} orders will fully cover
+                        your order.<br />
+                        The whole amount of your order will be immediately
+                        filled.
+                    </p>
+                );
+            else if (
+                (bn_totalUcdSellOrders.lte(bn_ucdAmount) &&
+                    orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.lte(bn_ethAmount) &&
+                    orderType === UCDSELL)
+            ) {
+                // TODO: let difference;
+                // if (orderType == ETHSELL) {
+                //     difference = bnTotalUcdSellOrders
+                // }
+                orderHelpText = (
+                    <p>
+                        Current open sell ETH orders only partially will cover
+                        your order.<br />
+                        The rest of your order will be placed as a market order.
+                    </p>
+                );
+            }
+        } catch (error) {
+            // it's likely a bignumber conversion error, we ignore it
+        }
 
         return (
             <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
@@ -145,11 +220,11 @@ class PlaceOrderForm extends React.Component {
                             activeKey={orderType}
                             onSelect={this.onOrderTypeChange}
                         >
-                            <NavItem eventKey={ETHSELL} title="Buy">
-                                <p>Buy</p>
+                            <NavItem eventKey={ETHSELL} title="Buy UCD">
+                                <p>Buy UCD</p>
                             </NavItem>
-                            <NavItem eventKey={UCDSELL} title="Sell">
-                                <p>Sell</p>
+                            <NavItem eventKey={UCDSELL} title="Sell UCD">
+                                <p>Sell UCD</p>
                             </NavItem>
                         </Nav>
                     </legend>
@@ -176,10 +251,10 @@ class PlaceOrderForm extends React.Component {
                     {!submitSucceeded &&
                         <div>
                             <FormGroup controlId="ucdAmount">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    {orderType === ETHSELL ? "Buy " : "Sell "}
+                                <Col componentClass={ControlLabel} xs={2}>
+                                    {orderType === ETHSELL ? "Buy: " : "Sell: "}
                                 </Col>
-                                <Col sm={10}>
+                                <Col xs={6}>
                                     <InputGroup>
                                         <Field
                                             name="ucdAmount"
@@ -193,10 +268,10 @@ class PlaceOrderForm extends React.Component {
                             </FormGroup>
 
                             <FormGroup controlId="ethAmount">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    for{" "}
+                                <Col componentClass={ControlLabel} xs={2}>
+                                    for:{" "}
                                 </Col>
-                                <Col sm={10}>
+                                <Col xs={6}>
                                     <InputGroup>
                                         <Field
                                             name="ethAmount"
@@ -210,7 +285,7 @@ class PlaceOrderForm extends React.Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Col smOffset={2} sm={10}>
+                                <Col smOffset={2} xs={10}>
                                     <Button
                                         type="submit"
                                         bsSize="large"
@@ -222,6 +297,9 @@ class PlaceOrderForm extends React.Component {
                                             ? "Place buy UCD order"
                                             : "Place sell UCD order"}
                                     </Button>
+                                    <HelpBlock>
+                                        {orderHelpText}
+                                    </HelpBlock>
                                 </Col>
                             </FormGroup>
                         </div>}
@@ -230,6 +308,13 @@ class PlaceOrderForm extends React.Component {
         );
     }
 }
+
+const selector = formValueSelector("PlaceOrderForm");
+
+PlaceOrderForm = connect(state => {
+    const { ethAmount, ucdAmount } = selector(state, "ethAmount", "ucdAmount");
+    return { ethAmount, ucdAmount }; //, ethAmount };
+})(PlaceOrderForm);
 
 export default reduxForm({
     form: "PlaceOrderForm"

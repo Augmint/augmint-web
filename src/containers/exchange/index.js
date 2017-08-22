@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import exchangeProvider from "modules/exchangeProvider";
 import AccountInfo from "components/AccountInfo";
-import OrderList from "components/OrderList";
+import OrderList from "./components/OrderList";
+import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 
 class ExchangeHome extends React.Component {
@@ -23,8 +24,10 @@ class ExchangeHome extends React.Component {
                 <Row>
                     <Col xs={12} sm={6}>
                         <Col xs={12}>
-                            <AccountInfo account={userAccount} />
-
+                            <ExchangeSummary
+                                exchangeInfo={exchange.info}
+                                rates={rates}
+                            />
                             <PlaceOrderForm
                                 orders={orders}
                                 exchange={exchange}
@@ -43,9 +46,11 @@ class ExchangeHome extends React.Component {
                     </Col>
 
                     <Col xs={12} sm={6}>
+                        <AccountInfo account={userAccount} />
                         <OrderList
                             orders={orders}
                             userAccountAddress={userAccount.address}
+                            header={<h3>All orders</h3>}
                         />
                     </Col>
                 </Row>
