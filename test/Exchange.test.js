@@ -18,6 +18,7 @@ let maker = web3.eth.accounts[1],
 let testedAccounts;
 
 before(async function() {
+    this.timeout(100000);
     rates = await Rates.deployed();
     tokenUcd = await tokenUcdTestHelper.newTokenUcd(1000000000);
     await tokenUcd.transfer(maker, 100000000);
@@ -27,6 +28,7 @@ before(async function() {
 });
 
 beforeEach(async function() {
+    this.timeout(50000);
     snapshotId = await testHelper.takeSnapshot();
     balBefore = await exchangeTestHelper.getBalances(tokenUcd, testedAccounts);
 });
