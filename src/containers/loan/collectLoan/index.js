@@ -9,9 +9,7 @@ const collectLoanMain = () =>
                 <PageHeader>Collect loans</PageHeader>
             </Col>
         </Row>
-        <Row>
-            <CollectLoanList />
-        </Row>
+        <CollectLoanList />
     </Grid>;
 
 export default collectLoanMain;

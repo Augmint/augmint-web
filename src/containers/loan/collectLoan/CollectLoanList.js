@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import LoanList from "components/LoanList";
-import { Col, Well, Button } from "react-bootstrap";
+import { Row, Col, Well, Button } from "react-bootstrap";
 import { SubmissionError, reduxForm } from "redux-form";
 import {
     collectLoans,
@@ -73,14 +73,25 @@ class CollectLoanList extends React.Component {
             loansToCollect
         } = this.props;
         return (
-            <Col>
-                <Col xs={12} md={4}>
+            <Row>
+                <Col xs={12} sm={4}>
                     <Well>
-                        .... TODO some description (and make this break on small
-                        devices properly) ...
+                        <p>
+                            When collecting a defaulted (not paid on time) loan
+                            the ETH held in contract escrow (collateral) will be
+                            transfered to system reserves.{" "}
+                        </p>
+                        <p>
+                            TODO, Not yet implemented: <br />
+                            If the value of the ETH collateral (at the moment of
+                            collection) is higher than the UCD loan amount less
+                            the fees for the collection then the leftover ETH
+                            will be transfered back to the borrower's ETH
+                            account.
+                        </p>
                     </Well>
                 </Col>
-                <Col xs={12} md={8}>
+                <Col xs={12} sm={8}>
                     {error &&
                         <EthSubmissionErrorPanel
                             error={error}
@@ -124,7 +135,7 @@ class CollectLoanList extends React.Component {
                         loans={loansToCollect}
                     />
                 </Col>
-            </Col>
+            </Row>
         );
     }
 }
