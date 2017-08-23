@@ -1,5 +1,9 @@
 echo "launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)"
-nvm use 8.2.1
+reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set OS=32BIT || set OS=64BIT
+
+if %OS%==32BIT nvm use 8.4.0 32
+if %OS%==64BIT nvm use 8.4.0
+
 testrpc ^
 --gasLimit 0x47D5DE ^
 --network-id 999 ^

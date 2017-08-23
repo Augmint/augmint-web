@@ -4,11 +4,11 @@
 Note: these steps are likely to work on linux too but it's not tested yet
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
-1. [nodejs](https://nodejs.org/en/download/)
+1. [nodejs](https://nodejs.org/en/download/) (tested with 8.4.0)
 1. [node version manager](https://github.com/tj/n): `npm install -g n`  
-1. Install node: `n 8.2.1`
+1. Install node: `n 8.4.0`
 1. `npm install -g ethereumjs-testrpc`  
-  _latest 4.1.0 version required_
+  _latest 4.1.1 version required_
 1. `npm install -g truffle`
 1. `git clone https://github.com/DecentLabs/ucd-poc.git`
 1. `cd ucd-poc`
@@ -21,8 +21,8 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
 
 in Git bash:
-1. `nvm install 8.2.1`
-1. `nvm use 8.2.1`
+1. `nvm install 8.4.0`
+1. `nvm use 8.4.0`
 1. `npm install -g ethereumjs-testrpc`  
     _latest 4.1.0 version required_
 1. `npm install -g truffle`
