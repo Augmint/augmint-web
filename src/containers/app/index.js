@@ -116,6 +116,9 @@ class App extends React.Component {
         this.props.tokenUcd.instance
             .e_transfer({ fromBlock: "latest", toBlock: "pending" })
             .watch(this.onTransfer.bind(this));
+        this.props.rates.instance
+            .e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" })
+            .watch(this.onRateChange.bind(this));
 
         // TODO: add & handle loanproduct change events
     }
@@ -124,7 +127,6 @@ class App extends React.Component {
         console.debug(
             "onNewBlock: dispatching fetchUserBalance & refreshTokenUcd"
         );
-        store.dispatch(refreshRates()); // not too expensive but should consider a  separate listener for rate change event
         store.dispatch(fetchUserBalance(this.props.userAccount));
         store.dispatch(refreshTokenUcd());
     }
@@ -176,12 +178,20 @@ class App extends React.Component {
         }
     }
 
+    onRateChange(error, result) {
+        console.log(
+            "onRateChange: e_ethToUsdcChanged event. Dispatching refreshRates"
+        );
+        store.dispatch(refreshRates());
+    }
+
     componentWillUnmount() {
         this.filterAllBlocks.stopWatching();
         this.props.loanManager.instance.e_newLoan().stopWatching();
         this.props.loanManager.instance.e_repayed().stopWatching();
         this.props.loanManager.instance.e_collected().stopWatching();
         this.props.tokenUcd.instance.e_transfer().stopWatching();
+        this.props.rates.instance.e_ethToUsdcChanged().stopWatching();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -286,7 +296,8 @@ const mapStateToProps = state => ({
     network: state.web3Connect.network,
     userAccount: state.web3Connect.userAccount,
     loanManager: state.loanManager.contract,
-    tokenUcd: state.tokenUcd.contract
+    tokenUcd: state.tokenUcd.contract,
+    rates: state.rates.contract
 });
 
 export default (App = withRouter(connect(mapStateToProps)(App)));
