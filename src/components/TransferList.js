@@ -15,7 +15,7 @@ export default class TransferList extends React.Component {
             transfers !== null &&
             transfers.filter(filter).map((tx, index) =>
                 <MyListGroupItem
-                    key={`txDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.direction}`}
+                    key={`txDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
                 >
                     {tx.from !== userAccountAddress &&
                         <p>

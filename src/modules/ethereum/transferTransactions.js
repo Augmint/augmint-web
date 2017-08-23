@@ -123,6 +123,7 @@ async function formatTransfer(address, tx) {
         blockNumber: tx.blockNumber,
         transactionIndex: tx.transactionIndex,
         transactionHash: tx.transactionHash,
+        logIndex: tx.logIndex,
         type: tx.type,
         bn_amount: bn_amount,
         direction: direction === -1 ? "out" : "in",
