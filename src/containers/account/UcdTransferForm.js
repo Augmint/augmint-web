@@ -50,7 +50,13 @@ class UcdTransferForm extends React.Component {
             });
         }
 
-        let res = await store.dispatch(transferUcd(values.payee, amount));
+        let res = await store.dispatch(
+            transferUcd({
+                payee: values.payee,
+                ucdAmount: amount,
+                narrative: values.narrative
+            })
+        );
         if (res.type !== TOKENUCD_TRANSFER_SUCCESS) {
             throw new SubmissionError({
                 _error: {
@@ -133,6 +139,20 @@ class UcdTransferForm extends React.Component {
                                         component={FieldInput}
                                         type="text"
                                         placeholder="0x0..."
+                                    />
+                                </Col>
+                            </FormGroup>
+
+                            <FormGroup controlId="narrative">
+                                <Col componentClass={ControlLabel} sm={2}>
+                                    Reference:{" "}
+                                </Col>
+                                <Col sm={10}>
+                                    <Field
+                                        name="narrative"
+                                        component={FieldInput}
+                                        type="text"
+                                        placeholder="short narrative (optional)"
                                     />
                                 </Col>
                             </FormGroup>

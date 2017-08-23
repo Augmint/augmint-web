@@ -160,16 +160,16 @@ export const refreshTokenUcd = () => {
     };
 };
 
-export function transferUcd(payee, ucdAmount) {
+export function transferUcd(payload) {
     return async dispatch => {
         dispatch({
             type: TOKENUCD_TRANSFER_REQUESTED,
-            ucdAmount: ucdAmount,
-            payee: payee
+            ucdcAmount: payload.ucdcAmount,
+            payee: payload.payee
         });
 
         try {
-            let result = await transferUcdTx(payee, ucdAmount);
+            let result = await transferUcdTx(payload);
             return dispatch({
                 type: TOKENUCD_TRANSFER_SUCCESS,
                 result: result

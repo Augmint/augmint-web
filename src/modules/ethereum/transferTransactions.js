@@ -13,15 +13,18 @@ import { asyncFilterGet, asyncGetBlock } from "modules/ethereum/ethHelper";
 
 const TRANSFER_UCD_GAS = 3000000;
 
-export async function transferUcdTx(payee, ucdAmount) {
+export async function transferUcdTx(payload) {
+    let { payee, ucdAmount, narrative } = payload;
     try {
         let gasEstimate = TRANSFER_UCD_GAS;
         let userAccount = store.getState().web3Connect.userAccount;
         let tokenUcd = store.getState().tokenUcd;
         let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
-        let result = await tokenUcd.contract.instance.transfer(
+        narrative = narrative == null ? "" : payload.narrative.trim();
+        let result = await tokenUcd.contract.instance.transferWithNarrative(
             payee,
             ucdcAmount,
+            narrative,
             {
                 from: userAccount,
                 gas: gasEstimate
