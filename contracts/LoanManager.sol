@@ -1,5 +1,4 @@
 /* Contract to manage UCD loan contracts
-    TODO: use of SafeMath for muls and plus
     TODO: add reentrancy protection
     TODO: consider to add early repayment
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
@@ -94,11 +93,11 @@ contract LoanManager is owned {
 
         // calculate UCD loan values based on ETH sent in with Tx
         uint usdcValue = rates.convertWeiToUsdc(msg.value);
-        uint ucdDueAtMaturity = (usdcValue * products[productId].loanCollateralRatio).roundedDiv(100000000);
+        uint ucdDueAtMaturity = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
         ucdDueAtMaturity = ucdDueAtMaturity * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
 
-        uint mul = (products[productId].loanCollateralRatio * products[productId].discountRate) / 1000000;
-        uint disbursedLoanInUcd = (usdcValue * mul).roundedDiv(100000000);
+        uint mul = products[productId].loanCollateralRatio.mul(products[productId].discountRate) / 1000000;
+        uint disbursedLoanInUcd = usdcValue.mul(mul).roundedDiv(100000000);
         disbursedLoanInUcd = disbursedLoanInUcd * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
 
         require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);

@@ -19,16 +19,18 @@
     TODO: implement ETH/UCD transfer for sale (ie. transfer from UCD or ETH reserves to exchange by owner)
     TODO: consider moving reserve to a separate contract
     TODO: add reentrancy protection
-    TODO: use safe maths
+    TODO: remove test functions (issue/burnUcd, getUcdFromReserve)
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices, https://github.com/OpenZeppelin/zeppelin-solidity
     TODO: move ERR all error code constants to lib/separate contract
     TODO: any point for ECR20Impl and TokenUcd separation now?
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";
+import "./SafeMath.sol";
 import "./ERC20Impl.sol";
 
 contract TokenUcd is ERC20Impl, owned {
+    using SafeMath for uint256;
     string public constant name = "US Crypto Dollar";
     string public constant symbol = "UCD";
     uint8 public constant decimals = 4; // TODO: check if 4 enough - assuming rate will be around USD
@@ -104,8 +106,8 @@ contract TokenUcd is ERC20Impl, owned {
     // FIXME: this is only for testing, remove this function
     event e_ucdIssued(uint amount);
     function issueUcd(uint amount) onlyOwner returns (int8 result) {
-        totalSupply += amount;
-        balances[this] += amount;
+        totalSupply = totalSupply.add(amount);
+        balances[this] = balances[this].add(amount);
         e_ucdIssued(amount);
         return SUCCESS;
     }
@@ -116,8 +118,8 @@ contract TokenUcd is ERC20Impl, owned {
         if (amount > balances[this]) {
             return ERR_RESERVE_BALANCE_NOT_ENOUGH;
         }
-        totalSupply -= amount;
-        balances[this] -= amount;
+        totalSupply = totalSupply.sub(amount);
+        balances[this] = balances[this].sub(amount);
         e_ucdBurned(amount);
         return SUCCESS;
     }
@@ -127,8 +129,8 @@ contract TokenUcd is ERC20Impl, owned {
         if (amount > balances[this]) {
             return ERR_RESERVE_BALANCE_NOT_ENOUGH;
         }
-        balances[this] -= amount;
-        balances[msg.sender] += amount;
+        balances[this] = balances[this].sub(amount);
+        balances[msg.sender] = balances[msg.sender].add(amount);
         return SUCCESS;
     }
 
@@ -137,13 +139,12 @@ contract TokenUcd is ERC20Impl, owned {
             return ERR_NOT_AUTHORISED;
         }
         if( ucdDueAtMaturity > disbursedLoanInUcd) {
-            totalSupply += ucdDueAtMaturity;
-            balances[this] += ucdDueAtMaturity ;
+            totalSupply = totalSupply.add(ucdDueAtMaturity);
+            balances[this] = balances[this].add(ucdDueAtMaturity);
         } else {
-            totalSupply += disbursedLoanInUcd;
+            totalSupply = totalSupply.add(disbursedLoanInUcd);
         }
         require( systemTransfer(this, borrower, disbursedLoanInUcd, narrative));
-        //balances[borrower] += disbursedLoanInUcd;
         return SUCCESS;
     }
 
@@ -155,7 +156,7 @@ contract TokenUcd is ERC20Impl, owned {
             return ERR_UCD_BALANCE_NOT_ENOUGH;
         }
         require( systemTransfer(borrower, this, ucdDueAtMaturity, narrative));
-        totalSupply -= ucdDueAtMaturity;
+        totalSupply = totalSupply.sub(ucdDueAtMaturity);
         return SUCCESS;
     }
 

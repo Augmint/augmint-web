@@ -1,11 +1,10 @@
 /*  mock implamentation of ETH/USD exchange rate oracle
-TODO: use of SafeMath
-TODO: use a real oracle (eg. piggyback Oraclize pricing contract?)
+    TODO: use a more realistic rates oracle (eg. piggyback Oraclize pricing contract?)
 */
 pragma solidity ^0.4.11;
 
-import "./Owned.sol";
 import "./SafeMath.sol";
+import "./Owned.sol";
 
 contract Rates is owned {
     using SafeMath for uint256;
@@ -27,13 +26,11 @@ contract Rates is owned {
     }
 
     function convertWeiToUsdc(uint weiValue) constant returns(uint usdcValue) {
-        // TODO: safe divide & multiply
-        return  (weiValue * ethUsdcRate).roundedDiv(ONE_ETH);
+        return weiValue.mul(ethUsdcRate).roundedDiv(ONE_ETH);
     }
 
     function convertUsdcToWei(uint usdcValue) constant returns(uint weiValue) {
-        // TODO: safe divide & multiply
         // TODO: can we make this not loosing max scale?
-        return  ( ONE_ETH * usdcValue).roundedDiv(ethUsdcRate) ;
+        return ONE_ETH.mul(usdcValue).roundedDiv(ethUsdcRate) ;
     }
 }

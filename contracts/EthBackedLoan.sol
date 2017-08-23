@@ -9,16 +9,17 @@
          - consider sending UCD to this loanContract  first?
     TODO: it costs 1094127 gas to create this contract. consider moving all functions to a library to reduce it
     TODO: implement sellLoan
+    TODO: consider a generic loan contract interface
 */
 
 pragma solidity ^0.4.11;
 
+import "./SafeMath.sol";
 import "./TokenUcd.sol";
 import "./LoanManager.sol";
 
 contract EthBackedLoan {
-
-    // TODO: consider a generic loan contract interface
+    using SafeMath for uint256;
     enum LoanState { Open, Repaid, Defaulted } // TODO: move this to a lib (used by TokenUcd too)
     address public owner; // the borrower
     LoanManager public loanManager; // loan manager contract instance
@@ -53,7 +54,7 @@ contract EthBackedLoan {
         tokenUcd = loanManager.tokenUcd();
         term = _term;
         disbursementDate = now;
-        maturity = disbursementDate + term;
+        maturity = disbursementDate.add(term);
         repayPeriod = _repayPeriod;
         disbursedLoanInUcd = _disbursedLoanInUcd;
         ucdDueAtMaturity = _ucdDueAtMaturity;
@@ -128,7 +129,7 @@ contract EthBackedLoan {
             return ERR_LOAN_NOT_OPEN;
         }
 
-        if(now < maturity + repayPeriod) {
+        if(now < maturity.add(repayPeriod) ) {
             return ERR_COLLECT_NOT_DUE_YET;
         }
 

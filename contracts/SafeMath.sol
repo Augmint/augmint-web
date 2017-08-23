@@ -4,7 +4,6 @@ pragma solidity ^0.4.11;
 * @title SafeMath
 * @dev Math operations with safety checks that throw on error
 
-    TODO: make use of these functions
     TODO: check against ds-math: https://blog.dapphub.com/ds-math/
     TODO: move roundedDiv to a sep lib? (eg. Math.sol)
 *

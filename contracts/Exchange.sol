@@ -16,12 +16,14 @@ TODO: add option to pass a rate for fill or kill orders to avoid different rate 
 TODO: add orderId to UCD transfer narrative
 */
 pragma solidity ^0.4.11;
+import "./SafeMath.sol";
 import "./Owned.sol";
 import "./OrdersLib.sol";
 import "./TokenUcd.sol";
 import "./Rates.sol";
 
 contract Exchange is owned {
+    using SafeMath for uint256;
     using OrdersLib for OrdersLib.OrderList;
     using OrdersLib for OrdersLib.OrderData;
 
@@ -135,15 +137,15 @@ contract Exchange is owned {
                 ucdSold = orders.orders[i-1].order.amount ;
                 weiToPay = rates.convertUsdcToWei(ucdSold);
             }
-            ucdValueLeft -= ucdSold;
-            weiToSellLeft -= weiToPay;
+            ucdValueLeft = ucdValueLeft.sub(ucdSold);
+            weiToSellLeft = weiToSellLeft.sub(weiToPay);
 
             fillOrder(i, msg.sender, ucdSold, weiToPay); // this pays the maker but not the taker yet
 
         }
-        if( ucdValueTotal - ucdValueLeft > 0 ) {
+        if( ucdValueTotal.sub(ucdValueLeft) > 0 ) {
             // transfer the sum UCD value of all WEI sold with orderFills
-            require(tokenUcd.systemTransfer(this, msg.sender, ucdValueTotal - ucdValueLeft, "UCD sold"));
+            require(tokenUcd.systemTransfer(this, msg.sender, ucdValueTotal.sub(ucdValueLeft), "UCD sold"));
         }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
@@ -179,12 +181,12 @@ contract Exchange is owned {
                 weiSold = orders.orders[i-1].order.amount;
                 ucdToPay = rates.convertWeiToUsdc(weiSold);
             }
-            weiValueLeft -= weiSold;
-            ucdToSellLeft -= ucdToPay;
+            weiValueLeft = weiValueLeft.sub(weiSold);
+            ucdToSellLeft = ucdToSellLeft.sub(ucdToPay);
             fillOrder(i, msg.sender, weiSold, ucdToPay); // this pays the maker but not the taker yet
         }
         // pay the sum WEI value of all UCD sold with orderFills to taker
-        msg.sender.transfer( weiValueTotal - weiValueLeft );
+        msg.sender.transfer( weiValueTotal.sub(weiValueLeft));
         if (ucdToSellLeft != 0) {
             // No buy order or weren't enough buy orders to fully fill order
             addOrder(OrdersLib.OrderType.UcdSell, msg.sender, ucdToSellLeft);
@@ -195,9 +197,9 @@ contract Exchange is owned {
     function addOrder(OrdersLib.OrderType orderType, address maker, uint amount) internal {
         // It's assumed that the ETH/UCD already taken from maker in calling function
         if (orderType == OrdersLib.OrderType.EthSell) {
-            totalEthSellOrders += amount;
+            totalEthSellOrders = totalEthSellOrders.add(amount);
         } else if(orderType == OrdersLib.OrderType.UcdSell ){
-            totalUcdSellOrders += amount;
+            totalUcdSellOrders = totalUcdSellOrders.add(amount);
         } else {
             revert();
         }
@@ -218,15 +220,15 @@ contract Exchange is owned {
         address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
             require (tokenUcd.systemTransfer(this, maker, amountToPay, "ETH sold"));
-            totalEthSellOrders -= amountToSell;
+            totalEthSellOrders = totalEthSellOrders.sub(amountToSell);
         } else if(orderType == OrdersLib.OrderType.UcdSell ){
             maker.transfer(amountToPay);
-            totalUcdSellOrders -= amountToSell;
+            totalUcdSellOrders = totalUcdSellOrders.sub(amountToSell);
         } else {
             revert();
         }
 
-        orders.orders[orderId -1 ].order.amount -= amountToSell;
+        orders.orders[orderId -1 ].order.amount = orders.orders[orderId -1 ].order.amount.sub(amountToSell);
 
         if (orders.orders[orderId -1].order.amount == 0) {
             removeOrder(orderId);
