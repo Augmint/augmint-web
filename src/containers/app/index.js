@@ -171,7 +171,7 @@ class App extends React.Component {
             result.args.from === this.props.userAccount ||
             result.args.to === this.props.userAccount
         ) {
-            console.log(
+            console.debug(
                 "onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer"
             );
             store.dispatch(processTransfer(this.props.userAccount, result));
@@ -179,7 +179,7 @@ class App extends React.Component {
     }
 
     onRateChange(error, result) {
-        console.log(
+        console.debug(
             "onRateChange: e_ethToUsdcChanged event. Dispatching refreshRates"
         );
         store.dispatch(refreshRates());

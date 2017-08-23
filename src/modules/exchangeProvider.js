@@ -8,14 +8,11 @@ import { refreshOrders } from "modules/reducers/orders";
 */
 
 export default () => {
-    console.debug("exchangeProvider");
-
     const exchange = store.getState().exchange;
     const web3Connect = store.getState().web3Connect;
     let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
     store.subscribe(
         w1((newVal, oldVal, objectPath) => {
-            console.debug("exchangeProvider - web3Connect.web3ConnectionId");
             if (newVal) {
                 console.debug(
                     "exchangeProvider - web3Connect.web3ConnectionId changed. Dispatching connectExchange()"
@@ -40,6 +37,9 @@ export default () => {
     );
 
     if (!web3Connect.isLoading && !web3Connect.isConnected) {
+        console.debug(
+            "exchangeProvider - web3Connect is not connected. Dispatching setupWeb3()"
+        );
         store.dispatch(setupWeb3());
     }
 

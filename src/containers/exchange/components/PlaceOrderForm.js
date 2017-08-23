@@ -56,7 +56,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     onUcdAmountChange(e) {
-        console.log("onucdch ", this.props.ucdAmount, this.props.ethAmount);
         let bn_ucdAmount;
         try {
             bn_ucdAmount = new BigNumber(e.target.value); //.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
@@ -77,7 +76,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     onEthAmountChange(e) {
-        console.log("onethch ", this.props.ucdAmount, this.props.ethAmount);
         let bn_ethAmount;
         try {
             bn_ethAmount = new BigNumber(e.target.value); //.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP);
