@@ -47,7 +47,7 @@ export async function transferUcdTx(payload) {
             result.logs[0].event !== "e_transfer"
         ) {
             throw new Error(
-                "e_transfer wasn't event received. Check tx :  " + result.tx
+                "e_transfer event wasn't received. Check tx :  " + result.tx
             );
         }
 

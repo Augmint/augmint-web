@@ -6,7 +6,14 @@ import stringifier from "stringifier";
 const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 export function ContractBaseInfo(props) {
-    let { isConnected, isLoading, error, contract, info } = props.contract;
+    let {
+        isConnected,
+        isLoading,
+        error,
+        contract,
+        info,
+        connectionError
+    } = props.contract;
     return (
         <div>
             <Table condensed striped>
@@ -32,14 +39,23 @@ export function ContractBaseInfo(props) {
                 </tbody>
             </Table>
 
+            {connectionError
+                ? <p>
+                      connectionError: <br />{" "}
+                      <ErrorDetails style={{ fontSize: 10 + "px" }}>
+                          {connectionError.message}
+                      </ErrorDetails>
+                  </p>
+                : <p>No connection error</p>}
+
             {error
                 ? <p>
                       Error: <br />{" "}
                       <ErrorDetails style={{ fontSize: 10 + "px" }}>
-                          stringify(error)
+                          {connectionError.message}
                       </ErrorDetails>
                   </p>
-                : <p>No error</p>}
+                : <p>No tx error</p>}
 
             <p>Info:</p>
             <pre style={{ fontSize: 10 + "px" }}>

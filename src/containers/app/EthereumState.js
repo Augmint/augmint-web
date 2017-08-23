@@ -40,7 +40,13 @@ function LocalInstallInstructions(props) {
 export class EthereumState extends React.Component {
     render() {
         let msg = null;
-        const { web3Connect, loanManager, rates, tokenUcd } = this.props;
+        const {
+            web3Connect,
+            loanManager,
+            rates,
+            tokenUcd,
+            exchange
+        } = this.props;
         if (web3Connect.isLoading) {
             msg = (
                 <InfoPanel
@@ -82,7 +88,8 @@ export class EthereumState extends React.Component {
         } else if (
             loanManager.connectionError ||
             rates.connectionError ||
-            tokenUcd.connectionError
+            tokenUcd.connectionError ||
+            (exchange && rates.connectionError)
         ) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
@@ -114,7 +121,10 @@ export class EthereumState extends React.Component {
                                 ? rates.connectionError.message + "\n"
                                 : ""}
                             {tokenUcd.connectionError
-                                ? tokenUcd.connectionError.message
+                                ? tokenUcd.connectionError.message + "\n"
+                                : ""}
+                            {exchange.connectionError
+                                ? exchange.connectionError.message
                                 : ""}
                         </ErrorDetails>
                     </p>
@@ -141,7 +151,8 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
     loanManager: state.loanManager,
     rates: state.rates,
-    tokenUcd: state.tokenUcd
+    tokenUcd: state.tokenUcd,
+    exchange: state.exchange
 });
 
 export default (EthereumState = connect(mapStateToProps)(EthereumState));
