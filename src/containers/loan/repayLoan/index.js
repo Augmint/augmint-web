@@ -11,10 +11,9 @@ const repayLoanMain = () =>
                 <PageHeader>Repay loan</PageHeader>
             </Col>
         </Row>
-        <Row>
-            <Route exact path="/loan/repay" component={LoanSelector} />
-            <Route path="/loan/repay/:loanId" component={RepayLoanPage} />
-        </Row>
+
+        <Route exact path="/loan/repay" component={LoanSelector} />
+        <Route path="/loan/repay/:loanId" component={RepayLoanPage} />
     </Grid>;
 
 export default repayLoanMain;

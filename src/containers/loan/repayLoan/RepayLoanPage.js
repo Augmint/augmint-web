@@ -19,6 +19,7 @@ import {
     WarningPanel
 } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
+import { RepayHelp } from "./components/RepayHelp";
 
 // TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
 //import { push } from 'react-router-redux'
@@ -145,14 +146,11 @@ class RepayLoanPage extends React.Component {
 
         return (
             <Row>
-                <Col xs={4} md={4}>
-                    <Row>
-                        <Col>
-                            <AccountInfo account={this.props.userAccount} />
-                        </Col>
-                    </Row>
+                <Col xs={12} sm={4}>
+                    <AccountInfo account={this.props.userAccount} />
+                    <RepayHelp />
                 </Col>
-                <Col xs={8} md={8}>
+                <Col xs={12} sm={8}>
                     {this.props.error &&
                         <EthSubmissionErrorPanel
                             error={this.props.error}
