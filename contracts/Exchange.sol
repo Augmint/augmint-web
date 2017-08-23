@@ -13,7 +13,7 @@ TODO: make orders generic, ie. more generic placeSellOrder func.
 TODO: test for rounding if could be any leftover after order fills
 TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
-TODO: add orderId to UCD transfers
+TODO: add orderId to UCD transfer narrative
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";

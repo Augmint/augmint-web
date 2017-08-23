@@ -1,10 +1,6 @@
 /*  mock implamentation of ETH/USD exchange rate oracle
-TODO: make use of SafeMath.roundedDiv and remove func from here when https://github.com/ethereumjs/testrpc/issues/122 is fixed
+TODO: use of SafeMath
 TODO: use a real oracle (eg. piggyback Oraclize pricing contract?)
-TODO: use save div and mul
-TODO: implement convertUsdcToWei()
-TODO: Consider using eg. Ray https://github.com/dapphub/ds-math
-
 */
 pragma solidity ^0.4.11;
 

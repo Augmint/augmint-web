@@ -1,9 +1,12 @@
 /* Contract to manage UCD loan contracts
-    TODO: make use of SafeMath.roundedDiv and remove func from here when https://github.com/ethereumjs/testrpc/issues/122 is fixed
-    TODO: store loanId (idx in loanPointers)  in EthBackedLoan
+    TODO: use of SafeMath for muls and plus
+    TODO: add reentrancy protection
     TODO: consider to add early repayment
     TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
     TODO: add loanId to disbursement, repay and collection narrative
+    TODO: check if we could do repayment without "direct" access to borrower's UCD balance
+           eg. transfer UCD to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
+           it wouldn't restrict access more but would be better seperation of functions
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";
@@ -138,9 +141,6 @@ contract LoanManager is owned {
     event e_repayed(address loanContractAddress, address borrower);
     function repay(uint loanId) returns (int8 result) {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
-        // TODO: check if we could do this without "direct" access to borrower's UCD balance
-        //       eg. transfer UCD to loanContract initiates repayment? or using ECR20 transfer approval?
-        //       it wouldn't restrict access more but would be better seperation of functions
         if(loanPointers.length < loanId + 1) {
             e_error(ERR_NO_LOAN);
             return ERR_NO_LOAN;

@@ -1,14 +1,6 @@
 pragma solidity ^0.4.11;
 
 library OrdersLib {
-    /* TODO: optimisations for gas cost. E.g.
-              - we could get rid of  prev/next/last,  just store first (orders only can be added to the end and deleted from the begining only)
-              - aren't we better with two orderlist and not storing orderType?
-              - do we really need loanId?
-              - datatypes, eg. less than uint80?
-              - get rid of makerOrderIdx somehow?
-    */
-
     uint80 constant None = uint80(0);
 
     // this struct holds open sell and buy orders actual state
