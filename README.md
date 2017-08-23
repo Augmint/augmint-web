@@ -11,6 +11,12 @@ TODO: a short paragraph
 ## Glossary
 TODO
 
+## Screenshots
+
+![My Account screenshot](docs/screenshots/02_myAccount.png)
+
+**[More screenshots](docs/screenshots)**
+
 ## Components
 ### Solidity Contracts
 * [Owned.sol](./contracts/Owned.sol)  
