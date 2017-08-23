@@ -15,14 +15,14 @@
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
 
-    TODO:
-        - decision making mechanism (ie. replace all onlyOwner)
-        - implement ETH selling (ie. separate auction contract)
-        - consider moving reserve to a separate contract
-        - use safe maths and/or use ds-math: https://blog.dapphub.com/ds-math/ or zeppelin safe math: https://github.com/OpenZeppelin/zeppelin-solidity
-        - check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices
-        - move ERR all error code constants to lib/separate contract
-        - any point for ECR20Impl and TokenUcd separation now?
+    TODO: decision making mechanism (ie. replace all onlyOwner)
+    TODO: implement ETH/UCD transfer for sale (ie. transfer from UCD or ETH reserves to exchange by owner)
+    TODO: consider moving reserve to a separate contract
+    TODO: add reentrancy protection
+    TODO: use safe maths
+    TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices, https://github.com/OpenZeppelin/zeppelin-solidity
+    TODO: move ERR all error code constants to lib/separate contract
+    TODO: any point for ECR20Impl and TokenUcd separation now?
 */
 pragma solidity ^0.4.11;
 import "./Owned.sol";

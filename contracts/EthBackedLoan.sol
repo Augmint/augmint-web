@@ -1,5 +1,6 @@
 /* contract for each loan given in UCD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
+    TODO: add reentrancy protection
     TODO: consider storing collateral amount when loan created for easier tracking after repayment
     TODO: consider store loanId (maintened in loanManager)
     TODO: consider moving all repay functionality here from loanManager to make it self contained
@@ -7,6 +8,7 @@
          - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
          - consider sending UCD to this loanContract  first?
     TODO: it costs 1094127 gas to create this contract. consider moving all functions to a library to reduce it
+    TODO: implement sellLoan
 */
 
 pragma solidity ^0.4.11;
