@@ -17,7 +17,7 @@ export default class OrderList extends React.Component {
             noItemMessage,
             userAccountAddress
         } = this.props;
-        const { orders, error, isLoading } = this.props.orders;
+        const { orders, refreshError, isLoading } = this.props.orders;
         const filteredOrders = orders == null ? null : orders.filter(filter);
         const listItems =
             filteredOrders != null &&
@@ -45,7 +45,7 @@ export default class OrderList extends React.Component {
             totalCcy = orders[0].ccy;
         return (
             <Panel header={header}>
-                {error && <p>Error loading orders</p>}
+                {refreshError && <p>Error loading orders</p>}
                 {isLoading && <p>Refreshing order list...</p>}
                 {orders != null && filteredOrders.length === 0
                     ? noItemMessage

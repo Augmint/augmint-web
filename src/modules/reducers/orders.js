@@ -15,6 +15,7 @@ export const PLACE_ORDER_ERROR = "orders/PLACE_ORDER_ERROR";
 export const PLACE_ORDER_SUCCESS = "orders/PLACE_ORDER_SUCCESS";
 
 const initialState = {
+    refreshError: null,
     error: null,
     isLoading: true,
     orders: null
@@ -26,7 +27,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                error: null
+                refreshError: null
             };
 
         case ORDERS_REFRESH_SUCCESS:
@@ -34,14 +35,14 @@ export default (state = initialState, action) => {
                 ...state,
                 orders: action.result,
                 isLoading: false,
-                error: null
+                refreshError: null
             };
 
         case ORDERS_REFRESH_ERROR:
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                refreshError: action.error
             };
 
         case PLACE_ORDER_REQUESTED:
