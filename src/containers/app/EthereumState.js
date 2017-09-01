@@ -14,25 +14,25 @@ function LocalInstallInstructions(props) {
     return (
         <div>
             <p>
-                This application only works on a local installation at the
-                moment.
+                This application only works on Rinkeby test network or on a
+                local installation at the moment.
             </p>
             <p>
-                Follow instructions on our{" "}
+                Make sure you are connected to Rinkeby or for local install
+                follow instructions on our{" "}
                 <Button
                     bsStyle="link"
                     href="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
                     target="_blank"
                 >
                     Github page
-                </Button>{" "}
-                about how to install and run it locally.
+                </Button>.
             </p>
-            <p>If you already installed then check if testrpc is running.</p>
             <p>
                 If you are using Metamask then check if it's connected to
-                localhost{" "}
+                Rinkeby or localhost for local install.
             </p>
+            <p>If you already installed then check if testrpc is running.</p>
         </div>
     );
 }
@@ -72,10 +72,11 @@ export class EthereumState extends React.Component {
             );
         } else if (
             web3Connect.isConnected &&
-            web3Connect.network.id !== "999"
+            web3Connect.network.id !== "999" &&
+            web3Connect.network.id !== "4"
         ) {
             msg = (
-                <ErrorPanel header={<h3>Not on local testrpc</h3>}>
+                <ErrorPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
                     <p>
                         Your browser seems to be connected to{" "}
                         {web3Connect.network.name} (id: {web3Connect.network.id}).
@@ -94,23 +95,32 @@ export class EthereumState extends React.Component {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
                     <p>
-                        You seem to be connected to local testrpc but can't find
-                        UCD contracts.<br />
-                        Do you have all the contracts deployed?
-                        <br />
-                        <pre>
-                            {"truffle migrate --reset" +
-                                "\ncp ./build/contracts/* ./src/contractsBuild"}
-                        </pre>
-                        <br />See more on our{" "}
-                        <Button
-                            bsStyle="link"
-                            href="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
-                            target="_blank"
-                        >
-                            Github page
-                        </Button>
+                        You seem to be connected to {web3Connect.network.name}{" "}
+                        but can't find UCD contracts.
                     </p>
+                    {web3Connect.network.id === "4" &&
+                        <p>
+                            It's an issue with our deployement, because you are
+                            on {web3Connect.network.name} and UCD contracts
+                            should be deployed.
+                        </p>}
+                    {web3Connect.network.id !== "4" &&
+                        <p>
+                            Do you have all the contracts deployed?
+                            <br />
+                            <pre>
+                                {"truffle migrate --reset" +
+                                    "\ncp ./build/contracts/* ./src/contractsBuild"}
+                            </pre>
+                            <br />See more on our{" "}
+                            <Button
+                                bsStyle="link"
+                                href="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                                target="_blank"
+                            >
+                                Github page
+                            </Button>
+                        </p>}
                     <p>
                         Error(s):<br />
                         <ErrorDetails>
