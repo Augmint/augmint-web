@@ -1,9 +1,8 @@
-echo "launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)"
-reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set OS=32BIT || set OS=64BIT
-
-if %OS%==32BIT nvm use 8.4.0 32
-if %OS%==64BIT nvm use 8.4.0
-
+@echo Launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)
+REM commented out now, nvm use requires admin rights and after it we have a path issue (testrpc cmd not found)
+REM @reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set OS=32BIT || set OS=64BIT
+REM @if %OS%==32BIT nvm use 8.4.0 32
+REM @if %OS%==64BIT nvm use 8.4.0
 testrpc ^
 --gasLimit 0x47D5DE ^
 --network-id 999 ^
