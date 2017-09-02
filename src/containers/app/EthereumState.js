@@ -73,7 +73,8 @@ export class EthereumState extends React.Component {
         } else if (
             web3Connect.isConnected &&
             web3Connect.network.id !== "999" &&
-            web3Connect.network.id !== "4"
+            web3Connect.network.id !== "4" &&
+            web3Connect.network.id !== "3"
         ) {
             msg = (
                 <ErrorPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
@@ -98,13 +99,15 @@ export class EthereumState extends React.Component {
                         You seem to be connected to {web3Connect.network.name}{" "}
                         but can't find UCD contracts.
                     </p>
-                    {web3Connect.network.id === "4" &&
+                    {(web3Connect.network.id === "4" ||
+                        web3Connect.network.id === "3") &&
                         <p>
                             It's an issue with our deployement, because you are
                             on {web3Connect.network.name} and UCD contracts
                             should be deployed.
                         </p>}
                     {web3Connect.network.id !== "4" &&
+                        web3Connect.network.id !== "3" &&
                         <p>
                             Do you have all the contracts deployed?
                             <br />

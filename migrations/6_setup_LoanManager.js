@@ -6,12 +6,14 @@ module.exports = function(deployer, network) {
     TokenUcd.deployed().then(res => {
         res.setLoanManagerAddress(LoanManager.address);
         var onTest =
-            web3.version.network == 999 || web3.version.network == 4
+            web3.version.network == 999 ||
+            web3.version.network == 4 ||
+            web3.version.network == 3
                 ? true
                 : false;
         if (onTest) {
             console.log(
-                "   On test network. Adding test loanProducts. Network id: ",
+                "   On a test network. Adding test loanProducts. Network id: ",
                 web3.version.network
             );
             LoanManager.deployed().then(res => {
