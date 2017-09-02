@@ -30,22 +30,41 @@ in Git bash:
 1. `cd ucd-poc`
 1. `npm install`
 
-TODO: test windows install steps with [Chocolatey](https://chocolatey.org/)
-
 ## Launch
-### On testrpc
-
-Update to latest ucd-poc:
+### 1. Update to latest ucd-poc
 1. `git pull` for latest ucd-poc version
 1. `npm install` if there were any node package changes in packages.json
 
-Launching:
+### 2. Deploy to network
+#### Testrpc
 1. `./runtestrpc` or on windows: `./runtestrpc.bat`
 1. in separate console:  
   `truffle migrate` or  
   `truffle migrate --reset` to overwrite existing migration
 1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
-1. `yarn start`
 
-### On testnet
-TODO: not tested yet
+#### Private chain
+##### First init
+```
+cd privatechain
+./createprivatechain.sh
+./importprivatekeys.sh
+cd ..
+truffle migrate
+cp ./build/contracts/* ./src/contractsBuild
+```
+##### Launch
+```
+cd privatechain
+./runprivatechain.sh
+```
+
+#### Rinkeby
+```
+./runrinkeby.sh
+truffle migrate --network rinkeby
+cp ./build/contracts/* ./src/contractsBuild
+```
+
+### 3. Launch local dev server
+`yarn start`

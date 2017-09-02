@@ -8,7 +8,8 @@ module.exports = function(deployer, network) {
         var onTest =
             web3.version.network == 999 ||
             web3.version.network == 4 ||
-            web3.version.network == 3
+            web3.version.network == 3 ||
+            web3.version.network == 1976
                 ? true
                 : false;
         if (onTest) {

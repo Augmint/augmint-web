@@ -78,6 +78,9 @@ export function asyncGetNetwork(web3) {
                     case "999":
                         networkName = "Testrpc";
                         break;
+                    case "1976":
+                        networkName = "PrivateChain";
+                        break;
                     default:
                         networkName = "Unknown";
                 }

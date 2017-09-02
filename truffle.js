@@ -15,6 +15,12 @@ module.exports = {
             network_id: "*", // Match any network id
             gas: 4707806
         },
+        privatechain: {
+            host: "localhost",
+            port: 8545,
+            network_id: "1976",
+            gas: 4707806
+        },
         rinkeby: {
             host: "localhost", // Connect to geth on the specified
             port: 8545,

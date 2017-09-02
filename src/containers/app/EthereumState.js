@@ -74,7 +74,8 @@ export class EthereumState extends React.Component {
             web3Connect.isConnected &&
             web3Connect.network.id !== "999" &&
             web3Connect.network.id !== "4" &&
-            web3Connect.network.id !== "3"
+            web3Connect.network.id !== "3" &&
+            web3Connect.network.id !== "1976"
         ) {
             msg = (
                 <ErrorPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
@@ -100,14 +101,15 @@ export class EthereumState extends React.Component {
                         but can't find UCD contracts.
                     </p>
                     {(web3Connect.network.id === "4" ||
-                        web3Connect.network.id === "3") &&
+                        web3Connect.network.id === "3") && (
                         <p>
                             It's an issue with our deployement, because you are
                             on {web3Connect.network.name} and UCD contracts
                             should be deployed.
-                        </p>}
+                        </p>
+                    )}
                     {web3Connect.network.id !== "4" &&
-                        web3Connect.network.id !== "3" &&
+                    web3Connect.network.id !== "3" && (
                         <p>
                             Do you have all the contracts deployed?
                             <br />
@@ -123,22 +125,31 @@ export class EthereumState extends React.Component {
                             >
                                 Github page
                             </Button>
-                        </p>}
+                        </p>
+                    )}
                     <p>
                         Error(s):<br />
                         <ErrorDetails>
-                            {loanManager.connectionError
-                                ? loanManager.connectionError.message + "\n"
-                                : ""}
-                            {rates.connectionError
-                                ? rates.connectionError.message + "\n"
-                                : ""}
-                            {tokenUcd.connectionError
-                                ? tokenUcd.connectionError.message + "\n"
-                                : ""}
-                            {exchange.connectionError
-                                ? exchange.connectionError.message
-                                : ""}
+                            {loanManager.connectionError ? (
+                                loanManager.connectionError.message + "\n"
+                            ) : (
+                                ""
+                            )}
+                            {rates.connectionError ? (
+                                rates.connectionError.message + "\n"
+                            ) : (
+                                ""
+                            )}
+                            {tokenUcd.connectionError ? (
+                                tokenUcd.connectionError.message + "\n"
+                            ) : (
+                                ""
+                            )}
+                            {exchange.connectionError ? (
+                                exchange.connectionError.message
+                            ) : (
+                                ""
+                            )}
                         </ErrorDetails>
                     </p>
                 </ErrorPanel>
@@ -149,9 +160,7 @@ export class EthereumState extends React.Component {
             msg = (
                 <Grid>
                     <Row>
-                        <Col>
-                            {msg}
-                        </Col>
+                        <Col>{msg}</Col>
                     </Row>
                 </Grid>
             );
