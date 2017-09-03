@@ -21,19 +21,21 @@ export default class OrderList extends React.Component {
         const filteredOrders = orders == null ? null : orders.filter(filter);
         const listItems =
             filteredOrders != null &&
-            filteredOrders.map((order, index) =>
+            filteredOrders.map((order, index) => (
                 <MyListGroupItem key={`ordersRow-${order.orderId}`}>
                     Sell {order.amount} {order.ccy} for{" "}
                     {order.ccy === "ETH" ? "UCD" : "ETH"}
                     <small>
                         <br />Order Id: {order.orderId} | makerOrderIdx:{" "}
                         {order.makerOrderIdx} | Maker: {order.maker}
-                        {order.maker === userAccountAddress
-                            ? " TODO: Cancel my order"
-                            : ""}
+                        {order.maker === userAccountAddress ? (
+                            " TODO: Cancel my order"
+                        ) : (
+                            ""
+                        )}
                     </small>
                 </MyListGroupItem>
-            );
+            ));
         const totalAmount =
             filteredOrders === null
                 ? "?"
@@ -47,24 +49,28 @@ export default class OrderList extends React.Component {
             <Panel header={header}>
                 {refreshError && <p>Error loading orders</p>}
                 {isLoading && <p>Refreshing order list...</p>}
-                {orders != null && filteredOrders.length === 0
-                    ? noItemMessage
-                    : <MyListGroup>
-                          Total: Sell {totalAmount} {totalCcy} in{" "}
-                          {orders === null ? "?" : orders.length} orders
-                          <Button
-                              bsStyle="link"
-                              onClick={() =>
-                                  this.setState({
-                                      orderListOpen: !this.state.orderListOpen
-                                  })}
-                          >
-                              {this.state.orderListOpen
-                                  ? "<< Hide orders"
-                                  : "Show orders >>"}
-                          </Button>
-                          {this.state.orderListOpen && listItems}
-                      </MyListGroup>}
+                {orders != null && filteredOrders.length === 0 ? (
+                    noItemMessage
+                ) : (
+                    <MyListGroup>
+                        Total: Sell {totalAmount} {totalCcy} in{" "}
+                        {orders === null ? "?" : filteredOrders.length} orders
+                        <Button
+                            bsStyle="link"
+                            onClick={() =>
+                                this.setState({
+                                    orderListOpen: !this.state.orderListOpen
+                                })}
+                        >
+                            {this.state.orderListOpen ? (
+                                "<< Hide orders"
+                            ) : (
+                                "Show orders >>"
+                            )}
+                        </Button>
+                        {this.state.orderListOpen && listItems}
+                    </MyListGroup>
+                )}
             </Panel>
         );
     }
