@@ -31,7 +31,7 @@
       "0xbe5cfd5fad54b3ccc13df84bc927702bcf0f84f7": { "balance": "20000000000000000000000" }
   },
   "config": {
-        "chainId": 15,
+        "chainId": 1976,
         "homesteadBlock": 0,
         "eip155Block": 0,
         "eip158Block": 0
