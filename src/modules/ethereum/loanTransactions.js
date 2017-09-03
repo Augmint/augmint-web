@@ -284,7 +284,9 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
     let maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
     let repayPeriod = l[9].toNumber();
     let repayBy = repayPeriod + maturity;
-    let currentTime = moment().utc().unix();
+    let currentTime = moment()
+        .utc()
+        .unix();
     let loanState = null;
     let isDue = false;
     switch (solidityLoanState) {

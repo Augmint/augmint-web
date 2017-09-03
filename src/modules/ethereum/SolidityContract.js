@@ -11,9 +11,9 @@ export default class SolidityContract {
     }
 
     static async connectNew(provider, artifacts) {
-        var contractDef = Contract(artifacts);
+        let contractDef = Contract(artifacts);
         contractDef.setProvider(provider);
-        var instance = await contractDef.deployed();
+        let instance = await contractDef.deployed();
 
         // This extra check needed because .deployed() returns an instance
         //      even when contract is not deployed

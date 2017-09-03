@@ -1,12 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
+import tokenUcdProvider from "modules/tokenUcdProvider";
+import loanManagerProvider from "modules/loanManagerProvider";
 import AccountInfo from "components/AccountInfo";
 import LoanList from "components/LoanList";
 import UcdTransferForm from "./UcdTransferForm";
 import TransferList from "components/TransferList";
 
 class AccountHome extends React.Component {
+    componentDidMount() {
+        loanManagerProvider();
+        tokenUcdProvider();
+    }
     render() {
         return (
             <Grid>

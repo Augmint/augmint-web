@@ -5,10 +5,12 @@ import { ExchangeInfo } from "./ExchangeInfo";
 import { OrdersInfo } from "./OrdersInfo";
 import { RatesInfo } from "./RatesInfo";
 import exchangeProvider from "modules/exchangeProvider";
+import ratesProvider from "modules/ratesProvider";
 
 class ExchangeInfoGroup extends React.Component {
     componentDidMount() {
         exchangeProvider();
+        ratesProvider();
     }
 
     render() {

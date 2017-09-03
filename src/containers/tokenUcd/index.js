@@ -2,6 +2,8 @@ import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import tokenUcdProvider from "modules/tokenUcdProvider";
+import ratesProvider from "modules/ratesProvider";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { Grid, Row, Col, Panel, PageHeader } from "react-bootstrap";
 
@@ -9,6 +11,11 @@ const baseInfoTitle = <h3>Base Info</h3>;
 const reservesTitle = <h3>Reserves</h3>;
 
 class TokenUcd extends React.Component {
+    componentDidMount() {
+        ratesProvider();
+        tokenUcdProvider();
+    }
+
     handleTokenUcdRefreshClick = e => {
         e.preventDefault();
         this.props.refreshTokenUcd();
@@ -36,11 +43,13 @@ class TokenUcd extends React.Component {
                             <p>
                                 ETH Reserve: {this.props.tokenUcdEthBalance} ETH
                                 ({this.props.bn_ethUsdRate == null ||
-                                this.props.tokenUcdBn_ethBalance == null
-                                    ? "?"
-                                    : this.props.bn_ethUsdRate
-                                          .mul(this.props.tokenUcdBn_ethBalance)
-                                          .toString()}{" "}
+                                this.props.tokenUcdBn_ethBalance == null ? (
+                                    "?"
+                                ) : (
+                                    this.props.bn_ethUsdRate
+                                        .mul(this.props.tokenUcdBn_ethBalance)
+                                        .toString()
+                                )}{" "}
                                 USD)
                             </p>
                             <p>

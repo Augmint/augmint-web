@@ -13,21 +13,7 @@ import "bootstrap/dist/css/bootstrap-theme.css";
 import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
-import watch from "redux-watch";
 import { setupWeb3 } from "modules/reducers/web3Connect";
-import { fetchUserBalance } from "modules/reducers/userBalances";
-import {
-    fetchTransferList,
-    processTransfer
-} from "modules/reducers/userTransfers";
-import { connectRates, refreshRates } from "modules/reducers/rates";
-import { connectTokenUcd, refreshTokenUcd } from "modules/reducers/tokenUcd";
-import {
-    connectloanManager,
-    refreshLoanManager,
-    fetchProducts
-} from "modules/reducers/loanManager";
-import { fetchLoans } from "modules/reducers/loans";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Route, Link, Switch, withRouter } from "react-router-dom";
@@ -49,161 +35,8 @@ class App extends React.Component {
     }
 
     onLoad() {
+        console.debug("App.onLoad() -  Dispatching setupWeb3()");
         store.dispatch(setupWeb3()); // we do it on load event to avoid timing issues with injected web3
-
-        let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
-        store.subscribe(
-            w1((newVal, oldVal, objectPath) => {
-                store.dispatch(connectRates());
-                store.dispatch(connectTokenUcd());
-                store.dispatch(connectloanManager());
-            })
-        );
-
-        let w2 = watch(store.getState, "rates.contract");
-        store.subscribe(
-            w2((newVal, oldVal, objectPath) => {
-                if (newVal) {
-                    store.dispatch(refreshRates());
-                }
-            })
-        );
-
-        let w3 = watch(store.getState, "tokenUcd.contract");
-        store.subscribe(
-            w3((newVal, oldVal, objectPath) => {
-                if (newVal) {
-                    store.dispatch(refreshTokenUcd()); // tokenUCD refresh required for loanManager refresh
-                    // TODO: fetch latest n transactions only
-                    store.dispatch(
-                        fetchTransferList(this.props.userAccount, 0, "pending")
-                    );
-                    // it's being called first by the listener
-                    //store.dispatch(fetchUserBalance(this.props.userAccount));
-                }
-            })
-        );
-
-        let w4 = watch(store.getState, "loanManager.contract");
-        store.subscribe(
-            w4((newVal, oldVal, objectPath) => {
-                if (newVal) {
-                    store.dispatch(refreshLoanManager());
-                    store.dispatch(fetchProducts());
-                    store.dispatch(fetchLoans(this.props.userAccount));
-                    this.setupListeners();
-                }
-            })
-        );
-    }
-
-    setupListeners() {
-        let web3 = store.getState().web3Connect.web3Instance;
-        // TODO: think over UX how to display confirmed ("latest") and "pending" TXs
-        //        Pending needed for quick UI refresh after tx submitted but we want to show when was it mined
-        this.filterAllBlocks = web3.eth.filter("pending");
-        this.filterAllBlocks.watch(this.onNewBlock.bind(this));
-
-        this.props.loanManager.instance
-            .e_newLoan({ fromBlock: "latest", toBlock: "pending" })
-            .watch(this.onNewLoan.bind(this));
-        this.props.loanManager.instance
-            .e_repayed({ fromBlock: "latest", toBlock: "pending" })
-            .watch(this.onRepayed.bind(this));
-        this.props.loanManager.instance
-            .e_collected({ fromBlock: "latest", toBlock: "pending" })
-            .watch(this.onCollected.bind(this));
-        this.props.tokenUcd.instance
-            .e_transfer({ fromBlock: "latest", toBlock: "pending" })
-            .watch(this.onTransfer.bind(this));
-        this.props.rates.instance
-            .e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" })
-            .watch(this.onRateChange.bind(this));
-
-        // TODO: add & handle loanproduct change events
-    }
-
-    onNewBlock() {
-        console.debug(
-            "onNewBlock: dispatching fetchUserBalance & refreshTokenUcd"
-        );
-        store.dispatch(fetchUserBalance(this.props.userAccount));
-        store.dispatch(refreshTokenUcd());
-    }
-
-    onNewLoan(error, result) {
-        // event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
-        console.debug("onNewLoan: dispatching refreshLoanManager");
-        store.dispatch(refreshLoanManager()); // to update loanCount
-        if (result.args.borrower === this.props.userAccount) {
-            console.debug(
-                "onNewLoan: new loan for current user. Dispatching fetchLoans"
-            );
-            // TODO: it can be expensive, should create a separate single fetchLoan action
-            store.dispatch(fetchLoans(this.props.userAccount));
-        }
-    }
-
-    onRepayed(error, result) {
-        // e_repayed(loanContractAddress, loanContract.owner());
-        if (result.args.borrower === this.props.userAccount) {
-            console.debug(
-                "onRepayed: loan repayed for current user. Dispatching fetchLoans"
-            );
-            // TODO: it can be expensive, should create a separate single fetchLoan action
-            store.dispatch(fetchLoans(this.props.userAccount));
-        }
-    }
-
-    onCollected(error, result) {
-        // event e_collected(address borrower, address loanContractAddress);
-        if (result.args.borrower === this.props.userAccount) {
-            console.debug(
-                "onCollected: loan collected for current user. Dispatching fetchLoans"
-            );
-            // TODO: it can be expensive, should create a separate single fetchLoan action
-            store.dispatch(fetchLoans(this.props.userAccount));
-        }
-    }
-
-    onTransfer(error, result) {
-        if (
-            result.args.from === this.props.userAccount ||
-            result.args.to === this.props.userAccount
-        ) {
-            console.debug(
-                "onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer"
-            );
-            store.dispatch(processTransfer(this.props.userAccount, result));
-        }
-    }
-
-    onRateChange(error, result) {
-        console.debug(
-            "onRateChange: e_ethToUsdcChanged event. Dispatching refreshRates"
-        );
-        store.dispatch(refreshRates());
-    }
-
-    componentWillUnmount() {
-        this.filterAllBlocks.stopWatching();
-        this.props.loanManager.instance.e_newLoan().stopWatching();
-        this.props.loanManager.instance.e_repayed().stopWatching();
-        this.props.loanManager.instance.e_collected().stopWatching();
-        this.props.tokenUcd.instance.e_transfer().stopWatching();
-        this.props.rates.instance.e_ethToUsdcChanged().stopWatching();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (
-            nextProps.isConnected &&
-            nextProps.userAccount !== this.props.userAccount
-        ) {
-            // TODO: this doesn't work yet: we need a timer to watch defaultAccount change
-            // TODO handle this more generically (ie. all contract balances watched and maybe cached? )
-            store.dispatch(fetchUserBalance(nextProps.userAccount));
-            // TODO: reset filters
-        }
     }
 
     render() {
@@ -243,9 +76,7 @@ class App extends React.Component {
                                 </LinkContainer>
                             </Nav>
                             <Navbar.Text pullRight>
-                                <small>
-                                    on {this.props.network.name}
-                                </small>
+                                <small>on {this.props.network.name}</small>
                             </Navbar.Text>;
                             <Nav pullRight>
                                 <LinkContainer to="/about-us">

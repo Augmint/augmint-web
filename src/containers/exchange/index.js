@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Grid, Row, Col, PageHeader } from "react-bootstrap";
 import exchangeProvider from "modules/exchangeProvider";
+import ratesProvider from "modules/ratesProvider";
+import tokenUcdProvider from "modules/tokenUcdProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderList from "./components/OrderList";
 import ExchangeSummary from "./components/ExchangeSummary";
@@ -9,7 +11,9 @@ import PlaceOrderForm from "./components/PlaceOrderForm";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
+        tokenUcdProvider();
         exchangeProvider();
+        ratesProvider();
     }
     render() {
         const { orders, userAccount, exchange, rates } = this.props;

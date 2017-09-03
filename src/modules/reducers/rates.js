@@ -18,7 +18,7 @@ const initialState = {
     contract: null,
     error: null,
     connectionError: null,
-    isLoading: true,
+    isLoading: false,
     isConnected: false,
     info: {
         bn_ethBalance: null,

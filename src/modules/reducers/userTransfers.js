@@ -22,7 +22,7 @@ export const USER_TRANSFERTX_FETCH_RECEIVED =
 
 const initialState = {
     transfers: null,
-    isLoading: true
+    isLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -86,9 +86,8 @@ export function fetchTransferList(address, fromBlock, toBlock) {
             fromBlock: fromBlock,
             toBlock: toBlock
         });
-
-        let result = await fetchTransferListTx(address, fromBlock, toBlock);
         try {
+            let result = await fetchTransferListTx(address, fromBlock, toBlock);
             return dispatch({
                 type: USER_TRANSFERLIST_RECEIVED,
                 result: result
@@ -110,8 +109,8 @@ export function processTransfer(address, tx) {
             tx: tx
         });
 
-        let result = await processTransferTx(address, tx);
         try {
+            let result = await processTransferTx(address, tx);
             return dispatch({
                 type: USER_TRANSFERTX_FETCH_RECEIVED,
                 result: result

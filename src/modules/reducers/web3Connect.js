@@ -11,7 +11,7 @@ const initialState = {
     web3ConnectionId: null, // workaround so that we don't need deep compare web3Instance to detecet change
     userAccount: "?",
     accounts: null,
-    isLoading: true,
+    isLoading: false,
     isConnected: false,
     network: { id: "?", name: "?" }
 };

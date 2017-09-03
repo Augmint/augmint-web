@@ -22,7 +22,7 @@ export const TOKENUCD_TRANSFER_ERROR = "tokenUcd/TOKENUCD_TRANSFER_ERROR";
 
 const initialState = {
     contract: null,
-    isLoading: true,
+    isLoading: false,
     isConnected: false,
     error: null,
     connectionError: null,

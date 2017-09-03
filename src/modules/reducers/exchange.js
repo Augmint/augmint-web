@@ -60,6 +60,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isConnected: false,
                 connectionError: action.error
             };
 

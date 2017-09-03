@@ -25,6 +25,8 @@ export const LOANMANAGER_CONNECT_ERROR =
 export const LOANMANAGER_REFRESH_REQUESTED =
     "loanManager/LOANMANAGER_REFRESH_REQUESTED";
 export const LOANMANAGER_REFRESHED = "loanManager/LOANMANAGER_REFRESHED";
+export const LOANMANAGER_REFRESH_ERROR =
+    "loanManager/LOANMANAGER_REFRESH_ERROR";
 
 export const LOANMANAGER_PRODUCTLIST_REQUESTED =
     "loanManager/LOANMANAGER_PRODUCTLIST_REQUESTED";
@@ -63,7 +65,7 @@ export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR =
 const initialState = {
     contract: null,
     isConnected: false,
-    isLoading: true,
+    isLoading: false,
     connectionError: null,
     result: null,
     error: null,
@@ -117,6 +119,13 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 info: action.result
+            };
+
+        case LOANMANAGER_REFRESH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.error
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
@@ -219,7 +228,7 @@ export default (state = initialState, action) => {
     }
 };
 
-export const connectloanManager = () => {
+export const connectLoanManager = () => {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_CONNECT_REQUESTED
@@ -247,31 +256,38 @@ export const refreshLoanManager = () => {
         dispatch({
             type: LOANMANAGER_REFRESH_REQUESTED
         });
-        let loanManager = store.getState().loanManager.contract.instance;
-        // TODO: make calls paralel
-        let loanCount = await loanManager.getLoanCount();
-        let productCount = await loanManager.getProductCount();
+        try {
+            let loanManager = store.getState().loanManager.contract.instance;
+            // TODO: make calls paralel
+            let loanCount = await loanManager.getLoanCount();
+            let productCount = await loanManager.getProductCount();
 
-        let tokenUcdAddress = await loanManager.tokenUcd();
-        let ratesAddress = await loanManager.rates();
-        let owner = await loanManager.owner();
+            let tokenUcdAddress = await loanManager.tokenUcd();
+            let ratesAddress = await loanManager.rates();
+            let owner = await loanManager.owner();
 
-        let bn_ethBalance = await asyncGetBalance(loanManager.address);
-        let bn_ucdBalance = await getUcdBalance(loanManager.address);
-        return dispatch({
-            type: LOANMANAGER_REFRESHED,
-            result: {
-                owner: owner,
-                bn_ethBalance: bn_ethBalance,
-                ethBalance: bn_ethBalance.toNumber(),
-                bn_ucdBalance: bn_ucdBalance,
-                ucdBalance: bn_ucdBalance.toNumber(),
-                loanCount: loanCount.toNumber(),
-                productCount: productCount.toNumber(),
-                tokenUcdAddress: tokenUcdAddress,
-                ratesAddress: ratesAddress
-            }
-        });
+            let bn_ethBalance = await asyncGetBalance(loanManager.address);
+            let bn_ucdBalance = await getUcdBalance(loanManager.address);
+            return dispatch({
+                type: LOANMANAGER_REFRESHED,
+                result: {
+                    owner: owner,
+                    bn_ethBalance: bn_ethBalance,
+                    ethBalance: bn_ethBalance.toNumber(),
+                    bn_ucdBalance: bn_ucdBalance,
+                    ucdBalance: bn_ucdBalance.toNumber(),
+                    loanCount: loanCount.toNumber(),
+                    productCount: productCount.toNumber(),
+                    tokenUcdAddress: tokenUcdAddress,
+                    ratesAddress: ratesAddress
+                }
+            });
+        } catch (error) {
+            return dispatch({
+                type: LOANMANAGER_REFRESH_ERROR,
+                error: error
+            });
+        }
     };
 };
 

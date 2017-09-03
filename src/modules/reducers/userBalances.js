@@ -16,7 +16,7 @@ export const USER_TRANSACTIONLIST_RECEIVED =
     "userBalances/USER_TRANSACTIONLIST_RECEIVED";
 
 const initialState = {
-    isLoading: true,
+    isLoading: false,
     account: {
         address: "?",
         ethBalance: "?",

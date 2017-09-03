@@ -1,30 +1,72 @@
 import store from "modules/store";
 import watch from "redux-watch";
-import { setupWeb3 } from "modules/reducers/web3Connect";
 import { connectExchange, refreshExchange } from "modules/reducers/exchange";
 import { refreshOrders } from "modules/reducers/orders";
 /*
     TODO: make it to a HOC
 */
+let w1Unsubscribe, w2Unsubscribe;
 
 export default () => {
     const exchange = store.getState().exchange;
     const web3Connect = store.getState().web3Connect;
+
+    if (!exchange.isLoading && !exchange.isConnected) {
+        setupWatches();
+        if (web3Connect.isConnected) {
+            console.debug(
+                "exchangeProvider - exchange not connected or loading and web3 alreay loaded, dispatching connectExchange() "
+            );
+            store.dispatch(connectExchange());
+        }
+    }
+    return;
+};
+
+const setupListeners = () => {
+    const exchange = store.getState().exchange.contract.instance;
+    exchange
+        .e_newOrder({ fromBlock: "latest", toBlock: "pending" })
+        .watch(onNewOrder);
+    exchange
+        .e_orderFill({ fromBlock: "latest", toBlock: "pending" })
+        .watch(onOrderFill);
+};
+
+const removeListeners = oldInstance => {
+    if (oldInstance.instance) {
+        oldInstance.instance.e_newOrder().stopWatching();
+        oldInstance.instance.e_orderFill().stopWatching();
+    }
+};
+
+const setupWatches = () => {
     let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
-    store.subscribe(
+    let unsubscribe = store.subscribe(
         w1((newVal, oldVal, objectPath) => {
-            if (newVal) {
+            if (w1Unsubscribe) {
+                w1Unsubscribe();
+                removeListeners(oldVal);
+            }
+            w1Unsubscribe = unsubscribe;
+            if (newVal !== null) {
                 console.debug(
                     "exchangeProvider - web3Connect.web3ConnectionId changed. Dispatching connectExchange()"
                 );
+
                 store.dispatch(connectExchange());
             }
         })
     );
 
     let w2 = watch(store.getState, "exchange.contract");
-    store.subscribe(
+    unsubscribe = store.subscribe(
         w2((newVal, oldVal, objectPath) => {
+            if (w2Unsubscribe) {
+                w2Unsubscribe();
+                removeListeners(oldVal);
+            }
+            w2Unsubscribe = unsubscribe;
             if (newVal) {
                 console.debug(
                     "exchangeProvider - exchange.contract changed. Dispatching refreshExchange()"
@@ -35,40 +77,10 @@ export default () => {
             }
         })
     );
-
-    if (!web3Connect.isLoading && !web3Connect.isConnected) {
-        console.debug(
-            "exchangeProvider - web3Connect is not connected. Dispatching setupWeb3()"
-        );
-        store.dispatch(setupWeb3());
-    }
-
-    if (
-        !exchange.isLoading &&
-        !exchange.isConnected &&
-        web3Connect.isConnected
-    ) {
-        console.debug(
-            "exchangeProvider - web3 connected, dispatching connectExchange() "
-        );
-        store.dispatch(connectExchange());
-    }
-
-    return;
 };
 
-const setupListeners = () => {
-    const exchange = store.getState().exchange;
-    exchange.contract.instance
-        .e_newOrder({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onNewOrder);
-    exchange.contract.instance
-        .e_orderFill({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onOrderFill);
-};
-
+// event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
 const onNewOrder = (error, result) => {
-    // event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
@@ -76,7 +88,6 @@ const onNewOrder = (error, result) => {
 
 // event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
 const onOrderFill = (error, result) => {
-    // event e_newOrder(address maker, uint weiToSell, uint ucdToSell );
     console.debug(
         "exchangeProvider.onOrderFill: dispatching refreshExchange()"
     );
