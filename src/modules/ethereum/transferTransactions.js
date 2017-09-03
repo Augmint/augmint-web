@@ -73,16 +73,18 @@ export async function transferUcdTx(payload) {
 export async function fetchTransferListTx(address, fromBlock, toBlock) {
     try {
         let tokenUcd = store.getState().tokenUcd.contract.instance;
-        let outFilter = tokenUcd.e_transfer(
-            { from: address },
-            { fromBlock: fromBlock, toBlock: toBlock }
-        );
+        let outFilter = tokenUcd.e_transfer({
+            from: address,
+            fromBlock: fromBlock,
+            toBlock: toBlock
+        });
         let filterResult = await asyncFilterGet(outFilter);
 
-        let inFilter = tokenUcd.e_transfer(
-            { to: address },
-            { fromBlock: fromBlock, toBlock: toBlock }
-        );
+        let inFilter = tokenUcd.e_transfer({
+            to: address,
+            fromBlock: fromBlock,
+            toBlock: toBlock
+        });
         filterResult = filterResult.concat(await asyncFilterGet(inFilter));
 
         let transfers = await Promise.all(
