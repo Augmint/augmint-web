@@ -9,7 +9,7 @@ import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 import { transferUcdTx } from "modules/ethereum/transferTransactions";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
-export const TOKENUCD_CONNECT_SUCCESS = "tokenUcd/TOKENUCD_CONNECT_SUCESS";
+export const TOKENUCD_CONNECT_SUCCESS = "tokenUcd/TOKENUCD_CONNECT_SUCCESS";
 export const TOKENUCD_CONNECT_ERROR = "tokenUcd/TOKENUCD_CONNECT_ERROR";
 
 export const TOKENUCD_REFRESH_REQUESTED = "tokenUcd/TOKENUCD_REFRESH_REQUESTED";
@@ -30,10 +30,12 @@ const initialState = {
         owner: "?",
         ethBalance: "?",
         bn_ethBalance: null,
+        ethPendingBalance: "?",
         decimals: "?",
         decimalsDiv: "?",
         bn_decimalsDiv: null,
         ucdBalance: "?",
+        ucdPendingBalance: "?",
         totalSupply: "?",
         loanManagerAddress: "?"
     }
@@ -141,7 +143,15 @@ export const refreshTokenUcd = () => {
         let bn_decimals = await tokenUcd.decimals();
         let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
         let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
+        let bn_ethPendingBalance = await asyncGetBalance(
+            tokenUcd.address,
+            "pending"
+        );
         let bn_ucdBalance = await getUcdBalance(tokenUcd.address);
+        let bn_ucdPendingBalance = await getUcdBalance(
+            tokenUcd.address,
+            "pending"
+        );
 
         return dispatch({
             type: TOKENUCD_REFRESHED,
@@ -151,8 +161,11 @@ export const refreshTokenUcd = () => {
                 bn_decimalsDiv: bn_decimalsDiv,
                 decimalsDiv: bn_decimalsDiv.toNumber(),
                 ucdBalance: bn_ucdBalance.toNumber(),
+                ucdPendingBalance: bn_ucdPendingBalance.toNumber(),
                 ethBalance: bn_ethBalance.toNumber(),
                 bn_ethBalance: bn_ethBalance,
+                bn_ethPendingBalance: bn_ethPendingBalance,
+                ethPendingBalance: bn_ethPendingBalance.toNumber(),
                 totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
                 loanManagerAddress: loanManagerAddress
             }

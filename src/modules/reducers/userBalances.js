@@ -20,7 +20,9 @@ const initialState = {
     account: {
         address: "?",
         ethBalance: "?",
-        ucdBalance: "?"
+        ethPendingBalance: "?",
+        ucdBalance: "?",
+        ucdPendingBalance: "?"
     }
 };
 
@@ -53,15 +55,21 @@ export function fetchUserBalance(address) {
         });
 
         let bn_ucdBalance = await getUcdBalance(address);
+        let bn_ucdPendingBalance = await getUcdBalance(address, "pending");
         let bn_ethBalance = await asyncGetBalance(address);
+        let bn_ethPendingBalance = await asyncGetBalance(address, "pending");
         return dispatch({
             type: USER_BALANCE_RECEIVED,
             account: {
                 address: address,
                 bn_ethBalance: bn_ethBalance,
                 ethBalance: bn_ethBalance.toNumber(),
+                bn_ethPendingBalance: bn_ethPendingBalance,
+                ethPendingBalance: bn_ethPendingBalance.toNumber(),
                 bn_ucdBalance: bn_ucdBalance,
-                ucdBalance: bn_ucdBalance.toNumber()
+                ucdBalance: bn_ucdBalance.toNumber(),
+                bn_ucdPendingBalance: bn_ucdPendingBalance,
+                ucdPendingBalance: bn_ucdPendingBalance.toNumber()
             }
         });
     };

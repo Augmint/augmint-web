@@ -14,15 +14,32 @@ export class AccountInfo extends React.Component {
         } = this.props;
         return (
             <Panel header={header}>
-                {!tokenUcdIsConnected &&
-                    <p>Connecting to tokenUcd contract...</p>}
+                {!tokenUcdIsConnected && (
+                    <p>Connecting to tokenUcd contract...</p>
+                )}
                 {userBalancesIsLoading && <p>Refreshing account info...</p>}
+                <p>Account: {account.address}</p>
                 <p>
-                    Account: {account.address}
+                    ETH: {account.ethBalance}
+                    {account.ethPendingBalance !== "?" &&
+                    account.ethPendingBalance - account.ethBalance !== 0 && (
+                        <span>
+                            {" "}
+                            (Pending:{" "}
+                            {account.ethPendingBalance - account.ethBalance} )
+                        </span>
+                    )}
                 </p>
                 <p>
-                    Balances: {account.ethBalance} ETH | {account.ucdBalance}{" "}
-                    UCD
+                    UCD: {account.ucdBalance}
+                    {account.ucdPendingBalance !== "?" &&
+                    account.ucdPendingBalance - account.ucdBalance !== 0 && (
+                        <span>
+                            {" "}
+                            (Pending:{" "}
+                            {account.ucdPendingBalance - account.ucdBalance} )
+                        </span>
+                    )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Panel>

@@ -4,10 +4,14 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 
-export function asyncGetBalance(address) {
+export function asyncGetBalance(address, defaultBlock) {
     return new Promise(function(resolve, reject) {
         let web3 = store.getState().web3Connect.web3Instance;
-        web3.eth.getBalance(address, function(error, bal) {
+        let defBlock = defaultBlock;
+        if (defBlock == null) {
+            defBlock = "latest";
+        }
+        web3.eth.getBalance(address, defBlock, function(error, bal) {
             if (error) {
                 reject(
                     new Error(
@@ -110,7 +114,6 @@ export function asyncGetBlock(blockNumber) {
 
 export function asyncFilterGet(filter) {
     return new Promise(function(resolve, reject) {
-        //let web3 = store.getState().web3Connect.web3Instance;
         filter.get(function(error, result) {
             if (error) {
                 reject(
@@ -144,17 +147,42 @@ export function asyncFilterGet(filter) {
 //     });
 // }
 
-export async function getUcdBalance(address) {
-    let tokenUcd = store.getState().tokenUcd;
-    let bn_balance = await tokenUcd.contract.instance.balanceOf(address);
-    let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
+export async function getUcdBalance(address, defaultBlock) {
+    return new Promise(
+        function(resolve, reject) {
+            let tokenUcd = store.getState().tokenUcd;
+            let defBlock = defaultBlock;
+            if (defBlock == null) {
+                defBlock = "latest";
+            }
 
-    if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
-        // this is a workround for timing issue with tokenUcd refresh
-        // TODO: figure out how to rearrange refresh to avoid these checks
-        bn_decimalsDiv = new BigNumber(10).pow(
-            await tokenUcd.contract.instance.decimals()
-        );
-    }
-    return bn_balance.div(bn_decimalsDiv);
+            tokenUcd.contract.instance.contract.balanceOf(
+                address,
+                defaultBlock,
+                async function(error, bn_balance) {
+                    if (error) {
+                        reject(
+                            new Error(
+                                "Can't get UCD balance from tokenUcd (getUcdBalance). Address: ",
+                                address + "\n" + error
+                            )
+                        );
+                    } else {
+                        let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
+
+                        if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
+                            // this is a workround for timing issue with tokenUcd refresh
+                            // TODO: figure out how to rearrange refresh to avoid these checks
+                            bn_decimalsDiv = new BigNumber(10).pow(
+                                await tokenUcd.contract.instance.decimals()
+                            );
+                        }
+
+                        resolve(bn_balance.div(bn_decimalsDiv));
+                    }
+                }
+            );
+        }
+        // https://ethereum.stackexchange.com/questions/25756/passing-defaultblock-pending-param-to-a-truffle-contract-call
+    );
 }
