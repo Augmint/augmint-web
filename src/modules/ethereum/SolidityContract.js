@@ -1,20 +1,17 @@
 import { default as Contract } from "truffle-contract";
+//import AbiDecoder from "abi-decoder";
 
 export default class SolidityContract {
     constructor(instance) {
         this.instance = instance;
-    }
-    static async connectNewOwned(provider, artifacts) {
-        let contract = this.connectNew(provider, artifacts);
-
-        return contract;
+        this.abiDecoder = require("abi-decoder");
+        this.abiDecoder.addABI(instance.abi);
     }
 
     static async connectNew(provider, artifacts) {
         let contractDef = Contract(artifacts);
         contractDef.setProvider(provider);
         let instance = await contractDef.deployed();
-
         // This extra check needed because .deployed() returns an instance
         //      even when contract is not deployed
         // TODO: find out if there is a better way to do it

@@ -1,7 +1,9 @@
 import store from "modules/store";
 import watch from "redux-watch";
 import { connectExchange, refreshExchange } from "modules/reducers/exchange";
+import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshOrders } from "modules/reducers/orders";
+import { ETHSELL, UCDSELL } from "modules/reducers/orders";
 /*
     TODO: make it to a HOC
 */
@@ -81,18 +83,43 @@ const setupWatches = () => {
 
 // event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
 const onNewOrder = (error, result) => {
-    console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange()");
+    console.debug(
+        "exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders(), result.args",
+        result.args
+    );
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    let userAccount = store.getState().web3Connect.userAccount;
+    if (
+        result.args.maker === userAccount &&
+        result.args.orderType.toNumber() === ETHSELL
+    ) {
+        console.debug(
+            "exchangeProvider.onNewOrder: e_NewOrder ETHSELL and maker is userAccount. Dispatching fetchUserBalance"
+        );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };
 
 // event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
 const onOrderFill = (error, result) => {
     console.debug(
-        "exchangeProvider.onOrderFill: dispatching refreshExchange()"
+        "exchangeProvider.onOrderFill: dispatching refreshExchange(), result.args",
+        result.args
     );
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    let userAccount = store.getState().web3Connect.userAccount;
+    if (
+        (result.args.maker === userAccount &&
+            result.args.orderType.toNumber() === ETHSELL) ||
+        (result.args.taker === userAccount && result.args.orderType === UCDSELL)
+    ) {
+        console.debug(
+            "exchangeProvider.onOrderFill: e_orderFill ETHSELL/UCDSELL and maker/taker is userAccount. Dispatching fetchUserBalance"
+        );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };

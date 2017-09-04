@@ -6,6 +6,8 @@ import {
     fetchProducts
 } from "modules/reducers/loanManager";
 import { fetchLoans } from "modules/reducers/loans";
+import { refreshTokenUcd } from "modules/reducers/tokenUcd";
+import { fetchUserBalance } from "modules/reducers/userBalances";
 /*
     TODO: make it to a HOC
 */
@@ -92,38 +94,52 @@ const setupWatches = () => {
 
 const onNewLoan = (error, result) => {
     // event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
-    console.debug("onNewLoan: dispatching refreshLoanManager");
-    let userAccount = store.getState().web3Connect.userAccount;
+    console.debug(
+        "loanManagerProvider.onNewLoan: dispatching refreshLoanManager & refreshTokenUcd"
+    );
+    store.dispatch(refreshTokenUcd());
     store.dispatch(refreshLoanManager()); // to update loanCount
+    let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.borrower === userAccount) {
         console.debug(
-            "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans"
+            "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
         );
         // TODO: it can be expensive, should create a separate single fetchLoan action
         store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchUserBalance(userAccount));
     }
 };
 
 const onRepayed = (error, result) => {
     // e_repayed(loanContractAddress, loanContract.owner());
+    console.debug(
+        "loanManagerProvider.onRepayed:: Dispatching refreshTokenUcd"
+    );
+    store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.borrower === userAccount) {
         console.debug(
-            "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans"
+            "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans & fetchUserBalance"
         );
         // TODO: it can be expensive, should create a separate single fetchLoan action
         store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchUserBalance(userAccount));
     }
 };
 
 const onCollected = (error, result) => {
     // event e_collected(address borrower, address loanContractAddress);
+    console.debug(
+        "loanManagerProvider.onCollected: Dispatching refreshTokenUcd"
+    );
+    store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.borrower === userAccount) {
         console.debug(
-            "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans"
+            "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans & fetchUserBalance"
         );
         // TODO: it can be expensive, should create a separate single fetchLoan action
         store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchUserBalance(userAccount));
     }
 };

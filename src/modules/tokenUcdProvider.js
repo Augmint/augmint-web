@@ -78,7 +78,7 @@ const setupWatches = () => {
                 );
                 store.dispatch(refreshTokenUcd());
                 store.dispatch(fetchUserBalance(userAccount));
-                store.dispatch(fetchTransferList(userAccount, 0, "pending"));
+                store.dispatch(fetchTransferList(userAccount, 0, "latest"));
                 setupListeners();
             }
         })
@@ -86,11 +86,14 @@ const setupWatches = () => {
 };
 
 const onTransfer = (error, result) => {
+    console.debug("tokenUcdProvider.onTransfer: Dispatching refreshTokenUcd");
+    store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.from === userAccount || result.args.to === userAccount) {
         console.debug(
-            "onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer"
+            "tokenUcdProvider.onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
+        store.dispatch(fetchUserBalance(userAccount));
         store.dispatch(processTransfer(userAccount, result));
     }
 };
@@ -98,10 +101,6 @@ const onTransfer = (error, result) => {
 const onNewBlock = (error, result) => {
     // TODO: think over UX how to display confirmed ("latest") and "pending" TXs
     //        Pending needed for quick UI refresh after tx submitted but we want to show when was it mined
-    let userAccount = store.getState().web3Connect.userAccount;
-    console.debug(
-        "tokenUcdProvider.onNewBlock: dispatching fetchUserBalance & refreshTokenUcd"
-    );
-    store.dispatch(fetchUserBalance(userAccount));
-    store.dispatch(refreshTokenUcd());
+    //let userAccount = store.getState().web3Connect.userAccount;
+    console.debug("tokenUcdProvider.onNewBlock");
 };

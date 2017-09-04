@@ -9,7 +9,7 @@ Use only from reducers.
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
-import { asyncFilterGet, asyncGetBlock } from "modules/ethereum/ethHelper";
+import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 
 const TRANSFER_UCD_GAS = 3000000;
 
@@ -72,21 +72,16 @@ export async function transferUcdTx(payload) {
 
 export async function fetchTransferListTx(address, fromBlock, toBlock) {
     try {
-        let tokenUcd = store.getState().tokenUcd.contract.instance;
-        let outFilter = tokenUcd.e_transfer({
-            from: address,
-            fromBlock: fromBlock,
-            toBlock: toBlock
-        });
-        let filterResult = await asyncFilterGet(outFilter);
+        let tokenUcd = store.getState().tokenUcd.contract;
+        let filterResult = await getEventLogs(
+            tokenUcd,
+            tokenUcd.instance.e_transfer,
+            { from: address, to: address }, // filter with OR!
+            fromBlock,
+            toBlock
+        );
 
-        let inFilter = tokenUcd.e_transfer({
-            to: address,
-            fromBlock: fromBlock,
-            toBlock: toBlock
-        });
-        filterResult = filterResult.concat(await asyncFilterGet(inFilter));
-
+        //console.debug("fetchTransferListTx filterResult", filterResult);
         let transfers = await Promise.all(
             filterResult.map((tx, index) => {
                 return formatTransfer(address, tx);

@@ -112,14 +112,122 @@ export function asyncGetBlock(blockNumber) {
     });
 }
 
+export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
+    // It's only tested with getEventLogs(tokenUcd.e_transfer, {topic1: value, topic2: value}, fromBlock, toBlock);
+    // TODO: add timeout & error handling for etherscan XMLHttpRequest
+    return new Promise(async function(resolve, reject) {
+        let web3Network = store.getState().web3Connect.network;
+        let filterResult = [];
+        if (web3Network.id === "4" || web3Network.id === "3") {
+            // on non-local networks we query from etherScan b/c filter.get times out
+            let eventFilter = event(filters).options;
+            let address = eventFilter.address;
+            let topic0 = eventFilter.topics[0];
+            let topicFilters = "";
+            if (eventFilter.topics.length > 1) {
+                // topic 0 is event signature
+                topicFilters += "&topic0_1_opr=and";
+            }
+            for (let i = 0; i < eventFilter.topics.length; i++) {
+                if (i > 0) {
+                    topicFilters += "&topic" + i + "_" + (i + 1) + "_opr=or";
+                }
+                topicFilters +=
+                    "&topic" + (i + 1) + "=" + eventFilter.topics[i + 1];
+            }
+            let xhr = new XMLHttpRequest();
+            let etherScanHost =
+                web3Network.id === "4"
+                    ? "https://rinkeby.etherscan.io"
+                    : "https://ropsten.etherscan.io";
+            let etherscanURL =
+                etherScanHost +
+                "/api?module=logs&action=getLogs" +
+                "&fromBlock=" +
+                fromBlock +
+                "&toBlock=" +
+                toBlock +
+                "&address=" +
+                address +
+                "&topic0=" +
+                topic0 +
+                topicFilters +
+                "&apikey=ZYSCPZX32KBBET6XZXX8T1T21ZFPY8R8RP";
+            xhr.open("GET", etherscanURL, true);
+            //xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    let res = JSON.parse(xhr.response);
+                    //console.debug("Response from etherScan (xhr.response):", xhr.response);
+                    //console.debug("JSON.parse(xhr.response) ", res);
+                    let decodedData = contract.abiDecoder.decodeLogs(
+                        res.result
+                    );
+                    //console.debug("contract.abiDecoder.decodeLogs(res.result) ", decodedData);
+                    for (let i = 0; i < decodedData.length; i++) {
+                        let r = res.result[i];
+                        let blockNumber = parseInt(r.blockNumber, 16);
+                        filterResult.push({
+                            address: r.address,
+                            blockNumber: blockNumber,
+                            gasPrice: parseInt(r.gasPrice, 16),
+                            gasUsed: parseInt(r.gasUsed, 16),
+                            logIndex: parseInt(r.logIndex, 16),
+                            timeStamp: parseInt(r.timeStamp, 16),
+                            transactionHash: parseInt(r.transactionHash, 16),
+                            transactionIndex:
+                                r.transactionIndex === "0x"
+                                    ? 0
+                                    : parseInt(r.transactionIndex, 16),
+                            type: blockNumber > 0 ? "mined" : "pending",
+                            event: decodedData[i]["name"]
+                        });
+                        let args = {};
+                        let decodedArgs = decodedData[i]["events"]; // don't ask why but args are under events ...
+                        for (let j = 0; j < decodedArgs.length; j++) {
+                            let val = decodedArgs[j]["value"];
+                            if (decodedArgs[j]["type"].indexOf("int") > 0) {
+                                val = new BigNumber(val);
+                            }
+                            args[decodedArgs[j]["name"]] = val;
+                        }
+                        filterResult[i]["args"] = args;
+                    }
+                    resolve(filterResult);
+                }
+            }; // xhr.onreadystatechange
+            await xhr.send();
+        } else {
+            // on local testchains (testrpc or pricatechain) we query directly with filter.get
+            // we need to run a seperate filter.get for each filter because filter.get doesn't support operator 'or'
+            for (var key in filters) {
+                if (filters.hasOwnProperty(key)) {
+                    let filterOptions = {};
+                    filterOptions[key] = filters[key];
+                    let filter = event(filterOptions, {
+                        fromBlock: fromBlock,
+                        toBlock: toBlock
+                    });
+                    filterResult = filterResult.concat(
+                        await asyncFilterGet(filter)
+                    );
+                }
+            }
+            resolve(filterResult);
+        }
+    });
+}
+
 export function asyncFilterGet(filter) {
     return new Promise(function(resolve, reject) {
         filter.get(function(error, result) {
             if (error) {
+                console.error(error);
                 reject(
                     new Error(
-                        "Can't get filter from  (asyncGetBalance). Filter: ",
-                        filter + "\nError: " + error
+                        "asyncFilterGet failed. Filter: ",
+                        filter,
+                        "\nError: " + error
                     )
                 );
             } else {
