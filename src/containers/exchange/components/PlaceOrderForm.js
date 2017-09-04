@@ -227,26 +227,26 @@ class PlaceOrderForm extends React.Component {
                         </Nav>
                     </legend>
                     {isLoading && <p>Connecting to tokenUcd contract...</p>}
-                    {error &&
+                    {error && (
                         <EthSubmissionErrorPanel
                             error={error}
                             collapsible={false}
                             header={<h3>Transfer failed</h3>}
                             onDismiss={() => clearSubmitErrors()}
-                        />}
+                        />
+                    )}
 
-                    {submitSucceeded &&
+                    {submitSucceeded && (
                         <EthSubmissionSuccessPanel
                             header={<h3>Successful order</h3>}
                             eth={this.state.result.eth}
                             onDismiss={() => reset()}
                         >
-                            <p>
-                                Order id: {this.state.result.orderId}
-                            </p>
-                        </EthSubmissionSuccessPanel>}
+                            <p>Order id: {this.state.result.orderId}</p>
+                        </EthSubmissionSuccessPanel>
+                    )}
 
-                    {!submitSucceeded &&
+                    {!submitSucceeded && (
                         <div>
                             <FormGroup controlId="ucdAmount">
                                 <Col componentClass={ControlLabel} xs={2}>
@@ -291,16 +291,16 @@ class PlaceOrderForm extends React.Component {
                                         disabled={pristine}
                                     >
                                         {submitting && "Submitting..."}
-                                        {!submitting && orderType === ETHSELL
-                                            ? "Place buy UCD order"
-                                            : "Place sell UCD order"}
+                                        {!submitting &&
+                                            (orderType === ETHSELL
+                                                ? "Place buy UCD order"
+                                                : "Place sell UCD order")}
                                     </Button>
-                                    <HelpBlock>
-                                        {orderHelpText}
-                                    </HelpBlock>
+                                    <HelpBlock>{orderHelpText}</HelpBlock>
                                 </Col>
                             </FormGroup>
-                        </div>}
+                        </div>
+                    )}
                 </fieldset>
             </Form>
         );
