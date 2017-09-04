@@ -48,7 +48,6 @@ in Git bash:
 ```
 cd privatechain
 ./createprivatechain.sh
-./importprivatekeys.sh
 cd ..
 truffle migrate
 cp ./build/contracts/* ./src/contractsBuild
@@ -57,6 +56,15 @@ cp ./build/contracts/* ./src/contractsBuild
 ```
 cd privatechain
 ./runprivatechain.sh
+```
+##### Reset privatechain
+```
+cd privatechain
+rm -r chaindata/geth
+./createprivatechain.sh
+cd ..
+truffle migrate
+cp ./build/contracts/* ./src/contractsBuild
 ```
 
 #### Rinkeby
