@@ -16,7 +16,12 @@ import store from "modules/store";
 import { setupWeb3 } from "modules/reducers/web3Connect";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Route, Link, Switch, withRouter } from "react-router-dom";
+import {
+    Route,
+    Link,
+    Switch,
+    withRouter
+} from "react-router-dom";
 import Home from "containers/home";
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";

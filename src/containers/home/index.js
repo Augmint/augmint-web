@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
+import { Grid, Row, Col, Jumbotron, Button } from "react-bootstrap";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import AccountInfo from "components/AccountInfo";
 import TokenUcdInfo from "components/TokenUcdInfo";
@@ -16,8 +16,21 @@ class Home extends React.Component {
                     <Col>
                         <Jumbotron>
                             <h1>UCD Playground</h1>
-                            <p>Hello UCD!</p>
-                            <p>UCD is ...</p>
+                            <p>
+                                Proof-of-concept implementation of a stable
+                                cryptocurrency based on the DCM (Digital Credit
+                                Money) concept.
+                            </p>
+                            <p>
+                                Read more on our
+                                <Button
+                                    bsStyle="link"
+                                    href="https://github.com/DecentLabs/ucd-poc"
+                                    target="_blank"
+                                >
+                                    Github page
+                                </Button>
+                            </p>
                         </Jumbotron>
                     </Col>
                 </Row>
