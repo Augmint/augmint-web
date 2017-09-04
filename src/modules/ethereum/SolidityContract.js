@@ -4,7 +4,7 @@ import { default as Contract } from "truffle-contract";
 export default class SolidityContract {
     constructor(instance) {
         this.instance = instance;
-        this.abiDecoder = require("abi-decoder");
+        this.abiDecoder = require("./abi-decoder");
         this.abiDecoder.addABI(instance.abi);
     }
 

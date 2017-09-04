@@ -115,6 +115,7 @@ export function asyncGetBlock(blockNumber) {
 export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
     // It's only tested with getEventLogs(tokenUcd.e_transfer, {topic1: value, topic2: value}, fromBlock, toBlock);
     // TODO: add timeout & error handling for etherscan XMLHttpRequest
+    // TODO: refactor abi-decoder to match structure of filter.get so we don't need to mess so much with decodedParams
     return new Promise(async function(resolve, reject) {
         let web3Network = store.getState().web3Connect.network;
         let filterResult = [];
@@ -186,9 +187,6 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                         let decodedArgs = decodedData[i]["events"]; // don't ask why but args are under events ...
                         for (let j = 0; j < decodedArgs.length; j++) {
                             let val = decodedArgs[j]["value"];
-                            if (decodedArgs[j]["type"].indexOf("int") > 0) {
-                                val = new BigNumber(val);
-                            }
                             args[decodedArgs[j]["name"]] = val;
                         }
                         filterResult[i]["args"] = args;
