@@ -5,7 +5,7 @@ import createHistory from "history/createBrowserHistory";
 import rootReducer from "modules/reducers/rootReducer";
 import { createLogger } from "redux-logger";
 
-export const history = createHistory({ basename: '/dcm' });
+export const history = createHistory(); //{ basename: '/dcm' });
 
 const initialState = {};
 const enhancers = [];
