@@ -1,0 +1,961 @@
+{
+  "contract_name": "TokenUcd",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_new",
+          "type": "address"
+        }
+      ],
+      "name": "setOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "name": "ucdDueAtMaturity",
+          "type": "uint256"
+        },
+        {
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "repayAndBurnUcd",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUcdReserveBalance",
+      "outputs": [
+        {
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "name": "ucdDueAtMaturity",
+          "type": "uint256"
+        },
+        {
+          "name": "disbursedLoanInUcd",
+          "type": "uint256"
+        },
+        {
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "issueAndDisburseUcd",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "loanManagerAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_NOT_AUTHORISED",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "burnUcd",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_RESERVE_BALANCE_NOT_ENOUGH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "exchangeAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_UCD_BALANCE_NOT_ENOUGH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setExchangeAddress",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SUCCESS",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "systemTransfer",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "issueUcd",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setLoanManagerAddress",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "getUcdFromReserve",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "transferWithNarrative",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "e_loanManagerAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "e_exchangeAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "e_transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "e_ucdIssued",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "e_ucdBurned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "old",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "current",
+          "type": "address"
+        }
+      ],
+      "name": "NewOwner",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x60606040525b60038054600160a060020a03191633600160a060020a03161790555b5b6113fb806100316000396000f300606060405236156101515763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166306fdde038114610155578063095ea7b3146101e057806313af40351461021657806318160ddd1461023757806323b872dd1461025c57806328dfa43d146102985780632b9cb0ef146103165780632c4a958e1461033b578063313ce567146103bc57806340eefcbf146103e55780636ac2be9e1461041457806370a082311461044057806371418a89146104715780638b90178e146104a05780638da5cb5b146104cc57806395d89b41146104fb5780639cd0160514610586578063a9059cbb146105b5578063ca457372146105eb578063d082ea8c14610617578063d0a6d1a61461064f578063d1a48c361461067b578063d24afd74146106fb578063da09bd4a1461072a578063ebe9512814610762578063ffdcf09514610791575b5b5b005b341561016057600080fd5b61016861080a565b60405160208082528190810183818151815260200191508051906020019080838360005b838110156101a55780820151818401525b60200161018c565b50505050905090810190601f1680156101d25780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34156101eb57600080fd5b610202600160a060020a0360043516602435610841565b604051901515815260200160405180910390f35b341561022157600080fd5b610151600160a060020a0360043516610896565b005b341561024257600080fd5b61024a610917565b60405190815260200160405180910390f35b341561026757600080fd5b610202600160a060020a036004358116906024351660443561091d565b604051901515815260200160405180910390f35b34156102a357600080fd5b6102fd60048035600160a060020a03169060248035919060649060443590810190830135806020601f8201819004810201604051908101604052818152929190602084018383808284375094965061099a95505050505050565b604051600091820b90910b815260200160405180910390f35b341561032157600080fd5b61024a610a1e565b60405190815260200160405180910390f35b341561034657600080fd5b6102fd60048035600160a060020a03169060248035916044359160849060643590810190830135806020601f82018190048102016040519081016040528181529291906020840183838082843750949650610a3b95505050505050565b604051600091820b90910b815260200160405180910390f35b34156103c757600080fd5b6103cf610afb565b60405160ff909116815260200160405180910390f35b34156103f057600080fd5b6103f8610b00565b604051600160a060020a03909116815260200160405180910390f35b341561041f57600080fd5b6102fd610b0f565b604051600091820b90910b815260200160405180910390f35b341561044b57600080fd5b61024a600160a060020a0360043516610b15565b60405190815260200160405180910390f35b341561047c57600080fd5b6102fd600435610b34565b604051600091820b90910b815260200160405180910390f35b34156104ab57600080fd5b6102fd610c11565b604051600091820b90910b815260200160405180910390f35b34156104d757600080fd5b6103f8610c17565b604051600160a060020a03909116815260200160405180910390f35b341561050657600080fd5b610168610c26565b60405160208082528190810183818151815260200191508051906020019080838360005b838110156101a55780820151818401525b60200161018c565b50505050905090810190601f1680156101d25780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b341561059157600080fd5b6103f8610c5d565b604051600160a060020a03909116815260200160405180910390f35b34156105c057600080fd5b610202600160a060020a0360043516602435610c6c565b604051901515815260200160405180910390f35b34156105f657600080fd5b6102fd610c90565b604051600091820b90910b815260200160405180910390f35b341561062257600080fd5b6102fd600160a060020a0360043516610c96565b604051600091820b90910b815260200160405180910390f35b341561065a57600080fd5b6102fd610d20565b604051600091820b90910b815260200160405180910390f35b341561068657600080fd5b610202600160a060020a036004803582169160248035909116916044359160849060643590810190830135806020601f82018190048102016040519081016040528181529291906020840183838082843750949650610d2595505050505050565b604051901515815260200160405180910390f35b341561070657600080fd5b6102fd600435610e5e565b604051600091820b90910b815260200160405180910390f35b341561073557600080fd5b6102fd600160a060020a0360043516610f12565b604051600091820b90910b815260200160405180910390f35b341561076d57600080fd5b6102fd600435610f9c565b604051600091820b90910b815260200160405180910390f35b341561079c57600080fd5b61020260048035600160a060020a03169060248035919060649060443590810190830135806020601f8201819004810201604051908101604052818152929190602084018383808284375094965061106795505050505050565b604051901515815260200160405180910390f35b60408051908101604052601081527f55532043727970746f20446f6c6c617200000000000000000000000000000000602082015281565b600082600160a060020a031633600160a060020a03161415151561086457600080fd5b50600160a060020a03338116600090815260026020908152604080832093861683529290522081905560015b92915050565b60035433600160a060020a039081169116141561091257600354600160a060020a0380831691167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a36003805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b50565b60005481565b600061092a848484611145565b1561098e5782600160a060020a031684600160a060020a03167fb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620846040519081526040602082018190526000818301526080909101905180910390a3506001610992565b5060005b5b9392505050565b60045460009033600160a060020a039081169116146109bc5750600219610992565b600160a060020a038416600090815260016020526040902054839010156109e65750600119610992565b6109f284308585610d25565b15156109fd57600080fd5b600054610a10908463ffffffff61122d16565b6000555060015b9392505050565b600160a060020a0330166000908152600160205260409020545b90565b60045460009033600160a060020a03908116911614610a5d5750600219610af3565b82841115610ac157600054610a78908563ffffffff61124416565b6000908155600160a060020a033016815260016020526040902054610aa3908563ffffffff61124416565b600160a060020a033016600090815260016020526040902055610ad8565b600054610ad4908463ffffffff61124416565b6000555b610ae430868585610d25565b1515610aef57600080fd5b5060015b949350505050565b600481565b600454600160a060020a031681565b60021981565b600160a060020a0381166000908152600160205260409020545b919050565b60035460009033600160a060020a0390811691161415610b2f57600160a060020a033016600090815260016020526040902054821115610b775750600019610b2f565b600054610b8a908363ffffffff61122d16565b6000908155600160a060020a033016815260016020526040902054610bb5908363ffffffff61122d16565b600160a060020a03301660009081526001602052604090819020919091557f36201c46a263f814b8c4987575e0d805ee31d78e79d1b4aed5f95d7c02933e5d9083905190815260200160405180910390a15060015b5b5b919050565b60001981565b600354600160a060020a031681565b60408051908101604052600381527f5543440000000000000000000000000000000000000000000000000000000000602082015281565b600554600160a060020a031681565b6000610c878383602060405190810160405260008152611067565b90505b92915050565b60011981565b60035460009033600160a060020a0390811691161415610b2f576005805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0384161790557faa20649ee6d7a1749d66a7e4a9482bcaf13735dde9fddd027ce53611f5ef47c182604051600160a060020a03909116815260200160405180910390a15060015b5b5b919050565b600181565b60055460009033600160a060020a0390811691161480610d53575060045433600160a060020a039081169116145b1515610d5e57600080fd5b83600160a060020a031685600160a060020a03161415610d8057506000610af3565b610d8b85858561125e565b15610e4d5783600160a060020a031685600160a060020a03167fb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620858560405182815260406020820181815290820183818151815260200191508051906020019080838360005b83811015610e0a5780820151818401525b602001610df1565b50505050905090810190601f168015610e375780820380516001836020036101000a031916815260200191505b50935050505060405180910390a3506001610af3565b506000610af3565b5b949350505050565b60035460009033600160a060020a0390811691161415610b2f57600054610e8b908363ffffffff61124416565b6000908155600160a060020a033016815260016020526040902054610eb6908363ffffffff61124416565b600160a060020a03301660009081526001602052604090819020919091557f5f9eca792ef010f5c4b5b4314122a63698157b8dbbc17344fa9d6713ab62a0fe9083905190815260200160405180910390a15060015b5b5b919050565b60035460009033600160a060020a0390811691161415610b2f576004805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0384161790557fab5b35579f32673e56d1369471531f244de4fccc5bbe0bb9ca7566ece0cd27e382604051600160a060020a03909116815260200160405180910390a15060015b5b5b919050565b60035460009033600160a060020a0390811691161415610b2f57600160a060020a033016600090815260016020526040902054821115610fdf5750600019610b2f565b600160a060020a033016600090815260016020526040902054611008908363ffffffff61122d16565b600160a060020a0330811660009081526001602052604080822093909355339091168152205461103e908363ffffffff61124416565b600160a060020a03331660009081526001602081905260409091209190915590505b5b5b919050565b60006110738484611313565b1561098e5783600160a060020a031633600160a060020a03167fb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620858560405182815260406020820181815290820183818151815260200191508051906020019080838360005b838110156110f25780820151818401525b6020016110d9565b50505050905090810190601f16801561111f5780820380516001836020036101000a031916815260200191505b50935050505060405180910390a3506001610992565b506000610992565b5b9392505050565b600160a060020a0383166000908152600160205260408120548290108015906111955750600160a060020a0380851660009081526002602090815260408083203390941683529290522054829010155b80156111a15750600082115b80156111c65750600160a060020a038316600090815260016020526040902054828101115b1561098e5750600160a060020a038084166000908152600160208181526040808420805487900390556002825280842033861685528252808420805487900390559386168352819052919020805483019055610992565b506000610992565b5b9392505050565b60008282111561123957fe5b508082035b92915050565b60008282018381101561125357fe5b8091505b5092915050565b6000600160a060020a03848116908416141561127957600080fd5b600160a060020a0384166000908152600160205260409020548290108015906112a25750600082115b80156112c75750600160a060020a038316600090815260016020526040902054828101115b1561098e5750600160a060020a038084166000908152600160208190526040808320805486900390559285168252919020805483019055610992565b506000610992565b5b9392505050565b600082600160a060020a031633600160a060020a03161415151561133657600080fd5b600160a060020a03331660009081526001602052604090205482901080159061135f5750600082115b80156113845750600160a060020a038316600090815260016020526040902054828101115b156113c05750600160a060020a033381166000908152600160208190526040808320805486900390559285168252919020805483019055610890565b506000610890565b5b929150505600a165627a7a72305820287a2c09f01daf691b1e0880ebc62bb81ce643660ee8e5913219a64fbbbb12a90029",
+  "networks": {
+    "3": {
+      "events": {
+        "0xab5b35579f32673e56d1369471531f244de4fccc5bbe0bb9ca7566ece0cd27e3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_loanManagerAddressChanged",
+          "type": "event"
+        },
+        "0xaa20649ee6d7a1749d66a7e4a9482bcaf13735dde9fddd027ce53611f5ef47c1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_exchangeAddressChanged",
+          "type": "event"
+        },
+        "0xb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "narrative",
+              "type": "string"
+            }
+          ],
+          "name": "e_transfer",
+          "type": "event"
+        },
+        "0x5f9eca792ef010f5c4b5b4314122a63698157b8dbbc17344fa9d6713ab62a0fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdIssued",
+          "type": "event"
+        },
+        "0x36201c46a263f814b8c4987575e0d805ee31d78e79d1b4aed5f95d7c02933e5d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdBurned",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xd329921a4f8d751920369ef993142ac1e8137ab5",
+      "updated_at": 1504353314969
+    },
+    "4": {
+      "events": {
+        "0xab5b35579f32673e56d1369471531f244de4fccc5bbe0bb9ca7566ece0cd27e3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_loanManagerAddressChanged",
+          "type": "event"
+        },
+        "0xaa20649ee6d7a1749d66a7e4a9482bcaf13735dde9fddd027ce53611f5ef47c1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_exchangeAddressChanged",
+          "type": "event"
+        },
+        "0xb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "narrative",
+              "type": "string"
+            }
+          ],
+          "name": "e_transfer",
+          "type": "event"
+        },
+        "0x5f9eca792ef010f5c4b5b4314122a63698157b8dbbc17344fa9d6713ab62a0fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdIssued",
+          "type": "event"
+        },
+        "0x36201c46a263f814b8c4987575e0d805ee31d78e79d1b4aed5f95d7c02933e5d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdBurned",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x4cf3a250a70a247a7f71acc3184c41953686eb0f",
+      "updated_at": 1504288323058
+    },
+    "999": {
+      "events": {
+        "0xab5b35579f32673e56d1369471531f244de4fccc5bbe0bb9ca7566ece0cd27e3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_loanManagerAddressChanged",
+          "type": "event"
+        },
+        "0x5f9eca792ef010f5c4b5b4314122a63698157b8dbbc17344fa9d6713ab62a0fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdIssued",
+          "type": "event"
+        },
+        "0x36201c46a263f814b8c4987575e0d805ee31d78e79d1b4aed5f95d7c02933e5d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdBurned",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        },
+        "0xb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "narrative",
+              "type": "string"
+            }
+          ],
+          "name": "e_transfer",
+          "type": "event"
+        },
+        "0xaa20649ee6d7a1749d66a7e4a9482bcaf13735dde9fddd027ce53611f5ef47c1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_exchangeAddressChanged",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x726c076c1b8cc9e64cde40bd68891de0879d1599",
+      "updated_at": 1504474637072
+    },
+    "1976": {
+      "events": {
+        "0xab5b35579f32673e56d1369471531f244de4fccc5bbe0bb9ca7566ece0cd27e3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_loanManagerAddressChanged",
+          "type": "event"
+        },
+        "0xaa20649ee6d7a1749d66a7e4a9482bcaf13735dde9fddd027ce53611f5ef47c1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newAddress",
+              "type": "address"
+            }
+          ],
+          "name": "e_exchangeAddressChanged",
+          "type": "event"
+        },
+        "0xb3d876ec2d89cdc0bff0c24cb5dbbe91c80448144771870cbb5e55caee954620": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "narrative",
+              "type": "string"
+            }
+          ],
+          "name": "e_transfer",
+          "type": "event"
+        },
+        "0x5f9eca792ef010f5c4b5b4314122a63698157b8dbbc17344fa9d6713ab62a0fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdIssued",
+          "type": "event"
+        },
+        "0x36201c46a263f814b8c4987575e0d805ee31d78e79d1b4aed5f95d7c02933e5d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ucdBurned",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x726c076c1b8cc9e64cde40bd68891de0879d1599",
+      "updated_at": 1504454592356
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1504474637072
+}

@@ -1,0 +1,329 @@
+{
+  "contract_name": "Rates",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_new",
+          "type": "address"
+        }
+      ],
+      "name": "setOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "weiValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "convertWeiToUsdc",
+      "outputs": [
+        {
+          "name": "usdcValue",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "USD_DECIMALS",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ethUsdcRate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "usdcValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "convertUsdcToWei",
+      "outputs": [
+        {
+          "name": "weiValue",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newEthUsdcRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "ethToUsdc",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "USD_SCALE",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "newEthUsdcRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "e_ethToUsdcChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "old",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "current",
+          "type": "address"
+        }
+      ],
+      "name": "NewOwner",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x6060604052621dc1306001555b60008054600160a060020a03191633600160a060020a03161790555b5b610437806100386000396000f300606060405236156100725763ffffffff60e060020a60003504166313af4035811461007757806319605cd9146100985780632f6ee695146100c05780635940da1e146100e957806375e1d3ac1461010e5780638da5cb5b14610136578063d8bddbd814610165578063f96d0baa1461017d575b600080fd5b341561008257600080fd5b610096600160a060020a03600435166101a9565b005b34156100a357600080fd5b6100ae60043561022a565b60405190815260200160405180910390f35b34156100cb57600080fd5b6100d36102ca565b60405160ff909116815260200160405180910390f35b34156100f457600080fd5b6100ae6102cf565b60405190815260200160405180910390f35b341561011957600080fd5b6100ae6004356102d5565b60405190815260200160405180910390f35b341561014157600080fd5b610149610372565b604051600160a060020a03909116815260200160405180910390f35b341561017057600080fd5b610096600435610381565b005b341561018857600080fd5b6101906103d6565b60405163ffffffff909116815260200160405180910390f35b60005433600160a060020a039081169116141561022557600054600160a060020a0380831691167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b50565b6000610241600154836103dc90919063ffffffff16565b73__SafeMath______________________________6351b644c09091670de0b6b3a764000060006040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b15156102a857600080fd5b6102c65a03f415156102b957600080fd5b50505060405180519150505b919050565b600481565b60015481565b60006102ef670de0b6b3a76400008363ffffffff6103dc16565b73__SafeMath______________________________6351b644c0909160015460006040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b15156102a857600080fd5b6102c65a03f415156102b957600080fd5b50505060405180519150505b919050565b600054600160a060020a031681565b60005433600160a060020a03908116911614156102255760018190557f148205eae942f5b918b25c45e339e3a8214be73b66606179037cfbafc15a294d8160405190815260200160405180910390a15b5b5b50565b61271081565b60008282028315806103f857508284828115156103f557fe5b04145b151561040057fe5b8091505b50929150505600a165627a7a72305820ddc2b52d6679d925c2075dc743c7314606647cff0b60b92d32bea955148362a00029",
+  "networks": {
+    "3": {
+      "events": {
+        "0x148205eae942f5b918b25c45e339e3a8214be73b66606179037cfbafc15a294d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newEthUsdcRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ethToUsdcChanged",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {
+        "SafeMath": "0x2637b2c432d4603588f9b2a0598a4945ff97c92a"
+      },
+      "address": "0xa11cc0176b763da6ebb7c913f986ffc9ca28410c",
+      "updated_at": 1504353314957
+    },
+    "4": {
+      "events": {
+        "0x148205eae942f5b918b25c45e339e3a8214be73b66606179037cfbafc15a294d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newEthUsdcRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ethToUsdcChanged",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {
+        "SafeMath": "0x3a2a8d273e6e50b93ccdea6c28b8afdb653c4939"
+      },
+      "address": "0xc3064f40073bc08fd9dae77be19f0a83f46a9f83",
+      "updated_at": 1504288323055
+    },
+    "999": {
+      "events": {
+        "0x206ec31cf44879afb76a99ad6051b021078af0ecde98e057937f09940a3d0b70": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newWeiUsdRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_usdWeiRateChanged",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        },
+        "0xb5de4b578dcd00d18b987b4f486681f83a9870062c0be21e49f537637c6f9fc0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newWeiUsdRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_usdcWeiRateChanged",
+          "type": "event"
+        },
+        "0x148205eae942f5b918b25c45e339e3a8214be73b66606179037cfbafc15a294d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newEthUsdcRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ethToUsdcChanged",
+          "type": "event"
+        }
+      },
+      "links": {
+        "SafeMath": "0x1578c4406b6a8808bae0945036a8896ede3c5de3"
+      },
+      "address": "0x50cbb3c22f42b5468b2177c6e49c32d99987a61b",
+      "updated_at": 1504474637074
+    },
+    "1976": {
+      "events": {
+        "0x148205eae942f5b918b25c45e339e3a8214be73b66606179037cfbafc15a294d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newEthUsdcRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "e_ethToUsdcChanged",
+          "type": "event"
+        },
+        "0x70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b2364": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "old",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "current",
+              "type": "address"
+            }
+          ],
+          "name": "NewOwner",
+          "type": "event"
+        }
+      },
+      "links": {
+        "SafeMath": "0x1578c4406b6a8808bae0945036a8896ede3c5de3"
+      },
+      "address": "0x50cbb3c22f42b5468b2177c6e49c32d99987a61b",
+      "updated_at": 1504454592359
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1504474637074
+}

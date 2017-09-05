@@ -1,0 +1,56 @@
+{
+  "contract_name": "SafeMath",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "a",
+          "type": "uint256"
+        },
+        {
+          "name": "b",
+          "type": "uint256"
+        }
+      ],
+      "name": "roundedDiv",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60b98061001e6000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166351b644c08114603c575b600080fd5b6048600435602435605a565b60405190815260200160405180910390f35b6000808284811515606757fe5b0490506002835b048385811515607957fe5b06106082576001015b8091505b50929150505600a165627a7a72305820a8c9c9c5cd08d68e37181e5f9783db0ec95f40ef564b64af2baf43d78394cac40029",
+  "networks": {
+    "3": {
+      "events": {},
+      "links": {},
+      "address": "0x2637b2c432d4603588f9b2a0598a4945ff97c92a",
+      "updated_at": 1504353314976
+    },
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0x3a2a8d273e6e50b93ccdea6c28b8afdb653c4939",
+      "updated_at": 1504286688598
+    },
+    "999": {
+      "events": {},
+      "links": {},
+      "address": "0x1578c4406b6a8808bae0945036a8896ede3c5de3",
+      "updated_at": 1504474637075
+    },
+    "1976": {
+      "events": {},
+      "links": {},
+      "address": "0x1578c4406b6a8808bae0945036a8896ede3c5de3",
+      "updated_at": 1504454592360
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1504474637075
+}

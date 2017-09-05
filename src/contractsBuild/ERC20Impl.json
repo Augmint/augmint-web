@@ -1,0 +1,62 @@
+{
+  "contract_name": "ERC20Impl",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b6101858061001f6000396000f300606060405263ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663095ea7b3811461005357806318160ddd1461008957806370a08231146100ae575b600080fd5b341561005e57600080fd5b610075600160a060020a03600435166024356100df565b604051901515815260200160405180910390f35b341561009457600080fd5b61009c610134565b60405190815260200160405180910390f35b34156100b957600080fd5b61009c600160a060020a036004351661013a565b60405190815260200160405180910390f35b600082600160a060020a031633600160a060020a03161415151561010257600080fd5b50600160a060020a03338116600090815260026020908152604080832093861683529290522081905560015b92915050565b60005481565b600160a060020a0381166000908152600160205260409020545b9190505600a165627a7a72305820a1fa38ed321977507fb3ce659b51f273459336a9b3a3cf3c8d85acb2ff641b950029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1503489990506
+}

@@ -1,0 +1,378 @@
+{
+  "contract_name": "EthBackedLoan",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "maturity",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_REPAY_NOT_DUE_YET",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "loanState",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "repayPeriod",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ucdDueAtMaturity",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenUcd",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "repay",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "name": "priceInUcd",
+          "type": "uint256"
+        }
+      ],
+      "name": "sellLoan",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_COLLECT_NOT_DUE_YET",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_NOT_AUTHORISED",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_LOAN_NOT_OPEN",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "disbursementDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "term",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_EXT_ERRCODE_BASE",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "loanManager",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "loanId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ERR_UCD_BALANCE_NOT_ENOUGH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SUCCESS",
+      "outputs": [
+        {
+          "name": "",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "collect",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "int8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "disbursedLoanInUcd",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getDetails",
+      "outputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_loanManager",
+          "type": "address"
+        },
+        {
+          "name": "_tokenUcd",
+          "type": "address"
+        },
+        {
+          "name": "_loanState",
+          "type": "uint8"
+        },
+        {
+          "name": "_ucdDueAtMaturity",
+          "type": "uint256"
+        },
+        {
+          "name": "_disbursedLoanInUcd",
+          "type": "uint256"
+        },
+        {
+          "name": "_term",
+          "type": "uint256"
+        },
+        {
+          "name": "_disbursementDate",
+          "type": "uint256"
+        },
+        {
+          "name": "_maturity",
+          "type": "uint256"
+        },
+        {
+          "name": "_repayPeriod",
+          "type": "uint256"
+        },
+        {
+          "name": "_loanId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_loanId",
+          "type": "uint256"
+        },
+        {
+          "name": "_borrower",
+          "type": "address"
+        },
+        {
+          "name": "_term",
+          "type": "uint256"
+        },
+        {
+          "name": "_disbursedLoanInUcd",
+          "type": "uint256"
+        },
+        {
+          "name": "_ucdDueAtMaturity",
+          "type": "uint256"
+        },
+        {
+          "name": "_repayPeriod",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b60405160c0806109bd8339810160405280805191906020018051919060200180519190602001805191906020018051919060200180519150505b600386905560018054600160a060020a03338116600160a060020a0319928316179283905560008054898316931692909217825591909116906335b6f81b90604051602001526040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b15156100d657600080fd5b6102c65a03f115156100e757600080fd5b505050604051805160028054600160a060020a031916600160a060020a0392909216919091179055506006849055426007819055610132908564010000000061017f81026107cf1704565b600855600981905560058390556004829055600280546000919060a060020a60ff02191674010000000000000000000000000000000000000000835b02179055505b505050505050610199565b60008282018381101561018e57fe5b8091505b5092915050565b610815806101a86000396000f300606060405236156101255763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663204f83f98114610129578063207efe651461014e57806325af34cd1461017a5780632bf51e40146101b15780632cbdbd16146101d657806335b6f81b146101fb578063402d88831461022a57806354d0258b1461025657806368e8d7d6146102915780636ac2be9e146102bd5780636ff6680e146102e95780638da5cb5b146103155780639c5a588014610344578063a10ffbed14610369578063afb7cee01461038e578063b3ccbcfe146103ba578063c95669a5146103e9578063ca4573721461040e578063d0a6d1a61461043a578063e522538114610466578063e720fe9414610492578063fbbf93a0146104b7575b5b5b005b341561013457600080fd5b61013c610541565b60405190815260200160405180910390f35b341561015957600080fd5b610161610547565b604051600091820b90910b815260200160405180910390f35b341561018557600080fd5b61018d61054d565b6040518082600281111561019d57fe5b60ff16815260200191505060405180910390f35b34156101bc57600080fd5b61013c61055d565b60405190815260200160405180910390f35b34156101e157600080fd5b61013c610563565b60405190815260200160405180910390f35b341561020657600080fd5b61020e610569565b604051600160a060020a03909116815260200160405180910390f35b341561023557600080fd5b610161610578565b604051600091820b90910b815260200160405180910390f35b341561026157600080fd5b610161600160a060020a0360043516602435610642565b604051600091820b90910b815260200160405180910390f35b341561029c57600080fd5b61016161064c565b604051600091820b90910b815260200160405180910390f35b34156102c857600080fd5b610161610652565b604051600091820b90910b815260200160405180910390f35b34156102f457600080fd5b610161610658565b604051600091820b90910b815260200160405180910390f35b341561032057600080fd5b61020e61065e565b604051600160a060020a03909116815260200160405180910390f35b341561034f57600080fd5b61013c61066d565b60405190815260200160405180910390f35b341561037457600080fd5b61013c610673565b60405190815260200160405180910390f35b341561039957600080fd5b610161610679565b604051600091820b90910b815260200160405180910390f35b34156103c557600080fd5b61020e61067f565b604051600160a060020a03909116815260200160405180910390f35b34156103f457600080fd5b61013c61068e565b60405190815260200160405180910390f35b341561041957600080fd5b610161610694565b604051600091820b90910b815260200160405180910390f35b341561044557600080fd5b61016161069a565b604051600091820b90910b815260200160405180910390f35b341561047157600080fd5b61016161069f565b604051600091820b90910b815260200160405180910390f35b341561049d57600080fd5b61013c610779565b60405190815260200160405180910390f35b34156104c257600080fd5b6104ca61077f565b604051600160a060020a03808d1682528b811660208301528a166040820152606081018960028111156104f957fe5b60ff1681526020018881526020018781526020018681526020018581526020018481526020018381526020018281526020019b50505050505050505050505060405180910390f35b60085481565b60011981565b60025460a060020a900460ff1681565b60095481565b60045481565b600254600160a060020a031681565b60015460009033600160a060020a0390811691161461059a575060031961063f565b60005b6002805460a060020a900460ff16908111156105b557fe5b146105c3575060041961063f565b6008544210156105d6575060011961063f565b600280546001919074ff0000000000000000000000000000000000000000191660a060020a835b0217905550600054600160a060020a039081169030163180156108fc0290604051600060405180830381858888f19350505050151561063b57600080fd5b5060015b90565b6000195b92915050565b60001981565b60031981565b60041981565b600054600160a060020a031681565b60075481565b60065481565b60091981565b600154600160a060020a031681565b60035481565b60021981565b600181565b60015460009033600160a060020a039081169116146106c1575060031961063f565b60005b6002805460a060020a900460ff16908111156106dc57fe5b146106ea575060041961063f565b6009546008546106ff9163ffffffff6107cf16565b42101561070f575060001961063f565b60028054819074ff0000000000000000000000000000000000000000191660a060020a825b0217905550600254600160a060020a039081169030163180156108fc0290604051600060405180830381858888f19350505050151561063b57600080fd5b5060015b90565b60055481565b600054600154600254600454600554600654600754600854600954600354600160a060020a03998a16999889169888169760a060020a900460ff16969594939291905b909192939495969798999a565b6000828201838110156107de57fe5b8091505b50929150505600a165627a7a723058200bd1c55b3ac3384fdb14ba9184dff0cb41c13de145a495e38d4e23767b0fc01b0029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1503486592089
+}

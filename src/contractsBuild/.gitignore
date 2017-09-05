@@ -1,4 +1,0 @@
-# Keep an empty contractsBuild folder in Git (needed for yarn build)
-*
-*/
-!.gitignore
