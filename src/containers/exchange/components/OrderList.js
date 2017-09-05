@@ -1,6 +1,7 @@
 import React from "react";
 import { Panel, Button } from "react-bootstrap";
 import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
+import ErrorDetails from "components/ErrorDetails";
 
 export default class OrderList extends React.Component {
     constructor(props) {
@@ -47,9 +48,17 @@ export default class OrderList extends React.Component {
             totalCcy = orders[0].ccy;
         return (
             <Panel header={header}>
-                {refreshError && <p>Error loading orders</p>}
+                {refreshError && (
+                    <p>
+                        Error while fetching order list
+                        <ErrorDetails>{refreshError.message}</ErrorDetails>
+                    </p>
+                )}
+                {orders == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing order list...</p>}
-                {orders != null && filteredOrders.length === 0 ? (
+                {orders != null &&
+                !refreshError &&
+                filteredOrders.length === 0 ? (
                     noItemMessage
                 ) : (
                     <MyListGroup>

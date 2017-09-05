@@ -20,7 +20,7 @@ export async function fetchOrders() {
                 bn_amount = order[4].div(new BigNumber(10000));
             } else if (orderType === ETHSELL) {
                 ccy = "ETH";
-                bn_amount = web3.fromWei(new BigNumber(order[4]));
+                bn_amount = new BigNumber(web3.fromWei(order[4]));
             } else {
                 throw new Error("Unknown orderType: " + orderType);
             }
