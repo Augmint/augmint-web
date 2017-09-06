@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Grid, Row, Col, Jumbotron, Button } from "react-bootstrap";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import AccountInfo from "components/AccountInfo";
-import TokenUcdInfo from "components/TokenUcdInfo";
+import { TokenUcdStats } from "components/TokenUcdStats";
 
 class Home extends React.Component {
     componentDidMount() {
@@ -44,7 +44,7 @@ class Home extends React.Component {
                     </Col>
 
                     <Col xs={6} md={6}>
-                        <TokenUcdInfo
+                        <TokenUcdStats
                             tokenUcd={this.props.tokenUcd}
                             showTokenUcdLink
                         />

@@ -5,10 +5,8 @@ import { Link } from "react-router-dom";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import ratesProvider from "modules/ratesProvider";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
-import { Grid, Row, Col, Panel, PageHeader } from "react-bootstrap";
-
-const baseInfoTitle = <h3>Base Info</h3>;
-const reservesTitle = <h3>Reserves</h3>;
+import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { TokenUcdStats } from "components/TokenUcdStats";
 
 class TokenUcd extends React.Component {
     componentDidMount() {
@@ -22,48 +20,36 @@ class TokenUcd extends React.Component {
     };
 
     render() {
+        const { tokenUcd, rates } = this.props;
+
         return (
-            <Grid>
-                <Row>
-                    <Col>
-                        <PageHeader>Token UCD</PageHeader>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={4}>
-                        <Panel header={baseInfoTitle}>
-                            <p>
-                                Total token supply:{" "}
-                                {this.props.tokenUcdTotalSupply} UCD
-                            </p>
-                        </Panel>
-                    </Col>
-                    <Col xs={12} md={4}>
-                        <Panel header={reservesTitle}>
-                            <p>
-                                ETH Reserve: {this.props.tokenUcdEthBalance} ETH
-                                ({this.props.bn_ethUsdRate == null ||
-                                this.props.tokenUcdBn_ethBalance == null ? (
-                                    "?"
-                                ) : (
-                                    this.props.bn_ethUsdRate
-                                        .mul(this.props.tokenUcdBn_ethBalance)
-                                        .toString()
-                                )}{" "}
-                                USD)
-                            </p>
-                            <p>
-                                UCD Reserve: {this.props.tokenUcdUcdBalance} UCD
-                            </p>
-                        </Panel>
-                    </Col>
-                    <Col xs={12} md={4}>
-                        <Link className="btn btn-link" to="/loan/collect">
-                            <h3>Loans to Collect</h3>
-                        </Link>
-                    </Col>
-                </Row>
-            </Grid>
+            <div>
+                <Pheader header="Token UCD" />
+                <Psegment>
+                    <Pgrid columns={1}>
+                        <Pgrid.Row>
+                            <Pgrid.Column>
+                                <TokenUcdStats
+                                    size="small"
+                                    showInUsd
+                                    tokenUcd={tokenUcd}
+                                    rates={rates}
+                                />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                        <Pgrid.Row>
+                            <Pgrid.Column>
+                                <Link
+                                    className="btn btn-link"
+                                    to="/loan/collect"
+                                >
+                                    <h3>Loans to Collect</h3>
+                                </Link>
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                    </Pgrid>
+                </Psegment>
+            </div>
         );
     }
 }
@@ -77,14 +63,8 @@ const mapStateToProps = state => ({
     web3ConnectionId: state.web3Connect.web3ConnectionId,
     web3Instance: state.web3Connect.web3Instance,
 
-    ratesContract: state.rates.contract,
-    bn_ethUsdRate: state.rates.info.bn_ethUsdRate,
-
-    tokenUcdContract: state.tokenUcd.contract,
-    tokenUcdUcdBalance: state.tokenUcd.info.ucdBalance,
-    tokenUcdEthBalance: state.tokenUcd.info.ethBalance,
-    tokenUcdBn_ethBalance: state.tokenUcd.info.bn_ethBalance,
-    tokenUcdTotalSupply: state.tokenUcd.info.totalSupply,
+    tokenUcd: state.tokenUcd,
+    rates: state.rates,
     loanManagerAddress: state.tokenUcd.info.loanManagerAddress
 });
 
