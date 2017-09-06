@@ -9,19 +9,14 @@ TODO: consider moving connection, event listeners etc to separate modul (like ex
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap-theme.css";
+import "semantic-ui-css/semantic.min.css";
 
 import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { setupWeb3 } from "modules/reducers/web3Connect";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import {
-    Route,
-    Link,
-    Switch,
-    withRouter
-} from "react-router-dom";
+import { Container, Menu, Segment } from "semantic-ui-react";
+import { Route, NavLink, Link, Switch, withRouter } from "react-router-dom";
 import Home from "containers/home";
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -47,62 +42,44 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <header>
-                    <Navbar inverse collapseOnSelect>
-                        <Navbar.Header>
-                            <Navbar.Brand>
-                                <LinkContainer to="/">
-                                    <Link to="/">Home</Link>
-                                </LinkContainer>
-                            </Navbar.Brand>
-                            <Navbar.Toggle />
-                        </Navbar.Header>
-                        <Navbar.Collapse>
-                            <Nav>
-                                <LinkContainer to="/account">
-                                    <NavItem eventKey={1} href="/account">
-                                        My Account
-                                    </NavItem>
-                                </LinkContainer>
-                                <LinkContainer to="/exchange">
-                                    <NavItem eventKey={2} href="/exchange">
-                                        Buy/Sell UCD
-                                    </NavItem>
-                                </LinkContainer>
-                                <LinkContainer to="/loan/new">
-                                    <NavItem eventKey={3} href="/loan/new">
-                                        Get UCD Loan
-                                    </NavItem>
-                                </LinkContainer>
-                                <LinkContainer to="/tokenUcd">
-                                    <NavItem eventKey={4} href="/tokenUcd">
-                                        TokenUcd
-                                    </NavItem>
-                                </LinkContainer>
-                            </Nav>
-                            <Navbar.Text pullRight>
-                                <small>on {this.props.network.name}</small>
-                            </Navbar.Text>;
-                            <Nav pullRight>
-                                <LinkContainer to="/about-us">
-                                    <NavItem eventKey={1} href="/about-us">
-                                        About
-                                    </NavItem>
-                                </LinkContainer>
-                                <LinkContainer to="/under-the-hood">
-                                    <NavItem
-                                        eventKey={2}
-                                        href="/under-the-hood"
-                                    >
-                                        Under the hood
-                                    </NavItem>
-                                </LinkContainer>
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Navbar>
-                </header>
+                <Segment inverted>
+                    <Menu inverted pointing secondary stackable size="large">
+                        <Container>
+                            <Menu.Item
+                                active={this.props.location.pathname === "/"}
+                                as={Link}
+                                to="/"
+                            >
+                                Home
+                            </Menu.Item>
+                            <Menu.Item as={NavLink} to="/account">
+                                My Account
+                            </Menu.Item>
+                            <Menu.Item as={NavLink} to="/exchange">
+                                Buy/Sell UCD
+                            </Menu.Item>
+                            <Menu.Item as={NavLink} to="/loan/new">
+                                Get UCD Loan
+                            </Menu.Item>
+                            <Menu.Item as={NavLink} to="/tokenUcd">
+                                TokenUcd
+                            </Menu.Item>
+                            <Menu.Menu position="right">
+                                <Menu.Item as={NavLink} to="/about-us">
+                                    About
+                                </Menu.Item>
+                                <Menu.Item as={NavLink} to="/under-the-hood">
+                                    Under the hood
+                                </Menu.Item>
+                                <Menu.Item as="p">
+                                    <small>on {this.props.network.name}</small>
+                                </Menu.Item>
+                            </Menu.Menu>
+                        </Container>
+                    </Menu>
+                </Segment>
 
-                <main>
+                <Segment basic>
                     <EthereumState />
                     <Switch>
                         <Route exact path="/" component={Home} />
@@ -122,7 +99,7 @@ class App extends React.Component {
                         />
                         <Route component={PageNotFound} />
                     </Switch>
-                </main>
+                </Segment>
             </div>
         );
     }
