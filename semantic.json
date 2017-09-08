@@ -16,7 +16,7 @@
         "clean": "dist/"
     },
     "permission": 744,
-    "autoInstall": false,
+    "autoInstall": true,
     "rtl": false,
     "components": [
         "reset",
