@@ -38,23 +38,19 @@ export class Psegment extends React.Component {
 
 Psegment.defaultProps = {
     style: { padding: "2em 2em" },
-    vertical: "true"
+    vertical: true
 };
 
 export class Pgrid extends React.Component {
     render() {
         const { children, ...other } = this.props;
-        return (
-            <Grid container {...other}>
-                {children}
-            </Grid>
-        );
+        return <Grid {...other}>{children}</Grid>;
     }
 }
 
 Pgrid.defaultProps = {
-    stackable: "true",
-    container: "true"
+    stackable: true,
+    container: true
 };
 
 export class Pcolumn extends React.Component {
@@ -64,7 +60,7 @@ export class Pcolumn extends React.Component {
     }
 }
 
-Pgrid.defaultProps = {
+Pcolumn.defaultProps = {
     style: {
         paddingBottom: "1em",
         paddingTop: "1em"
