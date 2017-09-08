@@ -9,7 +9,7 @@ import {
     repayLoan,
     LOANMANAGER_REPAY_SUCCESS
 } from "modules/reducers/loanManager";
-import LoanDetails from "components/LoanDetails";
+import LoanDetails from "containers/loan/components/LoanDetails";
 import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";
 import {
@@ -47,10 +47,11 @@ function LoanDetailsWithStatusCheck(props) {
 
     return (
         <div>
-            {statusWarn &&
+            {statusWarn && (
                 <WarningPanel header={<h3>Can't repay</h3>}>
                     {statusWarn}
-                </WarningPanel>}
+                </WarningPanel>
+            )}
 
             <h4>Selected Loan</h4>
             <LoanDetails loan={loan} />
@@ -124,11 +125,7 @@ class RepayLoanPage extends React.Component {
         const { submitSucceeded, clearSubmitErrors } = this.props;
 
         if (this.state.isLoading) {
-            return (
-                <p>
-                    Fetching data (loan id: {this.state.loanId})...
-                </p>
-            );
+            return <p>Fetching data (loan id: {this.state.loanId})...</p>;
         }
 
         if (!this.state.isLoanFound) {
@@ -151,16 +148,17 @@ class RepayLoanPage extends React.Component {
                     <RepayHelp />
                 </Col>
                 <Col xs={12} sm={8}>
-                    {this.props.error &&
+                    {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
                             header={<h3>Repay failed</h3>}
                             collapsible={false}
                             onDismiss={() => clearSubmitErrors()}
-                        />}
+                        />
+                    )}
 
                     {!submitSucceeded &&
-                        !this.state.isLoading &&
+                    !this.state.isLoading && (
                         <Form
                             onSubmit={this.props.handleSubmit(
                                 this.handleSubmit
@@ -178,20 +176,24 @@ class RepayLoanPage extends React.Component {
                                     this.state.loan.loanState !== 5
                                 }
                             >
-                                {this.props.submitting
-                                    ? "Submitting..."
-                                    : "Confirm to repay " +
-                                      this.state.loan.ucdDueAtMaturity +
-                                      " UCD"}
+                                {this.props.submitting ? (
+                                    "Submitting..."
+                                ) : (
+                                    "Confirm to repay " +
+                                    this.state.loan.ucdDueAtMaturity +
+                                    " UCD"
+                                )}
                             </Button>
-                        </Form>}
+                        </Form>
+                    )}
 
-                    {submitSucceeded &&
+                    {submitSucceeded && (
                         <EthSubmissionSuccessPanel
                             header={<h3>Successful repayment</h3>}
                             eth={this.state.result.eth}
                             dismissable={false}
-                        />}
+                        />
+                    )}
                 </Col>
             </Row>
         );

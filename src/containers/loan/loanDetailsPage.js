@@ -3,7 +3,7 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import LoanDetails from "components/LoanDetails";
+import LoanDetails from "./components/LoanDetails";
 import { ErrorPanel } from "components/MsgPanels";
 import { PageHeader, Grid, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -62,13 +62,14 @@ class LoanDetailsPage extends React.Component {
                 </Row>
                 <Row>
                     <Col>
-                        {this.state.isLoading &&
+                        {this.state.isLoading && (
                             <p>
                                 Fetching data (loan id: {this.state.loanId})...
-                            </p>}
+                            </p>
+                        )}
 
                         {!this.state.isLoading &&
-                            !this.state.isLoanFound &&
+                        !this.state.isLoanFound && (
                             <ErrorPanel
                                 header={
                                     <h3>
@@ -76,20 +77,23 @@ class LoanDetailsPage extends React.Component {
                                         current account {this.props.userAccount}
                                     </h3>
                                 }
-                            />}
+                            />
+                        )}
+
+                        {this.state.isLoanFound && (
+                            <LoanDetails loan={this.state.loan} />
+                        )}
 
                         {this.state.isLoanFound &&
-                            <LoanDetails loan={this.state.loan} />}
-
-                        {this.state.isLoanFound &&
-                            this.state.loan.isDue &&
+                        this.state.loan.isDue && (
                             <Link
                                 key={"repaybtn-" + this.state.loan.loanId}
                                 className="btn btn-primary"
                                 to={`/loan/repay/${this.state.loan.loanId}`}
                             >
                                 Repay
-                            </Link>}
+                            </Link>
+                        )}
                     </Col>
                 </Row>
             </Grid>

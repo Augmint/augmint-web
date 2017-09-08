@@ -1,5 +1,5 @@
 import React from "react";
-import { Panel } from "react-bootstrap";
+import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
 import ErrorDetails from "components/ErrorDetails";
 
@@ -33,7 +33,7 @@ export default class TransferList extends React.Component {
             ));
 
         return (
-            <Panel header={header}>
+            <Pblock header={header}>
                 {error && (
                     <p>
                         Error while fetching transfer list
@@ -47,7 +47,7 @@ export default class TransferList extends React.Component {
                 ) : (
                     <MyListGroup>{listItems}</MyListGroup>
                 )}
-            </Panel>
+            </Pblock>
         );
     }
 }
@@ -59,5 +59,5 @@ TransferList.defaultProps = {
         return true; // no filter passed
     },
     noItemMessage: <p>No transactions</p>,
-    header: <h3>UCD transfer history</h3>
+    header: "UCD transfer history"
 };

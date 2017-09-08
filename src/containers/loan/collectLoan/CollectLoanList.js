@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
-import LoanList from "components/LoanList";
+import LoanList from "containers/loan/components/LoanList";
 import { Row, Col, Well, Button } from "react-bootstrap";
 import { SubmissionError, reduxForm } from "redux-form";
 import {
@@ -92,18 +92,19 @@ class CollectLoanList extends React.Component {
                     </Well>
                 </Col>
                 <Col xs={12} sm={8}>
-                    {error &&
+                    {error && (
                         <EthSubmissionErrorPanel
                             error={error}
                             header="Failed to collect all loans."
                             onDismiss={() => clearSubmitErrors()}
                         >
                             <p>One or more loan collection has failed.</p>{" "}
-                        </EthSubmissionErrorPanel>}
+                        </EthSubmissionErrorPanel>
+                    )}
 
                     {!submitSucceeded &&
-                        !isLoading &&
-                        loansToCollect != null &&
+                    !isLoading &&
+                    loansToCollect != null && (
                         <Form onSubmit={handleSubmit(this.handleSubmit)}>
                             <Button
                                 type="submit"
@@ -112,9 +113,10 @@ class CollectLoanList extends React.Component {
                             >
                                 {submitting ? "Submitting..." : "Collect all"}
                             </Button>
-                        </Form>}
+                        </Form>
+                    )}
 
-                    {submitSucceeded &&
+                    {submitSucceeded && (
                         <EthSubmissionSuccessPanel
                             header={
                                 <h3>
@@ -123,10 +125,12 @@ class CollectLoanList extends React.Component {
                                 </h3>
                             }
                             eth={this.state.result.eth}
-                        />}
+                        />
+                    )}
 
-                    {(isLoading || loansToCollect == null) &&
-                        <p>Refreshing list of loans to collect...</p>}
+                    {(isLoading || loansToCollect == null) && (
+                        <p>Refreshing list of loans to collect...</p>
+                    )}
                     <LoanList
                         header={<h2>Loans to collect</h2>}
                         noItemMessage={

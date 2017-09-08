@@ -7,7 +7,7 @@ import {
     newLoan,
     LOANMANAGER_NEWLOAN_CREATED
 } from "modules/reducers/loanManager";
-import LoanProductDetails from "components/LoanProductDetails";
+import LoanProductDetails from "containers/loan/components/LoanProductDetails";
 import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";
 import NewLoanSuccess from "./NewLoanSuccess";
@@ -128,16 +128,18 @@ class NewLoanPage extends React.Component {
                     </Row>
                 </Col>
                 <Col xs={8} md={8}>
-                    {!this.state.submitSucceeded &&
+                    {!this.state.submitSucceeded && (
                         <NewLoanForm
                             product={this.state.product}
                             rates={this.props.rates}
                             onSubmit={this.handleSubmit}
-                        />}
-                    {this.state.submitSucceeded &&
+                        />
+                    )}
+                    {this.state.submitSucceeded && (
                         /* couldn't make this work yet:
                             <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                        <NewLoanSuccess result={this.state.result} />}
+                        <NewLoanSuccess result={this.state.result} />
+                    )}
                 </Col>
             </Row>
         );

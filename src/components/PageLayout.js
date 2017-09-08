@@ -16,28 +16,45 @@ Pheader.defaultProps = {
     style: { margin: "1em 0" }
 };
 
+export function Pcontainer(props) {
+    const { children, ...other } = props;
+    return <Container {...other}>{children}</Container>;
+}
+
+Pcontainer.defaultProps = {
+    style: { margin: "2em 0" }
+};
+
 export class Psegment extends React.Component {
     render() {
         const { children, ...other } = this.props;
-        return <Segment {...other}>{children}</Segment>;
+        return (
+            <Segment basic {...other}>
+                {children}
+            </Segment>
+        );
     }
 }
 
 Psegment.defaultProps = {
     style: { padding: "2em 2em" },
-    vertical: true
+    vertical: "true"
 };
 
 export class Pgrid extends React.Component {
     render() {
         const { children, ...other } = this.props;
-        return <Grid {...other}>{children}</Grid>;
+        return (
+            <Grid container {...other}>
+                {children}
+            </Grid>
+        );
     }
 }
 
 Pgrid.defaultProps = {
-    stackable: true,
-    container: true
+    stackable: "true",
+    container: "true"
 };
 
 export class Pcolumn extends React.Component {
@@ -56,3 +73,13 @@ Pgrid.defaultProps = {
 
 Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid.Row;
+
+export function Pblock(props) {
+    const { children, header, ...other } = props;
+    return (
+        <Segment basic {...other}>
+            <Header as="h2" content={header} />
+            {children}
+        </Segment>
+    );
+}

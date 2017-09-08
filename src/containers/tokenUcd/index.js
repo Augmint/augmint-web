@@ -24,35 +24,27 @@ class TokenUcd extends React.Component {
         const { tokenUcd, rates } = this.props;
 
         return (
-            <div>
+            <Psegment>
                 <EthereumState />
-                <Psegment>
-                    <Pheader header="Token UCD" />
 
-                    <Pgrid columns={1}>
-                        <Pgrid.Row>
-                            <Pgrid.Column>
-                                <TokenUcdStats
-                                    size="small"
-                                    showInUsd
-                                    tokenUcd={tokenUcd}
-                                    rates={rates}
-                                />
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                        <Pgrid.Row>
-                            <Pgrid.Column>
-                                <Link
-                                    className="btn btn-link"
-                                    to="/loan/collect"
-                                >
-                                    <h3>Loans to Collect</h3>
-                                </Link>
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
-                </Psegment>
-            </div>
+                <Pheader header="Token UCD" />
+
+                <Pgrid columns={1}>
+                    <Pgrid.Column>
+                        <TokenUcdStats
+                            size="small"
+                            showInUsd
+                            tokenUcd={tokenUcd}
+                            rates={rates}
+                        />
+                    </Pgrid.Column>
+                    <Pgrid.Column>
+                        <Link className="btn btn-link" to="/loan/collect">
+                            <h3>Loans to Collect</h3>
+                        </Link>
+                    </Pgrid.Column>
+                </Pgrid>
+            </Psegment>
         );
     }
 }

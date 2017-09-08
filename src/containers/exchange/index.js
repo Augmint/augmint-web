@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Grid, Row, Col, PageHeader } from "react-bootstrap";
+import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import tokenUcdProvider from "modules/tokenUcdProvider";
@@ -19,21 +19,14 @@ class ExchangeHome extends React.Component {
     render() {
         const { orders, userAccount, exchange, rates } = this.props;
         return (
-            <Grid>
-                <Row>
-                    <Col>
-                        <EthereumState />
-                        <PageHeader>Buy & Sell UCD</PageHeader>
-                    </Col>
-                </Row>
+            <Psegment>
+                <EthereumState />
+                <Pheader header="Buy & Sell UCD" />
+                <Pgrid>
+                    <Pgrid.Row columns={2}>
+                        <Pgrid.Column>
+                            <AccountInfo account={userAccount} />
 
-                <Row>
-                    <Col xs={12} sm={6}>
-                        <Col xs={12}>
-                            <ExchangeSummary
-                                exchangeInfo={exchange.info}
-                                rates={rates}
-                            />
                             <PlaceOrderForm
                                 orders={orders}
                                 exchange={exchange}
@@ -43,24 +36,27 @@ class ExchangeHome extends React.Component {
                             <OrderList
                                 orders={orders}
                                 userAccountAddress={userAccount.address}
-                                header={<h3>My orders</h3>}
+                                header="My orders"
                                 filter={item => {
                                     return item.maker === userAccount.address;
                                 }}
                             />
-                        </Col>
-                    </Col>
+                        </Pgrid.Column>
 
-                    <Col xs={12} sm={6}>
-                        <AccountInfo account={userAccount} />
-                        <OrderList
-                            orders={orders}
-                            userAccountAddress={userAccount.address}
-                            header={<h3>All orders</h3>}
-                        />
-                    </Col>
-                </Row>
-            </Grid>
+                        <Pgrid.Column>
+                            <ExchangeSummary
+                                exchangeInfo={exchange.info}
+                                rates={rates}
+                            />
+                            <OrderList
+                                orders={orders}
+                                userAccountAddress={userAccount.address}
+                                header="All orders"
+                            />
+                        </Pgrid.Column>
+                    </Pgrid.Row>
+                </Pgrid>
+            </Psegment>
         );
     }
 }

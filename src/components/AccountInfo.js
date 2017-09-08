@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Panel } from "react-bootstrap";
+import { Pblock } from "components/PageLayout";
 import { Link } from "react-router-dom";
 
 export class AccountInfo extends React.Component {
@@ -13,7 +13,7 @@ export class AccountInfo extends React.Component {
             userBalancesIsLoading
         } = this.props;
         return (
-            <Panel header={header}>
+            <Pblock header={header}>
                 {!tokenUcdIsConnected && (
                     <p>Connecting to tokenUcd contract...</p>
                 )}
@@ -42,13 +42,13 @@ export class AccountInfo extends React.Component {
                     )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
-            </Panel>
+            </Pblock>
         );
     }
 }
 
 AccountInfo.defaultProps = {
-    header: <h3>My Account</h3>,
+    header: "My Account",
     showMyAccountLink: false
 };
 

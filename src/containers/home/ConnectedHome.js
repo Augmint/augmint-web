@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { Hero } from "./Hero";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import { TokenUcdStats } from "components/TokenUcdStats";
-import { Psegment, Pgrid } from "components/PageLayout";
+import { Psegment } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
+import { Container, Header } from "semantic-ui-react";
 
 class ConnectedHome extends React.Component {
     componentDidMount() {
@@ -17,16 +18,12 @@ class ConnectedHome extends React.Component {
                 <Hero />
                 <EthereumState />
                 <Psegment>
-                    <Pgrid>
-                        <Pgrid.Row columns={1}>
-                            <Pgrid.Column>
-                                <TokenUcdStats
-                                    tokenUcd={tokenUcd}
-                                    showTokenUcdLink
-                                />
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
+                    <Container>
+                        <Header textAlign="center" style={{ fontSize: "2em" }}>
+                            Status
+                        </Header>
+                        <TokenUcdStats tokenUcd={tokenUcd} showTokenUcdLink />
+                    </Container>
                 </Psegment>
             </div>
         );

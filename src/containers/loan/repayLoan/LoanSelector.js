@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import LoanList from "components/LoanList";
+import LoanList from "containers/loan/components/LoanList";
 import { Row, Col } from "react-bootstrap";
 import { RepayHelp } from "./components/RepayHelp";
 

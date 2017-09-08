@@ -1,6 +1,6 @@
 import React from "react";
 //import {Popover, Glyphicon, OverlayTrigger} from 'react-bootstrap';
-import ToolTip from "./ToolTip";
+import ToolTip from "components/ToolTip";
 
 export function DiscountRateToolTip(props) {
     return (

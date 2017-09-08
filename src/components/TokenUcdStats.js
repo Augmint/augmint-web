@@ -34,11 +34,11 @@ export class TokenUcdStats extends React.Component {
                 {isLoading && <p>Refreshing tokenUcd info...</p>}
 
                 <Statistic.Group widths="3" size={size}>
-                    <Statistic style={{ paddingLeft: "2em" }}>
+                    <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
                         <Statistic.Value>{totalSupply} UCD</Statistic.Value>
                     </Statistic>
-                    <Statistic style={{ paddingLeft: "2em" }}>
+                    <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
                         <Statistic.Value>{ethBalance} ETH</Statistic.Value>
                         {showInUsd && (
@@ -48,7 +48,7 @@ export class TokenUcdStats extends React.Component {
                         )}
                     </Statistic>
 
-                    <Statistic style={{ paddingLeft: "2em" }}>
+                    <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>UCD reserve</Statistic.Label>
                         <Statistic.Value>{ucdBalance} UCD</Statistic.Value>
                     </Statistic>

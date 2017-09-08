@@ -29,6 +29,7 @@ import {
     TOKENUCD_TRANSFER_SUCCESS
 } from "modules/reducers/tokenUcd";
 import BigNumber from "bignumber.js";
+import { Pblock } from "components/PageLayout";
 
 class UcdTransferForm extends React.Component {
     constructor(props) {
@@ -86,94 +87,103 @@ class UcdTransferForm extends React.Component {
         } = this.props;
 
         return (
-            <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
-                <fieldset disabled={submitting || !tokenUcdIsConnected}>
-                    <legend>Send UCD</legend>
-                    {!tokenUcdIsConnected &&
-                        <p>Connecting to tokenUcd contract...</p>}
-                    {error &&
-                        <EthSubmissionErrorPanel
-                            error={error}
-                            collapsible={false}
-                            header={<h3>Transfer failed</h3>}
-                            onDismiss={() => clearSubmitErrors()}
-                        />}
+            <Pblock header="Send UCD">
+                <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
+                    <fieldset disabled={submitting || !tokenUcdIsConnected}>
+                        {!tokenUcdIsConnected && (
+                            <p>Connecting to tokenUcd contract...</p>
+                        )}
+                        {error && (
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                collapsible={false}
+                                header={<h3>Transfer failed</h3>}
+                                onDismiss={() => clearSubmitErrors()}
+                            />
+                        )}
 
-                    {submitSucceeded &&
-                        <EthSubmissionSuccessPanel
-                            header={<h3>Successful transfer</h3>}
-                            eth={this.state.result.eth}
-                            onDismiss={() => reset()}
-                        >
-                            <p>
-                                Sent {this.state.result.amount} UCD to{" "}
-                                {this.state.result.to}
-                            </p>
-                        </EthSubmissionSuccessPanel>}
+                        {submitSucceeded && (
+                            <EthSubmissionSuccessPanel
+                                header={<h3>Successful transfer</h3>}
+                                eth={this.state.result.eth}
+                                onDismiss={() => reset()}
+                            >
+                                <p>
+                                    Sent {this.state.result.amount} UCD to{" "}
+                                    {this.state.result.to}
+                                </p>
+                            </EthSubmissionSuccessPanel>
+                        )}
 
-                    {!submitSucceeded &&
-                        <div>
-                            <FormGroup controlId="ucdAmount">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Amount:{" "}
-                                </Col>
-                                <Col sm={10}>
-                                    <InputGroup>
+                        {!submitSucceeded && (
+                            <div>
+                                <FormGroup controlId="ucdAmount">
+                                    <Col componentClass={ControlLabel} sm={2}>
+                                        Amount:{" "}
+                                    </Col>
+                                    <Col sm={10}>
+                                        <InputGroup>
+                                            <Field
+                                                name="ucdAmount"
+                                                component={FieldInput}
+                                                type="number"
+                                            />
+                                            <InputGroup.Addon>
+                                                UCD
+                                            </InputGroup.Addon>
+                                        </InputGroup>
+                                    </Col>
+                                </FormGroup>
+
+                                <FormGroup controlId="payee">
+                                    <Col componentClass={ControlLabel} sm={2}>
+                                        To:{" "}
+                                    </Col>
+                                    <Col sm={10}>
                                         <Field
-                                            name="ucdAmount"
+                                            name="payee"
                                             component={FieldInput}
-                                            type="number"
+                                            type="text"
+                                            placeholder="0x0..."
                                         />
-                                        <InputGroup.Addon>UCD</InputGroup.Addon>
-                                    </InputGroup>
-                                </Col>
-                            </FormGroup>
+                                    </Col>
+                                </FormGroup>
 
-                            <FormGroup controlId="payee">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    To:{" "}
-                                </Col>
-                                <Col sm={10}>
-                                    <Field
-                                        name="payee"
-                                        component={FieldInput}
-                                        type="text"
-                                        placeholder="0x0..."
-                                    />
-                                </Col>
-                            </FormGroup>
+                                <FormGroup controlId="narrative">
+                                    <Col componentClass={ControlLabel} sm={2}>
+                                        Reference:{" "}
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Field
+                                            name="narrative"
+                                            component={FieldInput}
+                                            type="text"
+                                            placeholder="short narrative (optional)"
+                                        />
+                                    </Col>
+                                </FormGroup>
 
-                            <FormGroup controlId="narrative">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Reference:{" "}
-                                </Col>
-                                <Col sm={10}>
-                                    <Field
-                                        name="narrative"
-                                        component={FieldInput}
-                                        type="text"
-                                        placeholder="short narrative (optional)"
-                                    />
-                                </Col>
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Col smOffset={2} sm={10}>
-                                    <Button
-                                        type="submit"
-                                        bsSize="large"
-                                        bsStyle="primary"
-                                        disabled={pristine}
-                                    >
-                                        {submitting
-                                            ? "Submitting..."
-                                            : "Transfer"}
-                                    </Button>
-                                </Col>
-                            </FormGroup>
-                        </div>}
-                </fieldset>
-            </Form>
+                                <FormGroup>
+                                    <Col smOffset={2} sm={10}>
+                                        <Button
+                                            type="submit"
+                                            bsSize="large"
+                                            bsStyle="primary"
+                                            disabled={pristine}
+                                        >
+                                            {submitting ? (
+                                                "Submitting..."
+                                            ) : (
+                                                "Transfer"
+                                            )}
+                                        </Button>
+                                    </Col>
+                                </FormGroup>
+                            </div>
+                        )}
+                    </fieldset>
+                </Form>
+            </Pblock>
         );
     }
 }

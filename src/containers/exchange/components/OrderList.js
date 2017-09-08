@@ -1,5 +1,6 @@
 import React from "react";
-import { Panel, Button } from "react-bootstrap";
+import { Button } from "semantic-ui-react";
+import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
 import ErrorDetails from "components/ErrorDetails";
 
@@ -46,8 +47,17 @@ export default class OrderList extends React.Component {
         let totalCcy;
         if (filteredOrders !== null && filteredOrders.length > 0)
             totalCcy = orders[0].ccy;
+        let orderCount = orders === null ? "?" : filteredOrders.length;
+        let ordersLabel =
+            "Sell " +
+            totalAmount +
+            " " +
+            totalCcy +
+            " in " +
+            orderCount +
+            " orders";
         return (
-            <Panel header={header}>
+            <Pblock header={header}>
                 {refreshError && (
                     <p>
                         Error while fetching order list
@@ -62,25 +72,26 @@ export default class OrderList extends React.Component {
                     noItemMessage
                 ) : (
                     <MyListGroup>
-                        Total: Sell {totalAmount} {totalCcy} in{" "}
-                        {orders === null ? "?" : filteredOrders.length} orders
                         <Button
-                            bsStyle="link"
+                            basic
+                            content={ordersLabel}
+                            labelPosition="left"
+                            icon={
+                                this.state.orderListOpen ? (
+                                    "chevron up"
+                                ) : (
+                                    "chevron down"
+                                )
+                            }
                             onClick={() =>
                                 this.setState({
                                     orderListOpen: !this.state.orderListOpen
                                 })}
-                        >
-                            {this.state.orderListOpen ? (
-                                "<< Hide orders"
-                            ) : (
-                                "Show orders >>"
-                            )}
-                        </Button>
+                        />
                         {this.state.orderListOpen && listItems}
                     </MyListGroup>
                 )}
-            </Panel>
+            </Pblock>
         );
     }
 }
