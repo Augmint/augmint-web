@@ -7,6 +7,7 @@ import AccountInfo from "components/AccountInfo";
 import LoanList from "components/LoanList";
 import UcdTransferForm from "./UcdTransferForm";
 import TransferList from "components/TransferList";
+import { EthereumState } from "containers/app/EthereumState";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -18,6 +19,7 @@ class AccountHome extends React.Component {
             <Grid>
                 <Row>
                     <Col>
+                        <EthereumState />
                         <PageHeader>My Account</PageHeader>
                     </Col>
                 </Row>

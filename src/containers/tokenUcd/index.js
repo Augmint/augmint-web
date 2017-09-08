@@ -7,6 +7,7 @@ import ratesProvider from "modules/ratesProvider";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { TokenUcdStats } from "components/TokenUcdStats";
+import { EthereumState } from "containers/app/EthereumState";
 
 class TokenUcd extends React.Component {
     componentDidMount() {
@@ -24,8 +25,10 @@ class TokenUcd extends React.Component {
 
         return (
             <div>
-                <Pheader header="Token UCD" />
+                <EthereumState />
                 <Psegment>
+                    <Pheader header="Token UCD" />
+
                     <Pgrid columns={1}>
                         <Pgrid.Row>
                             <Pgrid.Column>

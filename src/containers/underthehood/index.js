@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
-
+import { EthereumState } from "containers/app/EthereumState";
 import { Grid, Row, Col, PageHeader, Nav, NavItem } from "react-bootstrap";
 
 class underTheHood extends React.Component {
@@ -24,6 +24,7 @@ class underTheHood extends React.Component {
             <Grid>
                 <Row>
                     <Col>
+                        <EthereumState />
                         <PageHeader>Under the hood</PageHeader>
                     </Col>
                 </Row>

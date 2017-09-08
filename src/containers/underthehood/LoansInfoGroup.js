@@ -12,6 +12,7 @@ class LoansInfoGroup extends React.Component {
 
     render() {
         const { loanManager, loanProducts, loans, visible } = this.props;
+        console.debug("loans:", loans);
         return !visible ? null : (
             <Row>
                 <Col xs={12} sm={4}>

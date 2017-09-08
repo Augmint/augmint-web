@@ -3,12 +3,11 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Grid, Row, Col } from "react-bootstrap";
-import { ErrorPanel, InfoPanel } from "components/MsgPanels";
+import { Container } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { ErrorPanel, WarningPanel } from "components/MsgPanels";
 import ErrorDetails from "components/ErrorDetails";
-//import stringifier from "stringifier";
-
-//const stringify = stringifier({ maxDepth: 3, indent: "   " });
+import { ConnectingEthereum } from "containers/app/ConnectingEthereum";
 
 function LocalInstallInstructions(props) {
     return (
@@ -20,13 +19,12 @@ function LocalInstallInstructions(props) {
             <p>
                 Make sure you are connected to Rinkeby or for local install
                 follow instructions on our{" "}
-                <Button
-                    bsStyle="link"
-                    href="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                <Link
+                    to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
                     target="_blank"
                 >
                     Github page
-                </Button>.
+                </Link>.
             </p>
             <p>
                 If you are using Metamask then check if it's connected to
@@ -47,46 +45,47 @@ export class EthereumState extends React.Component {
             tokenUcd,
             exchange
         } = this.props;
-        if (web3Connect.isLoading) {
+        const {
+            isConnected,
+            isLoading,
+            network,
+            error
+        } = this.props.web3Connect;
+        if (isLoading) {
+            msg = <ConnectingEthereum />;
+        } else if (!isConnected && !isLoading) {
             msg = (
-                <InfoPanel
-                    header={<h3>Connecting to Ethereum network....</h3>}
-                />
-            );
-        } else if (web3Connect.error) {
-            msg = (
-                <ErrorPanel header={<h3>Can't connect Ethereum network</h3>}>
+                <WarningPanel header={<h3>Can't connect Ethereum network</h3>}>
                     <p>
                         To use this app you need an Ethereum capable browser
                         (eg. Mist) or Chrome with Metamask plugin
                     </p>
-                    <LocalInstallInstructions
-                        web3Connect={this.props.web3Connect}
-                    />
-                    <p>Error details:</p>
-                    <ErrorDetails>
-                        {web3Connect.error.message}
-                        {web3Connect.error.stack}
-                    </ErrorDetails>
-                </ErrorPanel>
+                    <p>
+                        Please check our{" "}
+                        <Link to="/help/connecting">connection guide</Link>{" "}
+                        about how to connect to Ethereum network.
+                    </p>
+                    <p>Connection error details:</p>
+                    {web3Connect.error && (
+                        <ErrorDetails>{error.message}</ErrorDetails>
+                    )}
+                </WarningPanel>
             );
         } else if (
-            web3Connect.isConnected &&
-            web3Connect.network.id !== "999" &&
-            web3Connect.network.id !== "4" &&
-            web3Connect.network.id !== "3" &&
-            web3Connect.network.id !== "1976"
+            isConnected &&
+            network.id !== "999" &&
+            network.id !== "4" &&
+            network.id !== "3" &&
+            network.id !== "1976"
         ) {
             msg = (
-                <ErrorPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
+                <WarningPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
                     <p>
                         Your browser seems to be connected to{" "}
                         {web3Connect.network.name} (id: {web3Connect.network.id}).
                     </p>
-                    <LocalInstallInstructions
-                        web3Connect={this.props.web3Connect}
-                    />
-                </ErrorPanel>
+                    <LocalInstallInstructions web3Connect={web3Connect} />
+                </WarningPanel>
             );
         } else if (
             loanManager.connectionError ||
@@ -97,19 +96,18 @@ export class EthereumState extends React.Component {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
                     <p>
-                        You seem to be connected to {web3Connect.network.name}{" "}
-                        but can't find UCD contracts.
+                        You seem to be connected to {network.name} but can't
+                        find UCD contracts.
                     </p>
-                    {(web3Connect.network.id === "4" ||
-                        web3Connect.network.id === "3") && (
+                    {(network.id === "4" || network.id === "3") && (
                         <p>
                             It's an issue with our deployement, because you are
-                            on {web3Connect.network.name} and UCD contracts
-                            should be deployed.
+                            on {network.name} and UCD contracts should be
+                            deployed.
                         </p>
                     )}
-                    {web3Connect.network.id !== "4" &&
-                    web3Connect.network.id !== "3" && (
+                    {network.id !== "4" &&
+                    network.id !== "3" && (
                         <p>
                             Do you have all the contracts deployed?
                             <br />
@@ -118,13 +116,12 @@ export class EthereumState extends React.Component {
                                     "\ncp ./build/contracts/* ./src/contractsBuild"}
                             </pre>
                             <br />See more on our{" "}
-                            <Button
-                                bsStyle="link"
-                                href="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                            <Link
+                                to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
                                 target="_blank"
                             >
                                 Github page
-                            </Button>
+                            </Link>
                         </p>
                     )}
                     <p>
@@ -157,13 +154,7 @@ export class EthereumState extends React.Component {
         }
 
         if (msg) {
-            msg = (
-                <Grid>
-                    <Row>
-                        <Col>{msg}</Col>
-                    </Row>
-                </Grid>
-            );
+            msg = <Container>{msg}</Container>;
         }
         return msg;
     }

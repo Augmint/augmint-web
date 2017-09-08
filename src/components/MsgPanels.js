@@ -1,5 +1,5 @@
 import React from "react";
-import { Panel, Button } from "react-bootstrap";
+import { Container, Message, Button } from "semantic-ui-react";
 import ErrorDetails from "components/ErrorDetails";
 
 export default class MsgPanel extends React.Component {
@@ -23,15 +23,22 @@ export default class MsgPanel extends React.Component {
             dismissable,
             dismissed,
             onDismiss,
+            header,
             ...other
         } = this.props;
 
         return (
-            !this.state.dismissed &&
-            <Panel {...other}>
-                {children !== null && children}
-                {dismissable && <Button onClick={this.dismiss}>OK</Button>}
-            </Panel>
+            !this.state.dismissed && (
+                <Container style={{ margin: "1em" }}>
+                    <Message {...other}>
+                        <Message.Header>{header}</Message.Header>
+                        {children !== null && children}
+                        {dismissable && (
+                            <Button onClick={this.dismiss}>OK</Button>
+                        )}
+                    </Message>
+                </Container>
+            )
         );
     }
 }
@@ -40,63 +47,51 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    var { bsStyle, ...other } = props;
-    const _bsStyle = bsStyle ? bsStyle : "success";
-    return <MsgPanel bsStyle={_bsStyle} {...other} />;
+    return <MsgPanel success {...props} />;
 }
 
 export function InfoPanel(props) {
-    var { bsStyle, ...other } = props;
-    const _bsStyle = bsStyle ? bsStyle : "info";
-    return <MsgPanel bsStyle={_bsStyle} {...other} />;
+    return <MsgPanel info {...props} />;
 }
 
 export function WarningPanel(props) {
-    var { bsStyle, ...other } = props;
-    const _bsStyle = bsStyle ? bsStyle : "warning";
-    return <MsgPanel bsStyle={_bsStyle} {...other} />;
+    return <MsgPanel warning {...props} />;
 }
 
 export function ErrorPanel(props) {
-    var { bsStyle, ...other } = props;
-    const _bsStyle = bsStyle ? bsStyle : "danger";
-    return <MsgPanel bsStyle={_bsStyle} {...other} />;
+    return <MsgPanel error {...props} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
     render() {
         let { children, error, ...other } = this.props;
         return (
-            <MsgPanel {...other}>
+            <MsgPanel error {...other}>
                 {children}
                 {error && error.title}
                 {error != null &&
-                    error.eth &&
+                error.eth && (
                     <div>
-                        <p>
-                            Tx hash: {error.eth.tx}
-                        </p>
+                        <p>Tx hash: {error.eth.tx}</p>
                         <p>
                             Gas used: {error.eth.gasUsed} (from{" "}
                             {error.eth.gasProvided} provided)
                         </p>
-                    </div>}
+                    </div>
+                )}
                 {error != null &&
-                    error.details != null &&
-                    error.details.message &&
-                    <ErrorDetails>
-                        {error.details.message}
-                    </ErrorDetails>}
+                error.details != null &&
+                error.details.message && (
+                    <ErrorDetails>{error.details.message}</ErrorDetails>
+                )}
             </MsgPanel>
         );
     }
 }
 
 EthSubmissionErrorPanel.defaultProps = {
-    bsStyle: "danger",
     header: <h3>Submission error</h3>,
-    dismissable: true,
-    collapsible: false
+    dismissable: true
 };
 
 export class EthSubmissionSuccessPanel extends React.Component {
@@ -107,9 +102,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
             <MsgPanel {...other}>
                 {children}
                 <small>
-                    <p>
-                        Tx hash: {eth.tx}
-                    </p>
+                    <p>Tx hash: {eth.tx}</p>
                     <p>
                         Gas used: {eth.gasUsed} (from {eth.gasProvided}{" "}
                         provided)
@@ -121,8 +114,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
 }
 
 EthSubmissionSuccessPanel.defaultProps = {
-    bsStyle: "success",
+    success: true,
     header: <h3>Successfull transaction</h3>,
-    dismissable: true,
-    collapsible: false
+    dismissable: true
 };

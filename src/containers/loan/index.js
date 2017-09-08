@@ -8,6 +8,7 @@ import repayLoanMain from "./repayLoan";
 import loanDetails from "./loanDetailsPage";
 import collectLoanMain from "./collectLoan";
 import { PageNotFound } from "containers/PageNotFound";
+import { EthereumState } from "containers/app/EthereumState";
 
 export default class LoanMain extends React.Component {
     componentDidMount() {
@@ -18,13 +19,20 @@ export default class LoanMain extends React.Component {
 
     render() {
         return (
-            <Switch>
-                <Route path="/loan/new" component={newLoanMain} />
-                <Route path="/loan/repay" component={repayLoanMain} />
-                <Route exact path="/loan/collect" component={collectLoanMain} />
-                <Route path="/loan/:loanId" component={loanDetails} />
-                <Route component={PageNotFound} />
-            </Switch>
+            <div>
+                <EthereumState />
+                <Switch>
+                    <Route path="/loan/new" component={newLoanMain} />
+                    <Route path="/loan/repay" component={repayLoanMain} />
+                    <Route
+                        exact
+                        path="/loan/collect"
+                        component={collectLoanMain}
+                    />
+                    <Route path="/loan/:loanId" component={loanDetails} />
+                    <Route component={PageNotFound} />
+                </Switch>
+            </div>
         );
     }
 }

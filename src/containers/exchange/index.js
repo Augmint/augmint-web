@@ -8,6 +8,7 @@ import AccountInfo from "components/AccountInfo";
 import OrderList from "./components/OrderList";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
+import { EthereumState } from "containers/app/EthereumState";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -21,6 +22,7 @@ class ExchangeHome extends React.Component {
             <Grid>
                 <Row>
                     <Col>
+                        <EthereumState />
                         <PageHeader>Buy & Sell UCD</PageHeader>
                     </Col>
                 </Row>
