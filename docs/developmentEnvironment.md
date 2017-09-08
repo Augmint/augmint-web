@@ -76,3 +76,16 @@ cp ./build/contracts/* ./src/contractsBuild
 
 ### 3. Launch local dev server
 `yarn start`
+
+## UI development
+UI is built with [semantic-ui](https://www.semantic-ui.com) and [semantic-ui-react](https://react.semantic-ui.com).
+
+To customize it you need to edit dcm theme in [src/semantic/themes/dcm](src/semantic/themes/dcm) folder.
+
+### css build
+```
+cd src/semantic
+gulp build-css
+gulp build-assets
+```
+You can also use `gulp watch`
