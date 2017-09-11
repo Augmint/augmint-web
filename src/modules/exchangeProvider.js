@@ -84,8 +84,7 @@ const setupWatches = () => {
 // event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
 const onNewOrder = (error, result) => {
     console.debug(
-        "exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders(), result.args",
-        result.args
+        "exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()"
     );
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
@@ -104,8 +103,7 @@ const onNewOrder = (error, result) => {
 // event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
 const onOrderFill = (error, result) => {
     console.debug(
-        "exchangeProvider.onOrderFill: dispatching refreshExchange(), result.args",
-        result.args
+        "exchangeProvider.onOrderFill: dispatching refreshExchange()"
     );
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and

@@ -1,6 +1,11 @@
 import React from "react";
 import { Pblock } from "components/PageLayout";
-import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
+import {
+    MyListGroup,
+    MyGridTable,
+    MyGridTableRow as Row,
+    MyGridTableColumn as Col
+} from "components/MyListGroups";
 import ErrorDetails from "components/ErrorDetails";
 
 export default class TransferList extends React.Component {
@@ -15,25 +20,47 @@ export default class TransferList extends React.Component {
         const listItems =
             transfers !== null &&
             transfers.filter(filter).map((tx, index) => (
-                <MyListGroupItem
-                    key={`txDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                <MyListGroup.Row
+                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
                 >
-                    {tx.from !== userAccountAddress && <p>From: {tx.from}</p>}
-                    {tx.to !== userAccountAddress && <p>To: {tx.to}</p>}
-                    <p>Amount: {tx.amount} UCD</p>
-                    <p>{tx.blockTimeStampText}</p>
-                    {tx.narrative && <p>{tx.narrative}</p>}
-                    <small>
-                        <p>
-                            blockNumber: {tx.blockNumber} | transactionIndex:{" "}
-                            {tx.transactionIndex} | type: {tx.type}
-                        </p>
-                    </small>
-                </MyListGroupItem>
+                    <MyGridTable
+                        divided={false}
+                        key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                    >
+                        <Row columns={1}>
+                            <Col>
+                                {tx.from === userAccountAddress ? (
+                                    "From: " + tx.from
+                                ) : (
+                                    "To: " + tx.to
+                                )}
+                            </Col>
+                        </Row>
+                        <Row columns={2}>
+                            <Col>Amount: {tx.amount} UCD</Col>
+                            <Col>on {tx.blockTimeStampText}</Col>
+                        </Row>
+
+                        {tx.narrative && (
+                            <Row columns={1}>
+                                <Col>{tx.narrative}</Col>
+                            </Row>
+                        )}
+                        <Row columns={1}>
+                            <Col>
+                                <small>
+                                    blockNumber: {tx.blockNumber} |
+                                    transactionIndex: {tx.transactionIndex} |
+                                    type: {tx.type}
+                                </small>
+                            </Col>
+                        </Row>
+                    </MyGridTable>
+                </MyListGroup.Row>
             ));
 
         return (
-            <Pblock header={header}>
+            <Pblock loading={isLoading} header={header}>
                 {error && (
                     <p>
                         Error while fetching transfer list

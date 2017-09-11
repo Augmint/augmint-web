@@ -45,7 +45,7 @@ class ExchangeHome extends React.Component {
 
                         <Pgrid.Column>
                             <ExchangeSummary
-                                exchangeInfo={exchange.info}
+                                exchange={exchange}
                                 rates={rates}
                             />
                             <OrderList

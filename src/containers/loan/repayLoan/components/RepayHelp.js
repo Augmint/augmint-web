@@ -1,10 +1,10 @@
 import React from "react";
-import { Well } from "react-bootstrap";
+import { Message } from "semantic-ui-react";
 
 export function RepayHelp(props) {
     const { ...other } = props;
     return (
-        <Well {...other}>
+        <Message info {...other}>
             <p>You can repay your UCD loan due on its maturity. </p>
             <p>
                 When you repay your ETH held in escrow (collateral) will be sent
@@ -25,6 +25,6 @@ export function RepayHelp(props) {
                 less the fees for the collection then the leftover ETH will be
                 transfered back to the borrower's ETH account.
             </p>
-        </Well>
+        </Message>
     );
 }

@@ -1,15 +1,8 @@
 import React from "react";
-import { Grid, Row, Col, Jumbotron } from "react-bootstrap";
+import { Pheader, Psegment } from "components/PageLayout";
 
-export default () =>
-    <Grid>
-        <Row>
-            <Col>
-                <Jumbotron>
-                    <h1>About UCD</h1>
-                    <p>Hello UCD!</p>
-                    <p>UCD is ...</p>
-                </Jumbotron>
-            </Col>
-        </Row>
-    </Grid>;
+export default () => (
+    <Psegment>
+        <Pheader header="About" />
+    </Psegment>
+);

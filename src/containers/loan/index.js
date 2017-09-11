@@ -6,7 +6,7 @@ import ratesProvider from "modules/ratesProvider";
 import newLoanMain from "./newLoan/";
 import repayLoanMain from "./repayLoan";
 import loanDetails from "./loanDetailsPage";
-import collectLoanMain from "./collectLoan";
+import CollectLoanMain from "./collectLoan";
 import { PageNotFound } from "containers/PageNotFound";
 import { EthereumState } from "containers/app/EthereumState";
 
@@ -27,7 +27,7 @@ export default class LoanMain extends React.Component {
                     <Route
                         exact
                         path="/loan/collect"
-                        component={collectLoanMain}
+                        component={CollectLoanMain}
                     />
                     <Route path="/loan/:loanId" component={loanDetails} />
                     <Route component={PageNotFound} />

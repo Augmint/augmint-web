@@ -1,19 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanList from "containers/loan/components/LoanList";
-import { Row, Col } from "react-bootstrap";
+import { Pgrid } from "components/PageLayout";
 import { RepayHelp } from "./components/RepayHelp";
 
 class LoanSelector extends React.Component {
     render() {
         return (
-            <Row>
-                <Col xs={12} sm={4}>
+            <Pgrid columns={2}>
+                <Pgrid.Column width={6}>
                     <RepayHelp />
-                </Col>
-                <Col xs={12} sm={8}>
+                </Pgrid.Column>
+                <Pgrid.Column width={10}>
                     <LoanList
-                        header={<h2>Select your loan to repay</h2>}
+                        header="Select your loan to repay"
                         noItemMessage={
                             <p>None of your loans is due currently.</p>
                         }
@@ -22,8 +22,8 @@ class LoanSelector extends React.Component {
                             return item.isDue;
                         }}
                     />
-                </Col>
-            </Row>
+                </Pgrid.Column>
+            </Pgrid>
         );
     }
 }

@@ -1,14 +1,23 @@
 import React from "react";
 import { Pblock } from "components/PageLayout";
 import { NoOrdersToolTip } from "./ExchangeToolTips";
+import { ConnectionStatus } from "components/MsgPanels";
 
 export default class ExchangeSummary extends React.Component {
     render() {
-        const { rates, exchangeInfo, ...other } = this.props;
-        const { totalAmount, totalCcy, orderCount } = exchangeInfo;
+        const { rates, exchange, ...other } = this.props;
+        const { totalAmount, totalCcy, orderCount } = exchange.info;
 
         return (
-            <Pblock {...other}>
+            <Pblock
+                loading={
+                    rates.isLoading ||
+                    exchange.isLoading ||
+                    (!exchange.isConnected && !exchange.connectionError)
+                }
+                {...other}
+            >
+                <ConnectionStatus contract={rates} />
                 <h4>
                     1 ETH = {rates.info.ethUsdRate} UCD<br />
                     1 UCD = {rates.info.usdEthRate} ETH

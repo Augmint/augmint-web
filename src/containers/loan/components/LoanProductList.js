@@ -1,6 +1,6 @@
 import React from "react";
-import { Panel } from "react-bootstrap";
 import { MyListGroup } from "components/MyListGroups";
+import { Pblock } from "components/PageLayout";
 import LoanProductDetails from "./LoanProductDetails";
 
 export default function LoanProductList(props) {
@@ -19,21 +19,31 @@ export default function LoanProductList(props) {
         if (filteredProducts.length === 0) {
             listItems = <span>No products</span>;
         } else {
-            listItems = filteredProducts.map((prod, index) =>
-                <LoanProductDetails
-                    key={`loanProdDiv-${prod.id}`}
-                    product={prod}
-                    selectComponent={props.selectComponent}
-                />
-            );
+            listItems = filteredProducts.map((prod, index) => (
+                <MyListGroup.Row
+                    header={
+                        "Product " +
+                        (prod.id + 1) +
+                        " - Repay in " +
+                        prod.termText
+                    }
+                    key={prod.id}
+                >
+                    <LoanProductDetails
+                        key={`loanProdDiv-${prod.id}`}
+                        product={prod}
+                    />
+                    {props.selectComponent && (
+                        <props.selectComponent productId={prod.id} />
+                    )}
+                </MyListGroup.Row>
+            ));
         }
     }
 
     return (
-        <Panel header={props.header}>
-            <MyListGroup>
-                {listItems}
-            </MyListGroup>
-        </Panel>
+        <Pblock header={props.header}>
+            <MyListGroup divided={false}>{listItems}</MyListGroup>
+        </Pblock>
     );
 }

@@ -1,6 +1,9 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
-import { MyListGroupItem } from "components/MyListGroups";
+import {
+    MyGridTable,
+    MyGridTableRow as Row,
+    MyGridTableColumn as Col
+} from "components/MyListGroups";
 import {
     DiscountRateToolTip,
     LoanCollateralRatioToolTip,
@@ -10,51 +13,33 @@ import {
 export default function LoanProductDetails(props) {
     let prod = props.product;
     return (
-        <MyListGroupItem
-            header={"Product " + (prod.id + 1) + " - Repay in " + prod.termText}
-            key={prod.id}
-        >
+        <MyGridTable>
             <Row>
-                <Col sm={8}>
+                <Col>
                     Discount rate:{" "}
                     <DiscountRateToolTip discountRate={prod.discountRate} />
                 </Col>
-                <Col sm={4}>
-                    {prod.discountRate * 100}%
-                </Col>
+                <Col>{prod.discountRate * 100}%</Col>
             </Row>
             <Row>
-                <Col sm={8}>
+                <Col>
                     Loan/collateral ratio:{" "}
                     <LoanCollateralRatioToolTip
                         loanCollateralRatio={prod.loanCollateralRatio}
                     />
                 </Col>
-                <Col sm={4}>
-                    {prod.loanCollateralRatio * 100}%
-                </Col>
+                <Col>{prod.loanCollateralRatio * 100}%</Col>
             </Row>
             <Row>
-                <Col sm={8}>Min. payout:</Col>
-                <Col sm={4}>
-                    {prod.minDisbursedAmountInUcd} UCD
-                </Col>
+                <Col>Min. payout:</Col>
+                <Col>{prod.minDisbursedAmountInUcd} UCD</Col>
             </Row>
             <Row>
-                <Col sm={8}>
+                <Col>
                     Repayment period: <RepayPeriodToolTip />
                 </Col>
-                <Col sm={4}>
-                    {prod.repayPeriodText}
-                </Col>
+                <Col>{prod.repayPeriodText}</Col>
             </Row>
-
-            {props.selectComponent &&
-                <Row>
-                    <Col sm={12}>
-                        <props.selectComponent productId={prod.id} />
-                    </Col>
-                </Row>}
-        </MyListGroupItem>
+        </MyGridTable>
     );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Message, Button } from "semantic-ui-react";
+import { Container, Message, Button, Icon } from "semantic-ui-react";
 import ErrorDetails from "components/ErrorDetails";
 
 export default class MsgPanel extends React.Component {
@@ -10,7 +10,9 @@ export default class MsgPanel extends React.Component {
     }
 
     dismiss() {
-        this.setState({ dismissed: true });
+        if (this.props.dismissable) {
+            this.setState({ dismissed: true });
+        }
         if (this.props.onDismiss) {
             this.props.onDismiss();
         }
@@ -26,15 +28,19 @@ export default class MsgPanel extends React.Component {
             header,
             ...other
         } = this.props;
-
         return (
-            !this.state.dismissed && (
+            (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
-                    <Message {...other}>
+                    <Message
+                        onDismiss={onDismiss ? this.dismiss : null}
+                        {...other}
+                    >
                         <Message.Header>{header}</Message.Header>
                         {children !== null && children}
-                        {dismissable && (
-                            <Button onClick={this.dismiss}>OK</Button>
+                        {onDismiss && (
+                            <Button as="a" onClick={this.dismiss}>
+                                OK
+                            </Button>
                         )}
                     </Message>
                 </Container>
@@ -43,7 +49,8 @@ export default class MsgPanel extends React.Component {
     }
 }
 MsgPanel.defaultProps = {
-    dismissed: false
+    dismissed: false,
+    dismissable: false
 };
 
 export function SuccessPanel(props) {
@@ -60,6 +67,17 @@ export function WarningPanel(props) {
 
 export function ErrorPanel(props) {
     return <MsgPanel error {...props} />;
+}
+
+export function LoadingPanel(props) {
+    const { info = true, header, ...other } = props;
+    return (
+        <MsgPanel info={info} icon {...other}>
+            <Icon name="circle notched" loading />
+            <Message.Header>{header}</Message.Header>
+            {props.children}
+        </MsgPanel>
+    );
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
@@ -91,7 +109,7 @@ export class EthSubmissionErrorPanel extends React.Component {
 
 EthSubmissionErrorPanel.defaultProps = {
     header: <h3>Submission error</h3>,
-    dismissable: true
+    dismissable: false // pass onDismiss={() => {clearSubmitErrors();}} instead
 };
 
 export class EthSubmissionSuccessPanel extends React.Component {
@@ -118,3 +136,14 @@ EthSubmissionSuccessPanel.defaultProps = {
     header: <h3>Successfull transaction</h3>,
     dismissable: true
 };
+
+export function ConnectionStatus(props) {
+    const { contract, error = true, size = "tiny", ...other } = props;
+    return (
+        contract.connectionError && (
+            <Message size={size} error={error} {...other}>
+                Couldn't connect to Ethereum contract.
+            </Message>
+        )
+    );
+}

@@ -3,9 +3,6 @@ Wrapper for the whole App
     main navigation
     Web3 connection initialisation
 */
-
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/css/bootstrap-theme.css";
 import "semantic/dist/semantic.min.css";
 
 import React from "react";

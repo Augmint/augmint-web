@@ -1,60 +1,63 @@
 import React from "react";
-import { connect } from "react-redux";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
-import { Grid, Row, Col, PageHeader, Nav, NavItem } from "react-bootstrap";
+import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Menu } from "semantic-ui-react";
 
-class underTheHood extends React.Component {
+export default class underTheHood extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedGroup: "1"
+            selectedGroup: "baseinfo"
         };
         this.handleSelectGroup = this.handleSelectGroup.bind(this);
     }
-    handleSelectGroup(eventKey) {
-        // event.preventDefault();
-        this.setState({ selectedGroup: eventKey });
+    handleSelectGroup(e, { name }) {
+        this.setState({ selectedGroup: name });
     }
 
     render() {
+        const { selectedGroup } = this.state;
         return (
-            <Grid>
-                <Row>
-                    <Col>
-                        <EthereumState />
-                        <PageHeader>Under the hood</PageHeader>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Nav
-                            bsStyle="tabs"
-                            activeKey={this.state.selectedGroup}
-                            onSelect={this.handleSelectGroup}
-                        >
-                            <NavItem eventKey="1" title="Base info">
-                                <p>Base info</p>
-                            </NavItem>
-                            <NavItem eventKey="2" title="Loans">
-                                <p>Loans</p>
-                            </NavItem>
-                            <NavItem eventKey="3" title="Exchange">
-                                <p>Exchange</p>
-                            </NavItem>
-                        </Nav>
-                    </Col>
-                </Row>
-                <BaseInfoGroup visible={this.state.selectedGroup === "1"} />
-                <LoansInfoGroup visible={this.state.selectedGroup === "2"} />
-                <ExchangeInfoGroup visible={this.state.selectedGroup === "3"} />
-            </Grid>
+            <Psegment>
+                <EthereumState />
+
+                <Pheader header="Under the hood" />
+
+                <Pgrid columns={1}>
+                    <Pgrid.Column>
+                        <Menu size="massive" tabular>
+                            <Menu.Item
+                                active={selectedGroup === "baseinfo"}
+                                name="baseinfo"
+                                onClick={this.handleSelectGroup}
+                            >
+                                Base info
+                            </Menu.Item>
+                            <Menu.Item
+                                active={selectedGroup === "loans"}
+                                name="loans"
+                                onClick={this.handleSelectGroup}
+                            >
+                                Loans
+                            </Menu.Item>
+                            <Menu.Item
+                                active={selectedGroup === "exchange"}
+                                name="exchange"
+                                onClick={this.handleSelectGroup}
+                            >
+                                Exchange
+                            </Menu.Item>
+                        </Menu>
+
+                        {selectedGroup === "baseinfo" && <BaseInfoGroup />}
+                        {selectedGroup === "loans" && <LoansInfoGroup />}
+                        {selectedGroup === "exchange" && <ExchangeInfoGroup />}
+                    </Pgrid.Column>
+                </Pgrid>
+            </Psegment>
         );
     }
 }
-
-const mapStateToProps = state => ({});
-
-export default connect(mapStateToProps)(underTheHood);

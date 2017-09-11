@@ -1,5 +1,5 @@
 import React from "react";
-import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
+import { MyListGroup } from "components/MyListGroups";
 import { Pblock } from "components/PageLayout";
 import LoanListDetails from "./LoanListDetails";
 
@@ -17,17 +17,20 @@ export default function LoanList(props) {
                           }
                 )
                 .map((loan, index) => (
-                    <MyListGroupItem key={`loanDiv-${loan.loanId}`}>
-                        <LoanListDetails
-                            loan={loan}
-                            selectComponent={props.selectComponent}
-                        />
-                    </MyListGroupItem>
+                    <MyListGroup.Row key={loan.loanId}>
+                        <LoanListDetails loan={loan} />
+                        {props.selectComponent && (
+                            <props.selectComponent loanId={loan.loanId} />
+                        )}
+                    </MyListGroup.Row>
                 ))
         );
 
     return (
-        <Pblock header={props.header}>
+        <Pblock
+            loading={props.loans == null || props.loans.isLoading}
+            header={props.header}
+        >
             {props.loans != null && listItems.length === 0 ? (
                 props.noItemMessage
             ) : (

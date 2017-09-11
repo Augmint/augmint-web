@@ -30,21 +30,15 @@ export function Hero(props) {
                     Stable cryptocurrencies
                 </Header>
 
-                <Segment inverted>
-                    <p>
-                        Digital cryptocurrencies which can function as medium of
-                        exchange.
-                    </p>
-                    <p>
-                        Read more about the the DCM concept on our{" "}
-                        <Link
-                            to="https://github.com/DecentLabs/ucd-poc"
-                            target="_blank"
-                        >
-                            Github page
-                        </Link>
-                    </p>
-                </Segment>
+                <p>
+                    Read more about the the DCM concept on our{" "}
+                    <Link
+                        to="https://github.com/DecentLabs/ucd-poc"
+                        target="_blank"
+                    >
+                        Github page
+                    </Link>
+                </p>
             </Container>
         </Segment>
     );

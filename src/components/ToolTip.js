@@ -1,28 +1,18 @@
 import React from "react";
-import { Popover, Glyphicon, OverlayTrigger } from "react-bootstrap";
+import { Popup, Icon } from "semantic-ui-react";
 
 export default function ToolTip(props) {
-    const pop = (
-        <Popover id="popover-basic" title={props.title}>
-            <small>
-                {props.children}
-            </small>
-        </Popover>
-    );
-
+    const {
+        on = ["hover", "click"],
+        children,
+        trigger = <Icon color="grey" name="help circle" />,
+        header,
+        ...other
+    } = props;
     return (
-        <OverlayTrigger
-            rootClose={true}
-            trigger="click"
-            placement="right"
-            overlay={pop}
-        >
-            <span>
-                &nbsp;<Glyphicon
-                    style={{ color: "grey" }}
-                    glyph="question-sign"
-                />
-            </span>
-        </OverlayTrigger>
+        <Popup trigger={trigger} on={on} {...other}>
+            <Popup.Header children={header} />
+            <Popup.Content children={children} />
+        </Popup>
     );
 }

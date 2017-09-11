@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "semantic-ui-react";
 import { Pblock } from "components/PageLayout";
-import { MyListGroup, MyListGroupItem } from "components/MyListGroups";
+import { MyListGroup } from "components/MyListGroups";
 import ErrorDetails from "components/ErrorDetails";
 
 export default class OrderList extends React.Component {
@@ -24,7 +24,7 @@ export default class OrderList extends React.Component {
         const listItems =
             filteredOrders != null &&
             filteredOrders.map((order, index) => (
-                <MyListGroupItem key={`ordersRow-${order.orderId}`}>
+                <MyListGroup.Row key={`ordersRow-${order.orderId}`}>
                     Sell {order.amount} {order.ccy} for{" "}
                     {order.ccy === "ETH" ? "UCD" : "ETH"}
                     <small>
@@ -36,7 +36,7 @@ export default class OrderList extends React.Component {
                             ""
                         )}
                     </small>
-                </MyListGroupItem>
+                </MyListGroup.Row>
             ));
         const totalAmount =
             filteredOrders === null

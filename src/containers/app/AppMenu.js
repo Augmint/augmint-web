@@ -6,7 +6,6 @@ export function AppMenu(props) {
     const { isConnected, network, isLoading } = props.web3Connect;
     const { location } = props;
     let connectionStatus;
-    console.log(props);
     if (isLoading) {
         connectionStatus = <small>connecting...</small>;
     } else if (isConnected) {

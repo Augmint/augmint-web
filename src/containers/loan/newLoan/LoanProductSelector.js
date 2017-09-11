@@ -1,27 +1,31 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanProductList from "containers/loan/components/LoanProductList";
-import { Well, Row, Col } from "react-bootstrap";
+import { Pgrid } from "components/PageLayout";
+import { Message, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+//import { Container, Message, Icon } from "semantic-ui-react";
 
 export function SelectLoanButton(props) {
     return (
-        <Link
+        <Button
+            labelPosition="right"
+            content="Select"
+            icon="right chevron"
             key={props.productId}
-            className="btn btn-primary"
+            as={Link}
+            primary
             to={`/loan/new/${props.productId}`}
-        >
-            Select
-        </Link>
+        />
     );
 }
 
 class LoanProductSelector extends React.Component {
     render() {
         return (
-            <Row>
-                <Col xs={4} md={4}>
-                    <Well>
+            <Pgrid columns={2}>
+                <Pgrid.Column width={6}>
+                    <Message info>
                         <p>
                             You can get UCD for placing your ETH in escrow
                             (collateral).{" "}
@@ -46,19 +50,19 @@ class LoanProductSelector extends React.Component {
                             loan + fees for the default then the leftover ETH
                             will be transfered back to your ETH account.
                         </p>
-                    </Well>
-                </Col>
-                <Col xs={8} md={8}>
+                    </Message>
+                </Pgrid.Column>
+                <Pgrid.Column width={10}>
                     <LoanProductList
                         products={this.props.loanProducts}
-                        header={<h2>Select type of loan</h2>}
+                        header="Select type of loan"
                         selectComponent={SelectLoanButton}
                         filter={item => {
                             return item.isActive;
                         }}
                     />
-                </Col>
-            </Row>
+                </Pgrid.Column>
+            </Pgrid>
         );
     }
 }

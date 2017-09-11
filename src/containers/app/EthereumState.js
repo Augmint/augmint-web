@@ -5,35 +5,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { ErrorPanel, WarningPanel } from "components/MsgPanels";
+import { ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import ErrorDetails from "components/ErrorDetails";
-import { ConnectingEthereum } from "containers/app/ConnectingEthereum";
-
-function LocalInstallInstructions(props) {
-    return (
-        <div>
-            <p>
-                This application only works on Rinkeby test network or on a
-                local installation at the moment.
-            </p>
-            <p>
-                Make sure you are connected to Rinkeby or for local install
-                follow instructions on our{" "}
-                <Link
-                    to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
-                    target="_blank"
-                >
-                    Github page
-                </Link>.
-            </p>
-            <p>
-                If you are using Metamask then check if it's connected to
-                Rinkeby or localhost for local install.
-            </p>
-            <p>If you already installed then check if testrpc is running.</p>
-        </div>
-    );
-}
 
 export class EthereumState extends React.Component {
     render() {
@@ -52,7 +25,7 @@ export class EthereumState extends React.Component {
             error
         } = this.props.web3Connect;
         if (isLoading) {
-            msg = <ConnectingEthereum />;
+            msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!isConnected && !isLoading) {
             msg = (
                 <WarningPanel header={<h3>Can't connect Ethereum network</h3>}>
@@ -84,7 +57,20 @@ export class EthereumState extends React.Component {
                         Your browser seems to be connected to{" "}
                         {web3Connect.network.name} (id: {web3Connect.network.id}).
                     </p>
-                    <LocalInstallInstructions web3Connect={web3Connect} />
+                    <p>
+                        This application only works on Rinkeby test network or
+                        on a local installation at the moment.
+                    </p>
+                    <p>
+                        Make sure you are connected to Rinkeby or for local
+                        install follow instructions on our{" "}
+                        <Link
+                            to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                            target="_blank"
+                        >
+                            Github page
+                        </Link>.
+                    </p>
                 </WarningPanel>
             );
         } else if (

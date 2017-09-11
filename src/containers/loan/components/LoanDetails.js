@@ -1,71 +1,54 @@
 import React from "react";
-import { Table } from "react-bootstrap";
+import {
+    MyGridTable,
+    MyGridTableRow as Row,
+    MyGridTableColumn as Col
+} from "components/MyListGroups";
 
 export default function LoanDetails(props) {
     let loan = props.loan;
     return (
-        <div>
-            <Table condensed>
-                <thead>
-                    <tr>
-                        <th colSpan="2">
-                            {loan.loanStateText} loan #{loan.loanId}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Loan amount:</td>
-                        <td>
-                            {loan.ucdDueAtMaturity} UCD
-                        </td>
-                    </tr>
+        <MyGridTable>
+            <Row>
+                <Col>Loan amount:</Col>
+                <Col>{loan.ucdDueAtMaturity} UCD</Col>
+            </Row>
 
-                    <tr>
-                        <td>Due on:</td>
-                        <td>
-                            {loan.maturityText}
-                        </td>
-                    </tr>
+            <Row>
+                <Col>{loan.isDue ? "Pay by:" : "Due on:"}</Col>
+                <Col>
+                    <span>
+                        {loan.isDue ? loan.repayByText : loan.maturityText}
+                    </span>
+                </Col>
+            </Row>
 
-                    <tr>
-                        <td>Pay by latest:</td>
-                        <td>
-                            {loan.repayByText}
-                        </td>
-                    </tr>
+            <Row>
+                <Col>Pay by latest:</Col>
+                <Col>{loan.repayByText}</Col>
+            </Row>
 
-                    <tr>
-                        <td>Collateral held:</td>
-                        <td>
-                            {loan.ethBalance} ETH
-                        </td>
-                    </tr>
+            <Row>
+                <Col>Collateral held:</Col>
+                <Col>{loan.ethBalance} ETH</Col>
+            </Row>
 
-                    <tr>
-                        <td>Contract:</td>
-                        <td>
-                            <small>
-                                {loan.loanContract.instance.address}
-                            </small>
-                        </td>
-                    </tr>
+            <Row>
+                <Col>Contract:</Col>
+                <Col>
+                    <small>{loan.loanContract.instance.address}</small>
+                </Col>
+            </Row>
 
-                    <tr>
-                        <td>Disbursed on:</td>
-                        <td>
-                            {loan.disbursementDateText}
-                        </td>
-                    </tr>
+            <Row>
+                <Col>Disbursed on:</Col>
+                <Col>{loan.disbursementDateText}</Col>
+            </Row>
 
-                    <tr>
-                        <td>Disbursed amount:</td>
-                        <td>
-                            {loan.disbursedLoanInUcd} UCD
-                        </td>
-                    </tr>
-                </tbody>
-            </Table>
-        </div>
+            <Row>
+                <Col>Disbursed amount:</Col>
+                <Col>{loan.disbursedLoanInUcd} UCD</Col>
+            </Row>
+        </MyGridTable>
     );
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Row, Col } from "react-bootstrap";
-import { ExchangeInfo } from "./ExchangeInfo";
-import { OrdersInfo } from "./OrdersInfo";
-import { RatesInfo } from "./RatesInfo";
+import { Pgrid } from "components/PageLayout";
+import { ExchangeInfo } from "./components/ExchangeInfo";
+import { OrdersInfo } from "./components/OrdersInfo";
+import { RatesInfo } from "./components/RatesInfo";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 
@@ -14,21 +14,21 @@ class ExchangeInfoGroup extends React.Component {
     }
 
     render() {
-        const { visible, exchange, orders, rates } = this.props;
-        if (!visible) return null;
-        return (
-            <Row>
-                <Col xs={12} sm={4}>
-                    <ExchangeInfo contract={exchange} />
-                </Col>
-                <Col xs={12} sm={4}>
-                    <RatesInfo contract={rates} />
-                </Col>
+        const { exchange, orders, rates } = this.props;
 
-                <Col xs={12} sm={4}>
+        return (
+            <Pgrid columns={3}>
+                <Pgrid.Column>
+                    <ExchangeInfo contract={exchange} />
+                </Pgrid.Column>
+                <Pgrid.Column>
+                    <RatesInfo contract={rates} />
+                </Pgrid.Column>
+
+                <Pgrid.Column>
                     <OrdersInfo orders={orders} />
-                </Col>
-            </Row>
+                </Pgrid.Column>
+            </Pgrid>
         );
     }
 }

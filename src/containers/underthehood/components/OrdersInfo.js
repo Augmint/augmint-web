@@ -1,7 +1,8 @@
 import React from "react";
 import store from "modules/store";
 import { refreshOrders } from "modules/reducers/orders";
-import { Panel, Button } from "react-bootstrap";
+import { Pblock } from "components/PageLayout";
+import { Button } from "semantic-ui-react";
 import { ArrayDump } from "./ArrayDump";
 
 export function OrdersInfo(props) {
@@ -11,15 +12,15 @@ export function OrdersInfo(props) {
     };
 
     return (
-        <Panel header={<h3>Orders</h3>}>
+        <Pblock header="Orders">
             <ArrayDump items={props.orders} />
             <Button
-                bsSize="small"
+                size="small"
                 onClick={handleRefreshClick}
                 disabled={!props.orders || props.orders.isLoading}
             >
                 Refresh orders
             </Button>
-        </Panel>
+        </Pblock>
     );
 }

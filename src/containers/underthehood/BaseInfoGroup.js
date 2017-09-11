@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Row, Col, Panel } from "react-bootstrap";
 import tokenUcdProvider from "modules/tokenUcdProvider";
-import Web3ConnectionInfo from "./Web3ConnectionInfo";
-import { TokenUcdInfo } from "./TokenUcdInfo";
-import { UserAccountInfo } from "./UserAccountInfo";
-import { ArrayDump } from "./ArrayDump";
+import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
+import { TokenUcdInfo } from "./components/TokenUcdInfo";
+import { UserAccountInfo } from "./components/UserAccountInfo";
+import { ArrayDump } from "./components/ArrayDump";
+import { Pgrid } from "components/PageLayout";
 
 class BaseInfoGroup extends React.Component {
     componentDidMount() {
@@ -13,28 +13,20 @@ class BaseInfoGroup extends React.Component {
     }
 
     render() {
-        const {
-            visible,
-            web3Connect,
-            userBalances,
-            tokenUcd,
-            accounts
-        } = this.props;
-        return !visible ? null : (
-            <Row>
-                <Col xs={12} sm={4}>
+        const { web3Connect, userBalances, tokenUcd, accounts } = this.props;
+        return (
+            <Pgrid columns={3}>
+                <Pgrid.Column>
                     <Web3ConnectionInfo web3Connect={web3Connect} />
                     <UserAccountInfo userBalances={userBalances} />
-                </Col>
-                <Col xs={12} sm={4}>
+                </Pgrid.Column>
+                <Pgrid.Column>
                     <TokenUcdInfo contract={tokenUcd} />
-                </Col>
-                <Col xs={12} sm={4}>
-                    <Panel header={<h3>Accounts</h3>}>
-                        <ArrayDump items={accounts} />
-                    </Panel>
-                </Col>
-            </Row>
+                </Pgrid.Column>
+                <Pgrid.Column>
+                    <ArrayDump header="Accounts" items={accounts} />
+                </Pgrid.Column>
+            </Pgrid>
         );
     }
 }

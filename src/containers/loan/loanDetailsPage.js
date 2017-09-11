@@ -4,11 +4,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import { ErrorPanel } from "components/MsgPanels";
-import { PageHeader, Grid, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
-// TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
+import { Header, Button } from "semantic-ui-react";
+import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -54,49 +53,47 @@ class LoanDetailsPage extends React.Component {
 
     render() {
         return (
-            <Grid>
-                <Row>
-                    <Col>
-                        <PageHeader>Loan details</PageHeader>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        {this.state.isLoading && (
-                            <p>
-                                Fetching data (loan id: {this.state.loanId})...
-                            </p>
-                        )}
+            <Psegment>
+                <Pheader header="Loan details" />
+                {this.state.isLoading && (
+                    <LoadingPanel>
+                        Fetching data (loan id: {this.state.loanId})...
+                    </LoadingPanel>
+                )}
+                {!this.state.isLoading &&
+                !this.state.isLoanFound && (
+                    <ErrorPanel>
+                        Can't find loan #{this.state.loanId} for current account{" "}
+                        {this.props.userAccount}
+                    </ErrorPanel>
+                )}
 
-                        {!this.state.isLoading &&
-                        !this.state.isLoanFound && (
-                            <ErrorPanel
-                                header={
-                                    <h3>
-                                        Can't find loan #{this.state.loanId} for
-                                        current account {this.props.userAccount}
-                                    </h3>
-                                }
-                            />
-                        )}
+                {this.state.isLoanFound && (
+                    <Pgrid>
+                        <Pgrid.Row columns={2}>
+                            <Pgrid.Column>
+                                <Header>
+                                    {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
+                                </Header>
+                                <LoanDetails loan={this.state.loan} />
 
-                        {this.state.isLoanFound && (
-                            <LoanDetails loan={this.state.loan} />
-                        )}
-
-                        {this.state.isLoanFound &&
-                        this.state.loan.isDue && (
-                            <Link
-                                key={"repaybtn-" + this.state.loan.loanId}
-                                className="btn btn-primary"
-                                to={`/loan/repay/${this.state.loan.loanId}`}
-                            >
-                                Repay
-                            </Link>
-                        )}
-                    </Col>
-                </Row>
-            </Grid>
+                                {this.state.loan.isDue && (
+                                    <Button
+                                        content="Repay"
+                                        as={Link}
+                                        to={`/loan/repay/${this.state.loan
+                                            .loanId}`}
+                                        labelPosition="right"
+                                        icon="right chevron"
+                                        primary
+                                        size="large"
+                                    />
+                                )}
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                    </Pgrid>
+                )}
+            </Psegment>
         );
     }
 }

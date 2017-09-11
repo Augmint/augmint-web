@@ -6,19 +6,16 @@
     "private": true,
     "dependencies": {
         "bignumber.js": "^4.0.4",
-        "bootstrap": "3",
         "del": "^3.0.0",
         "moment": "^2.18.1",
         "react": "^15.6.1",
-        "react-bootstrap": "^0.31.2",
         "react-dom": "^15.6.1",
         "react-redux": "^5.0.6",
-        "react-router-bootstrap": "^0.24.3",
         "react-router-dom": "^4.2.2",
         "react-router-redux": "^5.0.0-alpha.6",
         "react-scripts": "1.0.13",
         "redux": "^3.7.2",
-        "redux-form": "^7.0.3",
+        "redux-form": "^7.0.4",
         "redux-thunk": "^2.2.0",
         "redux-watch": "^1.1.1",
         "semantic-ui-react": "^0.72.0",
@@ -28,8 +25,7 @@
     },
     "scripts": {
         "//": "simple 'cross_env NODE_PATH' doesn't work for some reason",
-        "start":
-            "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
+        "start": "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject"

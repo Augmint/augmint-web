@@ -3,7 +3,8 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Row, Col, Button } from "react-bootstrap";
+import { Pgrid } from "components/PageLayout";
+import { Button } from "semantic-ui-react";
 import store from "modules/store";
 import {
     repayLoan,
@@ -16,7 +17,8 @@ import {
     EthSubmissionErrorPanel,
     ErrorPanel,
     EthSubmissionSuccessPanel,
-    WarningPanel
+    WarningPanel,
+    LoadingPanel
 } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 import { RepayHelp } from "./components/RepayHelp";
@@ -27,32 +29,27 @@ import { RepayHelp } from "./components/RepayHelp";
 
 function LoanDetailsWithStatusCheck(props) {
     const loan = props.loan;
-    let statusWarn = null;
+    let msg;
 
     if (loan.loanState === 0) {
-        statusWarn = (
-            <p>
+        msg = (
+            <WarningPanel header="Can't repay">
                 This loan is not yet due
                 <br />(loan id: {loan.loanId}){" "}
-            </p>
+            </WarningPanel>
         );
     } else if (loan.loanState !== 5) {
-        statusWarn = (
-            <p>
+        msg = (
+            <WarningPanel header="Can't repay">
                 This loan is in "{loan.loanStateText}" status. <br />
                 (Loan id: {loan.loanId}){" "}
-            </p>
+            </WarningPanel>
         );
     }
 
     return (
         <div>
-            {statusWarn && (
-                <WarningPanel header={<h3>Can't repay</h3>}>
-                    {statusWarn}
-                </WarningPanel>
-            )}
-
+            {msg}
             <h4>Selected Loan</h4>
             <LoanDetails loan={loan} />
         </div>
@@ -125,7 +122,11 @@ class RepayLoanPage extends React.Component {
         const { submitSucceeded, clearSubmitErrors } = this.props;
 
         if (this.state.isLoading) {
-            return <p>Fetching data (loan id: {this.state.loanId})...</p>;
+            return (
+                <LoadingPanel>
+                    Fetching data (loan id: {this.state.loanId})...
+                </LoadingPanel>
+            );
         }
 
         if (!this.state.isLoanFound) {
@@ -142,17 +143,16 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Row>
-                <Col xs={12} sm={4}>
+            <Pgrid columns={2}>
+                <Pgrid.Column width={6}>
                     <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
-                </Col>
-                <Col xs={12} sm={8}>
+                </Pgrid.Column>
+                <Pgrid.Column width={10}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
                             header={<h3>Repay failed</h3>}
-                            collapsible={false}
                             onDismiss={() => clearSubmitErrors()}
                         />
                     )}
@@ -168,8 +168,8 @@ class RepayLoanPage extends React.Component {
                                 loan={this.state.loan}
                             />
                             <Button
-                                type="submit"
-                                bsStyle="primary"
+                                primary
+                                size="big"
                                 disabled={
                                     this.props.submitting ||
                                     !this.state.isLoanFound ||
@@ -194,8 +194,8 @@ class RepayLoanPage extends React.Component {
                             dismissable={false}
                         />
                     )}
-                </Col>
-            </Row>
+                </Pgrid.Column>
+            </Pgrid>
         );
     }
 }

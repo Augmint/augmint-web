@@ -4,17 +4,13 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import {
-    FormGroup,
-    InputGroup,
-    ControlLabel,
-    Button,
-    HelpBlock
-} from "react-bootstrap";
+import { Button, Label } from "semantic-ui-react";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
-import { FieldInput, Form } from "components/BaseComponents";
+import { Form } from "components/BaseComponents";
 import BigNumber from "bignumber.js";
+import { Pblock } from "components/PageLayout";
+import ToolTip from "components/ToolTip";
 
 const ETH_DECIMALS = 5;
 const UCD_DECIMALS = 2;
@@ -115,89 +111,98 @@ class NewLoanForm extends React.Component {
             handleSubmit,
             pristine,
             submitting,
-            clearSubmitErrors
+            clearSubmitErrors,
+            loanManager
         } = this.props;
         return (
-            <Form onSubmit={handleSubmit}>
-                {error &&
+            <Pblock header="Loan parameters">
+                {error && (
                     <EthSubmissionErrorPanel
                         error={error}
                         header={<h3>Create loan failed</h3>}
                         onDismiss={() => clearSubmitErrors()}
-                    />}
-                <fieldset disabled={submitting}>
-                    <legend>Loan parameters</legend>
+                    />
+                )}
+                <Form onSubmit={handleSubmit}>
+                    <Field
+                        component={Form.Field}
+                        as={Form.Input}
+                        name="disbursedUcdAmount"
+                        type="number"
+                        disabled={submitting || !loanManager.isConnected}
+                        onChange={this.onDisbursedUcdAmountChange}
+                        labelPosition="right"
+                        placeholder="pay out"
+                    >
+                        <Label basic>
+                            Disbursed amount{": "}
+                            <ToolTip>
+                                Disbursed (payed out) amount = Loan amount x
+                                Discount Rate{" "}
+                            </ToolTip>
+                        </Label>
 
-                    <FormGroup bsSize="large">
-                        <ControlLabel>
-                            Disbursed amount (to be payed out){" "}
-                        </ControlLabel>
-                        <InputGroup>
-                            <Field
-                                name="disbursedUcdAmount"
-                                component={FieldInput}
-                                type="number"
-                                onChange={this.onDisbursedUcdAmountChange}
-                            />
-                            <InputGroup.Addon>UCD</InputGroup.Addon>
-                        </InputGroup>
-                        <HelpBlock>
-                            Disbursed amount = Loan amount x Discount Rate{" "}
-                        </HelpBlock>
-                    </FormGroup>
+                        <input />
+                        <Label>UCD</Label>
+                    </Field>
 
-                    <FormGroup bsSize="large">
-                        <ControlLabel>
-                            Loan amount (to be payed back)
-                        </ControlLabel>
-                        <InputGroup>
-                            <Field
-                                name="loanUcdAmount"
-                                component={FieldInput}
-                                type="number"
-                                onChange={this.onLoanUcdAmountChange}
-                            />
-                            <InputGroup.Addon>UCD</InputGroup.Addon>
-                        </InputGroup>
-                        <HelpBlock>
-                            Loan UCD amount = Disbursed amount x ( 1 / Discount
-                            Rate )
-                        </HelpBlock>
-                    </FormGroup>
+                    <Field
+                        component={Form.Field}
+                        as={Form.Input}
+                        name="loanUcdAmount"
+                        placeholder="to pay back"
+                        type="number"
+                        disabled={submitting || !loanManager.isConnected}
+                        onChange={this.onLoanUcdAmountChange}
+                        labelPosition="right"
+                    >
+                        <Label basic>
+                            Loan amount{": "}
+                            <ToolTip>
+                                Loan UCD amount to be payed back = Disbursed
+                                amount x ( 1 / Discount Rate )
+                            </ToolTip>
+                        </Label>
+                        <input />
+                        <Label>UCD</Label>
+                    </Field>
 
-                    <FormGroup bsSize="large">
-                        <ControlLabel>Collateral (goes to escrow)</ControlLabel>
-                        <InputGroup>
-                            <Field
-                                name="ethAmount"
-                                component={FieldInput}
-                                type="number"
-                                onChange={this.onEthAmountChange}
-                            />
-                            <InputGroup.Addon>ETH</InputGroup.Addon>
-                        </InputGroup>
-                        <HelpBlock>
-                            ETH to be held as collateral = UCD Loan Amount /
-                            ETHUSD rate x (1 / Coverage ratio)
-                            <br />( ETH/USD Rate ={" "}
-                            {Math.round(
-                                this.props.rates.info.ethUsdRate * 100
-                            ) / 100}{" "}
-                            )
-                        </HelpBlock>
-                    </FormGroup>
-                    <FormGroup>
-                        <Button
-                            type="submit"
-                            bsSize="large"
-                            bsStyle="primary"
-                            disabled={pristine}
-                        >
-                            {submitting ? "Submitting..." : "Submit"}
-                        </Button>
-                    </FormGroup>
-                </fieldset>
-            </Form>
+                    <Field
+                        component={Form.Field}
+                        as={Form.Input}
+                        name="ethAmount"
+                        type="number"
+                        placeholder="amount taken to escrow"
+                        disabled={submitting || !loanManager.isConnected}
+                        onChange={this.onEthAmountChange}
+                        labelPosition="right"
+                    >
+                        <Label basic>
+                            Collateral:{" "}
+                            <ToolTip>
+                                ETH to be held as collateral = UCD Loan Amount /
+                                ETHUSD rate x (1 / Coverage ratio)
+                                <br />( ETH/USD Rate ={" "}
+                                {Math.round(
+                                    this.props.rates.info.ethUsdRate * 100
+                                ) / 100}{" "}
+                                )
+                            </ToolTip>
+                        </Label>
+                        <input />
+                        <Label>ETH</Label>
+                    </Field>
+
+                    <Button
+                        primary
+                        size="big"
+                        loading={submitting}
+                        disabled={pristine}
+                    >
+                        {submitting ? "Submitting..." : "Get loan"}
+                    </Button>
+                </Form>
+            </Pblock>
         );
     }
 }

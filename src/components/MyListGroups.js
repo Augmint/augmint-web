@@ -1,24 +1,93 @@
-/* TODO: remove shadows and borders 
- */
-
 import React from "react";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
-import "./MyListGroups.css";
+import { Grid } from "semantic-ui-react";
 
 export function MyListGroup(props) {
-    const { children, ...other } = props;
+    const {
+        children,
+        divided = "vertically",
+        container = false,
+        style = { margin: "0em 0em" },
+        ...other
+    } = props;
     return (
-        <ListGroup {...other}>
+        <Grid
+            stackable
+            divided={divided}
+            style={style}
+            container={container}
+            {...other}
+        >
             {children}
-        </ListGroup>
+        </Grid>
     );
 }
 
-export function MyListGroupItem(props) {
-    const { children, ...other } = props;
+export function MyListGroupRow(props) {
+    const {
+        children,
+        header,
+        style /*= { margin: "0em 0em" }*/,
+        ...other
+    } = props;
     return (
-        <ListGroupItem {...other}>
+        <Grid.Row style={style} {...other}>
+            {header && <h3>{header}</h3>}
             {children}
-        </ListGroupItem>
+        </Grid.Row>
     );
 }
+
+MyListGroup.Row = MyListGroupRow;
+
+export function MyGridTable(props) {
+    const {
+        children,
+        header,
+        divided = "vertically",
+        style = { margin: "0.5em 0em" },
+        stackable = true,
+        container = false,
+        ...other
+    } = props;
+    return (
+        <Grid
+            divided={divided}
+            stackable={stackable}
+            style={style}
+            container={container}
+            {...other}
+        >
+            {header && <h4>{header}</h4>}
+            {children}
+        </Grid>
+    );
+}
+
+export function MyGridTableRow(props) {
+    const {
+        children,
+        columns = 2,
+        style = { padding: "0 0.5em" },
+        ...other
+    } = props;
+    return (
+        <Grid.Row columns={columns} style={style} {...other}>
+            {children}
+        </Grid.Row>
+    );
+}
+MyGridTable.Row = MyGridTableRow;
+
+export function MyGridTableColumn(props) {
+    const {
+        children,
+        style = { padding: "0.5em 0", margin: "0em 0" },
+        ...other
+    } = props;
+    return (
+        <Grid.Column style={style} {...other}>
+            {children}
+        </Grid.Column>
+    );
+}
+MyGridTable.Column = MyGridTableColumn;

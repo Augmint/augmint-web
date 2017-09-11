@@ -9,21 +9,16 @@ TODO: make this a pure component
   */
 
 import React from "react";
-import {
-    FormGroup,
-    InputGroup,
-    ControlLabel,
-    Button,
-    Col
-} from "react-bootstrap";
+import { Button, Label } from "semantic-ui-react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import {
     EthSubmissionErrorPanel,
-    EthSubmissionSuccessPanel
+    EthSubmissionSuccessPanel,
+    ConnectionStatus
 } from "components/MsgPanels";
-import { Field, reduxForm, SubmissionError } from "redux-form";
-import { FieldInput, Form } from "components/BaseComponents";
+import { reduxForm, SubmissionError, Field } from "redux-form";
+import { Form } from "components/BaseComponents";
 import {
     transferUcd,
     TOKENUCD_TRANSFER_SUCCESS
@@ -83,113 +78,92 @@ class UcdTransferForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            tokenUcdIsConnected
+            tokenUcd
         } = this.props;
 
         return (
-            <Pblock header="Send UCD">
-                <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
-                    <fieldset disabled={submitting || !tokenUcdIsConnected}>
-                        {!tokenUcdIsConnected && (
-                            <p>Connecting to tokenUcd contract...</p>
-                        )}
-                        {error && (
-                            <EthSubmissionErrorPanel
-                                error={error}
-                                collapsible={false}
-                                header={<h3>Transfer failed</h3>}
-                                onDismiss={() => clearSubmitErrors()}
-                            />
-                        )}
+            <Pblock
+                loading={
+                    tokenUcd.isLoading ||
+                    (!tokenUcd.isConnected && !tokenUcd.connectionError)
+                }
+                header="Send UCD"
+            >
+                <ConnectionStatus contract={tokenUcd} />
+                {submitSucceeded && (
+                    <EthSubmissionSuccessPanel
+                        header={<h3>Successful transfer</h3>}
+                        eth={this.state.result.eth}
+                        onDismiss={() => reset()}
+                    >
+                        <p>
+                            Sent {this.state.result.amount} UCD to{" "}
+                            {this.state.result.to}
+                        </p>
+                    </EthSubmissionSuccessPanel>
+                )}
+                {!submitSucceeded && (
+                    <Form
+                        error={error ? true : false}
+                        onSubmit={handleSubmit(this.handleSubmit)}
+                    >
+                        <EthSubmissionErrorPanel
+                            error={error}
+                            header={<h3>Transfer failed</h3>}
+                            onDismiss={() => {
+                                clearSubmitErrors();
+                            }}
+                        />
 
-                        {submitSucceeded && (
-                            <EthSubmissionSuccessPanel
-                                header={<h3>Successful transfer</h3>}
-                                eth={this.state.result.eth}
-                                onDismiss={() => reset()}
-                            >
-                                <p>
-                                    Sent {this.state.result.amount} UCD to{" "}
-                                    {this.state.result.to}
-                                </p>
-                            </EthSubmissionSuccessPanel>
-                        )}
+                        <Field
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            name="ucdAmount"
+                            placeholder="Amount"
+                            labelPosition="right"
+                            disabled={submitting || !tokenUcd.isConnected}
+                        >
+                            <input />
+                            <Label>UCD</Label>
+                        </Field>
 
-                        {!submitSucceeded && (
-                            <div>
-                                <FormGroup controlId="ucdAmount">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Amount:{" "}
-                                    </Col>
-                                    <Col sm={10}>
-                                        <InputGroup>
-                                            <Field
-                                                name="ucdAmount"
-                                                component={FieldInput}
-                                                type="number"
-                                            />
-                                            <InputGroup.Addon>
-                                                UCD
-                                            </InputGroup.Addon>
-                                        </InputGroup>
-                                    </Col>
-                                </FormGroup>
+                        <Field
+                            component={Form.Field}
+                            as={Form.Input}
+                            label="To:"
+                            size="small"
+                            name="payee"
+                            type="text"
+                            placeholder="0x0..."
+                            disabled={submitting || !tokenUcd.isConnected}
+                        />
 
-                                <FormGroup controlId="payee">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        To:{" "}
-                                    </Col>
-                                    <Col sm={10}>
-                                        <Field
-                                            name="payee"
-                                            component={FieldInput}
-                                            type="text"
-                                            placeholder="0x0..."
-                                        />
-                                    </Col>
-                                </FormGroup>
-
-                                <FormGroup controlId="narrative">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Reference:{" "}
-                                    </Col>
-                                    <Col sm={10}>
-                                        <Field
-                                            name="narrative"
-                                            component={FieldInput}
-                                            type="text"
-                                            placeholder="short narrative (optional)"
-                                        />
-                                    </Col>
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <Col smOffset={2} sm={10}>
-                                        <Button
-                                            type="submit"
-                                            bsSize="large"
-                                            bsStyle="primary"
-                                            disabled={pristine}
-                                        >
-                                            {submitting ? (
-                                                "Submitting..."
-                                            ) : (
-                                                "Transfer"
-                                            )}
-                                        </Button>
-                                    </Col>
-                                </FormGroup>
-                            </div>
-                        )}
-                    </fieldset>
-                </Form>
+                        <Field
+                            component={Form.Field}
+                            as={Form.Input}
+                            label="Reference:"
+                            name="narrative"
+                            type="text"
+                            placeholder="short narrative (optional)"
+                            disabled={submitting || !tokenUcd.isConnected}
+                        />
+                        <Button
+                            loading={submitting}
+                            primary
+                            disabled={pristine}
+                        >
+                            {submitting ? "Submitting..." : "Transfer"}
+                        </Button>
+                    </Form>
+                )}
             </Pblock>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    tokenUcdIsConnected: state.tokenUcd.isConnected
+    tokenUcd: state.tokenUcd
 });
 
 UcdTransferForm = connect(mapStateToProps)(UcdTransferForm);

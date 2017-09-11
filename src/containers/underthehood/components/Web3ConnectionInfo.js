@@ -1,9 +1,10 @@
 import React from "react";
 import store from "modules/store";
-import { Panel, Button } from "react-bootstrap";
 import { setupWeb3 } from "modules/reducers/web3Connect";
 import ErrorDetails from "components/ErrorDetails";
 import stringifier from "stringifier";
+import { Button } from "semantic-ui-react";
+import { Pblock } from "components/PageLayout";
 
 export default class Web3ConnectionInfo extends React.Component {
     constructor(props) {
@@ -28,7 +29,7 @@ export default class Web3ConnectionInfo extends React.Component {
             store.dispatch(setupWeb3());
         };
         return (
-            <Panel header={<h3>Web3 connection</h3>}>
+            <Pblock header="Web3 connection">
                 <p>
                     {isConnected ? (
                         "connected - " +
@@ -55,35 +56,36 @@ export default class Web3ConnectionInfo extends React.Component {
                     <p>No connection error</p>
                 )}
 
-                <div>
-                    <Button
-                        bsStyle="link"
-                        onClick={() =>
-                            this.setState({
-                                providerInfoOpen: !this.state.providerInfoOpen
-                            })}
-                    >
-                        {this.state.providerInfoOpen ? (
-                            "<< Hide provider info"
-                        ) : (
-                            "Show provider info >>"
-                        )}
-                    </Button>
-                    <Panel collapsible expanded={this.state.providerInfoOpen}>
-                        <pre style={{ fontSize: 10 + "px" }}>
+                <Button
+                    basic
+                    size="small"
+                    onClick={() =>
+                        this.setState({
+                            providerInfoOpen: !this.state.providerInfoOpen
+                        })}
+                >
+                    {this.state.providerInfoOpen ? (
+                        "<< Hide provider info"
+                    ) : (
+                        "Show provider info >>"
+                    )}
+                </Button>
+                {this.state.providerInfoOpen && (
+                    <Pblock>
+                        <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
                             {web3Instance ? (
                                 stringify(web3Instance.currentProvider)
                             ) : (
                                 "No web3 Instance"
                             )}
                         </pre>
-                    </Panel>
-                </div>
+                    </Pblock>
+                )}
 
-                <Button bsSize="small" onClick={handleRefreshClick}>
+                <Button size="small" onClick={handleRefreshClick}>
                     Reconnect web3
                 </Button>
-            </Panel>
+            </Pblock>
         );
     }
 }

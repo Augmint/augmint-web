@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Statistic, Container } from "semantic-ui-react";
+import { Statistic, Segment, Button } from "semantic-ui-react";
+import { ConnectionStatus } from "components/MsgPanels";
 
 export class TokenUcdStats extends React.Component {
     render() {
@@ -13,7 +14,7 @@ export class TokenUcdStats extends React.Component {
         } = this.props;
 
         const bn_ethUsdRate = showInUsd ? rates.info.bn_ethUsdRate : null;
-        const { isConnected, isLoading } = this.props.tokenUcd;
+        const { isConnected, isLoading, connectionError } = this.props.tokenUcd;
 
         const {
             totalSupply,
@@ -28,10 +29,12 @@ export class TokenUcdStats extends React.Component {
                 : bn_ethUsdRate.mul(bn_ethBalance).toString();
 
         return (
-            <div>
-                {!isConnected && <p>Connecting to tokenUcd contract...</p>}
-
-                {isLoading && <p>Refreshing tokenUcd info...</p>}
+            <Segment
+                vertical
+                textAlign="center"
+                loading={isLoading || (!isConnected && !connectionError)}
+            >
+                <ConnectionStatus contract={tokenUcd} />
 
                 <Statistic.Group widths="3" size={size}>
                     <Statistic style={{ padding: "1em" }}>
@@ -53,12 +56,18 @@ export class TokenUcdStats extends React.Component {
                         <Statistic.Value>{ucdBalance} UCD</Statistic.Value>
                     </Statistic>
                 </Statistic.Group>
-                <Container>
-                    {showTokenUcdLink && (
-                        <Link to="/tokenUcd">More details</Link>
-                    )}
-                </Container>
-            </div>
+
+                {showTokenUcdLink && (
+                    <Button
+                        content="TokenUcd details"
+                        as={Link}
+                        to="/tokenUcd"
+                        icon="right chevron"
+                        labelPosition="right"
+                        basic
+                    />
+                )}
+            </Segment>
         );
     }
 }

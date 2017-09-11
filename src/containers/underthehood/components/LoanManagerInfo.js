@@ -1,6 +1,6 @@
 import React from "react";
 import store from "modules/store";
-import { Panel } from "react-bootstrap";
+import { Pblock } from "components/PageLayout";
 import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshLoanManager } from "modules/reducers/loanManager";
 
@@ -13,14 +13,12 @@ export function LoanManagerInfo(props) {
     };
 
     return (
-        <Panel header={<h3>LoanManager contract</h3>}>
-            <p>
-                LoanCount: {contract.info.loanCount}{" "}
-            </p>
+        <Pblock header="LoanManager contract">
+            <p>LoanCount: {contract.info.loanCount} </p>
             <ContractBaseInfo
                 contract={contract}
                 refreshCb={handleRefreshClick}
             />
-        </Panel>
+        </Pblock>
     );
 }

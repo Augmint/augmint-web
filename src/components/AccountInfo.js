@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { Link } from "react-router-dom";
+import { ConnectionStatus } from "components/MsgPanels";
 
 export class AccountInfo extends React.Component {
     render() {
@@ -9,15 +10,20 @@ export class AccountInfo extends React.Component {
             header,
             showMyAccountLink,
             account,
-            tokenUcdIsConnected,
+            tokenUcd,
             userBalancesIsLoading
         } = this.props;
         return (
-            <Pblock header={header}>
-                {!tokenUcdIsConnected && (
-                    <p>Connecting to tokenUcd contract...</p>
-                )}
-                {userBalancesIsLoading && <p>Refreshing account info...</p>}
+            <Pblock
+                loading={
+                    tokenUcd.isLoading ||
+                    (!tokenUcd.isConnected && !tokenUcd.connectionError) ||
+                    userBalancesIsLoading
+                }
+                header={header}
+            >
+                <ConnectionStatus contract={tokenUcd} />
+
                 <p>Account: {account.address}</p>
                 <p>
                     ETH: {account.ethBalance}
@@ -54,7 +60,7 @@ AccountInfo.defaultProps = {
 
 const mapStateToProps = state => ({
     userBalancesIsLoading: state.userBalances.isLoading,
-    tokenUcdIsConnected: state.tokenUcd.isConnected
+    tokenUcd: state.tokenUcd
 });
 
 export default connect(mapStateToProps)(AccountInfo);

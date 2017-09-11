@@ -8,6 +8,7 @@ import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { TokenUcdStats } from "components/TokenUcdStats";
 import { EthereumState } from "containers/app/EthereumState";
+import { Button } from "semantic-ui-react";
 
 class TokenUcd extends React.Component {
     componentDidMount() {
@@ -39,9 +40,15 @@ class TokenUcd extends React.Component {
                         />
                     </Pgrid.Column>
                     <Pgrid.Column>
-                        <Link className="btn btn-link" to="/loan/collect">
-                            <h3>Loans to Collect</h3>
-                        </Link>
+                        <Button
+                            content="Loans to Collect"
+                            as={Link}
+                            to="/loan/collect"
+                            icon="right chevron"
+                            labelPosition="right"
+                            basic
+                            size="large"
+                        />
                     </Pgrid.Column>
                 </Pgrid>
             </Psegment>

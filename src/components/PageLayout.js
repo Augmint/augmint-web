@@ -28,11 +28,7 @@ Pcontainer.defaultProps = {
 export class Psegment extends React.Component {
     render() {
         const { children, ...other } = this.props;
-        return (
-            <Segment basic {...other}>
-                {children}
-            </Segment>
-        );
+        return <Segment {...other}>{children}</Segment>;
     }
 }
 

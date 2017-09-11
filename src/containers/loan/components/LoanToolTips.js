@@ -1,10 +1,9 @@
 import React from "react";
-//import {Popover, Glyphicon, OverlayTrigger} from 'react-bootstrap';
 import ToolTip from "components/ToolTip";
 
 export function DiscountRateToolTip(props) {
     return (
-        <ToolTip title="Discount Rate">
+        <ToolTip header="Discount Rate">
             Disbursed UCD amount / amount due on maturity.<br />
             E.g. Loan amount is 100 UCD and discount rate is{" "}
             {props.discountRate * 100}% then<br />
@@ -16,7 +15,7 @@ export function DiscountRateToolTip(props) {
 
 export function LoanCollateralRatioToolTip(props) {
     return (
-        <ToolTip title="Loan/collateral ratio">
+        <ToolTip header="Loan/collateral ratio">
             UCD loan amount / USD value of ETH collateral.<br />
             I.e. How much UCD loan can you get for your ETH<br />
             E.g. 1ETH worth 200 USD and the Loan Coverage ratio is{" "}
@@ -28,7 +27,7 @@ export function LoanCollateralRatioToolTip(props) {
 
 export function RepayPeriodToolTip(props) {
     return (
-        <ToolTip title="Repayment period">
+        <ToolTip header="Repayment period">
             How much time you have to repay the UCD loan after maturity. Think
             of this as a repayment grace period after maturity. After this time
             period you can't pay it back and it's considered unpayed

@@ -1,19 +1,14 @@
 import React from "react";
-import { Grid, Row, Col, PageHeader } from "react-bootstrap";
+import { Psegment } from "components/PageLayout";
+import { ErrorPanel } from "components/MsgPanels";
 
 export const PageNotFound = props => {
     return (
-        <Grid>
-            <Row>
-                <Col>
-                    <PageHeader>Khm...</PageHeader>
-                </Col>
-            </Row>
-            <Row>
-                <p>
-                    What's {props.location.pathname} ? Not sure.
-                </p>
-            </Row>
-        </Grid>
+        <Psegment>
+            <ErrorPanel header="Page not found">
+                <p>Where's {props.location.pathname} ?</p>
+                <p> Not sure.</p>
+            </ErrorPanel>
+        </Psegment>
     );
 };

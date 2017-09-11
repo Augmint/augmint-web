@@ -24,23 +24,19 @@ class AccountHome extends React.Component {
                 <Pgrid>
                     <Pgrid.Row columns={2}>
                         <Pgrid.Column>
-                            <Pgrid.Column>
-                                <AccountInfo
-                                    account={this.props.userAccount}
-                                    header="Overview"
-                                />
-                            </Pgrid.Column>
-                            <Pgrid.Column>
-                                <UcdTransferForm />
-                            </Pgrid.Column>
-                            <Pgrid.Column>
-                                <TransferList
-                                    transfers={this.props.userTransfers}
-                                    userAccountAddress={
-                                        this.props.userAccount.address
-                                    }
-                                />
-                            </Pgrid.Column>
+                            <AccountInfo
+                                account={this.props.userAccount}
+                                header="Overview"
+                            />
+
+                            <UcdTransferForm />
+
+                            <TransferList
+                                transfers={this.props.userTransfers}
+                                userAccountAddress={
+                                    this.props.userAccount.address
+                                }
+                            />
                         </Pgrid.Column>
 
                         <Pgrid.Column>

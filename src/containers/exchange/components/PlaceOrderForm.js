@@ -6,28 +6,20 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import {
-    FormGroup,
-    InputGroup,
-    ControlLabel,
-    HelpBlock,
-    Button,
-    Col,
-    Nav,
-    NavItem
-} from "react-bootstrap";
+import { Menu, Button, Label, Message } from "semantic-ui-react";
 import store from "modules/store";
 import {
     EthSubmissionErrorPanel,
-    EthSubmissionSuccessPanel
+    EthSubmissionSuccessPanel,
+    ConnectionStatus
 } from "components/MsgPanels";
 import {
-    Field,
     reduxForm,
+    Field,
     SubmissionError,
     formValueSelector
 } from "redux-form";
-import { FieldInput, Form } from "components/BaseComponents";
+import { Form } from "components/BaseComponents";
 import {
     placeOrder,
     PLACE_ORDER_SUCCESS,
@@ -36,6 +28,7 @@ import {
 } from "modules/reducers/orders";
 import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
+import { Pblock } from "components/PageLayout";
 
 const ETH_DECIMALS = 5;
 const UCD_DECIMALS = 2;
@@ -50,9 +43,8 @@ class PlaceOrderForm extends React.Component {
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
     }
 
-    onOrderTypeChange(eventKey) {
-        // event.preventDefault();
-        this.setState({ orderType: eventKey });
+    onOrderTypeChange(e, { name, index }) {
+        this.setState({ orderType: index });
     }
 
     onUcdAmountChange(e) {
@@ -208,101 +200,99 @@ class PlaceOrderForm extends React.Component {
         } catch (error) {
             // it's likely a bignumber conversion error, we ignore it
         }
-
+        let header = (
+            <Menu size="massive" tabular>
+                <Menu.Item
+                    active={orderType === ETHSELL}
+                    index={ETHSELL}
+                    onClick={this.onOrderTypeChange}
+                >
+                    Buy UCD
+                </Menu.Item>
+                <Menu.Item
+                    active={orderType === UCDSELL}
+                    index={UCDSELL}
+                    onClick={this.onOrderTypeChange}
+                >
+                    Sell UCD
+                </Menu.Item>
+            </Menu>
+        );
         return (
-            <Form horizontal onSubmit={handleSubmit(this.handleSubmit)}>
-                <fieldset disabled={submitting || isLoading}>
-                    <legend>
-                        <Nav
-                            bsStyle="tabs"
-                            activeKey={orderType}
-                            onSelect={this.onOrderTypeChange}
-                        >
-                            <NavItem eventKey={ETHSELL} title="Buy UCD">
-                                <p>Buy UCD</p>
-                            </NavItem>
-                            <NavItem eventKey={UCDSELL} title="Sell UCD">
-                                <p>Sell UCD</p>
-                            </NavItem>
-                        </Nav>
-                    </legend>
-                    {isLoading && <p>Connecting to tokenUcd contract...</p>}
-                    {error && (
+            <Pblock loading={isLoading} header={header}>
+                <ConnectionStatus contract={this.props.exchange} />
+
+                {submitSucceeded && (
+                    <EthSubmissionSuccessPanel
+                        header={<h3>Successful order</h3>}
+                        eth={this.state.result.eth}
+                        onDismiss={() => reset()}
+                    >
+                        <p>Order id: {this.state.result.orderId}</p>
+                    </EthSubmissionSuccessPanel>
+                )}
+
+                {!submitSucceeded && (
+                    <Form
+                        error={error ? true : false}
+                        onSubmit={handleSubmit(this.handleSubmit)}
+                    >
                         <EthSubmissionErrorPanel
                             error={error}
-                            collapsible={false}
                             header={<h3>Transfer failed</h3>}
                             onDismiss={() => clearSubmitErrors()}
                         />
-                    )}
 
-                    {submitSucceeded && (
-                        <EthSubmissionSuccessPanel
-                            header={<h3>Successful order</h3>}
-                            eth={this.state.result.eth}
-                            onDismiss={() => reset()}
+                        <Field
+                            name="ucdAmount"
+                            label={orderType === ETHSELL ? "Buy: " : "Sell: "}
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            disabled={submitting || isLoading}
+                            onChange={this.onUcdAmountChange}
+                            labelPosition="right"
                         >
-                            <p>Order id: {this.state.result.orderId}</p>
-                        </EthSubmissionSuccessPanel>
-                    )}
+                            <input />
+                            <Label>UCD</Label>
+                        </Field>
 
-                    {!submitSucceeded && (
-                        <div>
-                            <FormGroup controlId="ucdAmount">
-                                <Col componentClass={ControlLabel} xs={2}>
-                                    {orderType === ETHSELL ? "Buy: " : "Sell: "}
-                                </Col>
-                                <Col xs={6}>
-                                    <InputGroup>
-                                        <Field
-                                            name="ucdAmount"
-                                            component={FieldInput}
-                                            type="number"
-                                            onChange={this.onUcdAmountChange}
-                                        />
-                                        <InputGroup.Addon>UCD</InputGroup.Addon>
-                                    </InputGroup>
-                                </Col>
-                            </FormGroup>
-
-                            <FormGroup controlId="ethAmount">
-                                <Col componentClass={ControlLabel} xs={2}>
-                                    for:{" "}
-                                </Col>
-                                <Col xs={6}>
-                                    <InputGroup>
-                                        <Field
-                                            name="ethAmount"
-                                            component={FieldInput}
-                                            type="number"
-                                            onChange={this.onEthAmountChange}
-                                        />
-                                        <InputGroup.Addon>ETH</InputGroup.Addon>
-                                    </InputGroup>
-                                </Col>
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Col smOffset={2} xs={10}>
-                                    <Button
-                                        type="submit"
-                                        bsSize="large"
-                                        bsStyle="primary"
-                                        disabled={pristine}
-                                    >
-                                        {submitting && "Submitting..."}
-                                        {!submitting &&
-                                            (orderType === ETHSELL
-                                                ? "Place buy UCD order"
-                                                : "Place sell UCD order")}
-                                    </Button>
-                                    <HelpBlock>{orderHelpText}</HelpBlock>
-                                </Col>
-                            </FormGroup>
-                        </div>
-                    )}
-                </fieldset>
-            </Form>
+                        <Field
+                            name="ethAmount"
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            label="for: "
+                            disabled={submitting || isLoading}
+                            onChange={this.onEthAmountChange}
+                            labelPosition="right"
+                        >
+                            <input />
+                            <Label>ETH</Label>
+                        </Field>
+                        {orderHelpText && (
+                            <Message
+                                icon="info"
+                                size="tiny"
+                                info
+                                content={orderHelpText}
+                            />
+                        )}
+                        <Button
+                            size="big"
+                            primary
+                            loading={submitting}
+                            disabled={pristine}
+                        >
+                            {submitting && "Submitting..."}
+                            {!submitting &&
+                                (orderType === ETHSELL
+                                    ? "Place buy UCD order"
+                                    : "Place sell UCD order")}
+                        </Button>
+                    </Form>
+                )}
+            </Pblock>
         );
     }
 }

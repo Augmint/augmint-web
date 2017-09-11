@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Row, Col } from "react-bootstrap";
+import { Pgrid, Pblock } from "components/PageLayout";
 import store from "modules/store";
+import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
 import {
     newLoan,
@@ -75,78 +76,69 @@ class NewLoanPage extends React.Component {
                 submitSucceeded: true,
                 result: res.result
             });
-            // this causing weird behavour:
-            // store.dispatch(push('/getLoan/fetchLoansuccess', { loanCreated: res.loanCreated}));
-            //this just doesnt upted browser URL:
-            // store.history.push('/getLoan/fetchLoansuccess', { submitSucceeded: true, loanCreated: res.loanCreated })
             return res;
         }
     }
 
     render() {
-        //const {submitSucceeded } = this.state
-
+        let msg;
         if (this.state.isLoading) {
-            return (
-                <p>
+            msg = (
+                <LoadingPanel>
                     Fetching data (loan product id: {this.state.productId})...
-                </p>
+                </LoadingPanel>
             );
-        }
-
-        if (!this.state.isProductFound) {
-            return (
-                <p>
+        } else if (!this.state.isProductFound) {
+            msg = (
+                <ErrorPanel>
                     Can't find this loan product (loan product id:{" "}
                     {this.state.productId}){" "}
-                </p>
+                </ErrorPanel>
             );
-        }
-
-        if (!this.state.product.isActive) {
-            return (
-                <p>
+        } else if (!this.state.product.isActive) {
+            msg = (
+                <ErrorPanel>
                     This loan product is not active currently (loan product id:{" "}
                     {this.state.productId}){" "}
-                </p>
+                </ErrorPanel>
             );
         }
 
+        if (msg) {
+            return msg;
+        }
         return (
-            <Row>
-                <Col xs={4} md={4}>
-                    <Row>
-                        <Col>
-                            <h4>Selected Loan</h4>
+            <Pgrid>
+                <Pgrid.Row columns={2}>
+                    <Pgrid.Column width={6}>
+                        <Pblock header="Selected Loan">
                             <LoanProductDetails product={this.state.product} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <AccountInfo account={this.props.userAccount} />
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs={8} md={8}>
-                    {!this.state.submitSucceeded && (
-                        <NewLoanForm
-                            product={this.state.product}
-                            rates={this.props.rates}
-                            onSubmit={this.handleSubmit}
-                        />
-                    )}
-                    {this.state.submitSucceeded && (
-                        /* couldn't make this work yet:
-                            <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                        <NewLoanSuccess result={this.state.result} />
-                    )}
-                </Col>
-            </Row>
+                        </Pblock>
+                        <AccountInfo account={this.props.userAccount} />
+                    </Pgrid.Column>
+                    <Pgrid.Column width={10}>
+                        {!this.state.submitSucceeded && (
+                            <NewLoanForm
+                                product={this.state.product}
+                                rates={this.props.rates}
+                                loanManager={this.props.loanManager}
+                                onSubmit={this.handleSubmit}
+                            />
+                        )}
+                        {this.state.submitSucceeded && (
+                            /* couldn't make this work yet:
+                        <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
+                            <NewLoanSuccess result={this.state.result} />
+                        )}
+                    </Pgrid.Column>
+                </Pgrid.Row>
+            </Pgrid>
         );
     }
 }
 
 const mapStateToProps = state => ({
+    loanManager: state.loanManager,
     products: state.loanManager.products,
     rates: state.rates,
     userAccount: state.userBalances.account

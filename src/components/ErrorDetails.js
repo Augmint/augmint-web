@@ -18,7 +18,7 @@ import React from "react";
 
 export default function ErrorDetails(props) {
     return (
-        <pre style={{ fontSize: 10 + "px" }}>
+        <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
             {props.children}
         </pre>
     );
