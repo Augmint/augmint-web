@@ -1,21 +1,20 @@
-# UCD - US Crypto Dollar
-Proof of concept implementation of an Ethereum based stable crypto currency.
+# DCM - Digital Credit Money
+Proof of concept implementation of a stable cryptocurrency in Ethereum
 
 _a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
 ## Concept
-TODO: a short paragraph
+DCM provides digital tokens, value of each token pegged to a fiat currency.
+
+The first DCM token will be UCD, pegged to USD.
+
+The value of 1 UCD is always closely around 1 USD.
+
+DCM tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
+
+Read more and try out the proof-of-concept implementation on **[dcm.netlify.com](http://dcm.netlify.com)**
 
 **[Whitepaper outline](https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g/edit?usp=sharing)** - It's work in progress, draft document. Please feel free to comment it: questions, ideas, suggestions are welcome.
-
-## Glossary
-TODO
-
-## Screenshots
-
-![My Account screenshot](docs/screenshots/02_myAccount.png)
-
-**[More screenshots](docs/screenshots)**
 
 ## Components
 ### Solidity Contracts
