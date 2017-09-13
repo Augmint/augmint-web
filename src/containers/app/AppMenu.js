@@ -25,18 +25,33 @@ export function AppMenu(props) {
                         Home
                     </Menu.Item>
 
-                    <Menu.Item as={NavLink} to="/account">
-                        My Account
+                    <Menu.Item
+                        active={location.pathname === "/concept"}
+                        as={Link}
+                        to="/concept"
+                    >
+                        Concept
                     </Menu.Item>
-                    <Menu.Item as={NavLink} to="/exchange">
-                        Buy/Sell UCD
-                    </Menu.Item>
-                    <Menu.Item as={NavLink} to="/loan/new">
-                        Get UCD Loan
-                    </Menu.Item>
-                    <Menu.Item as={NavLink} to="/tokenUcd">
-                        TokenUcd
-                    </Menu.Item>
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/account">
+                            My Account
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/exchange">
+                            Buy/Sell UCD
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/loan/new">
+                            Get UCD Loan
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/tokenUcd">
+                            TokenUcd
+                        </Menu.Item>
+                    )}
 
                     <Menu.Menu position="right">
                         {/* <Menu.Item as={NavLink} to="/about-us">

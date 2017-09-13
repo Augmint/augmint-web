@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Hero } from "./Hero";
+import { DcmOverview } from "./DcmOverview";
+import { ProjectStatus } from "./ProjectStatus";
 import { LoadingPanel } from "components/MsgPanels";
-import { Psegment } from "components/PageLayout";
-import { Header, Container } from "semantic-ui-react";
+import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
 
 class NotConnectedHome extends React.Component {
@@ -16,20 +17,11 @@ class NotConnectedHome extends React.Component {
                 {isLoading && (
                     <LoadingPanel header="Connecting to Ethereum network..." />
                 )}
-                <Psegment
-                    style={{ minHeight: 200, padding: "2em 0em" }}
-                    vertical
-                >
-                    <Container text>
-                        <Header
-                            as="h2"
-                            style={{
-                                fontSize: "1.7em",
-                                fontWeight: "normal"
-                            }}
-                        >
-                            Try it out
-                        </Header>
+                <DcmOverview />
+                <ProjectStatus />
+
+                <Tsegment header="Try it out">
+                    <Tsegment.Row>
                         <p>Play with our proof-of-concept implementation.</p>
                         <p>
                             Install{" "}
@@ -45,8 +37,8 @@ class NotConnectedHome extends React.Component {
                             </Link>{" "}
                             and connect to Rinkeby test network
                         </p>
-                    </Container>
-                </Psegment>
+                    </Tsegment.Row>
+                </Tsegment>
             </div>
         );
     }

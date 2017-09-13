@@ -4,6 +4,7 @@ Wrapper for the whole App
     Web3 connection initialisation
 */
 import "semantic/dist/semantic.min.css";
+import "./site.css";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -16,11 +17,13 @@ import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import TokenUcd from "containers/tokenUcd";
 import About from "containers/about";
+import Concept from "containers/concept";
 import UnderTheHood from "containers/underthehood";
 import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
+//import { AppFooter } from "containers/app/AppFooter";
 
 class App extends React.Component {
     constructor(props) {
@@ -37,33 +40,43 @@ class App extends React.Component {
     render() {
         const { isConnected } = this.props.web3Connect;
         return (
-            <div>
+            <div className="Site">
                 <AppMenu
                     web3Connect={this.props.web3Connect}
                     location={this.props.location}
                 />
 
-                <Switch>
-                    <Route
-                        exact
-                        path="/"
-                        component={
-                            isConnected ? ConnectedHome : NotConnectedHome
-                        }
-                    />
-                    <Route exact path="/account" component={AccountHome} />
-                    <Route exact path="/exchange" component={ExchangeHome} />
-                    <Route exact path="/tokenUcd" component={TokenUcd} />
-                    <Route path="/loan" component={LoanMain} />
+                <div className="Site-content">
+                    <Switch>
+                        <Route
+                            exact
+                            path="/"
+                            component={
+                                isConnected ? ConnectedHome : NotConnectedHome
+                            }
+                        />
+                        <Route exact path="/account" component={AccountHome} />
+                        <Route
+                            exact
+                            path="/exchange"
+                            component={ExchangeHome}
+                        />
+                        <Route exact path="/tokenUcd" component={TokenUcd} />
+                        <Route path="/loan" component={LoanMain} />
 
-                    <Route exact path="/about-us" component={About} />
-                    <Route
-                        exact
-                        path="/under-the-hood"
-                        component={UnderTheHood}
-                    />
-                    <Route component={PageNotFound} />
-                </Switch>
+                        <Route exact path="/concept" component={Concept} />
+                        <Route exact path="/about-us" component={About} />
+                        <Route
+                            exact
+                            path="/under-the-hood"
+                            component={UnderTheHood}
+                        />
+                        <Route component={PageNotFound} />
+                    </Switch>
+                </div>
+                {/* <div className="Site-footer">
+                    <AppFooter />
+                </div>  */}
             </div>
         );
     }

@@ -5,7 +5,7 @@ export function Pheader(props) {
     const { children, header, ...other } = props;
     return (
         <Container {...other}>
-            <Header as="h1">{header}</Header>
+            {header && <Header as="h1">{header}</Header>}
             {children}
             <Divider />
         </Container>

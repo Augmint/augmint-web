@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Hero } from "./Hero";
+import { DcmOverview } from "./DcmOverview";
+import { ProjectStatus } from "./ProjectStatus";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import { TokenUcdStats } from "components/TokenUcdStats";
 import { Psegment } from "components/PageLayout";
@@ -16,6 +18,7 @@ class ConnectedHome extends React.Component {
         return (
             <div>
                 <Hero />
+
                 <EthereumState />
                 <Psegment>
                     <Container>
@@ -25,6 +28,8 @@ class ConnectedHome extends React.Component {
                         <TokenUcdStats tokenUcd={tokenUcd} showTokenUcdLink />
                     </Container>
                 </Psegment>
+                <DcmOverview />
+                <ProjectStatus />
             </div>
         );
     }

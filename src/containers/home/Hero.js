@@ -1,13 +1,12 @@
 import React from "react";
 import { Segment, Container, Header } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 
 export function Hero(props) {
     return (
         <Segment
             inverted
             textAlign="center"
-            style={{ minHeight: 400, padding: "1em 0em" }}
+            style={{ minHeight: 300, padding: "1em 0em" }}
             vertical
         >
             <Container text>
@@ -29,16 +28,6 @@ export function Hero(props) {
                 >
                     Stable cryptocurrencies
                 </Header>
-
-                <p>
-                    Read more about the the DCM concept on our{" "}
-                    <Link
-                        to="https://github.com/DecentLabs/ucd-poc"
-                        target="_blank"
-                    >
-                        Github page
-                    </Link>
-                </p>
             </Container>
         </Segment>
     );
