@@ -25,6 +25,20 @@ import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
 //import { AppFooter } from "containers/app/AppFooter";
 
+class ScrollToTop extends React.Component {
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            window.scrollTo(0, 0);
+        }
+    }
+
+    render() {
+        return this.props.children ? this.props.children : null;
+    }
+}
+
+ScrollToTop = withRouter(ScrollToTop);
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -41,6 +55,7 @@ class App extends React.Component {
         const { isConnected } = this.props.web3Connect;
         return (
             <div className="Site">
+                <ScrollToTop />
                 <AppMenu
                     web3Connect={this.props.web3Connect}
                     location={this.props.location}
