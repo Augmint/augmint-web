@@ -2,6 +2,18 @@
 import React from "react";
 import { Form as SemanticForm } from "semantic-ui-react";
 
+export const Validations = {
+    required: value => (value ? undefined : "Required"),
+    email: value =>
+        value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
+            ? "Invalid email address"
+            : undefined
+};
+
+export const Normalizations = {
+    trim: value => value && value.trim()
+};
+
 export const semanticFormField = ({
     input,
     type,
@@ -20,13 +32,10 @@ export const semanticFormField = ({
                 type={type}
                 label={label}
                 placeholder={placeholder}
+                error={touched && error ? true : false}
             />
             {touched &&
-                ((error && (
-                    <span>
-                        <i>{error}</i>
-                    </span>
-                )) ||
+                ((error && <span style={{ color: "red" }}>{error}</span>) ||
                     (warning && (
                         <span>
                             <i>{warning}</i>

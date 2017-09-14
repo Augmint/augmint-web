@@ -9,6 +9,7 @@ import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
 import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
+import subscriptions from "modules/reducers/subscriptions";
 import { reducer as formReducer } from "redux-form";
 
 export default combineReducers({
@@ -22,5 +23,6 @@ export default combineReducers({
     exchange,
     orders,
     loans,
+    subscriptions,
     form: formReducer
 });

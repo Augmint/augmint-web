@@ -31,6 +31,7 @@ export function Tsegment(props) {
 }
 
 Tsegment.Row = Grid.Row;
+Tsegment.Column = Grid.Column;
 
 export function SubHeader(props) {
     const { children, header, ...other } = props;
