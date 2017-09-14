@@ -4,12 +4,14 @@
 Note: these steps are likely to work on linux too but it's not tested yet
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
-1. [nodejs](https://nodejs.org/en/download/) (tested with 8.4.0)
+1. [nodejs](https://nodejs.org/en/download/)  
+    _tested with version 8.4.0_
 1. [node version manager](https://github.com/tj/n): `npm install -g n`  
 1. Install node: `n 8.4.0`
 1. `npm install -g ethereumjs-testrpc`  
-  _latest 4.1.1 version required_
-1. `npm install -g truffle`
+    _tested with version 4.1.3_
+1. `npm install -g truffle`  
+    _tested with version 3.4.9_
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
@@ -24,8 +26,9 @@ in Git bash:
 1. `nvm install 8.4.0`
 1. `nvm use 8.4.0`
 1. `npm install -g ethereumjs-testrpc`  
-    _latest 4.1.0 version required_
+    _tested with version 4.1.3_
 1. `npm install -g truffle`
+    _tested with version 3.4.9_
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
