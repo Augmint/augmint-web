@@ -65,7 +65,7 @@ export class EthereumState extends React.Component {
                         Make sure you are connected to Rinkeby or for local
                         install follow instructions on our{" "}
                         <Link
-                            to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                            to="https://github.com/DecentLabs/dcm-poc/blob/master/docs/developmentEnvironment.md"
                             target="_blank"
                         >
                             Github page
@@ -103,7 +103,7 @@ export class EthereumState extends React.Component {
                             </pre>
                             <br />See more on our{" "}
                             <Link
-                                to="https://github.com/DecentLabs/ucd-poc/blob/master/docs/developmentEnvironment.md"
+                                to="https://github.com/DecentLabs/dcm-poc/blob/master/docs/developmentEnvironment.md"
                                 target="_blank"
                             >
                                 Github page

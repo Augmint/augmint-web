@@ -2,7 +2,7 @@ import React from "react";
 
 import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { Button, Divider } from "semantic-ui-react";
 import SubscribeForm from "./SubscribeForm";
 
 export function ProjectStatus(props) {
@@ -28,6 +28,16 @@ export function ProjectStatus(props) {
                         as={Link}
                         to="https://gitter.im/digital-credit-money/Lobby?utm_source=mainpage&utm_medium=web&utm_campaign=init"
                         icon="chat"
+                        labelPosition="left"
+                        target="_blank"
+                        size="large"
+                    />
+                    <Divider hidden />
+                    <Button
+                        content="Check it on GitHub"
+                        as={Link}
+                        to="https://github.com/DecentLabs/dcm-poc"
+                        icon="github"
                         labelPosition="left"
                         target="_blank"
                         size="large"

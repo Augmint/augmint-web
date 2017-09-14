@@ -5,6 +5,7 @@ export function Tsegment(props) {
     const {
         children,
         header,
+        subheader,
         textAlign = "center",
         style = { padding: "2em 0em" },
         ...other
@@ -15,13 +16,24 @@ export function Tsegment(props) {
                 {header && (
                     <Header
                         as="h2"
-                        content={header}
                         style={{
                             fontSize: "2em",
                             padding: "0.5em"
                         }}
-                    />
+                    >
+                        {header}
+                        {subheader && (
+                            <Header.Subheader
+                                content={subheader}
+                                style={{
+                                    fontSize: "1em",
+                                    marginTop: "0.5em"
+                                }}
+                            />
+                        )}
+                    </Header>
                 )}
+
                 <Grid container stackable>
                     {children}
                 </Grid>
@@ -33,7 +45,7 @@ export function Tsegment(props) {
 Tsegment.Row = Grid.Row;
 Tsegment.Column = Grid.Column;
 
-export function SubHeader(props) {
+export function TblockSubHeader(props) {
     const { children, header, ...other } = props;
     return (
         <Header as="h4" content={header} {...other}>
@@ -62,4 +74,4 @@ export function Tblock(props) {
     );
 }
 
-Tblock.SubHeader = SubHeader;
+Tblock.SubHeader = TblockSubHeader;

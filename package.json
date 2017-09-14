@@ -1,7 +1,7 @@
 {
-    "name": "ucd-poc",
+    "name": "dcm-poc",
     "version": "0.0.1",
-    "description": "US Crypto Dollar - Proof of Concept",
+    "description": "Digital Credit Money - Proof of Concept",
     "homepage": ".",
     "private": true,
     "dependencies": {

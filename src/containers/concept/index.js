@@ -4,21 +4,21 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 
 export default () => (
-    <Tsegment header="DCM concept">
+    <Tsegment header="Digital Credit Money" subheader="Concept">
         <Tblock header="Modern money">
             <p>
-                Modern monies are credit based. In layman's terms the amount of
-                money in circulation (supply) is automatically adjusted by
+                Modern currencies are credit based. In layman's terms the amount
+                of money in circulation (supply) is automatically adjusted by
                 market participants (i.e. banks). Banks are creating money when
                 issuing loans and burning money when a loan is repaid.
             </p>
             <p>
-                The stability is governed by central banks, adjusting certain
-                base parameters and by the market via the banks adjusting their
-                loan conditions.
+                The stability is secured or fortified by central banks,
+                adjusting certain base parameters and by the market via the
+                banks adjusting their loan conditions.
             </p>
             <p>
-                This method has its flaws and it can be corrupted by governments
+                This system has its flaws and it can be corrupted by governments
                 and banks but in general that's how the monetary system ensures
                 there is always as much money available in the economy as
                 needed.
@@ -42,11 +42,15 @@ export default () => (
                 interventions are decided by transparent and open governance
                 processes.
             </p>
+            <p>
+                UCD is the first DCM token to be implemented. UCD will be pegged
+                to USD.
+            </p>
         </Tblock>
         <Tblock header="Getting UCD">
             <p>
                 You can always buy or sell your UCD for cryptocurrencies (ETH,
-                BTC etc) on a decentralised exchange. Secondary exchanges will
+                BTC etc.) on a decentralised exchange. Secondary exchanges will
                 offer direct fiat conversions to/from UCD as well. As the DCM
                 ecosystem grows you will need less and less to exchange DCM
                 tokens to fiat money.
@@ -106,7 +110,7 @@ export default () => (
             <Button
                 content="Our work in progress white paper"
                 as={Link}
-                to="https://github.com/DecentLabs/ucd-poc"
+                to="https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g"
                 target="_blank"
                 icon="right chevron"
                 labelPosition="right"

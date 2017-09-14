@@ -10,8 +10,8 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. `npm install -g ethereumjs-testrpc`  
   _latest 4.1.1 version required_
 1. `npm install -g truffle`
-1. `git clone https://github.com/DecentLabs/ucd-poc.git`
-1. `cd ucd-poc`
+1. `git clone https://github.com/DecentLabs/dcm-poc.git`
+1. `cd dcm-poc`
 1. `npm install`
 
 ### Windows
@@ -26,13 +26,13 @@ in Git bash:
 1. `npm install -g ethereumjs-testrpc`  
     _latest 4.1.0 version required_
 1. `npm install -g truffle`
-1. `git clone https://github.com/DecentLabs/ucd-poc.git`
-1. `cd ucd-poc`
+1. `git clone https://github.com/DecentLabs/dcm-poc.git`
+1. `cd dcm-poc`
 1. `npm install`
 
 ## Launch
-### 1. Update to latest ucd-poc
-1. `git pull` for latest ucd-poc version
+### 1. Update to latest dcm-poc
+1. `git pull` for latest dcm-poc version
 1. `npm install` if there were any node package changes in packages.json
 
 ### 2. Deploy to network

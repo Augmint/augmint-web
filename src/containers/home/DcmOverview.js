@@ -9,11 +9,11 @@ export function DcmOverview(props) {
         <Tsegment>
             <Tblock header="Stable tokens">
                 <p>
-                    DCM provides digital tokens, value of each token pegged to a
+                    DCM offers digital tokens, value of each token pegged to a
                     fiat currency.
                 </p>
                 <p>The first DCM token will be UCD, pegged to USD.</p>
-                <p>The value of 1 UCD is always closely around 1 USD.</p>
+                <p>The value of 1 UCD is expected closely around 1 USD.</p>
                 <p>
                     DCM tokens are cryptocurrency tokens with all the benefits
                     of cryptocurrencies: stored securely in a decentralised
