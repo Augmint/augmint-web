@@ -32,18 +32,15 @@ export function ContractBaseInfo(props) {
             </p>
 
             {connectionError ? (
-                <p>
-                    connectionError: <br />{" "}
-                    <ErrorDetails>{connectionError.message}</ErrorDetails>
-                </p>
+                <ErrorDetails header="Connection error">
+                    {connectionError.message}
+                </ErrorDetails>
             ) : (
                 <p>No connection error</p>
             )}
 
             {error ? (
-                <p>
-                    Error: <br /> <ErrorDetails>{error.message}</ErrorDetails>
-                </p>
+                <ErrorDetails header="Tx error">{error.message}</ErrorDetails>
             ) : (
                 <p>No tx error</p>
             )}

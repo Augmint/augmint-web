@@ -59,10 +59,9 @@ export default class OrderList extends React.Component {
         return (
             <Pblock header={header}>
                 {refreshError && (
-                    <p>
-                        Error while fetching order list
-                        <ErrorDetails>{refreshError.message}</ErrorDetails>
-                    </p>
+                    <ErrorDetails header="Error while fetching order list">
+                        {refreshError.message}
+                    </ErrorDetails>
                 )}
                 {orders == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing order list...</p>}

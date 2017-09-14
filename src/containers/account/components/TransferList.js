@@ -62,10 +62,9 @@ export default class TransferList extends React.Component {
         return (
             <Pblock loading={isLoading} header={header}>
                 {error && (
-                    <p>
-                        Error while fetching transfer list
-                        <ErrorDetails>{error.message}</ErrorDetails>
-                    </p>
+                    <ErrorDetails header="Error while fetching transfer list">
+                        {error.message}
+                    </ErrorDetails>
                 )}
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}

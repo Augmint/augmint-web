@@ -17,9 +17,14 @@ import React from "react";
 // });
 
 export default function ErrorDetails(props) {
+    const {
+        header = "Error details:",
+        style = { fontSize: "0.8em", overflow: "auto" }
+    } = props;
     return (
-        <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
-            {props.children}
-        </pre>
+        <div>
+            <p>{header}</p>
+            <pre style={style}>{props.children}</pre>
+        </div>
     );
 }

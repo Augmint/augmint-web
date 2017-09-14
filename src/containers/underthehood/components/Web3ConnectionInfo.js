@@ -46,12 +46,7 @@ export default class Web3ConnectionInfo extends React.Component {
                 <p>Internal Connection Id: {web3ConnectionId}</p>
 
                 {error ? (
-                    <p>
-                        error: <br />{" "}
-                        <ErrorDetails style={{ fontSize: 10 + "px" }}>
-                            {error.message}
-                        </ErrorDetails>
-                    </p>
+                    <ErrorDetails header="Error">{error.message}</ErrorDetails>
                 ) : (
                     <p>No connection error</p>
                 )}
