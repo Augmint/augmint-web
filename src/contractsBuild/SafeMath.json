@@ -42,7 +42,7 @@
       "events": {},
       "links": {},
       "address": "0x1578c4406b6a8808bae0945036a8896ede3c5de3",
-      "updated_at": 1504474637075
+      "updated_at": 1505407800765
     },
     "1976": {
       "events": {},
@@ -52,5 +52,5 @@
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1504474637075
+  "updated_at": 1505407800765
 }

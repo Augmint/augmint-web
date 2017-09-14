@@ -283,7 +283,7 @@
         "SafeMath": "0x1578c4406b6a8808bae0945036a8896ede3c5de3"
       },
       "address": "0x50cbb3c22f42b5468b2177c6e49c32d99987a61b",
-      "updated_at": 1504474637074
+      "updated_at": 1505407800764
     },
     "1976": {
       "events": {
@@ -325,5 +325,5 @@
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1504474637074
+  "updated_at": 1505407800764
 }

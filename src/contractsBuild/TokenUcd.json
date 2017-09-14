@@ -854,7 +854,7 @@
       },
       "links": {},
       "address": "0x726c076c1b8cc9e64cde40bd68891de0879d1599",
-      "updated_at": 1504474637072
+      "updated_at": 1505407800763
     },
     "1976": {
       "events": {
@@ -957,5 +957,5 @@
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1504474637072
+  "updated_at": 1505407800763
 }
