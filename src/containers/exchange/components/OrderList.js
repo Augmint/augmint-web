@@ -30,7 +30,7 @@ export default class OrderList extends React.Component {
                     <small>
                         <br />Order Id: {order.orderId} | makerOrderIdx:{" "}
                         {order.makerOrderIdx} | Maker: {order.maker}
-                        {order.maker === userAccountAddress ? (
+                        {order.maker === userAccountAddress.toLowerCase() ? (
                             " TODO: Cancel my order"
                         ) : (
                             ""

@@ -38,7 +38,10 @@ class ExchangeHome extends React.Component {
                                 userAccountAddress={userAccount.address}
                                 header="My orders"
                                 filter={item => {
-                                    return item.maker === userAccount.address;
+                                    return (
+                                        item.maker ===
+                                        userAccount.address.toLowerCase()
+                                    );
                                 }}
                             />
                         </Pgrid.Column>

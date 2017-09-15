@@ -1,5 +1,8 @@
 import { default as Web3 } from "web3";
-import { asyncGetNetwork, asyncGetAccounts } from "modules/ethereum/ethHelper";
+import {
+    getNetworkDetails,
+    asyncGetAccounts
+} from "modules/ethereum/ethHelper";
 
 export const WEB3_SETUP_REQUESTED = "web3Connect/WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "web3Connect/WEB3_SETUP_SUCCESS";
@@ -8,6 +11,7 @@ export const WEB3_SETUP_ERROR = "web3Connect/WEB3_SETUP_ERROR";
 const initialState = {
     error: null,
     web3Instance: null,
+    info: { web3Version: "?" },
     web3ConnectionId: null, // workaround so that we don't need deep compare web3Instance to detecet change
     userAccount: "?",
     accounts: null,
@@ -37,7 +41,8 @@ export default (state = initialState, action) => {
                 userAccount: action.accounts[0],
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
-                network: action.network
+                network: action.network,
+                info: action.info
             };
 
         case WEB3_SETUP_ERROR:
@@ -72,8 +77,7 @@ export const setupWeb3 = () => {
                     new Web3.providers.HttpProvider("http://localhost:8545")
                 );
             }
-
-            let network = await asyncGetNetwork(web3);
+            let network = await getNetworkDetails(web3);
             let accounts = await asyncGetAccounts(web3);
 
             dispatch({
@@ -81,7 +85,8 @@ export const setupWeb3 = () => {
                 web3Instance: web3,
                 userAccount: accounts[0], // TODO: could we use web3.eth.defaultAccount?
                 accounts: accounts,
-                network: network
+                network: network,
+                info: { web3Version: "?" } // web3 1.0.0: web3.version }
             });
         } catch (error) {
             return dispatch({

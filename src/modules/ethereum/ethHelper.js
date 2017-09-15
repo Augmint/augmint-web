@@ -51,7 +51,9 @@ export function asyncGetAccounts(web3) {
     });
 }
 
-export function asyncGetNetwork(web3) {
+export async function getNetworkDetails(web3) {
+    //let networkId = await web3.eth.net.getId(); // web3 1.0.0
+
     return new Promise(function(resolve, reject) {
         web3.version.getNetwork((error, networkId) => {
             if (error) {
@@ -62,33 +64,38 @@ export function asyncGetNetwork(web3) {
                     )
                 );
             } else {
+                //let networkType = await web3.eth.net.getNetworkType(); // web3 1.0.0
                 let networkName;
+                networkId = parseInt(networkId, 10);
                 switch (networkId) {
-                    case "1":
+                    case 1:
                         networkName = "Main";
                         break;
-                    case "2":
+                    case 2:
                         networkName = "Morden";
                         break;
-                    case "3":
+                    case 3:
                         networkName = "Ropsten";
                         break;
-                    case "4":
+                    case 4:
                         networkName = "Rinkeby";
                         break;
-                    case "42":
+                    case 42:
                         networkName = "Kovan";
                         break;
-                    case "999":
+                    case 999:
                         networkName = "Testrpc";
                         break;
-                    case "1976":
+                    case 1976:
                         networkName = "PrivateChain";
                         break;
                     default:
                         networkName = "Unknown";
                 }
-                resolve({ id: networkId, name: networkName });
+                resolve({
+                    id: networkId,
+                    name: networkName /*, type: networkType */
+                });
             }
         });
     });
@@ -119,7 +126,7 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
     return new Promise(async function(resolve, reject) {
         let web3Network = store.getState().web3Connect.network;
         let filterResult = [];
-        if (web3Network.id === "4" || web3Network.id === "3") {
+        if (web3Network.id === 4 || web3Network.id === 3) {
             // on non-local networks we query from etherScan b/c filter.get times out
             let eventFilter = event(filters).options;
             let address = eventFilter.address;
@@ -138,7 +145,7 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
             }
             let xhr = new XMLHttpRequest();
             let etherScanHost =
-                web3Network.id === "4"
+                web3Network.id === 4
                     ? "https://rinkeby.etherscan.io"
                     : "https://ropsten.etherscan.io";
             let etherscanURL =

@@ -273,7 +273,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
     let bn_ucdBalance = await getUcdBalance(loanContractAddress);
 
     let loanContract = await SolidityContract.connectNewAt(
-        store.getState().web3Connect.web3Instance.currentProvider,
+        store.getState().web3Connect.web3Instance,
         ethBackedLoan_artifacts,
         loanContractAddress
     );

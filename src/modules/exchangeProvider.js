@@ -90,7 +90,7 @@ const onNewOrder = (error, result) => {
     store.dispatch(refreshOrders());
     let userAccount = store.getState().web3Connect.userAccount;
     if (
-        result.args.maker === userAccount &&
+        result.args.maker === userAccount.toLowerCase() &&
         result.args.orderType.toNumber() === ETHSELL
     ) {
         console.debug(

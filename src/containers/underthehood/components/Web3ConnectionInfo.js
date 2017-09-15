@@ -21,7 +21,8 @@ export default class Web3ConnectionInfo extends React.Component {
             web3ConnectionId,
             web3Instance,
             network,
-            error
+            error,
+            info
         } = this.props.web3Connect;
         const stringify = stringifier({ maxDepth: 3, indent: "   " });
         const handleRefreshClick = e => {
@@ -39,9 +40,10 @@ export default class Web3ConnectionInfo extends React.Component {
                     )}{" "}
                     | {isLoading ? "Loading..." : "not loading"}
                 </p>
-
+                <p>Web3 version: {info.web3Version}</p>
                 <p>
-                    Network: {network.name} Id: {network.id}
+                    Network: {network.name} Id: {network.id} Type:{" "}
+                    {network.type}
                 </p>
                 <p>Internal Connection Id: {web3ConnectionId}</p>
 

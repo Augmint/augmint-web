@@ -8,10 +8,10 @@ export default class SolidityContract {
         this.abiDecoder.addABI(instance.abi);
     }
 
-    static async connectNew(provider, artifacts) {
-        let contractDef = Contract(artifacts);
-        contractDef.setProvider(provider);
-        let instance = await contractDef.deployed();
+    static async connectNew(web3, artifacts) {
+        let contract = Contract(artifacts);
+        contract.setProvider(web3.currentProvider);
+        let instance = await contract.deployed();
         // This extra check needed because .deployed() returns an instance
         //      even when contract is not deployed
         // TODO: find out if there is a better way to do it
@@ -31,10 +31,10 @@ export default class SolidityContract {
         return new SolidityContract(instance);
     }
 
-    static async connectNewAt(provider, artifacts, address) {
-        let contractDef = Contract(artifacts);
-        contractDef.setProvider(provider);
-        let instance = await contractDef.at(address);
+    static async connectNewAt(web3, artifacts, address) {
+        let contract = Contract(artifacts);
+        contract.setProvider(web3.currentProvider);
+        let instance = await contract.at(address);
         return new SolidityContract(instance);
     }
 }

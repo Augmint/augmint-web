@@ -235,7 +235,7 @@ export const connectLoanManager = () => {
         });
         try {
             let contract = await SolidityContract.connectNew(
-                store.getState().web3Connect.web3Instance.currentProvider,
+                store.getState().web3Connect.web3Instance,
                 loanManager_artifacts
             );
             return dispatch({

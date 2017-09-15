@@ -48,10 +48,10 @@ export class EthereumState extends React.Component {
             );
         } else if (
             isConnected &&
-            network.id !== "999" &&
-            network.id !== "4" &&
-            network.id !== "3" &&
-            network.id !== "1976"
+            network.id !== 999 &&
+            network.id !== 4 &&
+            network.id !== 3 &&
+            network.id !== 1976
         ) {
             msg = (
                 <WarningPanel header={<h3>Not on Rinkeby or local testrpc</h3>}>
@@ -87,15 +87,15 @@ export class EthereumState extends React.Component {
                         You seem to be connected to {network.name} but can't
                         connect to DCM contracts.
                     </p>
-                    {(network.id === "4" || network.id === "3") && (
+                    {(network.id === 4 || network.id === 3) && (
                         <p>
                             It's an issue with our deployement, because you are
                             on {network.name} and DCM contracts should be
                             deployed.
                         </p>
                     )}
-                    {network.id !== "4" &&
-                    network.id !== "3" && (
+                    {network.id !== 4 &&
+                    network.id !== 3 && (
                         <div>
                             <p>Do you have all the contracts deployed?</p>
                             <pre>

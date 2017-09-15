@@ -89,7 +89,7 @@ export const connectRates = () => {
             return dispatch({
                 type: RATES_CONNECT_SUCCESS,
                 contract: await SolidityContract.connectNew(
-                    store.getState().web3Connect.web3Instance.currentProvider,
+                    store.getState().web3Connect.web3Instance,
                     rates_artifacts
                 )
             });
