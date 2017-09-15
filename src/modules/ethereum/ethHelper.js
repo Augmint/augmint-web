@@ -4,26 +4,15 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 
-export function asyncGetBalance(address, defaultBlock) {
-    return new Promise(function(resolve, reject) {
-        let web3 = store.getState().web3Connect.web3Instance;
-        let defBlock = defaultBlock;
-        if (defBlock == null) {
-            defBlock = "latest";
-        }
-        web3.eth.getBalance(address, defBlock, function(error, bal) {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get balance from web3 (asyncGetBalance). Address: ",
-                        address + "\n" + error
-                    )
-                );
-            } else {
-                resolve(web3.fromWei(bal));
-            }
-        });
-    });
+export async function asyncGetBalance(address, defaultBlock) {
+    let web3 = store.getState().web3Connect.web3Instance;
+    let defBlock = defaultBlock;
+    if (defBlock == null) {
+        defBlock = "latest";
+    }
+    let bal = await web3.eth.getBalance(address, defBlock);
+    let ret = new BigNumber(web3.utils.fromWei(bal));
+    return ret;
 }
 
 export function asyncGetAccounts(web3) {
@@ -37,7 +26,7 @@ export function asyncGetAccounts(web3) {
                     )
                 );
             } else {
-                if (!web3.isAddress(accounts[0])) {
+                if (!web3.utils.isAddress(accounts[0])) {
                     reject(
                         new Error(
                             "Can't get default account from web3 (asyncGetAccounts)." +
@@ -52,53 +41,41 @@ export function asyncGetAccounts(web3) {
 }
 
 export async function getNetworkDetails(web3) {
-    //let networkId = await web3.eth.net.getId(); // web3 1.0.0
-
-    return new Promise(function(resolve, reject) {
-        web3.version.getNetwork((error, networkId) => {
-            if (error) {
-                reject(
-                    new Error(
-                        "Can't get network from web3 (asyncGetNetwork).\n" +
-                            error
-                    )
-                );
-            } else {
-                //let networkType = await web3.eth.net.getNetworkType(); // web3 1.0.0
-                let networkName;
-                networkId = parseInt(networkId, 10);
-                switch (networkId) {
-                    case 1:
-                        networkName = "Main";
-                        break;
-                    case 2:
-                        networkName = "Morden";
-                        break;
-                    case 3:
-                        networkName = "Ropsten";
-                        break;
-                    case 4:
-                        networkName = "Rinkeby";
-                        break;
-                    case 42:
-                        networkName = "Kovan";
-                        break;
-                    case 999:
-                        networkName = "Testrpc";
-                        break;
-                    case 1976:
-                        networkName = "PrivateChain";
-                        break;
-                    default:
-                        networkName = "Unknown";
-                }
-                resolve({
-                    id: networkId,
-                    name: networkName /*, type: networkType */
-                });
-            }
-        });
-    });
+    let networkId = await web3.eth.net.getId();
+    networkId = parseInt(networkId, 10);
+    let networkType = "private"; //await web3.eth.net.getNetworkType(); // web3 1.0.0
+    let networkName;
+    switch (networkId) {
+        case 1:
+            networkName = "Main";
+            break;
+        case 2:
+            networkName = "Morden";
+            break;
+        case 3:
+            networkName = "Ropsten";
+            break;
+        case 4:
+            networkName = "Rinkeby";
+            break;
+        case 42:
+            networkName = "Kovan";
+            break;
+        case 999:
+            networkName = "Testrpc";
+            break;
+        case 1976:
+            networkName = "PrivateChain";
+            break;
+        default:
+            networkName = "Unknown";
+    }
+    console.log(networkId, networkName, networkType);
+    return {
+        id: networkId,
+        name: networkName,
+        type: networkType
+    };
 }
 
 export function asyncGetBlock(blockNumber) {
@@ -167,11 +144,16 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                 if (xhr.readyState === 4) {
                     let res = JSON.parse(xhr.response);
                     //console.debug("Response from etherScan (xhr.response):", xhr.response);
-                    //console.debug("JSON.parse(xhr.response) ", res);
+
+                    console.debug("JSON.parse(xhr.response) ", res);
+
                     let decodedData = contract.abiDecoder.decodeLogs(
                         res.result
                     );
-                    //console.debug("contract.abiDecoder.decodeLogs(res.result) ", decodedData);
+                    // console.debug(
+                    //     "contract.abiDecoder.decodeLogs(res.result) ",
+                    //     decodedData
+                    // );
                     for (let i = 0; i < decodedData.length; i++) {
                         let r = res.result[i];
                         let blockNumber = parseInt(r.blockNumber, 16);
@@ -180,23 +162,20 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                             blockNumber: blockNumber,
                             gasPrice: parseInt(r.gasPrice, 16),
                             gasUsed: parseInt(r.gasUsed, 16),
-                            logIndex: parseInt(r.logIndex, 16),
+                            logIndex:
+                                r.logIndex === "0x"
+                                    ? 0
+                                    : parseInt(r.logIndex, 16),
                             timeStamp: parseInt(r.timeStamp, 16),
-                            transactionHash: parseInt(r.transactionHash, 16),
+                            transactionHash: r.transactionHash,
                             transactionIndex:
                                 r.transactionIndex === "0x"
                                     ? 0
                                     : parseInt(r.transactionIndex, 16),
                             type: blockNumber > 0 ? "mined" : "pending",
-                            event: decodedData[i]["name"]
+                            event: decodedData[i].name,
+                            args: decodedData[i].args
                         });
-                        let args = {};
-                        let decodedArgs = decodedData[i]["events"]; // don't ask why but args are under events ...
-                        for (let j = 0; j < decodedArgs.length; j++) {
-                            let val = decodedArgs[j]["value"];
-                            args[decodedArgs[j]["name"]] = val;
-                        }
-                        filterResult[i]["args"] = args;
                     }
                     resolve(filterResult);
                 }

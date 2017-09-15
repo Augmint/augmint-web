@@ -121,7 +121,7 @@ export const refreshExchange = () => {
             let bn_ethBalance = await asyncGetBalance(exchange.address);
             let bn_ucdBalance = await getUcdBalance(exchange.address);
 
-            let bn_totalEthSellOrders = web3.fromWei(
+            let bn_totalEthSellOrders = web3.utils.fromWei(
                 await exchange.totalEthSellOrders()
             );
             let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(
