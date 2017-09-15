@@ -23,7 +23,7 @@ export async function transferUcdTx(payload) {
         narrative = narrative == null ? "" : payload.narrative.trim();
         let result = await tokenUcd.contract.instance.transferWithNarrative(
             payee,
-            ucdcAmount,
+            ucdcAmount.toString(), // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
             narrative,
             {
                 from: userAccount,
