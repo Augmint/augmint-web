@@ -20,7 +20,7 @@ export async function fetchOrders() {
                 bn_amount = order[4].div(new BigNumber(10000));
             } else if (orderType === ETHSELL) {
                 ccy = "ETH";
-                bn_amount = new BigNumber(web3.fromWei(order[4]));
+                bn_amount = new BigNumber(web3.utils.fromWei(order[4]));
             } else {
                 throw new Error("Unknown orderType: " + orderType);
             }
@@ -56,7 +56,7 @@ export async function placeOrderTx(orderType, amount) {
         switch (orderType) {
             case ETHSELL:
                 let web3 = store.getState().web3Connect.web3Instance;
-                submitAmount = web3.toWei(amount);
+                submitAmount = web3.utils.toWei(amount);
                 result = await exchange.placeSellEthOrder({
                     value: submitAmount,
                     from: userAccount,

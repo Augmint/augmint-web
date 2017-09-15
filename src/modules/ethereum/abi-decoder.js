@@ -1,21 +1,20 @@
-const SolidityCoder = require("web3/lib/solidity/coder.js");
-const Web3 = require("web3");
-
 const state = {
     savedABIs: [],
-    methodIDs: {}
+    methodIDs: {},
+    web3: null
 };
 
-function _getABIs() {
+export function getABIs() {
     return state.savedABIs;
 }
 
-function _addABI(abiArray) {
+export function addABI(web3, abiArray) {
+    state.web3 = web3;
     if (Array.isArray(abiArray)) {
         // Iterate new abi to generate method id's
         abiArray.map(abi => {
             if (abi.name) {
-                const signature = new Web3().sha3(
+                const signature = state.web3.utils.sha3(
                     abi.name +
                         "(" +
                         abi.inputs
@@ -40,12 +39,12 @@ function _addABI(abiArray) {
     }
 }
 
-function _removeABI(abiArray) {
+export function removeABI(abiArray) {
     if (Array.isArray(abiArray)) {
         // Iterate new abi to generate method id's
         abiArray.map(abi => {
             if (abi.name) {
-                const signature = new Web3().sha3(
+                const signature = state.web3.utils.sha3(
                     abi.name +
                         "(" +
                         abi.inputs
@@ -72,22 +71,25 @@ function _removeABI(abiArray) {
     }
 }
 
-function _getMethodIDs() {
+export function getMethodIDs() {
     return state.methodIDs;
 }
 
-function _decodeMethod(data) {
+export function decodeMethod(data) {
     const methodID = data.slice(2, 10);
     const abiItem = state.methodIDs[methodID];
     if (abiItem) {
         const params = abiItem.inputs.map(item => item.type);
-        let decoded = SolidityCoder.decodeParams(params, data.slice(10));
+        let decoded = state.web3.eth.abi.decodeParameters(
+            params,
+            data.slice(10)
+        );
         return {
             name: abiItem.name,
             params: decoded.map((param, index) => {
                 let parsedParam = param;
                 if (abiItem.inputs[index].type.indexOf("uint") !== -1) {
-                    parsedParam = new Web3().toBigNumber(param).toString();
+                    parsedParam = state.web3.utils.toBN(param).toString();
                 }
                 return {
                     name: abiItem.inputs[index].name,
@@ -99,7 +101,7 @@ function _decodeMethod(data) {
     }
 }
 
-function padZeros(address) {
+export function padZeros(address) {
     var formatted = address;
     if (address.indexOf("0x") !== -1) {
         formatted = address.slice(2);
@@ -112,72 +114,76 @@ function padZeros(address) {
     return "0x" + formatted;
 }
 
-function _decodeLogs(logs) {
-    return logs.map(logItem => {
+export function decodeLogs(logs) {
+    //console.log("state:", state);
+    return logs.map((logItem, index) => {
         const methodID = logItem.topics[0].slice(2);
         const method = state.methodIDs[methodID];
+        // console.debug(
+        //     "logItem index:",
+        //     index,
+        //     "method:",
+        //     method,
+        //     "methodId:",
+        //     methodID,
+        //     "   \nlogItem"
+        // );
         if (method) {
-            const logData = logItem.data;
-            let decodedParams = [];
-            let dataIndex = 0;
-            let topicsIndex = 1;
+            let logData = logItem.data;
+            let inputs = method.inputs;
+            let topics = logItem.topics.slice(1); // topic[0] is event name
+            // let notIndexTopicsCount = topics.filter(item => {
+            //     return (
+            //         !item.indexed
+            //     );
+            // }).length;
+            if (
+                method.inputs[method.inputs.length - 1].type === "string" &&
+                logData.length < 256
+            ) {
+                // TODO: workaround for web3.eth.abi.decodeLog bug : if last event field is string and
+                //       it's not emmitted from event (eg. narrative in ucd trasnfer list events is empty)
+                //       then decodeLog throws  "Error: The parameter "0x" must be a valid HEX string."
+                //       Not a generic workaround, made specificly for e_transfer events
+                // see https://github.com/ethereum/web3.js/issues/1044
+                inputs = method.inputs.slice(0, method.inputs.length - 1);
+            }
+            // console.debug(
+            //     "decodeParameters params:\n",
+            //     "\n  inputs: ",
+            //     inputs,
+            //     "\n logData: ",
+            //     logData,
+            //     "\n topics: ",
+            //     topics
+            // );
 
-            let dataTypes = [];
-            method.inputs.map(input => {
-                if (!input.indexed) {
-                    return dataTypes.push(input.type);
-                }
-                return 0;
-            });
-            const decodedData = SolidityCoder.decodeParams(
-                dataTypes,
-                logData.slice(2)
+            const decodedData = state.web3.eth.abi.decodeLog(
+                inputs,
+                logData,
+                topics
             );
-            // Loop topic and data to get the params
-            method.inputs.map(function(param) {
-                var decodedP = {
-                    name: param.name,
-                    type: param.type
-                };
 
-                if (param.indexed) {
-                    decodedP.value = logItem.topics[topicsIndex];
-                    topicsIndex++;
-                } else {
-                    decodedP.value = decodedData[dataIndex];
-                    dataIndex++;
-                }
-
-                if (param.type === "address") {
-                    decodedP.value = padZeros(
-                        new Web3().toBigNumber(decodedP.value).toString(16)
-                    );
-                } else if (
-                    param.type === "uint256" ||
-                    param.type === "uint8" ||
-                    param.type === "int"
-                ) {
-                    decodedP.value = new Web3().toBigNumber(decodedP.value);
-                }
-
-                return decodedParams.push(decodedP);
-            });
-
+            let decodedParams;
+            decodedParams = JSON.parse(JSON.stringify(decodedData)); // TODO: it's dirty, how to convert Result object ?
+            if (inputs.length < method.inputs.length) {
+                // TODO: decodeLog bug workaround, see above
+                decodedParams[method.inputs[method.inputs.length - 1].name] =
+                    "";
+            }
+            // console.debug(
+            //     "decodeParameters res decodedData:",
+            //     decodedData,
+            //     "  \ndecodedParams: ",
+            //     decodedParams
+            // );
             return {
                 name: method.name,
-                events: decodedParams,
+                args: decodedParams,
                 address: logItem.address
             };
+        } else {
+            return -1; // not a method
         }
-        return 1;
     });
 }
-
-module.exports = {
-    getABIs: _getABIs,
-    addABI: _addABI,
-    getMethodIDs: _getMethodIDs,
-    decodeMethod: _decodeMethod,
-    decodeLogs: _decodeLogs,
-    removeABI: _removeABI
-};
