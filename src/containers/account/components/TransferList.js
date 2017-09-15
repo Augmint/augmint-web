@@ -30,9 +30,9 @@ export default class TransferList extends React.Component {
                         <Row columns={1}>
                             <Col>
                                 {tx.from === userAccountAddress ? (
-                                    "From: " + tx.from
-                                ) : (
                                     "To: " + tx.to
+                                ) : (
+                                    "From: " + tx.from
                                 )}
                             </Col>
                         </Row>

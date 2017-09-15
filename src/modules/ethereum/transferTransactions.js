@@ -21,15 +21,6 @@ export async function transferUcdTx(payload) {
         let tokenUcd = store.getState().tokenUcd;
         let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
         narrative = narrative == null ? "" : payload.narrative.trim();
-        console.debug(
-            "transferUcdTx tokenUcd.contract.instance, payee, ucdAmount, narrative, from, gas",
-            tokenUcd.contract.instance,
-            payee,
-            ucdAmount,
-            narrative,
-            userAccount,
-            gasEstimate
-        );
         let result = await tokenUcd.contract.instance.transferWithNarrative(
             payee,
             ucdcAmount,
