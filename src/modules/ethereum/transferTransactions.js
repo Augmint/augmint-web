@@ -116,9 +116,17 @@ export async function processTransferTx(address, tx) {
 }
 
 async function formatTransfer(address, tx) {
+    //console.debug("formatTransfer args tx: ", tx);
     let direction = address === tx.args.from ? -1 : 1;
-    let blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
-    let bn_amount = tx.args.amount.div(new BigNumber(10000));
+    let blockTimeStamp, bn_amount;
+    if (tx.timeStamp) {
+        blockTimeStamp = tx.timeStamp; // when we query from etherscan we get timestamp
+        bn_amount = new BigNumber(tx.args.amount).div(new BigNumber(10000));
+    } else {
+        blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
+        bn_amount = tx.args.amount.div(new BigNumber(10000));
+    }
+
     let result = {
         blockNumber: tx.blockNumber,
         transactionIndex: tx.transactionIndex,
@@ -136,5 +144,6 @@ async function formatTransfer(address, tx) {
             .unix(blockTimeStamp)
             .format("D MMM YYYY HH:mm")
     };
+    //console.debug("formatTransfer result", result);
     return result;
 }

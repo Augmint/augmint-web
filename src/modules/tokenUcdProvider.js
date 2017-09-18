@@ -34,15 +34,14 @@ const setupListeners = () => {
     tokenUcd
         .e_transfer({ fromBlock: "latest", toBlock: "pending" })
         .watch(onTransfer);
-    filterAllBlocks = web3.eth.filter("pending");
-    filterAllBlocks.watch(onNewBlock);
+    filterAllBlocks = web3.eth.subscribe("newBlockHeaders", onNewBlock);
 };
 
 const removeListeners = oldInstance => {
     if (oldInstance.instance) {
         oldInstance.instance.e_transfer().stopWatching();
     }
-    filterAllBlocks.stopWatching();
+    filterAllBlocks.unsubscribe();
 };
 
 const setupWatches = () => {
