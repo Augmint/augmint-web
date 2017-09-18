@@ -18,13 +18,18 @@ import {
     ConnectionStatus
 } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
-import { Form } from "components/BaseComponents";
+import {
+    Form,
+    Validations,
+    Normalizations,
+    Parsers
+} from "components/BaseComponents";
 import {
     transferUcd,
     TOKENUCD_TRANSFER_SUCCESS
 } from "modules/reducers/tokenUcd";
-import BigNumber from "bignumber.js";
 import { Pblock } from "components/PageLayout";
+import { BigNumber } from "bignumber.js";
 
 class UcdTransferForm extends React.Component {
     constructor(props) {
@@ -33,23 +38,30 @@ class UcdTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    validate(values) {
+        console.debug("validate", this.props);
+    }
+
     async handleSubmit(values) {
-        let amount;
-        try {
-            amount = new BigNumber(values.ucdAmount);
-        } catch (error) {
-            throw new SubmissionError({
-                _error: {
-                    title: "Invalid amount",
-                    details: error
-                }
-            });
-        }
+        // let error = {};
+        // if (values.ucdAmount.gt(this.props.ucdBalance)) {
+        //     error.ucdAmount = "Your UCD balance is less than the amount";
+        // }
+        //
+        // if (
+        //     values.payee.toLowerCase() === this.props.userAccount.toLowerCase()
+        // ) {
+        //     error.payee = "You can't transfer to yourself";
+        // }
+        //
+        // if (error) {
+        //     throw new SubmissionError(error);
+        // }
 
         let res = await store.dispatch(
             transferUcd({
                 payee: values.payee,
-                ucdAmount: amount,
+                ucdAmount: new BigNumber(values.ucdAmount),
                 narrative: values.narrative
             })
         );
@@ -122,6 +134,12 @@ class UcdTransferForm extends React.Component {
                             name="ucdAmount"
                             placeholder="Amount"
                             labelPosition="right"
+                            validate={[
+                                Validations.required,
+                                Validations.ucdAmount,
+                                Validations.ucdUserBalance
+                            ]}
+                            normalize={Normalizations.ucdAmount}
                             disabled={submitting || !tokenUcd.isConnected}
                         >
                             <input />
@@ -135,6 +153,12 @@ class UcdTransferForm extends React.Component {
                             size="small"
                             name="payee"
                             type="text"
+                            parse={Parsers.trim}
+                            validate={[
+                                Validations.required,
+                                Validations.address,
+                                Validations.notOwnAddress
+                            ]}
                             placeholder="0x0..."
                             disabled={submitting || !tokenUcd.isConnected}
                         />
@@ -163,7 +187,10 @@ class UcdTransferForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    tokenUcd: state.tokenUcd
+    tokenUcd: state.tokenUcd,
+    ucdBalance: state.userBalances.account.ucdBalance,
+    userAccount: state.web3Connect.userAccount,
+    web3: state.web3Connect.web3Instance
 });
 
 UcdTransferForm = connect(mapStateToProps)(UcdTransferForm);

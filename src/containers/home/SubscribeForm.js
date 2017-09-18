@@ -13,7 +13,7 @@ import { Button } from "semantic-ui-react";
 import store from "modules/store";
 import { ErrorPanel, SuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
-import { Form, Validations, Normalizations } from "components/BaseComponents";
+import { Form, Validations, Parsers } from "components/BaseComponents";
 import { subscribe, SUBSCRIBE_SUCCESS } from "modules/reducers/subscriptions";
 import { Pblock } from "components/PageLayout";
 
@@ -25,6 +25,14 @@ class SubscribeForm extends React.Component {
     }
 
     async handleSubmit(values) {
+        let emailValidation = Validations.email(values.email);
+
+        if (emailValidation) {
+            throw new SubmissionError({
+                email: emailValidation
+            });
+        }
+
         let res = await store.dispatch(subscribe(values.email));
         if (res.type !== SUBSCRIBE_SUCCESS) {
             console.error("SubmissionError", res);
@@ -80,9 +88,8 @@ class SubscribeForm extends React.Component {
                             name="email"
                             type="text"
                             label="Keep me posted"
-                            validate={Validations.email}
                             placeholder="your email"
-                            normalize={Normalizations.trim}
+                            parse={Parsers.trim}
                             disabled={submitting}
                         />
                         <Button

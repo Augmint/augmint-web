@@ -19,7 +19,7 @@ import {
     SubmissionError,
     formValueSelector
 } from "redux-form";
-import { Form } from "components/BaseComponents";
+import { Form, Validations, Normalizations } from "components/BaseComponents";
 import {
     placeOrder,
     PLACE_ORDER_SUCCESS,
@@ -32,6 +32,17 @@ import { Pblock } from "components/PageLayout";
 
 const ETH_DECIMALS = 5;
 const UCD_DECIMALS = 2;
+
+const ethValidations = [Validations.required, Validations.ethAmount];
+const ucdValidations = [Validations.required, Validations.ucdAmount];
+const ucdValidationsWithBalance = [
+    ...ucdValidations,
+    Validations.ucdUserBalance
+];
+const ethValidationsWithBalance = [
+    ...ethValidations,
+    Validations.ethUserBalance
+];
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -218,6 +229,7 @@ class PlaceOrderForm extends React.Component {
                 </Menu.Item>
             </Menu>
         );
+
         return (
             <Pblock loading={isLoading} header={header}>
                 <ConnectionStatus contract={this.props.exchange} />
@@ -251,6 +263,12 @@ class PlaceOrderForm extends React.Component {
                             type="number"
                             disabled={submitting || isLoading}
                             onChange={this.onUcdAmountChange}
+                            validate={
+                                orderType === UCDSELL
+                                    ? ucdValidationsWithBalance
+                                    : ucdValidations
+                            }
+                            normalize={Normalizations.ucdAmount}
                             labelPosition="right"
                         >
                             <input />
@@ -265,6 +283,12 @@ class PlaceOrderForm extends React.Component {
                             label="for: "
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
+                            validate={
+                                orderType === ETHSELL
+                                    ? ethValidationsWithBalance
+                                    : ethValidations
+                            }
+                            normalize={Normalizations.ethAmount}
                             labelPosition="right"
                         >
                             <input />
@@ -301,9 +325,11 @@ const selector = formValueSelector("PlaceOrderForm");
 
 PlaceOrderForm = connect(state => {
     const { ethAmount, ucdAmount } = selector(state, "ethAmount", "ucdAmount");
-    return { ethAmount, ucdAmount }; //, ethAmount };
+    return { ethAmount, ucdAmount };  // to get amounts for orderHelpText in render
 })(PlaceOrderForm);
 
 export default reduxForm({
-    form: "PlaceOrderForm"
+    form: "PlaceOrderForm",
+    shouldValidate: (params) =>  true // workaround for issue that validations are not triggered when changing orderType in menu.
+                                    // minor TODO: check if we can avoid some unnecessary validation call
 })(PlaceOrderForm);

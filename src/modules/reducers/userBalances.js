@@ -20,9 +20,13 @@ const initialState = {
     account: {
         address: "?",
         ethBalance: "?",
+        bn_ethBalance: null,
         ethPendingBalance: "?",
+        bn_ethPendingBalance: null,
         ucdBalance: "?",
-        ucdPendingBalance: "?"
+        bn_ucdBalance: null,
+        ucdPendingBalance: "?",
+        bn_ucdPendingBalance: null
     }
 };
 
