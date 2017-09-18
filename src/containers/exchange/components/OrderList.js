@@ -25,12 +25,11 @@ export default class OrderList extends React.Component {
             filteredOrders != null &&
             filteredOrders.map((order, index) => (
                 <MyListGroup.Row key={`ordersRow-${order.orderId}`}>
-                    Sell {order.amount} {order.ccy} for{" "}
-                    {order.ccy === "ETH" ? "UCD" : "ETH"}
+                    {`${order.amount} ${order.ccy} sell order for ${order.ccy === "ETH" ? "UCD" : "ETH"}`}
                     <small>
                         <br />Order Id: {order.orderId} | makerOrderIdx:{" "}
                         {order.makerOrderIdx} | Maker: {order.maker}
-                        {order.maker === userAccountAddress.toLowerCase() ? (
+                        {order.maker.toLowerCase() === userAccountAddress.toLowerCase() ? (
                             " TODO: Cancel my order"
                         ) : (
                             ""

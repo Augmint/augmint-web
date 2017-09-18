@@ -27,7 +27,7 @@ export const Validations = {
     address: value => {
         let web3 = store.getState().web3Connect.web3Instance;
         //TODO: different error when checksum error
-        return web3.isAddress(value) ? undefined : "Invalid address";
+        return web3.utils.isAddress(value) ? undefined : "Invalid address";
     },
 
     ucdUserBalance: value => {

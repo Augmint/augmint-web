@@ -43,7 +43,7 @@ export function asyncGetAccounts(web3) {
 export async function getNetworkDetails(web3) {
     let networkId = await web3.eth.net.getId();
     networkId = parseInt(networkId, 10);
-    let networkType = "private"; //await web3.eth.net.getNetworkType(); // web3 1.0.0
+    let networkType = await web3.eth.net.getNetworkType();
     let networkName;
     switch (networkId) {
         case 1:
@@ -70,7 +70,6 @@ export async function getNetworkDetails(web3) {
         default:
             networkName = "Unknown";
     }
-    console.log(networkId, networkName, networkType);
     return {
         id: networkId,
         name: networkName,

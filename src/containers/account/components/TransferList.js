@@ -29,7 +29,7 @@ export default class TransferList extends React.Component {
                     >
                         <Row columns={1}>
                             <Col>
-                                {tx.from ===
+                                {tx.from.toLowerCase() ===
                                 userAccountAddress.toLowerCase() ? (
                                     "To: " + tx.to
                                 ) : (

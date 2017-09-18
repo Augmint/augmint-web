@@ -100,7 +100,7 @@ const onNewLoan = (error, result) => {
     store.dispatch(refreshTokenUcd());
     store.dispatch(refreshLoanManager()); // to update loanCount
     let userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.borrower === userAccount.toLowerCase()) {
+    if (result.args.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -117,7 +117,7 @@ const onRepayed = (error, result) => {
     );
     store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.borrower === userAccount) {
+    if (result.args.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -134,7 +134,7 @@ const onCollected = (error, result) => {
     );
     store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.borrower === userAccount) {
+    if (result.args.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans & fetchUserBalance"
         );

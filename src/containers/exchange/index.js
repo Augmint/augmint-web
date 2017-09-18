@@ -39,7 +39,7 @@ class ExchangeHome extends React.Component {
                                 header="My orders"
                                 filter={item => {
                                     return (
-                                        item.maker ===
+                                        item.maker.toLowerCase() ===
                                         userAccount.address.toLowerCase()
                                     );
                                 }}

@@ -89,8 +89,8 @@ const onTransfer = (error, result) => {
     store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (
-        result.args.from === userAccount.toLowerCase() ||
-        result.args.to === userAccount.toLowerCase()
+        result.args.from.toLowerCase() === userAccount.toLowerCase() ||
+        result.args.to.toLowerCase() === userAccount.toLowerCase()
     ) {
         console.debug(
             "tokenUcdProvider.onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"

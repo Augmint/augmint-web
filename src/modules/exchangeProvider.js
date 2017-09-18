@@ -90,7 +90,7 @@ const onNewOrder = (error, result) => {
     store.dispatch(refreshOrders());
     let userAccount = store.getState().web3Connect.userAccount;
     if (
-        result.args.maker === userAccount.toLowerCase() &&
+        result.args.maker.toLowerCase() === userAccount.toLowerCase() &&
         result.args.orderType.toNumber() === ETHSELL
     ) {
         console.debug(
@@ -111,9 +111,9 @@ const onOrderFill = (error, result) => {
     store.dispatch(refreshOrders());
     let userAccount = store.getState().web3Connect.userAccount;
     if (
-        (result.args.maker === userAccount &&
+        (result.args.maker.toLowerCase() === userAccount.toLowerCase() &&
             result.args.orderType.toNumber() === ETHSELL) ||
-        (result.args.taker === userAccount && result.args.orderType === UCDSELL)
+        (result.args.taker.toLowerCase() === userAccount.toLowerCase() && result.args.orderType === UCDSELL)
     ) {
         console.debug(
             "exchangeProvider.onOrderFill: e_orderFill ETHSELL/UCDSELL and maker/taker is userAccount. Dispatching fetchUserBalance"

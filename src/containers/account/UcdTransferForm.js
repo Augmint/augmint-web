@@ -38,26 +38,7 @@ class UcdTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    validate(values) {
-        console.debug("validate", this.props);
-    }
-
     async handleSubmit(values) {
-        // let error = {};
-        // if (values.ucdAmount.gt(this.props.ucdBalance)) {
-        //     error.ucdAmount = "Your UCD balance is less than the amount";
-        // }
-        //
-        // if (
-        //     values.payee.toLowerCase() === this.props.userAccount.toLowerCase()
-        // ) {
-        //     error.payee = "You can't transfer to yourself";
-        // }
-        //
-        // if (error) {
-        //     throw new SubmissionError(error);
-        // }
-
         let res = await store.dispatch(
             transferUcd({
                 payee: values.payee,
