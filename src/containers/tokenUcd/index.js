@@ -25,33 +25,33 @@ class TokenUcd extends React.Component {
         const { tokenUcd, rates } = this.props;
 
         return (
-            <Psegment>
-                <EthereumState />
+            <EthereumState>
+                <Psegment>
+                    <Pheader header="Token UCD" />
 
-                <Pheader header="Token UCD" />
-
-                <Pgrid columns={1}>
-                    <Pgrid.Column>
-                        <TokenUcdStats
-                            size="small"
-                            showInUsd
-                            tokenUcd={tokenUcd}
-                            rates={rates}
-                        />
-                    </Pgrid.Column>
-                    <Pgrid.Column>
-                        <Button
-                            content="Loans to Collect"
-                            as={Link}
-                            to="/loan/collect"
-                            icon="right chevron"
-                            labelPosition="right"
-                            basic
-                            size="large"
-                        />
-                    </Pgrid.Column>
-                </Pgrid>
-            </Psegment>
+                    <Pgrid columns={1}>
+                        <Pgrid.Column>
+                            <TokenUcdStats
+                                size="small"
+                                showInUsd
+                                tokenUcd={tokenUcd}
+                                rates={rates}
+                            />
+                        </Pgrid.Column>
+                        <Pgrid.Column>
+                            <Button
+                                content="Loans to Collect"
+                                as={Link}
+                                to="/loan/collect"
+                                icon="right chevron"
+                                labelPosition="right"
+                                basic
+                                size="large"
+                            />
+                        </Pgrid.Column>
+                    </Pgrid>
+                </Psegment>
+            </EthereumState>
         );
     }
 }

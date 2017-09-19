@@ -20,18 +20,19 @@ export default class LoanMain extends React.Component {
     render() {
         return (
             <div>
-                <EthereumState />
-                <Switch>
-                    <Route path="/loan/new" component={newLoanMain} />
-                    <Route path="/loan/repay" component={repayLoanMain} />
-                    <Route
-                        exact
-                        path="/loan/collect"
-                        component={CollectLoanMain}
-                    />
-                    <Route path="/loan/:loanId" component={loanDetails} />
-                    <Route component={PageNotFound} />
-                </Switch>
+                <EthereumState>
+                    <Switch>
+                        <Route path="/loan/new" component={newLoanMain} />
+                        <Route path="/loan/repay" component={repayLoanMain} />
+                        <Route
+                            exact
+                            path="/loan/collect"
+                            component={CollectLoanMain}
+                        />
+                        <Route path="/loan/:loanId" component={loanDetails} />
+                        <Route component={PageNotFound} />
+                    </Switch>
+                </EthereumState>
             </div>
         );
     }

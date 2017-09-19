@@ -32,6 +32,15 @@ export function AppMenu(props) {
                     >
                         Concept
                     </Menu.Item>
+
+                    <Menu.Item
+                        active={location.pathname === "/tryit"}
+                        as={Link}
+                        to="/tryit"
+                    >
+                        Try it
+                    </Menu.Item>
+
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/account">
                             My Account

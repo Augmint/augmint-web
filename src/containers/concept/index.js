@@ -75,7 +75,7 @@ export default () => (
             </p>
             <p>
                 These decisions are made by stakeholders - governance token
-                (GDC) holders. DCM's governance model ensures that all decisions
+                (GDC) holders. DCMs governance model ensures that all decisions
                 are democratic and transparent.
             </p>
             <p>
@@ -98,7 +98,6 @@ export default () => (
             </p>
             <Tblock.SubHeader header="Market intervention" />
             <p>
-                {" "}
                 DCM can intervene from its reserves accumulated from fees,
                 defaults and interests. DCM reserves can be used on held only
                 for market intervention therefore Check out our white paper for
@@ -106,17 +105,31 @@ export default () => (
             </p>
         </Tblock>
 
-        <Tsegment.Row centered>
-            <Button
-                content="Our work in progress white paper"
-                as={Link}
-                to="https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g"
-                target="_blank"
-                icon="right chevron"
-                labelPosition="right"
-                basic
-                size="large"
-            />
+        <Tsegment.Row centered columns={1}>
+            <Tsegment.Column textAlign="center">
+                <Button
+                    content="Try it"
+                    as={Link}
+                    to="/tryit"
+                    icon="right chevron"
+                    labelPosition="right"
+                    primary
+                    size="huge"
+                />
+            </Tsegment.Column>
+        </Tsegment.Row>
+        <Tsegment.Row centered columns={1}>
+            <Tsegment.Column textAlign="center">
+                <Button
+                    content="Work in progress white paper"
+                    as={Link}
+                    to="https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g"
+                    target="_blank"
+                    icon="file text outline"
+                    labelPosition="left"
+                    size="large"
+                />
+            </Tsegment.Column>
         </Tsegment.Row>
     </Tsegment>
 );

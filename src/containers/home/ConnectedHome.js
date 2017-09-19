@@ -18,18 +18,24 @@ class ConnectedHome extends React.Component {
         return (
             <div>
                 <Hero />
-
-                <EthereumState />
-                <Psegment>
-                    <Container>
-                        <Header textAlign="center" style={{ fontSize: "2em" }}>
-                            Status
-                        </Header>
-                        <TokenUcdStats tokenUcd={tokenUcd} showTokenUcdLink />
-                    </Container>
-                </Psegment>
                 <DcmOverview />
                 <ProjectStatus />
+                <EthereumState>
+                    <Psegment>
+                        <Container>
+                            <Header
+                                textAlign="center"
+                                style={{ fontSize: "2em" }}
+                            >
+                                UCD status
+                            </Header>
+                            <TokenUcdStats
+                                tokenUcd={tokenUcd}
+                                showTokenUcdLink
+                            />
+                        </Container>
+                    </Psegment>
+                </EthereumState>
             </div>
         );
     }

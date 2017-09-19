@@ -19,47 +19,48 @@ class ExchangeHome extends React.Component {
     render() {
         const { orders, userAccount, exchange, rates } = this.props;
         return (
-            <Psegment>
-                <EthereumState />
-                <Pheader header="Buy & Sell UCD" />
-                <Pgrid>
-                    <Pgrid.Row columns={2}>
-                        <Pgrid.Column>
-                            <AccountInfo account={userAccount} />
+            <EthereumState>
+                <Psegment>
+                    <Pheader header="Buy & Sell UCD" />
+                    <Pgrid>
+                        <Pgrid.Row columns={2}>
+                            <Pgrid.Column>
+                                <AccountInfo account={userAccount} />
 
-                            <PlaceOrderForm
-                                orders={orders}
-                                exchange={exchange}
-                                rates={rates}
-                            />
+                                <PlaceOrderForm
+                                    orders={orders}
+                                    exchange={exchange}
+                                    rates={rates}
+                                />
 
-                            <OrderList
-                                orders={orders}
-                                userAccountAddress={userAccount.address}
-                                header="My orders"
-                                filter={item => {
-                                    return (
-                                        item.maker.toLowerCase() ===
-                                        userAccount.address.toLowerCase()
-                                    );
-                                }}
-                            />
-                        </Pgrid.Column>
+                                <OrderList
+                                    orders={orders}
+                                    userAccountAddress={userAccount.address}
+                                    header="My orders"
+                                    filter={item => {
+                                        return (
+                                            item.maker.toLowerCase() ===
+                                            userAccount.address.toLowerCase()
+                                        );
+                                    }}
+                                />
+                            </Pgrid.Column>
 
-                        <Pgrid.Column>
-                            <ExchangeSummary
-                                exchange={exchange}
-                                rates={rates}
-                            />
-                            <OrderList
-                                orders={orders}
-                                userAccountAddress={userAccount.address}
-                                header="All orders"
-                            />
-                        </Pgrid.Column>
-                    </Pgrid.Row>
-                </Pgrid>
-            </Psegment>
+                            <Pgrid.Column>
+                                <ExchangeSummary
+                                    exchange={exchange}
+                                    rates={rates}
+                                />
+                                <OrderList
+                                    orders={orders}
+                                    userAccountAddress={userAccount.address}
+                                    header="All orders"
+                                />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                    </Pgrid>
+                </Psegment>
+            </EthereumState>
         );
     }
 }

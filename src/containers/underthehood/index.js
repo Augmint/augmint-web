@@ -21,43 +21,46 @@ export default class underTheHood extends React.Component {
     render() {
         const { selectedGroup } = this.state;
         return (
-            <Psegment>
+            <div>
                 <EthereumState />
+                <Psegment>
+                    <Pheader header="Under the hood" />
 
-                <Pheader header="Under the hood" />
+                    <Pgrid columns={1}>
+                        <Pgrid.Column>
+                            <Menu size="massive" tabular>
+                                <Menu.Item
+                                    active={selectedGroup === "baseinfo"}
+                                    name="baseinfo"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Base info
+                                </Menu.Item>
+                                <Menu.Item
+                                    active={selectedGroup === "loans"}
+                                    name="loans"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Loans
+                                </Menu.Item>
+                                <Menu.Item
+                                    active={selectedGroup === "exchange"}
+                                    name="exchange"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Exchange
+                                </Menu.Item>
+                            </Menu>
 
-                <Pgrid columns={1}>
-                    <Pgrid.Column>
-                        <Menu size="massive" tabular>
-                            <Menu.Item
-                                active={selectedGroup === "baseinfo"}
-                                name="baseinfo"
-                                onClick={this.handleSelectGroup}
-                            >
-                                Base info
-                            </Menu.Item>
-                            <Menu.Item
-                                active={selectedGroup === "loans"}
-                                name="loans"
-                                onClick={this.handleSelectGroup}
-                            >
-                                Loans
-                            </Menu.Item>
-                            <Menu.Item
-                                active={selectedGroup === "exchange"}
-                                name="exchange"
-                                onClick={this.handleSelectGroup}
-                            >
-                                Exchange
-                            </Menu.Item>
-                        </Menu>
-
-                        {selectedGroup === "baseinfo" && <BaseInfoGroup />}
-                        {selectedGroup === "loans" && <LoansInfoGroup />}
-                        {selectedGroup === "exchange" && <ExchangeInfoGroup />}
-                    </Pgrid.Column>
-                </Pgrid>
-            </Psegment>
+                            {selectedGroup === "baseinfo" && <BaseInfoGroup />}
+                            {selectedGroup === "loans" && <LoansInfoGroup />}
+                            {selectedGroup === "exchange" && (
+                                <ExchangeInfoGroup />
+                            )}
+                        </Pgrid.Column>
+                    </Pgrid>
+                </Psegment>
+            </div>
         );
     }
 }

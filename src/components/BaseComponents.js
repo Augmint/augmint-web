@@ -1,7 +1,6 @@
 /* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import { Form as SemanticForm } from "semantic-ui-react";
-import BigNumber from "bignumber.js";
 import store from "modules/store";
 
 export const Validations = {
@@ -79,8 +78,8 @@ export const Normalizations = {
         }
         // FIXME: interantilaistion (for different thousand separators)
         let v = value.toString().replace(/[^\d.]/g, "");
-        let firstDot = v.indexOf(".")
-        // not yet working fix attempt for edge case when user entering a second dot. 
+        let firstDot = v.indexOf(".");
+        // not yet working fix attempt for edge case when user entering a second dot.
         //  it requires text type input field
         // if (firstDot >= 0) {
         //     let secondDot = v.indexOf(".", firstDot + 1);
@@ -89,10 +88,9 @@ export const Normalizations = {
         //         v = v.slice(0, secondDot );
         //     }
         // }
-        v = v.slice(0,  firstDot >= 0 ? firstDot + 6 : undefined);
+        v = v.slice(0, firstDot >= 0 ? firstDot + 6 : undefined);
         return v;
     }
-
 };
 
 export const semanticFormField = ({

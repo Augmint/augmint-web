@@ -46,7 +46,6 @@ export function DcmOverview(props) {
                     to="/concept#"
                     icon="right chevron"
                     labelPosition="right"
-                    basic
                     size="large"
                 />
             </Tsegment.Row>

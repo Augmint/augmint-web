@@ -16,39 +16,41 @@ class AccountHome extends React.Component {
     }
     render() {
         return (
-            <Psegment>
-                <EthereumState />
+            <EthereumState>
+                <Psegment>
+                    <Pheader header="My Account" />
 
-                <Pheader header="My Account" />
+                    <Pgrid>
+                        <Pgrid.Row columns={2}>
+                            <Pgrid.Column>
+                                <AccountInfo
+                                    account={this.props.userAccount}
+                                    header="Overview"
+                                />
 
-                <Pgrid>
-                    <Pgrid.Row columns={2}>
-                        <Pgrid.Column>
-                            <AccountInfo
-                                account={this.props.userAccount}
-                                header="Overview"
-                            />
+                                <UcdTransferForm />
 
-                            <UcdTransferForm />
+                                <TransferList
+                                    transfers={this.props.userTransfers}
+                                    userAccountAddress={
+                                        this.props.userAccount.address
+                                    }
+                                />
+                            </Pgrid.Column>
 
-                            <TransferList
-                                transfers={this.props.userTransfers}
-                                userAccountAddress={
-                                    this.props.userAccount.address
-                                }
-                            />
-                        </Pgrid.Column>
-
-                        <Pgrid.Column>
-                            <LoanList
-                                header="My UCD Loans"
-                                noItemMessage={<span>You have no loans</span>}
-                                loans={this.props.loans}
-                            />
-                        </Pgrid.Column>
-                    </Pgrid.Row>
-                </Pgrid>
-            </Psegment>
+                            <Pgrid.Column>
+                                <LoanList
+                                    header="My UCD Loans"
+                                    noItemMessage={
+                                        <span>You have no loans</span>
+                                    }
+                                    loans={this.props.loans}
+                                />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                    </Pgrid>
+                </Psegment>
+            </EthereumState>
         );
     }
 }

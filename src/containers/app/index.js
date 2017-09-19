@@ -18,6 +18,7 @@ import LoanMain from "containers/loan";
 import TokenUcd from "containers/tokenUcd";
 import About from "containers/about";
 import Concept from "containers/concept";
+import TryIt from "containers/tryit";
 import UnderTheHood from "containers/underthehood";
 import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
@@ -80,6 +81,7 @@ class App extends React.Component {
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
+                        <Route exact path="/tryit" component={TryIt} />
                         <Route exact path="/about-us" component={About} />
                         <Route
                             exact
