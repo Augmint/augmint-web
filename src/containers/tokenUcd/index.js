@@ -27,7 +27,7 @@ class TokenUcd extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Token UCD" />
+                    <Pheader header="Reserves" />
 
                     <Pgrid columns={1}>
                         <Pgrid.Column>

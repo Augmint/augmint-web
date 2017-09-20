@@ -16,9 +16,9 @@ import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import TokenUcd from "containers/tokenUcd";
-import About from "containers/about";
-import Concept from "containers/concept";
-import TryIt from "containers/tryit";
+import AboutUs from "containers/home/aboutUs";
+import Concept from "containers/home/concept";
+import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
@@ -77,12 +77,12 @@ class App extends React.Component {
                             path="/exchange"
                             component={ExchangeHome}
                         />
-                        <Route exact path="/tokenUcd" component={TokenUcd} />
+                        <Route exact path="/reserves" component={TokenUcd} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
                         <Route exact path="/tryit" component={TryIt} />
-                        <Route exact path="/about-us" component={About} />
+                        <Route exact path="/aboutus" component={AboutUs} />
                         <Route
                             exact
                             path="/under-the-hood"

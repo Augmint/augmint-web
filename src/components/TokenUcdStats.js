@@ -59,9 +59,9 @@ export class TokenUcdStats extends React.Component {
 
                 {showTokenUcdLink && (
                     <Button
-                        content="TokenUcd details"
+                        content="Reserve details"
                         as={Link}
-                        to="/tokenUcd"
+                        to="/reserves"
                         icon="right chevron"
                         labelPosition="right"
                         basic

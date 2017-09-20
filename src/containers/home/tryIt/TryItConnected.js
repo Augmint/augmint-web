@@ -46,7 +46,7 @@ export function TryItConnected(props) {
                         <Link to="/account">account</Link>
                     </p>
                     <p>
-                        Check the <Link to="/tokenUcd">DCM reserves</Link>
+                        Check the <Link to="/reserves">DCM reserves</Link>
                     </p>
                 </Tblock>
                 <Tsegment.Row centered columns={1}>

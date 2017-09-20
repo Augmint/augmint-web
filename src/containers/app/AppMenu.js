@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Container, Menu } from "semantic-ui-react";
+import { Segment, Container, Menu, Dropdown } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
 
 export function AppMenu(props) {
@@ -57,19 +57,26 @@ export function AppMenu(props) {
                         </Menu.Item>
                     )}
                     {isConnected && (
-                        <Menu.Item as={NavLink} to="/tokenUcd">
-                            TokenUcd
+                        <Menu.Item as={NavLink} to="/reserves">
+                            Reserves
                         </Menu.Item>
                     )}
 
                     <Menu.Menu position="right">
-                        {/* <Menu.Item as={NavLink} to="/about-us">
-                            About
-                        </Menu.Item> */}
-                        <Menu.Item as={NavLink} to="/under-the-hood">
-                            Under the hood
+                        <Menu.Item as={NavLink} to="/aboutUs">
+                            About Us
                         </Menu.Item>
-                        <Menu.Item as="p">{connectionStatus}</Menu.Item>
+
+                        <Menu.Item as={Dropdown} text={connectionStatus}>
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    icon="settings"
+                                    as={NavLink}
+                                    to="/under-the-hood"
+                                    text="Under the hood"
+                                />
+                            </Dropdown.Menu>
+                        </Menu.Item>
                     </Menu.Menu>
                 </Container>
             </Menu>
