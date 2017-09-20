@@ -137,17 +137,7 @@ export function decodeLogs(logs) {
             //         !item.indexed
             //     );
             // }).length;
-            if (
-                method.inputs[method.inputs.length - 1].type === "string" &&
-                logData.length < 256
-            ) {
-                // TODO: workaround for web3.eth.abi.decodeLog bug : if last event field is string and
-                //       it's not emmitted from event (eg. narrative in ucd trasnfer list events is empty)
-                //       then decodeLog throws  "Error: The parameter "0x" must be a valid HEX string."
-                //       Not a generic workaround, made specificly for e_transfer events
-                // see https://github.com/ethereum/web3.js/issues/1044
-                inputs = method.inputs.slice(0, method.inputs.length - 1);
-            }
+
             // console.debug(
             //     "decodeParameters params:\n",
             //     "\n  inputs: ",
@@ -166,11 +156,6 @@ export function decodeLogs(logs) {
 
             let decodedParams;
             decodedParams = JSON.parse(JSON.stringify(decodedData)); // TODO: it's dirty, how to convert Result object ?
-            if (inputs.length < method.inputs.length) {
-                // TODO: decodeLog bug workaround, see above
-                decodedParams[method.inputs[method.inputs.length - 1].name] =
-                    "";
-            }
             // console.debug(
             //     "decodeParameters res decodedData:",
             //     decodedData,
