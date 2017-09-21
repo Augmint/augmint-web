@@ -325,11 +325,18 @@ const selector = formValueSelector("PlaceOrderForm");
 
 PlaceOrderForm = connect(state => {
     const { ethAmount, ucdAmount } = selector(state, "ethAmount", "ucdAmount");
-    return { ethAmount, ucdAmount };  // to get amounts for orderHelpText in render
+    return { ethAmount, ucdAmount }; // to get amounts for orderHelpText in render
 })(PlaceOrderForm);
 
 export default reduxForm({
     form: "PlaceOrderForm",
-    shouldValidate: (params) =>  true // workaround for issue that validations are not triggered when changing orderType in menu.
-                                    // minor TODO: check if we can avoid some unnecessary validation call
+    shouldValidate: params => {
+        // workaround for issue that validations are not triggered when changing orderType in menu.
+        // TODO: this is hack, not perferct, eg. user clicks back and forth b/w sell&buy then balance check is not always happening before submission attempt.
+        //       also lot of unnecessary validation call
+        if (params.props.error) {
+            return false; // needed otherwise submission error is not shown
+        }
+        return true;
+    }
 })(PlaceOrderForm);
