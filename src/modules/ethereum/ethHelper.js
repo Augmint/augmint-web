@@ -143,9 +143,7 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                 if (xhr.readyState === 4) {
                     let res = JSON.parse(xhr.response);
                     //console.debug("Response from etherScan (xhr.response):", xhr.response);
-
-                    console.debug("JSON.parse(xhr.response) ", res);
-
+                    //console.debug("JSON.parse(xhr.response) ", res);
                     let decodedData = contract.abiDecoder.decodeLogs(
                         res.result
                     );
