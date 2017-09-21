@@ -9,9 +9,15 @@ export default class SolidityContract {
     static async connectNew(web3, artifacts) {
         let contract = Contract(artifacts);
         contract.setProvider(web3.currentProvider);
-        // setNetwork was a workaround because truffle-contract 3.0.0 fails with web3 1.0.0 on testRPC
-        // (web3.version.getNetwork became web3.eth.net.getId())
-        // contract.setNetwork((await web3.eth.net.getId()).toString());
+        //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
+        if (typeof contract.currentProvider.sendAsync !== "function") {
+            contract.currentProvider.sendAsync = function() {
+                return contract.currentProvider.send.apply(
+                    contract.currentProvider,
+                    arguments
+                );
+            };
+        }
         let instance = await contract.deployed();
         // This extra check needed because .deployed() returns an instance
         //      even when contract is not deployed
