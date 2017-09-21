@@ -106,7 +106,7 @@ contract Exchange is owned {
                 orders.orders[ orderId -1 ].order.maker,
                 orders.orders[ orderId -1 ].order.makerOrderIdx,
                 orders.orders[ orderId -1 ].order.orderType,
-                orders.orders[ orderId -1 ].order.amount
+                orders.orders[ orderId -1 ].order.amount,
                 orders.orders[ orderId -1 ].next);
     }
 
