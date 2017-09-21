@@ -7,11 +7,11 @@ export function AppMenu(props) {
     const { location } = props;
     let connectionStatus;
     if (isLoading) {
-        connectionStatus = <small>connecting...</small>;
+        connectionStatus = "connecting...";
     } else if (isConnected) {
-        connectionStatus = <small>on {network.name}</small>;
+        connectionStatus = "on " + network.name;
     } else {
-        connectionStatus = <small>not connected</small>;
+        connectionStatus = "not connected";
     }
     return (
         <Segment inverted style={{ margin: 0 }}>
@@ -67,15 +67,19 @@ export function AppMenu(props) {
                             About Us
                         </Menu.Item>
 
-                        <Menu.Item as={Dropdown} text={connectionStatus}>
-                            <Dropdown.Menu>
-                                <Dropdown.Item
-                                    icon="settings"
-                                    as={NavLink}
-                                    to="/under-the-hood"
-                                    text="Under the hood"
-                                />
-                            </Dropdown.Menu>
+                        <Menu.Item>
+                            <small>
+                                <Dropdown text={connectionStatus}>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item
+                                            icon="settings"
+                                            as={NavLink}
+                                            to="/under-the-hood"
+                                            text="Under the hood"
+                                        />
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </small>
                         </Menu.Item>
                     </Menu.Menu>
                 </Container>
