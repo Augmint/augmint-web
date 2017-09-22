@@ -15,14 +15,18 @@ const decentImg = (
 );
 export default () => (
     <Tsegment header="About us">
-        <Tsegment.Row textAlign="centered">{decentImg}</Tsegment.Row>
-        <Tsegment.Row textAlign="centered">
-            <p>
-                DCM is being built by people at{" "}
-                <Link to="http://decent.org" target="_blank">
-                    Decent Labs
-                </Link>.
-            </p>
+        <Tsegment.Row textAlign="center">
+            <Tsegment.Column>{decentImg}</Tsegment.Column>
+        </Tsegment.Row>
+        <Tsegment.Row textAlign="center">
+            <Tsegment.Column>
+                <p>
+                    DCM is being built by people at{" "}
+                    <Link to="http://decent.org" target="_blank">
+                        Decent Labs
+                    </Link>.
+                </p>
+            </Tsegment.Column>
         </Tsegment.Row>
     </Tsegment>
 );
