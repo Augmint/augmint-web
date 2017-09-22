@@ -60,7 +60,6 @@ export const setupWatch = (stateToWatch, callback) => {
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-    console.debug("onWeb3NetworkChange", oldVal, newVal);
     if (filterAllBlocks) {
         filterAllBlocks.unsubscribe();
     }
