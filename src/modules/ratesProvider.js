@@ -1,17 +1,14 @@
 import store from "modules/store";
-import watch from "redux-watch";
+import { setupWatch } from "./web3Provider";
 import { connectRates, refreshRates } from "modules/reducers/rates";
-/*
-    TODO: make it to a HOC
-*/
-let w1Unsubscribe, w2Unsubscribe;
 
 export default () => {
     const rates = store.getState().rates;
     const web3Connect = store.getState().web3Connect;
 
     if (!rates.isLoading && !rates.isConnected) {
-        setupWatches();
+        setupWatch("web3Connect.network", onWeb3NetworkChange);
+        setupWatch("rates.contract", onRatesContractChange);
         if (web3Connect.isConnected) {
             console.debug(
                 "ratesProvider - rates not connected or loading and web3 alreay loaded, dispatching connectRates() "
@@ -31,46 +28,30 @@ const setupListeners = () => {
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance.instance) {
+    if (oldInstance && oldInstance.instance) {
         oldInstance.instance.e_ethToUsdcChanged().stopWatching();
     }
 };
 
-const setupWatches = () => {
-    let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
-    let unsubscribe = store.subscribe(
-        w1((newVal, oldVal, objectPath) => {
-            if (w1Unsubscribe) {
-                w1Unsubscribe();
-                removeListeners(oldVal);
-            }
-            w1Unsubscribe = unsubscribe;
-            if (newVal !== null) {
-                console.debug(
-                    "ratesProvider - web3Connect.web3ConnectionId changed. Dispatching connectRates()"
-                );
-                store.dispatch(connectRates());
-            }
-        })
-    );
+const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+    removeListeners(oldVal);
+    if (newVal !== null) {
+        console.debug(
+            "ratesProvider - web3Connect.network changed. Dispatching connectRates()"
+        );
+        store.dispatch(connectRates());
+    }
+};
 
-    let w2 = watch(store.getState, "rates.contract");
-    unsubscribe = store.subscribe(
-        w2((newVal, oldVal, objectPath) => {
-            if (w2Unsubscribe) {
-                w2Unsubscribe();
-                removeListeners(oldVal);
-            }
-            w2Unsubscribe = unsubscribe;
-            if (newVal) {
-                console.debug(
-                    "ratesProvider - rates.contract changed. Dispatching refreshRates()"
-                );
-                store.dispatch(refreshRates());
-                setupListeners();
-            }
-        })
-    );
+const onRatesContractChange = (newVal, oldVal, objectPath) => {
+    removeListeners(oldVal);
+    if (newVal) {
+        console.debug(
+            "ratesProvider - rates.contract changed. Dispatching refreshRates()"
+        );
+        store.dispatch(refreshRates());
+        setupListeners();
+    }
 };
 
 const onRateChange = (error, result) => {

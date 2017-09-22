@@ -1,6 +1,7 @@
 import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
+import { connectWeb3 } from "modules/web3Provider";
 import { Link } from "react-router-dom";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -12,6 +13,7 @@ import { Button } from "semantic-ui-react";
 
 class TokenUcd extends React.Component {
     componentDidMount() {
+        connectWeb3();
         ratesProvider();
         tokenUcdProvider();
     }
@@ -62,7 +64,6 @@ const mapStateToProps = state => ({
     balance: state.web3Connect.balance,
     isLoading: state.web3Connect.isLoading,
     isConnected: state.web3Connect.isConnected,
-    web3ConnectionId: state.web3Connect.web3ConnectionId,
     web3Instance: state.web3Connect.web3Instance,
 
     tokenUcd: state.tokenUcd,

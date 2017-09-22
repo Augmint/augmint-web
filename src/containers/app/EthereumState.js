@@ -27,7 +27,7 @@ export class EthereumState extends React.Component {
             network,
             error
         } = this.props.web3Connect;
-        if (isLoading) {
+        if (isLoading || document.readyState !== "complete") {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!isConnected && !isLoading) {
             msg = (

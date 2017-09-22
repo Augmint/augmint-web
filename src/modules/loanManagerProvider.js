@@ -1,5 +1,5 @@
 import store from "modules/store";
-import watch from "redux-watch";
+import { setupWatch } from "./web3Provider";
 import {
     connectLoanManager,
     refreshLoanManager,
@@ -8,17 +8,15 @@ import {
 import { fetchLoans } from "modules/reducers/loans";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { fetchUserBalance } from "modules/reducers/userBalances";
-/*
-    TODO: make it to a HOC
-*/
-let w1Unsubscribe, w2Unsubscribe;
 
 export default () => {
     const loanManager = store.getState().loanManager;
     let web3Connect = store.getState().web3Connect;
 
     if (!loanManager.isLoading && !loanManager.isConnected) {
-        setupWatches();
+        setupWatch("web3Connect.network", onWeb3NetworkChange);
+        setupWatch("loanManager.contract", onLoanManagerContractChange);
+        setupWatch("web3Connect.userAccount", onUserAccountChange);
         if (web3Connect.isConnected) {
             console.debug(
                 "loanManagerProvider - loanManager not connected or loading and web3 alreay loaded, dispatching connectLoanManager() "
@@ -41,55 +39,49 @@ const setupListeners = () => {
         .e_collected({ fromBlock: "latest", toBlock: "pending" })
         .watch(onCollected);
     // TODO: add & handle loanproduct change events
-    // TODO: remove prev listeners
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance.instance) {
+    if (oldInstance && oldInstance.instance) {
         oldInstance.instance.e_newLoan().stopWatching();
         oldInstance.instance.e_repayed().stopWatching();
         oldInstance.instance.e_collected().stopWatching();
     }
 };
 
-const setupWatches = () => {
-    let w1 = watch(store.getState, "web3Connect.web3ConnectionId");
-    let unsubscribe = store.subscribe(
-        w1((newVal, oldVal, objectPath) => {
-            if (w1Unsubscribe) {
-                w1Unsubscribe();
-                removeListeners(oldVal);
-            }
-            w1Unsubscribe = unsubscribe;
-            if (newVal !== null) {
-                console.debug(
-                    "loanManagerProvider - web3Connect.web3ConnectionId changed. Dispatching connectLoanManager()"
-                );
-                store.dispatch(connectLoanManager());
-            }
-        })
-    );
+const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+    removeListeners(oldVal);
+    if (newVal !== null) {
+        console.debug(
+            "loanManagerProvider - web3Connect.network changed. Dispatching connectLoanManager()"
+        );
+        store.dispatch(connectLoanManager());
+    }
+};
 
-    let w2 = watch(store.getState, "loanManager.contract");
-    unsubscribe = store.subscribe(
-        w2((newVal, oldVal, objectPath) => {
-            let userAccount = store.getState().web3Connect.userAccount;
-            if (w2Unsubscribe) {
-                w2Unsubscribe();
-                removeListeners(oldVal);
-            }
-            w2Unsubscribe = unsubscribe;
-            if (newVal) {
-                console.debug(
-                    "loanManagerProvider - loanManager.contract changed. Dispatching refreshLoanManager, fetchProducts, fetchLoans"
-                );
-                store.dispatch(refreshLoanManager());
-                store.dispatch(fetchProducts());
-                store.dispatch(fetchLoans(userAccount));
-                setupListeners();
-            }
-        })
-    );
+const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
+    removeListeners(oldVal);
+    if (newVal) {
+        console.debug(
+            "loanManagerProvider - loanManager.contract changed. Dispatching refreshLoanManager, fetchProducts, fetchLoans"
+        );
+        const userAccount = store.getState().web3Connect.userAccount;
+        store.dispatch(refreshLoanManager());
+        store.dispatch(fetchProducts());
+        store.dispatch(fetchLoans(userAccount));
+        setupListeners();
+    }
+};
+
+const onUserAccountChange = (newVal, oldVal, objectPath) => {
+    const loanManager = store.getState().loanManager;
+    if (loanManager.isConnected && newVal !== "?") {
+        console.debug(
+            "loanManagerProvider - web3Connect.userAccount changed. Dispatching fetchLoans()"
+        );
+        const userAccount = store.getState().web3Connect.userAccount;
+        store.dispatch(fetchLoans(userAccount));
+    }
 };
 
 const onNewLoan = (error, result) => {

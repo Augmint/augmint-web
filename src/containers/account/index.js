@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { connectWeb3 } from "modules/web3Provider";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import AccountInfo from "components/AccountInfo";
@@ -11,6 +12,7 @@ import { EthereumState } from "containers/app/EthereumState";
 
 class AccountHome extends React.Component {
     componentDidMount() {
+        connectWeb3();
         loanManagerProvider();
         tokenUcdProvider();
     }

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import tokenUcdProvider from "modules/tokenUcdProvider";
+import { connectWeb3 } from "modules/web3Provider";
 import { LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import { TryItConnected } from "./TryItConnected";
 
 class TryIt extends React.Component {
     componentDidMount() {
-        tokenUcdProvider();
+        connectWeb3();
     }
 
     render() {

@@ -18,7 +18,6 @@ export default class Web3ConnectionInfo extends React.Component {
         const {
             isLoading,
             isConnected,
-            web3ConnectionId,
             web3Instance,
             network,
             error,
@@ -32,20 +31,17 @@ export default class Web3ConnectionInfo extends React.Component {
         return (
             <Pblock header="Web3 connection">
                 <p>
-                    {isConnected ? (
-                        "connected - " +
-                        web3Instance.currentProvider.constructor.name
-                    ) : (
-                        "not connected"
-                    )}{" "}
+                    {isConnected
+                        ? "connected - " +
+                          web3Instance.currentProvider.constructor.name
+                        : "not connected"}{" "}
                     | {isLoading ? "Loading..." : "not loading"}
                 </p>
                 <p>Web3 version: {info.web3Version}</p>
                 <p>
-                    Network: {network.name} Id: {network.id} Type:{" "}
+                    Network: {network.name} | Id: {network.id} | Type:{" "}
                     {network.type}
                 </p>
-                <p>Internal Connection Id: {web3ConnectionId}</p>
 
                 {error ? (
                     <ErrorDetails header="Error">{error.message}</ErrorDetails>
@@ -61,20 +57,16 @@ export default class Web3ConnectionInfo extends React.Component {
                             providerInfoOpen: !this.state.providerInfoOpen
                         })}
                 >
-                    {this.state.providerInfoOpen ? (
-                        "<< Hide provider info"
-                    ) : (
-                        "Show provider info >>"
-                    )}
+                    {this.state.providerInfoOpen
+                        ? "<< Hide provider info"
+                        : "Show provider info >>"}
                 </Button>
                 {this.state.providerInfoOpen && (
                     <Pblock>
                         <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
-                            {web3Instance ? (
-                                stringify(web3Instance.currentProvider)
-                            ) : (
-                                "No web3 Instance"
-                            )}
+                            {web3Instance
+                                ? stringify(web3Instance.currentProvider)
+                                : "No web3 Instance"}
                         </pre>
                     </Pblock>
                 )}

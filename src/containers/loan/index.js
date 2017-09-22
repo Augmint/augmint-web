@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import { connectWeb3 } from "modules/web3Provider";
 import tokenUcdProvider from "modules/tokenUcdProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -12,6 +13,7 @@ import { EthereumState } from "containers/app/EthereumState";
 
 export default class LoanMain extends React.Component {
     componentDidMount() {
+        connectWeb3();
         ratesProvider();
         tokenUcdProvider();
         loanManagerProvider();

@@ -1,15 +1,12 @@
 /*
 Wrapper for the whole App
     main navigation
-    Web3 connection initialisation
 */
 import "semantic/dist/semantic.min.css";
 import "./site.css";
 
 import React from "react";
 import { connect } from "react-redux";
-import store from "modules/store";
-import { setupWeb3 } from "modules/reducers/web3Connect";
 import { Route, Switch, withRouter } from "react-router-dom";
 
 import AccountHome from "containers/account";
@@ -41,17 +38,6 @@ class ScrollToTop extends React.Component {
 ScrollToTop = withRouter(ScrollToTop);
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onLoad = this.onLoad.bind(this);
-        window.addEventListener("load", this.onLoad);
-    }
-
-    onLoad() {
-        console.debug("App.onLoad() -  Dispatching setupWeb3()");
-        store.dispatch(setupWeb3()); // we do it on load event to avoid timing issues with injected web3
-    }
-
     render() {
         const { isConnected } = this.props.web3Connect;
         return (

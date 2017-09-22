@@ -4,18 +4,18 @@ import {
     asyncGetAccounts
 } from "modules/ethereum/ethHelper";
 
-export const WEB3_SETUP_REQUESTED = "web3Connect/WEB3_SETUP_REQUESTED";
-export const WEB3_SETUP_SUCCESS = "web3Connect/WEB3_SETUP_SUCCESS";
-export const WEB3_SETUP_ERROR = "web3Connect/WEB3_SETUP_ERROR";
+export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
+export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
+export const WEB3_SETUP_ERROR = "WEB3_SETUP_ERROR";
+export const WEB3_ACCOUNT_CHANGE = "WEB3_ACCOUNT_CHANGE";
 
 const initialState = {
     error: null,
     web3Instance: null,
     info: { web3Version: "?" },
-    web3ConnectionId: null, // workaround so that we don't need deep compare web3Instance to detecet change
     userAccount: "?",
     accounts: null,
-    isLoading: true,
+    isLoading: false,
     isConnected: false,
     network: { id: "?", name: "?" }
 };
@@ -37,7 +37,6 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 isConnected: true,
                 error: null,
-                web3ConnectionId: state.web3ConnectionId + 1,
                 userAccount: action.accounts[0],
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
@@ -51,6 +50,13 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 isConnected: false,
                 error: action.error
+            };
+
+        case WEB3_ACCOUNT_CHANGE:
+            return {
+                ...state,
+                accounts: action.accounts,
+                userAccount: action.userAccount
             };
 
         default:
@@ -97,5 +103,13 @@ export const setupWeb3 = () => {
                 error: error
             });
         }
+    };
+};
+
+export const accountChange = newAccounts => {
+    return {
+        type: WEB3_ACCOUNT_CHANGE,
+        userAccount: newAccounts[0],
+        accounts: newAccounts
     };
 };

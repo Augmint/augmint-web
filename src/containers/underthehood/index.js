@@ -1,6 +1,7 @@
 import React from "react";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
+import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
@@ -16,6 +17,10 @@ export default class underTheHood extends React.Component {
     }
     handleSelectGroup(e, { name }) {
         this.setState({ selectedGroup: name });
+    }
+
+    componentDidMount() {
+        connectWeb3();
     }
 
     render() {
