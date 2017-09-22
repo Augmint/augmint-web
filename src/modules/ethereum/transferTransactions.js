@@ -117,7 +117,8 @@ export async function processTransferTx(address, tx) {
 
 async function formatTransfer(address, tx) {
     //console.debug("formatTransfer args tx: ", tx);
-    let direction = address === tx.args.from ? -1 : 1;
+    let direction =
+        address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
     let blockTimeStamp, bn_amount;
     if (tx.timeStamp) {
         blockTimeStamp = tx.timeStamp; // when we query from etherscan we get timestamp
