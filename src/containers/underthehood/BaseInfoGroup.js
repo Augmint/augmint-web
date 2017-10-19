@@ -5,6 +5,7 @@ import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
 import { TokenUcdInfo } from "./components/TokenUcdInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
 import { ArrayDump } from "./components/ArrayDump";
+import { SignTest } from "./components/SignTest";
 import { Pgrid } from "components/PageLayout";
 
 class BaseInfoGroup extends React.Component {
@@ -19,6 +20,7 @@ class BaseInfoGroup extends React.Component {
                 <Pgrid.Column>
                     <Web3ConnectionInfo web3Connect={web3Connect} />
                     <UserAccountInfo userBalances={userBalances} />
+                    <SignTest web3Connect={web3Connect} />
                 </Pgrid.Column>
                 <Pgrid.Column>
                     <TokenUcdInfo contract={tokenUcd} />
