@@ -47,6 +47,40 @@ export default () => (
                 to USD.
             </p>
         </Tblock>
+        <Tblock header="Price stability">
+            <p>
+                There are multiple mechanisms to ensure the market expectation
+                and the actual price is around parity to the pegged currency.
+            </p>
+            <Tblock.SubHeader header="Market mechanics" />
+            <p>
+                The primary foundation of stability is the continuous supply of
+                DCM tokens via loan originations and a corresponding demand for
+                paying back loans on maturity.
+            </p>
+            <p>
+                Further specific features of the DCM system will work towards
+                maintaining stability by smoothing the demand & supply peaks and
+                troughs.
+            </p>
+            <Tblock.SubHeader header="Loan parameters" />
+            <p>
+                If UCD price deviating from parity then loan parameters are
+                adjusted to make it more or less compelling to get UCD loan for
+                a certain digital asset. This has an effect on UCD
+                demand/supply.
+            </p>
+            <Tblock.SubHeader header="Market intervention" />
+            <p>
+                DCM can intervene from its reserves accumulated from fees,
+                defaults and interests. DCM reserves can be used on held only
+                for market intervention.
+            </p>
+            <p>
+                Check out our white paper for additional tools and more
+                scenarios.
+            </p>
+        </Tblock>
         <Tblock header="Getting UCD">
             <p>
                 You can always buy or sell your UCD for cryptocurrencies (ETH,
@@ -82,26 +116,6 @@ export default () => (
                 Access to GDC is open to anyone who is willing to deposit UCD
                 tokens. To incentify holding and voting with GDCs the profit
                 from fees is distributed among GDC holders.
-            </p>
-        </Tblock>
-        <Tblock header="Price stability">
-            <p>
-                There are multiple mechanisms to ensure the market expectation
-                and the actual price is around parity to the pegged currency.
-            </p>
-            <Tblock.SubHeader header="Loan parameters" />
-            <p>
-                If UCD price deviating from parity then loan parameters are
-                adjusted to make it more or less compelling to get UCD loan for
-                a certain digital asset. This has an effect on UCD
-                demand/supply.
-            </p>
-            <Tblock.SubHeader header="Market intervention" />
-            <p>
-                DCM can intervene from its reserves accumulated from fees,
-                defaults and interests. DCM reserves can be used on held only
-                for market intervention therefore Check out our white paper for
-                additional tools and more scenarios.
             </p>
         </Tblock>
 
