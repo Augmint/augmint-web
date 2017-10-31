@@ -123,7 +123,7 @@ export default () => (
                 <Button
                     content="Work in progress white paper"
                     as={Link}
-                    to="https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g"
+                    to="http://bit.ly/augmint-wp"
                     target="_blank"
                     icon="file text outline"
                     labelPosition="left"
