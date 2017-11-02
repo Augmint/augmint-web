@@ -64,6 +64,9 @@ export async function getNetworkDetails(web3) {
         case 999:
             networkName = "Testrpc";
             break;
+        case 4447:
+            networkName = "TruffleLocal";
+            break;
         case 1976:
             networkName = "PrivateChain";
             break;

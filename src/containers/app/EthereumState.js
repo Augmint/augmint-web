@@ -50,7 +50,8 @@ export class EthereumState extends React.Component {
             network.id !== 999 &&
             network.id !== 4 &&
             network.id !== 3 &&
-            network.id !== 1976
+            network.id !== 1976 &&
+            network.id !== 4447
         ) {
             msg = (
                 <div>
