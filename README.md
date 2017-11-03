@@ -14,7 +14,7 @@ DCM tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: 
 
 Read more and try out the proof-of-concept implementation on **[dcm.netlify.com](http://dcm.netlify.com)**
 
-**[Whitepaper outline](https://docs.google.com/document/d/1LtMlth1yJr0p2TTNwgJM8C0AeaP4JmIhQza2QuuzQ0g/edit?usp=sharing)** - It's work in progress, draft document. Please feel free to comment it: questions, ideas, suggestions are welcome.
+**[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
 ## Components
 ### Solidity Contracts

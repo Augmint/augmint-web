@@ -77,8 +77,11 @@ export default () => (
                 for market intervention.
             </p>
             <p>
-                Check out our white paper for additional tools and more
-                scenarios.
+                Check out our{" "}
+                <Link to="http://bit.ly/augmint-wp" target="_blank">
+                    white paper
+                </Link>{" "}
+                for additional tools and more scenarios.
             </p>
         </Tblock>
         <Tblock header="Getting UCD">
