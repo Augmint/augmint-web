@@ -2,7 +2,7 @@
 ERC20 Implementation
 TODO: consider using this instead: https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
  */
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 contract ERC20Impl {
 
     /*  This is a slight change to the ERC20 base standard.
@@ -22,7 +22,7 @@ contract ERC20Impl {
     mapping(address => mapping (address => uint256)) allowed;
 
     // What is the balance of a particular account?
-    function balanceOf(address _owner) constant returns (uint256 balance) {
+    function balanceOf(address _owner) external view returns (uint256 balance) {
         return balances[_owner];
     }
 
@@ -84,7 +84,7 @@ contract ERC20Impl {
 
     // Allow _spender to withdraw from your account, multiple times, up to the _value amount.
     // If this function is called again it overwrites the current allowance with _value.
-    function approve(address _spender, uint256 _amount) returns (bool success) {
+    function approve(address _spender, uint256 _amount) external returns (bool success) {
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         return true;

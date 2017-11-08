@@ -19,17 +19,17 @@ contract Rates is owned {
     uint public ethUsdcRate = 1950000   ;  //  1/195ETH = 512,820,512,821 WEI;
 
     event e_ethToUsdcChanged(uint newEthUsdcRate);
-    function ethToUsdc(uint newEthUsdcRate) onlyOwner {
+    function ethToUsdc(uint newEthUsdcRate) public onlyOwner {
         ethUsdcRate = newEthUsdcRate;
         e_ethToUsdcChanged(ethUsdcRate);
         return;
     }
 
-    function convertWeiToUsdc(uint weiValue) constant returns(uint usdcValue) {
+    function convertWeiToUsdc(uint weiValue) external view returns(uint usdcValue) {
         return weiValue.mul(ethUsdcRate).roundedDiv(ONE_ETH);
     }
 
-    function convertUsdcToWei(uint usdcValue) constant returns(uint weiValue) {
+    function convertUsdcToWei(uint usdcValue) external view returns(uint weiValue) {
         // TODO: can we make this not loosing max scale?
         return ONE_ETH.mul(usdcValue).roundedDiv(ethUsdcRate) ;
     }

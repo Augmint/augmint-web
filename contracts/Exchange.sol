@@ -15,7 +15,7 @@ TODO: add option to fill or kill (ie option to not place orders if can't fill fr
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
 TODO: add orderId to UCD transfer narrative
 */
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 import "./SafeMath.sol";
 import "./Owned.sol";
 import "./OrdersLib.sol";
@@ -45,20 +45,20 @@ contract Exchange is owned {
 
     mapping(address => uint80[]) public m_orders; // orders for an account => orderId
 
-    function Exchange(address _tokenUcdAddress, address _ratesAddress) owned() {
+    function Exchange(address _tokenUcdAddress, address _ratesAddress) public owned() {
          rates = Rates(_ratesAddress);
          tokenUcd = TokenUcd(_tokenUcdAddress);
     }
 
-    function getMakerOrderCount(address maker) constant returns(uint orderCount) {
+    function getMakerOrderCount(address maker) external view returns(uint orderCount) {
         return m_orders[maker].length;
     }
 
-    function getOrderCount() constant returns(uint80 orderCount) {
+    function getOrderCount() public view returns(uint80 orderCount) {
         return orders.count;
     }
 
-    function getMakerOrder(address maker, uint80 _makerOrderIdx) constant
+    function getMakerOrder(address maker, uint80 _makerOrderIdx) external view
             returns(uint80 orderId, uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
         orderId = m_orders[maker][_makerOrderIdx];
         return (
@@ -68,7 +68,7 @@ contract Exchange is owned {
                 orders.orders[ orderId -1].order.amount);
     }
 
-    function getOrder(uint80 orderId) constant
+    function getOrder(uint80 orderId) external view
             returns(address maker,  uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
         return (orders.orders[ orderId -1 ].order.maker,
                 orders.orders[ orderId -1 ].order.makerOrderIdx,
@@ -86,7 +86,7 @@ contract Exchange is owned {
          nextOrderId 0 returned then no more open orders
          For invalid orderId returns 0 order.amount and nextOrderId
     */
-    function iterateOpenOrders(uint80 orderId) constant
+    function iterateOpenOrders(uint80 orderId) external view
         returns (uint80 _orderId,
                 address maker,
                 uint80 makerOrderIdx,
@@ -99,19 +99,21 @@ contract Exchange is owned {
         }
         if(orderId == 0) {
             //|| orders.orders[orderid-1].first == OrdersLib.None) {
-            orderId =  orders.first;
+            _orderId = orders.first;
+        } else {
+            _orderId = orderId;
         }
 
-        return (orderId,
-                orders.orders[ orderId -1 ].order.maker,
-                orders.orders[ orderId -1 ].order.makerOrderIdx,
-                orders.orders[ orderId -1 ].order.orderType,
-                orders.orders[ orderId -1 ].order.amount,
-                orders.orders[ orderId -1 ].next);
+        return (_orderId,
+                orders.orders[ _orderId -1 ].order.maker,
+                orders.orders[ _orderId -1 ].order.makerOrderIdx,
+                orders.orders[ _orderId -1 ].order.orderType,
+                orders.orders[ _orderId -1 ].order.amount,
+                orders.orders[ _orderId -1 ].next);
     }
 
 
-    function placeSellEthOrder() payable {
+    function placeSellEthOrder() external payable {
         require(msg.value > 0); // FIXME: min amount? Shall we use min UCD amount instead of ETH value?
         uint weiToSellLeft = msg.value;
         uint ucdValueTotal = rates.convertWeiToUsdc(weiToSellLeft);
@@ -154,7 +156,7 @@ contract Exchange is owned {
         }
     }
 
-    function placeSellUcdOrder(uint ucdAmount) {
+    function placeSellUcdOrder(uint ucdAmount) external {
         require(ucdAmount > 0); // FIXME: min amount?
         require(tokenUcd.systemTransfer(msg.sender, this, ucdAmount, "UCD sell order placed" ) );
         uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
@@ -252,13 +254,13 @@ contract Exchange is owned {
             m_orders[maker].length--;
         }
     }
-
-    function cancelOrder(uint80 orderId) {
+/*
+    function cancelOrder( uint80 orderId ) external {
         // FIXME: to implement
         // transfer ETH or UCD back
-         orderId = orderId; // to supress compiler warnings
+         //orderId = orderId; // to supress compiler warnings
          // FIXME: check orderId
          // removeOrder( orderIdx)
     }
-
+*/
 }

@@ -12,7 +12,7 @@
     TODO: consider a generic loan contract interface
 */
 
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 import "./SafeMath.sol";
 import "./TokenUcd.sol";
@@ -42,12 +42,12 @@ contract EthBackedLoan {
     int8 public constant ERR_LOAN_NOT_OPEN = -5;
     int8 public constant ERR_EXT_ERRCODE_BASE = -10; // used to pass on error code returned fro mexternal calls
 
-    function() payable { } // to accept ETH collateral sent
+    function() external payable { } // to accept ETH collateral sent
     // TODO: should it refuse any other amount sent after?
     //       doens't seem to be a real issue as all ETH is going to be release after maturity anyway..
 
     function EthBackedLoan(uint _loanId, address _borrower, uint _term, uint _disbursedLoanInUcd,
-                            uint _ucdDueAtMaturity, uint _repayPeriod) {
+                            uint _ucdDueAtMaturity, uint _repayPeriod) public {
         loanId = _loanId;
         loanManager = LoanManager(msg.sender);
         owner = _borrower;
@@ -61,7 +61,7 @@ contract EthBackedLoan {
         loanState = LoanState.Open;
     }
 
-    function getDetails() constant returns (
+    function getDetails() external view returns (
                                     address _owner,
                                     LoanManager _loanManager,
                                     TokenUcd _tokenUcd,
@@ -89,7 +89,7 @@ contract EthBackedLoan {
             );
     }
 
-    function repay() returns (int8 result) {
+    function repay() external returns (int8 result) {
         // TODO: don't allow repayment when repayPeriod is over
         //  TODO: rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
         if( msg.sender != address(loanManager)) {
@@ -112,7 +112,7 @@ contract EthBackedLoan {
         return SUCCESS;
     }
 
-    function collect() returns (int8 result) {
+    function collect() external returns (int8 result) {
         /* This function is only callable by loanManager contract.
            It MUST throw an exception if there is an error after any state change happened here.
                 It's to ensure that any changes made in loanmanager before this call are reverted too.
@@ -140,12 +140,5 @@ contract EthBackedLoan {
         return SUCCESS;
     }
 
-    function sellLoan(address buyer, uint priceInUcd) returns (int8 result) {
-        /* TODO: 2 steps process, offer/approve method TBD
-        */
-        buyer = buyer; // to silence complier warnings until it's implemented
-        priceInUcd = priceInUcd;
-        return -1;
-    }
 
 }

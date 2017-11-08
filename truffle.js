@@ -27,14 +27,14 @@ module.exports = {
             from: "0xae653250B4220835050B75D3bC91433246903A95", // default address to use for any transaction Truffle makes during migrations
             network_id: 4,
             gas: 4700000, // Gas limit used for deploys
-            gasPrice: 8000000000 // 8 Gwei
+            gasPrice: 1000000000 // 1 Gwei
         },
         ropsten: {
             host: "localhost", // Connect to geth on the specified
             port: 8545,
             network_id: 3,
             gas: 4700000, // Gas limit used for deploys
-            gasPrice: 8000000000 // 8 Gwei
+            gasPrice: 21000000000 // 21 Gwei
         }
     }
 };

@@ -24,7 +24,7 @@
     TODO: move ERR all error code constants to lib/separate contract
     TODO: any point for ECR20Impl and TokenUcd separation now?
 */
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 import "./Owned.sol";
 import "./SafeMath.sol";
 import "./ERC20Impl.sol";
@@ -43,21 +43,21 @@ contract TokenUcd is ERC20Impl, owned {
     address public loanManagerAddress; // used for authorisation of issuing UCD for loans
     address public exchangeAddress; // for authorisation of transferExchange()
 
-    function () payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
+    function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
 
-    function getUcdReserveBalance() constant returns (uint balance) {
+    function getUcdReserveBalance() external view returns (uint balance) {
         return balances[this];
     }
 
     event e_loanManagerAddressChanged(address newAddress);
-    function setLoanManagerAddress(address newAddress) onlyOwner returns(int8 result) {
+    function setLoanManagerAddress(address newAddress) external onlyOwner returns(int8 result) {
         loanManagerAddress = newAddress;
         e_loanManagerAddressChanged(newAddress);
         return SUCCESS;
     }
 
     event e_exchangeAddressChanged(address newAddress);
-    function setExchangeAddress(address newAddress) onlyOwner returns(int8 result) {
+    function setExchangeAddress(address newAddress) external onlyOwner returns(int8 result) {
         exchangeAddress = newAddress;
         e_exchangeAddressChanged(newAddress);
         return SUCCESS;
@@ -68,7 +68,7 @@ contract TokenUcd is ERC20Impl, owned {
         address _from,
         address _to,
         uint256 _amount
-    ) returns (bool success) {
+    ) external returns (bool success) {
         if (_transferFrom(_from, _to, _amount)) {
             e_transfer(_from, _to, _amount, "");
             return true;
@@ -77,11 +77,11 @@ contract TokenUcd is ERC20Impl, owned {
         }
     }
 
-    function transfer(address _to, uint256 _amount) returns (bool success) {
+    function transfer(address _to, uint256 _amount) external returns (bool success) {
         return transferWithNarrative(_to, _amount, "");
     }
 
-    function transferWithNarrative(address _to, uint256 _amount, string narrative) returns (bool success) {
+    function transferWithNarrative(address _to, uint256 _amount, string narrative) public returns (bool success) {
         if ( _transfer(_to, _amount) ) {
             e_transfer(msg.sender, _to, _amount, narrative);
             return true;
@@ -90,7 +90,7 @@ contract TokenUcd is ERC20Impl, owned {
         }
     }
 
-    function systemTransfer(address _from, address _to, uint256 _amount, string narrative) returns (bool success) {
+    function systemTransfer(address _from, address _to, uint256 _amount, string narrative) public returns (bool success) {
         require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
         if(_from == _to) { // we don't need to throw in case of transfer b/w own accounts
             return false;
@@ -105,7 +105,7 @@ contract TokenUcd is ERC20Impl, owned {
 
     // FIXME: this is only for testing, remove this function
     event e_ucdIssued(uint amount);
-    function issueUcd(uint amount) onlyOwner returns (int8 result) {
+    function issueUcd(uint amount) external onlyOwner returns (int8 result) {
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
         e_ucdIssued(amount);
@@ -114,7 +114,7 @@ contract TokenUcd is ERC20Impl, owned {
 
     // FIXME: this is only for testing, remove this function
     event e_ucdBurned(uint amount);
-    function burnUcd(uint amount) onlyOwner returns (int8 result) {
+    function burnUcd(uint amount) external onlyOwner returns (int8 result) {
         if (amount > balances[this]) {
             return ERR_RESERVE_BALANCE_NOT_ENOUGH;
         }
@@ -125,7 +125,7 @@ contract TokenUcd is ERC20Impl, owned {
     }
 
     // FIXME: this is only for testing, remove this function
-    function getUcdFromReserve(uint amount) onlyOwner returns (int8 result) {
+    function getUcdFromReserve(uint amount) external onlyOwner returns (int8 result) {
         if (amount > balances[this]) {
             return ERR_RESERVE_BALANCE_NOT_ENOUGH;
         }
@@ -134,7 +134,7 @@ contract TokenUcd is ERC20Impl, owned {
         return SUCCESS;
     }
 
-    function issueAndDisburseUcd(address borrower, uint ucdDueAtMaturity, uint disbursedLoanInUcd, string narrative) returns (int8 result) {
+    function issueAndDisburseUcd(address borrower, uint ucdDueAtMaturity, uint disbursedLoanInUcd, string narrative) external returns (int8 result) {
         if( msg.sender != loanManagerAddress) {
             return ERR_NOT_AUTHORISED;
         }
@@ -148,7 +148,7 @@ contract TokenUcd is ERC20Impl, owned {
         return SUCCESS;
     }
 
-    function repayAndBurnUcd(address borrower, uint ucdDueAtMaturity, string narrative) returns (int8 result) {
+    function repayAndBurnUcd(address borrower, uint ucdDueAtMaturity, string narrative) external returns (int8 result) {
         if( msg.sender != loanManagerAddress) {
             return ERR_NOT_AUTHORISED;
         }

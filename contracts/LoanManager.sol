@@ -7,7 +7,7 @@
            eg. transfer UCD to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
            it wouldn't restrict access more but would be better seperation of functions
 */
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 import "./Owned.sol";
 import "./SafeMath.sol";
 import "./Rates.sol";
@@ -50,25 +50,25 @@ contract LoanManager is owned {
     LoanPointer[] public loanPointers;
     mapping(address => uint[]) public m_loanPointers;  // owner account address =>  array of loanContracts array idx-s (idx + 1)
 
-    function LoanManager(address _tokenUcdAddress, address _ratesAddress) owned() {
+    function LoanManager(address _tokenUcdAddress, address _ratesAddress) public owned() {
         tokenUcd = TokenUcd(_tokenUcdAddress);
         rates = Rates(_ratesAddress);
     }
 
-    function getLoanCount() constant returns (uint ct) {
+    function getLoanCount() external view returns (uint ct) {
         return loanPointers.length;
     }
 
-    function getProductCount() constant returns (uint ct) {
+    function getProductCount() external view returns (uint ct) {
         return products.length;
     }
 
-    function getLoanIds(address borrower) constant returns (uint[] loans) {
+    function getLoanIds(address borrower) external view returns (uint[] loans) {
         return m_loanPointers[borrower];
     }
 
     function addProduct(uint _term, uint _discountRate, uint _loanCollateralRatio,
-            uint _minDisbursedAmountInUcd, uint _repayPeriod, bool _isActive) onlyOwner returns (uint newProductId) {
+            uint _minDisbursedAmountInUcd, uint _repayPeriod, bool _isActive) external onlyOwner returns (uint newProductId) {
         newProductId = products.push( Product( {term: _term, discountRate: _discountRate,
                 loanCollateralRatio: _loanCollateralRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
                 repayPeriod: _repayPeriod, isActive: _isActive }) );
@@ -77,18 +77,18 @@ contract LoanManager is owned {
         // TODO: emit event
     }
 
-    function disableProduct(uint8 productId) onlyOwner {
+    function disableProduct(uint8 productId) external onlyOwner {
         products[productId].isActive = false;
         // TODO: emit event
     }
 
-    function enableProduct(uint8 productId) onlyOwner {
+    function enableProduct(uint8 productId) external onlyOwner {
         products[productId].isActive = true;
         // TODO: emit event
     }
 
     event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
-    function newEthBackedLoan(uint8 productId) payable {
+    function newEthBackedLoan(uint8 productId) external payable {
         require( products[productId].isActive); // valid productId?
 
         // calculate UCD loan values based on ETH sent in with Tx
@@ -126,7 +126,7 @@ contract LoanManager is owned {
 
     event e_error(int8 errorCode);
     event e_repayed(address loanContractAddress, address borrower);
-    function repay(uint loanId) returns (int8 result) {
+    function repay(uint loanId) external returns (int8 result) {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         if(loanPointers.length < loanId + 1) {
             e_error(ERR_NO_LOAN);
@@ -171,7 +171,7 @@ contract LoanManager is owned {
     }
 
     event e_collected(address borrower, address loanContractAddress);
-    function collect(uint[] loanIds) returns (int8 result) {
+    function collect(uint[] loanIds) external returns (int8 result) {
         /* when there are a lots of loans to be collected then
              the client need to call it in batches to make sure tx won't exceed block gas limit.
          Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted

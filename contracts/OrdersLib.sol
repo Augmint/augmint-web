@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.18;
 
 library OrdersLib {
     uint80 constant None = uint80(0);
@@ -76,9 +76,9 @@ library OrdersLib {
     }
 
     // Iterator interface
-    function iterateFirst(OrderList storage self) returns (uint80) { return self.first; }
-    function iterateValid(OrderList storage self, uint80 _index) returns (bool) { return _index - 1 < self.orders.length; }
-    function iteratePrev(OrderList storage self, uint80 _index) returns (uint80) { return self.orders[_index - 1].prev; }
-    function iterateNext(OrderList storage self, uint80 _index) returns (uint80) { return self.orders[_index - 1].next; }
+    function iterateFirst(OrderList storage self) internal view returns (uint80) { return self.first; }
+    function iterateValid(OrderList storage self, uint80 _index) internal view  returns (bool) { return _index - 1 < self.orders.length; }
+    function iteratePrev(OrderList storage self, uint80 _index) internal view  returns (uint80) { return self.orders[_index - 1].prev; }
+    function iterateNext(OrderList storage self, uint80 _index) internal view returns (uint80) { return self.orders[_index - 1].next; }
     // function iterateGet(OrderList storage self, uint80 _index) returns (Order) { return self.orders[_index - 1].order; }
 }

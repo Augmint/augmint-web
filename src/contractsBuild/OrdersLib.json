@@ -1,107 +1,18 @@
 {
   "contractName": "OrdersLib",
-  "abi": [
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "self",
-          "type": "OrdersLib.OrderList storage"
-        },
-        {
-          "name": "_index",
-          "type": "uint80"
-        }
-      ],
-      "name": "iterateNext",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint80"
-        }
-      ],
-      "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "self",
-          "type": "OrdersLib.OrderList storage"
-        }
-      ],
-      "name": "iterateFirst",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint80"
-        }
-      ],
-      "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "self",
-          "type": "OrdersLib.OrderList storage"
-        },
-        {
-          "name": "_index",
-          "type": "uint80"
-        }
-      ],
-      "name": "iteratePrev",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint80"
-        }
-      ],
-      "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "self",
-          "type": "OrdersLib.OrderList storage"
-        },
-        {
-          "name": "_index",
-          "type": "uint80"
-        }
-      ],
-      "name": "iterateValid",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
-    }
-  ],
-  "bytecode": "0x6060604052341561000f57600080fd5b6102b98061001e6000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063754646f8146100675780639854d129146100c0578063d1dd415e14610104578063e25fb1eb1461015d575b600080fd5b610092600480803590602001909190803569ffffffffffffffffffff169060200190919050506101a2565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b6100d660048080359060200190919050506101f4565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b61012f600480803590602001909190803569ffffffffffffffffffff16906020019091905050610218565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b610188600480803590602001909190803569ffffffffffffffffffff1690602001909190505061026a565b604051808215151515815260200191505060405180910390f35b6000826001016001830369ffffffffffffffffffff168154811015156101c457fe5b9060005260206000209060030201600001600a9054906101000a900469ffffffffffffffffffff16905092915050565b60008160000160009054906101000a900469ffffffffffffffffffff169050919050565b6000826001016001830369ffffffffffffffffffff1681548110151561023a57fe5b906000526020600020906003020160000160009054906101000a900469ffffffffffffffffffff16905092915050565b600082600101805490506001830369ffffffffffffffffffff16109050929150505600a165627a7a72305820a92bda68a7d5327cb998a1d5139d295d151d02e8d051c39d85201402716c2bc80029",
-  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063754646f8146100675780639854d129146100c0578063d1dd415e14610104578063e25fb1eb1461015d575b600080fd5b610092600480803590602001909190803569ffffffffffffffffffff169060200190919050506101a2565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b6100d660048080359060200190919050506101f4565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b61012f600480803590602001909190803569ffffffffffffffffffff16906020019091905050610218565b604051808269ffffffffffffffffffff1669ffffffffffffffffffff16815260200191505060405180910390f35b610188600480803590602001909190803569ffffffffffffffffffff1690602001909190505061026a565b604051808215151515815260200191505060405180910390f35b6000826001016001830369ffffffffffffffffffff168154811015156101c457fe5b9060005260206000209060030201600001600a9054906101000a900469ffffffffffffffffffff16905092915050565b60008160000160009054906101000a900469ffffffffffffffffffff169050919050565b6000826001016001830369ffffffffffffffffffff1681548110151561023a57fe5b906000526020600020906003020160000160009054906101000a900469ffffffffffffffffffff16905092915050565b600082600101805490506001830369ffffffffffffffffffff16109050929150505600a165627a7a72305820a92bda68a7d5327cb998a1d5139d295d151d02e8d051c39d85201402716c2bc80029",
-  "sourceMap": "26:2812:5:-;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "26:2812:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2595:117;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2259:85;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2473:117;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2349:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2595:117;2664:6;2681:4;:11;;2702:1;2693:6;:10;2681:23;;;;;;;;;;;;;;;;;;;;;;:28;;;;;;;;;;;;2674:35;;2595:117;;;;:::o;2259:85::-;2314:6;2331:4;:10;;;;;;;;;;;;2324:17;;2259:85;;;:::o;2473:117::-;2542:6;2559:4;:11;;2580:1;2571:6;:10;2559:23;;;;;;;;;;;;;;;;;;;;;;:28;;;;;;;;;;;;2552:35;;2473:117;;;;:::o;2349:119::-;2419:4;2447;:11;;:18;;;;2443:1;2434:6;:10;:31;;;2427:38;;2349:119;;;;:::o",
-  "source": "pragma solidity ^0.4.11;\n\nlibrary OrdersLib {\n    uint80 constant None = uint80(0);\n\n    // this struct holds open sell and buy orders actual state\n    // Ie. amount is updated when order partially filled\n    struct OrderList {\n        uint80 first;\n        uint80 last;\n        uint80 count;\n        Order[] orders;\n    }\n\n    enum OrderType {EthSell, UcdSell}\n    // all open orders\n    struct OrderData {\n        address maker;\n        uint80 makerOrderIdx; // idx in map(maker => [])\n        OrderType orderType;\n        uint amount; // actual amount to sell left (WEI or UCDC depending on orderType)\n\n    }\n\n    struct Order  {\n        uint80 prev;\n        uint80 next;\n        OrderData order;\n    }\n\n    /// Appends `_data` to the end of the list `self`.\n    function append(OrderList storage self, OrderData _order) internal returns (uint80 index)  {\n        index = uint80(self.orders.push(Order({prev: self.last, next: None, order: _order})));\n        if (self.last == None)\n        {\n            assert (self.first == None && self.count == 0) ;\n            self.first = self.last = index;\n            self.count = 1;\n        }\n        else\n        {\n            self.orders[self.last - 1].next = index;\n            self.last = index;\n            self.count ++;\n        }\n        return index;\n    }\n\n    /// Removes the element identified by index\n    /// `_index` from the list `self`.\n    function remove(OrderList storage self, uint80 _index) internal {\n        Order storage order = self.orders[_index - 1];\n        if (self.count == 1) {\n                self.count = 0;\n                self.first = 0;\n                self.last = 0;\n                order.prev = 0;\n                order.next = 0;\n                return;\n        }\n\n        if (order.prev == None && order.next == None  ) {\n            // this item is already deleted\n            return;\n        }\n        if (order.prev == None)\n            self.first = order.next;\n        if (order.next == None)\n            self.last = order.prev;\n        if (order.prev != None)\n            self.orders[order.prev - 1].next = order.next;\n        if (order.next != None)\n            self.orders[order.next - 1].prev = order.prev;\n        self.count--;\n\n    }\n\n    // Iterator interface\n    function iterateFirst(OrderList storage self) returns (uint80) { return self.first; }\n    function iterateValid(OrderList storage self, uint80 _index) returns (bool) { return _index - 1 < self.orders.length; }\n    function iteratePrev(OrderList storage self, uint80 _index) returns (uint80) { return self.orders[_index - 1].prev; }\n    function iterateNext(OrderList storage self, uint80 _index) returns (uint80) { return self.orders[_index - 1].next; }\n    // function iterateGet(OrderList storage self, uint80 _index) returns (Order) { return self.orders[_index - 1].order; }\n}\n",
+  "abi": [],
+  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a72305820ca62225de9b57e7444b99167e1b62f5fc733f025222b4e034275a07c1194b6760029",
+  "deployedBytecode": "0x6060604052600080fd00a165627a7a72305820ca62225de9b57e7444b99167e1b62f5fc733f025222b4e034275a07c1194b6760029",
+  "sourceMap": "26:2870:5:-;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "26:2870:5:-;;;;;",
+  "source": "pragma solidity ^0.4.18;\n\nlibrary OrdersLib {\n    uint80 constant None = uint80(0);\n\n    // this struct holds open sell and buy orders actual state\n    // Ie. amount is updated when order partially filled\n    struct OrderList {\n        uint80 first;\n        uint80 last;\n        uint80 count;\n        Order[] orders;\n    }\n\n    enum OrderType {EthSell, UcdSell}\n    // all open orders\n    struct OrderData {\n        address maker;\n        uint80 makerOrderIdx; // idx in map(maker => [])\n        OrderType orderType;\n        uint amount; // actual amount to sell left (WEI or UCDC depending on orderType)\n\n    }\n\n    struct Order  {\n        uint80 prev;\n        uint80 next;\n        OrderData order;\n    }\n\n    /// Appends `_data` to the end of the list `self`.\n    function append(OrderList storage self, OrderData _order) internal returns (uint80 index)  {\n        index = uint80(self.orders.push(Order({prev: self.last, next: None, order: _order})));\n        if (self.last == None)\n        {\n            assert (self.first == None && self.count == 0) ;\n            self.first = self.last = index;\n            self.count = 1;\n        }\n        else\n        {\n            self.orders[self.last - 1].next = index;\n            self.last = index;\n            self.count ++;\n        }\n        return index;\n    }\n\n    /// Removes the element identified by index\n    /// `_index` from the list `self`.\n    function remove(OrderList storage self, uint80 _index) internal {\n        Order storage order = self.orders[_index - 1];\n        if (self.count == 1) {\n                self.count = 0;\n                self.first = 0;\n                self.last = 0;\n                order.prev = 0;\n                order.next = 0;\n                return;\n        }\n\n        if (order.prev == None && order.next == None  ) {\n            // this item is already deleted\n            return;\n        }\n        if (order.prev == None)\n            self.first = order.next;\n        if (order.next == None)\n            self.last = order.prev;\n        if (order.prev != None)\n            self.orders[order.prev - 1].next = order.next;\n        if (order.next != None)\n            self.orders[order.next - 1].prev = order.prev;\n        self.count--;\n\n    }\n\n    // Iterator interface\n    function iterateFirst(OrderList storage self) internal view returns (uint80) { return self.first; }\n    function iterateValid(OrderList storage self, uint80 _index) internal view  returns (bool) { return _index - 1 < self.orders.length; }\n    function iteratePrev(OrderList storage self, uint80 _index) internal view  returns (uint80) { return self.orders[_index - 1].prev; }\n    function iterateNext(OrderList storage self, uint80 _index) internal view returns (uint80) { return self.orders[_index - 1].next; }\n    // function iterateGet(OrderList storage self, uint80 _index) returns (Order) { return self.orders[_index - 1].order; }\n}\n",
   "sourcePath": "/Users/petro/ether/dcm-poc/contracts/OrdersLib.sol",
   "ast": {
     "attributes": {
       "absolutePath": "/Users/petro/ether/dcm-poc/contracts/OrdersLib.sol",
       "exportedSymbols": {
         "OrdersLib": [
-          2504
+          2478
         ]
       }
     },
@@ -112,10 +23,10 @@
             "solidity",
             "^",
             "0.4",
-            ".11"
+            ".18"
           ]
         },
-        "id": 2189,
+        "id": 2163,
         "name": "PragmaDirective",
         "src": "0:24:5"
       },
@@ -131,17 +42,17 @@
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            2504
+            2478
           ],
           "name": "OrdersLib",
-          "scope": 2505
+          "scope": 2479
         },
         "children": [
           {
             "attributes": {
               "constant": true,
               "name": "None",
-              "scope": 2504,
+              "scope": 2478,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "uint80",
@@ -153,7 +64,7 @@
                   "name": "uint80",
                   "type": "uint80"
                 },
-                "id": 2190,
+                "id": 2164,
                 "name": "ElementaryTypeName",
                 "src": "50:6:5"
               },
@@ -187,7 +98,7 @@
                       "type": "type(uint80)",
                       "value": "uint80"
                     },
-                    "id": 2191,
+                    "id": 2165,
                     "name": "ElementaryTypeNameExpression",
                     "src": "73:6:5"
                   },
@@ -204,17 +115,17 @@
                       "type": "int_const 0",
                       "value": "0"
                     },
-                    "id": 2192,
+                    "id": 2166,
                     "name": "Literal",
                     "src": "80:1:5"
                   }
                 ],
-                "id": 2193,
+                "id": 2167,
                 "name": "FunctionCall",
                 "src": "73:9:5"
               }
             ],
-            "id": 2194,
+            "id": 2168,
             "name": "VariableDeclaration",
             "src": "50:32:5"
           },
@@ -222,7 +133,7 @@
             "attributes": {
               "canonicalName": "OrdersLib.OrderList",
               "name": "OrderList",
-              "scope": 2504,
+              "scope": 2478,
               "visibility": "public"
             },
             "children": [
@@ -230,7 +141,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "first",
-                  "scope": 2204,
+                  "scope": 2178,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -243,12 +154,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2195,
+                    "id": 2169,
                     "name": "ElementaryTypeName",
                     "src": "236:6:5"
                   }
                 ],
-                "id": 2196,
+                "id": 2170,
                 "name": "VariableDeclaration",
                 "src": "236:12:5"
               },
@@ -256,7 +167,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "last",
-                  "scope": 2204,
+                  "scope": 2178,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -269,12 +180,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2197,
+                    "id": 2171,
                     "name": "ElementaryTypeName",
                     "src": "258:6:5"
                   }
                 ],
-                "id": 2198,
+                "id": 2172,
                 "name": "VariableDeclaration",
                 "src": "258:11:5"
               },
@@ -282,7 +193,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "count",
-                  "scope": 2204,
+                  "scope": 2178,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -295,12 +206,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2199,
+                    "id": 2173,
                     "name": "ElementaryTypeName",
                     "src": "279:6:5"
                   }
                 ],
-                "id": 2200,
+                "id": 2174,
                 "name": "VariableDeclaration",
                 "src": "279:12:5"
               },
@@ -308,7 +219,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "orders",
-                  "scope": 2204,
+                  "scope": 2178,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "struct OrdersLib.Order storage ref[] storage pointer",
@@ -326,25 +237,25 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "Order",
-                          "referencedDeclaration": 2223,
+                          "referencedDeclaration": 2197,
                           "type": "struct OrdersLib.Order storage pointer"
                         },
-                        "id": 2201,
+                        "id": 2175,
                         "name": "UserDefinedTypeName",
                         "src": "301:5:5"
                       }
                     ],
-                    "id": 2202,
+                    "id": 2176,
                     "name": "ArrayTypeName",
                     "src": "301:7:5"
                   }
                 ],
-                "id": 2203,
+                "id": 2177,
                 "name": "VariableDeclaration",
                 "src": "301:14:5"
               }
             ],
-            "id": 2204,
+            "id": 2178,
             "name": "StructDefinition",
             "src": "209:113:5"
           },
@@ -358,7 +269,7 @@
                 "attributes": {
                   "name": "EthSell"
                 },
-                "id": 2205,
+                "id": 2179,
                 "name": "EnumValue",
                 "src": "344:7:5"
               },
@@ -366,12 +277,12 @@
                 "attributes": {
                   "name": "UcdSell"
                 },
-                "id": 2206,
+                "id": 2180,
                 "name": "EnumValue",
                 "src": "353:7:5"
               }
             ],
-            "id": 2207,
+            "id": 2181,
             "name": "EnumDefinition",
             "src": "328:33:5"
           },
@@ -379,7 +290,7 @@
             "attributes": {
               "canonicalName": "OrdersLib.OrderData",
               "name": "OrderData",
-              "scope": 2504,
+              "scope": 2478,
               "visibility": "public"
             },
             "children": [
@@ -387,7 +298,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "maker",
-                  "scope": 2216,
+                  "scope": 2190,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "address",
@@ -400,12 +311,12 @@
                       "name": "address",
                       "type": "address"
                     },
-                    "id": 2208,
+                    "id": 2182,
                     "name": "ElementaryTypeName",
                     "src": "416:7:5"
                   }
                 ],
-                "id": 2209,
+                "id": 2183,
                 "name": "VariableDeclaration",
                 "src": "416:13:5"
               },
@@ -413,7 +324,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "makerOrderIdx",
-                  "scope": 2216,
+                  "scope": 2190,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -426,12 +337,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2210,
+                    "id": 2184,
                     "name": "ElementaryTypeName",
                     "src": "439:6:5"
                   }
                 ],
-                "id": 2211,
+                "id": 2185,
                 "name": "VariableDeclaration",
                 "src": "439:20:5"
               },
@@ -439,7 +350,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "orderType",
-                  "scope": 2216,
+                  "scope": 2190,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "enum OrdersLib.OrderType",
@@ -451,15 +362,15 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "OrderType",
-                      "referencedDeclaration": 2207,
+                      "referencedDeclaration": 2181,
                       "type": "enum OrdersLib.OrderType"
                     },
-                    "id": 2212,
+                    "id": 2186,
                     "name": "UserDefinedTypeName",
                     "src": "496:9:5"
                   }
                 ],
-                "id": 2213,
+                "id": 2187,
                 "name": "VariableDeclaration",
                 "src": "496:19:5"
               },
@@ -467,7 +378,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "amount",
-                  "scope": 2216,
+                  "scope": 2190,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -480,17 +391,17 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2214,
+                    "id": 2188,
                     "name": "ElementaryTypeName",
                     "src": "525:4:5"
                   }
                 ],
-                "id": 2215,
+                "id": 2189,
                 "name": "VariableDeclaration",
                 "src": "525:11:5"
               }
             ],
-            "id": 2216,
+            "id": 2190,
             "name": "StructDefinition",
             "src": "389:222:5"
           },
@@ -498,7 +409,7 @@
             "attributes": {
               "canonicalName": "OrdersLib.Order",
               "name": "Order",
-              "scope": 2504,
+              "scope": 2478,
               "visibility": "public"
             },
             "children": [
@@ -506,7 +417,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "prev",
-                  "scope": 2223,
+                  "scope": 2197,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -519,12 +430,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2217,
+                    "id": 2191,
                     "name": "ElementaryTypeName",
                     "src": "641:6:5"
                   }
                 ],
-                "id": 2218,
+                "id": 2192,
                 "name": "VariableDeclaration",
                 "src": "641:11:5"
               },
@@ -532,7 +443,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "next",
-                  "scope": 2223,
+                  "scope": 2197,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint80",
@@ -545,12 +456,12 @@
                       "name": "uint80",
                       "type": "uint80"
                     },
-                    "id": 2219,
+                    "id": 2193,
                     "name": "ElementaryTypeName",
                     "src": "662:6:5"
                   }
                 ],
-                "id": 2220,
+                "id": 2194,
                 "name": "VariableDeclaration",
                 "src": "662:11:5"
               },
@@ -558,7 +469,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "order",
-                  "scope": 2223,
+                  "scope": 2197,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "struct OrdersLib.OrderData storage pointer",
@@ -570,20 +481,20 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "OrderData",
-                      "referencedDeclaration": 2216,
+                      "referencedDeclaration": 2190,
                       "type": "struct OrdersLib.OrderData storage pointer"
                     },
-                    "id": 2221,
+                    "id": 2195,
                     "name": "UserDefinedTypeName",
                     "src": "683:9:5"
                   }
                 ],
-                "id": 2222,
+                "id": 2196,
                 "name": "VariableDeclaration",
                 "src": "683:15:5"
               }
             ],
-            "id": 2223,
+            "id": 2197,
             "name": "StructDefinition",
             "src": "617:88:5"
           },
@@ -597,7 +508,7 @@
               ],
               "name": "append",
               "payable": false,
-              "scope": 2504,
+              "scope": 2478,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "internal"
@@ -609,7 +520,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2307,
+                      "scope": 2281,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -621,15 +532,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2224,
+                        "id": 2198,
                         "name": "UserDefinedTypeName",
                         "src": "782:9:5"
                       }
                     ],
-                    "id": 2225,
+                    "id": 2199,
                     "name": "VariableDeclaration",
                     "src": "782:22:5"
                   },
@@ -637,7 +548,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_order",
-                      "scope": 2307,
+                      "scope": 2281,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "struct OrdersLib.OrderData memory",
@@ -649,20 +560,20 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderData",
-                          "referencedDeclaration": 2216,
+                          "referencedDeclaration": 2190,
                           "type": "struct OrdersLib.OrderData storage pointer"
                         },
-                        "id": 2226,
+                        "id": 2200,
                         "name": "UserDefinedTypeName",
                         "src": "806:9:5"
                       }
                     ],
-                    "id": 2227,
+                    "id": 2201,
                     "name": "VariableDeclaration",
                     "src": "806:16:5"
                   }
                 ],
-                "id": 2228,
+                "id": 2202,
                 "name": "ParameterList",
                 "src": "781:42:5"
               },
@@ -672,7 +583,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "index",
-                      "scope": 2307,
+                      "scope": 2281,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -685,17 +596,17 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2229,
+                        "id": 2203,
                         "name": "ElementaryTypeName",
                         "src": "842:6:5"
                       }
                     ],
-                    "id": 2230,
+                    "id": 2204,
                     "name": "VariableDeclaration",
                     "src": "842:12:5"
                   }
                 ],
-                "id": 2231,
+                "id": 2205,
                 "name": "ParameterList",
                 "src": "841:14:5"
               },
@@ -720,11 +631,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2230,
+                              "referencedDeclaration": 2204,
                               "type": "uint80",
                               "value": "index"
                             },
-                            "id": 2232,
+                            "id": 2206,
                             "name": "Identifier",
                             "src": "867:5:5"
                           },
@@ -758,7 +669,7 @@
                                   "type": "type(uint80)",
                                   "value": "uint80"
                                 },
-                                "id": 2233,
+                                "id": 2207,
                                 "name": "ElementaryTypeNameExpression",
                                 "src": "875:6:5"
                               },
@@ -781,7 +692,7 @@
                                     "attributes": {
                                       "argumentTypes": [
                                         {
-                                          "typeIdentifier": "t_struct$_Order_$2223_memory",
+                                          "typeIdentifier": "t_struct$_Order_$2197_memory",
                                           "typeString": "struct OrdersLib.Order memory"
                                         }
                                       ],
@@ -802,7 +713,7 @@
                                           "isPure": false,
                                           "lValueRequested": false,
                                           "member_name": "orders",
-                                          "referencedDeclaration": 2203,
+                                          "referencedDeclaration": 2177,
                                           "type": "struct OrdersLib.Order storage ref[] storage ref"
                                         },
                                         "children": [
@@ -812,21 +723,21 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2225,
+                                              "referencedDeclaration": 2199,
                                               "type": "struct OrdersLib.OrderList storage pointer",
                                               "value": "self"
                                             },
-                                            "id": 2234,
+                                            "id": 2208,
                                             "name": "Identifier",
                                             "src": "882:4:5"
                                           }
                                         ],
-                                        "id": 2235,
+                                        "id": 2209,
                                         "name": "MemberAccess",
                                         "src": "882:11:5"
                                       }
                                     ],
-                                    "id": 2236,
+                                    "id": 2210,
                                     "name": "MemberAccess",
                                     "src": "882:16:5"
                                   },
@@ -853,11 +764,11 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2223,
+                                          "referencedDeclaration": 2197,
                                           "type": "type(struct OrdersLib.Order storage pointer)",
                                           "value": "Order"
                                         },
-                                        "id": 2237,
+                                        "id": 2211,
                                         "name": "Identifier",
                                         "src": "899:5:5"
                                       },
@@ -869,7 +780,7 @@
                                           "isPure": false,
                                           "lValueRequested": false,
                                           "member_name": "last",
-                                          "referencedDeclaration": 2198,
+                                          "referencedDeclaration": 2172,
                                           "type": "uint80"
                                         },
                                         "children": [
@@ -879,16 +790,16 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2225,
+                                              "referencedDeclaration": 2199,
                                               "type": "struct OrdersLib.OrderList storage pointer",
                                               "value": "self"
                                             },
-                                            "id": 2238,
+                                            "id": 2212,
                                             "name": "Identifier",
                                             "src": "912:4:5"
                                           }
                                         ],
-                                        "id": 2239,
+                                        "id": 2213,
                                         "name": "MemberAccess",
                                         "src": "912:9:5"
                                       },
@@ -898,11 +809,11 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2194,
+                                          "referencedDeclaration": 2168,
                                           "type": "uint80",
                                           "value": "None"
                                         },
-                                        "id": 2240,
+                                        "id": 2214,
                                         "name": "Identifier",
                                         "src": "929:4:5"
                                       },
@@ -912,36 +823,36 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2227,
+                                          "referencedDeclaration": 2201,
                                           "type": "struct OrdersLib.OrderData memory",
                                           "value": "_order"
                                         },
-                                        "id": 2241,
+                                        "id": 2215,
                                         "name": "Identifier",
                                         "src": "942:6:5"
                                       }
                                     ],
-                                    "id": 2242,
+                                    "id": 2216,
                                     "name": "FunctionCall",
                                     "src": "899:51:5"
                                   }
                                 ],
-                                "id": 2243,
+                                "id": 2217,
                                 "name": "FunctionCall",
                                 "src": "882:69:5"
                               }
                             ],
-                            "id": 2244,
+                            "id": 2218,
                             "name": "FunctionCall",
                             "src": "875:77:5"
                           }
                         ],
-                        "id": 2245,
+                        "id": 2219,
                         "name": "Assignment",
                         "src": "867:85:5"
                       }
                     ],
-                    "id": 2246,
+                    "id": 2220,
                     "name": "ExpressionStatement",
                     "src": "867:85:5"
                   },
@@ -970,7 +881,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "last",
-                              "referencedDeclaration": 2198,
+                              "referencedDeclaration": 2172,
                               "type": "uint80"
                             },
                             "children": [
@@ -980,16 +891,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2225,
+                                  "referencedDeclaration": 2199,
                                   "type": "struct OrdersLib.OrderList storage pointer",
                                   "value": "self"
                                 },
-                                "id": 2247,
+                                "id": 2221,
                                 "name": "Identifier",
                                 "src": "966:4:5"
                               }
                             ],
-                            "id": 2248,
+                            "id": 2222,
                             "name": "MemberAccess",
                             "src": "966:9:5"
                           },
@@ -999,16 +910,16 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2194,
+                              "referencedDeclaration": 2168,
                               "type": "uint80",
                               "value": "None"
                             },
-                            "id": 2249,
+                            "id": 2223,
                             "name": "Identifier",
                             "src": "979:4:5"
                           }
                         ],
-                        "id": 2250,
+                        "id": 2224,
                         "name": "BinaryOperation",
                         "src": "966:17:5"
                       },
@@ -1042,11 +953,11 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 3240,
+                                      "referencedDeclaration": 3214,
                                       "type": "function (bool) pure",
                                       "value": "assert"
                                     },
-                                    "id": 2251,
+                                    "id": 2225,
                                     "name": "Identifier",
                                     "src": "1007:6:5"
                                   },
@@ -1088,7 +999,7 @@
                                               "isPure": false,
                                               "lValueRequested": false,
                                               "member_name": "first",
-                                              "referencedDeclaration": 2196,
+                                              "referencedDeclaration": 2170,
                                               "type": "uint80"
                                             },
                                             "children": [
@@ -1098,16 +1009,16 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 2225,
+                                                  "referencedDeclaration": 2199,
                                                   "type": "struct OrdersLib.OrderList storage pointer",
                                                   "value": "self"
                                                 },
-                                                "id": 2252,
+                                                "id": 2226,
                                                 "name": "Identifier",
                                                 "src": "1015:4:5"
                                               }
                                             ],
-                                            "id": 2253,
+                                            "id": 2227,
                                             "name": "MemberAccess",
                                             "src": "1015:10:5"
                                           },
@@ -1117,16 +1028,16 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2194,
+                                              "referencedDeclaration": 2168,
                                               "type": "uint80",
                                               "value": "None"
                                             },
-                                            "id": 2254,
+                                            "id": 2228,
                                             "name": "Identifier",
                                             "src": "1029:4:5"
                                           }
                                         ],
-                                        "id": 2255,
+                                        "id": 2229,
                                         "name": "BinaryOperation",
                                         "src": "1015:18:5"
                                       },
@@ -1153,7 +1064,7 @@
                                               "isPure": false,
                                               "lValueRequested": false,
                                               "member_name": "count",
-                                              "referencedDeclaration": 2200,
+                                              "referencedDeclaration": 2174,
                                               "type": "uint80"
                                             },
                                             "children": [
@@ -1163,16 +1074,16 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 2225,
+                                                  "referencedDeclaration": 2199,
                                                   "type": "struct OrdersLib.OrderList storage pointer",
                                                   "value": "self"
                                                 },
-                                                "id": 2256,
+                                                "id": 2230,
                                                 "name": "Identifier",
                                                 "src": "1037:4:5"
                                               }
                                             ],
-                                            "id": 2257,
+                                            "id": 2231,
                                             "name": "MemberAccess",
                                             "src": "1037:10:5"
                                           },
@@ -1189,27 +1100,27 @@
                                               "type": "int_const 0",
                                               "value": "0"
                                             },
-                                            "id": 2258,
+                                            "id": 2232,
                                             "name": "Literal",
                                             "src": "1051:1:5"
                                           }
                                         ],
-                                        "id": 2259,
+                                        "id": 2233,
                                         "name": "BinaryOperation",
                                         "src": "1037:15:5"
                                       }
                                     ],
-                                    "id": 2260,
+                                    "id": 2234,
                                     "name": "BinaryOperation",
                                     "src": "1015:37:5"
                                   }
                                 ],
-                                "id": 2261,
+                                "id": 2235,
                                 "name": "FunctionCall",
                                 "src": "1007:46:5"
                               }
                             ],
-                            "id": 2262,
+                            "id": 2236,
                             "name": "ExpressionStatement",
                             "src": "1007:46:5"
                           },
@@ -1234,7 +1145,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "first",
-                                      "referencedDeclaration": 2196,
+                                      "referencedDeclaration": 2170,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -1244,16 +1155,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2225,
+                                          "referencedDeclaration": 2199,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2263,
+                                        "id": 2237,
                                         "name": "Identifier",
                                         "src": "1068:4:5"
                                       }
                                     ],
-                                    "id": 2265,
+                                    "id": 2239,
                                     "name": "MemberAccess",
                                     "src": "1068:10:5"
                                   },
@@ -1276,7 +1187,7 @@
                                           "isPure": false,
                                           "lValueRequested": true,
                                           "member_name": "last",
-                                          "referencedDeclaration": 2198,
+                                          "referencedDeclaration": 2172,
                                           "type": "uint80"
                                         },
                                         "children": [
@@ -1286,16 +1197,16 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2225,
+                                              "referencedDeclaration": 2199,
                                               "type": "struct OrdersLib.OrderList storage pointer",
                                               "value": "self"
                                             },
-                                            "id": 2266,
+                                            "id": 2240,
                                             "name": "Identifier",
                                             "src": "1081:4:5"
                                           }
                                         ],
-                                        "id": 2267,
+                                        "id": 2241,
                                         "name": "MemberAccess",
                                         "src": "1081:9:5"
                                       },
@@ -1305,26 +1216,26 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2230,
+                                          "referencedDeclaration": 2204,
                                           "type": "uint80",
                                           "value": "index"
                                         },
-                                        "id": 2268,
+                                        "id": 2242,
                                         "name": "Identifier",
                                         "src": "1093:5:5"
                                       }
                                     ],
-                                    "id": 2269,
+                                    "id": 2243,
                                     "name": "Assignment",
                                     "src": "1081:17:5"
                                   }
                                 ],
-                                "id": 2270,
+                                "id": 2244,
                                 "name": "Assignment",
                                 "src": "1068:30:5"
                               }
                             ],
-                            "id": 2271,
+                            "id": 2245,
                             "name": "ExpressionStatement",
                             "src": "1068:30:5"
                           },
@@ -1349,7 +1260,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "count",
-                                      "referencedDeclaration": 2200,
+                                      "referencedDeclaration": 2174,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -1359,16 +1270,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2225,
+                                          "referencedDeclaration": 2199,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2272,
+                                        "id": 2246,
                                         "name": "Identifier",
                                         "src": "1112:4:5"
                                       }
                                     ],
-                                    "id": 2274,
+                                    "id": 2248,
                                     "name": "MemberAccess",
                                     "src": "1112:10:5"
                                   },
@@ -1385,22 +1296,22 @@
                                       "type": "int_const 1",
                                       "value": "1"
                                     },
-                                    "id": 2275,
+                                    "id": 2249,
                                     "name": "Literal",
                                     "src": "1125:1:5"
                                   }
                                 ],
-                                "id": 2276,
+                                "id": 2250,
                                 "name": "Assignment",
                                 "src": "1112:14:5"
                               }
                             ],
-                            "id": 2277,
+                            "id": 2251,
                             "name": "ExpressionStatement",
                             "src": "1112:14:5"
                           }
                         ],
-                        "id": 2278,
+                        "id": 2252,
                         "name": "Block",
                         "src": "993:144:5"
                       },
@@ -1427,7 +1338,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "next",
-                                      "referencedDeclaration": 2220,
+                                      "referencedDeclaration": 2194,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -1449,7 +1360,7 @@
                                               "isPure": false,
                                               "lValueRequested": false,
                                               "member_name": "orders",
-                                              "referencedDeclaration": 2203,
+                                              "referencedDeclaration": 2177,
                                               "type": "struct OrdersLib.Order storage ref[] storage ref"
                                             },
                                             "children": [
@@ -1459,16 +1370,16 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 2225,
+                                                  "referencedDeclaration": 2199,
                                                   "type": "struct OrdersLib.OrderList storage pointer",
                                                   "value": "self"
                                                 },
-                                                "id": 2279,
+                                                "id": 2253,
                                                 "name": "Identifier",
                                                 "src": "1173:4:5"
                                               }
                                             ],
-                                            "id": 2285,
+                                            "id": 2259,
                                             "name": "MemberAccess",
                                             "src": "1173:11:5"
                                           },
@@ -1495,7 +1406,7 @@
                                                   "isPure": false,
                                                   "lValueRequested": false,
                                                   "member_name": "last",
-                                                  "referencedDeclaration": 2198,
+                                                  "referencedDeclaration": 2172,
                                                   "type": "uint80"
                                                 },
                                                 "children": [
@@ -1505,16 +1416,16 @@
                                                       "overloadedDeclarations": [
                                                         null
                                                       ],
-                                                      "referencedDeclaration": 2225,
+                                                      "referencedDeclaration": 2199,
                                                       "type": "struct OrdersLib.OrderList storage pointer",
                                                       "value": "self"
                                                     },
-                                                    "id": 2281,
+                                                    "id": 2255,
                                                     "name": "Identifier",
                                                     "src": "1185:4:5"
                                                   }
                                                 ],
-                                                "id": 2282,
+                                                "id": 2256,
                                                 "name": "MemberAccess",
                                                 "src": "1185:9:5"
                                               },
@@ -1531,22 +1442,22 @@
                                                   "type": "int_const 1",
                                                   "value": "1"
                                                 },
-                                                "id": 2283,
+                                                "id": 2257,
                                                 "name": "Literal",
                                                 "src": "1197:1:5"
                                               }
                                             ],
-                                            "id": 2284,
+                                            "id": 2258,
                                             "name": "BinaryOperation",
                                             "src": "1185:13:5"
                                           }
                                         ],
-                                        "id": 2286,
+                                        "id": 2260,
                                         "name": "IndexAccess",
                                         "src": "1173:26:5"
                                       }
                                     ],
-                                    "id": 2287,
+                                    "id": 2261,
                                     "name": "MemberAccess",
                                     "src": "1173:31:5"
                                   },
@@ -1556,21 +1467,21 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2230,
+                                      "referencedDeclaration": 2204,
                                       "type": "uint80",
                                       "value": "index"
                                     },
-                                    "id": 2288,
+                                    "id": 2262,
                                     "name": "Identifier",
                                     "src": "1207:5:5"
                                   }
                                 ],
-                                "id": 2289,
+                                "id": 2263,
                                 "name": "Assignment",
                                 "src": "1173:39:5"
                               }
                             ],
-                            "id": 2290,
+                            "id": 2264,
                             "name": "ExpressionStatement",
                             "src": "1173:39:5"
                           },
@@ -1595,7 +1506,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "last",
-                                      "referencedDeclaration": 2198,
+                                      "referencedDeclaration": 2172,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -1605,16 +1516,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2225,
+                                          "referencedDeclaration": 2199,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2291,
+                                        "id": 2265,
                                         "name": "Identifier",
                                         "src": "1226:4:5"
                                       }
                                     ],
-                                    "id": 2293,
+                                    "id": 2267,
                                     "name": "MemberAccess",
                                     "src": "1226:9:5"
                                   },
@@ -1624,21 +1535,21 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2230,
+                                      "referencedDeclaration": 2204,
                                       "type": "uint80",
                                       "value": "index"
                                     },
-                                    "id": 2294,
+                                    "id": 2268,
                                     "name": "Identifier",
                                     "src": "1238:5:5"
                                   }
                                 ],
-                                "id": 2295,
+                                "id": 2269,
                                 "name": "Assignment",
                                 "src": "1226:17:5"
                               }
                             ],
-                            "id": 2296,
+                            "id": 2270,
                             "name": "ExpressionStatement",
                             "src": "1226:17:5"
                           },
@@ -1664,7 +1575,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "count",
-                                      "referencedDeclaration": 2200,
+                                      "referencedDeclaration": 2174,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -1674,42 +1585,42 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2225,
+                                          "referencedDeclaration": 2199,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2297,
+                                        "id": 2271,
                                         "name": "Identifier",
                                         "src": "1257:4:5"
                                       }
                                     ],
-                                    "id": 2299,
+                                    "id": 2273,
                                     "name": "MemberAccess",
                                     "src": "1257:10:5"
                                   }
                                 ],
-                                "id": 2300,
+                                "id": 2274,
                                 "name": "UnaryOperation",
                                 "src": "1257:13:5"
                               }
                             ],
-                            "id": 2301,
+                            "id": 2275,
                             "name": "ExpressionStatement",
                             "src": "1257:13:5"
                           }
                         ],
-                        "id": 2302,
+                        "id": 2276,
                         "name": "Block",
                         "src": "1159:122:5"
                       }
                     ],
-                    "id": 2303,
+                    "id": 2277,
                     "name": "IfStatement",
                     "src": "962:319:5"
                   },
                   {
                     "attributes": {
-                      "functionReturnParameters": 2231
+                      "functionReturnParameters": 2205
                     },
                     "children": [
                       {
@@ -1718,26 +1629,26 @@
                           "overloadedDeclarations": [
                             null
                           ],
-                          "referencedDeclaration": 2230,
+                          "referencedDeclaration": 2204,
                           "type": "uint80",
                           "value": "index"
                         },
-                        "id": 2304,
+                        "id": 2278,
                         "name": "Identifier",
                         "src": "1297:5:5"
                       }
                     ],
-                    "id": 2305,
+                    "id": 2279,
                     "name": "Return",
                     "src": "1290:12:5"
                   }
                 ],
-                "id": 2306,
+                "id": 2280,
                 "name": "Block",
                 "src": "857:452:5"
               }
             ],
-            "id": 2307,
+            "id": 2281,
             "name": "FunctionDefinition",
             "src": "766:543:5"
           },
@@ -1751,7 +1662,7 @@
               ],
               "name": "remove",
               "payable": false,
-              "scope": 2504,
+              "scope": 2478,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "internal"
@@ -1763,7 +1674,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2438,
+                      "scope": 2412,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -1775,15 +1686,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2308,
+                        "id": 2282,
                         "name": "UserDefinedTypeName",
                         "src": "1418:9:5"
                       }
                     ],
-                    "id": 2309,
+                    "id": 2283,
                     "name": "VariableDeclaration",
                     "src": "1418:22:5"
                   },
@@ -1791,7 +1702,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_index",
-                      "scope": 2438,
+                      "scope": 2412,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -1804,17 +1715,17 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2310,
+                        "id": 2284,
                         "name": "ElementaryTypeName",
                         "src": "1442:6:5"
                       }
                     ],
-                    "id": 2311,
+                    "id": 2285,
                     "name": "VariableDeclaration",
                     "src": "1442:13:5"
                   }
                 ],
-                "id": 2312,
+                "id": 2286,
                 "name": "ParameterList",
                 "src": "1417:39:5"
               },
@@ -1825,7 +1736,7 @@
                   ]
                 },
                 "children": [],
-                "id": 2313,
+                "id": 2287,
                 "name": "ParameterList",
                 "src": "1466:0:5"
               },
@@ -1834,7 +1745,7 @@
                   {
                     "attributes": {
                       "assignments": [
-                        2315
+                        2289
                       ]
                     },
                     "children": [
@@ -1842,7 +1753,7 @@
                         "attributes": {
                           "constant": false,
                           "name": "order",
-                          "scope": 2438,
+                          "scope": 2412,
                           "stateVariable": false,
                           "storageLocation": "storage",
                           "type": "struct OrdersLib.Order storage pointer",
@@ -1854,15 +1765,15 @@
                             "attributes": {
                               "contractScope": null,
                               "name": "Order",
-                              "referencedDeclaration": 2223,
+                              "referencedDeclaration": 2197,
                               "type": "struct OrdersLib.Order storage pointer"
                             },
-                            "id": 2314,
+                            "id": 2288,
                             "name": "UserDefinedTypeName",
                             "src": "1476:5:5"
                           }
                         ],
-                        "id": 2315,
+                        "id": 2289,
                         "name": "VariableDeclaration",
                         "src": "1476:19:5"
                       },
@@ -1884,7 +1795,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "orders",
-                              "referencedDeclaration": 2203,
+                              "referencedDeclaration": 2177,
                               "type": "struct OrdersLib.Order storage ref[] storage ref"
                             },
                             "children": [
@@ -1894,16 +1805,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2309,
+                                  "referencedDeclaration": 2283,
                                   "type": "struct OrdersLib.OrderList storage pointer",
                                   "value": "self"
                                 },
-                                "id": 2316,
+                                "id": 2290,
                                 "name": "Identifier",
                                 "src": "1498:4:5"
                               }
                             ],
-                            "id": 2317,
+                            "id": 2291,
                             "name": "MemberAccess",
                             "src": "1498:11:5"
                           },
@@ -1928,11 +1839,11 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2311,
+                                  "referencedDeclaration": 2285,
                                   "type": "uint80",
                                   "value": "_index"
                                 },
-                                "id": 2318,
+                                "id": 2292,
                                 "name": "Identifier",
                                 "src": "1510:6:5"
                               },
@@ -1949,22 +1860,22 @@
                                   "type": "int_const 1",
                                   "value": "1"
                                 },
-                                "id": 2319,
+                                "id": 2293,
                                 "name": "Literal",
                                 "src": "1519:1:5"
                               }
                             ],
-                            "id": 2320,
+                            "id": 2294,
                             "name": "BinaryOperation",
                             "src": "1510:10:5"
                           }
                         ],
-                        "id": 2321,
+                        "id": 2295,
                         "name": "IndexAccess",
                         "src": "1498:23:5"
                       }
                     ],
-                    "id": 2322,
+                    "id": 2296,
                     "name": "VariableDeclarationStatement",
                     "src": "1476:45:5"
                   },
@@ -1996,7 +1907,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "count",
-                              "referencedDeclaration": 2200,
+                              "referencedDeclaration": 2174,
                               "type": "uint80"
                             },
                             "children": [
@@ -2006,16 +1917,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2309,
+                                  "referencedDeclaration": 2283,
                                   "type": "struct OrdersLib.OrderList storage pointer",
                                   "value": "self"
                                 },
-                                "id": 2323,
+                                "id": 2297,
                                 "name": "Identifier",
                                 "src": "1535:4:5"
                               }
                             ],
-                            "id": 2324,
+                            "id": 2298,
                             "name": "MemberAccess",
                             "src": "1535:10:5"
                           },
@@ -2032,12 +1943,12 @@
                               "type": "int_const 1",
                               "value": "1"
                             },
-                            "id": 2325,
+                            "id": 2299,
                             "name": "Literal",
                             "src": "1549:1:5"
                           }
                         ],
-                        "id": 2326,
+                        "id": 2300,
                         "name": "BinaryOperation",
                         "src": "1535:15:5"
                       },
@@ -2064,7 +1975,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "count",
-                                      "referencedDeclaration": 2200,
+                                      "referencedDeclaration": 2174,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -2074,16 +1985,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2309,
+                                          "referencedDeclaration": 2283,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2327,
+                                        "id": 2301,
                                         "name": "Identifier",
                                         "src": "1570:4:5"
                                       }
                                     ],
-                                    "id": 2329,
+                                    "id": 2303,
                                     "name": "MemberAccess",
                                     "src": "1570:10:5"
                                   },
@@ -2100,17 +2011,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 2330,
+                                    "id": 2304,
                                     "name": "Literal",
                                     "src": "1583:1:5"
                                   }
                                 ],
-                                "id": 2331,
+                                "id": 2305,
                                 "name": "Assignment",
                                 "src": "1570:14:5"
                               }
                             ],
-                            "id": 2332,
+                            "id": 2306,
                             "name": "ExpressionStatement",
                             "src": "1570:14:5"
                           },
@@ -2135,7 +2046,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "first",
-                                      "referencedDeclaration": 2196,
+                                      "referencedDeclaration": 2170,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -2145,16 +2056,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2309,
+                                          "referencedDeclaration": 2283,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2333,
+                                        "id": 2307,
                                         "name": "Identifier",
                                         "src": "1602:4:5"
                                       }
                                     ],
-                                    "id": 2335,
+                                    "id": 2309,
                                     "name": "MemberAccess",
                                     "src": "1602:10:5"
                                   },
@@ -2171,17 +2082,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 2336,
+                                    "id": 2310,
                                     "name": "Literal",
                                     "src": "1615:1:5"
                                   }
                                 ],
-                                "id": 2337,
+                                "id": 2311,
                                 "name": "Assignment",
                                 "src": "1602:14:5"
                               }
                             ],
-                            "id": 2338,
+                            "id": 2312,
                             "name": "ExpressionStatement",
                             "src": "1602:14:5"
                           },
@@ -2206,7 +2117,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "last",
-                                      "referencedDeclaration": 2198,
+                                      "referencedDeclaration": 2172,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -2216,16 +2127,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2309,
+                                          "referencedDeclaration": 2283,
                                           "type": "struct OrdersLib.OrderList storage pointer",
                                           "value": "self"
                                         },
-                                        "id": 2339,
+                                        "id": 2313,
                                         "name": "Identifier",
                                         "src": "1634:4:5"
                                       }
                                     ],
-                                    "id": 2341,
+                                    "id": 2315,
                                     "name": "MemberAccess",
                                     "src": "1634:9:5"
                                   },
@@ -2242,17 +2153,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 2342,
+                                    "id": 2316,
                                     "name": "Literal",
                                     "src": "1646:1:5"
                                   }
                                 ],
-                                "id": 2343,
+                                "id": 2317,
                                 "name": "Assignment",
                                 "src": "1634:13:5"
                               }
                             ],
-                            "id": 2344,
+                            "id": 2318,
                             "name": "ExpressionStatement",
                             "src": "1634:13:5"
                           },
@@ -2277,7 +2188,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "prev",
-                                      "referencedDeclaration": 2218,
+                                      "referencedDeclaration": 2192,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -2287,16 +2198,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2315,
+                                          "referencedDeclaration": 2289,
                                           "type": "struct OrdersLib.Order storage pointer",
                                           "value": "order"
                                         },
-                                        "id": 2345,
+                                        "id": 2319,
                                         "name": "Identifier",
                                         "src": "1665:5:5"
                                       }
                                     ],
-                                    "id": 2347,
+                                    "id": 2321,
                                     "name": "MemberAccess",
                                     "src": "1665:10:5"
                                   },
@@ -2313,17 +2224,17 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 2348,
+                                    "id": 2322,
                                     "name": "Literal",
                                     "src": "1678:1:5"
                                   }
                                 ],
-                                "id": 2349,
+                                "id": 2323,
                                 "name": "Assignment",
                                 "src": "1665:14:5"
                               }
                             ],
-                            "id": 2350,
+                            "id": 2324,
                             "name": "ExpressionStatement",
                             "src": "1665:14:5"
                           },
@@ -2348,7 +2259,7 @@
                                       "isPure": false,
                                       "lValueRequested": true,
                                       "member_name": "next",
-                                      "referencedDeclaration": 2220,
+                                      "referencedDeclaration": 2194,
                                       "type": "uint80"
                                     },
                                     "children": [
@@ -2358,16 +2269,16 @@
                                           "overloadedDeclarations": [
                                             null
                                           ],
-                                          "referencedDeclaration": 2315,
+                                          "referencedDeclaration": 2289,
                                           "type": "struct OrdersLib.Order storage pointer",
                                           "value": "order"
                                         },
-                                        "id": 2351,
+                                        "id": 2325,
                                         "name": "Identifier",
                                         "src": "1697:5:5"
                                       }
                                     ],
-                                    "id": 2353,
+                                    "id": 2327,
                                     "name": "MemberAccess",
                                     "src": "1697:10:5"
                                   },
@@ -2384,36 +2295,36 @@
                                       "type": "int_const 0",
                                       "value": "0"
                                     },
-                                    "id": 2354,
+                                    "id": 2328,
                                     "name": "Literal",
                                     "src": "1710:1:5"
                                   }
                                 ],
-                                "id": 2355,
+                                "id": 2329,
                                 "name": "Assignment",
                                 "src": "1697:14:5"
                               }
                             ],
-                            "id": 2356,
+                            "id": 2330,
                             "name": "ExpressionStatement",
                             "src": "1697:14:5"
                           },
                           {
                             "attributes": {
                               "expression": null,
-                              "functionReturnParameters": 2313
+                              "functionReturnParameters": 2287
                             },
-                            "id": 2357,
+                            "id": 2331,
                             "name": "Return",
                             "src": "1729:7:5"
                           }
                         ],
-                        "id": 2358,
+                        "id": 2332,
                         "name": "Block",
                         "src": "1552:194:5"
                       }
                     ],
-                    "id": 2359,
+                    "id": 2333,
                     "name": "IfStatement",
                     "src": "1531:215:5"
                   },
@@ -2460,7 +2371,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "prev",
-                                  "referencedDeclaration": 2218,
+                                  "referencedDeclaration": 2192,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2470,16 +2381,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2360,
+                                    "id": 2334,
                                     "name": "Identifier",
                                     "src": "1760:5:5"
                                   }
                                 ],
-                                "id": 2361,
+                                "id": 2335,
                                 "name": "MemberAccess",
                                 "src": "1760:10:5"
                               },
@@ -2489,16 +2400,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2194,
+                                  "referencedDeclaration": 2168,
                                   "type": "uint80",
                                   "value": "None"
                                 },
-                                "id": 2362,
+                                "id": 2336,
                                 "name": "Identifier",
                                 "src": "1774:4:5"
                               }
                             ],
-                            "id": 2363,
+                            "id": 2337,
                             "name": "BinaryOperation",
                             "src": "1760:18:5"
                           },
@@ -2525,7 +2436,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "next",
-                                  "referencedDeclaration": 2220,
+                                  "referencedDeclaration": 2194,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2535,16 +2446,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2364,
+                                    "id": 2338,
                                     "name": "Identifier",
                                     "src": "1782:5:5"
                                   }
                                 ],
-                                "id": 2365,
+                                "id": 2339,
                                 "name": "MemberAccess",
                                 "src": "1782:10:5"
                               },
@@ -2554,21 +2465,21 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2194,
+                                  "referencedDeclaration": 2168,
                                   "type": "uint80",
                                   "value": "None"
                                 },
-                                "id": 2366,
+                                "id": 2340,
                                 "name": "Identifier",
                                 "src": "1796:4:5"
                               }
                             ],
-                            "id": 2367,
+                            "id": 2341,
                             "name": "BinaryOperation",
                             "src": "1782:18:5"
                           }
                         ],
-                        "id": 2368,
+                        "id": 2342,
                         "name": "BinaryOperation",
                         "src": "1760:40:5"
                       },
@@ -2577,19 +2488,19 @@
                           {
                             "attributes": {
                               "expression": null,
-                              "functionReturnParameters": 2313
+                              "functionReturnParameters": 2287
                             },
-                            "id": 2369,
+                            "id": 2343,
                             "name": "Return",
                             "src": "1862:7:5"
                           }
                         ],
-                        "id": 2370,
+                        "id": 2344,
                         "name": "Block",
                         "src": "1804:75:5"
                       }
                     ],
-                    "id": 2371,
+                    "id": 2345,
                     "name": "IfStatement",
                     "src": "1756:123:5"
                   },
@@ -2621,7 +2532,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "prev",
-                              "referencedDeclaration": 2218,
+                              "referencedDeclaration": 2192,
                               "type": "uint80"
                             },
                             "children": [
@@ -2631,16 +2542,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2315,
+                                  "referencedDeclaration": 2289,
                                   "type": "struct OrdersLib.Order storage pointer",
                                   "value": "order"
                                 },
-                                "id": 2372,
+                                "id": 2346,
                                 "name": "Identifier",
                                 "src": "1892:5:5"
                               }
                             ],
-                            "id": 2373,
+                            "id": 2347,
                             "name": "MemberAccess",
                             "src": "1892:10:5"
                           },
@@ -2650,16 +2561,16 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2194,
+                              "referencedDeclaration": 2168,
                               "type": "uint80",
                               "value": "None"
                             },
-                            "id": 2374,
+                            "id": 2348,
                             "name": "Identifier",
                             "src": "1906:4:5"
                           }
                         ],
-                        "id": 2375,
+                        "id": 2349,
                         "name": "BinaryOperation",
                         "src": "1892:18:5"
                       },
@@ -2684,7 +2595,7 @@
                                   "isPure": false,
                                   "lValueRequested": true,
                                   "member_name": "first",
-                                  "referencedDeclaration": 2196,
+                                  "referencedDeclaration": 2170,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2694,16 +2605,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2309,
+                                      "referencedDeclaration": 2283,
                                       "type": "struct OrdersLib.OrderList storage pointer",
                                       "value": "self"
                                     },
-                                    "id": 2376,
+                                    "id": 2350,
                                     "name": "Identifier",
                                     "src": "1924:4:5"
                                   }
                                 ],
-                                "id": 2378,
+                                "id": 2352,
                                 "name": "MemberAccess",
                                 "src": "1924:10:5"
                               },
@@ -2715,7 +2626,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "next",
-                                  "referencedDeclaration": 2220,
+                                  "referencedDeclaration": 2194,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2725,31 +2636,31 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2379,
+                                    "id": 2353,
                                     "name": "Identifier",
                                     "src": "1937:5:5"
                                   }
                                 ],
-                                "id": 2380,
+                                "id": 2354,
                                 "name": "MemberAccess",
                                 "src": "1937:10:5"
                               }
                             ],
-                            "id": 2381,
+                            "id": 2355,
                             "name": "Assignment",
                             "src": "1924:23:5"
                           }
                         ],
-                        "id": 2382,
+                        "id": 2356,
                         "name": "ExpressionStatement",
                         "src": "1924:23:5"
                       }
                     ],
-                    "id": 2383,
+                    "id": 2357,
                     "name": "IfStatement",
                     "src": "1888:59:5"
                   },
@@ -2781,7 +2692,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "next",
-                              "referencedDeclaration": 2220,
+                              "referencedDeclaration": 2194,
                               "type": "uint80"
                             },
                             "children": [
@@ -2791,16 +2702,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2315,
+                                  "referencedDeclaration": 2289,
                                   "type": "struct OrdersLib.Order storage pointer",
                                   "value": "order"
                                 },
-                                "id": 2384,
+                                "id": 2358,
                                 "name": "Identifier",
                                 "src": "1961:5:5"
                               }
                             ],
-                            "id": 2385,
+                            "id": 2359,
                             "name": "MemberAccess",
                             "src": "1961:10:5"
                           },
@@ -2810,16 +2721,16 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2194,
+                              "referencedDeclaration": 2168,
                               "type": "uint80",
                               "value": "None"
                             },
-                            "id": 2386,
+                            "id": 2360,
                             "name": "Identifier",
                             "src": "1975:4:5"
                           }
                         ],
-                        "id": 2387,
+                        "id": 2361,
                         "name": "BinaryOperation",
                         "src": "1961:18:5"
                       },
@@ -2844,7 +2755,7 @@
                                   "isPure": false,
                                   "lValueRequested": true,
                                   "member_name": "last",
-                                  "referencedDeclaration": 2198,
+                                  "referencedDeclaration": 2172,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2854,16 +2765,16 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2309,
+                                      "referencedDeclaration": 2283,
                                       "type": "struct OrdersLib.OrderList storage pointer",
                                       "value": "self"
                                     },
-                                    "id": 2388,
+                                    "id": 2362,
                                     "name": "Identifier",
                                     "src": "1993:4:5"
                                   }
                                 ],
-                                "id": 2390,
+                                "id": 2364,
                                 "name": "MemberAccess",
                                 "src": "1993:9:5"
                               },
@@ -2875,7 +2786,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "prev",
-                                  "referencedDeclaration": 2218,
+                                  "referencedDeclaration": 2192,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -2885,31 +2796,31 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2391,
+                                    "id": 2365,
                                     "name": "Identifier",
                                     "src": "2005:5:5"
                                   }
                                 ],
-                                "id": 2392,
+                                "id": 2366,
                                 "name": "MemberAccess",
                                 "src": "2005:10:5"
                               }
                             ],
-                            "id": 2393,
+                            "id": 2367,
                             "name": "Assignment",
                             "src": "1993:22:5"
                           }
                         ],
-                        "id": 2394,
+                        "id": 2368,
                         "name": "ExpressionStatement",
                         "src": "1993:22:5"
                       }
                     ],
-                    "id": 2395,
+                    "id": 2369,
                     "name": "IfStatement",
                     "src": "1957:58:5"
                   },
@@ -2941,7 +2852,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "prev",
-                              "referencedDeclaration": 2218,
+                              "referencedDeclaration": 2192,
                               "type": "uint80"
                             },
                             "children": [
@@ -2951,16 +2862,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2315,
+                                  "referencedDeclaration": 2289,
                                   "type": "struct OrdersLib.Order storage pointer",
                                   "value": "order"
                                 },
-                                "id": 2396,
+                                "id": 2370,
                                 "name": "Identifier",
                                 "src": "2029:5:5"
                               }
                             ],
-                            "id": 2397,
+                            "id": 2371,
                             "name": "MemberAccess",
                             "src": "2029:10:5"
                           },
@@ -2970,16 +2881,16 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2194,
+                              "referencedDeclaration": 2168,
                               "type": "uint80",
                               "value": "None"
                             },
-                            "id": 2398,
+                            "id": 2372,
                             "name": "Identifier",
                             "src": "2043:4:5"
                           }
                         ],
-                        "id": 2399,
+                        "id": 2373,
                         "name": "BinaryOperation",
                         "src": "2029:18:5"
                       },
@@ -3004,7 +2915,7 @@
                                   "isPure": false,
                                   "lValueRequested": true,
                                   "member_name": "next",
-                                  "referencedDeclaration": 2220,
+                                  "referencedDeclaration": 2194,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -3026,7 +2937,7 @@
                                           "isPure": false,
                                           "lValueRequested": false,
                                           "member_name": "orders",
-                                          "referencedDeclaration": 2203,
+                                          "referencedDeclaration": 2177,
                                           "type": "struct OrdersLib.Order storage ref[] storage ref"
                                         },
                                         "children": [
@@ -3036,16 +2947,16 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2309,
+                                              "referencedDeclaration": 2283,
                                               "type": "struct OrdersLib.OrderList storage pointer",
                                               "value": "self"
                                             },
-                                            "id": 2400,
+                                            "id": 2374,
                                             "name": "Identifier",
                                             "src": "2061:4:5"
                                           }
                                         ],
-                                        "id": 2406,
+                                        "id": 2380,
                                         "name": "MemberAccess",
                                         "src": "2061:11:5"
                                       },
@@ -3072,7 +2983,7 @@
                                               "isPure": false,
                                               "lValueRequested": false,
                                               "member_name": "prev",
-                                              "referencedDeclaration": 2218,
+                                              "referencedDeclaration": 2192,
                                               "type": "uint80"
                                             },
                                             "children": [
@@ -3082,16 +2993,16 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 2315,
+                                                  "referencedDeclaration": 2289,
                                                   "type": "struct OrdersLib.Order storage pointer",
                                                   "value": "order"
                                                 },
-                                                "id": 2402,
+                                                "id": 2376,
                                                 "name": "Identifier",
                                                 "src": "2073:5:5"
                                               }
                                             ],
-                                            "id": 2403,
+                                            "id": 2377,
                                             "name": "MemberAccess",
                                             "src": "2073:10:5"
                                           },
@@ -3108,22 +3019,22 @@
                                               "type": "int_const 1",
                                               "value": "1"
                                             },
-                                            "id": 2404,
+                                            "id": 2378,
                                             "name": "Literal",
                                             "src": "2086:1:5"
                                           }
                                         ],
-                                        "id": 2405,
+                                        "id": 2379,
                                         "name": "BinaryOperation",
                                         "src": "2073:14:5"
                                       }
                                     ],
-                                    "id": 2407,
+                                    "id": 2381,
                                     "name": "IndexAccess",
                                     "src": "2061:27:5"
                                   }
                                 ],
-                                "id": 2408,
+                                "id": 2382,
                                 "name": "MemberAccess",
                                 "src": "2061:32:5"
                               },
@@ -3135,7 +3046,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "next",
-                                  "referencedDeclaration": 2220,
+                                  "referencedDeclaration": 2194,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -3145,31 +3056,31 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2409,
+                                    "id": 2383,
                                     "name": "Identifier",
                                     "src": "2096:5:5"
                                   }
                                 ],
-                                "id": 2410,
+                                "id": 2384,
                                 "name": "MemberAccess",
                                 "src": "2096:10:5"
                               }
                             ],
-                            "id": 2411,
+                            "id": 2385,
                             "name": "Assignment",
                             "src": "2061:45:5"
                           }
                         ],
-                        "id": 2412,
+                        "id": 2386,
                         "name": "ExpressionStatement",
                         "src": "2061:45:5"
                       }
                     ],
-                    "id": 2413,
+                    "id": 2387,
                     "name": "IfStatement",
                     "src": "2025:81:5"
                   },
@@ -3201,7 +3112,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "next",
-                              "referencedDeclaration": 2220,
+                              "referencedDeclaration": 2194,
                               "type": "uint80"
                             },
                             "children": [
@@ -3211,16 +3122,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2315,
+                                  "referencedDeclaration": 2289,
                                   "type": "struct OrdersLib.Order storage pointer",
                                   "value": "order"
                                 },
-                                "id": 2414,
+                                "id": 2388,
                                 "name": "Identifier",
                                 "src": "2120:5:5"
                               }
                             ],
-                            "id": 2415,
+                            "id": 2389,
                             "name": "MemberAccess",
                             "src": "2120:10:5"
                           },
@@ -3230,16 +3141,16 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2194,
+                              "referencedDeclaration": 2168,
                               "type": "uint80",
                               "value": "None"
                             },
-                            "id": 2416,
+                            "id": 2390,
                             "name": "Identifier",
                             "src": "2134:4:5"
                           }
                         ],
-                        "id": 2417,
+                        "id": 2391,
                         "name": "BinaryOperation",
                         "src": "2120:18:5"
                       },
@@ -3264,7 +3175,7 @@
                                   "isPure": false,
                                   "lValueRequested": true,
                                   "member_name": "prev",
-                                  "referencedDeclaration": 2218,
+                                  "referencedDeclaration": 2192,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -3286,7 +3197,7 @@
                                           "isPure": false,
                                           "lValueRequested": false,
                                           "member_name": "orders",
-                                          "referencedDeclaration": 2203,
+                                          "referencedDeclaration": 2177,
                                           "type": "struct OrdersLib.Order storage ref[] storage ref"
                                         },
                                         "children": [
@@ -3296,16 +3207,16 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 2309,
+                                              "referencedDeclaration": 2283,
                                               "type": "struct OrdersLib.OrderList storage pointer",
                                               "value": "self"
                                             },
-                                            "id": 2418,
+                                            "id": 2392,
                                             "name": "Identifier",
                                             "src": "2152:4:5"
                                           }
                                         ],
-                                        "id": 2424,
+                                        "id": 2398,
                                         "name": "MemberAccess",
                                         "src": "2152:11:5"
                                       },
@@ -3332,7 +3243,7 @@
                                               "isPure": false,
                                               "lValueRequested": false,
                                               "member_name": "next",
-                                              "referencedDeclaration": 2220,
+                                              "referencedDeclaration": 2194,
                                               "type": "uint80"
                                             },
                                             "children": [
@@ -3342,16 +3253,16 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 2315,
+                                                  "referencedDeclaration": 2289,
                                                   "type": "struct OrdersLib.Order storage pointer",
                                                   "value": "order"
                                                 },
-                                                "id": 2420,
+                                                "id": 2394,
                                                 "name": "Identifier",
                                                 "src": "2164:5:5"
                                               }
                                             ],
-                                            "id": 2421,
+                                            "id": 2395,
                                             "name": "MemberAccess",
                                             "src": "2164:10:5"
                                           },
@@ -3368,22 +3279,22 @@
                                               "type": "int_const 1",
                                               "value": "1"
                                             },
-                                            "id": 2422,
+                                            "id": 2396,
                                             "name": "Literal",
                                             "src": "2177:1:5"
                                           }
                                         ],
-                                        "id": 2423,
+                                        "id": 2397,
                                         "name": "BinaryOperation",
                                         "src": "2164:14:5"
                                       }
                                     ],
-                                    "id": 2425,
+                                    "id": 2399,
                                     "name": "IndexAccess",
                                     "src": "2152:27:5"
                                   }
                                 ],
-                                "id": 2426,
+                                "id": 2400,
                                 "name": "MemberAccess",
                                 "src": "2152:32:5"
                               },
@@ -3395,7 +3306,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "prev",
-                                  "referencedDeclaration": 2218,
+                                  "referencedDeclaration": 2192,
                                   "type": "uint80"
                                 },
                                 "children": [
@@ -3405,31 +3316,31 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2315,
+                                      "referencedDeclaration": 2289,
                                       "type": "struct OrdersLib.Order storage pointer",
                                       "value": "order"
                                     },
-                                    "id": 2427,
+                                    "id": 2401,
                                     "name": "Identifier",
                                     "src": "2187:5:5"
                                   }
                                 ],
-                                "id": 2428,
+                                "id": 2402,
                                 "name": "MemberAccess",
                                 "src": "2187:10:5"
                               }
                             ],
-                            "id": 2429,
+                            "id": 2403,
                             "name": "Assignment",
                             "src": "2152:45:5"
                           }
                         ],
-                        "id": 2430,
+                        "id": 2404,
                         "name": "ExpressionStatement",
                         "src": "2152:45:5"
                       }
                     ],
-                    "id": 2431,
+                    "id": 2405,
                     "name": "IfStatement",
                     "src": "2116:81:5"
                   },
@@ -3455,7 +3366,7 @@
                               "isPure": false,
                               "lValueRequested": true,
                               "member_name": "count",
-                              "referencedDeclaration": 2200,
+                              "referencedDeclaration": 2174,
                               "type": "uint80"
                             },
                             "children": [
@@ -3465,42 +3376,42 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2309,
+                                  "referencedDeclaration": 2283,
                                   "type": "struct OrdersLib.OrderList storage pointer",
                                   "value": "self"
                                 },
-                                "id": 2432,
+                                "id": 2406,
                                 "name": "Identifier",
                                 "src": "2207:4:5"
                               }
                             ],
-                            "id": 2434,
+                            "id": 2408,
                             "name": "MemberAccess",
                             "src": "2207:10:5"
                           }
                         ],
-                        "id": 2435,
+                        "id": 2409,
                         "name": "UnaryOperation",
                         "src": "2207:12:5"
                       }
                     ],
-                    "id": 2436,
+                    "id": 2410,
                     "name": "ExpressionStatement",
                     "src": "2207:12:5"
                   }
                 ],
-                "id": 2437,
+                "id": 2411,
                 "name": "Block",
                 "src": "1466:761:5"
               }
             ],
-            "id": 2438,
+            "id": 2412,
             "name": "FunctionDefinition",
             "src": "1402:825:5"
           },
           {
             "attributes": {
-              "constant": false,
+              "constant": true,
               "implemented": true,
               "isConstructor": false,
               "modifiers": [
@@ -3508,10 +3419,10 @@
               ],
               "name": "iterateFirst",
               "payable": false,
-              "scope": 2504,
-              "stateMutability": "nonpayable",
+              "scope": 2478,
+              "stateMutability": "view",
               "superFunction": null,
-              "visibility": "public"
+              "visibility": "internal"
             },
             "children": [
               {
@@ -3520,7 +3431,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2449,
+                      "scope": 2423,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -3532,20 +3443,20 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2439,
+                        "id": 2413,
                         "name": "UserDefinedTypeName",
                         "src": "2281:9:5"
                       }
                     ],
-                    "id": 2440,
+                    "id": 2414,
                     "name": "VariableDeclaration",
                     "src": "2281:22:5"
                   }
                 ],
-                "id": 2441,
+                "id": 2415,
                 "name": "ParameterList",
                 "src": "2280:24:5"
               },
@@ -3555,7 +3466,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 2449,
+                      "scope": 2423,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -3568,25 +3479,25 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2442,
+                        "id": 2416,
                         "name": "ElementaryTypeName",
-                        "src": "2314:6:5"
+                        "src": "2328:6:5"
                       }
                     ],
-                    "id": 2443,
+                    "id": 2417,
                     "name": "VariableDeclaration",
-                    "src": "2314:6:5"
+                    "src": "2328:6:5"
                   }
                 ],
-                "id": 2444,
+                "id": 2418,
                 "name": "ParameterList",
-                "src": "2313:8:5"
+                "src": "2327:8:5"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 2444
+                      "functionReturnParameters": 2418
                     },
                     "children": [
                       {
@@ -3597,7 +3508,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "first",
-                          "referencedDeclaration": 2196,
+                          "referencedDeclaration": 2170,
                           "type": "uint80"
                         },
                         "children": [
@@ -3607,37 +3518,37 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 2440,
+                              "referencedDeclaration": 2414,
                               "type": "struct OrdersLib.OrderList storage pointer",
                               "value": "self"
                             },
-                            "id": 2445,
+                            "id": 2419,
                             "name": "Identifier",
-                            "src": "2331:4:5"
+                            "src": "2345:4:5"
                           }
                         ],
-                        "id": 2446,
+                        "id": 2420,
                         "name": "MemberAccess",
-                        "src": "2331:10:5"
+                        "src": "2345:10:5"
                       }
                     ],
-                    "id": 2447,
+                    "id": 2421,
                     "name": "Return",
-                    "src": "2324:17:5"
+                    "src": "2338:17:5"
                   }
                 ],
-                "id": 2448,
+                "id": 2422,
                 "name": "Block",
-                "src": "2322:22:5"
+                "src": "2336:22:5"
               }
             ],
-            "id": 2449,
+            "id": 2423,
             "name": "FunctionDefinition",
-            "src": "2259:85:5"
+            "src": "2259:99:5"
           },
           {
             "attributes": {
-              "constant": false,
+              "constant": true,
               "implemented": true,
               "isConstructor": false,
               "modifiers": [
@@ -3645,10 +3556,10 @@
               ],
               "name": "iterateValid",
               "payable": false,
-              "scope": 2504,
-              "stateMutability": "nonpayable",
+              "scope": 2478,
+              "stateMutability": "view",
               "superFunction": null,
-              "visibility": "public"
+              "visibility": "internal"
             },
             "children": [
               {
@@ -3657,7 +3568,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2467,
+                      "scope": 2441,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -3669,23 +3580,23 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2450,
+                        "id": 2424,
                         "name": "UserDefinedTypeName",
-                        "src": "2371:9:5"
+                        "src": "2385:9:5"
                       }
                     ],
-                    "id": 2451,
+                    "id": 2425,
                     "name": "VariableDeclaration",
-                    "src": "2371:22:5"
+                    "src": "2385:22:5"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_index",
-                      "scope": 2467,
+                      "scope": 2441,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -3698,19 +3609,19 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2452,
+                        "id": 2426,
                         "name": "ElementaryTypeName",
-                        "src": "2395:6:5"
+                        "src": "2409:6:5"
                       }
                     ],
-                    "id": 2453,
+                    "id": 2427,
                     "name": "VariableDeclaration",
-                    "src": "2395:13:5"
+                    "src": "2409:13:5"
                   }
                 ],
-                "id": 2454,
+                "id": 2428,
                 "name": "ParameterList",
-                "src": "2370:39:5"
+                "src": "2384:39:5"
               },
               {
                 "children": [
@@ -3718,7 +3629,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 2467,
+                      "scope": 2441,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "bool",
@@ -3731,25 +3642,25 @@
                           "name": "bool",
                           "type": "bool"
                         },
-                        "id": 2455,
+                        "id": 2429,
                         "name": "ElementaryTypeName",
-                        "src": "2419:4:5"
+                        "src": "2448:4:5"
                       }
                     ],
-                    "id": 2456,
+                    "id": 2430,
                     "name": "VariableDeclaration",
-                    "src": "2419:4:5"
+                    "src": "2448:4:5"
                   }
                 ],
-                "id": 2457,
+                "id": 2431,
                 "name": "ParameterList",
-                "src": "2418:6:5"
+                "src": "2447:6:5"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 2457
+                      "functionReturnParameters": 2431
                     },
                     "children": [
                       {
@@ -3788,13 +3699,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 2453,
+                                  "referencedDeclaration": 2427,
                                   "type": "uint80",
                                   "value": "_index"
                                 },
-                                "id": 2458,
+                                "id": 2432,
                                 "name": "Identifier",
-                                "src": "2434:6:5"
+                                "src": "2463:6:5"
                               },
                               {
                                 "attributes": {
@@ -3809,14 +3720,14 @@
                                   "type": "int_const 1",
                                   "value": "1"
                                 },
-                                "id": 2459,
+                                "id": 2433,
                                 "name": "Literal",
-                                "src": "2443:1:5"
+                                "src": "2472:1:5"
                               }
                             ],
-                            "id": 2460,
+                            "id": 2434,
                             "name": "BinaryOperation",
-                            "src": "2434:10:5"
+                            "src": "2463:10:5"
                           },
                           {
                             "attributes": {
@@ -3838,7 +3749,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "orders",
-                                  "referencedDeclaration": 2203,
+                                  "referencedDeclaration": 2177,
                                   "type": "struct OrdersLib.Order storage ref[] storage ref"
                                 },
                                 "children": [
@@ -3848,47 +3759,47 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2451,
+                                      "referencedDeclaration": 2425,
                                       "type": "struct OrdersLib.OrderList storage pointer",
                                       "value": "self"
                                     },
-                                    "id": 2461,
+                                    "id": 2435,
                                     "name": "Identifier",
-                                    "src": "2447:4:5"
+                                    "src": "2476:4:5"
                                   }
                                 ],
-                                "id": 2462,
+                                "id": 2436,
                                 "name": "MemberAccess",
-                                "src": "2447:11:5"
+                                "src": "2476:11:5"
                               }
                             ],
-                            "id": 2463,
+                            "id": 2437,
                             "name": "MemberAccess",
-                            "src": "2447:18:5"
+                            "src": "2476:18:5"
                           }
                         ],
-                        "id": 2464,
+                        "id": 2438,
                         "name": "BinaryOperation",
-                        "src": "2434:31:5"
+                        "src": "2463:31:5"
                       }
                     ],
-                    "id": 2465,
+                    "id": 2439,
                     "name": "Return",
-                    "src": "2427:38:5"
+                    "src": "2456:38:5"
                   }
                 ],
-                "id": 2466,
+                "id": 2440,
                 "name": "Block",
-                "src": "2425:43:5"
+                "src": "2454:43:5"
               }
             ],
-            "id": 2467,
+            "id": 2441,
             "name": "FunctionDefinition",
-            "src": "2349:119:5"
+            "src": "2363:134:5"
           },
           {
             "attributes": {
-              "constant": false,
+              "constant": true,
               "implemented": true,
               "isConstructor": false,
               "modifiers": [
@@ -3896,10 +3807,10 @@
               ],
               "name": "iteratePrev",
               "payable": false,
-              "scope": 2504,
-              "stateMutability": "nonpayable",
+              "scope": 2478,
+              "stateMutability": "view",
               "superFunction": null,
-              "visibility": "public"
+              "visibility": "internal"
             },
             "children": [
               {
@@ -3908,7 +3819,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2485,
+                      "scope": 2459,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -3920,23 +3831,23 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2468,
+                        "id": 2442,
                         "name": "UserDefinedTypeName",
-                        "src": "2494:9:5"
+                        "src": "2523:9:5"
                       }
                     ],
-                    "id": 2469,
+                    "id": 2443,
                     "name": "VariableDeclaration",
-                    "src": "2494:22:5"
+                    "src": "2523:22:5"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_index",
-                      "scope": 2485,
+                      "scope": 2459,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -3949,19 +3860,19 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2470,
+                        "id": 2444,
                         "name": "ElementaryTypeName",
-                        "src": "2518:6:5"
+                        "src": "2547:6:5"
                       }
                     ],
-                    "id": 2471,
+                    "id": 2445,
                     "name": "VariableDeclaration",
-                    "src": "2518:13:5"
+                    "src": "2547:13:5"
                   }
                 ],
-                "id": 2472,
+                "id": 2446,
                 "name": "ParameterList",
-                "src": "2493:39:5"
+                "src": "2522:39:5"
               },
               {
                 "children": [
@@ -3969,7 +3880,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 2485,
+                      "scope": 2459,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -3982,25 +3893,25 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2473,
+                        "id": 2447,
                         "name": "ElementaryTypeName",
-                        "src": "2542:6:5"
+                        "src": "2586:6:5"
                       }
                     ],
-                    "id": 2474,
+                    "id": 2448,
                     "name": "VariableDeclaration",
-                    "src": "2542:6:5"
+                    "src": "2586:6:5"
                   }
                 ],
-                "id": 2475,
+                "id": 2449,
                 "name": "ParameterList",
-                "src": "2541:8:5"
+                "src": "2585:8:5"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 2475
+                      "functionReturnParameters": 2449
                     },
                     "children": [
                       {
@@ -4011,7 +3922,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "prev",
-                          "referencedDeclaration": 2218,
+                          "referencedDeclaration": 2192,
                           "type": "uint80"
                         },
                         "children": [
@@ -4033,7 +3944,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "orders",
-                                  "referencedDeclaration": 2203,
+                                  "referencedDeclaration": 2177,
                                   "type": "struct OrdersLib.Order storage ref[] storage ref"
                                 },
                                 "children": [
@@ -4043,18 +3954,18 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2469,
+                                      "referencedDeclaration": 2443,
                                       "type": "struct OrdersLib.OrderList storage pointer",
                                       "value": "self"
                                     },
-                                    "id": 2476,
+                                    "id": 2450,
                                     "name": "Identifier",
-                                    "src": "2559:4:5"
+                                    "src": "2603:4:5"
                                   }
                                 ],
-                                "id": 2477,
+                                "id": 2451,
                                 "name": "MemberAccess",
-                                "src": "2559:11:5"
+                                "src": "2603:11:5"
                               },
                               {
                                 "attributes": {
@@ -4077,13 +3988,13 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2471,
+                                      "referencedDeclaration": 2445,
                                       "type": "uint80",
                                       "value": "_index"
                                     },
-                                    "id": 2478,
+                                    "id": 2452,
                                     "name": "Identifier",
-                                    "src": "2571:6:5"
+                                    "src": "2615:6:5"
                                   },
                                   {
                                     "attributes": {
@@ -4098,43 +4009,43 @@
                                       "type": "int_const 1",
                                       "value": "1"
                                     },
-                                    "id": 2479,
+                                    "id": 2453,
                                     "name": "Literal",
-                                    "src": "2580:1:5"
+                                    "src": "2624:1:5"
                                   }
                                 ],
-                                "id": 2480,
+                                "id": 2454,
                                 "name": "BinaryOperation",
-                                "src": "2571:10:5"
+                                "src": "2615:10:5"
                               }
                             ],
-                            "id": 2481,
+                            "id": 2455,
                             "name": "IndexAccess",
-                            "src": "2559:23:5"
+                            "src": "2603:23:5"
                           }
                         ],
-                        "id": 2482,
+                        "id": 2456,
                         "name": "MemberAccess",
-                        "src": "2559:28:5"
+                        "src": "2603:28:5"
                       }
                     ],
-                    "id": 2483,
+                    "id": 2457,
                     "name": "Return",
-                    "src": "2552:35:5"
+                    "src": "2596:35:5"
                   }
                 ],
-                "id": 2484,
+                "id": 2458,
                 "name": "Block",
-                "src": "2550:40:5"
+                "src": "2594:40:5"
               }
             ],
-            "id": 2485,
+            "id": 2459,
             "name": "FunctionDefinition",
-            "src": "2473:117:5"
+            "src": "2502:132:5"
           },
           {
             "attributes": {
-              "constant": false,
+              "constant": true,
               "implemented": true,
               "isConstructor": false,
               "modifiers": [
@@ -4142,10 +4053,10 @@
               ],
               "name": "iterateNext",
               "payable": false,
-              "scope": 2504,
-              "stateMutability": "nonpayable",
+              "scope": 2478,
+              "stateMutability": "view",
               "superFunction": null,
-              "visibility": "public"
+              "visibility": "internal"
             },
             "children": [
               {
@@ -4154,7 +4065,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "self",
-                      "scope": 2503,
+                      "scope": 2477,
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "type": "struct OrdersLib.OrderList storage pointer",
@@ -4166,23 +4077,23 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "OrderList",
-                          "referencedDeclaration": 2204,
+                          "referencedDeclaration": 2178,
                           "type": "struct OrdersLib.OrderList storage pointer"
                         },
-                        "id": 2486,
+                        "id": 2460,
                         "name": "UserDefinedTypeName",
-                        "src": "2616:9:5"
+                        "src": "2660:9:5"
                       }
                     ],
-                    "id": 2487,
+                    "id": 2461,
                     "name": "VariableDeclaration",
-                    "src": "2616:22:5"
+                    "src": "2660:22:5"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_index",
-                      "scope": 2503,
+                      "scope": 2477,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -4195,19 +4106,19 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2488,
+                        "id": 2462,
                         "name": "ElementaryTypeName",
-                        "src": "2640:6:5"
+                        "src": "2684:6:5"
                       }
                     ],
-                    "id": 2489,
+                    "id": 2463,
                     "name": "VariableDeclaration",
-                    "src": "2640:13:5"
+                    "src": "2684:13:5"
                   }
                 ],
-                "id": 2490,
+                "id": 2464,
                 "name": "ParameterList",
-                "src": "2615:39:5"
+                "src": "2659:39:5"
               },
               {
                 "children": [
@@ -4215,7 +4126,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "",
-                      "scope": 2503,
+                      "scope": 2477,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint80",
@@ -4228,25 +4139,25 @@
                           "name": "uint80",
                           "type": "uint80"
                         },
-                        "id": 2491,
+                        "id": 2465,
                         "name": "ElementaryTypeName",
-                        "src": "2664:6:5"
+                        "src": "2722:6:5"
                       }
                     ],
-                    "id": 2492,
+                    "id": 2466,
                     "name": "VariableDeclaration",
-                    "src": "2664:6:5"
+                    "src": "2722:6:5"
                   }
                 ],
-                "id": 2493,
+                "id": 2467,
                 "name": "ParameterList",
-                "src": "2663:8:5"
+                "src": "2721:8:5"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 2493
+                      "functionReturnParameters": 2467
                     },
                     "children": [
                       {
@@ -4257,7 +4168,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "next",
-                          "referencedDeclaration": 2220,
+                          "referencedDeclaration": 2194,
                           "type": "uint80"
                         },
                         "children": [
@@ -4279,7 +4190,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "orders",
-                                  "referencedDeclaration": 2203,
+                                  "referencedDeclaration": 2177,
                                   "type": "struct OrdersLib.Order storage ref[] storage ref"
                                 },
                                 "children": [
@@ -4289,18 +4200,18 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2487,
+                                      "referencedDeclaration": 2461,
                                       "type": "struct OrdersLib.OrderList storage pointer",
                                       "value": "self"
                                     },
-                                    "id": 2494,
+                                    "id": 2468,
                                     "name": "Identifier",
-                                    "src": "2681:4:5"
+                                    "src": "2739:4:5"
                                   }
                                 ],
-                                "id": 2495,
+                                "id": 2469,
                                 "name": "MemberAccess",
-                                "src": "2681:11:5"
+                                "src": "2739:11:5"
                               },
                               {
                                 "attributes": {
@@ -4323,13 +4234,13 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 2489,
+                                      "referencedDeclaration": 2463,
                                       "type": "uint80",
                                       "value": "_index"
                                     },
-                                    "id": 2496,
+                                    "id": 2470,
                                     "name": "Identifier",
-                                    "src": "2693:6:5"
+                                    "src": "2751:6:5"
                                   },
                                   {
                                     "attributes": {
@@ -4344,49 +4255,49 @@
                                       "type": "int_const 1",
                                       "value": "1"
                                     },
-                                    "id": 2497,
+                                    "id": 2471,
                                     "name": "Literal",
-                                    "src": "2702:1:5"
+                                    "src": "2760:1:5"
                                   }
                                 ],
-                                "id": 2498,
+                                "id": 2472,
                                 "name": "BinaryOperation",
-                                "src": "2693:10:5"
+                                "src": "2751:10:5"
                               }
                             ],
-                            "id": 2499,
+                            "id": 2473,
                             "name": "IndexAccess",
-                            "src": "2681:23:5"
+                            "src": "2739:23:5"
                           }
                         ],
-                        "id": 2500,
+                        "id": 2474,
                         "name": "MemberAccess",
-                        "src": "2681:28:5"
+                        "src": "2739:28:5"
                       }
                     ],
-                    "id": 2501,
+                    "id": 2475,
                     "name": "Return",
-                    "src": "2674:35:5"
+                    "src": "2732:35:5"
                   }
                 ],
-                "id": 2502,
+                "id": 2476,
                 "name": "Block",
-                "src": "2672:40:5"
+                "src": "2730:40:5"
               }
             ],
-            "id": 2503,
+            "id": 2477,
             "name": "FunctionDefinition",
-            "src": "2595:117:5"
+            "src": "2639:131:5"
           }
         ],
-        "id": 2504,
+        "id": 2478,
         "name": "ContractDefinition",
-        "src": "26:2812:5"
+        "src": "26:2870:5"
       }
     ],
-    "id": 2505,
+    "id": 2479,
     "name": "SourceUnit",
-    "src": "0:2839:5"
+    "src": "0:2897:5"
   },
   "compiler": {
     "name": "solc",
@@ -4396,26 +4307,17 @@
     "3": {
       "events": {},
       "links": {},
-      "address": "0x1d5da10163f5129223b6b5629bc51cdd30c107c1",
-      "updated_at": 1504353314955
+      "address": "0x304f9d40007e4f9b311ff517d2f0ce8e46c8db5e"
     },
     "4": {
       "events": {},
       "links": {},
-      "address": "0x85069ad59d2988b3fdc18a0ae69484a308de5304",
-      "updated_at": 1504286688597
+      "address": "0x0d52909eadf57a91a0a3fed64a7cae1379a855f6"
     },
     "999": {
       "events": {},
       "links": {},
-      "address": "0x8776c78b55a226e3a94e4beba7c0d79454ad00c7",
-      "updated_at": 1508414338200
-    },
-    "1976": {
-      "events": {},
-      "links": {},
-      "address": "0x8776c78b55a226e3a94e4beba7c0d79454ad00c7",
-      "updated_at": 1504454592360
+      "address": "0x8776c78b55a226e3a94e4beba7c0d79454ad00c7"
     },
     "4447": {
       "events": {},
@@ -4424,5 +4326,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-02T15:35:41.610Z"
+  "updatedAt": "2017-11-04T08:00:49.738Z"
 }
