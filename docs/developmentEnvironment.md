@@ -5,10 +5,10 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/)  
-    _tested with version 8.9.0_
+    _tested with version 8.9.1_
 1. [node version manager](https://github.com/tj/n): `npm install -g n`  
-1. Install node: `n 8.9.0`
-1. `npm install -g ethereumjs-testrpc`  
+1. Install node: `n 8.9.1`
+1. `npm install -g ethereumjs-testrpc@4.1.3`  
     _tested with version 4.1.3_
 1. `npm install -g truffle`  
     _tested with version v4.0.1_
@@ -23,9 +23,9 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
 
 in Git bash:
-1. `nvm install 8.9.0`
-1. `nvm use 8.9.0`
-1. `npm install -g ethereumjs-testrpc`  
+1. `nvm install 8.9.1`
+1. `nvm use 8.9.1`
+1. `npm install -g ethereumjs-testrpc@4.1.3`  
     _tested with version 4.1.3_
 1. `npm install -g truffle`
     _tested with version 4.0.1_
