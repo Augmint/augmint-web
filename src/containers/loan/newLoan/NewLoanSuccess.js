@@ -17,15 +17,9 @@ export default function NewLoanSuccess(props) {
             eth={eth}
             dismissable={false}
         >
-            <p>
-                Loan id: {loanId}
-            </p>
-            <p>
-                Contract address: {address}
-            </p>
-            <p>
-                Disbursed: {disbursedLoanInUcd} UCD
-            </p>
+            <p>Loan id: {loanId}</p>
+            <p>Contract address: {address}</p>
+            <p>Disbursed: {disbursedLoanInUcd} ACD</p>
             <p>Don't forget to pay it back on maturity.</p>
             <p>
                 You can always check your loans'' status on {" "}

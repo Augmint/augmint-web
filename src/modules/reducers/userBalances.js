@@ -1,5 +1,5 @@
 /*
-ETH and UCD balance for the active userAccount
+ETH and ACD balance for the active userAccount
     TODO: add all user accounts?
     TODO: make this generic? ie. to use this for any address balances?
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect

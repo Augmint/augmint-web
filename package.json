@@ -1,7 +1,7 @@
 {
     "name": "dcm-poc",
     "version": "0.0.1",
-    "description": "Digital Credit Money - Proof of Concept",
+    "description": "Augmint Stable Tokens - Proof of Concept",
     "homepage": ".",
     "private": true,
     "dependencies": {
@@ -26,7 +26,8 @@
     },
     "scripts": {
         "//": "simple 'cross_env NODE_PATH' doesn't work for some reason",
-        "start": "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
+        "start":
+            "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject"

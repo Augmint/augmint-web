@@ -5,7 +5,7 @@ export function RepayHelp(props) {
     const { ...other } = props;
     return (
         <Message info {...other}>
-            <p>You can repay your UCD loan due on its maturity. </p>
+            <p>You can repay your ACD loan due on its maturity. </p>
             <p>
                 When you repay your ETH held in escrow (collateral) will be sent
                 back to you.
@@ -21,7 +21,7 @@ export function RepayHelp(props) {
             </p>
             <p>
                 TODO, Not yet implemented: If the value of the ETH collateral
-                (at the moment of collection) is higher than the UCD loan amount
+                (at the moment of collection) is higher than the ACD loan amount
                 less the fees for the collection then the leftover ETH will be
                 transfered back to the borrower's ETH account.
             </p>

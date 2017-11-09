@@ -331,7 +331,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         loanState: loanState, // 3
         solidityLoanState: solidityLoanState,
         loanStateText: loanStateText,
-        ucdDueAtMaturity: l[4].toNumber() / 10000, // 4 nominal loan amount in UCD (non discounted amount)
+        ucdDueAtMaturity: l[4].toNumber() / 10000, // 4 nominal loan amount in ACD (non discounted amount)
         disbursedLoanInUcd: l[5].toNumber() / 10000, // 5
         term: l[6].toNumber(), // 6 duration of loan
         termText: moment.duration(l[6].toNumber(), "seconds").humanize(),

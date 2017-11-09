@@ -16,7 +16,7 @@ export function UserAccountInfo(props) {
         <Pblock header="User Account">
             <p>{userBalances.account.address}</p>
             <p>ETH Balance: {userBalances.account.ethBalance} ETH</p>
-            <p>UCD Balance: {userBalances.account.ucdBalance} UCD</p>
+            <p>ACD Balance: {userBalances.account.ucdBalance} ACD</p>
 
             <Button
                 size="small"

@@ -28,24 +28,30 @@ export class AccountInfo extends React.Component {
                 <p>
                     ETH: {account.ethBalance}
                     {account.ethPendingBalance !== "?" &&
-                    account.ethPendingBalance - account.ethBalance !== 0 && (
-                        <span>
-                            {" "}
-                            (Pending:{" "}
-                            {account.ethPendingBalance - account.ethBalance} )
-                        </span>
-                    )}
+                        account.ethPendingBalance - account.ethBalance !==
+                            0 && (
+                            <span>
+                                {" "}
+                                (Pending:{" "}
+                                {account.ethPendingBalance -
+                                    account.ethBalance}{" "}
+                                )
+                            </span>
+                        )}
                 </p>
                 <p>
-                    UCD: {account.ucdBalance}
+                    ACD: {account.ucdBalance}
                     {account.ucdPendingBalance !== "?" &&
-                    account.ucdPendingBalance - account.ucdBalance !== 0 && (
-                        <span>
-                            {" "}
-                            (Pending:{" "}
-                            {account.ucdPendingBalance - account.ucdBalance} )
-                        </span>
-                    )}
+                        account.ucdPendingBalance - account.ucdBalance !==
+                            0 && (
+                            <span>
+                                {" "}
+                                (Pending:{" "}
+                                {account.ucdPendingBalance -
+                                    account.ucdBalance}{" "}
+                                )
+                            </span>
+                        )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Pblock>

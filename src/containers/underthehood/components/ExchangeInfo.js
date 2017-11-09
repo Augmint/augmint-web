@@ -17,7 +17,7 @@ export function ExchangeInfo(props) {
             <p>OrderCount: {contract.info.orderCount}</p>
             <p>
                 To sell: {contract.info.totalEthSellOrders} ETH |{" "}
-                {contract.info.totalUcdSellOrders} UCD
+                {contract.info.totalUcdSellOrders} ACD
             </p>
             <ContractBaseInfo
                 contract={contract}

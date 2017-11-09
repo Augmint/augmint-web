@@ -1,7 +1,4 @@
 /*
-TODO: form client side validation. eg:
-    - UCD / ETH balance check
-    - number  format check
 TODO: input formatting: decimals, thousand separators
   */
 
@@ -218,14 +215,14 @@ class PlaceOrderForm extends React.Component {
                     index={ETHSELL}
                     onClick={this.onOrderTypeChange}
                 >
-                    Buy UCD
+                    Buy ACD
                 </Menu.Item>
                 <Menu.Item
                     active={orderType === UCDSELL}
                     index={UCDSELL}
                     onClick={this.onOrderTypeChange}
                 >
-                    Sell UCD
+                    Sell ACD
                 </Menu.Item>
             </Menu>
         );
@@ -272,7 +269,7 @@ class PlaceOrderForm extends React.Component {
                             labelPosition="right"
                         >
                             <input />
-                            <Label>UCD</Label>
+                            <Label>ACD</Label>
                         </Field>
 
                         <Field
@@ -311,8 +308,8 @@ class PlaceOrderForm extends React.Component {
                             {submitting && "Submitting..."}
                             {!submitting &&
                                 (orderType === ETHSELL
-                                    ? "Place buy UCD order"
-                                    : "Place sell UCD order")}
+                                    ? "Place buy ACD order"
+                                    : "Place sell ACD order")}
                         </Button>
                     </Form>
                 )}

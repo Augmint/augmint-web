@@ -21,7 +21,7 @@ export default () => (
         <Tsegment.Row textAlign="center">
             <Tsegment.Column>
                 <p>
-                    DCM is being built by people at{" "}
+                    Augmint is being built by people at{" "}
                     <Link to="http://decent.org" target="_blank">
                         Decent Labs
                     </Link>.

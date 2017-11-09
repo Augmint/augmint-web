@@ -33,7 +33,7 @@ export const Validations = {
         // TODO: shall we look for bn_ucdPendingBalance instead?
         let userBalance = store.getState().userBalances.account.bn_ucdBalance;
         return userBalance.lt(parseFloat(value))
-            ? "Your UCD balance is less than the amount"
+            ? "Your ACD balance is less than the amount"
             : undefined;
     },
 
@@ -54,7 +54,7 @@ export const Validations = {
 
     minUcdAmount: minValue => value => {
         return parseFloat(value) < minValue
-            ? "Amount must be at least " + minValue + " UCD"
+            ? "Amount must be at least " + minValue + " ACD"
             : undefined;
     }
 };

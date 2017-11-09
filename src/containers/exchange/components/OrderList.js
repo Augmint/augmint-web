@@ -25,15 +25,17 @@ export default class OrderList extends React.Component {
             filteredOrders != null &&
             filteredOrders.map((order, index) => (
                 <MyListGroup.Row key={`ordersRow-${order.orderId}`}>
-                    {`${order.amount} ${order.ccy} sell order for ${order.ccy === "ETH" ? "UCD" : "ETH"}`}
+                    {`${order.amount} ${order.ccy} sell order for ${order.ccy ===
+                    "ETH"
+                        ? "ACD"
+                        : "ETH"}`}
                     <small>
                         <br />Order Id: {order.orderId} | makerOrderIdx:{" "}
                         {order.makerOrderIdx} | Maker: {order.maker}
-                        {order.maker.toLowerCase() === userAccountAddress.toLowerCase() ? (
-                            " TODO: Cancel my order"
-                        ) : (
-                            ""
-                        )}
+                        {order.maker.toLowerCase() ===
+                        userAccountAddress.toLowerCase()
+                            ? " TODO: Cancel my order"
+                            : ""}
                     </small>
                 </MyListGroup.Row>
             ));
@@ -75,11 +77,9 @@ export default class OrderList extends React.Component {
                             content={ordersLabel}
                             labelPosition="left"
                             icon={
-                                this.state.orderListOpen ? (
-                                    "chevron up"
-                                ) : (
-                                    "chevron down"
-                                )
+                                this.state.orderListOpen
+                                    ? "chevron up"
+                                    : "chevron down"
                             }
                             onClick={() =>
                                 this.setState({

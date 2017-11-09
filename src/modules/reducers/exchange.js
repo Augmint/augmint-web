@@ -133,7 +133,7 @@ export const refreshExchange = () => {
                 totalCcy = "";
             if (totalUcdSellOrders > 0) {
                 totalAmount = totalUcdSellOrders;
-                totalCcy = "UCD";
+                totalCcy = "ACD";
             } else if (totalEthSellOrders > 0) {
                 totalAmount = totalEthSellOrders;
                 totalCcy = "ETH";

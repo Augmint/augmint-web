@@ -1,16 +1,16 @@
-# DCM - Digital Credit Money
+# Augmint - Stable Digital Tokens
 Proof of concept implementation of a stable cryptocurrency in Ethereum
 
 _a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
 ## Concept
-DCM provides digital tokens, value of each token pegged to a fiat currency.
+Augmint provides digital tokens, value of each token pegged to a fiat currency.
 
-The first DCM token will be UCD, pegged to USD.
+The first Augmint token will be ACD (Aug Crypto Dollar), pegged to USD.
 
-The value of 1 UCD is always closely around 1 USD.
+The value of 1 ACD is always closely around 1 USD.
 
-DCM tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
+Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
 
 Read more and try out the proof-of-concept implementation on **[dcm.netlify.com](http://dcm.netlify.com)**
 
@@ -22,19 +22,19 @@ Read more and try out the proof-of-concept implementation on **[dcm.netlify.com]
   Standard onlyOwner implementation. Going to be replaced to support more elaborate TokenUcd & LoanManager governance rules.
 * [ERC20Impl.sol](./contracts/ERC20Impl.sol)  
   Standard [ERC20](https://theethereum.wiki/w/index.php/ERC20_Token_Standard) token base.
-  * Maintains UCD balances of token holders
-  * UCD transfers b/w accounts
+  * Maintains ACD balances of token holders
+  * ACD transfers b/w accounts
   * Manages withdrawal pre-approvals
 * [TokenUcd.sol](./contracts/TokenUcd.sol)
-  UCD token contract, derived from ERC20Impl.
+  ACD token contract, derived from ERC20Impl.
   * Sets standard token parameters (name, symbol, decimals, etc.)
-  * Issue and burn UCD
-  * Holds UCD & ETH reserves
+  * Issue and burn ACD
+  * Holds ACD & ETH reserves
   * Send reserve for auction (not implemented yet) when intervening
 * [Rates.sol](./contracts/Rates.sol)  
   A mock oracle contract to return USD/ETH exchange rates
 * [Exchange.sol](./contracts/Exchange.sol)  
-  A basic UCD / ETH exchange contract. Sell or buy UCD for ETH on USD/ETH market rates.
+  A basic ACD / ETH exchange contract. Sell or buy ACD for ETH on USD/ETH market rates.
 * [LoanManager.sol](./contracts/LoanManager.sol)  
   * Maintains loan products and their parameters
   * Maintains a list of all loan contracts

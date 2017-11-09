@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 
 export default () => (
-    <Tsegment header="Digital Credit Money" subheader="Concept">
+    <Tsegment header="Augmint Stable Tokens" subheader="Concept">
         <Tblock header="Modern money">
             <p>
                 Modern currencies are credit based. In layman's terms the amount
@@ -24,18 +24,18 @@ export default () => (
                 needed.
             </p>
         </Tblock>
-        <Tblock header="DCM tokens">
+        <Tblock header="Augmint tokens">
             <p>
-                DCM is built on the concept of automatically adjusting the
-                supply of each DCM token in a similar way as modern fiat money
-                but in a transparent, decentralised and secure fashion.
+                Augmint is built on the concept of automatically adjusting the
+                supply of each Augmint token in a similar way as modern fiat
+                money but in a transparent, decentralised and secure fashion.
             </p>
             <p>
-                DCM tokens are only issued when a new, collateral based loan is
-                created. Tokens are burnt on repayment. In case of loan default
-                the collateral goes to DCM stability reserves, managed by smart
-                contracts. It all happens in an automated, cryptographically
-                secure and decentralised way.{" "}
+                Augmint tokens are only issued when a new, collateral based loan
+                is created. Tokens are burnt on repayment. In case of loan
+                default the collateral goes to Augmint stability reserves,
+                managed by smart contracts. It all happens in an automated,
+                cryptographically secure and decentralised way.{" "}
             </p>
             <p>
                 Parameters for the new loans, the use of the reserves for market
@@ -43,8 +43,8 @@ export default () => (
                 processes.
             </p>
             <p>
-                UCD is the first DCM token to be implemented. UCD will be pegged
-                to USD.
+                ACD is the first Augmint token to be implemented. ACD will be
+                pegged to USD.
             </p>
         </Tblock>
         <Tblock header="Price stability">
@@ -55,26 +55,26 @@ export default () => (
             <Tblock.SubHeader header="Market mechanics" />
             <p>
                 The primary foundation of stability is the continuous supply of
-                DCM tokens via loan originations and a corresponding demand for
-                paying back loans on maturity.
+                Augmint tokens via loan originations and a corresponding demand
+                for paying back loans on maturity.
             </p>
             <p>
-                Further specific features of the DCM system will work towards
-                maintaining stability by smoothing the demand & supply peaks and
-                troughs.
+                Further specific features of the Augmint system will work
+                towards maintaining stability by smoothing the demand & supply
+                peaks and troughs.
             </p>
             <Tblock.SubHeader header="Loan parameters" />
             <p>
-                If UCD price deviating from parity then loan parameters are
-                adjusted to make it more or less compelling to get UCD loan for
-                a certain digital asset. This has an effect on UCD
+                If ACD price deviating from parity then loan parameters are
+                adjusted to make it more or less compelling to get ACD loan for
+                a certain digital asset. This has an effect on ACD
                 demand/supply.
             </p>
             <Tblock.SubHeader header="Market intervention" />
             <p>
-                DCM can intervene from its reserves accumulated from fees,
-                defaults and interests. DCM reserves can be used on held only
-                for market intervention.
+                Augmint can intervene from its reserves accumulated from fees,
+                defaults and interests. Augmint reserves can be used on held
+                only for market intervention.
             </p>
             <p>
                 Check out our{" "}
@@ -84,17 +84,17 @@ export default () => (
                 for additional tools and more scenarios.
             </p>
         </Tblock>
-        <Tblock header="Getting UCD">
+        <Tblock header="Getting ACD">
             <p>
-                You can always buy or sell your UCD for cryptocurrencies (ETH,
+                You can always buy or sell your ACD for cryptocurrencies (ETH,
                 BTC etc.) on a decentralised exchange. Secondary exchanges will
-                offer direct fiat conversions to/from UCD as well. As the DCM
-                ecosystem grows you will need less and less to exchange DCM
-                tokens to fiat money.
+                offer direct fiat conversions to/from ACD as well. As the
+                Augmint ecosystem grows you will need less and less to exchange
+                Augmint tokens to fiat money.
             </p>
-            <Tblock.SubHeader>UCD loans</Tblock.SubHeader>
+            <Tblock.SubHeader>ACD loans</Tblock.SubHeader>
             <p>
-                You can also get UCD by putting your digital assets (ETH or BTC
+                You can also get ACD by putting your digital assets (ETH or BTC
                 at the beginning) into a decentralised escrow contract.
             </p>
         </Tblock>
@@ -112,11 +112,11 @@ export default () => (
             </p>
             <p>
                 These decisions are made by stakeholders - governance token
-                (GDC) holders. DCMs governance model ensures that all decisions
-                are democratic and transparent.
+                (GDC) holders. Augmint's governance model ensures that all
+                decisions are democratic and transparent.
             </p>
             <p>
-                Access to GDC is open to anyone who is willing to deposit UCD
+                Access to GDC is open to anyone who is willing to deposit ACD
                 tokens. To incentify holding and voting with GDCs the profit
                 from fees is distributed among GDC holders.
             </p>

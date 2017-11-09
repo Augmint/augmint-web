@@ -27,7 +27,7 @@ class ConnectedHome extends React.Component {
                                 textAlign="center"
                                 style={{ fontSize: "2em" }}
                             >
-                                UCD status
+                                ACD status
                             </Header>
                             <TokenUcdStats
                                 tokenUcd={tokenUcd}

@@ -56,7 +56,7 @@ export class EthereumState extends React.Component {
             msg = (
                 <div>
                     <WarningPanel header="Connected but not on Rinkeby" />
-                    <p>DCM only works on Rinkeby test network currently</p>
+                    <p>Augmint only works on Rinkeby test network currently</p>
                     <p>
                         Your browser seems to be connected to{" "}
                         {web3Connect.network.name} network. (id:{" "}
@@ -83,16 +83,16 @@ export class EthereumState extends React.Component {
             (exchange && rates.connectionError)
         ) {
             msg = (
-                <ErrorPanel header={<h3>Can't connect to UCD contracts</h3>}>
+                <ErrorPanel header={<h3>Can't connect to Augint contracts</h3>}>
                     <p>
                         You seem to be connected to {network.name} but can't
-                        connect to DCM contracts.
+                        connect to Augmint contracts.
                     </p>
                     {(network.id === 4 || network.id === 3) && (
                             <p>
                                 It's an issue with our deployement, because you
-                                are on {network.name} and DCM contracts should
-                                be deployed.
+                                are on {network.name} and Augmint contracts
+                                should be deployed.
                             </p>
                         )}
                     {network.id !== 4 &&

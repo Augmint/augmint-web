@@ -1,4 +1,4 @@
-# UCD development environment
+# Augmint PoC development environment
 ## Install
 ### OSX
 Note: these steps are likely to work on linux too but it's not tested yet

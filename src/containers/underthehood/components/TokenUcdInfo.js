@@ -14,9 +14,9 @@ export function TokenUcdInfo(props) {
 
     return (
         <Pblock header="TokenUcd contract">
-            <p>Total token supply: {contract.info.totalSupply} UCD</p>
+            <p>Total token supply: {contract.info.totalSupply} ACD</p>
             <p>ETH Reserve: {contract.info.ethBalance} ETH</p>
-            <p>UCD Reserve: {contract.info.ucdBalance} UCD </p>
+            <p>ACD Reserve: {contract.info.ucdBalance} ACD </p>
             <ContractBaseInfo
                 contract={contract}
                 refreshCb={handleRefreshClick}

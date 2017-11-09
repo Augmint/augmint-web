@@ -89,7 +89,7 @@ class CollectLoanMain extends React.Component {
                             <p>
                                 TODO, Not yet implemented: <br />
                                 If the value of the ETH collateral (at the
-                                moment of collection) is higher than the UCD
+                                moment of collection) is higher than the ACD
                                 loan amount less the fees for the collection
                                 then the leftover ETH will be transfered back to
                                 the borrower's ETH account.
@@ -110,22 +110,22 @@ class CollectLoanMain extends React.Component {
                         )}
 
                         {!submitSucceeded &&
-                        !isLoading &&
-                        loansToCollect != null && (
-                            <Form onSubmit={handleSubmit(this.handleSubmit)}>
-                                <Button
-                                    size="large"
-                                    primary
-                                    disabled={submitting}
+                            !isLoading &&
+                            loansToCollect != null && (
+                                <Form
+                                    onSubmit={handleSubmit(this.handleSubmit)}
                                 >
-                                    {submitting ? (
-                                        "Submitting..."
-                                    ) : (
-                                        "Collect all"
-                                    )}
-                                </Button>
-                            </Form>
-                        )}
+                                    <Button
+                                        size="large"
+                                        primary
+                                        disabled={submitting}
+                                    >
+                                        {submitting
+                                            ? "Submitting..."
+                                            : "Collect all"}
+                                    </Button>
+                                </Form>
+                            )}
 
                         {submitSucceeded && (
                             <EthSubmissionSuccessPanel
@@ -140,10 +140,10 @@ class CollectLoanMain extends React.Component {
                         )}
 
                         {(isLoading || loansToCollect == null) && (
-                            <LoadingPanel>
-                                Refreshing list of loans to collect...
-                            </LoadingPanel>
-                        )}
+                                <LoadingPanel>
+                                    Refreshing list of loans to collect...
+                                </LoadingPanel>
+                            )}
                         <LoanList
                             header="Loans to collect"
                             noItemMessage={

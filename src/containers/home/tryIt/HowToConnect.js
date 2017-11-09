@@ -9,7 +9,7 @@ export function HowToConnect(props) {
         <Tsegment>
             <Tsegment.Row centered columns={1}>
                 <Tsegment.Column textAlign="center">
-                    <p>To use DCM you need an Ethereum capable browser:</p>
+                    <p>To use Augmint you need an Ethereum capable browser:</p>
                     <p>
                         Install{" "}
                         <Link to="https://metamask.io/" target="_blank">

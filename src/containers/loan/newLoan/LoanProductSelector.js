@@ -27,26 +27,26 @@ class LoanProductSelector extends React.Component {
                 <Pgrid.Column width={6}>
                     <Message info>
                         <p>
-                            You can get UCD for placing your ETH in escrow
+                            You can get ACD for placing your ETH in escrow
                             (collateral).{" "}
                         </p>
                         <p>
                             <strong>Repayment</strong>
                             <br />
-                            When you repay the UCD on maturity you will get back
+                            When you repay the ACD on maturity you will get back
                             all of your ETH.
                         </p>
                         <p>
                             <strong>Default (non payment)</strong>
                             <br />
-                            If you decide not to repay the UCD loan at maturity
-                            then your ETH will be taken to the system (tokenUcd)
+                            If you decide not to repay the ACD loan at maturity
+                            then your ETH will be taken to the Augmint system
                             reserves.
                         </p>
                         <p>
                             TODO, Not yet implemented: <br />
                             If the value of your ETH (at the moment of
-                            collection) is higher than the UCD value of your
+                            collection) is higher than the ACD value of your
                             loan + fees for the default then the leftover ETH
                             will be transfered back to your ETH account.
                         </p>

@@ -1,6 +1,6 @@
 /*
 TODO: form client side validation. eg:
-    - UCD balance check
+    - ACD balance check
     - address format check
     - number  format check
     - To: can't be the same as From:
@@ -80,7 +80,7 @@ class UcdTransferForm extends React.Component {
                     tokenUcd.isLoading ||
                     (!tokenUcd.isConnected && !tokenUcd.connectionError)
                 }
-                header="Send UCD"
+                header="Send ACD"
             >
                 <ConnectionStatus contract={tokenUcd} />
                 {submitSucceeded && (
@@ -90,7 +90,7 @@ class UcdTransferForm extends React.Component {
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Sent {this.state.result.amount} UCD to{" "}
+                            Sent {this.state.result.amount} ACD to{" "}
                             {this.state.result.to}
                         </p>
                     </EthSubmissionSuccessPanel>
@@ -124,7 +124,7 @@ class UcdTransferForm extends React.Component {
                             disabled={submitting || !tokenUcd.isConnected}
                         >
                             <input />
-                            <Label>UCD</Label>
+                            <Label>ACD</Label>
                         </Field>
 
                         <Field

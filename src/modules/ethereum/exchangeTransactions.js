@@ -16,7 +16,7 @@ export async function fetchOrders() {
             let orderType = order[3].toNumber();
             let bn_amount, ccy;
             if (orderType === UCDSELL) {
-                ccy = "UCD";
+                ccy = "ACD";
                 bn_amount = order[4].div(new BigNumber(10000));
             } else if (orderType === ETHSELL) {
                 ccy = "ETH";

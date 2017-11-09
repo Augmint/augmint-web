@@ -30,23 +30,24 @@ export function TryItConnected(props) {
                     </p>
                 </Tblock>
 
-                <Tblock header="Get UCD">
+                <Tblock header="Get ACD">
                     <p>
                         <Link to="/loan/new">Get a loan</Link> by leaving your
                         ETH in escrow
                     </p>
                     <p>
-                        Buy UCD on <Link to="/exchange">DCM's exchange</Link>
+                        Buy ACD on{" "}
+                        <Link to="/exchange">Augmint's exchange</Link>
                     </p>
                 </Tblock>
 
                 <Tblock header="Play around">
                     <p>
-                        See your loans, transactions and transfer UCD from your{" "}
+                        See your loans, transactions and transfer ACD from your{" "}
                         <Link to="/account">account</Link>
                     </p>
                     <p>
-                        Check the <Link to="/reserves">DCM reserves</Link>
+                        Check the <Link to="/reserves">Augmint reserves</Link>
                     </p>
                 </Tblock>
                 <Tsegment.Row centered columns={1}>

@@ -12,7 +12,7 @@ export function Hero(props) {
             <Container text>
                 <Header
                     as="h1"
-                    content="Digital Credit Money"
+                    content="Augmint"
                     inverted
                     style={{
                         fontSize: "4em",

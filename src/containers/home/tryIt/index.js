@@ -16,7 +16,7 @@ class TryIt extends React.Component {
     render() {
         const { isLoading, isConnected } = this.props.web3Connect;
         return (
-            <Tsegment header="Try DCM">
+            <Tsegment header="Try Augmint">
                 {isLoading && (
                     <LoadingPanel header="Trying to connect to Ethereum network..." />
                 )}

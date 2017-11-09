@@ -1,13 +1,3 @@
-/*
-TODO: form client side validation. eg:
-    - UCD balance check
-    - address format check
-    - number  format check
-    - To: can't be the same as From:
-TODO: input formatting: decimals, thousand separators
-TODO: make this a pure component
-  */
-
 import React from "react";
 import { Button } from "semantic-ui-react";
 import store from "modules/store";

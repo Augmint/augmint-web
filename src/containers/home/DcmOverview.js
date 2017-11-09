@@ -9,15 +9,15 @@ export function DcmOverview(props) {
         <Tsegment>
             <Tblock header="Stable tokens">
                 <p>
-                    DCM offers digital tokens, value of each token pegged to a
-                    fiat currency.
+                    Augmint offers digital tokens, value of each token pegged to
+                    a fiat currency.
                 </p>
-                <p>The first DCM token will be UCD, pegged to USD.</p>
-                <p>The value of 1 UCD is expected closely around 1 USD.</p>
+                <p>The first Augmint token will be ACD, pegged to USD.</p>
+                <p>The value of 1 ACD is expected closely around 1 USD.</p>
                 <p>
-                    DCM tokens are cryptocurrency tokens with all the benefits
-                    of cryptocurrencies: stored securely in a decentralised
-                    manner and instantly transferable worldwide.
+                    Augmint tokens are cryptocurrency tokens with all the
+                    benefits of cryptocurrencies: stored securely in a
+                    decentralised manner and instantly transferable worldwide.
                 </p>
             </Tblock>
 

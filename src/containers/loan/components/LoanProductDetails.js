@@ -32,7 +32,7 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>Min. payout:</Col>
-                <Col>{prod.minDisbursedAmountInUcd} UCD</Col>
+                <Col>{prod.minDisbursedAmountInUcd} ACD</Col>
             </Row>
             <Row>
                 <Col>

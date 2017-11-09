@@ -30,15 +30,13 @@ export default class TransferList extends React.Component {
                         <Row columns={1}>
                             <Col>
                                 {tx.from.toLowerCase() ===
-                                userAccountAddress.toLowerCase() ? (
-                                    "To: " + tx.to
-                                ) : (
-                                    "From: " + tx.from
-                                )}
+                                userAccountAddress.toLowerCase()
+                                    ? "To: " + tx.to
+                                    : "From: " + tx.from}
                             </Col>
                         </Row>
                         <Row columns={2}>
-                            <Col>Amount: {tx.amount} UCD</Col>
+                            <Col>Amount: {tx.amount} ACD</Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 
@@ -86,5 +84,5 @@ TransferList.defaultProps = {
         return true; // no filter passed
     },
     noItemMessage: <p>No transactions</p>,
-    header: "UCD transfer history"
+    header: "ACD transfer history"
 };

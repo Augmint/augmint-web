@@ -1,5 +1,5 @@
 /*
- UCD transfer ethereum functions
+ ACD transfer ethereum functions
 Use only from reducers.
 
     TODO: tune default gasPrice
@@ -34,7 +34,7 @@ export async function transferUcdTx(payload) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
             throw new Error(
-                "UCD transfer failed. All gas provided was used:  " +
+                "ACD transfer failed. All gas provided was used:  " +
                     result.receipt.gasUsed
             );
         }
@@ -66,7 +66,7 @@ export async function transferUcdTx(payload) {
             }
         };
     } catch (error) {
-        throw new Error("UCD transfer failed.\n" + error);
+        throw new Error("ACD transfer failed.\n" + error);
     }
 }
 

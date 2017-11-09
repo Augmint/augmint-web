@@ -23,7 +23,7 @@ class ExchangeHome extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Buy & Sell UCD" />
+                    <Pheader header="Buy & Sell ACD" />
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>

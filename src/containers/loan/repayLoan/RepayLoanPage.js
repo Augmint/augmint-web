@@ -1,5 +1,5 @@
 /*
-    TODO: check here of user account UCD balance is enough for repayment
+    TODO: check here of user account ACD balance is enough for repayment
 */
 import React from "react";
 import { connect } from "react-redux";
@@ -158,34 +158,32 @@ class RepayLoanPage extends React.Component {
                     )}
 
                     {!submitSucceeded &&
-                    !this.state.isLoading && (
-                        <Form
-                            onSubmit={this.props.handleSubmit(
-                                this.handleSubmit
-                            )}
-                        >
-                            <LoanDetailsWithStatusCheck
-                                loan={this.state.loan}
-                            />
-                            <Button
-                                primary
-                                size="big"
-                                disabled={
-                                    this.props.submitting ||
-                                    !this.state.isLoanFound ||
-                                    this.state.loan.loanState !== 5
-                                }
-                            >
-                                {this.props.submitting ? (
-                                    "Submitting..."
-                                ) : (
-                                    "Confirm to repay " +
-                                    this.state.loan.ucdDueAtMaturity +
-                                    " UCD"
+                        !this.state.isLoading && (
+                            <Form
+                                onSubmit={this.props.handleSubmit(
+                                    this.handleSubmit
                                 )}
-                            </Button>
-                        </Form>
-                    )}
+                            >
+                                <LoanDetailsWithStatusCheck
+                                    loan={this.state.loan}
+                                />
+                                <Button
+                                    primary
+                                    size="big"
+                                    disabled={
+                                        this.props.submitting ||
+                                        !this.state.isLoanFound ||
+                                        this.state.loan.loanState !== 5
+                                    }
+                                >
+                                    {this.props.submitting
+                                        ? "Submitting..."
+                                        : "Confirm to repay " +
+                                          this.state.loan.ucdDueAtMaturity +
+                                          " ACD"}
+                                </Button>
+                            </Form>
+                        )}
 
                     {submitSucceeded && (
                         <EthSubmissionSuccessPanel

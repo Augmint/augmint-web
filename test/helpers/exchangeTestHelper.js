@@ -139,7 +139,10 @@ async function balanceAsserts(tokenUcd, expBalances) {
         //     expGasFee
         // );
         assert.isAtMost(
-            newEthBal.minus(expBal.eth).absoluteValue().toNumber(),
+            newEthBal
+                .minus(expBal.eth)
+                .absoluteValue()
+                .toNumber(),
             expGasFee,
             expBal.name +
                 " new and initial ETH balance diferrence is higher than expecteed "
@@ -147,7 +150,7 @@ async function balanceAsserts(tokenUcd, expBalances) {
         assert.equal(
             newUcdBal.toString(),
             expBal.ucd.toString(),
-            expBal.name + " new UCD balance is not as expected"
+            expBal.name + " new ACD balance is not as expected"
         );
     }
 }
