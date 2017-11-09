@@ -12,7 +12,7 @@ The value of 1 ACD is always closely around 1 USD.
 
 Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
 
-Read more and try out the proof-of-concept implementation on **[dcm.netlify.com](http://dcm.netlify.com)**
+Read more and try out the proof-of-concept implementation on **[www.augmint.cc](http://www.augmint.cc)**
 
 **[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
