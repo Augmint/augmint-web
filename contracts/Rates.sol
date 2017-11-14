@@ -11,7 +11,7 @@ contract Rates is owned {
 
     uint constant ONE_ETH = 1000000000000000000; // 1 ETH in WEI
 
-    // 1 USD = 10000 USDc
+    // 1 USD = 10000 ACDc
     uint8 public constant USD_DECIMALS = 4; // USD values decimal places
     uint32 public constant USD_SCALE = 10 ** 4;  // USDc to USD conversion, 10 ** USD_DECIMALS
 
