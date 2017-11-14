@@ -1,10 +1,8 @@
-var Exchange = artifacts.require("./Exchange.sol");
-var Rates = artifacts.require("./Rates.sol");
-var TokenUcd = artifacts.require("./TokenUcd.sol");
-var BigNumber = require("bignumber.js");
-var testHelper = new require("./helpers/testHelper.js");
-var tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
-var exchangeTestHelper = new require("./helpers/exchangeTestHelper.js");
+const Rates = artifacts.require("./Rates.sol");
+const BigNumber = require("bignumber.js");
+const testHelper = new require("./helpers/testHelper.js");
+const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
+const exchangeTestHelper = new require("./helpers/exchangeTestHelper.js");
 
 const PLACE_ORDER_MAXFEE = web3.toWei(0.03);
 const ETHSELL = 0,
@@ -30,7 +28,7 @@ before(async function() {
 beforeEach(async function() {
     this.timeout(50000);
     snapshotId = await testHelper.takeSnapshot();
-    balBefore = await exchangeTestHelper.getBalances(tokenUcd, testedAccounts);
+    balBefore = await tokenUcdTestHelper.getBalances(tokenUcd, testedAccounts);
 });
 
 afterEach(async function() {
@@ -86,7 +84,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("place a sellUcd when no sellETH orders", async function() {
@@ -128,7 +126,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("sellUcd - fully filled from bigger open sellEth order ", async function() {
@@ -142,7 +140,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await exchangeTestHelper.getBalances(
+        balBefore = await tokenUcdTestHelper.getBalances(
             tokenUcd,
             testedAccounts
         );
@@ -192,7 +190,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("sellUcd - exactly filled from multiple sellEth order");
@@ -208,7 +206,7 @@ contract("Exchange order", accounts => {
 
         testHelper.logGasUse(this, tx);
 
-        balBefore = await exchangeTestHelper.getBalances(
+        balBefore = await tokenUcdTestHelper.getBalances(
             tokenUcd,
             testedAccounts
         );
@@ -259,7 +257,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("sellEth - exactly filled from multiple open sellUcd orders");
@@ -275,7 +273,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await exchangeTestHelper.getBalances(
+        balBefore = await tokenUcdTestHelper.getBalances(
             tokenUcd,
             testedAccounts
         );
@@ -344,7 +342,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("sellEth - partially filled from smaller open sellUcd order ", async function() {
@@ -357,7 +355,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await exchangeTestHelper.getBalances(
+        balBefore = await tokenUcdTestHelper.getBalances(
             tokenUcd,
             testedAccounts
         );
@@ -428,7 +426,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("sellEth - fully filled from multiple open sellUcd orders", async function() {
@@ -446,7 +444,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await exchangeTestHelper.getBalances(
+        balBefore = await tokenUcdTestHelper.getBalances(
             tokenUcd,
             testedAccounts
         );
@@ -532,6 +530,6 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await exchangeTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 });
