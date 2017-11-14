@@ -4,9 +4,8 @@ contract owned {
     address public owner;
 
     modifier onlyOwner() {
-        if (msg.sender == owner) {
-            _;
-        }
+        require(msg.sender == owner);
+        _;
     }
 
     function owned() public {

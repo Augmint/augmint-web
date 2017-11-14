@@ -33,7 +33,7 @@ library OrdersLib {
         index = uint80(self.orders.push(Order({prev: self.last, next: None, order: _order})));
         if (self.last == None)
         {
-            assert (self.first == None && self.count == 0) ;
+            require (self.first == None && self.count == 0) ;
             self.first = self.last = index;
             self.count = 1;
         }
