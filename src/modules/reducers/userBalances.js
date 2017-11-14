@@ -67,13 +67,13 @@ export function fetchUserBalance(address) {
             account: {
                 address: address,
                 bn_ethBalance: bn_ethBalance,
-                ethBalance: bn_ethBalance.toNumber(),
+                ethBalance: bn_ethBalance.toString(),
                 bn_ethPendingBalance: bn_ethPendingBalance,
-                ethPendingBalance: bn_ethPendingBalance.toNumber(),
+                ethPendingBalance: bn_ethPendingBalance.toString(),
                 bn_ucdBalance: bn_ucdBalance,
-                ucdBalance: bn_ucdBalance.toNumber(),
+                ucdBalance: bn_ucdBalance.toString(),
                 bn_ucdPendingBalance: bn_ucdPendingBalance,
-                ucdPendingBalance: bn_ucdPendingBalance.toNumber()
+                ucdPendingBalance: bn_ucdPendingBalance.toString()
             }
         });
     };
