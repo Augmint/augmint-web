@@ -141,8 +141,10 @@ contract TokenUcd is ERC20Impl, owned {
         if( ucdDueAtMaturity > disbursedLoanInUcd) {
             totalSupply = totalSupply.add(ucdDueAtMaturity);
             balances[this] = balances[this].add(ucdDueAtMaturity);
+            // TODO: move interest (ucdDueAtMaturity.minus(disbursedLoanInUcd)) to interest pool
         } else {
             totalSupply = totalSupply.add(disbursedLoanInUcd);
+            balances[this] = balances[this].add(disbursedLoanInUcd);
         }
         require( systemTransfer(this, borrower, disbursedLoanInUcd, narrative));
         return SUCCESS;
