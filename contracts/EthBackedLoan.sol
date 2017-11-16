@@ -1,6 +1,6 @@
 /* contract for each loan given in UCD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
-    TODO: add reentrancy protection
+    TODO: double check against reentrancy
     TODO: consider storing collateral amount when loan created for easier tracking after repayment
     TODO: consider store loanId (maintened in loanManager)
     TODO: consider moving all repay functionality here from loanManager to make it self contained
@@ -25,7 +25,7 @@ contract EthBackedLoan {
     LoanManager public loanManager; // loan manager contract instance
     TokenUcd public tokenUcd; // tokenUcd instance
 
-    LoanState public loanState;
+    LoanState public loanState; // TODO: make LoanState a getter which calculates state
     uint public loanId;
     uint public ucdDueAtMaturity; // nominal loan amount in UCD (non discounted amount)
     uint public disbursedLoanInUcd;
@@ -89,27 +89,13 @@ contract EthBackedLoan {
             );
     }
 
-    function repay() external returns (int8 result) {
-        // TODO: don't allow repayment when repayPeriod is over
-        //  TODO: rename this function, eg. releaseCollateralWhenRepaid closeRepaid?
-        if( msg.sender != address(loanManager)) {
-            // repayment is only through loanManager.
-            // loanManager only allows owner to repay loan
-            return ERR_NOT_AUTHORISED;
-        }
-        if(loanState != LoanState.Open) {
-            return ERR_LOAN_NOT_OPEN;
-        }
-
-        if(now < maturity) {
-            return ERR_REPAY_NOT_DUE_YET;
-        }
-
+    function releaseCollateral() external  {
+        require( msg.sender == address(loanManager)); // repayment is only through loanManager
+        require(loanState == LoanState.Open);
+        require(now >= maturity);
+        require(now <= maturity.add(repayPeriod));
         loanState = LoanState.Repaid;
-         // send back ETH collateral held in this contract
-        owner.transfer(this.balance);
-
-        return SUCCESS;
+        owner.transfer(this.balance); // send back ETH collateral held in this contract
     }
 
     function collect() external returns (int8 result) {
@@ -117,7 +103,7 @@ contract EthBackedLoan {
            It MUST throw an exception if there is an error after any state change happened here.
                 It's to ensure that any changes made in loanmanager before this call are reverted too.
                 see loanManager.collect() for more details.
-        TODO: payback collateral over the UCD value
+        TODO: payback collateral over the UCD value less default fee
         TODO: deduct fee
         */
         if( msg.sender != address(loanManager)) {

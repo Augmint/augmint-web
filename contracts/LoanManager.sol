@@ -1,9 +1,6 @@
 /* Contract to manage UCD loan contracts
-    TODO: add reentrancy protection
-    TODO: consider to add early repayment
-    TODO: consider to allow partial repayment (eg. 60% repaid, 40% default )
     TODO: add loanId to disbursement, repay and collection narrative
-    TODO: check if we could do repayment without "direct" access to borrower's UCD balance
+    TODO: check if we could do repayment without "direct" access to borrower's balance (i.e. systemTransfer)
            eg. transfer UCD to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
            it wouldn't restrict access more but would be better seperation of functions
 */
@@ -116,10 +113,7 @@ contract LoanManager is owned {
         loanContractAddress.transfer(msg.value);
 
         // Issue UCD and send to borrower
-        int8 res = tokenUcd.issueAndDisburseUcd( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
-        if( res != tokenUcd.SUCCESS()) {
-            revert(); // can't return error code b/c changes need to be reverted
-        }
+        tokenUcd.issueAndDisburse( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
 
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
     }
@@ -128,6 +122,7 @@ contract LoanManager is owned {
     event e_repayed(address loanContractAddress, address borrower);
     function repay(uint loanId) external returns (int8 result) {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
+        // TODO: change to require
         if(loanPointers.length < loanId + 1) {
             e_error(ERR_NO_LOAN);
             return ERR_NO_LOAN;
@@ -151,19 +146,8 @@ contract LoanManager is owned {
             return ERR_NOT_OWNER;
         }
 
-        int8 res = tokenUcd.repayAndBurnUcd(msg.sender, loanContract.ucdDueAtMaturity(), "Loan repayment");
-        if(res != tokenUcd.SUCCESS() ) {
-            // no state changes can happen up to this point
-            // ie. no revert required
-            e_error(ERR_EXT_ERRCODE_BASE + res);
-            return ERR_EXT_ERRCODE_BASE + res;
-        }
-
-        res = loanContract.repay();
-        if (res != loanContract.SUCCESS() ) {
-            // revert required as previous steps made state changes
-           revert();
-        }
+        tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(), loanContract.disbursedLoanInUcd(), "Loan repayment");
+        loanContract.releaseCollateral();
 
         loanPointers[loanId].loanState = LoanState.Repaid;
         e_repayed(loanContractAddress, loanContract.owner());
