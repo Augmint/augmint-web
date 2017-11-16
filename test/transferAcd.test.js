@@ -142,4 +142,8 @@ contract("Transfer ACD tests", accounts => {
             tokenUcd.transfer(acc0, txValue, { from: acc0 })
         );
     });
+
+    it("transferFrom");
+    it("transferFromWithNarrative");
+    it("transferFrom w/o approve attempt");
 });
