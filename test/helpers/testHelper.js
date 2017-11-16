@@ -1,12 +1,14 @@
-var stringifier = require("stringifier");
+const stringifier = require("stringifier");
+const moment = require("moment");
 var gasUseLog = new Array();
 
 module.exports = {
-    stringify: stringify,
-    takeSnapshot: takeSnapshot,
-    revertSnapshot: revertSnapshot,
-    logGasUse: logGasUse,
-    expectThrow: expectThrow
+    stringify,
+    takeSnapshot,
+    revertSnapshot,
+    logGasUse,
+    expectThrow,
+    waitForTimeStamp
 };
 var _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
@@ -97,13 +99,50 @@ function revertSnapshot(snapshotId) {
     });
 }
 
-function logGasUse(testObj, tx) {
+function logGasUse(testObj, tx, txName) {
     gasUseLog.push([
         testObj.test.parent.title,
         testObj.test.fullTitle(),
+        txName || "",
         tx.receipt.gasUsed
     ]);
 } //  logGasUse ()
+
+function waitForTimeStamp(waitForTimeStamp) {
+    var currentTimeStamp = moment()
+        .utc()
+        .unix();
+    var wait =
+        waitForTimeStamp <= currentTimeStamp
+            ? 1
+            : waitForTimeStamp - currentTimeStamp; // 0 wait caused tests to be flaky, why?
+    console.log(
+        "\x1b[2m        ... waiting ",
+        wait,
+        "seconds then sending a dummy tx for blockTimeStamp to reach time required by test ...\x1b[0m"
+    );
+
+    return new Promise(resolve => {
+        setTimeout(function() {
+            var blockTimeStamp = web3.eth.getBlock(web3.eth.blockNumber)
+                .timestamp;
+            if (blockTimeStamp < waitForTimeStamp) {
+                web3.eth.sendTransaction(
+                    { from: web3.eth.accounts[0] },
+                    function(error, res) {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            } else {
+                resolve();
+            }
+        }, wait * 1000);
+    });
+} // waitForTimeStamp()
 
 function expectThrow(promise) {
     const onPrivateChain = web3.version.network == 1976 ? true : false; // set by .runprivatechain.sh (geth ...  --networkid 1976 ..)
@@ -166,7 +205,7 @@ after(function() {
                 "" +
                 " ==================="
         );
-        console.log("Test contract", "Test", "Gas used");
+        console.log("Test contract,", "Test,", "Tx,", "Gas used");
         //console.log(gasUseLog);
         var sum = 0;
         for (var i = 0; i < gasUseLog.length; i++) {
@@ -175,10 +214,12 @@ after(function() {
                     gasUseLog[i][0] +
                     '", "' +
                     gasUseLog[i][1] +
+                    '", "' +
+                    gasUseLog[i][2] +
                     '", ' +
-                    gasUseLog[i][2]
+                    gasUseLog[i][3]
             );
-            sum += gasUseLog[i][2];
+            sum += gasUseLog[i][3];
         }
 
         console.log("=========== Total gas usage : " + sum);
