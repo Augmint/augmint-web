@@ -83,18 +83,20 @@ export class EthereumState extends React.Component {
             (exchange && rates.connectionError)
         ) {
             msg = (
-                <ErrorPanel header={<h3>Can't connect to Augint contracts</h3>}>
+                <ErrorPanel
+                    header={<h3>Can't connect to Augmint contracts</h3>}
+                >
                     <p>
                         You seem to be connected to {network.name} but can't
                         connect to Augmint contracts.
                     </p>
                     {(network.id === 4 || network.id === 3) && (
-                            <p>
-                                It's an issue with our deployement, because you
-                                are on {network.name} and Augmint contracts
-                                should be deployed.
-                            </p>
-                        )}
+                        <p>
+                            It's an issue with our deployement, because you are
+                            on {network.name} and Augmint contracts should be
+                            deployed.
+                        </p>
+                    )}
                     {network.id !== 4 &&
                         network.id !== 3 && (
                             <div>
