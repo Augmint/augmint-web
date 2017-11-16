@@ -17,31 +17,34 @@ let maker = web3.eth.accounts[1],
     taker = web3.eth.accounts[2];
 let testedAccounts;
 
-before(async function() {
-    this.timeout(100000);
-    rates = await Rates.deployed();
-    tokenUcd = await TokenUcd.deployed();
-    await tokenUcd.issueUcd(1000000000);
-    await tokenUcd.getUcdFromReserve(1000000000);
-
-    await tokenUcd.transfer(maker, 100000000);
-    await tokenUcd.transfer(taker, 100000000);
-    exchange = await Exchange.deployed();
-    testedAccounts = [exchange.address, maker, taker];
-});
-
-beforeEach(async function() {
-    this.timeout(50000);
-    snapshotId = await testHelper.takeSnapshot();
-    balBefore = await tokenUcdTestHelper.getBalances(tokenUcd, testedAccounts);
-});
-
-afterEach(async function() {
-    let res = await testHelper.revertSnapshot(snapshotId);
-});
-
 /* TODO: refactor this spagetthi */
 contract("Exchange order", accounts => {
+    before(async function() {
+        this.timeout(100000);
+        rates = await Rates.deployed();
+        tokenUcd = await TokenUcd.deployed();
+        await tokenUcd.issueUcd(1000000000);
+        await tokenUcd.getUcdFromReserve(1000000000);
+
+        await tokenUcd.transfer(maker, 100000000);
+        await tokenUcd.transfer(taker, 100000000);
+        exchange = await Exchange.deployed();
+        testedAccounts = [exchange.address, maker, taker];
+    });
+
+    beforeEach(async function() {
+        this.timeout(50000);
+        snapshotId = await testHelper.takeSnapshot();
+        balBefore = await tokenUcdTestHelper.getBalances(
+            tokenUcd,
+            testedAccounts
+        );
+    });
+
+    afterEach(async function() {
+        let res = await testHelper.revertSnapshot(snapshotId);
+    });
+
     it("no sell a sellEth order below min amount ");
     it("no sell a sellUcd order below min amount ");
 

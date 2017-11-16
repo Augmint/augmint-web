@@ -14,11 +14,11 @@ function stringify(values) {
     return _stringify(values);
 }
 
-before(function() {
-    /* TODO: this way would be nicer  but throws: ReferenceError: toIntVal is not defined
-           use takeSnapshot() and revertSnapshot(snapshotId) instead.
-           Keep an eye on: https://ethereum.stackexchange.com/questions/24899/referenceerror-tointval-is-not-defined-when-extending-web3-with-evm-snapshot
-    */
+/*before(function() {
+    //  TODO: this way would be nicer  but throws: ReferenceError: toIntVal is not defined
+    //        use takeSnapshot() and revertSnapshot(snapshotId) instead.
+    //        Keep an eye on: https://ethereum.stackexchange.com/questions/24899/referenceerror-tointval-is-not-defined-when-extending-web3-with-evm-snapshot
+    //
     // web3._extend({
     //     property: "evm",
     //     methods: [
@@ -42,7 +42,9 @@ before(function() {
     //         })
     //     ]
     // });
+
 });
+*/
 
 //let snapshotCount = 0;
 function takeSnapshot() {

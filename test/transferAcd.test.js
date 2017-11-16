@@ -10,18 +10,21 @@ const txValue = 200000000,
     txNarrative = "ACD transfer test";
 let tokenUcd;
 
-before(async function() {
-    tokenUcd = await TokenUcd.deployed();
-    await tokenUcd.issueUcd(1000000000);
-    await tokenUcd.getUcdFromReserve(1000000000);
-    testedAccounts = [acc0, acc1, acc2];
-});
-
-beforeEach(async function() {
-    balBefore = await tokenUcdTestHelper.getBalances(tokenUcd, testedAccounts);
-});
-
 contract("Transfer ACD tests", accounts => {
+    before(async function() {
+        tokenUcd = await TokenUcd.deployed();
+        await tokenUcd.issueUcd(1000000000);
+        await tokenUcd.getUcdFromReserve(1000000000);
+        testedAccounts = [acc0, acc1, acc2];
+    });
+
+    beforeEach(async function() {
+        balBefore = await tokenUcdTestHelper.getBalances(
+            tokenUcd,
+            testedAccounts
+        );
+    });
+
     it("Should be able to transfer ACD between accounts (without narrative)", async function() {
         let tx = await tokenUcd.transfer(acc1, txValue, { from: acc0 });
         testHelper.logGasUse(this, tx);
