@@ -15,7 +15,7 @@ module.exports = async function(deployer, network) {
             web3.version.network
         );
         let lm = await LoanManager.deployed();
-        // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmountInUcd (w/ 4 decimals), gracePerdio, isActive
+        // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmountInAcd (w/ 4 decimals), gracePerdio, isActive
         lm.addProduct(31536000, 800000, 800000, 300000, 864000, true); // due in 365d
         lm.addProduct(15552000, 850000, 800000, 300000, 259200, true); // due in 180d
         lm.addProduct(7776000, 910000, 800000, 300000, 172800, true); // due in 90d

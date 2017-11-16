@@ -3,7 +3,7 @@ const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
 const testHelper = new require("./helpers/testHelper.js");
 const Rates = artifacts.require("./Rates.sol");
 const LoanManager = artifacts.require("./loanManager.sol");
-const TokenUcd = artifacts.require("./TokenUcd.sol");
+const TokenUcd = artifacts.require("./TokenAcd.sol");
 const NEWLOAN_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 const REPAY_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 
@@ -113,7 +113,7 @@ contract("ACD Loans tests", accounts => {
 
         let interestAmount = expLoan.loanAmount.minus(expLoan.disbursedAmount);
 
-        await tokenUcd.getUcdFromReserve(interestAmount, { from: acc0 });
+        await tokenUcd.getFromReserve(interestAmount, { from: acc0 });
         await tokenUcd.transferWithNarrative(
             acc1,
             interestAmount,

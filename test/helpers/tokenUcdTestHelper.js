@@ -4,12 +4,12 @@ module.exports = {
 };
 
 /* This returning a new instance for some reason for subsequent test runs
-const TokenUcd = artifacts.require("./TokenUcd.sol");
+const TokenUcd = artifacts.require("./TokenAcd.sol");
 async function getTokenUcd(initialUcdBalance) {
     let instance = await TokenUcd.deployed();
     if (initialUcdBalance > 0) {
-        await instance.issueUcd(initialUcdBalance);
-        await instance.getUcdFromReserve(initialUcdBalance);
+        await instance.issue(initialUcdBalance);
+        await instance.getFromReserve(initialUcdBalance);
     }
     return instance;
 }

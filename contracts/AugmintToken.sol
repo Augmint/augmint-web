@@ -1,24 +1,23 @@
-/* UCD Token implementation (ERC20 token)
+/* Generic Augmint Token implementation (ERC20 token)
     This contract manages:
-        * Balances of UCD holders and transactions between them
-        * Issues and burns UCD
+        * Balances of Augmint holders and transactions between them
+        * Issues and burns tokens
             - manually by the contract owner or
-            - automatically when new UCD loan issued or repaid
-        * Holds ETH reserve (as regular ETH balance of the contract)
-            from defaulted loans
-            TBD: ETH bought by owner for UCD
-        * Holds UCD reserve (stored as regular UCD balance under the contract address)
-            from ETH collateral sold on auctions (from defauleted loans)
-            newly issued UCD (UCD reserve)
+            - automatically when new loan issued or repaid
+        * Holds  reserves:
+            - ETH as regular ETH balance of the contract
+            - ERC20 token reserve (stored as regular Token balance under the contract address)
+            TODO: separate reserve contract in order to hold any ERC20 token in one reserve
 
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
 
-    TODO: split this: ERC20 base - generic Augmint Token - ACD Token 
-    TODO: separate data from logic?
+    TODO: split this: ERC20 base - generic Augmint Token
+    TODO: separate data from logic for code upgradeablity
+    TODO: if we emit generic events from here then can we filter to specific AugmintTokens?
     TODO: decision making mechanism (ie. replace all onlyOwner)
-    TODO: remove test functions (getUcdFromReserve + restrict issueUcd)
+    TODO: remove test functions (getFromReserve + restrict issue)
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices,
                         https://github.com/OpenZeppelin/zeppelin-solidity
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
@@ -27,7 +26,7 @@ pragma solidity ^0.4.18;
 import "./Owned.sol";
 import "./SafeMath.sol";
 
-contract TokenUcd is owned {
+contract AugmintToken is owned {
     using SafeMath for uint256;
 
     uint256 public totalSupply; // total amount of tokens
@@ -37,14 +36,11 @@ contract TokenUcd is owned {
     // Owner of account approves the transfer of an amount to another account
     mapping(address => mapping (address => uint256)) allowed;
 
-    string public constant name = "Augmint Crypto Dollar";
-    string public constant symbol = "ACD";
-    uint8 public constant decimals = 4; // TODO: check if 4 enough - assuming rate will be around USD
-
     address public loanManagerAddress; // used for authorisation of issuing ACD for loans
     address public exchangeAddress; // for authorisation of transferExchange()
 
     function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
+    // TODO: shall we put protection against accidentally sending in ETH?
 
     // What is the balance of a particular account?
     function balanceOf(address _owner) external view returns (uint256 balance) {
@@ -130,34 +126,34 @@ contract TokenUcd is owned {
         e_transfer(_from, _to, _amount, _narrative);
     }
 
-    event e_ucdIssued(uint amount);
-    function issueUcd(uint amount) public  { // FIXME: this is only public for testing, change to internal
+    event e_issued(uint amount);
+    function issue(uint amount) public  { // FIXME: this is only public for testing, change to internal
         require(msg.sender == owner || msg.sender == loanManagerAddress); // this won't be needed when we change it internal
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
-        e_ucdIssued(amount);
+        e_issued(amount);
     }
 
-    event e_ucdBurned(uint amount);
-    function burnUcd(uint amount) internal {
+    event e_burned(uint amount);
+    function burn(uint amount) internal {
         require( amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
-        e_ucdBurned(amount);
+        e_burned(amount);
     }
 
     function repayAndBurn(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
         require(msg.sender == loanManagerAddress); // only called from repay()
         systemTransfer(borrower, address(this), loanAmount, narrative);
         if( loanAmount > disbursedAmount) {
-            burnUcd(disbursedAmount); // we leave the interest in reserve
+            burn(disbursedAmount); // we leave the interest in reserve
         } else  {
-            burnUcd(loanAmount); // it was with zero or negative interest, we just burn the loanAmount
+            burn(loanAmount); // it was with zero or negative interest, we just burn the loanAmount
         }
     }
 
     // FIXME: this is only for testing, remove this function
-    function getUcdFromReserve(uint amount) external onlyOwner {
+    function getFromReserve(uint amount) external onlyOwner {
         require(amount <= balances[this]);
         balances[this] = balances[this].sub(amount);
         balances[msg.sender] = balances[msg.sender].add(amount);
@@ -167,9 +163,9 @@ contract TokenUcd is owned {
         require( msg.sender == loanManagerAddress);
         require(loanAmount > 0);
         if( loanAmount > disbursedAmount) {
-            issueUcd(loanAmount);
+            issue(loanAmount);
         } else {
-            issueUcd(disbursedAmount); // negative or zero interest loan
+            issue(disbursedAmount); // negative or zero interest loan
         }
         systemTransfer(address(this), borrower, disbursedAmount, narrative);
         // we leave the interest part (if any) in reserve

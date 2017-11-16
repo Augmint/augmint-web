@@ -1,11 +1,11 @@
 /*
-Exchange UCD <-> ETH
-It's mock only yet, basic implemantion of selling UCD for ETH or vica versa.
-All orders are on a market ethUCD rate at the moment of fullmilment
+Exchange Acd <-> ETH
+It's mock only yet, basic implemantion of selling Acd for ETH or vica versa.
+All orders are on a market ethAcd rate at the moment of fullmilment
 Market rate is provided  by the rates contract
 
 TODO: add reentrancy protection
-TODO: add min exchanged amount param (set in UCD for both?)
+TODO: add min exchanged amount param (set in Acd for both?)
     + what if total leftover from fills  carried over to new order but it's small than minamount?
 TODO: astronomical gas costs when filling a lot of orders
     + how to handle on client side (eg. estimate if it might be over the gas etc.)
@@ -13,13 +13,13 @@ TODO: make orders generic, ie. more generic placeSellOrder func.
 TODO: test for rounding if could be any leftover after order fills
 TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
-TODO: add orderId to UCD transfer narrative
+TODO: add orderId to Acd transfer narrative
 */
 pragma solidity ^0.4.18;
 import "./SafeMath.sol";
 import "./Owned.sol";
 import "./OrdersLib.sol";
-import "./TokenUcd.sol";
+import "./TokenAcd.sol";
 import "./Rates.sol";
 
 contract Exchange is owned {
@@ -28,7 +28,7 @@ contract Exchange is owned {
     using OrdersLib for OrdersLib.OrderData;
 
     Rates public rates;
-    TokenUcd public tokenUcd; // for UCD transfers
+    TokenAcd public tokenUcd; // for UCD transfers
 
     // These should be equal to ETH and UCD Balances of contract
     /* TODO: consider to remove these when rounding tested */
@@ -47,7 +47,7 @@ contract Exchange is owned {
 
     function Exchange(address _tokenUcdAddress, address _ratesAddress) public owned() {
          rates = Rates(_ratesAddress);
-         tokenUcd = TokenUcd(_tokenUcdAddress);
+         tokenUcd = TokenAcd(_tokenUcdAddress);
     }
 
     function getMakerOrderCount(address maker) external view returns(uint orderCount) {

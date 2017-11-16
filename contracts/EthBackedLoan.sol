@@ -1,5 +1,6 @@
 /* contract for each loan given in UCD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
+    TODO: split it into AugmintLoan - EthBackedACDLoan ?
     TODO: double check against reentrancy
     TODO: consider storing collateral amount when loan created for easier tracking after repayment
     TODO: consider store loanId (maintened in loanManager)
@@ -15,7 +16,7 @@
 pragma solidity ^0.4.18;
 
 import "./SafeMath.sol";
-import "./TokenUcd.sol";
+import "./TokenAcd.sol";
 import "./LoanManager.sol";
 
 contract EthBackedLoan {
@@ -23,7 +24,7 @@ contract EthBackedLoan {
     enum LoanState { Open, Repaid, Defaulted } // TODO: move this to a lib (used by TokenUcd too)
     address public owner; // the borrower
     LoanManager public loanManager; // loan manager contract instance
-    TokenUcd public tokenUcd; // tokenUcd instance
+    TokenAcd public tokenUcd; // tokenAcd instance
 
     LoanState public loanState; // TODO: make LoanState a getter which calculates state
     uint public loanId;
@@ -64,7 +65,7 @@ contract EthBackedLoan {
     function getDetails() external view returns (
                                     address _owner,
                                     LoanManager _loanManager,
-                                    TokenUcd _tokenUcd,
+                                    TokenAcd _tokenUcd,
                                     LoanState _loanState,
                                     uint _ucdDueAtMaturity,
                                     uint _disbursedLoanInUcd,

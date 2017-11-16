@@ -1,4 +1,4 @@
-const TokenUcd = artifacts.require("./TokenUcd.sol");
+const TokenUcd = artifacts.require("./TokenAcd.sol");
 const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
 const testHelper = new require("./helpers/testHelper.js");
 const TRANSFER_MAXFEE = web3.toWei(0.006); // TODO: set this to expected value (+set gasPrice)
@@ -13,8 +13,8 @@ let tokenUcd;
 contract("Transfer ACD tests", accounts => {
     before(async function() {
         tokenUcd = await TokenUcd.deployed();
-        await tokenUcd.issueUcd(1000000000);
-        await tokenUcd.getUcdFromReserve(1000000000);
+        await tokenUcd.issue(1000000000);
+        await tokenUcd.getFromReserve(1000000000);
         testedAccounts = [acc0, acc1, acc2];
     });
 

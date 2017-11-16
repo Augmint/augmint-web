@@ -1,14 +1,14 @@
-/* Contract to manage UCD loan contracts
+/* Contract to manage Acd loan contracts
     TODO: add loanId to disbursement, repay and collection narrative
     TODO: check if we could do repayment without "direct" access to borrower's balance (i.e. systemTransfer)
-           eg. transfer UCD to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
+           eg. transfer Acd to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
            it wouldn't restrict access more but would be better seperation of functions
 */
 pragma solidity ^0.4.18;
 import "./Owned.sol";
 import "./SafeMath.sol";
 import "./Rates.sol";
-import "./TokenUcd.sol";
+import "./TokenAcd.sol";
 import "./EthBackedLoan.sol";
 
 contract LoanManager is owned {
@@ -23,7 +23,7 @@ contract LoanManager is owned {
 
     Rates public rates; // instance of ETH/USD rate provider contract
                         // TODO:  setter to be able to change? (consider trust questions)
-    TokenUcd public tokenUcd; // instance of UCD token contract
+    TokenAcd public tokenUcd; // instance of UCD token contract
 
     struct Product {
         uint term;
@@ -48,7 +48,7 @@ contract LoanManager is owned {
     mapping(address => uint[]) public m_loanPointers;  // owner account address =>  array of loanContracts array idx-s (idx + 1)
 
     function LoanManager(address _tokenUcdAddress, address _ratesAddress) public owned() {
-        tokenUcd = TokenUcd(_tokenUcdAddress);
+        tokenUcd = TokenAcd(_tokenUcdAddress);
         rates = Rates(_ratesAddress);
     }
 

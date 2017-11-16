@@ -1,6 +1,6 @@
 const Rates = artifacts.require("./Rates.sol");
 const Exchange = artifacts.require("./Exchange.sol");
-const TokenUcd = artifacts.require("./TokenUcd.sol");
+const TokenUcd = artifacts.require("./TokenAcd.sol");
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./helpers/testHelper.js");
 const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
@@ -23,8 +23,8 @@ contract("Exchange order", accounts => {
         this.timeout(100000);
         rates = await Rates.deployed();
         tokenUcd = await TokenUcd.deployed();
-        await tokenUcd.issueUcd(1000000000);
-        await tokenUcd.getUcdFromReserve(1000000000);
+        await tokenUcd.issue(1000000000);
+        await tokenUcd.getFromReserve(1000000000);
 
         await tokenUcd.transfer(maker, 100000000);
         await tokenUcd.transfer(taker, 100000000);

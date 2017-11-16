@@ -3,7 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import tokenUcd_artifacts from "contractsBuild/TokenUcd.json";
+import tokenUcd_artifacts from "contractsBuild/TokenAcd.json";
 import BigNumber from "bignumber.js";
 import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 import { transferUcdTx } from "modules/ethereum/transferTransactions";
