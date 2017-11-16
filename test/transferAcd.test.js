@@ -10,7 +10,7 @@ const txValue = 200000000,
 let tokenUcd;
 
 before(async function() {
-    tokenUcd = await tokenUcdTestHelper.newTokenUcd(1000000000);
+    tokenUcd = await tokenUcdTestHelper.getTokenUcd(1000000000);
     testedAccounts = [acc0, acc1, acc2];
 });
 

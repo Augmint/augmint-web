@@ -1,4 +1,5 @@
 const Rates = artifacts.require("./Rates.sol");
+var Exchange = artifacts.require("./Exchange.sol");
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./helpers/testHelper.js");
 const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
@@ -18,10 +19,10 @@ let testedAccounts;
 before(async function() {
     this.timeout(100000);
     rates = await Rates.deployed();
-    tokenUcd = await tokenUcdTestHelper.newTokenUcd(1000000000);
+    tokenUcd = await tokenUcdTestHelper.getTokenUcd(1000000000);
     await tokenUcd.transfer(maker, 100000000);
     await tokenUcd.transfer(taker, 100000000);
-    exchange = await exchangeTestHelper.newExchange(tokenUcd, rates);
+    exchange = await Exchange.deployed();
     testedAccounts = [exchange.address, maker, taker];
 });
 

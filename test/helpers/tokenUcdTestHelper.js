@@ -2,14 +2,14 @@ var TokenUcd = artifacts.require("./TokenUcd.sol");
 //var testHelper = new require("./testHelper.js");
 
 module.exports = {
-    newTokenUcd,
+    getTokenUcd,
     getBalances,
     balanceAsserts
 };
 
-function newTokenUcd(initialUcdBalance) {
+function getTokenUcd(initialUcdBalance) {
     return new Promise(async function(resolve, reject) {
-        let instance = await TokenUcd.new();
+        let instance = await TokenUcd.deployed();
         if (initialUcdBalance > 0) {
             await instance.issueUcd(initialUcdBalance);
             await instance.getUcdFromReserve(initialUcdBalance);
