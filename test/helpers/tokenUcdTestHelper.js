@@ -1,22 +1,19 @@
-var TokenUcd = artifacts.require("./TokenUcd.sol");
-//var testHelper = new require("./testHelper.js");
-
 module.exports = {
-    getTokenUcd,
     getBalances,
     balanceAsserts
 };
 
-function getTokenUcd(initialUcdBalance) {
-    return new Promise(async function(resolve, reject) {
-        let instance = await TokenUcd.deployed();
-        if (initialUcdBalance > 0) {
-            await instance.issueUcd(initialUcdBalance);
-            await instance.getUcdFromReserve(initialUcdBalance);
-        }
-        resolve(instance);
-    });
+/* This returning a new instance for some reason for subsequent test runs
+const TokenUcd = artifacts.require("./TokenUcd.sol");
+async function getTokenUcd(initialUcdBalance) {
+    let instance = await TokenUcd.deployed();
+    if (initialUcdBalance > 0) {
+        await instance.issueUcd(initialUcdBalance);
+        await instance.getUcdFromReserve(initialUcdBalance);
+    }
+    return instance;
 }
+*/
 
 async function getBalances(tokenUcd, addresses) {
     let balances = [];
@@ -34,12 +31,6 @@ async function balanceAsserts(tokenUcd, expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);
         let newUcdBal = await tokenUcd.balanceOf(expBal.address);
         let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
-        // console.log(
-        //     expBal.name,
-        //     newEthBal.toString(),
-        //     expBal.eth.toString(),
-        //     expGasFee
-        // );
         assert.isAtMost(
             newEthBal
                 .minus(expBal.eth)
