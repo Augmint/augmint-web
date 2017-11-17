@@ -134,15 +134,16 @@ contract("ACD Loans tests", accounts => {
 
         assert.equal(
             (await tokenUcd.totalSupply()).toString(),
-            totalSupplyBefore.plus(interestAmount).toString(),
-            "total ACD supply should be increased with interest"
+            totalSupplyBefore.toString(),
+            "total ACD supply should be the same"
+        );
         );
 
         let expBalances = [
             {
                 name: "reserve",
                 address: reserveAcc,
-                ucd: balBefore[0].ucd.plus(interestAmount),
+                ucd: balBefore[0].ucd,
                 eth: balBefore[0].eth
             },
             {

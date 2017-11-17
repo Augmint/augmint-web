@@ -145,10 +145,10 @@ contract AugmintToken is owned {
     function repayAndBurn(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
         require(msg.sender == loanManagerAddress); // only called from repay()
         systemTransfer(borrower, address(this), loanAmount, narrative);
-        if( loanAmount > disbursedAmount) {
-            burn(disbursedAmount); // we leave the interest in reserve
+        if( loanAmount > disbursedAmount) { // burn all what has been issued at originiation
+            burn(loanAmount);
         } else  {
-            burn(loanAmount); // it was with zero or negative interest, we just burn the loanAmount
+            burn(disbursedAmount); // loan was with zero or negative interest
         }
     }
 
