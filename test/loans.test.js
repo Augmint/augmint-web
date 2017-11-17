@@ -27,6 +27,15 @@ contract("ACD Loans tests", accounts => {
             repaying: await loanTestHelper.getProductInfo(loanManager, 5),
             notDue: await loanTestHelper.getProductInfo(loanManager, 4)
         };
+
+        for (const key of Object.keys(products)) {
+            console.log({
+                key: key,
+                id: products[key].id,
+                term: products[key].term.toString(),
+                repayPeriod: products[key].repayPeriod.toString()
+            });
+        }
     });
 
     beforeEach(async function() {
@@ -61,8 +70,14 @@ contract("ACD Loans tests", accounts => {
 
         assert.equal(
             (await tokenUcd.totalSupply()).toString(),
-            totalSupplyBefore.plus(expLoan.loanAmount).toString(),
+            totalSupplyBefore.add(expLoan.loanAmount).toString(),
             "total ACD supply should be increased by the loan amount"
+        );
+
+        assert.equal(
+            (await web3.eth.getBalance(loanContract.address)).toString(),
+            collateralWei.toString(),
+            "collateral ETH should be in loanContract"
         );
 
         let expBalances = [
@@ -70,14 +85,14 @@ contract("ACD Loans tests", accounts => {
                 name: "reserve",
                 address: reserveAcc,
                 ucd: balBefore[0].ucd
-                    .plus(expLoan.loanAmount)
+                    .add(expLoan.loanAmount)
                     .minus(expLoan.disbursedAmount),
                 eth: balBefore[0].eth
             },
             {
                 name: "acc1",
                 address: acc1,
-                ucd: balBefore[1].ucd.plus(expLoan.disbursedAmount),
+                ucd: balBefore[1].ucd.add(expLoan.disbursedAmount),
                 eth: balBefore[1].eth.minus(collateralWei),
                 gasFee: NEWLOAN_MAXFEE
             }
@@ -137,6 +152,11 @@ contract("ACD Loans tests", accounts => {
             totalSupplyBefore.toString(),
             "total ACD supply should be the same"
         );
+
+        assert.equal(
+            (await web3.eth.getBalance(loanContract.address)).toString(),
+            "0",
+            "collateral ETH in loanContract should be 0"
         );
 
         let expBalances = [
