@@ -6,9 +6,11 @@ const LoanManager = artifacts.require("./loanManager.sol");
 const TokenUcd = artifacts.require("./TokenAcd.sol");
 const NEWLOAN_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 const REPAY_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
+const COLLECT_BASEFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 
 const acc0 = web3.eth.accounts[0],
     acc1 = web3.eth.accounts[1];
+acc2 = web3.eth.accounts[2];
 
 const collateralWei = web3.toWei(0.5);
 let tokenUcd, loanManager, rates, products;
@@ -20,7 +22,7 @@ contract("ACD Loans tests", accounts => {
         rates = await Rates.deployed();
         loanManager = await LoanManager.deployed();
         reserveAcc = tokenUcd.address;
-        testedAccounts = [reserveAcc, acc1];
+        testedAccounts = [reserveAcc, acc1, acc2];
 
         products = {
             defaulting: await loanTestHelper.getProductInfo(loanManager, 6),
@@ -30,7 +32,7 @@ contract("ACD Loans tests", accounts => {
 
         for (const key of Object.keys(products)) {
             console.log({
-                key: key,
+                product: key,
                 id: products[key].id,
                 term: products[key].term.toString(),
                 repayPeriod: products[key].repayPeriod.toString()
@@ -178,9 +180,83 @@ contract("ACD Loans tests", accounts => {
         await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
-    it("Should NOT repay a loan after paymentperiod is over");
+    it("Should collect a defaulted ACD loan", async function() {
+        let expLoan = await loanTestHelper.calcLoanValues(
+            rates,
+            products.defaulting,
+            collateralWei
+        );
+        expLoan.state = 1; // open first
+        expLoan.borrower = acc1;
+        expLoan.collateral = collateralWei;
+        let tx = await loanManager.newEthBackedLoan(products.defaulting.id, {
+            from: acc1,
+            value: collateralWei
+        });
+        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
-    it("Should collect a defaulted ACD loan");
+        let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
+        let loanId = await loanContract.loanId();
+
+        let interestAmount = expLoan.loanAmount.minus(expLoan.disbursedAmount);
+
+        await testHelper.waitForTimeStamp(
+            (await loanContract.maturity())
+                .add(expLoan.product.repayPeriod)
+                .toNumber()
+        );
+
+        expLoan.state = 2; // defaulted
+        tx = await loanManager
+            .collect([loanId], { from: acc2 })
+            .catch(error => console.log(error));
+        testHelper.logGasUse(this, tx, "collect 1");
+        await loanTestHelper.loanContractAsserts(loanContract, expLoan);
+
+        assert.equal(
+            (await tokenUcd.totalSupply()).toString(),
+            totalSupplyBefore.add(expLoan.loanAmount).toString(),
+            "total ACD supply should be increased by the defaulted loanAmount"
+        );
+
+        assert.equal(
+            (await web3.eth.getBalance(loanContract.address)).toString(),
+            "0",
+            "collateral ETH in loanContract should be 0"
+        );
+        let newbal = await web3.eth.getBalance(acc1);
+        // console.log(
+        //     web3.fromWei(balBefore[1].eth).toString(),
+        //     web3.fromWei(newbal).toString(),
+        //     web3.fromWei(newbal.minus(balBefore[1].eth)).toString()
+        // );
+        let expBalances = [
+            {
+                name: "reserve",
+                address: reserveAcc,
+                ucd: balBefore[0].ucd.add(interestAmount),
+                eth: balBefore[0].eth.add(collateralWei)
+            },
+            {
+                name: "acc1",
+                address: acc1,
+                ucd: balBefore[1].ucd.add(expLoan.disbursedAmount),
+                eth: balBefore[1].eth.minus(collateralWei),
+                gasFee: NEWLOAN_MAXFEE
+            },
+            {
+                name: "acc2", // collect tx calling acc
+                address: acc2,
+                ucd: balBefore[2].ucd,
+                eth: balBefore[2].eth,
+                gasFee: COLLECT_BASEFEE
+            }
+        ];
+
+        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+    });
+
+    it("Should NOT repay a loan after paymentperiod is over");
 
     it("Should NOT collect an already collected ACD loan");
 
