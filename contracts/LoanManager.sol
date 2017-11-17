@@ -113,7 +113,11 @@ contract LoanManager is owned {
         loanContractAddress.transfer(msg.value);
 
         // Issue UCD and send to borrower
-        tokenUcd.issueAndDisburse( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
+        // tokenUcd.issueAndDisburse( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
+        /* Alternative to issueAndDisburse: */
+        tokenUcd.issue( ucdDueAtMaturity);
+        // TODO: interest should go to Interest Pool
+        tokenUcd.transferNoFee( address(tokenUcd), msg.sender, disbursedLoanInUcd, "Loan disbursement");
 
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
     }
@@ -146,7 +150,10 @@ contract LoanManager is owned {
             return ERR_NOT_OWNER;
         }
 
-        tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(), loanContract.disbursedLoanInUcd(), "Loan repayment");
+        // tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(), loanContract.disbursedLoanInUcd(), "Loan repayment");
+        /* Alternative to repayAndBurn: */
+        tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanContract.ucdDueAtMaturity(), "Loan repayment");
+        tokenUcd.burn(loanContract.ucdDueAtMaturity());
         loanContract.releaseCollateral();
 
         loanPointers[loanId].loanState = LoanState.Repaid;

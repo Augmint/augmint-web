@@ -62,25 +62,22 @@ contract AugmintToken is owned {
     event e_transfer(address indexed from, address indexed to, uint amount, string narrative);
 
     function transfer(address _to, uint256 _amount) external {
-        transferWithNarrative(_to, _amount, "");
+        _transfer(msg.sender, _to, _amount, "");
     }
 
-    function transferWithNarrative(address _to, uint256 _amount, string narrative) public {
-        require(msg.sender != _to); // no need to send to myself. Makes client code simpler if we don't allow
-        require(balances[msg.sender] >= _amount);
-        require(_amount > 0);
-        balances[msg.sender] = balances[msg.sender].sub(_amount);
-        balances[_to] = balances[_to].add(_amount);
-        e_transfer(msg.sender, _to, _amount, narrative);
+    function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
+        _transfer(msg.sender, _to, _amount, _narrative);
     }
 
-    function systemTransfer(address _from, address _to, uint256 _amount, string narrative) public {
-        // Transfer the balance between any two accounts
-        // Exchange and LoanManager contract  uses it at the moment for repay and exchange txs
-        // TODO: check if exchange really needs it so that we could change to internal
+    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external {
         require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
+        _transfer(_from, _to, _amount, _narrative);
+    }
+
+    function _transfer(address _from, address _to, uint256 _amount, string narrative) internal {
+        // TODO: add fee arg, calc fee and deduct fee if there is any
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
-        require( balances[_from] >= _amount);
+        require(balances[_from] >= _amount);
         require(_amount > 0);
         balances[_from] = balances[_from].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
@@ -127,7 +124,7 @@ contract AugmintToken is owned {
     }
 
     event e_issued(uint amount);
-    function issue(uint amount) public  { // FIXME: this is only public for testing, change to internal
+    function issue(uint amount) external  { // FIXME: this is only public for testing, change to internal
         require(msg.sender == owner || msg.sender == loanManagerAddress); // this won't be needed when we change it internal
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
@@ -135,13 +132,15 @@ contract AugmintToken is owned {
     }
 
     event e_burned(uint amount);
-    function burn(uint amount) internal {
+    function burn(uint amount) external {
+        require(msg.sender == loanManagerAddress);
         require( amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
         e_burned(amount);
     }
 
+    /* This can be removed, loanManager does this
     function repayAndBurn(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
         require(msg.sender == loanManagerAddress); // only called from repay()
         systemTransfer(borrower, address(this), loanAmount, narrative);
@@ -150,7 +149,7 @@ contract AugmintToken is owned {
         } else  {
             burn(disbursedAmount); // loan was with zero or negative interest
         }
-    }
+    }*/
 
     // FIXME: this is only for testing, remove this function
     function getFromReserve(uint amount) external onlyOwner {
@@ -159,6 +158,7 @@ contract AugmintToken is owned {
         balances[msg.sender] = balances[msg.sender].add(amount);
     }
 
+    /* This can be removed, loanManager does this
     function issueAndDisburse(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
         require( msg.sender == loanManagerAddress);
         require(loanAmount > 0);
@@ -169,6 +169,6 @@ contract AugmintToken is owned {
         }
         systemTransfer(address(this), borrower, disbursedAmount, narrative);
         // we leave the interest part (if any) in reserve
-    }
+    }*/
 
 }
