@@ -30,14 +30,15 @@ contract("ACD Loans tests", accounts => {
             notDue: await loanTestHelper.getProductInfo(loanManager, 4)
         };
 
-        for (const key of Object.keys(products)) {
-            console.log({
-                product: key,
-                id: products[key].id,
-                term: products[key].term.toString(),
-                repayPeriod: products[key].repayPeriod.toString()
-            });
-        }
+        // For test debug:
+        // for (const key of Object.keys(products)) {
+        //     console.log({
+        //         product: key,
+        //         id: products[key].id,
+        //         term: products[key].term.toString(),
+        //         repayPeriod: products[key].repayPeriod.toString()
+        //     });
+        // }
     });
 
     beforeEach(async function() {

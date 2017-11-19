@@ -3,24 +3,33 @@ var Rates = artifacts.require("./Rates.sol");
 var SafeMath = artifacts.require("./SafeMath.sol");
 var LoanManager = artifacts.require("./LoanManager.sol");
 
-module.exports = async function(deployer, network) {
+module.exports = function(deployer, network) {
     deployer.link(SafeMath, LoanManager);
-    lm = await deployer.deploy(LoanManager, TokenAcd.address, Rates.address);
+    deployer.deploy(LoanManager, TokenAcd.address, Rates.address);
+    deployer.then(async () => {
+        lm = await LoanManager.deployed();
+        let tokenAcd = await TokenAcd.deployed();
+        await tokenAcd.setLoanManagerAddress(LoanManager.address);
 
-    var onTest =
-        web3.version.network == 999 ||
-        web3.version.network == 4 ||
-        web3.version.network == 3 ||
-        web3.version.network == 1976 ||
-        web3.version.network == 4447
-            ? true
-            : false;
-    if (onTest) {
+        let onTest =
+            web3.version.network == 999 ||
+            web3.version.network == 4 ||
+            web3.version.network == 3 ||
+            web3.version.network == 1976 ||
+            web3.version.network == 4447
+                ? true
+                : false;
+        if (!onTest) {
+            console.log(
+                "   Not on a known test network. NOT adding test loanProducts. Network id: ",
+                web3.version.network
+            );
+            return;
+        }
         console.log(
             "   On a test network. Adding test loanProducts. Network id: ",
             web3.version.network
         );
-        let lm = await LoanManager.deployed();
         // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmountInAcd (w/ 4 decimals), gracePerdio, isActive
         await lm.addProduct(31536000, 800000, 800000, 300000, 864000, true); // due in 365d
         await lm.addProduct(15552000, 850000, 800000, 300000, 259200, true); // due in 180d
@@ -31,11 +40,5 @@ module.exports = async function(deployer, network) {
         await lm.addProduct(1, 985000, 900000, 200000, 3600, true);
         // due in 1 sec, repay in 1sec for testing defaults
         await lm.addProduct(1, 990000, 950000, 100000, 1, true); // defaults in 2 secs for testing
-    } else {
-        console.log(
-            "   Not on a known test network. NOT adding test loanProducts. Network id: ",
-            web3.version.network
-        );
-    }
-    return lm;
+    });
 };
