@@ -3,11 +3,6 @@ const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
 const testHelper = new require("./helpers/testHelper.js");
 const TRANSFER_MAXFEE = web3.toWei(0.006); // TODO: set this to expected value (+set gasPrice)
 
-const acc0 = web3.eth.accounts[0],
-    acc1 = web3.eth.accounts[1],
-    acc2 = web3.eth.accounts[2];
-const txValue = 200000000,
-    txNarrative = "ACD transfer test";
 let tokenUcd;
 
 contract("Transfer ACD tests", accounts => {
@@ -15,7 +10,7 @@ contract("Transfer ACD tests", accounts => {
         tokenUcd = await TokenUcd.deployed();
         await tokenUcd.issue(1000000000);
         await tokenUcd.getFromReserve(1000000000);
-        testedAccounts = [acc0, acc1, acc2];
+        testedAccounts = [accounts[0], accounts[1], accounts[2]];
     });
 
     beforeEach(async function() {
@@ -26,45 +21,30 @@ contract("Transfer ACD tests", accounts => {
     });
 
     it("Should be able to transfer ACD between accounts (without narrative)", async function() {
-        let tx = await tokenUcd.transfer(acc1, txValue, { from: acc0 });
+        expTransfer = {
+            from: accounts[0],
+            to: accounts[1],
+            amount: 200000000,
+            narrative: ""
+        };
+        let tx = await tokenUcd.transfer(expTransfer.to, expTransfer.amount, {
+            from: expTransfer.from
+        });
         testHelper.logGasUse(this, tx);
-        assert.equal(
-            tx.logs[0].event,
-            "e_transfer",
-            "e_transfer event should be emited"
-        );
-        assert.equal(
-            tx.logs[0].args.from,
-            acc0,
-            "from: in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.to,
-            acc1,
-            "to: in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.narrative,
-            "",
-            "narrative in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.amount.toString(),
-            txValue.toString(),
-            "amount in e_transfer event should be set"
-        );
+
+        tokenUcdTestHelper.transferEventAsserts(tx, expTransfer);
         let expBalances = [
             {
-                name: "acc0",
-                address: acc0,
-                ucd: balBefore[0].ucd.minus(txValue),
+                name: "acc from",
+                address: expTransfer.from,
+                ucd: balBefore[0].ucd.minus(expTransfer.amount),
                 eth: balBefore[0].eth,
                 gasFee: TRANSFER_MAXFEE
             },
             {
-                name: "acc1",
-                address: acc1,
-                ucd: balBefore[1].ucd.plus(txValue),
+                name: "acc to",
+                address: expTransfer.to,
+                ucd: balBefore[1].ucd.plus(expTransfer.amount),
                 eth: balBefore[1].eth
             }
         ];
@@ -73,73 +53,64 @@ contract("Transfer ACD tests", accounts => {
     });
 
     it("Should be able to transfer ACD between accounts (with narrative)", async function() {
+        expTransfer = {
+            from: accounts[0],
+            to: accounts[1],
+            amount: 200000000,
+            narrative: "test narrative"
+        };
         let tx = await tokenUcd.transferWithNarrative(
-            acc1,
-            txValue,
-            txNarrative,
-            { from: acc0 }
+            expTransfer.to,
+            expTransfer.amount,
+            expTransfer.narrative,
+            { from: expTransfer.from }
         );
         testHelper.logGasUse(this, tx);
-        assert.equal(
-            tx.logs[0].event,
-            "e_transfer",
-            "e_transfer event should be emited"
-        );
-        assert.equal(
-            tx.logs[0].args.from,
-            acc0,
-            "from: in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.to,
-            acc1,
-            "to: in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.narrative,
-            txNarrative,
-            "narrative in e_transfer event should be set"
-        );
-        assert.equal(
-            tx.logs[0].args.amount.toString(),
-            txValue.toString(),
-            "amount in e_transfer event should be set"
-        );
+        tokenUcdTestHelper.transferEventAsserts(tx, expTransfer);
         let expBalances = [
             {
-                name: "acc0",
-                address: acc0,
-                ucd: balBefore[0].ucd.minus(txValue),
+                name: "acc from",
+                address: expTransfer.from,
+                ucd: balBefore[0].ucd.minus(expTransfer.amount),
                 eth: balBefore[0].eth,
                 gasFee: TRANSFER_MAXFEE
             },
             {
-                name: "acc1",
-                address: acc1,
-                ucd: balBefore[1].ucd.plus(txValue),
+                name: "acc to",
+                address: expTransfer.to,
+                ucd: balBefore[1].ucd.plus(expTransfer.amount),
                 eth: balBefore[1].eth
             }
         ];
 
         await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
+
+    it("transfer fee % should deducted when fee % is between min and max fee");
+    it("min transfer fee should deducted when fee % is less than min fee");
+    it("max transfer fee should deducted when fee % is more than max fee");
+
     it("Shouldn't be able to transfer ACD when ACD balance is insufficient", async function() {
         // it throws until TokenUcd refactor (i.e. tokenUcd should  require instead of returning false)
         return testHelper.expectThrow(
-            tokenUcd.transfer(acc2, balBefore[1].ucd.plus(1), { from: acc1 })
+            tokenUcd.transfer(accounts[2], balBefore[1].ucd.plus(1), {
+                from: accounts[1]
+            })
         );
     });
 
     it("Shouldn't be able to transfer 0 ACD", async function() {
         // it throws until TokenUcd refactor (i.e. tokenUcd should  require instead of returning false)
         return testHelper.expectThrow(
-            tokenUcd.transfer(acc1, 0, { from: acc0 })
+            tokenUcd.transfer(accounts[1], 0, { from: accounts[0] })
         );
     });
 
     it("Shouldn't be able to transfer ACD between the same accounts", async function() {
         return testHelper.expectThrow(
-            tokenUcd.transfer(acc0, txValue, { from: acc0 })
+            tokenUcd.transfer(accounts[0], 20000, {
+                from: accounts[0]
+            })
         );
     });
 

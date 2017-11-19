@@ -1,5 +1,6 @@
 module.exports = {
     getBalances,
+    transferEventAsserts,
     balanceAsserts
 };
 
@@ -24,6 +25,34 @@ async function getBalances(tokenUcd, addresses) {
         });
     }
     return balances;
+}
+
+async function transferEventAsserts(tx, expTransfer) {
+    assert.equal(
+        tx.logs[0].event,
+        "e_transfer",
+        "e_transfer event should be emited"
+    );
+    assert.equal(
+        tx.logs[0].args.from,
+        expTransfer.from,
+        "from: in e_transfer event should be set"
+    );
+    assert.equal(
+        tx.logs[0].args.to,
+        expTransfer.to,
+        "to: in e_transfer event should be set"
+    );
+    assert.equal(
+        tx.logs[0].args.narrative,
+        expTransfer.narrative,
+        "narrative in e_transfer event should be set"
+    );
+    assert.equal(
+        tx.logs[0].args.amount.toString(),
+        expTransfer.amount.toString(),
+        "amount in e_transfer event should be set"
+    );
 }
 
 async function balanceAsserts(tokenUcd, expBalances) {
