@@ -179,11 +179,16 @@ function expectThrow(promise) {
             const invalidOpcode2 =
                 error.message.search(
                     "VM Exception while executing eth_call: invalid opcode"
-                ) >= 0;
+                ) >= 0; // testRpc <= v4
+            const invalidOpcode3 =
+                error.message.search(
+                    "VM Exception while processing transaction: revert"
+                ) >= 0; // testRpc > v4
 
             assert(
                 invalidOpcode1 ||
                     invalidOpcode2 ||
+                    invalidOpcode3 ||
                     invalidJump ||
                     outOfGas ||
                     (onPrivateChain && (outOfGasPrivateChain || allGasUsed)),
