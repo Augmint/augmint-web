@@ -36,6 +36,8 @@ const initialState = {
         bn_decimalsDiv: null,
         ucdBalance: "?",
         feeAccountAcdBalance: "?",
+        interestPoolAccountAcdBalance: "?",
+        interestEarnedAccountAcdBalance: "?",
         ucdPendingBalance: "?",
         totalSupply: "?",
         loanManagerAddress: "?"
@@ -136,6 +138,7 @@ export const refreshTokenUcd = () => {
         dispatch({
             type: TOKENUCD_REFRESH_REQUESTED
         });
+
         let tokenUcd = store.getState().tokenUcd.contract.instance;
         // TODO: make these paralel
         let owner = await tokenUcd.owner();
@@ -144,7 +147,16 @@ export const refreshTokenUcd = () => {
         let bn_decimals = await tokenUcd.decimals();
         let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
         let feeAccount = await tokenUcd.feeAccount();
+        let interestPoolAccount = await tokenUcd.interestPoolAccount();
+        let interestEarnedAccount = await tokenUcd.interestEarnedAccount();
         let bn_feeAccountAcdBalance = await getUcdBalance(feeAccount);
+        let bn_interestPoolAccountAcdBalance = await getUcdBalance(
+            interestPoolAccount
+        );
+        let bn_interestEarnedAccountAcdBalance = await getUcdBalance(
+            interestEarnedAccount
+        );
+
         let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
         let bn_ethPendingBalance = await asyncGetBalance(
             tokenUcd.address,
@@ -166,6 +178,10 @@ export const refreshTokenUcd = () => {
                 ucdBalance: bn_ucdBalance.toNumber(),
                 bn_feeAccountAcdBalance: bn_feeAccountAcdBalance,
                 feeAccountAcdBalance: bn_feeAccountAcdBalance.toString(),
+                bn_interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance,
+                interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance.toString(),
+                bn_interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance,
+                interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance.toString(),
                 ucdPendingBalance: bn_ucdPendingBalance.toNumber(),
                 ethBalance: bn_ethBalance.toNumber(),
                 bn_ethBalance: bn_ethBalance,

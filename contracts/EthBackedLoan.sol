@@ -1,6 +1,6 @@
-/* contract for each loan given in UCD for ETH collateral
+/* contract for each loan given in ACD for ETH collateral
     holds ETH collateral in contract balance, only allows access to it on maturity
-    TODO: split it into AugmintLoan - EthBackedACDLoan ?
+    TODO: split it into AugmintLoan - EthBackedACDLoan ? generic loan contract interface contract ?
     TODO: double check against reentrancy
     TODO: consider storing collateral amount when loan created for easier tracking after repayment
     TODO: consider store loanId (maintened in loanManager)
@@ -8,9 +8,7 @@
          - would need to remove state from loanManager (so wouldn't need to call loanManager for housekeeping)
          - it would call tokenUcd directly, TBD: how would tokenUcd check permission if it doesn't know about contracts
          - consider sending UCD to this loanContract  first?
-    TODO: it costs 1094127 gas to create this contract. consider moving all functions to a library to reduce it
-    TODO: implement sellLoan
-    TODO: consider a generic loan contract interface
+    TODO: consider moving functions to a library to reduce gas costs
 */
 
 pragma solidity ^0.4.18;

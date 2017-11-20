@@ -20,6 +20,8 @@ export class TokenUcdStats extends React.Component {
             totalSupply,
             ucdBalance,
             feeAccountAcdBalance,
+            interestPoolAccountAcdBalance,
+            interestEarnedAccountAcdBalance,
             ethBalance,
             bn_ethBalance
         } = tokenUcd.info;
@@ -61,6 +63,24 @@ export class TokenUcdStats extends React.Component {
                         <Statistic.Label>ACD fee account</Statistic.Label>
                         <Statistic.Value>
                             {feeAccountAcdBalance} ACD
+                        </Statistic.Value>
+                    </Statistic>
+
+                    <Statistic style={{ padding: "1em" }}>
+                        <Statistic.Label>
+                            ACD interest pool account
+                        </Statistic.Label>
+                        <Statistic.Value>
+                            {interestPoolAccountAcdBalance} ACD
+                        </Statistic.Value>
+                    </Statistic>
+
+                    <Statistic style={{ padding: "1em" }}>
+                        <Statistic.Label>
+                            ACD earned interest account
+                        </Statistic.Label>
+                        <Statistic.Value>
+                            {interestEarnedAccountAcdBalance} ACD
                         </Statistic.Value>
                     </Statistic>
                 </Statistic.Group>

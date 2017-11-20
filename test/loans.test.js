@@ -19,10 +19,20 @@ let balBefore, totalSupplyBefore;
 contract("ACD Loans tests", accounts => {
     before(async function() {
         tokenUcd = await TokenUcd.deployed();
+        await tokenUcd.issue(1000000000);
+        await tokenUcd.withdrawTokens(accounts[0], 1000000000);
         rates = await Rates.deployed();
         loanManager = await LoanManager.deployed();
         reserveAcc = tokenUcd.address;
-        testedAccounts = [reserveAcc, acc1, acc2];
+        interestPoolAcc = await tokenUcd.interestPoolAccount();
+        interestEarnedAcc = await tokenUcd.interestEarnedAccount();
+        testedAccounts = [
+            reserveAcc,
+            acc1,
+            acc2,
+            interestPoolAcc,
+            interestEarnedAcc
+        ];
 
         products = {
             defaulting: await loanTestHelper.getProductInfo(loanManager, 6),
@@ -87,9 +97,7 @@ contract("ACD Loans tests", accounts => {
             {
                 name: "reserve",
                 address: reserveAcc,
-                ucd: balBefore[0].ucd
-                    .add(expLoan.loanAmount)
-                    .minus(expLoan.disbursedAmount),
+                ucd: balBefore[0].ucd,
                 eth: balBefore[0].eth
             },
             {
@@ -98,6 +106,18 @@ contract("ACD Loans tests", accounts => {
                 ucd: balBefore[1].ucd.add(expLoan.disbursedAmount),
                 eth: balBefore[1].eth.minus(collateralWei),
                 gasFee: NEWLOAN_MAXFEE
+            },
+            {
+                name: "interestPool Acc",
+                address: interestPoolAcc,
+                ucd: balBefore[3].ucd.add(expLoan.interestAmount),
+                eth: balBefore[3].eth
+            },
+            {
+                name: "interestEarned Acc",
+                address: interestEarnedAcc,
+                ucd: balBefore[4].ucd,
+                eth: balBefore[4].eth
             }
         ];
 
@@ -130,9 +150,8 @@ contract("ACD Loans tests", accounts => {
         let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
         let loanId = await loanContract.loanId();
 
-        let interestAmount = expLoan.loanAmount.minus(expLoan.disbursedAmount);
         // send interest to borrower to have enough ACD to repay in test
-        await tokenUcd.withdrawTokens(expLoan.borrower, interestAmount, {
+        await tokenUcd.transfer(expLoan.borrower, expLoan.interestAmount, {
             from: acc0
         });
 
@@ -171,6 +190,18 @@ contract("ACD Loans tests", accounts => {
                 ucd: balBefore[1].ucd, // it's the same b/c we sent the exact loanAmount after we saved the bal
                 eth: balBefore[1].eth, // it's the same b/c we get loan after we saved the bal
                 gasFee: REPAY_MAXFEE
+            },
+            {
+                name: "interestPool Acc",
+                address: interestPoolAcc,
+                ucd: balBefore[3].ucd,
+                eth: balBefore[3].eth
+            },
+            {
+                name: "interestEarned Acc",
+                address: interestEarnedAcc,
+                ucd: balBefore[4].ucd.add(expLoan.interestAmount),
+                eth: balBefore[4].eth
             }
         ];
 
@@ -197,8 +228,6 @@ contract("ACD Loans tests", accounts => {
         let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
         let loanId = await loanContract.loanId();
 
-        let interestAmount = expLoan.loanAmount.minus(expLoan.disbursedAmount);
-
         await testHelper.waitForTimeStamp(
             (await loanContract.maturity())
                 .add(expLoan.product.repayPeriod)
@@ -223,17 +252,12 @@ contract("ACD Loans tests", accounts => {
             "0",
             "collateral ETH in loanContract should be 0"
         );
-        let newbal = await web3.eth.getBalance(acc1);
-        // console.log(
-        //     web3.fromWei(balBefore[1].eth).toString(),
-        //     web3.fromWei(newbal).toString(),
-        //     web3.fromWei(newbal.minus(balBefore[1].eth)).toString()
-        // );
+
         let expBalances = [
             {
                 name: "reserve",
                 address: reserveAcc,
-                ucd: balBefore[0].ucd.add(interestAmount),
+                ucd: balBefore[0].ucd.add(expLoan.interestAmount),
                 eth: balBefore[0].eth.add(collateralWei)
             },
             {

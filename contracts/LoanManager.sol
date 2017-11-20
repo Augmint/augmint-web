@@ -114,12 +114,11 @@ contract LoanManager is owned {
         // Send ETH collateral to loan contract
         loanContractAddress.transfer(msg.value);
 
-        // Issue UCD and send to borrower
-        // tokenUcd.issueAndDisburse( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
+        // Issue UCD and send to borrower. TODO: interest should go to Interest Pool
+        tokenUcd.issueAndDisburse( msg.sender, loanAmount, disbursedAmount, "Loan disbursement");
         /* Alternative to issueAndDisburse: */
-        tokenUcd.issue(loanAmount);
-        // TODO: interest should go to Interest Pool
-        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");
+        /*tokenUcd.issue(loanAmount);
+        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");*/
 
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedAmount);
     }
@@ -135,11 +134,12 @@ contract LoanManager is owned {
 
         require(loanContract.owner() == msg.sender);
 
-        // tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(),
-        //                   loanContract.disbursedLoanInUcd(), "Loan repayment");
+        tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(),
+                loanContract.disbursedLoanInUcd(), "Loan repayment");
         /* Alternative to repayAndBurn: */
-        tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanContract.ucdDueAtMaturity(), "Loan repayment");
-        tokenUcd.burn(loanContract.ucdDueAtMaturity());
+        /*tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanContract.ucdDueAtMaturity(), "Loan repayment");
+        tokenUcd.burn(loanContract.ucdDueAtMaturity());*/
+
         loanContract.releaseCollateral();
 
         loanPointers[loanId].loanState = LoanState.Repaid;
@@ -163,6 +163,9 @@ contract LoanManager is owned {
 
             loanContract.collect();
             loanPointers[loanId].loanState = LoanState.Defaulted;
+            // move interest from InterestPoolAccount to MIR (tokenAcd reserve)
+            tokenUcd.transferNoFee(tokenUcd.interestPoolAccount(), address(tokenUcd),
+                loanContract.ucdDueAtMaturity().sub(loanContract.disbursedLoanInUcd()), "Defaulted loan interest");
             e_collected(loanContract.owner(), loanContractAddress);
         }
 

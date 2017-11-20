@@ -32,13 +32,15 @@ contract AugmintToken is owned {
     uint256 public totalSupply; // total amount of tokens
 
     // Balances for each account
-    mapping(address => uint256) balances;
+    mapping(address => uint256) public balances;
     // Owner of account approves the transfer of an amount to another account
-    mapping(address => mapping (address => uint256)) allowed;
+    mapping(address => mapping (address => uint256)) public allowed;
 
     address public loanManagerAddress; // used for authorisation of issuing ACD for loans
     address public exchangeAddress; // for authorisation of transferExchange()
     address public feeAccount;
+    address public interestPoolAccount;
+    address public interestEarnedAccount;
     uint public transferFeeDiv; // 1/transferFeeDiv %, eg. 500 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
@@ -69,21 +71,27 @@ contract AugmintToken is owned {
     }
 
     event e_loanManagerAddressChanged(address newAddress);
+
     function setLoanManagerAddress(address newAddress) external onlyOwner {
         loanManagerAddress = newAddress;
         e_loanManagerAddressChanged(newAddress);
     }
 
     event e_exchangeAddressChanged(address newAddress);
+
     function setExchangeAddress(address newAddress) external onlyOwner {
         exchangeAddress = newAddress;
         e_exchangeAddressChanged(newAddress);
     }
 
-    event e_feeAccountChanged(address newAddress);
-    function setFeeAccountAddress(address newAddress) external onlyOwner {
-        feeAccount = newAddress;
-        e_feeAccountChanged(newAddress);
+    event e_systemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
+
+    function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
+            address newInterestEarnedAccount) external onlyOwner {
+        feeAccount = newFeeAccount;
+        interestPoolAccount = newInteresPoolAccount;
+        interestEarnedAccount = newInterestEarnedAccount;
+        e_systemAccountsChanged(newFeeAccount, newInteresPoolAccount, newInterestEarnedAccount);
     }
 
     event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
@@ -103,7 +111,7 @@ contract AugmintToken is owned {
         _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external {
+    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) public {
         require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
         _transfer(_from, _to, _amount, _narrative, 0);
     }
@@ -158,7 +166,7 @@ contract AugmintToken is owned {
     }
 
     event e_issued(uint amount);
-    function issue(uint amount) external  {
+    function issue(uint amount) public {
         // FIXME: owner only allowed for testing, remove from production
         require(msg.sender == owner || msg.sender == loanManagerAddress);
         totalSupply = totalSupply.add(amount);
@@ -167,24 +175,13 @@ contract AugmintToken is owned {
     }
 
     event e_burned(uint amount);
-    function burn(uint amount) external {
-        require(msg.sender == loanManagerAddress);
-        require( amount <= balances[this]);
+    function burn(uint amount) public {
+        require(msg.sender == owner || msg.sender == loanManagerAddress);
+        require(amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
         e_burned(amount);
     }
-
-    /* This can be removed, loanManager does this
-    function repayAndBurn(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
-        require(msg.sender == loanManagerAddress); // only called from repay()
-        systemTransfer(borrower, address(this), loanAmount, narrative);
-        if( loanAmount > disbursedAmount) { // burn all what has been issued at originiation
-            burn(loanAmount);
-        } else  {
-            burn(disbursedAmount); // loan was with zero or negative interest
-        }
-    }*/
 
     // FIXME: this is only for testing, remove this function from production
     function withdrawTokens(address _to, uint _amount) external onlyOwner {
@@ -193,17 +190,31 @@ contract AugmintToken is owned {
         balances[_to] = balances[_to].add(_amount);
     }
 
-    /* This can be removed, loanManager does this
+    function repayAndBurn(address borrower, uint repaidAmount, uint disbursedAmount, string narrative) external {
+        require(msg.sender == loanManagerAddress);
+        transferNoFee(borrower, address(this), repaidAmount, narrative);
+        burn(repaidAmount);
+        if(repaidAmount > disbursedAmount) {
+            // transfer interestAmount to InterestEarnedAccount
+            uint interestAmount = repaidAmount.sub(disbursedAmount);
+            balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
+            balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
+        }
+    }
+
     function issueAndDisburse(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
-        require( msg.sender == loanManagerAddress);
+        require(msg.sender == loanManagerAddress);
         require(loanAmount > 0);
-        if( loanAmount > disbursedAmount) {
+        if(loanAmount > disbursedAmount) {
             issue(loanAmount);
+            // move interest to InterestPoolAccount
+            uint interestAmount = loanAmount.sub(disbursedAmount);
+            balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
+            balances[this] = balances[this].sub(interestAmount);
         } else {
             issue(disbursedAmount); // negative or zero interest loan
         }
-        systemTransfer(address(this), borrower, disbursedAmount, narrative);
-        // we leave the interest part (if any) in reserve
-    }*/
+        transferNoFee(address(this), borrower, disbursedAmount, narrative);
+    }
 
 }

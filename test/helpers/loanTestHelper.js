@@ -48,6 +48,7 @@ async function calcLoanValues(rates, product, collateralWei) {
         .round(0, BigNumber.ROUND_HALF_UP)
         .mul(100);
 
+    ret.interestAmount = ret.loanAmount.minus(ret.disbursedAmount);
     ret.disbursementTime = moment()
         .utc()
         .unix();
