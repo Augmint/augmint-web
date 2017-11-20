@@ -110,8 +110,9 @@ contract("ACD Loans tests", accounts => {
         "Should NOT repay an ACD loan on maturity if ACD balance is insufficient"
     );
     it("Only owner should repay a loan when it's due");
+    it("Should not repay with invalid loanId");
 
-    it("Should repay an ACD loan on maturity", async function() {
+    it("Should repay an ACD loan after maturity", async function() {
         let expLoan = await loanTestHelper.calcLoanValues(
             rates,
             products.repaying,
@@ -175,6 +176,8 @@ contract("ACD Loans tests", accounts => {
 
         await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
+
+    it("Should repay an ACD loan BEFORE maturity");
 
     it("Should collect a defaulted ACD loan", async function() {
         let expLoan = await loanTestHelper.calcLoanValues(

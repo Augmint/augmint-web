@@ -15,10 +15,10 @@ import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 
 const stringify = stringifier({ maxDepth: 5, indent: "   " });
 
-const NEW_LOAN_GAS = 2000000; // As of now it's on testRPC: first= 762376  additional = 702376
-const NEW_FIRST_LOAN_GAS = 2000000;
-const REPAY_GAS = 3000000;
-const COLLECT_GAS = 3000000;
+const NEW_LOAN_GAS = 1000000; // As of now it's on testRPC: first= 877056  additional = 832056 - 832094
+const NEW_FIRST_LOAN_GAS = 1000000;
+const REPAY_GAS = 110000; // as of now on testRpc: 93616
+const COLLECT_GAS = 60000; // as of now on testRpc: 49352
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     try {

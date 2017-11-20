@@ -11,15 +11,9 @@ import "./Rates.sol";
 import "./TokenAcd.sol";
 import "./EthBackedLoan.sol";
 
+
 contract LoanManager is owned {
     using SafeMath for uint256;
-
-    int8 public constant SUCCESS = 1;
-    int8 public constant ERR_NOT_OWNER = -2;
-    int8 public constant ERR_NO_LOAN = -3;
-    int8 public constant ERR_LOAN_NOT_OPEN = -4;
-
-    int8 public constant ERR_EXT_ERRCODE_BASE = -10;
 
     Rates public rates; // instance of ETH/USD rate provider contract
                         // TODO:  setter to be able to change? (consider trust questions)
@@ -39,9 +33,10 @@ contract LoanManager is owned {
 
     enum LoanState { Open, Repaid, Defaulted }
 
-    struct LoanPointer { // TODO: better name for it...
+    struct LoanPointer {
         address contractAddress;
-        LoanState loanState;  // Redundant, stored in loan contract as well but saves us to instantiate each contract when need to iterate through
+        LoanState loanState;    // Redundant, stored in loan contract as well but saves us to instantiate each contract
+                                //   when need to iterate through
     }
 
     LoanPointer[] public loanPointers;
@@ -64,11 +59,15 @@ contract LoanManager is owned {
         return m_loanPointers[borrower];
     }
 
-    function addProduct(uint _term, uint _discountRate, uint _loanCollateralRatio,
-            uint _minDisbursedAmountInUcd, uint _repayPeriod, bool _isActive) external onlyOwner returns (uint newProductId) {
-        newProductId = products.push( Product( {term: _term, discountRate: _discountRate,
+    function addProduct(uint _term, uint _discountRate, uint _loanCollateralRatio, uint _minDisbursedAmountInUcd,
+            uint _repayPeriod, bool _isActive) external onlyOwner returns (uint newProductId) {
+        newProductId = products.push(
+            Product(
+                {term: _term, discountRate: _discountRate,
                 loanCollateralRatio: _loanCollateralRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
-                repayPeriod: _repayPeriod, isActive: _isActive }) );
+                repayPeriod: _repayPeriod, isActive: _isActive}
+            )
+        );
 
         return newProductId - 1;
         // TODO: emit event
@@ -84,30 +83,33 @@ contract LoanManager is owned {
         // TODO: emit event
     }
 
-    event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
+    event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd);
+
     function newEthBackedLoan(uint8 productId) external payable {
-        require( products[productId].isActive); // valid productId?
+        require(products[productId].isActive); // valid productId?
 
         // calculate UCD loan values based on ETH sent in with Tx
         uint usdcValue = rates.convertWeiToUsdc(msg.value);
-        uint ucdDueAtMaturity = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
-        ucdDueAtMaturity = ucdDueAtMaturity * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
+        uint loanAmount = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
+        loanAmount = loanAmount * 100;  // rounding 4 decimals value to 2 decimals.
+                                                    // no safe mul needed b/c of prev divide
 
         uint mul = products[productId].loanCollateralRatio.mul(products[productId].discountRate) / 1000000;
-        uint disbursedLoanInUcd = usdcValue.mul(mul).roundedDiv(100000000);
-        disbursedLoanInUcd = disbursedLoanInUcd * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
+        uint disbursedAmount = usdcValue.mul(mul).roundedDiv(100000000);
+        disbursedAmount = disbursedAmount * 100;  // rounding 4 decimals value to 2 decimals.
+                                                        // no safe mul needed b/c of prev divide
 
-        require(disbursedLoanInUcd >= products[productId].minDisbursedAmountInUcd);
+        require(disbursedAmount >= products[productId].minDisbursedAmountInUcd);
 
         // Create new loan contract
-        uint loanId = loanPointers.push( LoanPointer(address(0), LoanState.Open) ) - 1;
+        uint loanId = loanPointers.push(LoanPointer(address(0), LoanState.Open)) - 1;
         // TODO: check if it's better to pass productId or Product struct
         address loanContractAddress = new EthBackedLoan(loanId, msg.sender, products[productId].term,
-                    disbursedLoanInUcd, ucdDueAtMaturity, products[productId].repayPeriod);
+                    disbursedAmount, loanAmount, products[productId].repayPeriod);
         loanPointers[loanId].contractAddress = loanContractAddress;
 
         // Store ref to new loan contract in this contract
-        m_loanPointers[msg.sender].push(loanId );
+        m_loanPointers[msg.sender].push(loanId);
 
         // Send ETH collateral to loan contract
         loanContractAddress.transfer(msg.value);
@@ -115,42 +117,26 @@ contract LoanManager is owned {
         // Issue UCD and send to borrower
         // tokenUcd.issueAndDisburse( msg.sender, ucdDueAtMaturity, disbursedLoanInUcd, "Loan disbursement");
         /* Alternative to issueAndDisburse: */
-        tokenUcd.issue( ucdDueAtMaturity);
+        tokenUcd.issue(loanAmount);
         // TODO: interest should go to Interest Pool
-        tokenUcd.transferNoFee( address(tokenUcd), msg.sender, disbursedLoanInUcd, "Loan disbursement");
+        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");
 
-        e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedLoanInUcd );
+        e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedAmount);
     }
 
-    event e_error(int8 errorCode);
     event e_repayed(address loanContractAddress, address borrower);
-    function repay(uint loanId) external returns (int8 result) {
+
+    function repay(uint loanId) external {
         // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
-        // TODO: change to require
-        if(loanPointers.length < loanId + 1) {
-            e_error(ERR_NO_LOAN);
-            return ERR_NO_LOAN;
-        }
+        require(loanPointers[loanId].loanState == LoanState.Open);
 
-        if(loanPointers[loanId].loanState != LoanState.Open) {
-            e_error(ERR_LOAN_NOT_OPEN);
-            return ERR_LOAN_NOT_OPEN;
-        }
+        address loanContractAddress = loanPointers[loanId].contractAddress;
+        EthBackedLoan loanContract = EthBackedLoan(loanContractAddress);
 
-        if(m_loanPointers[msg.sender].length == 0) {
-            e_error(ERR_NOT_OWNER);
-            return ERR_NOT_OWNER;
-        }
+        require(loanContract.owner() == msg.sender);
 
-        address loanContractAddress = loanPointers[ loanId ].contractAddress;
-        EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
-
-        if(loanContract.owner() != msg.sender) {
-            e_error(ERR_NOT_OWNER);
-            return ERR_NOT_OWNER;
-        }
-
-        // tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(), loanContract.disbursedLoanInUcd(), "Loan repayment");
+        // tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(),
+        //                   loanContract.disbursedLoanInUcd(), "Loan repayment");
         /* Alternative to repayAndBurn: */
         tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanContract.ucdDueAtMaturity(), "Loan repayment");
         tokenUcd.burn(loanContract.ucdDueAtMaturity());
@@ -158,46 +144,28 @@ contract LoanManager is owned {
 
         loanPointers[loanId].loanState = LoanState.Repaid;
         e_repayed(loanContractAddress, loanContract.owner());
-        return SUCCESS;
     }
 
     event e_collected(address borrower, address loanContractAddress);
-    function collect(uint[] loanIds) external returns (int8 result) {
+
+    function collect(uint[] loanIds) external {
         /* when there are a lots of loans to be collected then
              the client need to call it in batches to make sure tx won't exceed block gas limit.
          Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted
          TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
         */
-        if(loanPointers.length == 0) {
-            e_error(ERR_NO_LOAN);
-            return ERR_NO_LOAN;
-        }
         for (uint i = 0; i < loanIds.length; i++) {
             uint loanId = loanIds[i];
-            if (loanPointers.length <= loanId) {
-                e_error(ERR_NO_LOAN);
-                return ERR_NO_LOAN;
-            }
-            if(loanPointers[loanId].loanState != LoanState.Open) {
-                e_error(ERR_LOAN_NOT_OPEN);
-                return ERR_LOAN_NOT_OPEN;
-            }
+            require(loanPointers[loanId].loanState == LoanState.Open);
 
-            address loanContractAddress = loanPointers[ loanId ].contractAddress;
-            EthBackedLoan loanContract = EthBackedLoan( loanContractAddress );
+            address loanContractAddress = loanPointers[loanId].contractAddress;
+            EthBackedLoan loanContract = EthBackedLoan(loanContractAddress);
 
-            int8 res = loanContract.collect();
-            if (res != loanContract.SUCCESS() ) {
-                // if EthBackedLoan.collect returned an error then no state changes could have happen yet
-                // ie. no revert required
-                e_error(ERR_EXT_ERRCODE_BASE + res);
-                return ERR_EXT_ERRCODE_BASE + res;
-            }
-
+            loanContract.collect();
             loanPointers[loanId].loanState = LoanState.Defaulted;
             e_collected(loanContract.owner(), loanContractAddress);
         }
-        return SUCCESS;
+
     }
 
 }
