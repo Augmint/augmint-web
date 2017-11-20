@@ -124,8 +124,9 @@ contract AugmintToken is owned {
     }
 
     event e_issued(uint amount);
-    function issue(uint amount) external  { // FIXME: this is only public for testing, change to internal
-        require(msg.sender == owner || msg.sender == loanManagerAddress); // this won't be needed when we change it internal
+    function issue(uint amount) external  {
+        // FIXME: owner only allowed for testing, remove from production
+        require(msg.sender == owner || msg.sender == loanManagerAddress);
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
         e_issued(amount);
@@ -151,11 +152,11 @@ contract AugmintToken is owned {
         }
     }*/
 
-    // FIXME: this is only for testing, remove this function
-    function getFromReserve(uint amount) external onlyOwner {
-        require(amount <= balances[this]);
-        balances[this] = balances[this].sub(amount);
-        balances[msg.sender] = balances[msg.sender].add(amount);
+    // FIXME: this is only for testing, remove this function from production
+    function withdrawTokens(address _to, uint _amount) external onlyOwner {
+        require(_amount <= balances[this]);
+        balances[this] = balances[this].sub(_amount);
+        balances[_to] = balances[_to].add(_amount);
     }
 
     /* This can be removed, loanManager does this

@@ -24,10 +24,9 @@ contract("Exchange order", accounts => {
         rates = await Rates.deployed();
         tokenUcd = await TokenUcd.deployed();
         await tokenUcd.issue(1000000000);
-        await tokenUcd.getFromReserve(1000000000);
+        await tokenUcd.withdrawTokens(maker, 100000000);
+        await tokenUcd.withdrawTokens(taker, 100000000);
 
-        await tokenUcd.transfer(maker, 100000000);
-        await tokenUcd.transfer(taker, 100000000);
         exchange = await Exchange.deployed();
         testedAccounts = [exchange.address, maker, taker];
     });

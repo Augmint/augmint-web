@@ -9,8 +9,8 @@ const REPAY_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set
 const COLLECT_BASEFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 
 const acc0 = web3.eth.accounts[0],
-    acc1 = web3.eth.accounts[1];
-acc2 = web3.eth.accounts[2];
+    acc1 = web3.eth.accounts[1],
+    acc2 = web3.eth.accounts[2];
 
 const collateralWei = web3.toWei(0.5);
 let tokenUcd, loanManager, rates, products;
@@ -130,16 +130,11 @@ contract("ACD Loans tests", accounts => {
         let loanId = await loanContract.loanId();
 
         let interestAmount = expLoan.loanAmount.minus(expLoan.disbursedAmount);
+        // send interest to borrower to have enough ACD to repay in test
+        await tokenUcd.withdrawTokens(expLoan.borrower, interestAmount, {
+            from: acc0
+        });
 
-        await tokenUcd.getFromReserve(interestAmount, { from: acc0 });
-        await tokenUcd.transferWithNarrative(
-            acc1,
-            interestAmount,
-            "send interest to borrower to have enough ACD to repay in test",
-            {
-                from: acc0
-            }
-        );
         await testHelper.waitForTimeStamp(
             expLoan.product.term.add(expLoan.disbursementTime).toNumber()
         );

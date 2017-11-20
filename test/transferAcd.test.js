@@ -9,7 +9,6 @@ contract("Transfer ACD tests", accounts => {
     before(async function() {
         tokenUcd = await TokenUcd.deployed();
         await tokenUcd.issue(1000000000);
-        await tokenUcd.getFromReserve(1000000000);
         testedAccounts = [accounts[0], accounts[1], accounts[2]];
     });
 
@@ -18,6 +17,7 @@ contract("Transfer ACD tests", accounts => {
             tokenUcd,
             testedAccounts
         );
+        await tokenUcd.withdrawTokens(accounts[0], 1000000000);
     });
 
     it("Should be able to transfer ACD between accounts (without narrative)", async function() {
