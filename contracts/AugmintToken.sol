@@ -38,13 +38,34 @@ contract AugmintToken is owned {
 
     address public loanManagerAddress; // used for authorisation of issuing ACD for loans
     address public exchangeAddress; // for authorisation of transferExchange()
+    address public feeAccount;
+    uint public transferFeeDiv; // 1/transferFeeDiv %, eg. 500 = 0.2%
+    uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
+    uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
+
+    /* TODO: TRUFFLE migrate fails on TokenAcd.deploy(...) if constructor is defined here
+        function AugmintToken(address _feeAccount, uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
+        feeAccount = _feeAccount;
+        transferFeePt = _transferFeePt;
+        transferFeeMin = _transferFeeMin;
+        transferFeeMax = _transferFeeMax;
+    }*/
 
     function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
     // TODO: shall we put protection against accidentally sending in ETH?
 
-    // What is the balance of a particular account?
     function balanceOf(address _owner) external view returns (uint256 balance) {
         return balances[_owner];
+    }
+
+    function getFee(uint amount) internal view returns (uint256 fee) {
+        fee = amount.div(transferFeeDiv) ;
+        if (fee > transferFeeMax ) {
+            fee = transferFeeMax;
+        } else if (fee < transferFeeMin) {
+            fee = transferFeeMin;
+        }
+        return fee;
     }
 
     event e_loanManagerAddressChanged(address newAddress);
@@ -59,29 +80,42 @@ contract AugmintToken is owned {
         e_exchangeAddressChanged(newAddress);
     }
 
-    event e_transfer(address indexed from, address indexed to, uint amount, string narrative);
+    event e_feeAccountChanged(address newAddress);
+    function setFeeAccountAddress(address newAddress) external onlyOwner {
+        feeAccount = newAddress;
+        e_feeAccountChanged(newAddress);
+    }
+
+    event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
+    function setTransferFees(uint _transferFeeDiv, uint _transferFeeMin, uint _transferFeeMax) external onlyOwner {
+        transferFeeDiv = _transferFeeDiv;
+        transferFeeMin = _transferFeeMin;
+        transferFeeMax = _transferFeeMax;
+    }
+
+    event e_transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
 
     function transfer(address _to, uint256 _amount) external {
-        _transfer(msg.sender, _to, _amount, "");
+        _transfer(msg.sender, _to, _amount, "", getFee(_amount));
     }
 
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
-        _transfer(msg.sender, _to, _amount, _narrative);
+        _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
     function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external {
         require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
-        _transfer(_from, _to, _amount, _narrative);
+        _transfer(_from, _to, _amount, _narrative, 0);
     }
 
-    function _transfer(address _from, address _to, uint256 _amount, string narrative) internal {
+    function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
         // TODO: add fee arg, calc fee and deduct fee if there is any
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
-        require(balances[_from] >= _amount);
         require(_amount > 0);
-        balances[_from] = balances[_from].sub(_amount);
+        balances[feeAccount] = balances[feeAccount].add(_fee);
+        balances[_from] = balances[_from].sub(_amount).sub(_fee);
         balances[_to] = balances[_to].add(_amount);
-        e_transfer(_from, _to, _amount, narrative);
+        e_transfer(_from, _to, _amount, narrative, _fee);
     }
 
     // Allow _spender to withdraw from your account, multiple times, up to the _value amount.
@@ -120,7 +154,7 @@ contract AugmintToken is owned {
         balances[_from] = balances[_from].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
-        e_transfer(_from, _to, _amount, _narrative);
+        e_transfer(_from, _to, _amount, _narrative, getFee(_amount));
     }
 
     event e_issued(uint amount);

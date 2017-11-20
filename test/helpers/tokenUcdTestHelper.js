@@ -1,4 +1,11 @@
+const BigNumber = require("bignumber.js");
+const testHelper = new require("./testHelper.js");
+const TokenUcd = artifacts.require("./TokenAcd.sol");
+const TRANSFER_MAXFEE = web3.toWei(0.01); // TODO: set this to expected value (+set gasPrice)
+
 module.exports = {
+    transferTest,
+    getTransferFee,
     getBalances,
     transferEventAsserts,
     balanceAsserts
@@ -15,6 +22,80 @@ async function getTokenUcd(initialUcdBalance) {
     return instance;
 }
 */
+
+async function transferTest(testTxInfo, from, to, amount, narrative) {
+    tokenUcd = TokenUcd.at(TokenUcd.address);
+    let feeAccount = await tokenUcd.feeAccount();
+    expTransfer = {
+        from: from,
+        to: to,
+        amount: amount,
+        narrative: narrative,
+        fee: await getTransferFee(amount)
+    };
+    let balBefore = await getBalances(tokenUcd, [from, to, feeAccount]);
+    let tx;
+    if (narrative === "") {
+        tx = await tokenUcd.transferWithNarrative(
+            expTransfer.to,
+            expTransfer.amount,
+            expTransfer.narrative,
+            { from: expTransfer.from }
+        );
+    } else {
+        tx = await tokenUcd.transferWithNarrative(
+            expTransfer.to,
+            expTransfer.amount,
+            expTransfer.narrative,
+            { from: expTransfer.from }
+        );
+    }
+    testHelper.logGasUse(testTxInfo.test, tx, testTxInfo.name);
+    transferEventAsserts(tx, expTransfer);
+    let expBalances = [
+        {
+            name: "acc from",
+            address: expTransfer.from,
+            ucd: balBefore[0].ucd
+                .minus(expTransfer.amount)
+                .minus(expTransfer.fee),
+            eth: balBefore[0].eth,
+            gasFee: TRANSFER_MAXFEE
+        },
+        {
+            name: "acc to",
+            address: expTransfer.to,
+            ucd: balBefore[1].ucd.plus(expTransfer.amount),
+            eth: balBefore[1].eth
+        },
+        {
+            name: "acc fee",
+            address: feeAccount,
+            ucd: balBefore[2].ucd.plus(expTransfer.fee),
+            eth: balBefore[2].eth
+        }
+    ];
+
+    await balanceAsserts(tokenUcd, expBalances);
+}
+
+async function getTransferFee(_amount) {
+    let tokenUcd, feeDiv, feeMin, feeMax;
+    let amount = new BigNumber(_amount);
+    tokenUcd = TokenUcd.at(TokenUcd.address);
+    await Promise.all([
+        (feeDiv = await tokenUcd.transferFeeDiv()),
+        (feeMax = await tokenUcd.transferFeeMax()),
+        (feeMin = await tokenUcd.transferFeeMax())
+    ]);
+    let fee = amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    if (fee < feeMin) {
+        fee = feeMin;
+    } else if (fee > maxFee) {
+        fee = maxFee;
+    }
+    return fee;
+}
 
 async function getBalances(tokenUcd, addresses) {
     let balances = [];
@@ -52,6 +133,11 @@ async function transferEventAsserts(tx, expTransfer) {
         tx.logs[0].args.amount.toString(),
         expTransfer.amount.toString(),
         "amount in e_transfer event should be set"
+    );
+    assert.equal(
+        tx.logs[0].args.fee.toString(),
+        expTransfer.fee.toString(),
+        "fee in e_transfer event should be set"
     );
 }
 

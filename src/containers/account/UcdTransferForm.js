@@ -24,18 +24,34 @@ import {
     Normalizations,
     Parsers
 } from "components/BaseComponents";
+import { getTransferFee } from "modules/ethereum/transferTransactions";
 import {
     transferUcd,
     TOKENUCD_TRANSFER_SUCCESS
 } from "modules/reducers/tokenUcd";
 import { Pblock } from "components/PageLayout";
+import { TransferFeeToolTip } from "./components/AccountToolTips.js";
 import { BigNumber } from "bignumber.js";
 
 class UcdTransferForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null };
+        this.state = { result: null, feeAmount: "0" };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onAcdAmountChange = this.onAcdAmountChange.bind(this);
+    }
+
+    onAcdAmountChange(e) {
+        let val;
+        let decimalsDiv = this.props.tokenUcd.info.bn_decimalsDiv;
+        try {
+            val = new BigNumber(e.target.value).mul(decimalsDiv);
+        } catch (error) {
+            return;
+        }
+        let fee = getTransferFee(val);
+        console.debug(val.toString(), fee.toString());
+        this.setState({ feeAmount: fee.div(decimalsDiv).toString() });
     }
 
     async handleSubmit(values) {
@@ -115,10 +131,11 @@ class UcdTransferForm extends React.Component {
                             name="ucdAmount"
                             placeholder="Amount"
                             labelPosition="right"
+                            onChange={this.onAcdAmountChange}
                             validate={[
                                 Validations.required,
                                 Validations.ucdAmount,
-                                Validations.ucdUserBalance
+                                Validations.acdUserBalanceWithTransferFee
                             ]}
                             normalize={Normalizations.ucdAmount}
                             disabled={submitting || !tokenUcd.isConnected}
@@ -126,6 +143,12 @@ class UcdTransferForm extends React.Component {
                             <input />
                             <Label>ACD</Label>
                         </Field>
+
+                        <small>
+                            Fee:{" "}
+                            <TransferFeeToolTip tokenAcdInfo={tokenUcd.info} />
+                            {this.state.feeAmount} ACD
+                        </small>
 
                         <Field
                             component={Form.Field}

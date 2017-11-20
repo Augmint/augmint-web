@@ -21,11 +21,15 @@ export default class TransferList extends React.Component {
             transfers !== null &&
             transfers.filter(filter).map((tx, index) => (
                 <MyListGroup.Row
-                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${
+                        tx.logIndex
+                    }-${tx.direction}`}
                 >
                     <MyGridTable
                         divided={false}
-                        key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                        key={`txTableDiv-${tx.blockNumber}-${
+                            tx.transactionIndex
+                        }-${tx.logIndex}-${tx.direction}`}
                     >
                         <Row columns={1}>
                             <Col>
@@ -35,8 +39,9 @@ export default class TransferList extends React.Component {
                                     : "From: " + tx.from}
                             </Col>
                         </Row>
-                        <Row columns={2}>
+                        <Row columns={3}>
                             <Col>Amount: {tx.amount} ACD</Col>
+                            <Col>Fee: {tx.fee} ACD</Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 

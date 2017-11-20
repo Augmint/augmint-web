@@ -1,5 +1,10 @@
 /* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
+import BigNumber from "bignumber.js";
+import {
+    getTransferFee,
+    getMaxTransfer
+} from "modules/ethereum/transferTransactions";
 import { Form as SemanticForm } from "semantic-ui-react";
 import store from "modules/store";
 
@@ -34,6 +39,28 @@ export const Validations = {
         let userBalance = store.getState().userBalances.account.bn_ucdBalance;
         return userBalance.lt(parseFloat(value))
             ? "Your ACD balance is less than the amount"
+            : undefined;
+    },
+
+    acdUserBalanceWithTransferFee: value => {
+        // TODO: shall we look for bn_ucdPendingBalance instead?
+        let decimalsDiv = store.getState().tokenUcd.info.bn_decimalsDiv;
+        let userBalance = store
+            .getState()
+            .userBalances.account.bn_ucdBalance.mul(decimalsDiv);
+        let amount;
+        try {
+            amount = new BigNumber(value).mul(decimalsDiv);
+        } catch (error) {
+            return;
+        }
+        let fee = getTransferFee(amount);
+        return userBalance.lt(amount.add(fee))
+            ? "Your ACD balance is less than the amount + transfer fee. \nMax amount you can transfer is " +
+                  getMaxTransfer(userBalance)
+                      .div(decimalsDiv)
+                      .toString() +
+                  " ACD"
             : undefined;
     },
 

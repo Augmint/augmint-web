@@ -35,6 +35,7 @@ const initialState = {
         decimalsDiv: "?",
         bn_decimalsDiv: null,
         ucdBalance: "?",
+        feeAccountAcdBalance: "?",
         ucdPendingBalance: "?",
         totalSupply: "?",
         loanManagerAddress: "?"
@@ -142,6 +143,8 @@ export const refreshTokenUcd = () => {
         let loanManagerAddress = await tokenUcd.loanManagerAddress();
         let bn_decimals = await tokenUcd.decimals();
         let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
+        let feeAccount = await tokenUcd.feeAccount();
+        let bn_feeAccountAcdBalance = await getUcdBalance(feeAccount);
         let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
         let bn_ethPendingBalance = await asyncGetBalance(
             tokenUcd.address,
@@ -161,13 +164,19 @@ export const refreshTokenUcd = () => {
                 bn_decimalsDiv: bn_decimalsDiv,
                 decimalsDiv: bn_decimalsDiv.toNumber(),
                 ucdBalance: bn_ucdBalance.toNumber(),
+                bn_feeAccountAcdBalance: bn_feeAccountAcdBalance,
+                feeAccountAcdBalance: bn_feeAccountAcdBalance.toString(),
                 ucdPendingBalance: bn_ucdPendingBalance.toNumber(),
                 ethBalance: bn_ethBalance.toNumber(),
                 bn_ethBalance: bn_ethBalance,
                 bn_ethPendingBalance: bn_ethPendingBalance,
                 ethPendingBalance: bn_ethPendingBalance.toNumber(),
                 totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
-                loanManagerAddress: loanManagerAddress
+                loanManagerAddress: loanManagerAddress,
+                feeAccount: feeAccount,
+                feeDiv: await tokenUcd.transferFeeDiv(),
+                feeMin: await tokenUcd.transferFeeMin(),
+                feeMax: await tokenUcd.transferFeeMax()
             }
         });
     };

@@ -11,7 +11,42 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 
-const TRANSFER_UCD_GAS = 3000000;
+const TRANSFER_UCD_GAS = 100000;
+
+export function getTransferFee(amount) {
+    let feeDiv = store.getState().tokenUcd.info.feeDiv;
+    let feeMin = store.getState().tokenUcd.info.feeMin;
+    let feeMax = store.getState().tokenUcd.info.feeMax;
+
+    let fee = amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    if (fee.lt(feeMin)) {
+        fee = feeMin;
+    } else if (fee.gt(feeMax)) {
+        fee = feeMax;
+    }
+    return fee;
+}
+
+export function getMaxTransfer(amount) {
+    let feeDiv = store.getState().tokenUcd.info.feeDiv;
+    let feeMin = store.getState().tokenUcd.info.feeMin;
+    let feeMax = store.getState().tokenUcd.info.feeMax;
+    let maxAmount;
+
+    let minLimit = feeMin.mul(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    let maxLimit = feeMax.mul(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    if (amount.lte(minLimit)) {
+        maxAmount = amount.sub(feeMin);
+    } else if (amount.gte(maxLimit)) {
+        maxAmount = amount.sub(feeMax);
+    } else {
+        maxAmount = amount.sub(
+            amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN)
+        );
+    }
+
+    return maxAmount;
+}
 
 export async function transferUcdTx(payload) {
     let { payee, ucdAmount, narrative } = payload;
@@ -119,14 +154,21 @@ async function formatTransfer(address, tx) {
     //console.debug("formatTransfer args tx: ", tx);
     let direction =
         address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
-    let blockTimeStamp, bn_amount;
+    let blockTimeStamp, bn_amount, bn_fee;
+    let feeTmp, amountTmp;
     if (tx.timeStamp) {
-        blockTimeStamp = tx.timeStamp; // when we query from etherscan we get timestamp
-        bn_amount = new BigNumber(tx.args.amount).div(new BigNumber(10000));
+        // when we query from etherscan we get timestamp and args are not BigNumber
+        blockTimeStamp = tx.timeStamp;
+        amountTmp = new BigNumber(tx.args.amount);
+        feeTmp = new BigNumber(tx.args.fee);
     } else {
         blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
-        bn_amount = tx.args.amount.div(new BigNumber(10000));
+        amountTmp = tx.args.amount;
+        feeTmp = tx.args.fee;
     }
+    bn_amount = amountTmp.div(new BigNumber(10000));
+    bn_fee =
+        direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
 
     let result = {
         blockNumber: tx.blockNumber,
@@ -139,6 +181,8 @@ async function formatTransfer(address, tx) {
         amount: bn_amount.times(direction).toString(),
         from: tx.args.from,
         to: tx.args.to,
+        bn_fee: bn_fee,
+        fee: bn_fee.toString(),
         narrative: tx.args.narrative,
         blockTimeStamp: blockTimeStamp,
         blockTimeStampText: moment

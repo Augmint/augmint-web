@@ -12,7 +12,13 @@ module.exports = {
         development: {
             host: "localhost",
             port: 8545,
-            network_id: "*", // Match any network id
+            network_id: "999",
+            gas: 4707806
+        },
+        truffleLocal: {
+            host: "localhost",
+            port: 9545,
+            network_id: "4447",
             gas: 4707806
         },
         privatechain: {
