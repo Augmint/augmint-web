@@ -120,8 +120,12 @@ contract AugmintToken is owned {
         // TODO: add fee arg, calc fee and deduct fee if there is any
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
         require(_amount > 0);
-        balances[feeAccount] = balances[feeAccount].add(_fee);
-        balances[_from] = balances[_from].sub(_amount).sub(_fee);
+        if (_fee > 0) {
+            balances[feeAccount] = balances[feeAccount].add(_fee);
+            balances[_from] = balances[_from].sub(_amount).sub(_fee);
+        } else {
+            balances[_from] = balances[_from].sub(_amount);
+        }
         balances[_to] = balances[_to].add(_amount);
         e_transfer(_from, _to, _amount, narrative, _fee);
     }
