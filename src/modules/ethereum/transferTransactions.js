@@ -10,8 +10,7 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
-
-const TRANSFER_UCD_GAS = 100000;
+import { cost } from "./gas";
 
 export function getTransferFee(amount) {
     let feeDiv = store.getState().tokenUcd.info.feeDiv;
@@ -51,7 +50,7 @@ export function getMaxTransfer(amount) {
 export async function transferUcdTx(payload) {
     let { payee, ucdAmount, narrative } = payload;
     try {
-        let gasEstimate = TRANSFER_UCD_GAS;
+        let gasEstimate = cost.TRANSFER_UCD_GAS;
         let userAccount = store.getState().web3Connect.userAccount;
         let tokenUcd = store.getState().tokenUcd;
         let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);

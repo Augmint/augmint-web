@@ -1,8 +1,7 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { ETHSELL, UCDSELL } from "modules/reducers/orders";
-
-const PLACE_ORDER_GAS = 4000000;
+import { cost } from "./gas";
 
 export async function fetchOrders() {
     // FIXME: what to do if orders changes while iterating?
@@ -50,7 +49,7 @@ export async function fetchOrders() {
 
 export async function placeOrderTx(orderType, amount) {
     try {
-        let gasEstimate = PLACE_ORDER_GAS;
+        let gasEstimate = cost.PLACE_ORDER_GAS;
         let userAccount = store.getState().web3Connect.userAccount;
         let exchange = store.getState().exchange.contract.instance;
         let submitAmount, result;

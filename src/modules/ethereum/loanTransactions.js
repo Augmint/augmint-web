@@ -12,13 +12,9 @@ import stringifier from "stringifier";
 import ethBackedLoan_artifacts from "contractsBuild/EthBackedLoan.json";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
+import { cost } from "./gas";
 
 const stringify = stringifier({ maxDepth: 5, indent: "   " });
-
-const NEW_LOAN_GAS = 1000000; // As of now it's on testRPC: first= 871489  additional = 841489 - 841527
-const NEW_FIRST_LOAN_GAS = 1000000;
-const REPAY_GAS = 130000; // as of now on testRpc: 119242, 2nd from same AC: 104242
-const COLLECT_GAS = 130000; // as of now on testRpc: 95473
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     try {
@@ -26,9 +22,9 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         let loanManager = store.getState().loanManager.contract.instance;
         let gasEstimate;
         if (store.getState().loanManager.loanCount === 0) {
-            gasEstimate = NEW_FIRST_LOAN_GAS;
+            gasEstimate = cost.NEW_FIRST_LOAN_GAS;
         } else {
-            gasEstimate = NEW_LOAN_GAS;
+            gasEstimate = cost.NEW_LOAN_GAS;
         }
         let userAccount = store.getState().web3Connect.userAccount;
         let weiAmount = web3.utils.toWei(ethAmount);
@@ -123,7 +119,7 @@ export async function repayLoanTx(loanId) {
     try {
         let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate = REPAY_GAS;
+        let gasEstimate = cost.REPAY_GAS;
         let result = await loanManager.repay(loanId, {
             from: userAccount,
             gas: gasEstimate
@@ -193,7 +189,7 @@ export async function collectLoansTx(loansToCollect) {
     try {
         let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate = COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
+        let gasEstimate = cost.COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
         let converted = loansToCollect.map(item => {
             return new BigNumber(item.loanId);
         });
