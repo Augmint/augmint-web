@@ -13,11 +13,14 @@ import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
 
 export function getTransferFee(amount) {
-    let feeDiv = store.getState().tokenUcd.info.feeDiv;
+    let feePt = store.getState().tokenUcd.info.feePt;
     let feeMin = store.getState().tokenUcd.info.feeMin;
     let feeMax = store.getState().tokenUcd.info.feeMax;
 
-    let fee = amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    let fee = amount
+        .mul(feePt)
+        .div(1000000)
+        .round(0, BigNumber.ROUND_DOWN);
     if (fee.lt(feeMin)) {
         fee = feeMin;
     } else if (fee.gt(feeMax)) {
@@ -27,21 +30,29 @@ export function getTransferFee(amount) {
 }
 
 export function getMaxTransfer(amount) {
-    let feeDiv = store.getState().tokenUcd.info.feeDiv;
+    let feePt = store.getState().tokenUcd.info.feePt;
     let feeMin = store.getState().tokenUcd.info.feeMin;
     let feeMax = store.getState().tokenUcd.info.feeMax;
     let maxAmount;
 
-    let minLimit = feeMin.mul(feeDiv).round(0, BigNumber.ROUND_DOWN);
-    let maxLimit = feeMax.mul(feeDiv).round(0, BigNumber.ROUND_DOWN);
+    let minLimit = feeMin
+        .div(feePt)
+        .mul(1000000)
+        .round(0, BigNumber.ROUND_DOWN);
+    let maxLimit = feeMax
+        .div(feePt)
+        .mul(1000000)
+        .round(0, BigNumber.ROUND_DOWN);
     if (amount.lte(minLimit)) {
         maxAmount = amount.sub(feeMin);
     } else if (amount.gte(maxLimit)) {
+        // TODO: fix this on edge cases, https://github.com/DecentLabs/dcm-poc/issues/60
         maxAmount = amount.sub(feeMax);
     } else {
-        maxAmount = amount.sub(
-            amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN)
-        );
+        maxAmount = amount
+            .div(feePt.plus(1000000))
+            .mul(1000000)
+            .round(0, BigNumber.ROUND_HALF_UP);
     }
 
     return maxAmount;

@@ -80,19 +80,24 @@ async function transferTest(testTxInfo, from, to, amount, narrative) {
 }
 
 async function getTransferFee(_amount) {
-    let tokenUcd, feeDiv, feeMin, feeMax;
+    let tokenUcd, feePt, feeMin, feeMax;
     let amount = new BigNumber(_amount);
     tokenUcd = TokenUcd.at(TokenUcd.address);
+
     await Promise.all([
-        (feeDiv = await tokenUcd.transferFeeDiv()),
+        (feePt = await tokenUcd.transferFeePt()),
         (feeMax = await tokenUcd.transferFeeMax()),
-        (feeMin = await tokenUcd.transferFeeMax())
+        (feeMin = await tokenUcd.transferFeeMin())
     ]);
-    let fee = amount.div(feeDiv).round(0, BigNumber.ROUND_DOWN);
+
+    let fee = amount
+        .mul(feePt)
+        .div(1000000)
+        .round(0, BigNumber.ROUND_DOWN);
     if (fee < feeMin) {
         fee = feeMin;
-    } else if (fee > maxFee) {
-        fee = maxFee;
+    } else if (fee > feeMax) {
+        fee = feeMax;
     }
     return fee;
 }

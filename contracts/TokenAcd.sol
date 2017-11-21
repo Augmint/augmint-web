@@ -9,11 +9,11 @@ contract TokenAcd is AugmintToken {
     uint8 public constant decimals = 4; // TODO: check if 4 enough - assuming rate will be around USD
 
     function TokenAcd(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
-            uint _transferFeeDiv, uint _transferFeeMin, uint _transferFeeMax) public {
+            uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
         feeAccount = _feeAccount;
         interestPoolAccount = _interestPoolAccount;
         interestEarnedAccount = _interestEarnedAccount;
-        transferFeeDiv = _transferFeeDiv;
+        transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
     }

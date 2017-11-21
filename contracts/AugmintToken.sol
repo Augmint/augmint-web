@@ -41,7 +41,7 @@ contract AugmintToken is owned {
     address public feeAccount;
     address public interestPoolAccount;
     address public interestEarnedAccount;
-    uint public transferFeeDiv; // 1/transferFeeDiv %, eg. 500 = 0.2%
+    uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
 
@@ -61,8 +61,8 @@ contract AugmintToken is owned {
     }
 
     function getFee(uint amount) internal view returns (uint256 fee) {
-        fee = amount.div(transferFeeDiv) ;
-        if (fee > transferFeeMax ) {
+        fee = amount.mul(transferFeePt).div(1000000);
+        if (fee > transferFeeMax) {
             fee = transferFeeMax;
         } else if (fee < transferFeeMin) {
             fee = transferFeeMin;
@@ -95,8 +95,8 @@ contract AugmintToken is owned {
     }
 
     event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
-    function setTransferFees(uint _transferFeeDiv, uint _transferFeeMin, uint _transferFeeMax) external onlyOwner {
-        transferFeeDiv = _transferFeeDiv;
+    function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external onlyOwner {
+        transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
     }

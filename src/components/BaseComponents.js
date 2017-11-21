@@ -55,13 +55,20 @@ export const Validations = {
             return;
         }
         let fee = getTransferFee(amount);
-        return userBalance.lt(amount.add(fee))
-            ? "Your ACD balance is less than the amount + transfer fee. \nMax amount you can transfer is " +
-                  getMaxTransfer(userBalance)
-                      .div(decimalsDiv)
-                      .toString() +
-                  " ACD"
-            : undefined;
+        if (userBalance.gte(amount.add(fee))) {
+            return undefined;
+        }
+        let maxTransfer = getMaxTransfer(userBalance)
+            .div(decimalsDiv)
+            .toString();
+        if (maxTransfer <= 0) {
+            return "Your ACD balance is less than the amount + transfer fee.";
+        }
+        return (
+            "Your ACD balance is less than the amount + transfer fee. Max amount you can transfer is " +
+            maxTransfer +
+            " ACD"
+        );
     },
 
     ethUserBalance: value => {

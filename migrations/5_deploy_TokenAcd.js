@@ -11,8 +11,8 @@ module.exports = function(deployer) {
         FeeAccount.address,
         InterestPoolAccount.address,
         InterestEarnedAccount.address,
-        500 /* transferFeeDiv =  1/500 = 0.2% */,
-        2000 /* min: 0.02 ACD */,
+        2000 /* transferFeePt in parts per million = 0.2% */,
+        200 /* min: 0.02 ACD */,
         50000 /* max fee: 5 ACD */
     );
 };

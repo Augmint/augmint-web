@@ -190,7 +190,7 @@ export const refreshTokenUcd = () => {
                 totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
                 loanManagerAddress: loanManagerAddress,
                 feeAccount: feeAccount,
-                feeDiv: await tokenUcd.transferFeeDiv(),
+                feePt: await tokenUcd.transferFeePt(),
                 feeMin: await tokenUcd.transferFeeMin(),
                 feeMax: await tokenUcd.transferFeeMax()
             }
