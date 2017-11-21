@@ -111,7 +111,7 @@ contract AugmintToken is owned {
         _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) public {
+    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external {
         require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
         _transfer(_from, _to, _amount, _narrative, 0);
     }
@@ -171,7 +171,7 @@ contract AugmintToken is owned {
     }
 
     event e_issued(uint amount);
-    function issue(uint amount) public {
+    function issue(uint amount) external {
         // FIXME: owner only allowed for testing, remove from production
         require(msg.sender == owner || msg.sender == loanManagerAddress);
         totalSupply = totalSupply.add(amount);
@@ -180,7 +180,7 @@ contract AugmintToken is owned {
     }
 
     event e_burned(uint amount);
-    function burn(uint amount) public {
+    function burn(uint amount) external {
         require(msg.sender == owner || msg.sender == loanManagerAddress);
         require(amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
@@ -193,33 +193,6 @@ contract AugmintToken is owned {
         require(_amount <= balances[this]);
         balances[this] = balances[this].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
-    }
-
-    function repayAndBurn(address borrower, uint repaidAmount, uint disbursedAmount, string narrative) external {
-        require(msg.sender == loanManagerAddress);
-        transferNoFee(borrower, address(this), repaidAmount, narrative);
-        burn(repaidAmount);
-        if(repaidAmount > disbursedAmount) {
-            // transfer interestAmount to InterestEarnedAccount
-            uint interestAmount = repaidAmount.sub(disbursedAmount);
-            balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
-            balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
-        }
-    }
-
-    function issueAndDisburse(address borrower, uint loanAmount, uint disbursedAmount, string narrative) external {
-        require(msg.sender == loanManagerAddress);
-        require(loanAmount > 0);
-        if(loanAmount > disbursedAmount) {
-            issue(loanAmount);
-            // move interest to InterestPoolAccount
-            uint interestAmount = loanAmount.sub(disbursedAmount);
-            balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
-            balances[this] = balances[this].sub(interestAmount);
-        } else {
-            issue(disbursedAmount); // negative or zero interest loan
-        }
-        transferNoFee(address(this), borrower, disbursedAmount, narrative);
     }
 
 }

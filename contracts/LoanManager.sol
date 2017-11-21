@@ -114,11 +114,13 @@ contract LoanManager is owned {
         // Send ETH collateral to loan contract
         loanContractAddress.transfer(msg.value);
 
-        // Issue UCD and send to borrower. TODO: interest should go to Interest Pool
-        tokenUcd.issueAndDisburse( msg.sender, loanAmount, disbursedAmount, "Loan disbursement");
-        /* Alternative to issueAndDisburse: */
-        /*tokenUcd.issue(loanAmount);
-        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");*/
+        // Issue ACD and send to borrower. TODO: interest should go to Interest Pool
+        tokenUcd.issue(loanAmount);
+        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");
+        if (loanAmount > disbursedAmount) {
+            tokenUcd.transferNoFee(address(tokenUcd), tokenUcd.interestPoolAccount(),
+                loanAmount.sub(disbursedAmount), "Loan interest at origination");
+        }
 
         e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedAmount);
     }
@@ -134,11 +136,14 @@ contract LoanManager is owned {
 
         require(loanContract.owner() == msg.sender);
 
-        tokenUcd.repayAndBurn(msg.sender, loanContract.ucdDueAtMaturity(),
-                loanContract.disbursedLoanInUcd(), "Loan repayment");
-        /* Alternative to repayAndBurn: */
-        /*tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanContract.ucdDueAtMaturity(), "Loan repayment");
-        tokenUcd.burn(loanContract.ucdDueAtMaturity());*/
+        uint disbursedAmount = loanContract.disbursedLoanInUcd();
+        uint loanAmount = loanContract.ucdDueAtMaturity();
+        tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanAmount, "Loan repayment");
+        tokenUcd.burn(loanAmount);
+        if (loanAmount > disbursedAmount) {
+            tokenUcd.transferNoFee(tokenUcd.interestPoolAccount(), tokenUcd.interestEarnedAccount(),
+                loanAmount.sub(disbursedAmount), "Loan interest at repayment");
+        }
 
         loanContract.releaseCollateral();
 
