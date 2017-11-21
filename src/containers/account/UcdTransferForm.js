@@ -71,7 +71,8 @@ class UcdTransferForm extends React.Component {
             });
         } else {
             this.setState({
-                result: res.result
+                result: res.result,
+                feeAmount: "0"
             });
             return;
         }
