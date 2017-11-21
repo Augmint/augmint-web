@@ -50,8 +50,8 @@ async function transferTest(testTxInfo, from, to, amount, narrative) {
             { from: expTransfer.from }
         );
     }
-    testHelper.logGasUse(testTxInfo.test, tx, testTxInfo.name);
     transferEventAsserts(tx, expTransfer);
+    testHelper.logGasUse(testTxInfo.test, tx, testTxInfo.name);
     let expBalances = [
         {
             name: "acc from",

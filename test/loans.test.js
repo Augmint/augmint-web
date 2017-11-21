@@ -75,11 +75,9 @@ contract("ACD Loans tests", accounts => {
             from: acc1,
             value: collateralWei
         });
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
-
         let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
-
         await loanTestHelper.loanContractAsserts(loanContract, expLoan);
+        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
         assert.equal(
             (await tokenUcd.totalSupply()).toString(),
@@ -145,10 +143,9 @@ contract("ACD Loans tests", accounts => {
             from: acc1,
             value: collateralWei
         });
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
-
         let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
         let loanId = await loanContract.loanId();
+        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
         // send interest to borrower to have enough ACD to repay in test
         await tokenUcd.transfer(expLoan.borrower, expLoan.interestAmount, {
@@ -162,8 +159,8 @@ contract("ACD Loans tests", accounts => {
         tx = await loanManager
             .repay(loanId, { from: acc1 })
             .catch(error => console.log(error));
-        testHelper.logGasUse(this, tx, "repay");
         await loanTestHelper.loanContractAsserts(loanContract, expLoan);
+        testHelper.logGasUse(this, tx, "repay");
 
         assert.equal(
             (await tokenUcd.totalSupply()).toString(),
@@ -223,10 +220,10 @@ contract("ACD Loans tests", accounts => {
             from: acc1,
             value: collateralWei
         });
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
         let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
         let loanId = await loanContract.loanId();
+        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
         await testHelper.waitForTimeStamp(
             (await loanContract.maturity())
@@ -238,8 +235,9 @@ contract("ACD Loans tests", accounts => {
         tx = await loanManager
             .collect([loanId], { from: acc2 })
             .catch(error => console.log(error));
-        testHelper.logGasUse(this, tx, "collect 1");
+
         await loanTestHelper.loanContractAsserts(loanContract, expLoan);
+        testHelper.logGasUse(this, tx, "collect 1");
 
         assert.equal(
             (await tokenUcd.totalSupply()).toString(),
