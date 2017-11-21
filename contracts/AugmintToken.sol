@@ -163,10 +163,11 @@ contract AugmintToken is owned {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
         require(_amount > 0);
-        balances[_from] = balances[_from].sub(_amount);
-        balances[_to] = balances[_to].add(_amount);
-        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
-        e_transfer(_from, _to, _amount, _narrative, getFee(_amount));
+        uint fee = getFee(_amount);
+        _transfer(_from, _to, _amount, _narrative, fee);
+        // CHECK: we reduce allowance with amount + fee. Shall it be only amount?
+        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount).sub(fee);
+        e_transfer(_from, _to, _amount, _narrative, fee);
     }
 
     event e_issued(uint amount);
