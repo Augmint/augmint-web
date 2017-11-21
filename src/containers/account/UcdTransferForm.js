@@ -50,7 +50,6 @@ class UcdTransferForm extends React.Component {
             return;
         }
         let fee = getTransferFee(val);
-        console.debug(val.toString(), fee.toString());
         this.setState({ feeAmount: fee.div(decimalsDiv).toString() });
     }
 
@@ -137,7 +136,7 @@ class UcdTransferForm extends React.Component {
                                 Validations.ucdAmount,
                                 Validations.acdUserBalanceWithTransferFee
                             ]}
-                            normalize={Normalizations.ucdAmount}
+                            normalize={Normalizations.fourDecimals}
                             disabled={submitting || !tokenUcd.isConnected}
                         >
                             <input />

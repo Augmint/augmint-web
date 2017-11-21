@@ -89,34 +89,35 @@ export const Validations = {
 export const Parsers = {
     trim: value => value && value.trim()
 };
+function normalizeDecimals(decimalPlaces, value) {
+    if (value === null || value === "" || value === undefined) {
+        return "";
+    }
+    // TODO: interantilaistion (for different thousand separators)
+    let v = value.toString().replace(/[^\d.]/g, "");
+    let firstDot = v.indexOf(".");
+    // TODO: not yet working fix attempt for edge case when user entering a second dot.
+    // if (firstDot >= 0) {
+    //     let secondDot = v.indexOf(".", firstDot + 1);
+    //     console.log("v:", v,  "firstdot: ", firstDot, "seconddot: ",secondDot)
+    //     if (secondDot >= 0) {
+    //         v = v.slice(0, secondDot );
+    //     }
+    // }
+    v = v.slice(0, firstDot >= 0 ? firstDot + decimalPlaces + 1 : undefined);
+    return v;
+}
 export const Normalizations = {
-    ucdAmount: (value, previousValue) => {
-        if (value === null || value === "" || value === undefined) {
-            return "";
-        }
-        let v = value.toString().replace(/[^\d.]/g, "");
-        v = v.slice(0, v.indexOf(".") >= 0 ? v.indexOf(".") + 3 : undefined);
-        return v;
+    fourDecimals: (value, previousValue) => {
+        return normalizeDecimals(4, value);
     },
 
-    ethAmount: (value, previousValue) => {
-        if (value === null || value === "" || value === undefined) {
-            return "";
-        }
-        // FIXME: interantilaistion (for different thousand separators)
-        let v = value.toString().replace(/[^\d.]/g, "");
-        let firstDot = v.indexOf(".");
-        // not yet working fix attempt for edge case when user entering a second dot.
-        //  it requires text type input field
-        // if (firstDot >= 0) {
-        //     let secondDot = v.indexOf(".", firstDot + 1);
-        //     console.log("v:", v,  "firstdot: ", firstDot, "seconddot: ",secondDot)
-        //     if (secondDot >= 0) {
-        //         v = v.slice(0, secondDot );
-        //     }
-        // }
-        v = v.slice(0, firstDot >= 0 ? firstDot + 6 : undefined);
-        return v;
+    twoDecimals: (value, previousValue) => {
+        return normalizeDecimals(2, value);
+    },
+
+    fiveDecimals: (value, previousValue) => {
+        return normalizeDecimals(5, value);
     }
 };
 

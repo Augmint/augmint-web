@@ -169,7 +169,8 @@ class PlaceOrderForm extends React.Component {
             )
                 orderHelpText = (
                     <p>
-                        Currently there are only sell {totalCcy} orders open.<br />
+                        Currently there are only sell {totalCcy} orders open.<br
+                        />
                         Your will add an order on market rate.
                     </p>
                 );
@@ -265,7 +266,7 @@ class PlaceOrderForm extends React.Component {
                                     ? ucdValidationsWithBalance
                                     : ucdValidations
                             }
-                            normalize={Normalizations.ucdAmount}
+                            normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
                             <input />
@@ -285,7 +286,7 @@ class PlaceOrderForm extends React.Component {
                                     ? ethValidationsWithBalance
                                     : ethValidations
                             }
-                            normalize={Normalizations.ethAmount}
+                            normalize={Normalizations.fiveDecimals}
                             labelPosition="right"
                         >
                             <input />

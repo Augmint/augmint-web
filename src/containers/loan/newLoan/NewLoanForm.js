@@ -147,7 +147,7 @@ class NewLoanForm extends React.Component {
                             Validations.ucdAmount,
                             this.minUcd
                         ]}
-                        normalize={Normalizations.ucdAmount}
+                        normalize={Normalizations.twoDecimals}
                         onChange={this.onDisbursedUcdAmountChange}
                         labelPosition="right"
                         placeholder="pay out"
@@ -171,7 +171,7 @@ class NewLoanForm extends React.Component {
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
                         validate={[Validations.required, Validations.ucdAmount]}
-                        normalize={Normalizations.ucdAmount}
+                        normalize={Normalizations.twoDecimals}
                         onChange={this.onLoanUcdAmountChange}
                         labelPosition="right"
                     >
@@ -197,7 +197,7 @@ class NewLoanForm extends React.Component {
                             Validations.ethAmount,
                             Validations.ethUserBalance
                         ]}
-                        normalize={Normalizations.ethAmount}
+                        normalize={Normalizations.fiveDecimals}
                         onChange={this.onEthAmountChange}
                         labelPosition="right"
                     >
