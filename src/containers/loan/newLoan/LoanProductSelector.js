@@ -28,13 +28,13 @@ class LoanProductSelector extends React.Component {
                     <Message info>
                         <p>
                             You can get ACD for placing your ETH in escrow
-                            (collateral).{" "}
+                            (collateral).
                         </p>
                         <p>
                             <strong>Repayment</strong>
                             <br />
-                            When you repay the ACD on maturity you will get back
-                            all of your ETH.
+                            You get back all of your ETH if you repay your ACD
+                            loan anytime before it's due (maturity).
                         </p>
                         <p>
                             <strong>Default (non payment)</strong>

@@ -111,7 +111,12 @@ class NewLoanPage extends React.Component {
             <Pgrid>
                 <Pgrid.Row columns={2}>
                     <Pgrid.Column width={6}>
-                        <Pblock header="Selected Loan">
+                        <Pblock
+                            header={
+                                "Selected: loan product " +
+                                (this.state.product.id + 1)
+                            }
+                        >
                             <LoanProductDetails product={this.state.product} />
                         </Pblock>
                         <AccountInfo account={this.props.userAccount} />

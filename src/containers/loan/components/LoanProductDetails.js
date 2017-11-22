@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import {
     MyGridTable,
     MyGridTableRow as Row,
@@ -14,6 +15,15 @@ export default function LoanProductDetails(props) {
     let prod = props.product;
     return (
         <MyGridTable>
+            <Row>
+                <Col>Repay:</Col>
+                <Col>
+                    in {prod.termText}, before{" "}
+                    {moment
+                        .unix(prod.term + moment.utc().unix())
+                        .format("D MMM YYYY")}
+                </Col>
+            </Row>
             <Row>
                 <Col>
                     Discount rate:{" "}
@@ -36,7 +46,7 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Repayment period: <RepayPeriodToolTip />
+                    Repayment grace period: <RepayPeriodToolTip />
                 </Col>
                 <Col>{prod.repayPeriodText}</Col>
             </Row>
