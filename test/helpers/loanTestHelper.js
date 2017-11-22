@@ -1,13 +1,252 @@
-const EthBackedLoan = artifacts.require("./EthBackedLoan.sol");
+"use strict";
+
+const NEWLOAN_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
+const REPAY_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
+const COLLECT_BASEFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
+
 const BigNumber = require("bignumber.js");
 const moment = require("moment");
+const tokenUcdTestHelper = require("./tokenUcdTestHelper.js");
+const testHelper = require("./testHelper.js");
+
+const TokenUcd = artifacts.require("./TokenAcd.sol");
+const LoanManager = artifacts.require("./loanManager.sol");
+const Rates = artifacts.require("./Rates.sol");
+const EthBackedLoan = artifacts.require("./EthBackedLoan.sol");
+
+const tokenUcd = TokenUcd.at(TokenUcd.address);
+const loanManager = LoanManager.at(LoanManager.address);
+const rates = Rates.at(Rates.address);
+const reserveAcc = tokenUcd.address;
+let interestPoolAcc = null;
+let interestEarnedAcc = null;
 
 module.exports = {
+    createLoan,
+    repayLoan,
+    collectLoan,
     getProductInfo,
     calcLoanValues,
     newLoanEventAsserts,
     loanContractAsserts
 };
+
+async function init() {
+    interestPoolAcc = await tokenUcd.interestPoolAccount();
+    interestEarnedAcc = await tokenUcd.interestEarnedAccount();
+}
+
+async function createLoan(testInstance, product, borrower, collateralWei) {
+    if (!interestPoolAcc) {
+        await init();
+    }
+
+    const loan = await calcLoanValues(rates, product, collateralWei);
+    loan.state = 0;
+    loan.borrower = borrower;
+
+    const testedAccounts = [
+        reserveAcc,
+        loan.borrower,
+        interestPoolAcc,
+        interestEarnedAcc
+    ];
+
+    const totalSupplyBefore = await tokenUcd.totalSupply();
+    const balBefore = await tokenUcdTestHelper.getBalances(
+        tokenUcd,
+        testedAccounts
+    );
+
+    const tx = await loanManager.newEthBackedLoan(loan.product.id, {
+        from: loan.borrower,
+        value: loan.collateral
+    });
+
+    loan.contract = newLoanEventAsserts(tx, loan);
+    loan.id = await loan.contract.loanId();
+
+    await loanContractAsserts(loan.contract, loan);
+    testHelper.logGasUse(testInstance, tx, "newEthBackedLoan");
+
+    assert.equal(
+        (await tokenUcd.totalSupply()).toString(),
+        totalSupplyBefore.add(loan.loanAmount).toString(),
+        "total ACD supply should be increased by the loan amount"
+    );
+
+    assert.equal(
+        (await web3.eth.getBalance(loan.contract.address)).toString(),
+        loan.collateral.toString(),
+        "collateral ETH should be in loanContract"
+    );
+
+    let expBalances = [
+        {
+            name: "reserve",
+            address: reserveAcc,
+            ucd: balBefore[0].ucd,
+            eth: balBefore[0].eth
+        },
+        {
+            name: "loan.borrower",
+            address: loan.borrower,
+            ucd: balBefore[1].ucd.add(loan.disbursedAmount),
+            eth: balBefore[1].eth.minus(loan.collateral),
+            gasFee: NEWLOAN_MAXFEE
+        },
+        {
+            name: "interestPool Acc",
+            address: interestPoolAcc,
+            ucd: balBefore[2].ucd.add(loan.interestAmount),
+            eth: balBefore[2].eth
+        },
+        {
+            name: "interestEarned Acc",
+            address: interestEarnedAcc,
+            ucd: balBefore[3].ucd,
+            eth: balBefore[3].eth
+        }
+    ];
+
+    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+
+    return loan;
+}
+
+async function repayLoan(testInstance, loan) {
+    const testedAccounts = [
+        reserveAcc,
+        loan.borrower,
+        interestPoolAcc,
+        interestEarnedAcc
+    ];
+    const totalSupplyBefore = await tokenUcd.totalSupply();
+    const balBefore = await tokenUcdTestHelper.getBalances(
+        tokenUcd,
+        testedAccounts
+    );
+
+    loan.state = 1; // repaid
+
+    const tx = await loanManager.repay(loan.id, { from: loan.borrower });
+    await loanContractAsserts(loan.contract, loan);
+    testHelper.logGasUse(testInstance, tx, "repay");
+
+    assert.equal(
+        (await tokenUcd.totalSupply()).toString(),
+        totalSupplyBefore.sub(loan.loanAmount).toString(),
+        "total ACD supply should be reduced by the repaid loan amount"
+    );
+
+    assert.equal(
+        (await web3.eth.getBalance(loan.contract.address)).toString(),
+        "0",
+        "collateral ETH in loanContract should be 0"
+    );
+
+    let expBalances = [
+        {
+            name: "reserve",
+            address: reserveAcc,
+            ucd: balBefore[0].ucd,
+            eth: balBefore[0].eth
+        },
+        {
+            name: "loan.borrower",
+            address: loan.borrower,
+            ucd: balBefore[1].ucd.sub(loan.loanAmount),
+            eth: balBefore[1].eth.add(loan.collateral),
+            gasFee: REPAY_MAXFEE
+        },
+        {
+            name: "interestPool Acc",
+            address: interestPoolAcc,
+            ucd: balBefore[2].ucd.sub(loan.interestAmount),
+            eth: balBefore[2].eth
+        },
+        {
+            name: "interestEarned Acc",
+            address: interestEarnedAcc,
+            ucd: balBefore[3].ucd.add(loan.interestAmount),
+            eth: balBefore[3].eth
+        }
+    ];
+
+    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+}
+
+async function collectLoan(testInstance, loan, collector) {
+    loan.collector = collector;
+
+    const testedAccounts = [
+        reserveAcc,
+        loan.borrower,
+        loan.collector,
+        interestPoolAcc,
+        interestEarnedAcc
+    ];
+    const totalSupplyBefore = await tokenUcd.totalSupply();
+    const balBefore = await tokenUcdTestHelper.getBalances(
+        tokenUcd,
+        testedAccounts
+    );
+
+    loan.state = 2; // defaulted
+
+    const tx = await loanManager.collect([loan.id], { from: loan.collector });
+
+    await loanContractAsserts(loan.contract, loan);
+    testHelper.logGasUse(testInstance, tx, "collect 1");
+
+    assert.equal(
+        (await tokenUcd.totalSupply()).toString(),
+        totalSupplyBefore.toString(),
+        "total ACD supply should be the same"
+    );
+
+    assert.equal(
+        (await web3.eth.getBalance(loan.contract.address)).toString(),
+        "0",
+        "collateral ETH in loanContract should be 0"
+    );
+
+    let expBalances = [
+        {
+            name: "reserve",
+            address: reserveAcc,
+            ucd: balBefore[0].ucd.add(loan.interestAmount),
+            eth: balBefore[0].eth.add(loan.collateral)
+        },
+        {
+            name: "loan.borrower",
+            address: loan.borrower,
+            ucd: balBefore[1].ucd,
+            eth: balBefore[1].eth
+        },
+        {
+            name: "loan.collector", // collect tx calling acc
+            address: loan.collector,
+            ucd: balBefore[2].ucd,
+            eth: balBefore[2].eth,
+            gasFee: COLLECT_BASEFEE
+        },
+        {
+            name: "interestPool Acc",
+            address: interestPoolAcc,
+            ucd: balBefore[3].ucd.sub(loan.interestAmount),
+            eth: balBefore[3].eth
+        },
+        {
+            name: "interestEarned Acc",
+            address: interestEarnedAcc,
+            ucd: balBefore[4].ucd,
+            eth: balBefore[4].eth
+        }
+    ];
+
+    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+}
 
 async function getProductInfo(loanManager, productId) {
     let prod = await loanManager.products(productId);
@@ -25,6 +264,8 @@ async function getProductInfo(loanManager, productId) {
 
 async function calcLoanValues(rates, product, collateralWei) {
     let ret = {};
+
+    ret.collateral = collateralWei;
 
     // uint usdcValue = rates.convertWeiToUsdc(msg.value);
     // uint ucdDueAtMaturity = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);

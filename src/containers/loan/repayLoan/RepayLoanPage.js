@@ -167,21 +167,33 @@ class RepayLoanPage extends React.Component {
                                 <LoanDetailsWithStatusCheck
                                     loan={this.state.loan}
                                 />
-                                <Button
-                                    primary
-                                    size="big"
-                                    disabled={
-                                        this.props.submitting ||
-                                        !this.state.isLoanFound ||
-                                        this.state.loan.loanState !== 5
-                                    }
-                                >
-                                    {this.props.submitting
-                                        ? "Submitting..."
-                                        : "Confirm to repay " +
-                                          this.state.loan.ucdDueAtMaturity +
-                                          " ACD"}
-                                </Button>
+                                {this.state.loan.isRepayable &&
+                                    !this.state.loan.isDue && (
+                                        <p>
+                                            This loan is not due yet but you can
+                                            repay early without any extra fee.
+                                        </p>
+                                    )}
+                                {this.state.loan.isRepayable && (
+                                    <Button
+                                        primary
+                                        size="big"
+                                        disabled={
+                                            this.props.submitting ||
+                                            !this.state.isLoanFound ||
+                                            !this.state.loan.isRepayable
+                                        }
+                                    >
+                                        {this.props.submitting
+                                            ? "Submitting..."
+                                            : "Confirm to repay " +
+                                              this.state.loan.ucdDueAtMaturity +
+                                              " ACD"}
+                                    </Button>
+                                )}
+                                {!this.state.loan.isRepayable && (
+                                    <p>This loan is not repayable anymore</p>
+                                )}
                             </Form>
                         )}
 

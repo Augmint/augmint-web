@@ -6,6 +6,7 @@ import {
 } from "components/MyListGroups";
 import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { LoanRepayLink } from "./LoanRepayLink";
 
 export default function LoanListDetails(props) {
     let loan = props.loan;
@@ -20,7 +21,7 @@ export default function LoanListDetails(props) {
                 <Col>{loan.isDue ? "Pay by:" : "Due on:"}</Col>
                 <Col>{loan.isDue ? loan.repayByText : loan.maturityText}</Col>
             </Row>
-            <Row>
+            <Row columns={1}>
                 <Col>
                     <Button
                         content="Details"
@@ -31,17 +32,7 @@ export default function LoanListDetails(props) {
                         icon="right chevron"
                         basic
                     />
-                    {loan.isDue && (
-                        <Button
-                            content="Repay"
-                            as={Link}
-                            key={"repaybtn-" + loan.loanId}
-                            to={`/loan/repay/${loan.loanId}`}
-                            labelPosition="right"
-                            icon="right chevron"
-                            primary
-                        />
-                    )}
+                    <LoanRepayLink loan={loan} />
                 </Col>
             </Row>
         </MyGridTable>

@@ -1,38 +1,20 @@
-const loanTestHelper = new require("./helpers/loanTestHelper.js");
-const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
-const testHelper = new require("./helpers/testHelper.js");
-const Rates = artifacts.require("./Rates.sol");
+"use strict";
+
+const loanTestHelper = require("./helpers/loanTestHelper.js");
+const tokenUcdTestHelper = require("./helpers/tokenUcdTestHelper.js");
+const testHelper = require("./helpers/testHelper.js");
+
 const LoanManager = artifacts.require("./loanManager.sol");
 const TokenUcd = artifacts.require("./TokenAcd.sol");
-const NEWLOAN_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
-const REPAY_MAXFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
-const COLLECT_BASEFEE = web3.toWei(0.11); // TODO: set this to expected value (+set gasPrice)
 
-const acc0 = web3.eth.accounts[0],
-    acc1 = web3.eth.accounts[1],
-    acc2 = web3.eth.accounts[2];
-
-const collateralWei = web3.toWei(0.5);
-let tokenUcd, loanManager, rates, products;
-let balBefore, totalSupplyBefore;
+let tokenUcd, loanManager, products;
 
 contract("ACD Loans tests", accounts => {
     before(async function() {
         tokenUcd = await TokenUcd.deployed();
         await tokenUcd.issue(1000000000);
         await tokenUcd.withdrawTokens(accounts[0], 1000000000);
-        rates = await Rates.deployed();
         loanManager = await LoanManager.deployed();
-        reserveAcc = tokenUcd.address;
-        interestPoolAcc = await tokenUcd.interestPoolAccount();
-        interestEarnedAcc = await tokenUcd.interestEarnedAccount();
-        testedAccounts = [
-            reserveAcc,
-            acc1,
-            acc2,
-            interestPoolAcc,
-            interestEarnedAcc
-        ];
 
         products = {
             defaulting: await loanTestHelper.getProductInfo(loanManager, 6),
@@ -51,75 +33,15 @@ contract("ACD Loans tests", accounts => {
         // }
     });
 
-    beforeEach(async function() {
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
-        totalSupplyBefore = await tokenUcd.totalSupply();
-    });
-
     it("Should NOT get a loan less than minLoanAmount");
 
     it("Should get an ACD loan", async function() {
-        let expLoan = await loanTestHelper.calcLoanValues(
-            rates,
+        await loanTestHelper.createLoan(
+            this,
             products.repaying,
-            collateralWei
+            accounts[0],
+            web3.toWei(0.5)
         );
-        expLoan.state = 0;
-        expLoan.borrower = acc1;
-        expLoan.collateral = collateralWei;
-
-        let tx = await loanManager.newEthBackedLoan(products.repaying.id, {
-            from: acc1,
-            value: collateralWei
-        });
-        let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
-        await loanTestHelper.loanContractAsserts(loanContract, expLoan);
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
-
-        assert.equal(
-            (await tokenUcd.totalSupply()).toString(),
-            totalSupplyBefore.add(expLoan.loanAmount).toString(),
-            "total ACD supply should be increased by the loan amount"
-        );
-
-        assert.equal(
-            (await web3.eth.getBalance(loanContract.address)).toString(),
-            collateralWei.toString(),
-            "collateral ETH should be in loanContract"
-        );
-
-        let expBalances = [
-            {
-                name: "reserve",
-                address: reserveAcc,
-                ucd: balBefore[0].ucd,
-                eth: balBefore[0].eth
-            },
-            {
-                name: "acc1",
-                address: acc1,
-                ucd: balBefore[1].ucd.add(expLoan.disbursedAmount),
-                eth: balBefore[1].eth.minus(collateralWei),
-                gasFee: NEWLOAN_MAXFEE
-            },
-            {
-                name: "interestPool Acc",
-                address: interestPoolAcc,
-                ucd: balBefore[3].ucd.add(expLoan.interestAmount),
-                eth: balBefore[3].eth
-            },
-            {
-                name: "interestEarned Acc",
-                address: interestEarnedAcc,
-                ucd: balBefore[4].ucd,
-                eth: balBefore[4].eth
-            }
-        ];
-
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
     });
 
     it("Should NOT collect a loan before it's due");
@@ -131,150 +53,56 @@ contract("ACD Loans tests", accounts => {
     it("Should not repay with invalid loanId");
 
     it("Should repay an ACD loan after maturity", async function() {
-        let expLoan = await loanTestHelper.calcLoanValues(
-            rates,
+        const loan = await loanTestHelper.createLoan(
+            this,
             products.repaying,
-            collateralWei
+            accounts[1],
+            web3.toWei(0.5)
         );
-        expLoan.state = 1; // repaid
-        expLoan.borrower = acc1;
-        expLoan.collateral = collateralWei;
-        let tx = await loanManager.newEthBackedLoan(products.repaying.id, {
-            from: acc1,
-            value: collateralWei
-        });
-        let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
-        let loanId = await loanContract.loanId();
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
 
         // send interest to borrower to have enough ACD to repay in test
-        await tokenUcd.transfer(expLoan.borrower, expLoan.interestAmount, {
-            from: acc0
+        await tokenUcd.transfer(loan.borrower, loan.interestAmount, {
+            from: accounts[0]
         });
 
         await testHelper.waitForTimeStamp(
-            expLoan.product.term.add(expLoan.disbursementTime).toNumber()
+            loan.product.term.add(loan.disbursementTime).toNumber()
         );
 
-        tx = await loanManager
-            .repay(loanId, { from: acc1 })
-            .catch(error => console.log(error));
-        await loanTestHelper.loanContractAsserts(loanContract, expLoan);
-        testHelper.logGasUse(this, tx, "repay");
-
-        assert.equal(
-            (await tokenUcd.totalSupply()).toString(),
-            totalSupplyBefore.toString(),
-            "total ACD supply should be the same"
-        );
-
-        assert.equal(
-            (await web3.eth.getBalance(loanContract.address)).toString(),
-            "0",
-            "collateral ETH in loanContract should be 0"
-        );
-
-        let expBalances = [
-            {
-                name: "reserve",
-                address: reserveAcc,
-                ucd: balBefore[0].ucd,
-                eth: balBefore[0].eth
-            },
-            {
-                name: "acc1",
-                address: acc1,
-                ucd: balBefore[1].ucd, // it's the same b/c we sent the exact loanAmount after we saved the bal
-                eth: balBefore[1].eth, // it's the same b/c we get loan after we saved the bal
-                gasFee: REPAY_MAXFEE
-            },
-            {
-                name: "interestPool Acc",
-                address: interestPoolAcc,
-                ucd: balBefore[3].ucd,
-                eth: balBefore[3].eth
-            },
-            {
-                name: "interestEarned Acc",
-                address: interestEarnedAcc,
-                ucd: balBefore[4].ucd.add(expLoan.interestAmount),
-                eth: balBefore[4].eth
-            }
-        ];
-
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await loanTestHelper.repayLoan(this, loan);
     });
 
-    it("Should repay an ACD loan BEFORE maturity");
-
-    it("Should collect a defaulted ACD loan", async function() {
-        let expLoan = await loanTestHelper.calcLoanValues(
-            rates,
-            products.defaulting,
-            collateralWei
+    it("Should repay an ACD loan BEFORE maturity", async function() {
+        const loan = await loanTestHelper.createLoan(
+            this,
+            products.notDue,
+            accounts[1],
+            web3.toWei(0.5)
         );
-        expLoan.state = 1; // open first
-        expLoan.borrower = acc1;
-        expLoan.collateral = collateralWei;
-        let tx = await loanManager.newEthBackedLoan(products.defaulting.id, {
-            from: acc1,
-            value: collateralWei
+
+        // send interest to borrower to have enough ACD to repay in test
+        await tokenUcd.transfer(loan.borrower, loan.interestAmount, {
+            from: accounts[0]
         });
 
-        let loanContract = loanTestHelper.newLoanEventAsserts(tx, expLoan);
-        let loanId = await loanContract.loanId();
-        testHelper.logGasUse(this, tx, "newEthBackedLoan");
+        await loanTestHelper.repayLoan(this, loan);
+    });
+
+    it("Should collect a defaulted ACD loan", async function() {
+        const loan = await loanTestHelper.createLoan(
+            this,
+            products.defaulting,
+            accounts[1],
+            web3.toWei(0.5)
+        );
 
         await testHelper.waitForTimeStamp(
-            (await loanContract.maturity())
-                .add(expLoan.product.repayPeriod)
+            (await loan.contract.maturity())
+                .add(loan.product.repayPeriod)
                 .toNumber()
         );
 
-        expLoan.state = 2; // defaulted
-        tx = await loanManager
-            .collect([loanId], { from: acc2 })
-            .catch(error => console.log(error));
-
-        await loanTestHelper.loanContractAsserts(loanContract, expLoan);
-        testHelper.logGasUse(this, tx, "collect 1");
-
-        assert.equal(
-            (await tokenUcd.totalSupply()).toString(),
-            totalSupplyBefore.add(expLoan.loanAmount).toString(),
-            "total ACD supply should be increased by the defaulted loanAmount"
-        );
-
-        assert.equal(
-            (await web3.eth.getBalance(loanContract.address)).toString(),
-            "0",
-            "collateral ETH in loanContract should be 0"
-        );
-
-        let expBalances = [
-            {
-                name: "reserve",
-                address: reserveAcc,
-                ucd: balBefore[0].ucd.add(expLoan.interestAmount),
-                eth: balBefore[0].eth.add(collateralWei)
-            },
-            {
-                name: "acc1",
-                address: acc1,
-                ucd: balBefore[1].ucd.add(expLoan.disbursedAmount),
-                eth: balBefore[1].eth.minus(collateralWei),
-                gasFee: NEWLOAN_MAXFEE
-            },
-            {
-                name: "acc2", // collect tx calling acc
-                address: acc2,
-                ucd: balBefore[2].ucd,
-                eth: balBefore[2].eth,
-                gasFee: COLLECT_BASEFEE
-            }
-        ];
-
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await loanTestHelper.collectLoan(this, loan, accounts[2]);
     });
 
     it("Should NOT repay a loan after paymentperiod is over");

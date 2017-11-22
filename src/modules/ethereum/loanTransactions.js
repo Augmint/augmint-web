@@ -285,6 +285,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         .unix();
     let loanState = null;
     let isDue = false;
+    let isRepayable = false;
     switch (solidityLoanState) {
         case 0:
             if (repayBy < currentTime) {
@@ -292,9 +293,11 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
                 loanStateText = "Defaulted (not yet collected)";
             } else if (maturity < currentTime && repayBy > currentTime) {
                 isDue = true;
+                isRepayable = true;
                 loanStateText = "Payment Due";
                 loanState = 5;
             } else {
+                isRepayable = true;
                 loanState = 0;
                 loanStateText = "Open";
             }
@@ -341,7 +344,8 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         repayByText: moment
             .unix(repayPeriod + maturity)
             .format("D MMM YYYY HH:mm"),
-        isDue: isDue
+        isDue: isDue,
+        isRepayable: isRepayable
     };
     return loan;
 }

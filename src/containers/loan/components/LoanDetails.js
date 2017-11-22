@@ -10,22 +10,26 @@ export default function LoanDetails(props) {
     return (
         <MyGridTable>
             <Row>
+                <Col>Status: </Col>
+                <Col>{loan.loanStateText}</Col>
+            </Row>
+            <Row>
                 <Col>Loan amount:</Col>
                 <Col>{loan.ucdDueAtMaturity} ACD</Col>
             </Row>
 
             <Row>
-                <Col>{loan.isDue ? "Pay by:" : "Due on:"}</Col>
-                <Col>
-                    <span>
-                        {loan.isDue ? loan.repayByText : loan.maturityText}
-                    </span>
-                </Col>
+                <Col>Due on:</Col>
+                <Col>{loan.maturityText}</Col>
             </Row>
 
             <Row>
-                <Col>Pay by latest:</Col>
-                <Col>{loan.repayByText}</Col>
+                <Col>
+                    <strong>Pay by latest:</strong>
+                </Col>
+                <Col>
+                    <strong>{loan.repayByText}</strong>
+                </Col>
             </Row>
 
             <Row>

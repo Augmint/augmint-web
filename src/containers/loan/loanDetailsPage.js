@@ -4,10 +4,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import { Link } from "react-router-dom";
-import { Header, Button } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
+import { LoanRepayLink } from "./components/LoanRepayLink";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -61,34 +61,28 @@ class LoanDetailsPage extends React.Component {
                     </LoadingPanel>
                 )}
                 {!this.state.isLoading &&
-                !this.state.isLoanFound && (
-                    <ErrorPanel>
-                        Can't find loan #{this.state.loanId} for current account{" "}
-                        {this.props.userAccount}
-                    </ErrorPanel>
-                )}
+                    !this.state.isLoanFound && (
+                        <ErrorPanel>
+                            Can't find loan #{this.state.loanId} for current
+                            account {this.props.userAccount}
+                        </ErrorPanel>
+                    )}
 
                 {this.state.isLoanFound && (
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
                                 <Header>
-                                    {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
+                                    {this.state.loan.loanStateText} loan #{
+                                        this.state.loan.loanId
+                                    }
                                 </Header>
                                 <LoanDetails loan={this.state.loan} />
 
-                                {this.state.loan.isDue && (
-                                    <Button
-                                        content="Repay"
-                                        as={Link}
-                                        to={`/loan/repay/${this.state.loan
-                                            .loanId}`}
-                                        labelPosition="right"
-                                        icon="right chevron"
-                                        primary
-                                        size="large"
-                                    />
-                                )}
+                                <LoanRepayLink
+                                    loan={this.state.loan}
+                                    size="large"
+                                />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

@@ -84,7 +84,6 @@ contract EthBackedLoan {
     function releaseCollateral() external {
         require(msg.sender == address(loanManager)); // repayment is only through loanManager
         require(loanState == LoanState.Open);
-        require(now >= maturity);
         require(now <= maturity.add(repayPeriod));
         loanState = LoanState.Repaid;
         owner.transfer(this.balance); // send back ETH collateral held in this contract
