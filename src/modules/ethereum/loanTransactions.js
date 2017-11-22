@@ -189,7 +189,9 @@ export async function collectLoansTx(loansToCollect) {
     try {
         let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate = cost.COLLECT_GAS; // TODO: calculate BASE + gasperloan x N
+        let gasEstimate =
+            cost.COLLECT_BASE_GAS +
+            cost.COLLECT_ONE_GAS * loansToCollect.length;
         let converted = loansToCollect.map(item => {
             return new BigNumber(item.loanId);
         });
