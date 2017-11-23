@@ -122,7 +122,7 @@ export const refreshExchange = () => {
             let bn_ucdBalance = await getUcdBalance(exchange.address);
 
             let bn_totalEthSellOrders = web3.utils.fromWei(
-                await exchange.totalEthSellOrders()
+                (await exchange.totalEthSellOrders()).toString() // toString() required to supress web3 error, why?
             );
             let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(
                 new BigNumber(10000)
