@@ -7,7 +7,7 @@ contract Owned {
 
     event NewOwner(address indexed oldOwner, address indexed newOwner);
 
-    function owned() public {
+    function Owned() public {
         // TODO: is this needed:
         require(owner == address(0x0));
         owner = msg.sender;
@@ -19,6 +19,7 @@ contract Owned {
     }
 
     function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0x0));
         NewOwner(owner, newOwner);
         owner = newOwner;
     }

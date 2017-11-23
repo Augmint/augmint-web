@@ -2,17 +2,19 @@
     This is just for single adderss authorisation.
 */
 
+// TODO: replace Owned with multisig permission
+
 pragma solidity ^0.4.18;
 
 import "./Owned.sol";
 
 contract Restricted is Owned {
-    /* TODO: replace Owned with multisig permission */     
+
     // NB: using bytes32 rather than the string type because it's cheaper gas-wise:
     mapping (address => mapping (bytes32 => bool)) permissions;
 
-    event EPermissionGranted(address indexed agent, bytes32 grantedPermission);
-    event EPermissionRevoked(address indexed agent, bytes32 revokedPermission);
+    event PermissionGranted(address indexed agent, bytes32 grantedPermission);
+    event PermissionRevoked(address indexed agent, bytes32 revokedPermission);
 
     modifier restrict(bytes32 requiredPermission) {
         require(permissions[msg.sender][requiredPermission]);
@@ -21,10 +23,26 @@ contract Restricted is Owned {
 
     function grantPermission(address agent, bytes32 requiredPermission) public onlyOwner {
         permissions[agent][requiredPermission] = true;
+        PermissionGranted(agent, requiredPermission);
+    }
+
+    function grantMulitplePermissions(address agent, bytes32[] requiredPermissions) public onlyOwner {
+        uint256 length = requiredPermissions.length;
+        for (uint256 i = 0; i < length; i++) {
+            grantPermission(agent, requiredPermissions[i]);
+        }
     }
 
     function revokePermission(address agent, bytes32 requiredPermission) public onlyOwner {
         permissions[agent][requiredPermission] = false;
+        PermissionRevoked(agent, requiredPermission);
+    }
+
+    function revokeMulitplePermissions(address agent, bytes32[] requiredPermissions) public onlyOwner {
+        uint256 length = requiredPermissions.length;
+        for (uint256 i = 0; i < length; i++) {
+            revokePermission(agent, requiredPermissions[i]);
+        }
     }
 
 }
