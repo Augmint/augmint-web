@@ -16,13 +16,13 @@ TODO: add option to pass a rate for fill or kill orders to avoid different rate 
 TODO: add orderId to Acd transfer narrative
 */
 pragma solidity ^0.4.18;
-import "./SafeMath.sol";
-import "./Owned.sol";
-import "./OrdersLib.sol";
+import "./generic/SafeMath.sol";
+import "./generic/Owned.sol";
+import "./generic/OrdersLib.sol";
 import "./TokenAcd.sol";
 import "./Rates.sol";
 
-contract Exchange is owned {
+contract Exchange is Owned {
     using SafeMath for uint256;
     using OrdersLib for OrdersLib.OrderList;
     using OrdersLib for OrdersLib.OrderData;
@@ -45,7 +45,7 @@ contract Exchange is owned {
 
     mapping(address => uint80[]) public m_orders; // orders for an account => orderId
 
-    function Exchange(address _tokenUcdAddress, address _ratesAddress) public owned() {
+    function Exchange(address _tokenUcdAddress, address _ratesAddress) public Owned() {
          rates = Rates(_ratesAddress);
          tokenUcd = TokenAcd(_tokenUcdAddress);
     }

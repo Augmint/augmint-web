@@ -23,7 +23,7 @@
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
 */
 pragma solidity ^0.4.18;
-import "./generic/Restricted.sol";
+import "./Restricted.sol";
 import "./SafeMath.sol";
 
 contract AugmintToken is Restricted {
