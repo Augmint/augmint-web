@@ -39,8 +39,7 @@ const initialState = {
         interestPoolAccountAcdBalance: "?",
         interestEarnedAccountAcdBalance: "?",
         ucdPendingBalance: "?",
-        totalSupply: "?",
-        loanManagerAddress: "?"
+        totalSupply: "?"
     }
 };
 
@@ -143,7 +142,6 @@ export const refreshTokenUcd = () => {
         // TODO: make these paralel
         let owner = await tokenUcd.owner();
         let bn_totalSupply = await tokenUcd.totalSupply();
-        let loanManagerAddress = await tokenUcd.loanManagerAddress();
         let bn_decimals = await tokenUcd.decimals();
         let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
         let feeAccount = await tokenUcd.feeAccount();
@@ -188,7 +186,6 @@ export const refreshTokenUcd = () => {
                 bn_ethPendingBalance: bn_ethPendingBalance,
                 ethPendingBalance: bn_ethPendingBalance.toNumber(),
                 totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
-                loanManagerAddress: loanManagerAddress,
                 feeAccount: feeAccount,
                 feePt: await tokenUcd.transferFeePt(),
                 feeMin: await tokenUcd.transferFeeMin(),

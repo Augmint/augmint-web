@@ -68,7 +68,7 @@ const mapStateToProps = state => ({
 
     tokenUcd: state.tokenUcd,
     rates: state.rates,
-    loanManagerAddress: state.tokenUcd.info.loanManagerAddress
+    loanManagerAddress: state.loanManager.contract.address
 });
 
 const mapDispatchToProps = dispatch =>
