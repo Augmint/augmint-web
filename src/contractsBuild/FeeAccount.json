@@ -2,20 +2,6 @@
   "contractName": "FeeAccount",
   "abi": [
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_new",
-          "type": "address"
-        }
-      ],
-      "name": "setOwner",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [],
       "name": "owner",
@@ -27,6 +13,20 @@
       ],
       "payable": false,
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -60,12 +60,12 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "old",
+          "name": "oldOwner",
           "type": "address"
         },
         {
           "indexed": true,
-          "name": "current",
+          "name": "newOwner",
           "type": "address"
         }
       ],
@@ -73,18 +73,18 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x6060604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610403806100536000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806313af40351461005c5780638da5cb5b14610095578063fd979672146100ea575b600080fd5b341561006757600080fd5b610093600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061015f565b005b34156100a057600080fd5b6100a8610278565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091908035906020019082018035906020019190919290505061029d565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101ba57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102f857600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103bc57600080fd5b6102c65a03f115156103cd57600080fd5b50505050505050505600a165627a7a72305820be7642385e25aaf1c4a83209c3f7afca5dfa5820cd20b0c7c0f37a07b3ec0dc50029",
-  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806313af40351461005c5780638da5cb5b14610095578063fd979672146100ea575b600080fd5b341561006757600080fd5b610093600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061015f565b005b34156100a057600080fd5b6100a8610278565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091908035906020019082018035906020019190919290505061029d565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101ba57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102f857600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103bc57600080fd5b6102c65a03f115156103cd57600080fd5b50505050505050505600a165627a7a72305820be7642385e25aaf1c4a83209c3f7afca5dfa5820cd20b0c7c0f37a07b3ec0dc50029",
-  "sourceMap": "123:41:3:-;;;199:10:9;191:5;;:18;;;;;;;;;;;;;;;;;;123:41:3;;;;;;",
-  "deployedSourceMap": "123:41:3:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;288:107:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;47:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;220:187:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;288:107:9;127:5;;;;;;;;;;;113:19;;:10;:19;;;105:28;;;;;;;;363:4;347:21;;356:5;;;;;;;;;;;347:21;;;;;;;;;;;;384:4;376:5;;:12;;;;;;;;;;;;;;;;;;288:107;:::o;47:20::-;;;;;;;;;;;;;:::o;220:187:13:-;127:5:9;;;;;;;;;;;113:19;;:10;:19;;;105:28;;;;;;;;343:12:13;:34;;;378:2;382:6;390:9;;343:57;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;220:187;;;;;:::o",
-  "source": "/* Contract to collect fees from system */\n\npragma solidity ^0.4.18;\nimport \"./Owned.sol\";\nimport \"./SystemAccount.sol\";\n\n\ncontract FeeAccount is SystemAccount {\n\n}\n",
+  "bytecode": "0x6060604052600073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561006057600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061043f806100af6000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058200ddf8e45049da8f0b9052ffe978ae7974b59ed6de895beca2701c953fd8513200029",
+  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058200ddf8e45049da8f0b9052ffe978ae7974b59ed6de895beca2701c953fd8513200029",
+  "sourceMap": "109:41:2:-;;;245:3:11;228:21;;:5;;;;;;;;;;;:21;;;220:30;;;;;;;;268:10;260:5;;:18;;;;;;;;;;;;;;;;;;109:41:2;;;;;;",
+  "deployedSourceMap": "109:41:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;53:20:11;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;372:173;;;;;;;;;;;;;;;;;;;;;;;;;;;;220:187:15;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;53:20:11;;;;;;;;;;;;;:::o;372:173::-;342:5;;;;;;;;;;;328:19;;:10;:19;;;320:28;;;;;;;;472:3;452:24;;:8;:24;;;;444:33;;;;;;;;503:8;487:25;;496:5;;;;;;;;;;;487:25;;;;;;;;;;;;530:8;522:5;;:16;;;;;;;;;;;;;;;;;;372:173;:::o;220:187:15:-;342:5:11;;;;;;;;;;;328:19;;:10;:19;;;320:28;;;;;;;;343:12:15;:34;;;378:2;382:6;390:9;;343:57;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;220:187;;;;;:::o",
+  "source": "/* Contract to collect fees from system */\n\npragma solidity ^0.4.18;\nimport \"./generic/SystemAccount.sol\";\n\n\ncontract FeeAccount is SystemAccount {\n\n}\n",
   "sourcePath": "/Users/petro/ether/dcm-poc/contracts/FeeAccount.sol",
   "ast": {
     "attributes": {
       "absolutePath": "/Users/petro/ether/dcm-poc/contracts/FeeAccount.sol",
       "exportedSymbols": {
         "FeeAccount": [
-          1825
+          1188
         ]
       }
     },
@@ -98,59 +98,44 @@
             ".18"
           ]
         },
-        "id": 1820,
+        "id": 1184,
         "name": "PragmaDirective",
-        "src": "44:24:3"
+        "src": "44:24:2"
       },
       {
         "attributes": {
-          "SourceUnit": 2839,
-          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/Owned.sol",
-          "file": "./Owned.sol",
-          "scope": 1826,
+          "SourceUnit": 3438,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SystemAccount.sol",
+          "file": "./generic/SystemAccount.sol",
+          "scope": 1189,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 1821,
+        "id": 1185,
         "name": "ImportDirective",
-        "src": "69:21:3"
-      },
-      {
-        "attributes": {
-          "SourceUnit": 3286,
-          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/SystemAccount.sol",
-          "file": "./SystemAccount.sol",
-          "scope": 1826,
-          "symbolAliases": [
-            null
-          ],
-          "unitAlias": ""
-        },
-        "id": 1822,
-        "name": "ImportDirective",
-        "src": "91:29:3"
+        "src": "69:37:2"
       },
       {
         "attributes": {
           "contractDependencies": [
-            2838,
-            3285
+            2912,
+            3437
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            1825,
-            3285,
-            2838
+            1188,
+            3437,
+            2912
           ],
           "name": "FeeAccount",
           "nodes": [
             null
           ],
-          "scope": 1826
+          "scope": 1189
         },
         "children": [
           {
@@ -164,43 +149,33 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3285,
+                  "referencedDeclaration": 3437,
                   "type": "contract SystemAccount"
                 },
-                "id": 1823,
+                "id": 1186,
                 "name": "UserDefinedTypeName",
-                "src": "146:13:3"
+                "src": "132:13:2"
               }
             ],
-            "id": 1824,
+            "id": 1187,
             "name": "InheritanceSpecifier",
-            "src": "146:13:3"
+            "src": "132:13:2"
           }
         ],
-        "id": 1825,
+        "id": 1188,
         "name": "ContractDefinition",
-        "src": "123:41:3"
+        "src": "109:41:2"
       }
     ],
-    "id": 1826,
+    "id": 1189,
     "name": "SourceUnit",
-    "src": "44:121:3"
+    "src": "44:107:2"
   },
   "compiler": {
     "name": "solc",
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
   "networks": {
-    "3": {
-      "events": {},
-      "links": {},
-      "address": "0x61c6086ca3102ec7b244af51be98c98d83d14804"
-    },
-    "4": {
-      "events": {},
-      "links": {},
-      "address": "0xb1c977e9152565842a9ac5900709cf0d825b264a"
-    },
     "999": {
       "events": {},
       "links": {},
@@ -208,5 +183,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-21T15:28:06.659Z"
+  "updatedAt": "2017-11-23T18:04:42.581Z"
 }

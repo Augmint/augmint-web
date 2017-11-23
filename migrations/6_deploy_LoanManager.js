@@ -3,13 +3,17 @@ var Rates = artifacts.require("./Rates.sol");
 var SafeMath = artifacts.require("./SafeMath.sol");
 var LoanManager = artifacts.require("./LoanManager.sol");
 
-module.exports = function(deployer, network) {
+module.exports = function(deployer, network, accounts) {
     deployer.link(SafeMath, LoanManager);
     deployer.deploy(LoanManager, TokenAcd.address, Rates.address);
     deployer.then(async () => {
-        lm = await LoanManager.deployed();
-        let tokenAcd = await TokenAcd.deployed();
-        await tokenAcd.setLoanManagerAddress(LoanManager.address);
+        let lm = LoanManager.at(LoanManager.address);
+        let tokenAcd = TokenAcd.at(TokenAcd.address);
+        await tokenAcd.grantMulitplePermissions(LoanManager.address, [
+            "transferNoFee",
+            "issue",
+            "burn"
+        ]);
 
         let onTest =
             web3.version.network == 999 ||

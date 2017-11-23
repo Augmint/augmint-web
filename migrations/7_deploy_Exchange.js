@@ -9,7 +9,7 @@ module.exports = function(deployer, network) {
     deployer.link(OrdersLib, Exchange);
     deployer.deploy(Exchange, TokenAcd.address, Rates.address);
     deployer.then(async () => {
-        tokenAcd = await TokenAcd.deployed();
-        await tokenAcd.setExchangeAddress(Exchange.address);
+        let tokenAcd = TokenAcd.at(TokenAcd.address);
+        await tokenAcd.grantPermission(Exchange.address, "transferNoFee");
     });
 };
