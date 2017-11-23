@@ -1,4 +1,3 @@
-// TODO: move into generic folder
 pragma solidity ^0.4.18;
 
 /**
