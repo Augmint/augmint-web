@@ -8,6 +8,7 @@ import { Header } from "semantic-ui-react";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 import { LoanRepayLink } from "./components/LoanRepayLink";
+import CollectLoanButton from "./collectLoan/CollectLoanButton";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -83,6 +84,14 @@ class LoanDetailsPage extends React.Component {
                                     loan={this.state.loan}
                                     size="large"
                                 />
+
+                                {this.state.loan.isCollectable && (
+                                    <CollectLoanButton
+                                        loansToCollect={[
+                                            { loanId: this.state.loanId }
+                                        ]}
+                                    />
+                                )}
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
