@@ -5,14 +5,14 @@
            it wouldn't restrict access more but would be better seperation of functions
 */
 pragma solidity ^0.4.18;
-import "./Owned.sol";
-import "./SafeMath.sol";
+import "./generic/Owned.sol";
+import "./generic/SafeMath.sol";
 import "./Rates.sol";
 import "./TokenAcd.sol";
 import "./EthBackedLoan.sol";
 
 
-contract LoanManager is owned {
+contract LoanManager is Owned {
     using SafeMath for uint256;
 
     Rates public rates; // instance of ETH/USD rate provider contract
@@ -42,7 +42,7 @@ contract LoanManager is owned {
     LoanPointer[] public loanPointers;
     mapping(address => uint[]) public m_loanPointers;  // owner account address =>  array of loanContracts array idx-s (idx + 1)
 
-    function LoanManager(address _tokenUcdAddress, address _ratesAddress) public owned() {
+    function LoanManager(address _tokenUcdAddress, address _ratesAddress) public Owned() {
         tokenUcd = TokenAcd(_tokenUcdAddress);
         rates = Rates(_ratesAddress);
     }

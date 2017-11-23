@@ -1,6 +1,6 @@
 /* Augmint Crypto Dollar token (ACD) implementation */
 pragma solidity ^0.4.18;
-import "./AugmintToken.sol";
+import "./generic/AugmintToken.sol";
 
 
 contract TokenAcd is AugmintToken {

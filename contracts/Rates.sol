@@ -3,10 +3,10 @@
 */
 pragma solidity ^0.4.11;
 
-import "./SafeMath.sol";
-import "./Owned.sol";
+import "./generic/SafeMath.sol";
+import "./generic/Owned.sol";
 
-contract Rates is owned {
+contract Rates is Owned {
     using SafeMath for uint256;
 
     uint constant ONE_ETH = 1000000000000000000; // 1 ETH in WEI

@@ -13,7 +13,7 @@
 
 pragma solidity ^0.4.18;
 
-import "./SafeMath.sol";
+import "./generic/SafeMath.sol";
 import "./TokenAcd.sol";
 import "./LoanManager.sol";
 
