@@ -23,10 +23,10 @@
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
 */
 pragma solidity ^0.4.18;
-import "./Owned.sol";
+import "./generic/Restricted.sol";
 import "./SafeMath.sol";
 
-contract AugmintToken is owned {
+contract AugmintToken is Restricted {
     using SafeMath for uint256;
 
     uint256 public totalSupply; // total amount of tokens
@@ -36,8 +36,6 @@ contract AugmintToken is owned {
     // Owner of account approves the transfer of an amount to another account
     mapping(address => mapping (address => uint256)) public allowed;
 
-    address public loanManagerAddress; // used for authorisation of issuing ACD for loans
-    address public exchangeAddress; // for authorisation of transferExchange()
     address public feeAccount;
     address public interestPoolAccount;
     address public interestEarnedAccount;
@@ -70,24 +68,10 @@ contract AugmintToken is owned {
         return fee;
     }
 
-    event e_loanManagerAddressChanged(address newAddress);
-
-    function setLoanManagerAddress(address newAddress) external onlyOwner {
-        loanManagerAddress = newAddress;
-        e_loanManagerAddressChanged(newAddress);
-    }
-
-    event e_exchangeAddressChanged(address newAddress);
-
-    function setExchangeAddress(address newAddress) external onlyOwner {
-        exchangeAddress = newAddress;
-        e_exchangeAddressChanged(newAddress);
-    }
-
     event e_systemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
 
     function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
-            address newInterestEarnedAccount) external onlyOwner {
+            address newInterestEarnedAccount) external restrict("setSystemAccounts") {
         feeAccount = newFeeAccount;
         interestPoolAccount = newInteresPoolAccount;
         interestEarnedAccount = newInterestEarnedAccount;
@@ -95,7 +79,7 @@ contract AugmintToken is owned {
     }
 
     event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
-    function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external onlyOwner {
+    function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external restrict("setTransferFees") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
@@ -111,8 +95,7 @@ contract AugmintToken is owned {
         _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external {
-        require( msg.sender == exchangeAddress || msg.sender == loanManagerAddress);
+    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external restrict("transferNoFee") {
         _transfer(_from, _to, _amount, _narrative, 0);
     }
 
@@ -171,17 +154,14 @@ contract AugmintToken is owned {
     }
 
     event e_issued(uint amount);
-    function issue(uint amount) external {
-        // FIXME: owner only allowed for testing, remove from production
-        require(msg.sender == owner || msg.sender == loanManagerAddress);
+    function issue(uint amount) external restrict("issue") {
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
         e_issued(amount);
     }
 
     event e_burned(uint amount);
-    function burn(uint amount) external {
-        require(msg.sender == owner || msg.sender == loanManagerAddress);
+    function burn(uint amount) external restrict("burn") {
         require(amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
@@ -189,7 +169,7 @@ contract AugmintToken is owned {
     }
 
     // FIXME: this is only for testing, remove this function from production
-    function withdrawTokens(address _to, uint _amount) external onlyOwner {
+    function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {
         require(_amount <= balances[this]);
         balances[this] = balances[this].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
