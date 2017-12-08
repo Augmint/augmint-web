@@ -25,11 +25,10 @@
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
 import "./SafeMath.sol";
+import "./ERC20Interface.sol";
 
-contract AugmintToken is Restricted {
+contract AugmintToken is ERC20Interface, Restricted {
     using SafeMath for uint256;
-
-    uint256 public totalSupply; // total amount of tokens
 
     // Balances for each account
     mapping(address => uint256) public balances;
@@ -54,7 +53,7 @@ contract AugmintToken is Restricted {
     function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
     // TODO: shall we put protection against accidentally sending in ETH?
 
-    function balanceOf(address _owner) external view returns (uint256 balance) {
+    function balanceOf(address _owner) public view returns (uint256 balance) {
         return balances[_owner];
     }
 
@@ -87,7 +86,7 @@ contract AugmintToken is Restricted {
 
     event e_transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
 
-    function transfer(address _to, uint256 _amount) external {
+    function transfer(address _to, uint256 _amount) public {
         _transfer(msg.sender, _to, _amount, "", getFee(_amount));
     }
 
@@ -115,11 +114,10 @@ contract AugmintToken is Restricted {
 
     // Allow _spender to withdraw from your account, multiple times, up to the _value amount.
     // If this function is called again it overwrites the current allowance with _value.
-    function approve(address _spender, uint256 _amount) external returns (bool success) {
+    function approve(address _spender, uint256 _amount) public {
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         // TODO: emit event
-        return true;
     }
 
     // Send _value amount of tokens from address _from to address _to
