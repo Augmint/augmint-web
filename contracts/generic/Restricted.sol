@@ -26,7 +26,7 @@ contract Restricted is Owned {
         PermissionGranted(agent, requiredPermission);
     }
 
-    function grantMulitplePermissions(address agent, bytes32[] requiredPermissions) public onlyOwner {
+    function grantMultiplePermissions(address agent, bytes32[] requiredPermissions) public onlyOwner {
         uint256 length = requiredPermissions.length;
         for (uint256 i = 0; i < length; i++) {
             grantPermission(agent, requiredPermissions[i]);

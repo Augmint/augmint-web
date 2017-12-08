@@ -9,7 +9,7 @@ module.exports = function(deployer, network, accounts) {
     deployer.then(async () => {
         let lm = LoanManager.at(LoanManager.address);
         let tokenAcd = TokenAcd.at(TokenAcd.address);
-        await tokenAcd.grantMulitplePermissions(LoanManager.address, [
+        await tokenAcd.grantMultiplePermissions(LoanManager.address, [
             "transferNoFee",
             "issue",
             "burn"

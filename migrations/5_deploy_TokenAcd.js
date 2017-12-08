@@ -17,7 +17,7 @@ module.exports = async function(deployer, network, accounts) {
     );
 
     let tokenAcd = TokenAcd.at(TokenAcd.address);
-    await tokenAcd.grantMulitplePermissions(accounts[0], [
+    await tokenAcd.grantMultiplePermissions(accounts[0], [
         "setSystemAccounts",
         "setTransferFees",
         "transferNoFee)",
