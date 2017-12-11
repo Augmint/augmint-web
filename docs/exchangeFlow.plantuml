@@ -8,7 +8,10 @@ control ExchangeContract
 actor Taker
 == maker order  ==
 Maker -> TokenContract : placeSellOrder\n(exchangeAddress, price, amount)
-TokenContract -> TokenContract : _transfer\n(from: maker, to: exchange, amount, narr: "sell order", fee: 0)
+note over TokenContract 
+    placeSellOrder restricted to trusted exchange(s)
+end note
+TokenContract -> TokenContract : _transfer\n(to: exchange, amount, narr: "sell order", fee: 0)
 Maker --> ExchangeContract : tokens to sell transfered
 TokenContract -> ExchangeContract : placeSellOrder\n(userAddress, amount)
 note over ExchangeContract
@@ -47,7 +50,7 @@ loop as many times as fits to gas provided to tx call
     ExchangeContract -> TokenContract : transferNoFee(feesAccount, tradeFee)
     note over TokenContract, ExchangeContract
         transferNoFee is restricted to trusted Exchange only
-        Exhange needs to call transfer when
+        Exhange needs to call standard transfer when
         trading non-Augmint ERC20 tokens
     end note
     ExchangeContract -> TokenContract : transferNoFee\n(to: taker, amountSold - tradeFee, narr: "Order fill")
