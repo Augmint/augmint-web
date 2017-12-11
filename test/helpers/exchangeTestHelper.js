@@ -8,12 +8,12 @@ module.exports = {
     contractStateAsserts
 };
 
-function newExchange(tokenUcd, rates) {
-    return new Promise(async function(resolve, reject) {
-        let instance = await Exchange.new(tokenUcd.address, rates.address);
-        await tokenUcd.setExchangeAddress(instance.address);
-        resolve(instance);
-    });
+let exchange;
+
+async function newExchange(tokenAcd, rates) {
+    exchange = await Exchange.new(tokenAcd.address, rates.address);
+    await tokenAcd.grantPermission(exchange.address, "transferNoFee");
+    return exchange;
 }
 
 async function newOrderEventAsserts(logItem, orderType, maker, orderAmount) {
@@ -75,7 +75,7 @@ async function orderFillEventAsserts(
     return orderId;
 }
 
-async function contractStateAsserts(exchange, expState) {
+async function contractStateAsserts(expState) {
     let orderCount = (await exchange.getOrderCount()).toNumber();
     assert.equal(orderCount, expState.orderCount, "orderCount should be set");
 

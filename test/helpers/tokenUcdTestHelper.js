@@ -1,9 +1,12 @@
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./testHelper.js");
-const TokenUcd = artifacts.require("./TokenAcd.sol");
+const TokenAcdMock = artifacts.require("./mocks/TokenAcdMock.sol");
+const LoanManager = artifacts.require("./LoanManager.sol");
+const Exchange = artifacts.require("./Exchange.sol");
 const TRANSFER_MAXFEE = web3.toWei(0.01); // TODO: set this to expected value (+set gasPrice)
 
 module.exports = {
+    newTokenAcdMock,
     transferTest,
     getTransferFee,
     getBalances,
@@ -11,21 +14,35 @@ module.exports = {
     balanceAsserts
 };
 
-/* This returning a new instance for some reason for subsequent test runs
-const TokenUcd = artifacts.require("./TokenAcd.sol");
-async function getTokenUcd(initialUcdBalance) {
-    let instance = await TokenUcd.deployed();
-    if (initialUcdBalance > 0) {
-        await instance.issue(initialUcdBalance);
-        await instance.getFromReserve(initialUcdBalance);
-    }
-    return instance;
+const FeeAccount = artifacts.require("./FeeAccount.sol");
+const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
+const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
+let tokenAcd;
+
+async function newTokenAcdMock() {
+    //if (typeof tokenAcd == "undefined") {
+    tokenAcd = await TokenAcdMock.new(
+        FeeAccount.address,
+        InterestPoolAccount.address,
+        InterestEarnedAccount.address,
+        2000 /* transferFeePt in parts per million = 0.2% */,
+        200 /* min: 0.02 ACD */,
+        50000 /* max fee: 5 ACD */
+    );
+    await tokenAcd.grantMultiplePermissions(web3.eth.accounts[0], [
+        "setSystemAccounts",
+        "setTransferFees",
+        "transferNoFee)",
+        "withdrawTokens",
+        "issue"
+    ]);
+    //}
+
+    return tokenAcd;
 }
-*/
 
 async function transferTest(testTxInfo, from, to, amount, narrative) {
-    tokenUcd = TokenUcd.at(TokenUcd.address);
-    let feeAccount = await tokenUcd.feeAccount();
+    let feeAccount = await tokenAcd.feeAccount();
     expTransfer = {
         from: from,
         to: to,
@@ -33,17 +50,17 @@ async function transferTest(testTxInfo, from, to, amount, narrative) {
         narrative: narrative,
         fee: await getTransferFee(amount)
     };
-    let balBefore = await getBalances(tokenUcd, [from, to, feeAccount]);
+    let balBefore = await getBalances([from, to, feeAccount]);
     let tx;
     if (narrative === "") {
-        tx = await tokenUcd.transferWithNarrative(
+        tx = await tokenAcd.transferWithNarrative(
             expTransfer.to,
             expTransfer.amount,
             expTransfer.narrative,
             { from: expTransfer.from }
         );
     } else {
-        tx = await tokenUcd.transferWithNarrative(
+        tx = await tokenAcd.transferWithNarrative(
             expTransfer.to,
             expTransfer.amount,
             expTransfer.narrative,
@@ -76,18 +93,17 @@ async function transferTest(testTxInfo, from, to, amount, narrative) {
         }
     ];
 
-    await balanceAsserts(tokenUcd, expBalances);
+    await balanceAsserts(expBalances);
 }
 
 async function getTransferFee(_amount) {
-    let tokenUcd, feePt, feeMin, feeMax;
+    let feePt, feeMin, feeMax;
     let amount = new BigNumber(_amount);
-    tokenUcd = TokenUcd.at(TokenUcd.address);
 
     await Promise.all([
-        (feePt = await tokenUcd.transferFeePt()),
-        (feeMax = await tokenUcd.transferFeeMax()),
-        (feeMin = await tokenUcd.transferFeeMin())
+        (feePt = await tokenAcd.transferFeePt()),
+        (feeMax = await tokenAcd.transferFeeMax()),
+        (feeMin = await tokenAcd.transferFeeMin())
     ]);
 
     let fee = amount
@@ -102,12 +118,12 @@ async function getTransferFee(_amount) {
     return fee;
 }
 
-async function getBalances(tokenUcd, addresses) {
+async function getBalances(addresses) {
     let balances = [];
     for (let addr of addresses) {
         balances.push({
             eth: await web3.eth.getBalance(addr),
-            ucd: await tokenUcd.balanceOf(addr)
+            ucd: await tokenAcd.balanceOf(addr)
         });
     }
     return balances;
@@ -146,10 +162,10 @@ async function transferEventAsserts(tx, expTransfer) {
     );
 }
 
-async function balanceAsserts(tokenUcd, expBalances) {
+async function balanceAsserts(expBalances) {
     for (let expBal of expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);
-        let newUcdBal = await tokenUcd.balanceOf(expBal.address);
+        let newUcdBal = await tokenAcd.balanceOf(expBal.address);
         let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
         assert.isAtMost(
             newEthBal

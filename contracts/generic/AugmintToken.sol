@@ -170,11 +170,4 @@ contract AugmintToken is Restricted {
         e_burned(amount);
     }
 
-    // FIXME: this is only for testing, remove this function from production
-    function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {
-        require(_amount <= balances[this]);
-        balances[this] = balances[this].sub(_amount);
-        balances[_to] = balances[_to].add(_amount);
-    }
-
 }

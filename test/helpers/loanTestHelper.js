@@ -6,22 +6,19 @@ const COLLECT_BASEFEE = web3.toWei(0.11); // TODO: set this to expected value (+
 
 const BigNumber = require("bignumber.js");
 const moment = require("moment");
-const tokenUcdTestHelper = require("./tokenUcdTestHelper.js");
+const tokenAcdTestHelper = require("./tokenUcdTestHelper.js");
 const testHelper = require("./testHelper.js");
 
-const TokenUcd = artifacts.require("./TokenAcd.sol");
 const LoanManager = artifacts.require("./loanManager.sol");
-const Rates = artifacts.require("./Rates.sol");
 const EthBackedLoan = artifacts.require("./EthBackedLoan.sol");
 
-const tokenUcd = TokenUcd.at(TokenUcd.address);
-const loanManager = LoanManager.at(LoanManager.address);
-const rates = Rates.at(Rates.address);
-const reserveAcc = tokenUcd.address;
+let tokenAcd, loanManager, rates;
+let reserveAcc;
 let interestPoolAcc = null;
 let interestEarnedAcc = null;
 
 module.exports = {
+    newLoanManager,
     createLoan,
     repayLoan,
     collectLoan,
@@ -31,16 +28,30 @@ module.exports = {
     loanContractAsserts
 };
 
-async function init() {
-    interestPoolAcc = await tokenUcd.interestPoolAccount();
-    interestEarnedAcc = await tokenUcd.interestEarnedAccount();
+async function newLoanManager(_tokenAcd, _rates) {
+    tokenAcd = _tokenAcd;
+    rates = _rates;
+    reserveAcc = tokenAcd.address;
+    loanManager = await LoanManager.new(tokenAcd.address, rates.address);
+    // notDue: (due in 1 day)
+    await loanManager.addProduct(86400, 970000, 850000, 300000, 3600, true);
+
+    // repaying: due in 1 sec, repay in 1hr for testing repayments
+    await loanManager.addProduct(1, 985000, 900000, 200000, 3600, true);
+    // defaulting: due in 1 sec, repay in 1sec for testing defaults
+    await loanManager.addProduct(1, 990000, 950000, 100000, 1, true);
+    await tokenAcd.grantMultiplePermissions(loanManager.address, [
+        "transferNoFee",
+        "issue",
+        "burn"
+    ]);
+    interestPoolAcc = await tokenAcd.interestPoolAccount();
+    interestEarnedAcc = await tokenAcd.interestEarnedAccount();
+
+    return loanManager;
 }
 
 async function createLoan(testInstance, product, borrower, collateralWei) {
-    if (!interestPoolAcc) {
-        await init();
-    }
-
     const loan = await calcLoanValues(rates, product, collateralWei);
     loan.state = 0;
     loan.borrower = borrower;
@@ -52,11 +63,8 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
         interestEarnedAcc
     ];
 
-    const totalSupplyBefore = await tokenUcd.totalSupply();
-    const balBefore = await tokenUcdTestHelper.getBalances(
-        tokenUcd,
-        testedAccounts
-    );
+    const totalSupplyBefore = await tokenAcd.totalSupply();
+    const balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
     const tx = await loanManager.newEthBackedLoan(loan.product.id, {
         from: loan.borrower,
@@ -70,7 +78,7 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
     testHelper.logGasUse(testInstance, tx, "newEthBackedLoan");
 
     assert.equal(
-        (await tokenUcd.totalSupply()).toString(),
+        (await tokenAcd.totalSupply()).toString(),
         totalSupplyBefore.add(loan.loanAmount).toString(),
         "total ACD supply should be increased by the loan amount"
     );
@@ -109,7 +117,7 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
         }
     ];
 
-    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+    await tokenAcdTestHelper.balanceAsserts(expBalances);
 
     return loan;
 }
@@ -121,11 +129,8 @@ async function repayLoan(testInstance, loan) {
         interestPoolAcc,
         interestEarnedAcc
     ];
-    const totalSupplyBefore = await tokenUcd.totalSupply();
-    const balBefore = await tokenUcdTestHelper.getBalances(
-        tokenUcd,
-        testedAccounts
-    );
+    const totalSupplyBefore = await tokenAcd.totalSupply();
+    const balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
     loan.state = 1; // repaid
 
@@ -134,7 +139,7 @@ async function repayLoan(testInstance, loan) {
     testHelper.logGasUse(testInstance, tx, "repay");
 
     assert.equal(
-        (await tokenUcd.totalSupply()).toString(),
+        (await tokenAcd.totalSupply()).toString(),
         totalSupplyBefore.sub(loan.loanAmount).toString(),
         "total ACD supply should be reduced by the repaid loan amount"
     );
@@ -173,7 +178,7 @@ async function repayLoan(testInstance, loan) {
         }
     ];
 
-    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+    await tokenAcdTestHelper.balanceAsserts(expBalances);
 }
 
 async function collectLoan(testInstance, loan, collector) {
@@ -186,11 +191,8 @@ async function collectLoan(testInstance, loan, collector) {
         interestPoolAcc,
         interestEarnedAcc
     ];
-    const totalSupplyBefore = await tokenUcd.totalSupply();
-    const balBefore = await tokenUcdTestHelper.getBalances(
-        tokenUcd,
-        testedAccounts
-    );
+    const totalSupplyBefore = await tokenAcd.totalSupply();
+    const balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
     loan.state = 2; // defaulted
 
@@ -200,7 +202,7 @@ async function collectLoan(testInstance, loan, collector) {
     testHelper.logGasUse(testInstance, tx, "collect 1");
 
     assert.equal(
-        (await tokenUcd.totalSupply()).toString(),
+        (await tokenAcd.totalSupply()).toString(),
         totalSupplyBefore.toString(),
         "total ACD supply should be the same"
     );
@@ -245,7 +247,7 @@ async function collectLoan(testInstance, loan, collector) {
         }
     ];
 
-    await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+    await tokenAcdTestHelper.balanceAsserts(expBalances);
 }
 
 async function getProductInfo(loanManager, productId) {

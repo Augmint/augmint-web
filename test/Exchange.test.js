@@ -1,9 +1,8 @@
 const Rates = artifacts.require("./Rates.sol");
 const Exchange = artifacts.require("./Exchange.sol");
-const TokenUcd = artifacts.require("./TokenAcd.sol");
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./helpers/testHelper.js");
-const tokenUcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
+const tokenAcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
 const exchangeTestHelper = new require("./helpers/exchangeTestHelper.js");
 
 const PLACE_ORDER_MAXFEE = web3.toWei(0.03);
@@ -11,7 +10,7 @@ const ETHSELL = 0,
     UCDSELL = 1;
 
 let snapshotId;
-let rates, tokenUcd, exchange;
+let rates, tokenAcd, exchange;
 let balBefore;
 let maker = web3.eth.accounts[1],
     taker = web3.eth.accounts[2];
@@ -21,23 +20,20 @@ let testedAccounts;
 contract("Exchange order", accounts => {
     before(async function() {
         this.timeout(100000);
-        rates = await Rates.deployed();
-        tokenUcd = await TokenUcd.deployed();
-        await tokenUcd.issue(1000000000);
-        await tokenUcd.withdrawTokens(maker, 100000000);
-        await tokenUcd.withdrawTokens(taker, 100000000);
+        rates = Rates.at(Rates.address);
+        tokenAcd = await tokenAcdTestHelper.newTokenAcdMock();
+        await tokenAcd.issue(1000000000);
+        await tokenAcd.withdrawTokens(maker, 100000000);
+        await tokenAcd.withdrawTokens(taker, 100000000);
 
-        exchange = await Exchange.deployed();
+        exchange = await exchangeTestHelper.newExchange(tokenAcd, rates);
         testedAccounts = [exchange.address, maker, taker];
     });
 
     beforeEach(async function() {
         this.timeout(50000);
         snapshotId = await testHelper.takeSnapshot();
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
     });
 
     afterEach(async function() {
@@ -68,7 +64,7 @@ contract("Exchange order", accounts => {
             maker,
             orderAmount
         );
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: orderType,
             orderAmount: orderAmount,
@@ -91,7 +87,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("place a sellUcd when no sellETH orders", async function() {
@@ -109,7 +105,7 @@ contract("Exchange order", accounts => {
             orderAmount
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: orderType,
             orderAmount: orderAmount,
@@ -133,7 +129,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("sellUcd - fully filled from bigger open sellEth order ", async function() {
@@ -147,10 +143,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
         orderType = UCDSELL;
         tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -166,7 +159,7 @@ contract("Exchange order", accounts => {
             sellUcdAmount
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: ETHSELL,
             orderAmount: new BigNumber(sellEthAmount).minus(expEthSold),
@@ -197,7 +190,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("sellUcd - exactly filled from multiple sellEth order");
@@ -213,10 +206,7 @@ contract("Exchange order", accounts => {
 
         testHelper.logGasUse(this, tx);
 
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
         orderType = ETHSELL;
         tx = await exchange.placeSellEthOrder({
@@ -233,7 +223,7 @@ contract("Exchange order", accounts => {
             sellEthAmount
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: UCDSELL,
             orderAmount: sellUcdAmount - expUcdSold,
@@ -264,7 +254,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("sellEth - exactly filled from multiple open sellUcd orders");
@@ -280,10 +270,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
         orderType = UCDSELL;
         tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -303,7 +290,7 @@ contract("Exchange order", accounts => {
             ucdPaid
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: ETHSELL,
             orderAmount: 0,
@@ -318,7 +305,7 @@ contract("Exchange order", accounts => {
             ucdLeft
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: UCDSELL,
             orderAmount: ucdLeft,
@@ -349,7 +336,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("sellEth - partially filled from smaller open sellUcd order ", async function() {
@@ -362,10 +349,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
         orderType = ETHSELL;
         tx = await exchange.placeSellEthOrder({
@@ -387,7 +371,7 @@ contract("Exchange order", accounts => {
             ethPaid
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: UCDSELL,
             orderAmount: 0,
@@ -402,7 +386,7 @@ contract("Exchange order", accounts => {
             ethLeft
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: ETHSELL,
             orderAmount: ethLeft,
@@ -433,7 +417,7 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 
     it("sellEth - fully filled from multiple open sellUcd orders", async function() {
@@ -451,10 +435,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        balBefore = await tokenUcdTestHelper.getBalances(
-            tokenUcd,
-            testedAccounts
-        );
+        balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
         orderType = ETHSELL;
         tx = await exchange.placeSellEthOrder({
@@ -476,7 +457,7 @@ contract("Exchange order", accounts => {
             ethPaid
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: UCDSELL,
             orderAmount: 0,
@@ -491,7 +472,7 @@ contract("Exchange order", accounts => {
             ethPaid
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: UCDSELL,
             orderAmount: 0,
@@ -506,7 +487,7 @@ contract("Exchange order", accounts => {
             ethLeft
         );
 
-        await exchangeTestHelper.contractStateAsserts(exchange, {
+        await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: ETHSELL,
             orderAmount: ethLeft,
@@ -537,6 +518,6 @@ contract("Exchange order", accounts => {
             }
         ];
 
-        await tokenUcdTestHelper.balanceAsserts(tokenUcd, expBalances);
+        await tokenAcdTestHelper.balanceAsserts(expBalances);
     });
 });

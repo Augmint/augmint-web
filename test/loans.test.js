@@ -1,25 +1,24 @@
 "use strict";
-
+const Rates = artifacts.require("./Rates.sol");
 const loanTestHelper = require("./helpers/loanTestHelper.js");
-const tokenUcdTestHelper = require("./helpers/tokenUcdTestHelper.js");
+const tokenAcdTestHelper = require("./helpers/tokenUcdTestHelper.js");
 const testHelper = require("./helpers/testHelper.js");
 
 const LoanManager = artifacts.require("./loanManager.sol");
-const TokenUcd = artifacts.require("./TokenAcd.sol");
 
-let tokenUcd, loanManager, products;
+let tokenAcd, loanManager, rates, products;
 
 contract("ACD Loans tests", accounts => {
     before(async function() {
-        tokenUcd = await TokenUcd.deployed();
-        await tokenUcd.issue(1000000000);
-        await tokenUcd.withdrawTokens(accounts[0], 1000000000);
-        loanManager = await LoanManager.deployed();
-
+        tokenAcd = await tokenAcdTestHelper.newTokenAcdMock();
+        rates = Rates.at(Rates.address);
+        loanManager = await loanTestHelper.newLoanManager(tokenAcd, rates);
+        await tokenAcd.issue(1000000000);
+        await tokenAcd.withdrawTokens(accounts[0], 1000000000);
         products = {
-            defaulting: await loanTestHelper.getProductInfo(loanManager, 6),
-            repaying: await loanTestHelper.getProductInfo(loanManager, 5),
-            notDue: await loanTestHelper.getProductInfo(loanManager, 4)
+            defaulting: await loanTestHelper.getProductInfo(loanManager, 2),
+            repaying: await loanTestHelper.getProductInfo(loanManager, 1),
+            notDue: await loanTestHelper.getProductInfo(loanManager, 0)
         };
 
         // For test debug:
@@ -61,14 +60,13 @@ contract("ACD Loans tests", accounts => {
         );
 
         // send interest to borrower to have enough ACD to repay in test
-        await tokenUcd.transfer(loan.borrower, loan.interestAmount, {
+        await tokenAcd.transfer(loan.borrower, loan.interestAmount, {
             from: accounts[0]
         });
 
         await testHelper.waitForTimeStamp(
             loan.product.term.add(loan.disbursementTime).toNumber()
         );
-
         await loanTestHelper.repayLoan(this, loan);
     });
 
@@ -81,7 +79,7 @@ contract("ACD Loans tests", accounts => {
         );
 
         // send interest to borrower to have enough ACD to repay in test
-        await tokenUcd.transfer(loan.borrower, loan.interestAmount, {
+        await tokenAcd.transfer(loan.borrower, loan.interestAmount, {
             from: accounts[0]
         });
 
