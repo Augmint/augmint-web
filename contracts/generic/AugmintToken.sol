@@ -25,10 +25,14 @@
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
 import "./SafeMath.sol";
-import "./ERC20Interface.sol";
+/* TODO: "contract Augmint token is ERC20, Restricted" is causing truffle migrate to fail occasionally:
+    Error: The contract code couldn't be stored, please check your gas amount
+import "./ERC20.sol";
+*/
 
-contract AugmintToken is ERC20Interface, Restricted {
+contract AugmintToken is Restricted {
     using SafeMath for uint256;
+    uint public totalSupply;
 
     // Balances for each account
     mapping(address => uint256) public balances;
