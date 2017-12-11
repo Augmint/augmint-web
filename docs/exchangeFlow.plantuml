@@ -1,0 +1,64 @@
+@startuml
+title **Augmint** - Exchange flow
+skinparam ArrowColor #blue
+skinparam noteBackgroundColor #lightgrey
+actor Maker
+control TokenContract
+control ExchangeContract
+actor Taker
+== maker order  ==
+Maker -> TokenContract : placeSellOrder\n(exchangeAddress, price, amount)
+TokenContract -> TokenContract : _transfer\n(from: maker, to: exchange, amount, narr: "sell order", fee: 0)
+Maker --> ExchangeContract : tokens to sell transfered
+TokenContract -> ExchangeContract : placeSellOrder\n(userAddress, amount)
+note over ExchangeContract
+    placeSellOrder restricted to trusted tokenContract(s)
+    Could be any ERC20 token traded without trust?
+        i.e. additional alternative Deposit/Withdraw + placeSellOrder funcs
+        and maintain user balances per token?
+end note
+ExchangeContract -> ExchangeContract : save order
+note left
+    we could just queue new orders
+    to have constant gas
+    cost for place order
+    and a sep. call could add orders
+    to the orderbook in batch.
+end note
+== taker order  ==
+Taker -> ExchangeContract : placeBuyOrder\n(tokenContract, price, {ethValue})
+ExchangeContract -> ExchangeContract : save order
+note over ExchangeContract, Taker
+    shall we have an additional
+    placeAndMatchBuyOrder() which
+    would match immediately?
+end note
+== matching  ==
+Taker -> ExchangeContract : matchMultiple()
+note left
+    anyone can call matchMultiple() and match()
+    Caller can be a 3rd party service
+    rewarded with some eth
+end note
+loop as many times as fits to gas provided to tx call
+    ExchangeContract -> ExchangeContract : match()
+    ExchangeContract -> ExchangeContract : fill/partially fill order
+    ExchangeContract -> Maker : maker.send( ethValue)
+    ExchangeContract -> TokenContract : transferNoFee(feesAccount, tradeFee)
+    note over TokenContract, ExchangeContract
+        transferNoFee is restricted to trusted Exchange only
+        Exhange needs to call transfer when
+        trading non-Augmint ERC20 tokens
+    end note
+    ExchangeContract -> TokenContract : transferNoFee\n(to: taker, amountSold - tradeFee, narr: "Order fill")
+    ExchangeContract --> Taker : amountSold - tradeFee transferred
+end
+== cancel buy order  ==
+Taker -> ExchangeContract : cancelBuyOrder\n(tokenContract, orderId)
+ExchangeContract -> ExchangeContract : remove order
+ExchangeContract -> Taker : maker.send( unfilledEthValue)
+== cancel sell order  ==
+Maker -> ExchangeContract : cancelSellOrder\n(tokenContract, orderId)
+ExchangeContract -> TokenContract : transferNoFee\n(to: taker, amount, narr: "Order cancel")
+ExchangeContract --> Maker : unfilled amount transferred back
+@enduml

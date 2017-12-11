@@ -1,0 +1,67 @@
+@startuml
+title **Augmint** - Loan flow
+skinparam ArrowColor #blue
+skinparam noteBackgroundColor #lightgrey
+actor 3rdParty
+actor Borrower
+control TokenContract
+control LoanManager
+control LoanContract
+== new loan ==
+Borrower -> TokenContract : getLoan\n(loanManager, productId, {ethToEscrow})
+note over TokenContract
+getLoan restricted to trusted loanManagers
+end note
+TokenContract -> LoanManager : newLoan\n(borrower, productId, ethAmount)
+note over LoanManager
+newLoan is restricted to tokenContract
+end note
+LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
+LoanManager -> LoanContract : create\n(tokenContract, borrower, loanParams)
+LoanManager --> TokenContract : return loanAmount, interestAmount
+TokenContract -> LoanContract : send(ethToEscrow)
+TokenContract -> TokenContract :  issue(loanAmount)\nbalances[interestPool] += interestAmount
+TokenContract -> TokenContract : _transfer\n(tokenContract, borrower, disbursedAmount, "loan disbursment", 0)
+TokenContract --> Borrower : disbursedAmount transferred
+
+== repay loan  ==
+Borrower -> TokenContract : repay(loanContract)
+activate TokenContract
+TokenContract -> TokenContract : _transfer\n(borrower, tokenContract, loanAmount, "loan repayment", 0)
+Borrower --> TokenContract : loanAmount transferred
+TokenContract -> LoanContract : repay()
+deactivate TokenContract
+activate LoanContract
+note over LoanContract
+repay only allowed from tokenContract
+which created the loan
+end note
+LoanContract -> LoanContract : close loan
+LoanContract --> Borrower : borrower.send(ethInEscrow)
+LoanContract -> LoanManager : repayed(loanId)
+LoanManager -> LoanManager : close loan
+LoanContract --> TokenContract : return loanAmount, interestAmount
+deactivate LoanContract
+activate TokenContract
+TokenContract -> TokenContract : burn(loanAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
+deactivate TokenContract
+== collect loan  ==
+3rdParty -> LoanManager : collectMultiple()
+note right
+    anyone call collectMultiple and collect
+    caller can be rewarded with some eth
+end note
+loop as many times as fits to gas provided to tx call
+    LoanManager -> LoanContract : collect()
+    note over LoanContract
+        collect only if defaulted
+    end note
+    LoanContract --> TokenContract : tokenContract.send({collaterInEscrow})
+    LoanContract -> LoanContract : close loan
+    LoanManager -> TokenContract : collected(interestAmount)
+    note over TokenContract
+    collected only allowed with trusted loanManagers
+    end note
+    TokenContract -> TokenContract : move interest from interestPool to reserve
+end
+@enduml
