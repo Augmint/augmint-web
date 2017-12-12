@@ -9,13 +9,9 @@ contract TokenAcdMock is AugmintToken {
     uint8 public constant decimals = 4; // TODO: check if 4 enough - assuming rate will be around USD
 
     function TokenAcdMock(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
-            uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
-        feeAccount = _feeAccount;
-        interestPoolAccount = _interestPoolAccount;
-        interestEarnedAccount = _interestEarnedAccount;
-        transferFeePt = _transferFeePt;
-        transferFeeMin = _transferFeeMin;
-        transferFeeMax = _transferFeeMax;
+        uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public AugmintToken(
+        _feeAccount, _interestPoolAccount, _interestEarnedAccount,
+        _transferFeePt, _transferFeeMin, _transferFeeMax ) {
     }
 
     function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {

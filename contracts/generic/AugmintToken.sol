@@ -46,13 +46,15 @@ contract AugmintToken is Restricted {
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
 
-    /* TODO: TRUFFLE migrate fails on TokenAcd.deploy(...) if constructor is defined here
-        function AugmintToken(address _feeAccount, uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
+    function AugmintToken(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
+        uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
         feeAccount = _feeAccount;
+        interestPoolAccount = _interestPoolAccount;
+        interestEarnedAccount = _interestEarnedAccount;
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
-    }*/
+    }
 
     function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
     // TODO: shall we put protection against accidentally sending in ETH?
