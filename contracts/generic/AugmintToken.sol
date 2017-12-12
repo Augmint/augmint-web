@@ -7,20 +7,17 @@
         * Holds  reserves:
             - ETH as regular ETH balance of the contract
             - ERC20 token reserve (stored as regular Token balance under the contract address)
-            TODO: separate reserve contract in order to hold any ERC20 token in one reserve
+            TODO: separate reserve contract ?
 
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
 
-    TODO: split this: ERC20 base - generic Augmint Token
-    TODO: separate data from logic for code upgradeablity
-    TODO: if we emit generic events from here then can we filter to specific AugmintTokens?
-    TODO: decision making mechanism (ie. replace all onlyOwner)
-    TODO: remove test functions (getFromReserve + restrict issue)
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices,
                         https://github.com/OpenZeppelin/zeppelin-solidity
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
+    TODO: update event names according to Solidity style guide (requires lot of FE and test changes)
+    TODO: function should be ordered according to Solidity style guide
 */
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
@@ -34,10 +31,9 @@ contract AugmintToken is Restricted {
     using SafeMath for uint256;
     uint public totalSupply;
 
-    // Balances for each account
-    mapping(address => uint256) public balances;
-    // Owner of account approves the transfer of an amount to another account
-    mapping(address => mapping (address => uint256)) public allowed;
+
+    mapping(address => uint256) public balances; // Balances for each account
+    mapping(address => mapping (address => uint256)) public allowed; // allowances added with approve()
 
     address public feeAccount;
     address public interestPoolAccount;
@@ -111,7 +107,6 @@ contract AugmintToken is Restricted {
     }
 
     function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
-        // TODO: add fee arg, calc fee and deduct fee if there is any
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
         require(_amount > 0);
         if (_fee > 0) {
@@ -124,21 +119,12 @@ contract AugmintToken is Restricted {
         e_transfer(_from, _to, _amount, narrative, _fee);
     }
 
-    // Allow _spender to withdraw from your account, multiple times, up to the _value amount.
-    // If this function is called again it overwrites the current allowance with _value.
     function approve(address _spender, uint256 _amount) public {
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         // TODO: emit event
     }
 
-    // Send _value amount of tokens from address _from to address _to
-    // The transferFrom method is used for a withdraw workflow, allowing contracts to send
-    // tokens on your behalf, for example to "deposit" to a contract address and/or to charge
-    // fees in sub-currencies; the command should fail unless the _from account has
-    // deliberately authorized the sender of the message via some mechanism; we propose
-    // these standardized APIs for approval:
-    // This is only callable by the parent contract which emits transfer events
     function transferFrom(
             address _from,
             address _to,
