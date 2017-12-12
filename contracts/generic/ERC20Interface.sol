@@ -5,9 +5,7 @@ pragma solidity ^0.4.18;
  * ERC20 interface
  * see https://github.com/ethereum/EIPs/issues/20
  */
-contract ERC20 {
-    uint public totalSupply;
-
+interface ERC20Interface {
     function allowance(address owner, address spender) public view returns (uint);
     function transferFrom(address from, address to, uint value) public;
     function approve(address spender, uint value) public;
