@@ -48,6 +48,9 @@ contract AugmintToken is Restricted {
 
     function AugmintToken(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
         uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
+        require(_feeAccount != 0);
+        require(_interestPoolAccount != 0);
+        require(_interestEarnedAccount != 0);
         feeAccount = _feeAccount;
         interestPoolAccount = _interestPoolAccount;
         interestEarnedAccount = _interestEarnedAccount;
@@ -77,6 +80,9 @@ contract AugmintToken is Restricted {
 
     function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
             address newInterestEarnedAccount) external restrict("setSystemAccounts") {
+        require(newFeeAccount != 0);
+        require(newInteresPoolAccount != 0);
+        require(newInterestEarnedAccount != 0);
         feeAccount = newFeeAccount;
         interestPoolAccount = newInteresPoolAccount;
         interestEarnedAccount = newInterestEarnedAccount;
