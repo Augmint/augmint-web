@@ -17,20 +17,26 @@ Read more and try out the proof-of-concept implementation on **[www.augmint.cc](
 **[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
 ## Components
+See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exchange flow](docs/exchangeFlow.png). (additional sequence diagrams are coming)
 ### Solidity Contracts
-* [Owned.sol](./contracts/Owned.sol)  
+* [Owned.sol](./contracts/generic/Owned.sol)  
   Standard onlyOwner implementation. Going to be replaced to support more elaborate TokenUcd & LoanManager governance rules.
-* [ERC20Impl.sol](./contracts/ERC20Impl.sol)  
-  Standard [ERC20](https://theethereum.wiki/w/index.php/ERC20_Token_Standard) token base.
-  * Maintains ACD balances of token holders
-  * ACD transfers b/w accounts
-  * Manages withdrawal pre-approvals
-* [TokenUcd.sol](./contracts/TokenUcd.sol)
-  ACD token contract, derived from ERC20Impl.
-  * Sets standard token parameters (name, symbol, decimals, etc.)
-  * Issue and burn ACD
-  * Holds ACD & ETH reserves
+* [Restricted.sol](./contracts/generic/Owned.sol)  
+    Stores which address can access which function call.
+    Grant/revoke permissions only by owner currently but it's to be replaced with more elaborate multisig mechanism.
+* [ERC20.sol](./contracts/generic/ERC20.sol)  
+  Standard [ERC20](https://theethereum.wiki/w/index.php/ERC20_Token_Standard) token interface.
+* [SystemAccount.sol](./contracts/generic/ERC20.sol)
+  Generic contract to maintain balances of Augmint system accounts (InterestPoolAccount, InterestEarnedAccount, FeeAccount)
+* [AugmintToken.sol](./contracts/generic/AugmintToken.sol)  
+  Base contract for all Augmint tokens. ERC20.
+  * Issue and burn ACD for new loans and on loan repayment
+  * Convenience functions: getLoan, placeSellOrder (see [Loan flow](docs/loanFlow.png) and [Exchange flow](docs/exchangeFlow.png).)
+  * Holds ETH and Augmint Token reserves
   * Send reserve for auction (not implemented yet) when intervening
+* [TokenAcd.sol](./contracts/TokenAcd.sol)
+  * AugmintToken contract for USD pegged Augmint token (ACD aka Augmint Crypto Dollar)
+  * Sets standard token parameters (name, symbol, decimals, etc.)
 * [Rates.sol](./contracts/Rates.sol)  
   A mock oracle contract to return USD/ETH exchange rates
 * [Exchange.sol](./contracts/Exchange.sol)  
