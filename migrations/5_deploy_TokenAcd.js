@@ -20,7 +20,8 @@ module.exports = async function(deployer, network, accounts) {
     await tokenAcd.grantMultiplePermissions(accounts[0], [
         "setSystemAccounts",
         "setTransferFees",
-        "transferNoFee)",
+        "transferNoFee",
+        "transferFromNoFee",
         "withdrawTokens",
         "issue"
     ]);

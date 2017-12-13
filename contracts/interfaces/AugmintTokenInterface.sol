@@ -17,14 +17,13 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
         address newInterestEarnedAccount);
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
-
+    /* TODO: check how overloading events works w/ web3: event Transfer(address indexed from, address indexed to, uint amount); */
     event Transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
-
     event TokenIssued(uint amount);
-
     event TokenBurned(uint amount);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-    /* TODO: function allowance(address owner, address spender) public view returns (uint); */
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining);
     function transferFrom(address from, address to, uint value) public;
     function approve(address spender, uint value) public;
     function balanceOf(address who) public view returns (uint);
@@ -40,11 +39,14 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
 
     function transferFromWithNarrative(address _from, address _to, uint256 _amount, string _narrative) public;
 
-  /* TODO:  function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-        public restrict("transferFromNoFee"); */
+    function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
+        public restrict("transferFromNoFee");
 
     function issue(uint amount) external restrict("issue");
 
     function burn(uint amount) external restrict("burn");
+
+    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
+        public restrict("newLoan");
 
 }

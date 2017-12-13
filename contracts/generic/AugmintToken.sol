@@ -12,11 +12,11 @@
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
-
+    TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
+    TODO: ERC20 transferFrom attack protection: https://github.com/DecentLabs/dcm-poc/issues/57
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices,
                         https://github.com/OpenZeppelin/zeppelin-solidity
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
-    TODO: update event names according to Solidity style guide (requires lot of FE and test changes)
     TODO: function should be ordered according to Solidity style guide
 */
 pragma solidity ^0.4.18;
@@ -57,6 +57,10 @@ contract AugmintToken is AugmintTokenInterface {
         return balances[_owner];
     }
 
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        return allowed[_owner][_spender];
+    }
+
     function getFee(uint amount) internal view returns (uint256 fee) {
         fee = amount.mul(transferFeePt).div(1000000);
         if (fee > transferFeeMax) {
@@ -81,6 +85,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
+
     function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external restrict("setTransferFees") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
@@ -118,7 +123,7 @@ contract AugmintToken is AugmintTokenInterface {
     function approve(address _spender, uint256 _amount) public {
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
-        // TODO: emit event
+        Approval(msg.sender, _spender, _amount);
     }
 
     function transferFrom(
@@ -126,7 +131,7 @@ contract AugmintToken is AugmintTokenInterface {
             address _to,
             uint256 _amount
         ) public {
-        transferFromWithNarrative(_from, _to, _amount, "");
+        _transferFrom(_from, _to, _amount, "", getFee(_amount));
     }
 
     function transferFromWithNarrative(
@@ -135,14 +140,27 @@ contract AugmintToken is AugmintTokenInterface {
         uint256 _amount,
         string _narrative
     ) public {
+        _transferFrom(_from, _to, _amount, _narrative, getFee(_amount));
+    }
+
+    function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
+        public restrict("transferFromNoFee") {
+        _transferFrom(_from, _to, _amount, _narrative, 0);
+    }
+
+    function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) internal {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
         require(_amount > 0);
-        uint fee = getFee(_amount);
-        _transfer(_from, _to, _amount, _narrative, fee);
-        // CHECK: we reduce allowance with amount + fee. Shall it be only amount?
-        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount).sub(fee);
-        Transfer(_from, _to, _amount, _narrative, fee);
+
+        _transfer(_from, _to, _amount, _narrative, 0);
+        if (_fee > 0) {
+            /* we need to deduct fee from _to unlike normal transfer
+             TODO: better way to do this? E.g. allow transfer fee to be deducted from beneficiary? */
+            _transfer(_to, feeAccount, _fee, "TransferFrom fee", 0);
+        }
+
+        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }
 
     event TokenIssued(uint amount);
