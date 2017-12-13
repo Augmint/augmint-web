@@ -43,23 +43,32 @@ async function newTokenAcdMock() {
     return tokenAcd;
 }
 
-async function transferTest(testTxInfo, expTransfer) {
-    expTransfer.fee = await getTransferFee(expTransfer.amount);
+async function transferTest(testInstance, expTransfer) {
+    // if fee is provided than we are testing transferNoFee
+    if (typeof expTransfer.fee === "undefined") expTransfer.fee = await getTransferFee(expTransfer.amount);
+    if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
     let feeAccount = await tokenAcd.feeAccount();
 
     let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
-    let tx;
-    if (expTransfer.narrative === "") {
+    let tx, txName;
+    if (expTransfer.fee === 0) {
+        txName = "transferNoFee";
+        tx = await tokenAcd.transferNoFee(expTransfer.from, expTransfer.to, expTransfer.amount, expTransfer.narrative, {
+            from: expTransfer.from
+        });
+    } else if (expTransfer.narrative === "") {
+        txName = "transfer";
         tx = await tokenAcd.transfer(expTransfer.to, expTransfer.amount, {
             from: expTransfer.from
         });
     } else {
+        txName = "transferWithNarrative";
         tx = await tokenAcd.transferWithNarrative(expTransfer.to, expTransfer.amount, expTransfer.narrative, {
             from: expTransfer.from
         });
     }
     transferEventAsserts(tx, expTransfer);
-    testHelper.logGasUse(testTxInfo.test, tx, testTxInfo.name);
+    testHelper.logGasUse(testInstance, tx, txName);
     let expBalances = [
         {
             name: "acc from",
@@ -85,36 +94,56 @@ async function transferTest(testTxInfo, expTransfer) {
     await balanceAsserts(expBalances);
 }
 
-async function approveTest(testTxInfo, expApprove) {
+async function approveTest(testInstance, expApprove) {
     let tx = await tokenAcd.approve(expApprove.spender, expApprove.value, {
         from: expApprove.owner
     });
     approveEventAsserts(tx, expApprove);
+    testHelper.logGasUse(testInstance, tx, "approve");
     let newAllowance = await tokenAcd.allowance(expApprove.owner, expApprove.spender);
     assert.equal(newAllowance.toString(), expApprove.value.toString(), "allowance value should be set");
 }
 
-async function transferFromTest(testTxInfo, expTransfer) {
+async function transferFromTest(testInstance, expTransfer) {
+    // if fee is provided than we are testing transferFromNoFee
+    let isNoFeeTest = typeof expTransfer.fee === "undefined" ? false : true;
     expTransfer.fee = 0; // transferFrom deducts transfer fee from beneficiary
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
     let feeAccount = await tokenAcd.feeAccount();
-    let fee = (await getTransferFee(expTransfer.amount)).toNumber();
+    let fee = 0;
+    let expFeeTransfer;
+    if (!isNoFeeTest) {
+        fee = (await getTransferFee(expTransfer.amount)).toNumber();
 
-    let expFeeTransfer = {
-        from: expTransfer.to,
-        to: feeAccount,
-        amount: fee,
-        narrative: "TransferFrom fee",
-        fee: 0
-    };
+        expFeeTransfer = {
+            from: expTransfer.to,
+            to: feeAccount,
+            amount: fee,
+            narrative: "TransferFrom fee",
+            fee: 0
+        };
+    }
     let allowanceBefore = await tokenAcd.allowance(expTransfer.from, expTransfer.to);
     let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
-    let tx;
-    if (expTransfer.narrative === "") {
+    let tx, txName;
+    if (isNoFeeTest) {
+        txName = "transferFromNoFee";
+        tx = await tokenAcd.transferFromNoFee(
+            expTransfer.from,
+            expTransfer.to,
+            expTransfer.amount,
+            expTransfer.narrative,
+            {
+                from: expTransfer.to
+            }
+        );
+    } else if (expTransfer.narrative === "") {
+        txName = "transferFrom";
         tx = await tokenAcd.transferFrom(expTransfer.from, expTransfer.to, expTransfer.amount, {
             from: expTransfer.to
         });
     } else {
+        txName = "transferFromWithNarrative";
         tx = await tokenAcd.transferFromWithNarrative(
             expTransfer.from,
             expTransfer.to,
@@ -127,14 +156,16 @@ async function transferFromTest(testTxInfo, expTransfer) {
     }
 
     transferEventAsserts(tx, expTransfer, 0);
-    transferEventAsserts(tx, expFeeTransfer, 1);
+    if (!isNoFeeTest) {
+        transferEventAsserts(tx, expFeeTransfer, 1);
+    }
     let allowanceAfter = await tokenAcd.allowance(expTransfer.from, expTransfer.to);
     assert.equal(
         allowanceBefore.sub(expTransfer.amount).toString(),
         allowanceAfter.toString(),
         "allowance should be reduced with transferred amount"
     );
-    testHelper.logGasUse(testTxInfo.test, tx, testTxInfo.name);
+    testHelper.logGasUse(testInstance, tx, txName);
     let expBalances = [
         {
             name: "acc from",

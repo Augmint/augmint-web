@@ -18,39 +18,30 @@ contract("Transfer ACD tests", accounts => {
     });
 
     it("Should be able to transfer ACD between accounts (without narrative, min fee)", async function() {
-        await tokenAcdTestHelper.transferTest(
-            { test: this, name: "transfer no narr" },
-            {
-                from: accounts[0],
-                to: accounts[1],
-                amount: minFeeAmount.sub(10),
-                narrative: ""
-            }
-        );
+        await tokenAcdTestHelper.transferTest(this, {
+            from: accounts[0],
+            to: accounts[1],
+            amount: minFeeAmount.sub(10),
+            narrative: ""
+        });
     });
 
     it("Should be able to transfer ACD between accounts (with narrative, max fee)", async function() {
-        await tokenAcdTestHelper.transferTest(
-            { test: this, name: "transfer w/ narr" },
-            {
-                from: accounts[0],
-                to: accounts[1],
-                amount: maxFeeAmount.add(10),
-                narrative: "test narrative"
-            }
-        );
+        await tokenAcdTestHelper.transferTest(this, {
+            from: accounts[0],
+            to: accounts[1],
+            amount: maxFeeAmount.add(10),
+            narrative: "test narrative"
+        });
     });
 
     it("transfer fee % should deducted when fee % is between min and max fee", async function() {
-        await tokenAcdTestHelper.transferTest(
-            { test: this, name: "transfer b/w min and max fee" },
-            {
-                from: accounts[0],
-                to: accounts[1],
-                amount: maxFeeAmount.sub(10),
-                narrative: ""
-            }
-        );
+        await tokenAcdTestHelper.transferTest(this, {
+            from: accounts[0],
+            to: accounts[1],
+            amount: maxFeeAmount.sub(10),
+            narrative: ""
+        });
     });
 
     it("Shouldn't be able to transfer ACD when ACD balance is insufficient", async function() {
@@ -73,7 +64,27 @@ contract("Transfer ACD tests", accounts => {
         );
     });
 
-    it("transferNoFee only by allowed");
+    it("transferNoFee", async function() {
+        await tokenAcdTestHelper.transferTest(this, {
+            from: accounts[0],
+            to: accounts[1],
+            amount: 10000,
+            narrative: "transferNofee test",
+            fee: 0
+        });
+    });
 
-    it("transferNoFee");
+    it("transferNoFee only from allowed account", async function() {
+        let amount = 10000;
+        await tokenAcd.transfer(accounts[1], amount + maxFee.toNumber(), { from: accounts[0] });
+        return testHelper.expectThrow(
+            tokenAcdTestHelper.transferTest(this, {
+                from: accounts[1],
+                to: accounts[2],
+                amount: amount,
+                narrative: "transferNofee test",
+                fee: 0
+            })
+        );
+    });
 });

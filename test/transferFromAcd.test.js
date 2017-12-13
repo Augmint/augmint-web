@@ -17,26 +17,20 @@ contract("TransferFrom ACD tests", accounts => {
             value: 100000
         };
 
-        await tokenAcdTestHelper.approveTest({ test: this, name: "transferFrom no narr" }, expApprove);
+        await tokenAcdTestHelper.approveTest(this, expApprove);
 
-        await tokenAcdTestHelper.transferFromTest(
-            { test: this, name: "transferFrom no narr" },
-            {
-                from: expApprove.owner,
-                to: expApprove.spender,
-                amount: Math.round(expApprove.value / 2)
-            }
-        );
+        await tokenAcdTestHelper.transferFromTest(this, {
+            from: expApprove.owner,
+            to: expApprove.spender,
+            amount: Math.round(expApprove.value / 2)
+        });
 
-        await tokenAcdTestHelper.transferFromTest(
-            { test: this, name: "transferFrom with narr" },
-            {
-                from: expApprove.owner,
-                to: expApprove.spender,
-                amount: Math.round(expApprove.value / 2),
-                narrative: "Test with narrative"
-            }
-        );
+        await tokenAcdTestHelper.transferFromTest(this, {
+            from: expApprove.owner,
+            to: expApprove.spender,
+            amount: Math.round(expApprove.value / 2),
+            narrative: "Test with narrative"
+        });
     });
 
     it("transferFrom only if approved", async function() {
@@ -54,7 +48,7 @@ contract("TransferFrom ACD tests", accounts => {
             value: 200000
         };
 
-        await tokenAcdTestHelper.approveTest({ test: this, name: "transferFrom only if approved greater" }, expApprove);
+        await tokenAcdTestHelper.approveTest(this, expApprove);
         return testHelper.expectThrow(
             tokenAcd.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
                 from: expApprove.spender
@@ -70,10 +64,7 @@ contract("TransferFrom ACD tests", accounts => {
             spender: accounts[1],
             value: amount
         };
-        await tokenAcdTestHelper.approveTest(
-            { test: this, name: "transferFrom only if balance is enough" },
-            expApprove
-        );
+        await tokenAcdTestHelper.approveTest(this, expApprove);
 
         await testHelper.expectThrow(
             tokenAcd.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
@@ -82,7 +73,39 @@ contract("TransferFrom ACD tests", accounts => {
         );
     });
 
-    it("transferFromNoFee");
+    it("transferFromNoFee", async function() {
+        let expApprove = {
+            owner: accounts[1],
+            spender: accounts[0],
+            value: 100000
+        };
+        await tokenAcdTestHelper.approveTest(this, expApprove);
+        let amount = 100000;
+        await tokenAcd.transfer(expApprove.owner, amount, { from: accounts[0] });
+        await tokenAcdTestHelper.transferFromTest(this, {
+            from: expApprove.owner,
+            to: expApprove.spender,
+            amount: expApprove.value,
+            fee: 0
+        });
+    });
 
-    it("transferFromNoFee only by allowed");
+    it("transferFromNoFee only by allowed", async function() {
+        let expApprove = {
+            owner: accounts[0],
+            spender: accounts[1],
+            value: 100000
+        };
+        await tokenAcdTestHelper.approveTest(this, expApprove);
+        let amount = maxFee.toNumber(); // to cover costs
+        await tokenAcd.transfer(expApprove.spender, amount, { from: accounts[0] });
+        await testHelper.expectThrow(
+            tokenAcdTestHelper.transferFromTest(this, {
+                from: expApprove.owner,
+                to: expApprove.spender,
+                amount: expApprove.value,
+                fee: 0
+            })
+        );
+    });
 });
