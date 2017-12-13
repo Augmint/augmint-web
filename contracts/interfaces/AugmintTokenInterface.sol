@@ -1,4 +1,9 @@
-/* Augmint Token interface  */
+/* Augmint Token interface
+
+TODO: overload transfer() & transferFrom() instead of transferWithNarrative() & transferFromWithNarrative()
+      when this fix available in web3 and truffle also uses that web3:
+      https://github.com/ethereum/web3.js/pull/1185
+ */
 pragma solidity ^0.4.18;
 import "../generic/SafeMath.sol";
 import "../generic/Restricted.sol";
