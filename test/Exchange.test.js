@@ -1,5 +1,4 @@
 const Rates = artifacts.require("./Rates.sol");
-const Exchange = artifacts.require("./Exchange.sol");
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./helpers/testHelper.js");
 const tokenAcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
@@ -58,12 +57,7 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx);
 
-        let orderId = await exchangeTestHelper.newOrderEventAsserts(
-            tx.logs[0],
-            orderType,
-            maker,
-            orderAmount
-        );
+        let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
             orderType: orderType,
@@ -98,12 +92,7 @@ contract("Exchange order", accounts => {
             from: maker
         });
         testHelper.logGasUse(this, tx);
-        let orderId = await exchangeTestHelper.newOrderEventAsserts(
-            tx.logs[0],
-            orderType,
-            maker,
-            orderAmount
-        );
+        let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -152,12 +141,7 @@ contract("Exchange order", accounts => {
         testHelper.logGasUse(this, tx);
 
         let expEthSold = await rates.convertUsdcToWei(sellUcdAmount);
-        let orderId = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[0],
-            taker,
-            expEthSold,
-            sellUcdAmount
-        );
+        let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, sellUcdAmount);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -216,12 +200,7 @@ contract("Exchange order", accounts => {
         testHelper.logGasUse(this, tx);
 
         let expUcdSold = await rates.convertWeiToUsdc(sellEthAmount);
-        let orderId = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[0],
-            taker,
-            expUcdSold,
-            sellEthAmount
-        );
+        let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, sellEthAmount);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -280,15 +259,9 @@ contract("Exchange order", accounts => {
 
         let ucdPaid = await rates.convertWeiToUsdc(sellEthAmount);
         let expEthSold = sellEthAmount;
-        let ucdLeft =
-            sellUcdAmount - (await rates.convertWeiToUsdc(sellEthAmount));
+        let ucdLeft = sellUcdAmount - (await rates.convertWeiToUsdc(sellEthAmount));
 
-        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[0],
-            taker,
-            expEthSold,
-            ucdPaid
-        );
+        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, ucdPaid);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -298,12 +271,7 @@ contract("Exchange order", accounts => {
             orderId: filledOrderId
         });
 
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(
-            tx.logs[1],
-            UCDSELL,
-            taker,
-            ucdLeft
-        );
+        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[1], UCDSELL, taker, ucdLeft);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -360,16 +328,9 @@ contract("Exchange order", accounts => {
 
         let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
         let expUcdSold = sellUcdAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(
-            await rates.convertUsdcToWei(sellUcdAmount)
-        );
+        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertUsdcToWei(sellUcdAmount));
 
-        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[0],
-            taker,
-            expUcdSold,
-            ethPaid
-        );
+        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, ethPaid);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -379,12 +340,7 @@ contract("Exchange order", accounts => {
             orderId: filledOrderId
         });
 
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(
-            tx.logs[1],
-            ETHSELL,
-            taker,
-            ethLeft
-        );
+        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[1], ETHSELL, taker, ethLeft);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -446,16 +402,9 @@ contract("Exchange order", accounts => {
 
         let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
         let expUcdSold = sellUcdAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(
-            await rates.convertUsdcToWei(sellUcdAmount * 2)
-        );
+        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertUsdcToWei(sellUcdAmount * 2));
 
-        let filledOrderId1 = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[0],
-            taker,
-            expUcdSold,
-            ethPaid
-        );
+        let filledOrderId1 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, ethPaid);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -465,12 +414,7 @@ contract("Exchange order", accounts => {
             orderId: filledOrderId1
         });
 
-        let filledOrderId2 = await exchangeTestHelper.orderFillEventAsserts(
-            tx.logs[1],
-            taker,
-            expUcdSold,
-            ethPaid
-        );
+        let filledOrderId2 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[1], taker, expUcdSold, ethPaid);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -480,12 +424,7 @@ contract("Exchange order", accounts => {
             orderId: filledOrderId2
         });
 
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(
-            tx.logs[2],
-            ETHSELL,
-            taker,
-            ethLeft
-        );
+        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[2], ETHSELL, taker, ethLeft);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
