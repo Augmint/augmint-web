@@ -22,11 +22,9 @@
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
-import "../interfaces/ERC20Interface.sol";
 
 
-contract AugmintToken is AugmintTokenInterface, ERC20Interface, Restricted {
-//    using SafeMath for uint256;
+contract AugmintToken is AugmintTokenInterface {
     uint public totalSupply;
 
     mapping(address => uint256) public balances; // Balances for each account
