@@ -55,7 +55,7 @@ contract("Exchange order", accounts => {
             value: orderAmount,
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
         await exchangeTestHelper.contractStateAsserts({
@@ -91,7 +91,7 @@ contract("Exchange order", accounts => {
         let tx = await exchange.placeSellUcdOrder(orderAmount, {
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
         let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
 
         await exchangeTestHelper.contractStateAsserts({
@@ -130,7 +130,7 @@ contract("Exchange order", accounts => {
             value: sellEthAmount,
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
@@ -138,7 +138,7 @@ contract("Exchange order", accounts => {
         tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
             from: taker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         let expEthSold = await rates.convertUsdcToWei(sellUcdAmount);
         let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, sellUcdAmount);
@@ -188,7 +188,7 @@ contract("Exchange order", accounts => {
             from: maker
         });
 
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
@@ -197,7 +197,7 @@ contract("Exchange order", accounts => {
             value: sellEthAmount,
             from: taker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         let expUcdSold = await rates.convertWeiToUsdc(sellEthAmount);
         let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, sellEthAmount);
@@ -247,7 +247,7 @@ contract("Exchange order", accounts => {
             value: sellEthAmount,
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
@@ -255,7 +255,7 @@ contract("Exchange order", accounts => {
         tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
             from: taker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         let ucdPaid = await rates.convertWeiToUsdc(sellEthAmount);
         let expEthSold = sellEthAmount;
@@ -315,7 +315,7 @@ contract("Exchange order", accounts => {
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
@@ -324,7 +324,7 @@ contract("Exchange order", accounts => {
             value: sellEthAmount,
             from: taker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
         let expUcdSold = sellUcdAmount;
@@ -384,12 +384,12 @@ contract("Exchange order", accounts => {
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
             from: maker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
         balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
 
@@ -398,7 +398,7 @@ contract("Exchange order", accounts => {
             value: sellEthAmount,
             from: taker
         });
-        testHelper.logGasUse(this, tx);
+        testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
         let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
         let expUcdSold = sellUcdAmount;
