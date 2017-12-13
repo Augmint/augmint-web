@@ -67,7 +67,7 @@ const onNewOrder = (error, result) => {
     );
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // Userbalance is refreshed because e_transfer is emmitted from neworder tx
+    // Userbalance is refreshed because Transfer is emmitted from neworder tx
 };
 
 // event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
@@ -81,5 +81,5 @@ const onOrderFill = (error, result) => {
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // Userbalance is refreshed because e_transfer is emmitted from orderfill tx
+    // Userbalance is refreshed because Transfer is emmitted from orderfill tx
 };

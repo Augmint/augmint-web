@@ -331,13 +331,13 @@ function newLoanEventAsserts(tx, expLoan) {
     /* TODO: truffle doesn't parse other event into tx.logs[1] - depsite it's in tx.receipt.logs in raw format
         assert.equal(
             tx.logs[1].event,
-            "e_transfer",
-            "e_transfer event should be emitted"
+            "Transfer",
+            "Transfer event should be emitted"
         );
         assert.equal(
             tx.logs[1].args.amount.toString(),
             disbursedAmount.toString(),
-            "amount in e_transfer event should be set"
+            "amount in Transfer event should be set"
         );
         // TODO: other event args
         */

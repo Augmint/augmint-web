@@ -28,13 +28,13 @@ export default () => {
 const setupListeners = () => {
     const tokenUcd = store.getState().tokenUcd.contract.instance;
     tokenUcd
-        .e_transfer({ fromBlock: "latest", toBlock: "pending" })
+        .Transfer({ fromBlock: "latest", toBlock: "pending" })
         .watch(onTransfer);
 };
 
 const removeListeners = oldInstance => {
     if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.e_transfer().stopWatching();
+        oldInstance.instance.Transfer().stopWatching();
     }
 };
 
@@ -82,7 +82,7 @@ const onTransfer = (error, result) => {
         result.args.to.toLowerCase() === userAccount.toLowerCase()
     ) {
         console.debug(
-            "tokenUcdProvider.onTransfer: e_transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
+            "tokenUcdProvider.onTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
         store.dispatch(processTransfer(userAccount, result));

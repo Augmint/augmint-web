@@ -132,33 +132,33 @@ async function getBalances(addresses) {
 async function transferEventAsserts(tx, expTransfer) {
     assert.equal(
         tx.logs[0].event,
-        "e_transfer",
-        "e_transfer event should be emited"
+        "Transfer",
+        "Transfer event should be emited"
     );
     assert.equal(
         tx.logs[0].args.from,
         expTransfer.from,
-        "from: in e_transfer event should be set"
+        "from: in Transfer event should be set"
     );
     assert.equal(
         tx.logs[0].args.to,
         expTransfer.to,
-        "to: in e_transfer event should be set"
+        "to: in Transfer event should be set"
     );
     assert.equal(
         tx.logs[0].args.narrative,
         expTransfer.narrative,
-        "narrative in e_transfer event should be set"
+        "narrative in Transfer event should be set"
     );
     assert.equal(
         tx.logs[0].args.amount.toString(),
         expTransfer.amount.toString(),
-        "amount in e_transfer event should be set"
+        "amount in Transfer event should be set"
     );
     assert.equal(
         tx.logs[0].args.fee.toString(),
         expTransfer.fee.toString(),
-        "fee in e_transfer event should be set"
+        "fee in Transfer event should be set"
     );
 }
 

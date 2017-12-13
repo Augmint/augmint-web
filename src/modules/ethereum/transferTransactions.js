@@ -89,10 +89,10 @@ export async function transferUcdTx(payload) {
         if (
             !result.logs ||
             !result.logs[0] ||
-            result.logs[0].event !== "e_transfer"
+            result.logs[0].event !== "Transfer"
         ) {
             throw new Error(
-                "e_transfer event wasn't received. Check tx :  " + result.tx
+                "Transfer event wasn't received. Check tx :  " + result.tx
             );
         }
 
@@ -120,7 +120,7 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
         let tokenUcd = store.getState().tokenUcd.contract;
         let filterResult = await getEventLogs(
             tokenUcd,
-            tokenUcd.instance.e_transfer,
+            tokenUcd.instance.Transfer,
             { from: address, to: address }, // filter with OR!
             fromBlock,
             toBlock

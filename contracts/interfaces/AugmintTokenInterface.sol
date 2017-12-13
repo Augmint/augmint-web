@@ -8,16 +8,17 @@ import "./ERC20Interface.sol";
 contract AugmintTokenInterface is Restricted, ERC20Interface {
     using SafeMath for uint256;
 
-    event e_systemAccountsChanged(address newFeeAccount, address newInteresPoolAccount,
+    event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount,
         address newInterestEarnedAccount);
 
-    event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
+    event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
-    event e_transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+    event Transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
 
-    event e_issued(uint amount);
+    event TokenIssued(uint amount);
 
-    event e_burned(uint amount);
+    event TokenBurned(uint amount);
+
     /* TODO: function allowance(address owner, address spender) public view returns (uint); */
     function transferFrom(address from, address to, uint value) public;
     function approve(address spender, uint value) public;

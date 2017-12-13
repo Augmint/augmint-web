@@ -67,7 +67,7 @@ contract AugmintToken is AugmintTokenInterface {
         return fee;
     }
 
-    event e_systemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
+    event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
 
     function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
             address newInterestEarnedAccount) external restrict("setSystemAccounts") {
@@ -77,17 +77,18 @@ contract AugmintToken is AugmintTokenInterface {
         feeAccount = newFeeAccount;
         interestPoolAccount = newInteresPoolAccount;
         interestEarnedAccount = newInterestEarnedAccount;
-        e_systemAccountsChanged(newFeeAccount, newInteresPoolAccount, newInterestEarnedAccount);
+        SystemAccountsChanged(newFeeAccount, newInteresPoolAccount, newInterestEarnedAccount);
     }
 
-    event e_transferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
+    event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
     function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external restrict("setTransferFees") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
+        TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);
     }
 
-    event e_transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+    event Transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
 
     function transfer(address _to, uint256 _amount) public {
         _transfer(msg.sender, _to, _amount, "", getFee(_amount));
@@ -111,7 +112,7 @@ contract AugmintToken is AugmintTokenInterface {
             balances[_from] = balances[_from].sub(_amount);
         }
         balances[_to] = balances[_to].add(_amount);
-        e_transfer(_from, _to, _amount, narrative, _fee);
+        Transfer(_from, _to, _amount, narrative, _fee);
     }
 
     function approve(address _spender, uint256 _amount) public {
@@ -141,22 +142,22 @@ contract AugmintToken is AugmintTokenInterface {
         _transfer(_from, _to, _amount, _narrative, fee);
         // CHECK: we reduce allowance with amount + fee. Shall it be only amount?
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount).sub(fee);
-        e_transfer(_from, _to, _amount, _narrative, fee);
+        Transfer(_from, _to, _amount, _narrative, fee);
     }
 
-    event e_issued(uint amount);
+    event TokenIssued(uint amount);
     function issue(uint amount) external restrict("issue") {
         totalSupply = totalSupply.add(amount);
         balances[this] = balances[this].add(amount);
-        e_issued(amount);
+        TokenIssued(amount);
     }
 
-    event e_burned(uint amount);
+    event TokenBurned(uint amount);
     function burn(uint amount) external restrict("burn") {
         require(amount <= balances[this]);
         totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
-        e_burned(amount);
+        TokenBurned(amount);
     }
 
 }
