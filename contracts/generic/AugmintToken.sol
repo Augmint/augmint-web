@@ -163,6 +163,16 @@ contract AugmintToken is AugmintTokenInterface {
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }
 
+    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
+        public restrict("newLoan"){
+            // FIXME: to be implemented
+            borrower = 0;
+            loanAmount = 0;
+            interestAmount = 0;
+            narrative = "";
+            revert();
+    }
+
     event TokenIssued(uint amount);
     function issue(uint amount) external restrict("issue") {
         totalSupply = totalSupply.add(amount);

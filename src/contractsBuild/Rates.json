@@ -184,7 +184,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3193,
+          "SourceUnit": 3314,
           "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SafeMath.sol",
           "file": "./generic/SafeMath.sol",
           "scope": 1912,
@@ -199,7 +199,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 2913,
+          "SourceUnit": 3034,
           "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/Owned.sol",
           "file": "./generic/Owned.sol",
           "scope": 1912,
@@ -215,14 +215,14 @@
       {
         "attributes": {
           "contractDependencies": [
-            2912
+            3033
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             1911,
-            2912
+            3033
           ],
           "name": "Rates",
           "scope": 1912
@@ -239,7 +239,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Owned",
-                  "referencedDeclaration": 2912,
+                  "referencedDeclaration": 3033,
                   "type": "contract Owned"
                 },
                 "id": 1839,
@@ -257,7 +257,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SafeMath",
-                  "referencedDeclaration": 3192,
+                  "referencedDeclaration": 3313,
                   "type": "library SafeMath"
                 },
                 "id": 1841,
@@ -598,7 +598,7 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 2886,
+                      "referencedDeclaration": 3007,
                       "type": "modifier ()",
                       "value": "onlyOwner"
                     },
@@ -860,7 +860,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "roundedDiv",
-                              "referencedDeclaration": 3191,
+                              "referencedDeclaration": 3312,
                               "type": "function (uint256,uint256) pure returns (uint256)"
                             },
                             "children": [
@@ -892,7 +892,7 @@
                                       "isPure": false,
                                       "lValueRequested": false,
                                       "member_name": "mul",
-                                      "referencedDeclaration": 3099,
+                                      "referencedDeclaration": 3220,
                                       "type": "function (uint256,uint256) pure returns (uint256)"
                                     },
                                     "children": [
@@ -1090,7 +1090,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "roundedDiv",
-                              "referencedDeclaration": 3191,
+                              "referencedDeclaration": 3312,
                               "type": "function (uint256,uint256) pure returns (uint256)"
                             },
                             "children": [
@@ -1122,7 +1122,7 @@
                                       "isPure": false,
                                       "lValueRequested": false,
                                       "member_name": "mul",
-                                      "referencedDeclaration": 3099,
+                                      "referencedDeclaration": 3220,
                                       "type": "function (uint256,uint256) pure returns (uint256)"
                                     },
                                     "children": [
@@ -1225,5 +1225,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-23T18:04:43.719Z"
+  "updatedAt": "2017-12-14T09:53:10.764Z"
 }
