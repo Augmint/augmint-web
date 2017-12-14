@@ -37,6 +37,11 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
 
+    event TokenIssued(uint amount);
+    event TokenBurned(uint amount);
+    event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
+    event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
+
     function AugmintToken(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
         uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
         require(_feeAccount != 0);
@@ -50,28 +55,42 @@ contract AugmintToken is AugmintTokenInterface {
         transferFeeMax = _transferFeeMax;
     }
 
-    function () public payable {} // to accept ETH sent into reserve (from defaulted loan's collateral )
-    // TODO: shall we put protection against accidentally sending in ETH?
-
-    function balanceOf(address _owner) public view returns (uint256 balance) {
-        return balances[_owner];
+    function () public payable { // solhint-disable-line no-empty-blocks
+        // to accept ETH sent into reserve (from defaulted loan's collateral )
+        /* TODO: shall we put protection against accidentally sending in ETH? */
     }
 
-    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
-        return allowed[_owner][_spender];
+    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
+    external restrict("newLoan") {
+        // FIXME: to be implemented
+        require(borrower != 0);
+        require(loanAmount != 0);
+        require(interestAmount != 0);
+        require(bytes(narrative).length != 0);
+        revert();
     }
 
-    function getFee(uint amount) internal view returns (uint256 fee) {
-        fee = amount.mul(transferFeePt).div(1000000);
-        if (fee > transferFeeMax) {
-            fee = transferFeeMax;
-        } else if (fee < transferFeeMin) {
-            fee = transferFeeMin;
-        }
-        return fee;
+    function issue(uint amount) external restrict("issue") {
+        totalSupply = totalSupply.add(amount);
+        balances[this] = balances[this].add(amount);
+        TokenIssued(amount);
     }
 
-    event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
+    function burn(uint amount) external restrict("burn") {
+        require(amount <= balances[this]);
+        totalSupply = totalSupply.sub(amount);
+        balances[this] = balances[this].sub(amount);
+        TokenBurned(amount);
+    }
+
+    function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
+        _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
+    }
+
+    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative)
+    external restrict("transferNoFee") {
+        _transfer(_from, _to, _amount, _narrative, 0);
+    }
 
     function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
             address newInterestEarnedAccount) external restrict("setSystemAccounts") {
@@ -84,40 +103,24 @@ contract AugmintToken is AugmintTokenInterface {
         SystemAccountsChanged(newFeeAccount, newInteresPoolAccount, newInterestEarnedAccount);
     }
 
-    event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
-
-    function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) external restrict("setTransferFees") {
+    function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax)
+    external restrict("setTransferFees") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
         TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);
     }
 
-    event Transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+    function balanceOf(address _owner) public view returns (uint256 balance) {
+        return balances[_owner];
+    }
+
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        return allowed[_owner][_spender];
+    }
 
     function transfer(address _to, uint256 _amount) public {
         _transfer(msg.sender, _to, _amount, "", getFee(_amount));
-    }
-
-    function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
-        _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
-    }
-
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative) external restrict("transferNoFee") {
-        _transfer(_from, _to, _amount, _narrative, 0);
-    }
-
-    function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
-        require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
-        require(_amount > 0);
-        if (_fee > 0) {
-            balances[feeAccount] = balances[feeAccount].add(_fee);
-            balances[_from] = balances[_from].sub(_amount).sub(_fee);
-        } else {
-            balances[_from] = balances[_from].sub(_amount);
-        }
-        balances[_to] = balances[_to].add(_amount);
-        Transfer(_from, _to, _amount, narrative, _fee);
     }
 
     function approve(address _spender, uint256 _amount) public {
@@ -126,11 +129,7 @@ contract AugmintToken is AugmintTokenInterface {
         Approval(msg.sender, _spender, _amount);
     }
 
-    function transferFrom(
-            address _from,
-            address _to,
-            uint256 _amount
-        ) public {
+    function transferFrom(address _from, address _to, uint256 _amount) public {
         _transferFrom(_from, _to, _amount, "", getFee(_amount));
     }
 
@@ -144,8 +143,18 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-        public restrict("transferFromNoFee") {
+    public restrict("transferFromNoFee") {
         _transferFrom(_from, _to, _amount, _narrative, 0);
+    }
+
+    function getFee(uint amount) internal view returns (uint256 fee) {
+        fee = amount.mul(transferFeePt).div(1000000);
+        if (fee > transferFeeMax) {
+            fee = transferFeeMax;
+        } else if (fee < transferFeeMin) {
+            fee = transferFeeMin;
+        }
+        return fee;
     }
 
     function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) internal {
@@ -163,29 +172,17 @@ contract AugmintToken is AugmintTokenInterface {
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }
 
-    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
-        public restrict("newLoan"){
-            // FIXME: to be implemented
-            borrower = 0;
-            loanAmount = 0;
-            interestAmount = 0;
-            narrative = "";
-            revert();
-    }
-
-    event TokenIssued(uint amount);
-    function issue(uint amount) external restrict("issue") {
-        totalSupply = totalSupply.add(amount);
-        balances[this] = balances[this].add(amount);
-        TokenIssued(amount);
-    }
-
-    event TokenBurned(uint amount);
-    function burn(uint amount) external restrict("burn") {
-        require(amount <= balances[this]);
-        totalSupply = totalSupply.sub(amount);
-        balances[this] = balances[this].sub(amount);
-        TokenBurned(amount);
+    function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
+        require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
+        require(_amount > 0);
+        if (_fee > 0) {
+            balances[feeAccount] = balances[feeAccount].add(_fee);
+            balances[_from] = balances[_from].sub(_amount).sub(_fee);
+        } else {
+            balances[_from] = balances[_from].sub(_amount);
+        }
+        balances[_to] = balances[_to].add(_amount);
+        Transfer(_from, _to, _amount, narrative, _fee);
     }
 
 }
