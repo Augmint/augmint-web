@@ -119,14 +119,16 @@ contract AugmintToken is AugmintTokenInterface {
         return allowed[_owner][_spender];
     }
 
-    function transfer(address _to, uint256 _amount) public {
+    function transfer(address _to, uint256 _amount) public returns (bool) {
         _transfer(msg.sender, _to, _amount, "", getFee(_amount));
+        return true;
     }
 
-    function approve(address _spender, uint256 _amount) public {
+    function approve(address _spender, uint256 _amount) public returns (bool) {
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         Approval(msg.sender, _spender, _amount);
+        return true;
     }
 
     /**
@@ -152,8 +154,9 @@ contract AugmintToken is AugmintTokenInterface {
         return true;
     }
 
-    function transferFrom(address _from, address _to, uint256 _amount) public {
+    function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         _transferFrom(_from, _to, _amount, "", getFee(_amount));
+        return true;
     }
 
     function transferFromWithNarrative(

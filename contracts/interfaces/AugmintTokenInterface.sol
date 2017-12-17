@@ -1,10 +1,12 @@
-/* Augmint Token interface
+/* Augmint Token interface (abstract contract)
 
 TODO: overload transfer() & transferFrom() instead of transferWithNarrative() & transferFromWithNarrative()
       when this fix available in web3 and truffle also uses that web3:
       https://github.com/ethereum/web3.js/pull/1185
 TODO: decide on external vs. public and sync it with AugmintToken (and ERC20?)
-TODO:L move totalSupply and maybe other declarations here
+TODO: move totalSupply and maybe other declarations here
+TODO: should have transfer, transferFrom, approve which doesn't throw if fails but
+        returns false to striclty follow ERC20 standard? and have sep. safeTransfer etc. for own use? 
  */
 pragma solidity ^0.4.18;
 import "../generic/SafeMath.sol";
@@ -41,13 +43,13 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
         external restrict("newLoan");
 
     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
-    function transferFrom(address from, address to, uint value) public;
-    function approve(address spender, uint value) public;
+    function transferFrom(address from, address to, uint value) public returns (bool);
+    function approve(address spender, uint value) public returns (bool);
     function increaseApproval(address _spender, uint _addedValue) public returns (bool);
     function decreaseApproval(address _spender, uint _subtractedValue) public returns (bool);
 
     function balanceOf(address who) public view returns (uint);
-    function transfer(address to, uint value) public; // solhint-disable-line no-simple-event-func-name
+    function transfer(address to, uint value) public returns (bool); // solhint-disable-line no-simple-event-func-name
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
         public restrict("transferFromNoFee");
