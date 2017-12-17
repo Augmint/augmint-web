@@ -43,6 +43,9 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
     function transferFrom(address from, address to, uint value) public;
     function approve(address spender, uint value) public;
+    function increaseApproval(address _spender, uint _addedValue) public returns (bool);
+    function decreaseApproval(address _spender, uint _subtractedValue) public returns (bool);
+
     function balanceOf(address who) public view returns (uint);
     function transfer(address to, uint value) public; // solhint-disable-line no-simple-event-func-name
 
