@@ -1,10 +1,7 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectTokenUcd, refreshTokenUcd } from "modules/reducers/tokenUcd";
-import {
-    fetchTransferList,
-    processTransfer
-} from "modules/reducers/userTransfers";
+import { fetchTransferList, processTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
@@ -27,9 +24,11 @@ export default () => {
 
 const setupListeners = () => {
     const tokenUcd = store.getState().tokenUcd.contract.instance;
-    tokenUcd
-        .Transfer({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onTransfer);
+    tokenUcd.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }).watch(onAugmintTransfer);
+    /* TODO: use this once truffle exposes web3@1.0 interface: */
+    // tokenUcd.events.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }, (error, event) => {
+    //     console.log(event, error);
+    // });
 };
 
 const removeListeners = oldInstance => {
@@ -41,9 +40,7 @@ const removeListeners = oldInstance => {
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug(
-            "tokenUcdProvider - web3Connect.network changed. Dispatching connectTokenUcd()"
-        );
+        console.debug("tokenUcdProvider - web3Connect.network changed. Dispatching connectTokenUcd()");
         store.dispatch(connectTokenUcd());
     }
 };
@@ -73,8 +70,8 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onTransfer = (error, result) => {
-    console.debug("tokenUcdProvider.onTransfer: Dispatching refreshTokenUcd");
+const onAugmintTransfer = (error, result) => {
+    console.debug("tokenUcdProvider.onAugmintTransfer: Dispatching refreshTokenUcd");
     store.dispatch(refreshTokenUcd());
     const userAccount = store.getState().web3Connect.userAccount;
     if (
@@ -82,7 +79,7 @@ const onTransfer = (error, result) => {
         result.args.to.toLowerCase() === userAccount.toLowerCase()
     ) {
         console.debug(
-            "tokenUcdProvider.onTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
+            "tokenUcdProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
         store.dispatch(processTransfer(userAccount, result));

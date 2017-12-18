@@ -7,13 +7,12 @@ pragma solidity ^0.4.18;
 
 interface ERC20Interface {
     event Approval(address indexed _owner, address indexed _spender, uint _value);
-    /* TODO: check how overloading events works w/ web3:
-    event Transfer(address indexed from, address indexed to, uint amount); */
+    event Transfer(address indexed from, address indexed to, uint amount);
 
     function allowance(address _owner, address _spender) public view returns (uint remaining);
     function transferFrom(address from, address to, uint value) public returns (bool);
     function approve(address spender, uint value) public returns (bool);
     function balanceOf(address who) public view returns (uint);
-    function transfer(address to, uint value) public returns (bool);
+    function transfer(address to, uint value) public returns (bool); // solhint-disable-line no-simple-event-func-name
 
 }

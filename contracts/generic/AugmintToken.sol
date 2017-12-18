@@ -12,6 +12,9 @@
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
+    TODO: allow transfer of 0 (comply with ERC20 standard)
+    TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
+    TODO: don't aloow transfer to 0x
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
     TODO: ERC20 transferFrom attack protection: https://github.com/DecentLabs/dcm-poc/issues/57
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices,
@@ -208,7 +211,8 @@ contract AugmintToken is AugmintTokenInterface {
             balances[_from] = balances[_from].sub(_amount);
         }
         balances[_to] = balances[_to].add(_amount);
-        Transfer(_from, _to, _amount, narrative, _fee);
+        Transfer(_from, _to, _amount);
+        AugmintTransfer(_from, _to, _amount, narrative, _fee);
     }
 
 }

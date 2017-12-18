@@ -78,22 +78,13 @@ export async function transferUcdTx(payload) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error(
-                "ACD transfer failed. All gas provided was used:  " +
-                    result.receipt.gasUsed
-            );
+            throw new Error("ACD transfer failed. All gas provided was used:  " + result.receipt.gasUsed);
         }
 
         /* TODO:  display result in confirmation */
 
-        if (
-            !result.logs ||
-            !result.logs[0] ||
-            result.logs[0].event !== "Transfer"
-        ) {
-            throw new Error(
-                "Transfer event wasn't received. Check tx :  " + result.tx
-            );
+        if (!result.logs || !result.logs[0] || result.logs[0].event !== "Transfer") {
+            throw new Error("Transfer event wasn't received. Check tx :  " + result.tx);
         }
 
         let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
@@ -120,12 +111,11 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
         let tokenUcd = store.getState().tokenUcd.contract;
         let filterResult = await getEventLogs(
             tokenUcd,
-            tokenUcd.instance.Transfer,
+            tokenUcd.instance.AugmintTransfer,
             { from: address, to: address }, // filter with OR!
             fromBlock,
             toBlock
         );
-
         //console.debug("fetchTransferListTx filterResult", filterResult);
         let transfers = await Promise.all(
             filterResult.map((tx, index) => {
@@ -162,8 +152,7 @@ export async function processTransferTx(address, tx) {
 
 async function formatTransfer(address, tx) {
     //console.debug("formatTransfer args tx: ", tx);
-    let direction =
-        address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
+    let direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
     let blockTimeStamp, bn_amount, bn_fee;
     let feeTmp, amountTmp;
     if (tx.timeStamp) {
@@ -177,8 +166,7 @@ async function formatTransfer(address, tx) {
         feeTmp = tx.args.fee;
     }
     bn_amount = amountTmp.div(new BigNumber(10000));
-    bn_fee =
-        direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
+    bn_fee = direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
 
     let result = {
         blockNumber: tx.blockNumber,
@@ -195,9 +183,7 @@ async function formatTransfer(address, tx) {
         fee: bn_fee.toString(),
         narrative: tx.args.narrative,
         blockTimeStamp: blockTimeStamp,
-        blockTimeStampText: moment
-            .unix(blockTimeStamp)
-            .format("D MMM YYYY HH:mm")
+        blockTimeStampText: moment.unix(blockTimeStamp).format("D MMM YYYY HH:mm")
     };
     //console.debug("formatTransfer result", result);
     return result;

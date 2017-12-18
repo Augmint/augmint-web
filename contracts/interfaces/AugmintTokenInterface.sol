@@ -6,7 +6,9 @@ TODO: overload transfer() & transferFrom() instead of transferWithNarrative() & 
 TODO: decide on external vs. public and sync it with AugmintToken (and ERC20?)
 TODO: move totalSupply and maybe other declarations here
 TODO: should have transfer, transferFrom, approve which doesn't throw if fails but
-        returns false to striclty follow ERC20 standard? and have sep. safeTransfer etc. for own use? 
+        returns false to striclty follow ERC20 standard? and have sep. safeTransfer etc. for own use?
+        see: https://ethereum.stackexchange.com/questions/33676
+TODO: shall we use bytes for narrative?
  */
 pragma solidity ^0.4.18;
 import "../generic/SafeMath.sol";
@@ -24,9 +26,8 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
         address newInterestEarnedAccount);
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
-    /* TODO: check how overloading events works w/ web3:
-    event Transfer(address indexed from, address indexed to, uint amount); */
-    event Transfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+    event Transfer(address indexed from, address indexed to, uint amount);
+    event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
     event TokenIssued(uint amount);
     event TokenBurned(uint amount);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);

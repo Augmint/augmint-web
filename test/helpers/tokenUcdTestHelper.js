@@ -157,7 +157,7 @@ async function transferFromTest(testInstance, expTransfer) {
 
     transferEventAsserts(tx, expTransfer, 0);
     if (!isNoFeeTest) {
-        transferEventAsserts(tx, expFeeTransfer, 1);
+        transferEventAsserts(tx, expFeeTransfer, 2);
     }
     let allowanceAfter = await tokenAcd.allowance(expTransfer.from, expTransfer.to);
     assert.equal(
@@ -226,7 +226,17 @@ async function getBalances(addresses) {
 
 async function transferEventAsserts(tx, expTransfer, logIndex) {
     if (typeof logIndex === "undefined") logIndex = 0;
-    assert.equal(tx.logs[logIndex].event, "Transfer", "Transfer event should be emited");
+    // first event should be the ERC20 Transfer event
+    assert.equal(tx.logs[logIndex].event, "Transfer", "ERC20 Transfer event should be emited");
+    assert.equal(tx.logs[logIndex].args.from, expTransfer.from, "from: in ERC20 Transfer event should be set");
+    assert.equal(tx.logs[logIndex].args.to, expTransfer.to, "to: in ERC20 Transfer event should be set");
+    assert.equal(
+        tx.logs[logIndex].args.amount.toString(),
+        expTransfer.amount.toString(),
+        "amount in ERC20 Transfer event should be set"
+    );
+    logIndex++; // next event is Augmint's extended Transfer event
+    assert.equal(tx.logs[logIndex].event, "AugmintTransfer", "Transfer event should be emited");
     assert.equal(tx.logs[logIndex].args.from, expTransfer.from, "from: in Transfer event should be set");
     assert.equal(tx.logs[logIndex].args.to, expTransfer.to, "to: in Transfer event should be set");
     assert.equal(tx.logs[logIndex].args.narrative, expTransfer.narrative, "narrative in Transfer event should be set");
