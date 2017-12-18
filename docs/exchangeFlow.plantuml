@@ -2,23 +2,23 @@
 title **Augmint** - Exchange flow
 skinparam ArrowColor #blue
 skinparam noteBackgroundColor #lightgrey
-actor Maker
+actor Seller
 control AugmintToken
 control ExchangeContract
 control ERC20Token
 actor Taker
 actor Anyone
-== maker order ALT 1. - works only with Augmint tokens (requires only a single TX from maker) ==
-Maker -> AugmintToken : placeSellOrder\n(exchangeAddress, price, amount)
+== Token sell order ALT 1. - works only with Augmint tokens (requires only a single TX from seller) ==
+Seller -> AugmintToken : placeSellOrder\n(exchangeAddress, price, amount)
 AugmintToken -> AugmintToken : approve(to: exchange, amount)
-AugmintToken -> ExchangeContract : placeSellOrder\n(userAddress, amount)
-ExchangeContract -> AugmintToken : transferFromNoFee\n(from:maker, to: ExchangeContract, amount, narr: "sell order", fee: 0)
+AugmintToken -> ExchangeContract : placeSellOrder\n(augmintToken, userAddress, amount)
+ExchangeContract -> AugmintToken : transferFromNoFee\n(from: seller, to: ExchangeContract, amount, narr: "sell order", fee: 0)
 note over AugmintToken
     transferFromNoFee() is restricted to trusted Exchanges
     Exchange needs to call standard transferFrom when
     trading non-Augmint ERC20 tokens
 end note
-Maker --> ExchangeContract : tokens to sell transfered
+Seller --> ExchangeContract : tokens to sell transfered
 ExchangeContract -> ExchangeContract : save order
 note left
     we could just queue new orders to have constant gas
@@ -41,7 +41,7 @@ end note
 loop as many times as fits to gas provided to tx call
     ExchangeContract -> ExchangeContract : match(tokenContract)
     ExchangeContract -> ExchangeContract : fill/partially fill order
-    ExchangeContract -> Maker : maker.send( ethValue - tradeFee )
+    ExchangeContract -> Seller : seller.send( ethValue - tradeFee )
     ExchangeContract --> AugmintToken : send(feesAccount, tradeFee - matchReward)
     ExchangeContract -> AugmintToken : transferNoFee\n(to: taker, amountSold - tradeFee, narr: "Order fill")
     note over AugmintToken, ExchangeContract
@@ -55,28 +55,28 @@ ExchangeContract -> Anyone : send(Anyone, sum matchReward)
 == cancel buy order  ==
 Taker -> ExchangeContract : cancelBuyOrder\n(ERC20Token, orderId)
 ExchangeContract -> ExchangeContract : remove order
-ExchangeContract -> Taker : maker.send( unfilledEthValue)
+ExchangeContract -> Taker : seller.send( unfilledEthValue)
 == cancel sell order  ==
-Maker -> ExchangeContract : cancelSellOrder\n(ERC20Token, orderId)
+Seller -> ExchangeContract : cancelSellOrder\n(ERC20Token, orderId)
 ExchangeContract -> AugmintToken : transferNoFee\n(to: taker, amount, narr: "Order cancel")
 note over ExchangeContract
  Q: how do we decide if transfer or transferNoFee
  should be called on ERC20Token?
 end note
-ExchangeContract --> Maker : unfilled amount transferred back
-== maker order ALT 2. - works with any ERC20 token (requires 2 TXs from maker) ==
+ExchangeContract --> Seller : unfilled amount transferred back
+== Token sell order ALT 2. - works with any ERC20 token (requires 2 TXs from seller) ==
 note over ExchangeContract
     To be implemented later
     (not fully fleshed out)
 end note
-Maker -> ERC20Token : Tx1: approve(ExchangeContract, amount)
-Maker -> ExchangeContract : Tx2: placeSellOrder(ERC20Token, amount)
+Seller -> ERC20Token : Tx1: approve(ExchangeContract, amount)
+Seller -> ExchangeContract : Tx2: placeSellOrder(ERC20Token, amount)
 note over ExchangeContract
  Q: how do we decide if transferFrom or transferFromNoFee
  should be called on ERC20Token?
 end note
 ExchangeContract -> ERC20Token : transferFrom\n(from: msg.sender, to: ExchangeContract, amount)
-Maker --> ExchangeContract : tokens to sell transfered
+Seller --> ExchangeContract : tokens to sell transfered
 ExchangeContract -> ExchangeContract : save order
 
 @enduml

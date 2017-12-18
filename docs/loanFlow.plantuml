@@ -11,9 +11,9 @@ actor Anyone
 Borrower -> LoanManager : getLoan\n(productId, {ethToEscrow})
 LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
 LoanManager -> LoanContract : create\n(AugmintToken, borrower, loanParams, {ethValue})
-LoanManager -> AugmintToken : newLoan\n(borrower, loanAmount, interestAmount)
+LoanManager -> AugmintToken : issueAndDisburse\n(borrower, loanAmount, interestAmount)
 note over AugmintToken
-newLoan is restricted to trusted LoanManager(s)
+issueAndDisburse is restricted to trusted LoanManager(s)
 end note
 AugmintToken -> AugmintToken : issue(repaymentAmount)\nbalances[interestPool] += interestAmount
 AugmintToken -> AugmintToken : _transfer\n(borrower, loanAmount, "loan disbursment", 0)
@@ -29,20 +29,19 @@ note over AugmintToken #yellow
 end note
 AugmintToken -> AugmintToken : approve\n(loanContract, repaymentAmount)
 
-AugmintToken -> LoanContract : releaseFunds()
+AugmintToken -> LoanContract : releaseCollateral()
 note left LoanContract
     releaseFunds() is not restricted but
     it checks loan status and transfers repaymentAmount from user
 end note
-LoanContract -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanContract, , "loan repayment", fee: 0)
-Borrower --> LoanContract : repaymentAmount transferred
-LoanContract -> AugmintToken : repayAndBurn(repaymentAmount, interestAmount)
+LoanContract -> AugmintToken : repayAndBurn(borrower, repaymentAmount, interestAmount, narrative)
 note right AugmintToken #yellow
     Does repayAndBurn() need to be restriced?
-    It deducts burned amount from msg.sender
     Any potential for a malicious caller?
 end note
 activate AugmintToken
+AugmintToken -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanContract, , "loan repayment", fee: 0)
+Borrower --> LoanContract : repaymentAmount transferred
 AugmintToken -> AugmintToken : balances[loanContract] -= repaymentAmount\nbalances[AugmintToken] += repaymentAmount\nburn(repaymentAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
 deactivate AugmintToken
 LoanContract --> Borrower : borrower.send(ethInEscrow)
