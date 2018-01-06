@@ -15,8 +15,8 @@ Note: these steps are likely to work on linux too but it's not tested yet
    _testrcp regularly crashes with node v8.9.3, `runtestrpc.sh` selects the correct node version_
 1. `npm install -g ethereumjs-testrpc@6.0.3`  
    _tested with version 6.0.3_
-1. `npm install -g truffle`  
-   _tested with version v4.0.1_
+1. `npm install -g truffle@4.0.4`  
+   _tested with version v4.0.4_
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
@@ -34,8 +34,8 @@ in Git bash:
 1. `nvm use 8.9.3`
 1. `npm install -g ethereumjs-testrpc@6.0.3`  
    _tested with version v6.0.3_
-1. `npm install -g truffle`
-   _tested with version 4.0.1_
+1. `npm install -g truffle@4.0.4`
+   _tested with version 4.0.4_
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
