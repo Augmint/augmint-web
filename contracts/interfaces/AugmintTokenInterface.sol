@@ -1,14 +1,11 @@
 /* Augmint Token interface (abstract contract)
 
 TODO: overload transfer() & transferFrom() instead of transferWithNarrative() & transferFromWithNarrative()
-      when this fix available in web3 and truffle also uses that web3:
-      https://github.com/ethereum/web3.js/pull/1185
-TODO: decide on external vs. public and sync it with AugmintToken (and ERC20?)
+      when this fix available in web3& truffle also uses that web3: https://github.com/ethereum/web3.js/pull/1185
 TODO: move totalSupply and maybe other declarations here
-TODO: should have transfer, transferFrom, approve which doesn't throw if fails but
-        returns false to striclty follow ERC20 standard? and have sep. safeTransfer etc. for own use?
-        see: https://ethereum.stackexchange.com/questions/33676
 TODO: shall we use bytes for narrative?
+TODO: shall we replace repayLoan with a generic approveAndCall ?
+TODO: shall we put protection against accidentally sending in ETH?
  */
 pragma solidity ^0.4.18;
 import "../generic/SafeMath.sol";
@@ -19,8 +16,7 @@ import "./ERC20Interface.sol";
 contract AugmintTokenInterface is Restricted, ERC20Interface {
     using SafeMath for uint256;
 
-    function () public payable;// to accept ETH sent into reserve (from defaulted loan's collateral )
-    /* TODO: shall we put protection against accidentally sending in ETH? */
+    function () public payable; // to accept ETH sent into reserve (from defaulted loan's collateral )
 
     event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount,
         address newInterestEarnedAccount);
@@ -37,11 +33,15 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function transferNoFee(address _from, address _to, uint256 _amount, string _narrative)
     external restrict("transferNoFee");
 
-    function issue(uint amount) external restrict("issue");
-    function burn(uint amount) external restrict("burn");
+    function repayLoan(address loanManager, uint loanId) external;
 
-    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
-        external restrict("newLoan");
+    function issueAndDisburse(address borrower, uint loanAmount, uint interestAmount, string narrative)
+    external restrict("issueAndDisburse");
+
+    function repayAndBurn(address borrower, uint repaymentAmount, uint interestAmount, string narrative)
+        external restrict("repayAndBurn");
+
+    function moveCollectedInterest(uint interestAmount) external restrict("moveCollectedInterest");
 
     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
     function transferFrom(address from, address to, uint value) public returns (bool);

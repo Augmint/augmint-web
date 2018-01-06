@@ -5,12 +5,10 @@ skinparam noteBackgroundColor #lightgrey
 actor Borrower
 control AugmintToken
 control LoanManager
-control LoanContract
 actor Anyone
 == new loan ==
 Borrower -> LoanManager : getLoan\n(productId, {ethToEscrow})
 LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
-LoanManager -> LoanContract : create\n(AugmintToken, borrower, loanParams, {ethValue})
 LoanManager -> AugmintToken : issueAndDisburse\n(borrower, loanAmount, interestAmount)
 note over AugmintToken
 issueAndDisburse is restricted to trusted LoanManager(s)
@@ -20,37 +18,33 @@ AugmintToken -> AugmintToken : _transfer\n(borrower, loanAmount, "loan disbursme
 AugmintToken --> Borrower : loanAmount transferred
 
 == repay loan Alt 1. (with a single TX from user)  ==
-Borrower -> AugmintToken : repayLoan(loanContract)
-note over AugmintToken #yellow
-    Any point to restrict repayLoan()?
-    It deducts repayment amount from msg.sender
-    Any danger if a malicious caller
-    providing a crafted loanContract?
+Borrower -> AugmintToken : repayLoan(loanManager, loanId)
+note over AugmintToken
+    Only accepts whitelisted loanManagerAddress
+    to avoid phising attacks
 end note
-AugmintToken -> AugmintToken : approve\n(loanContract, repaymentAmount)
+AugmintToken -> AugmintToken : approve\n(loanManager, repaymentAmount)
 
-AugmintToken -> LoanContract : releaseCollateral()
-note left LoanContract
-    releaseFunds() is not restricted but
+AugmintToken -> LoanManager : releaseCollateral(loanId)
+note left LoanManager
+    releaseCollateral() is not restricted but
     it checks loan status and transfers repaymentAmount from user
 end note
-LoanContract -> AugmintToken : repayAndBurn(borrower, repaymentAmount, interestAmount, narrative)
-note right AugmintToken #yellow
-    Does repayAndBurn() need to be restriced?
-    Any potential for a malicious caller?
+LoanManager -> AugmintToken : repayAndBurn(borrower, repaymentAmount, interestAmount, narrative)
+note right AugmintToken
+    RepayAndBurn() is restricted to trusted loanManagers
 end note
 activate AugmintToken
-AugmintToken -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanContract, , "loan repayment", fee: 0)
-Borrower --> LoanContract : repaymentAmount transferred
-AugmintToken -> AugmintToken : balances[loanContract] -= repaymentAmount\nbalances[AugmintToken] += repaymentAmount\nburn(repaymentAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
+AugmintToken -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanManager, , "loan repayment", fee: 0)
+Borrower --> LoanManager : repaymentAmount transferred
+AugmintToken -> AugmintToken : balances[loanManager] -= repaymentAmount\nbalances[AugmintToken] += repaymentAmount\nburn(repaymentAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
 deactivate AugmintToken
-LoanContract --> Borrower : borrower.send(ethInEscrow)
-LoanContract -> LoanContract : selfdestruct()
+LoanManager --> Borrower : borrower.send(ethInEscrow)
 
-== repay loan Alt 2., fallback (two user Txs but direclty via loanContract)  ==
+== repay loan Alt 2., fallback (two user Txs but direclty via loanManager)  ==
 Borrower -> AugmintToken : Tx1: approve(loanContract, repaymentAmount)
-Borrower -> LoanContract : Tx2: releaseFunds()
-note over Borrower, LoanContract
+Borrower -> LoanManager : Tx2: releaseCollateral(loanId)
+note over Borrower, LoanManager
     from here the same as Alt 1.
 end note
 == collect loan  ==
@@ -60,21 +54,14 @@ note left
     caller will be rewarded with eth
 end note
 loop as many times as fits to gas provided to tx call
-    LoanManager -> LoanContract : collect()
-    note over LoanContract
-        collect only if defaulted
-        anyone can call collect() but
-        it doesn't reward caller
-    end note
-    LoanContract --> AugmintToken : AugmintToken.send({loanValueInEth + defaultingFee})
-    LoanContract --> Borrower : AugmintToken.send({collaterInEscrow - loanValueInEth - defaultingFee})
-    LoanContract -> AugmintToken : moveCollectedInterest(interestAmount)
+    LoanManager -> LoanManager : collect()
+    LoanManager --> AugmintToken : AugmintToken.send({loanValueInEth + defaultingFee})
+    LoanManager --> Borrower : AugmintToken.send({collaterInEscrow - loanValueInEth - defaultingFee})
+    LoanManager -> AugmintToken : moveCollectedInterest(interestAmount)
     note over AugmintToken #yellow
-    moveCollectedInterest() need to be restricted.
-    How?
+    moveCollectedInterest() is restricted to trusted loanManagers
     end note
     AugmintToken -> AugmintToken : move interest from interestPool to reserve
-    LoanContract -> LoanContract : selfdestruct
 end
 LoanManager -> AugmintToken : sendReward(msg.sender, sum collectionReward)
 note over AugmintToken #yellow

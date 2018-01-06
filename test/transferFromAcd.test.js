@@ -108,4 +108,7 @@ contract("TransferFrom ACD tests", accounts => {
             })
         );
     });
+
+    it("increaseApproval");
+    it("decreaseApproval");
 });

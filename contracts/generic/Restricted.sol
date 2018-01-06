@@ -8,10 +8,11 @@ pragma solidity ^0.4.18;
 
 import "./Owned.sol";
 
+
 contract Restricted is Owned {
 
     // NB: using bytes32 rather than the string type because it's cheaper gas-wise:
-    mapping (address => mapping (bytes32 => bool)) permissions;
+    mapping (address => mapping (bytes32 => bool)) public permissions;
 
     event PermissionGranted(address indexed agent, bytes32 grantedPermission);
     event PermissionRevoked(address indexed agent, bytes32 revokedPermission);
@@ -19,6 +20,10 @@ contract Restricted is Owned {
     modifier restrict(bytes32 requiredPermission) {
         require(permissions[msg.sender][requiredPermission]);
         _;
+    }
+
+    function isAllowed(address agent, bytes32 permission) public view returns (bool) {
+        return(permissions[agent][permission]);
     }
 
     function grantPermission(address agent, bytes32 requiredPermission) public onlyOwner {

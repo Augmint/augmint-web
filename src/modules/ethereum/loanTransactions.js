@@ -9,7 +9,6 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import stringifier from "stringifier";
-import ethBackedLoan_artifacts from "contractsBuild/EthBackedLoan.json";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
@@ -37,19 +36,11 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error(
-                "All gas provided was used:  " + result.receipt.gasUsed
-            );
+            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
         }
 
-        if (
-            !result.logs ||
-            !result.logs[0] ||
-            result.logs[0].event !== "e_newLoan"
-        ) {
-            throw new Error(
-                "e_newLoan wasn't event received. Check tx :  " + result.tx
-            );
+        if (!result.logs || !result.logs[0] || result.logs[0].event !== "NewLoan") {
+            throw new Error("NewLoan event wasn't received. Check tx :  " + result.tx);
         }
         return {
             txResult: result,
@@ -57,9 +48,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
             loanId: result.logs[0].args.loanId.toNumber(),
             productId: result.logs[0].args.productId.toNumber(),
             borrower: result.logs[0].args.borrower,
-            disbursedLoanInUcd: result.logs[0].args.disbursedLoanInUcd
-                .div(new BigNumber(10000))
-                .toNumber(),
+            disbursedLoanInUcd: result.logs[0].args.disbursedLoanInUcd.div(new BigNumber(10000)).toNumber(),
             eth: {
                 gasProvided: gasEstimate,
                 gasUsed: result.receipt.gasUsed,
@@ -76,16 +65,13 @@ export async function fetchProductsTx() {
         let loanManager = store.getState().loanManager.contract.instance;
         let productCount = await loanManager.getProductCount();
         // TODO: get this from store.tokenUcd (timing issues on first load..)
-        let decimalsDiv = new BigNumber(10).pow(
-            await store.getState().tokenUcd.contract.instance.decimals()
-        );
+        let decimalsDiv = new BigNumber(10).pow(await store.getState().tokenUcd.contract.instance.decimals());
 
         let products = [];
         for (let i = 0; i < productCount; i++) {
-            let p = await loanManager.products(i);
-            let term = p[0].toNumber();
+            const p = await loanManager.products(i);
+            const term = p[0].toNumber();
             // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            let repayPeriod = p[4].toNumber();
             let bn_discountRate = p[1].div(new BigNumber(1000000));
             let bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
             let bn_minDisbursedAmountInUcd = p[3];
@@ -98,14 +84,8 @@ export async function fetchProductsTx() {
                 bn_loanCollateralRatio: bn_loanCollateralRatio,
                 loanCollateralRatio: bn_loanCollateralRatio.toNumber(),
                 bn_minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd,
-                minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd
-                    .div(decimalsDiv)
-                    .toNumber(),
-                repayPeriod: repayPeriod,
-                repayPeriodText: moment
-                    .duration(repayPeriod, "seconds")
-                    .humanize(),
-                isActive: p[5]
+                minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd.div(decimalsDiv).toNumber(),
+                isActive: p[4]
             };
             products.push(prod);
         }
@@ -127,23 +107,14 @@ export async function repayLoanTx(loanId) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error(
-                "All gas provided was used:  " + result.receipt.gasUsed
-            );
+            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
         }
-        if (
-            !result.logs ||
-            !result.logs[0] ||
-            result.logs[0].event !== "e_repayed"
-        ) {
+        if (!result.logs || !result.logs[0] || result.logs[0].event !== "e_repayed") {
             // TODO: check and handle e_error event errocodes in user friendly way:
             //         -12 ( tokenUcd.ERR_UCD_BALANCE_NOT_ENOUGH + loanManager.ERR_EXT_ERRCODE_BASE)
             //          myabe: loanManager.ERR_LOAN_NOT_OPEN and loanManager.ERR_NOT_OWNER too
             throw new Error(
-                "e_repayed wasn't event received. Check tx :  " +
-                    result.tx +
-                    "\nResult:\n" +
-                    stringify(result)
+                "e_repayed wasn't event received. Check tx :  " + result.tx + "\nResult:\n" + stringify(result)
             );
         }
 
@@ -189,9 +160,7 @@ export async function collectLoansTx(loansToCollect) {
     try {
         let userAccount = store.getState().web3Connect.userAccount;
         let loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate =
-            cost.COLLECT_BASE_GAS +
-            cost.COLLECT_ONE_GAS * loansToCollect.length;
+        let gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
         let converted = loansToCollect.map(item => {
             return new BigNumber(item.loanId);
         });
@@ -202,14 +171,10 @@ export async function collectLoansTx(loansToCollect) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error(
-                "All gas provided was used:  " + result.receipt.gasUsed
-            );
+            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
         }
         if (!result.logs || result.logs.length === 0) {
-            throw new Error(
-                "no e_collected events received. Check tx :  " + result.tx
-            );
+            throw new Error("no e_collected events received. Check tx :  " + result.tx);
         }
 
         result.logs.map((logItem, index) => {
@@ -320,9 +285,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
     // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
     let disbursementDate = l[7].toNumber();
-    let disbursementDateText = moment
-        .unix(disbursementDate)
-        .format("D MMM YYYY HH:mm:ss");
+    let disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
     let loan = {
         ethBalance: bn_ethBalance.toNumber(),
         ucdBalance: bn_ucdBalance.toNumber(),
@@ -345,9 +308,7 @@ export async function fetchLoanDetailsByAddress(loanContractAddress) {
         repayPeriod: repayPeriod, // 9
         repayPeriodText: moment.duration(repayPeriod, "seconds").humanize(),
         repayBy: repayBy,
-        repayByText: moment
-            .unix(repayPeriod + maturity)
-            .format("D MMM YYYY HH:mm"),
+        repayByText: moment.unix(repayPeriod + maturity).format("D MMM YYYY HH:mm"),
         isDue: isDue,
         isRepayable: isRepayable,
         isCollectable: isCollectable

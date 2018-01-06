@@ -1,10 +1,8 @@
 /* Generic Augmint Token implementation (ERC20 token)
     This contract manages:
         * Balances of Augmint holders and transactions between them
-        * Issues and burns tokens
-            - manually by the contract owner or
-            - automatically when new loan issued or repaid
-        * Holds  reserves:
+        * Issues and burns tokens when loan issued or repaid
+        * Holds reserves:
             - ETH as regular ETH balance of the contract
             - ERC20 token reserve (stored as regular Token balance under the contract address)
             TODO: separate reserve contract ?
@@ -25,6 +23,7 @@
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
+import "../interfaces/LoanManagerInterface.sol";
 
 
 contract AugmintToken is AugmintTokenInterface {
@@ -60,30 +59,48 @@ contract AugmintToken is AugmintTokenInterface {
 
     function () public payable { // solhint-disable-line no-empty-blocks
         // to accept ETH sent into reserve (from defaulted loan's collateral )
-        /* TODO: shall we put protection against accidentally sending in ETH? */
     }
 
-    function newLoan(address borrower, uint loanAmount, uint interestAmount, string narrative)
-    external restrict("newLoan") {
-        // FIXME: to be implemented
-        require(borrower != 0);
-        require(loanAmount != 0);
-        require(interestAmount != 0);
-        require(bytes(narrative).length != 0);
-        revert();
+    function issueAndDisburse(address borrower, uint loanAmount, uint interestAmount, string narrative)
+    external restrict("issueAndDisburse") {
+        require(loanAmount > 0);
+        uint issuedAmount = loanAmount.add(interestAmount);
+        totalSupply = totalSupply.add(issuedAmount);
+        balances[this] = balances[this].add(loanAmount);
+        if (interestAmount > 0) {
+            // move interest to InterestPoolAccount
+            balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
+        }
+        _transfer(address(this), borrower, loanAmount, narrative, 0);
+        TokenIssued(issuedAmount);
     }
 
-    function issue(uint amount) external restrict("issue") {
-        totalSupply = totalSupply.add(amount);
-        balances[this] = balances[this].add(amount);
-        TokenIssued(amount);
+    /* Optional convenience function for users to be able to repay with one transaction */
+    function repayLoan(address _loanManager, uint loanId) external {
+        require(isAllowed(_loanManager, "LoanManager")); // only whitelisted loanManagers
+
+        LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
+        var (borrower, , ,repaymentAmount, ) = loanManager.loans(loanId);
+        require(borrower == msg.sender);
+        _increaseApproval(msg.sender, _loanManager, repaymentAmount);
+        loanManager.releaseCollateral(loanId);
     }
 
-    function burn(uint amount) external restrict("burn") {
-        require(amount <= balances[this]);
-        totalSupply = totalSupply.sub(amount);
-        balances[this] = balances[this].sub(amount);
-        TokenBurned(amount);
+    function repayAndBurn(address borrower, uint repaymentAmount, uint interestAmount, string narrative)
+    external restrict("repayAndBurn") {
+        _transferFrom(borrower, this, repaymentAmount, narrative, 0);
+        totalSupply = totalSupply.sub(repaymentAmount);
+        balances[this] = balances[this].sub(repaymentAmount);
+        if (interestAmount > 0) {
+            // transfer interestAmount to InterestEarnedAccount
+            balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
+            balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
+        }
+        TokenBurned(repaymentAmount);
+    }
+
+    function moveCollectedInterest(uint interestAmount) external restrict("moveCollectedInterest") {
+        _transfer(interestPoolAccount, address(this), interestAmount, "Defaulted loan interest", 0);
     }
 
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
@@ -139,10 +156,7 @@ contract AugmintToken is AugmintTokenInterface {
      to use this function to avoid 2 calls (and wait until the first transaction is mined)
      From MonolithDAO Token.sol */
     function increaseApproval(address _spender, uint _addedValue) public returns (bool) {
-        require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
-        allowed[msg.sender][_spender] = allowed[msg.sender][_spender].add(_addedValue);
-        Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
-        return true;
+        return _increaseApproval(msg.sender, _spender, _addedValue);
     }
 
     function decreaseApproval(address _spender, uint _subtractedValue) public returns (bool) {
@@ -174,6 +188,12 @@ contract AugmintToken is AugmintTokenInterface {
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
     public restrict("transferFromNoFee") {
         _transferFrom(_from, _to, _amount, _narrative, 0);
+    }
+
+    function _increaseApproval(address _approver, address _spender, uint _addedValue) internal returns (bool) {
+        require(_approver != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
+        allowed[_approver][_spender] = allowed[_approver][_spender].add(_addedValue);
+        Approval(_approver, _spender, allowed[_approver][_spender]);
     }
 
     function getFee(uint amount) internal view returns (uint256 fee) {

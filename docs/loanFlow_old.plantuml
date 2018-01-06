@@ -1,0 +1,85 @@
+@startuml
+title **Augmint** - Loan flow
+skinparam ArrowColor #blue
+skinparam noteBackgroundColor #lightgrey
+actor Borrower
+control AugmintToken
+control LoanManager
+control LoanContract
+actor Anyone
+== new loan ==
+Borrower -> LoanManager : getLoan\n(productId, {ethToEscrow})
+LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
+LoanManager -> LoanContract : create\n(AugmintToken, borrower, loanParams, {ethValue})
+LoanManager -> AugmintToken : issueAndDisburse\n(borrower, loanAmount, interestAmount)
+note over AugmintToken
+issueAndDisburse is restricted to trusted LoanManager(s)
+end note
+AugmintToken -> AugmintToken : issue(repaymentAmount)\nbalances[interestPool] += interestAmount
+AugmintToken -> AugmintToken : _transfer\n(borrower, loanAmount, "loan disbursment", 0)
+AugmintToken --> Borrower : loanAmount transferred
+
+== repay loan Alt 1. (with a single TX from user)  ==
+Borrower -> AugmintToken : repayLoan(loanContract)
+note over AugmintToken #yellow
+    Any point to restrict repayLoan()?
+    It deducts repayment amount from msg.sender
+    Any danger if a malicious caller
+    providing a crafted loanContract?
+end note
+AugmintToken -> AugmintToken : approve\n(loanContract, repaymentAmount)
+
+AugmintToken -> LoanContract : releaseCollateral()
+note left LoanContract
+    releaseFunds() is not restricted but
+    it checks loan status and transfers repaymentAmount from user
+end note
+LoanContract -> AugmintToken : repayAndBurn(borrower, repaymentAmount, interestAmount, narrative)
+note right AugmintToken #yellow
+    Does repayAndBurn() need to be restriced?
+    Any potential for a malicious caller?
+end note
+activate AugmintToken
+AugmintToken -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanContract, , "loan repayment", fee: 0)
+Borrower --> LoanContract : repaymentAmount transferred
+AugmintToken -> AugmintToken : balances[loanContract] -= repaymentAmount\nbalances[AugmintToken] += repaymentAmount\nburn(repaymentAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
+deactivate AugmintToken
+LoanContract --> Borrower : borrower.send(ethInEscrow)
+LoanContract -> LoanContract : selfdestruct()
+
+== repay loan Alt 2., fallback (two user Txs but direclty via loanContract)  ==
+Borrower -> AugmintToken : Tx1: approve(loanContract, repaymentAmount)
+Borrower -> LoanContract : Tx2: releaseFunds()
+note over Borrower, LoanContract
+    from here the same as Alt 1.
+end note
+== collect loan  ==
+Anyone -> LoanManager : collectMultiple(loanIds[])
+note left
+    collectMultiple() is not restricted
+    caller will be rewarded with eth
+end note
+loop as many times as fits to gas provided to tx call
+    LoanManager -> LoanContract : collect()
+    note over LoanContract
+        collect only if defaulted
+        anyone can call collect() but
+        it doesn't reward caller
+    end note
+    LoanContract --> AugmintToken : AugmintToken.send({loanValueInEth + defaultingFee})
+    LoanContract --> Borrower : AugmintToken.send({collaterInEscrow - loanValueInEth - defaultingFee})
+    LoanContract -> AugmintToken : moveCollectedInterest(interestAmount)
+    note over AugmintToken #yellow
+    moveCollectedInterest() need to be restricted.
+    How?
+    end note
+    AugmintToken -> AugmintToken : move interest from interestPool to reserve
+    LoanContract -> LoanContract : selfdestruct
+end
+LoanManager -> AugmintToken : sendReward(msg.sender, sum collectionReward)
+note over AugmintToken #yellow
+    sendReward() is restricted to LoanManager
+    Q: how much a vulnerability risk is it? how to restrict better?
+end note
+AugmintToken --> Anyone : msg.sender.send({sum collectionReward})
+@enduml
