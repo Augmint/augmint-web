@@ -19,12 +19,7 @@ export function asyncGetAccounts(web3) {
     return new Promise(function(resolve, reject) {
         web3.eth.getAccounts((error, accounts) => {
             if (error) {
-                reject(
-                    new Error(
-                        "Can't get account list from web3 (asyncGetAccounts).\n " +
-                            error
-                    )
-                );
+                reject(new Error("Can't get account list from web3 (asyncGetAccounts).\n " + error));
             } else {
                 if (!web3.utils.isAddress(accounts[0])) {
                     reject(
@@ -86,10 +81,7 @@ export function asyncGetBlock(blockNumber) {
         web3.eth.getBlock(blockNumber, function(error, block) {
             if (error) {
                 reject(
-                    new Error(
-                        "Can't getBlock from web3 (asyncGetBalance). blockNumber: ",
-                        blockNumber + "\n" + error
-                    )
+                    new Error("Can't getBlock from web3 (asyncGetBalance). blockNumber: ", blockNumber + "\n" + error)
                 );
             } else {
                 resolve(block);
@@ -119,14 +111,10 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                 if (i > 0) {
                     topicFilters += "&topic" + i + "_" + (i + 1) + "_opr=or";
                 }
-                topicFilters +=
-                    "&topic" + (i + 1) + "=" + eventFilter.topics[i + 1];
+                topicFilters += "&topic" + (i + 1) + "=" + eventFilter.topics[i + 1];
             }
             let xhr = new XMLHttpRequest();
-            let etherScanHost =
-                web3Network.id === 4
-                    ? "https://rinkeby.etherscan.io"
-                    : "https://ropsten.etherscan.io";
+            let etherScanHost = web3Network.id === 4 ? "https://rinkeby.etherscan.io" : "https://ropsten.etherscan.io";
             let etherscanURL =
                 etherScanHost +
                 "/api?module=logs&action=getLogs" +
@@ -147,9 +135,7 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                     let res = JSON.parse(xhr.response);
                     //console.debug("Response from etherScan (xhr.response):", xhr.response);
                     //console.debug("JSON.parse(xhr.response) ", res);
-                    let decodedData = contract.abiDecoder.decodeLogs(
-                        res.result
-                    );
+                    let decodedData = contract.abiDecoder.decodeLogs(res.result);
                     // console.debug(
                     //     "contract.abiDecoder.decodeLogs(res.result) ",
                     //     decodedData
@@ -162,16 +148,10 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                             blockNumber: blockNumber,
                             gasPrice: parseInt(r.gasPrice, 16),
                             gasUsed: parseInt(r.gasUsed, 16),
-                            logIndex:
-                                r.logIndex === "0x"
-                                    ? 0
-                                    : parseInt(r.logIndex, 16),
+                            logIndex: r.logIndex === "0x" ? 0 : parseInt(r.logIndex, 16),
                             timeStamp: parseInt(r.timeStamp, 16),
                             transactionHash: r.transactionHash,
-                            transactionIndex:
-                                r.transactionIndex === "0x"
-                                    ? 0
-                                    : parseInt(r.transactionIndex, 16),
+                            transactionIndex: r.transactionIndex === "0x" ? 0 : parseInt(r.transactionIndex, 16),
                             type: blockNumber > 0 ? "mined" : "pending",
                             event: decodedData[i].name,
                             args: decodedData[i].args
@@ -192,9 +172,7 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                         fromBlock: fromBlock,
                         toBlock: toBlock
                     });
-                    filterResult = filterResult.concat(
-                        await asyncFilterGet(filter)
-                    );
+                    filterResult = filterResult.concat(await asyncFilterGet(filter));
                 }
             }
             resolve(filterResult);
@@ -207,13 +185,7 @@ export function asyncFilterGet(filter) {
         filter.get(function(error, result) {
             if (error) {
                 console.error(error);
-                reject(
-                    new Error(
-                        "asyncFilterGet failed. Filter: ",
-                        filter,
-                        "\nError: " + error
-                    )
-                );
+                reject(new Error("asyncFilterGet failed. Filter: ", filter, "\nError: " + error));
             } else {
                 resolve(result);
             }
@@ -248,32 +220,26 @@ export async function getUcdBalance(address, defaultBlock) {
                 defBlock = "latest";
             }
 
-            tokenUcd.contract.instance.contract.balanceOf(
-                address,
-                defaultBlock,
-                async function(error, bn_balance) {
-                    if (error) {
-                        reject(
-                            new Error(
-                                "Can't get ACD balance from tokenUcd (getUcdBalance). Address: ",
-                                address + "\n" + error
-                            )
-                        );
-                    } else {
-                        let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
+            tokenUcd.contract.instance.contract.balanceOf(address, defaultBlock, async function(error, bn_balance) {
+                if (error) {
+                    reject(
+                        new Error(
+                            "Can't get ACD balance from tokenUcd (getUcdBalance). Address: ",
+                            address + "\n" + error
+                        )
+                    );
+                } else {
+                    let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
 
-                        if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
-                            // this is a workround for timing issue with tokenUcd refresh
-                            // TODO: figure out how to rearrange refresh to avoid these checks
-                            bn_decimalsDiv = new BigNumber(10).pow(
-                                await tokenUcd.contract.instance.decimals()
-                            );
-                        }
-
-                        resolve(bn_balance.div(bn_decimalsDiv));
+                    if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
+                        // this is a workround for timing issue with tokenUcd refresh
+                        // TODO: figure out how to rearrange refresh to avoid these checks
+                        bn_decimalsDiv = new BigNumber(10).pow(await tokenUcd.contract.instance.decimals());
                     }
+
+                    resolve(bn_balance.div(bn_decimalsDiv));
                 }
-            );
+            });
         }
         // https://ethereum.stackexchange.com/questions/25756/passing-defaultblock-pending-param-to-a-truffle-contract-call
     );
