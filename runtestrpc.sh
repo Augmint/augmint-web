@@ -1,6 +1,6 @@
-echo "launching testrpc with deterministic addresses and preset accounts with balances (for unit tests)"
 n 8.9.1
-testrpc \
+echo "launching ganache-cli (aka testrpc) with deterministic addresses and preset accounts with balances"
+ganache-cli \
 --gasLimit 0x47D5DE \
 --network-id 999 \
 -m "hello build tongue rack parade express shine salute glare rate spice stock" \

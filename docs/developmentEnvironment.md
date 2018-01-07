@@ -13,7 +13,7 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [node version manager](https://github.com/tj/n): `npm install -g n`
 1. Install node: `n 8.9.3` and `n 8.9.1`  
    _testrcp regularly crashes with node v8.9.3, `runtestrpc.sh` selects the correct node version_
-1. `npm install -g ethereumjs-testrpc@6.0.3`  
+1. `npm install -g ganache-cli@6.0.3`  
    _tested with version 6.0.3_
 1. `npm install -g truffle@4.0.4`  
    _tested with version v4.0.4_
@@ -32,7 +32,7 @@ in Git bash:
 
 1. `nvm install 8.9.3`
 1. `nvm use 8.9.3`
-1. `npm install -g ethereumjs-testrpc@6.0.3`  
+1. `npm install -g ganache-cli@6.0.3`  
    _tested with version v6.0.3_
 1. `npm install -g truffle@4.0.4`
    _tested with version 4.0.4_
@@ -49,7 +49,7 @@ in Git bash:
 
 ### 2. Deploy to network
 
-#### Testrpc
+#### Testrpc (ganache-cli)
 
 1. `./runtestrpc` or on windows: `./runtestrpc.bat`
 1. in separate console:  
