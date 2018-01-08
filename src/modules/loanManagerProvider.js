@@ -1,10 +1,6 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import {
-    connectLoanManager,
-    refreshLoanManager,
-    fetchProducts
-} from "modules/reducers/loanManager";
+import { connectLoanManager, refreshLoanManager, fetchProducts } from "modules/reducers/loanManager";
 import { fetchLoans } from "modules/reducers/loans";
 import { refreshTokenUcd } from "modules/reducers/tokenUcd";
 import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -29,32 +25,24 @@ export default () => {
 
 const setupListeners = () => {
     const loanManager = store.getState().loanManager.contract.instance;
-    loanManager
-        .e_newLoan({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onNewLoan);
-    loanManager
-        .e_repayed({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onRepayed);
-    loanManager
-        .e_collected({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onCollected);
+    loanManager.NewLoan({ fromBlock: "latest", toBlock: "pending" }).watch(onNewLoan);
+    loanManager.LoanRepayed({ fromBlock: "latest", toBlock: "pending" }).watch(onRepayed);
+    loanManager.LoanCollected({ fromBlock: "latest", toBlock: "pending" }).watch(onCollected);
     // TODO: add & handle loanproduct change events
 };
 
 const removeListeners = oldInstance => {
     if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.e_newLoan().stopWatching();
-        oldInstance.instance.e_repayed().stopWatching();
-        oldInstance.instance.e_collected().stopWatching();
+        oldInstance.instance.NewLoan().stopWatching();
+        oldInstance.instance.LoanRepayed().stopWatching();
+        oldInstance.instance.LoanCollected().stopWatching();
     }
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug(
-            "loanManagerProvider - web3Connect.network changed. Dispatching connectLoanManager()"
-        );
+        console.debug("loanManagerProvider - web3Connect.network changed. Dispatching connectLoanManager()");
         store.dispatch(connectLoanManager());
     }
 };
@@ -76,19 +64,15 @@ const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
     const loanManager = store.getState().loanManager;
     if (loanManager.isConnected && newVal !== "?") {
-        console.debug(
-            "loanManagerProvider - web3Connect.userAccount changed. Dispatching fetchLoans()"
-        );
+        console.debug("loanManagerProvider - web3Connect.userAccount changed. Dispatching fetchLoans()");
         const userAccount = store.getState().web3Connect.userAccount;
         store.dispatch(fetchLoans(userAccount));
     }
 };
 
 const onNewLoan = (error, result) => {
-    // event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd );
-    console.debug(
-        "loanManagerProvider.onNewLoan: dispatching refreshLoanManager & refreshTokenUcd"
-    );
+    // event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount, uint repaymentAmount);
+    console.debug("loanManagerProvider.onNewLoan: dispatching refreshLoanManager & refreshTokenUcd");
     store.dispatch(refreshTokenUcd());
     store.dispatch(refreshLoanManager()); // to update loanCount
     let userAccount = store.getState().web3Connect.userAccount;
@@ -103,10 +87,8 @@ const onNewLoan = (error, result) => {
 };
 
 const onRepayed = (error, result) => {
-    // e_repayed(loanContractAddress, loanContract.owner());
-    console.debug(
-        "loanManagerProvider.onRepayed:: Dispatching refreshTokenUcd"
-    );
+    // event LoanRepayed(uint loanId, address borrower);
+    console.debug("loanManagerProvider.onRepayed:: Dispatching refreshTokenUcd");
     store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.borrower.toLowerCase() === userAccount.toLowerCase()) {
@@ -120,10 +102,8 @@ const onRepayed = (error, result) => {
 };
 
 const onCollected = (error, result) => {
-    // event e_collected(address borrower, address loanContractAddress);
-    console.debug(
-        "loanManagerProvider.onCollected: Dispatching refreshTokenUcd"
-    );
+    // event LoanCollected(uint loanId, address borrower);
+    console.debug("loanManagerProvider.onCollected: Dispatching refreshTokenUcd");
     store.dispatch(refreshTokenUcd());
     let userAccount = store.getState().web3Connect.userAccount;
     if (result.args.borrower.toLowerCase() === userAccount.toLowerCase()) {

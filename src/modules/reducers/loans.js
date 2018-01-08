@@ -47,13 +47,12 @@ export function fetchLoans(userAccount) {
         dispatch({
             type: LOANS_LOANLIST_REQUESTED
         });
-        let loanIds, loanManager;
-        try {
-            loanManager = store.getState().loanManager.contract.instance;
-            loanIds = await loanManager.getLoanIds(userAccount);
 
-            let actions = loanIds.map(fetchLoanDetails);
-            let loans = await Promise.all(actions); // queries in paralel...
+        try {
+            const loanManager = store.getState().loanManager.contract.instance;
+            const loanIds = await loanManager.getLoanIds(userAccount);
+            const actions = loanIds.map(fetchLoanDetails);
+            const loans = await Promise.all(actions); // queries in paralel...
 
             return dispatch({
                 type: LOANS_LOANLIST_RECEIVED,

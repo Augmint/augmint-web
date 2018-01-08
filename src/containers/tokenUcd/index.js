@@ -33,12 +33,7 @@ class TokenUcd extends React.Component {
 
                     <Pgrid columns={1}>
                         <Pgrid.Column>
-                            <TokenUcdStats
-                                size="small"
-                                showInUsd
-                                tokenUcd={tokenUcd}
-                                rates={rates}
-                            />
+                            <TokenUcdStats size="small" showInUsd tokenUcd={tokenUcd} rates={rates} />
                         </Pgrid.Column>
                         <Pgrid.Column>
                             <Button
@@ -67,8 +62,7 @@ const mapStateToProps = state => ({
     web3Instance: state.web3Connect.web3Instance,
 
     tokenUcd: state.tokenUcd,
-    rates: state.rates,
-    loanManagerAddress: state.loanManager.contract.address
+    rates: state.rates
 });
 
 const mapDispatchToProps = dispatch =>

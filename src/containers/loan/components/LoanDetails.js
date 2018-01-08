@@ -1,12 +1,8 @@
 import React from "react";
-import {
-    MyGridTable,
-    MyGridTableRow as Row,
-    MyGridTableColumn as Col
-} from "components/MyListGroups";
+import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 
 export default function LoanDetails(props) {
-    let loan = props.loan;
+    const loan = props.loan;
     return (
         <MyGridTable>
             <Row>
@@ -14,8 +10,8 @@ export default function LoanDetails(props) {
                 <Col>{loan.loanStateText}</Col>
             </Row>
             <Row>
-                <Col>Loan amount:</Col>
-                <Col>{loan.ucdDueAtMaturity} ACD</Col>
+                <Col>Repayment amount:</Col>
+                <Col>{loan.repaymentAmount} ACD</Col>
             </Row>
 
             <Row>
@@ -24,23 +20,14 @@ export default function LoanDetails(props) {
             </Row>
 
             <Row>
-                <Col>
-                    <strong>Pay by latest:</strong>
-                </Col>
-                <Col>
-                    <strong>{loan.repayByText}</strong>
-                </Col>
-            </Row>
-
-            <Row>
                 <Col>Collateral held:</Col>
-                <Col>{loan.ethBalance} ETH</Col>
+                <Col>{loan.collateralEth} ETH</Col>
             </Row>
 
             <Row>
-                <Col>Contract:</Col>
+                <Col>Loan id:</Col>
                 <Col>
-                    <small>{loan.loanContract.instance.address}</small>
+                    <small>{loan.loanId}</small>
                 </Col>
             </Row>
 
@@ -50,8 +37,8 @@ export default function LoanDetails(props) {
             </Row>
 
             <Row>
-                <Col>Disbursed amount:</Col>
-                <Col>{loan.disbursedLoanInUcd} ACD</Col>
+                <Col>Loan amount (disbursed):</Col>
+                <Col>{loan.loanAmount} ACD</Col>
             </Row>
         </MyGridTable>
     );

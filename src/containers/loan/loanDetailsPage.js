@@ -13,10 +13,9 @@ import CollectLoanButton from "./collectLoan/CollectLoanButton";
 class LoanDetailsPage extends React.Component {
     constructor(props) {
         super(props);
-        let loanId = parseInt(this.props.match.params.loanId, 10);
         this.state = {
             loan: null,
-            loanId: loanId,
+            loanId: this.props.match.params.loanId,
             isLoading: true
         };
     }
@@ -37,7 +36,7 @@ class LoanDetailsPage extends React.Component {
             return;
         } // not loaded yet
         let isLoanFound;
-        let loan = this.props.loans.find(item => {
+        const loan = this.props.loans.find(item => {
             return item.loanId === this.state.loanId;
         });
         if (typeof loan === "undefined") {
@@ -56,16 +55,11 @@ class LoanDetailsPage extends React.Component {
         return (
             <Psegment>
                 <Pheader header="Loan details" />
-                {this.state.isLoading && (
-                    <LoadingPanel>
-                        Fetching data (loan id: {this.state.loanId})...
-                    </LoadingPanel>
-                )}
+                {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
                     !this.state.isLoanFound && (
                         <ErrorPanel>
-                            Can't find loan #{this.state.loanId} for current
-                            account {this.props.userAccount}
+                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
                         </ErrorPanel>
                     )}
 
@@ -74,23 +68,14 @@ class LoanDetailsPage extends React.Component {
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
                                 <Header>
-                                    {this.state.loan.loanStateText} loan #{
-                                        this.state.loan.loanId
-                                    }
+                                    {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
                                 </Header>
                                 <LoanDetails loan={this.state.loan} />
 
-                                <LoanRepayLink
-                                    loan={this.state.loan}
-                                    size="large"
-                                />
+                                <LoanRepayLink loan={this.state.loan} size="large" />
 
                                 {this.state.loan.isCollectable && (
-                                    <CollectLoanButton
-                                        loansToCollect={[
-                                            { loanId: this.state.loanId }
-                                        ]}
-                                    />
+                                    <CollectLoanButton loansToCollect={[{ loanId: this.state.loanId }]} />
                                 )}
                             </Pgrid.Column>
                         </Pgrid.Row>

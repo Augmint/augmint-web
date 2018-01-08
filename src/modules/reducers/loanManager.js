@@ -15,52 +15,33 @@ import {
     fetchProductsTx
 } from "modules/ethereum/loanTransactions";
 
-export const LOANMANAGER_CONNECT_REQUESTED =
-    "loanManager/LOANMANAGER_CONNECT_REQUESTED";
-export const LOANMANAGER_CONNECT_SUCCESS =
-    "loanManager/LOANMANAGER_CONNECT_SUCCESS";
-export const LOANMANAGER_CONNECT_ERROR =
-    "loanManager/LOANMANAGER_CONNECT_ERROR";
+export const LOANMANAGER_CONNECT_REQUESTED = "loanManager/LOANMANAGER_CONNECT_REQUESTED";
+export const LOANMANAGER_CONNECT_SUCCESS = "loanManager/LOANMANAGER_CONNECT_SUCCESS";
+export const LOANMANAGER_CONNECT_ERROR = "loanManager/LOANMANAGER_CONNECT_ERROR";
 
-export const LOANMANAGER_REFRESH_REQUESTED =
-    "loanManager/LOANMANAGER_REFRESH_REQUESTED";
+export const LOANMANAGER_REFRESH_REQUESTED = "loanManager/LOANMANAGER_REFRESH_REQUESTED";
 export const LOANMANAGER_REFRESHED = "loanManager/LOANMANAGER_REFRESHED";
-export const LOANMANAGER_REFRESH_ERROR =
-    "loanManager/LOANMANAGER_REFRESH_ERROR";
+export const LOANMANAGER_REFRESH_ERROR = "loanManager/LOANMANAGER_REFRESH_ERROR";
 
-export const LOANMANAGER_PRODUCTLIST_REQUESTED =
-    "loanManager/LOANMANAGER_PRODUCTLIST_REQUESTED";
-export const LOANMANAGER_PRODUCTLIST_RECEIVED =
-    "loanManager/LOANMANAGER_PRODUCTLIST_RECEIVED";
-export const LOANMANAGER_PRODUCTLIST_ERROR =
-    "loanManager/LOANMANAGER_PRODUCTLIST_ERROR";
+export const LOANMANAGER_PRODUCTLIST_REQUESTED = "loanManager/LOANMANAGER_PRODUCTLIST_REQUESTED";
+export const LOANMANAGER_PRODUCTLIST_RECEIVED = "loanManager/LOANMANAGER_PRODUCTLIST_RECEIVED";
+export const LOANMANAGER_PRODUCTLIST_ERROR = "loanManager/LOANMANAGER_PRODUCTLIST_ERROR";
 
-export const LOANMANAGER_NEWLOAN_REQUESTED =
-    "loanManager/LOANMANAGER_NEWLOAN_REQUESTED";
-export const LOANMANAGER_NEWLOAN_CREATED =
-    "loanManager/LOANMANAGER_NEWLOAN_CREATED";
-export const LOANMANAGER_NEWLOAN_ERROR =
-    "loanManager/LOANMANAGER_NEWLOAN_ERROR";
+export const LOANMANAGER_NEWLOAN_REQUESTED = "loanManager/LOANMANAGER_NEWLOAN_REQUESTED";
+export const LOANMANAGER_NEWLOAN_CREATED = "loanManager/LOANMANAGER_NEWLOAN_CREATED";
+export const LOANMANAGER_NEWLOAN_ERROR = "loanManager/LOANMANAGER_NEWLOAN_ERROR";
 
-export const LOANMANAGER_REPAY_REQUESTED =
-    "loanManager/LOANMANAGER_REPAY_REQUESTED";
-export const LOANMANAGER_REPAY_SUCCESS =
-    "loanManager/LOANMANAGER_REPAY_SUCCESS";
+export const LOANMANAGER_REPAY_REQUESTED = "loanManager/LOANMANAGER_REPAY_REQUESTED";
+export const LOANMANAGER_REPAY_SUCCESS = "loanManager/LOANMANAGER_REPAY_SUCCESS";
 export const LOANMANAGER_REPAY_ERROR = "loanManager/LOANMANAGER_REPAY_ERROR";
 
-export const LOANMANAGER_COLLECT_REQUESTED =
-    "loanManager/LOANMANAGER_COLLECT_REQUESTED";
-export const LOANMANAGER_COLLECT_SUCCESS =
-    "loanManager/LOANMANAGER_COLLECT_SUCCESS";
-export const LOANMANAGER_COLLECT_ERROR =
-    "loanManager/LOANMANAGER_COLLECT_ERROR";
+export const LOANMANAGER_COLLECT_REQUESTED = "loanManager/LOANMANAGER_COLLECT_REQUESTED";
+export const LOANMANAGER_COLLECT_SUCCESS = "loanManager/LOANMANAGER_COLLECT_SUCCESS";
+export const LOANMANAGER_COLLECT_ERROR = "loanManager/LOANMANAGER_COLLECT_ERROR";
 
-export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED =
-    "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED";
-export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED =
-    "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED";
-export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR =
-    "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR";
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED = "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED";
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED = "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED";
+export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR = "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR";
 
 const initialState = {
     contract: null,
@@ -257,17 +238,17 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            let loanManager = store.getState().loanManager.contract.instance;
+            const loanManager = store.getState().loanManager.contract.instance;
             // TODO: make calls paralel
-            let loanCount = await loanManager.getLoanCount();
-            let productCount = await loanManager.getProductCount();
+            const loanCount = await loanManager.getLoanCount();
+            const productCount = await loanManager.getProductCount();
 
-            let tokenUcdAddress = await loanManager.tokenUcd();
-            let ratesAddress = await loanManager.rates();
-            let owner = await loanManager.owner();
+            const augmintTokenAddress = await loanManager.augmintToken();
+            const ratesAddress = await loanManager.rates();
+            const owner = await loanManager.owner();
 
-            let bn_ethBalance = await asyncGetBalance(loanManager.address);
-            let bn_ucdBalance = await getUcdBalance(loanManager.address);
+            const bn_ethBalance = await asyncGetBalance(loanManager.address);
+            const bn_ucdBalance = await getUcdBalance(loanManager.address);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {
@@ -278,7 +259,7 @@ export const refreshLoanManager = () => {
                     ucdBalance: bn_ucdBalance.toNumber(),
                     loanCount: loanCount.toNumber(),
                     productCount: productCount.toNumber(),
-                    tokenUcdAddress: tokenUcdAddress,
+                    tokenUcdAddress: augmintTokenAddress,
                     ratesAddress: ratesAddress
                 }
             });
@@ -343,7 +324,6 @@ export function repayLoan(loanId) {
             loanId: loanId
         });
 
-        // FIXME: per user loanId vs.  global loan id - need to be fixed in contracts
         try {
             let result = await repayLoanTx(loanId);
             return dispatch({

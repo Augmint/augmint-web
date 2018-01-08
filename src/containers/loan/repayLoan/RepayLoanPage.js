@@ -6,10 +6,7 @@ import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
 import store from "modules/store";
-import {
-    repayLoan,
-    LOANMANAGER_REPAY_SUCCESS
-} from "modules/reducers/loanManager";
+import { repayLoan, LOANMANAGER_REPAY_SUCCESS } from "modules/reducers/loanManager";
 import LoanDetails from "containers/loan/components/LoanDetails";
 import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";
@@ -59,10 +56,9 @@ function LoanDetailsWithStatusCheck(props) {
 class RepayLoanPage extends React.Component {
     constructor(props) {
         super(props);
-        let loanId = parseInt(this.props.match.params.loanId, 10);
         this.state = {
             loan: null,
-            loanId: loanId,
+            loanId: this.props.match.params.loanId,
             isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -122,11 +118,7 @@ class RepayLoanPage extends React.Component {
         const { submitSucceeded, clearSubmitErrors } = this.props;
 
         if (this.state.isLoading) {
-            return (
-                <LoadingPanel>
-                    Fetching data (loan id: {this.state.loanId})...
-                </LoadingPanel>
-            );
+            return <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>;
         }
 
         if (!this.state.isLoanFound) {
@@ -134,8 +126,7 @@ class RepayLoanPage extends React.Component {
                 <ErrorPanel
                     header={
                         <h3>
-                            Can't find loan #{this.state.loanId} for current
-                            account {this.props.userAccount.address}
+                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount.address}
                         </h3>
                     }
                 />
@@ -159,20 +150,11 @@ class RepayLoanPage extends React.Component {
 
                     {!submitSucceeded &&
                         !this.state.isLoading && (
-                            <Form
-                                onSubmit={this.props.handleSubmit(
-                                    this.handleSubmit
-                                )}
-                            >
-                                <LoanDetailsWithStatusCheck
-                                    loan={this.state.loan}
-                                />
+                            <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                <LoanDetailsWithStatusCheck loan={this.state.loan} />
                                 {this.state.loan.isRepayable &&
                                     !this.state.loan.isDue && (
-                                        <p>
-                                            This loan is not due yet but you can
-                                            repay early without any extra fee.
-                                        </p>
+                                        <p>This loan is not due soon but you can repay early without any extra fee.</p>
                                     )}
                                 {this.state.loan.isRepayable && (
                                     <Button
@@ -186,14 +168,10 @@ class RepayLoanPage extends React.Component {
                                     >
                                         {this.props.submitting
                                             ? "Submitting..."
-                                            : "Confirm to repay " +
-                                              this.state.loan.ucdDueAtMaturity +
-                                              " ACD"}
+                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " ACD"}
                                     </Button>
                                 )}
-                                {!this.state.loan.isRepayable && (
-                                    <p>This loan is not repayable anymore</p>
-                                )}
+                                {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
                             </Form>
                         )}
 
