@@ -26,29 +26,22 @@ class LoanProductSelector extends React.Component {
             <Pgrid columns={2}>
                 <Pgrid.Column width={6}>
                     <Message info>
-                        <p>
-                            You can get ACD for placing your ETH in escrow
-                            (collateral).
-                        </p>
+                        <p>You can get ACE for placing your ETH in escrow (collateral).</p>
                         <p>
                             <strong>Repayment</strong>
                             <br />
-                            You get back all of your ETH if you repay your ACD
-                            loan anytime before it's due (maturity).
+                            You get back all of your ETH if you repay your ACE loan anytime before it's due (maturity).
                         </p>
                         <p>
                             <strong>Default (non payment)</strong>
                             <br />
-                            If you decide not to repay the ACD loan at maturity
-                            then your ETH will be taken to the Augmint system
-                            reserves.
+                            If you decide not to repay the ACE loan at maturity then your ETH will be taken to the
+                            Augmint system reserves.
                         </p>
                         <p>
-                            TODO, Not yet implemented: <br />
-                            If the value of your ETH (at the moment of
-                            collection) is higher than the ACD value of your
-                            loan + fees for the default then the leftover ETH
-                            will be transfered back to your ETH account.
+                            If the value of your ETH (at the moment of collection) is higher than the ACE value of your
+                            loan + fees for the default then the leftover ETH will be transfered back to your ETH
+                            account.
                         </p>
                     </Message>
                 </Pgrid.Column>

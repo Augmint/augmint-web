@@ -71,10 +71,11 @@ export async function fetchProductsTx() {
             const p = await loanManager.products(i);
             const term = p[0].toNumber();
             // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            let bn_discountRate = p[1].div(new BigNumber(1000000));
-            let bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
-            let bn_minDisbursedAmountInUcd = p[3];
-            let prod = {
+            const bn_discountRate = p[1].div(new BigNumber(1000000));
+            const bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
+            const bn_minDisbursedAmountInUcd = p[3];
+            const bn_defaultingFeePt = p[4].div(new BigNumber(1000000));
+            const prod = {
                 id: i,
                 term: term,
                 termText: moment.duration(term, "seconds").humanize(),
@@ -84,7 +85,9 @@ export async function fetchProductsTx() {
                 loanCollateralRatio: bn_loanCollateralRatio.toNumber(),
                 bn_minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd,
                 minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd.div(decimalsDiv).toNumber(),
-                isActive: p[4]
+                bn_defaultingFeePt: bn_defaultingFeePt,
+                defaultingFeePt: bn_defaultingFeePt.toNumber(),
+                isActive: p[5]
             };
             products.push(prod);
         }

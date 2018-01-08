@@ -13,6 +13,7 @@ contract("ACD Loans tests", accounts => {
         await tokenAcd.issue(1000000000);
         await tokenAcd.withdrawTokens(accounts[0], 1000000000);
         products = {
+            defaultingNoLeftOver: await loanTestHelper.getProductInfo(3),
             defaulting: await loanTestHelper.getProductInfo(2),
             repaying: await loanTestHelper.getProductInfo(1),
             notDue: await loanTestHelper.getProductInfo(0)
@@ -62,8 +63,16 @@ contract("ACD Loans tests", accounts => {
         await loanTestHelper.repayLoan(this, loan, false); // repayment via AugmintToken.approve + LoanManager.releaseCollateral
     });
 
-    it("Should collect a defaulted ACD loan", async function() {
+    it("Should collect a defaulted ACD loan and send back leftover collateral", async function() {
         const loan = await loanTestHelper.createLoan(this, products.defaulting, accounts[1], web3.toWei(0.5));
+
+        await testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber());
+
+        await loanTestHelper.collectLoan(this, loan, accounts[2]);
+    });
+
+    it("Should collect a defaulted ACD loan when no leftover collateral", async function() {
+        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(2));
 
         await testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber());
 

@@ -30,13 +30,16 @@ async function newLoanManager(_tokenAcd, _rates) {
     rates = _rates;
     reserveAcc = tokenAcd.address;
     loanManager = await LoanManager.new(tokenAcd.address, rates.address);
+    // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmount (w/ 4 decimals), defaultingFeePt, isActive
     // notDue: (due in 1 day)
-    await loanManager.addProduct(86400, 970000, 850000, 300000, true);
-
-    // repaying: due in 1 sec, repay in 1hr for testing repayments
-    await loanManager.addProduct(1, 985000, 900000, 200000, true);
+    await loanManager.addProduct(86400, 970000, 850000, 300000, 50000, true);
+    // repaying: due in 60 sec for testing repayment
+    await loanManager.addProduct(60, 985000, 900000, 200000, 50000, true);
     // defaulting: due in 1 sec, repay in 1sec for testing defaults
-    await loanManager.addProduct(1, 990000, 950000, 100000, true);
+    await loanManager.addProduct(1, 990000, 600000, 100000, 50000, true);
+    // defaulting no left over collateral: due in 1 sec, repay in 1sec for testing defaults without leftover
+    await loanManager.addProduct(1, 990000, 990000, 100000, 50000, true);
+
     await tokenAcd.grantMultiplePermissions(loanManager.address, [
         "issueAndDisburse",
         "repayAndBurn",
@@ -189,7 +192,14 @@ async function collectLoan(testInstance, loan, collector) {
     ];
     const totalSupplyBefore = await tokenAcd.totalSupply();
     const balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
-
+    const coveringValue = (await rates.convertUsdcToWei(loan.repaymentAmount)).add(loan.defaultingFee);
+    let releasedCollateral;
+    if (coveringValue < loan.collateral) {
+        releasedCollateral = loan.collateral.sub(coveringValue);
+    } else {
+        releasedCollateral = 0;
+    }
+    const collectedCollateral = loan.collateral.sub(releasedCollateral);
     loan.state = 2; // defaulted
 
     const tx = await loanManager.collect([loan.id], { from: loan.collector });
@@ -208,13 +218,13 @@ async function collectLoan(testInstance, loan, collector) {
             name: "reserve",
             address: reserveAcc,
             ucd: balBefore[0].ucd.add(loan.interestAmount),
-            eth: balBefore[0].eth.add(loan.collateral)
+            eth: balBefore[0].eth.add(collectedCollateral)
         },
         {
             name: "loan.borrower",
             address: loan.borrower,
             ucd: balBefore[1].ucd,
-            eth: balBefore[1].eth
+            eth: balBefore[1].eth.add(releasedCollateral)
         },
         {
             name: "loan.collector", // collect tx calling acc
@@ -254,7 +264,8 @@ async function getProductInfo(productId) {
         discountRate: prod[1],
         collateralRatio: prod[2],
         minDisbursedAmount: prod[3],
-        isActive: prod[4]
+        defaultingFeePt: prod[4],
+        isActive: prod[5]
     };
     return info;
 }
@@ -262,7 +273,7 @@ async function getProductInfo(productId) {
 async function calcLoanValues(rates, product, collateralWei) {
     let ret = {};
 
-    ret.collateral = collateralWei;
+    ret.collateral = new BigNumber(collateralWei);
 
     // uint usdcValue = rates.convertWeiToUsdc(msg.value);
     // uint ucdDueAtMaturity = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
@@ -290,6 +301,10 @@ async function calcLoanValues(rates, product, collateralWei) {
     ret.disbursementTime = moment()
         .utc()
         .unix();
+    ret.defaultingFee = ret.collateral
+        .mul(product.defaultingFeePt)
+        .div(1000000)
+        .round(0, BigNumber.ROUND_DOWN);
     ret.product = product;
     return ret;
 }
@@ -363,5 +378,6 @@ async function loanAsserts(expLoan) {
         "maturity should be at disbursementDate + term"
     );
 
+    assert.equal(loan[9].toString(), expLoan.product.defaultingFeePt.toString(), "defaultingFeePt should be set");
     // TODO: test loanManager.getLoanIds and .mLoans
 }

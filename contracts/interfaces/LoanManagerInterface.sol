@@ -16,7 +16,8 @@ contract LoanManagerInterface is Owned {
         uint collateralRatio;   // 2: ucd loan amount / colleteral usd value
                                 // in parts per million , ie. 10,000 = 1%
         uint minDisbursedAmount; // 3: with 4 decimals, ie. 31000 = 3.1UCD
-        bool isActive; // 4
+        uint defaultingFeePt; // 4: % of collateral in parts per million , ie. 50,000 = 5%
+        bool isActive; // 5
     }
 
     struct LoanData {
@@ -29,6 +30,7 @@ contract LoanManagerInterface is Owned {
         uint term; // 6
         uint disbursementDate; // 7
         uint maturity; // 8
+        uint defaultingFeePt; // 9
     }
 
     LoanProduct[] public products;

@@ -1,5 +1,4 @@
 /* Contract to manage Acd loan contracts
-    TODO: payback collateral over the UCD value less default fee
     TODO: add loanId to disbursement, repay and collection narrative
 */
 pragma solidity ^0.4.18;
@@ -18,8 +17,9 @@ contract LoanManager is LoanManagerInterface {
         uint repaymentAmount);
 
     event LoanRepayed(uint loanId, address borrower);
-    
-    event LoanCollected(uint loanId, address borrower);
+
+    event LoanCollected(uint indexed loanId, address indexed borrower, uint collectedCollateral,
+        uint releasedCollateral, uint defaultingFee);
 
     function LoanManager(address _augmintTokenAddress, address _ratesAddress) public Owned() {
         augmintToken = AugmintToken(_augmintTokenAddress);
@@ -39,9 +39,9 @@ contract LoanManager is LoanManagerInterface {
     }
 
     function addProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
-            bool _isActive) external onlyOwner returns (uint newProductId) {
+        uint _defaultingFee, bool _isActive) external onlyOwner returns (uint newProductId) {
         newProductId = products.push(
-            LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _isActive)
+            LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
         );
 
         return newProductId - 1;
@@ -77,7 +77,8 @@ contract LoanManager is LoanManagerInterface {
         // Create new loan
         uint loanId = loans.push(
             LoanData(msg.sender, LoanState.Open, msg.value, repaymentAmount, loanAmount,
-                repaymentAmount.sub(loanAmount), products[productId].term, now, now + products[productId].term)
+                repaymentAmount.sub(loanAmount), products[productId].term, now, now + products[productId].term,
+                products[productId].defaultingFeePt)
             ) - 1;
 
         // Store ref to new loan
@@ -116,12 +117,20 @@ contract LoanManager is LoanManagerInterface {
             require(now >= loans[loanId].maturity);
             loans[loanId].state = LoanState.Defaulted;
             // send ETH collateral to augmintToken reserve
-            address(augmintToken).transfer(loans[loanId].collateralAmount);
+            uint defaultingFee = loans[loanId].collateralAmount.mul(loans[loanId].defaultingFeePt).div(1000000);
+            uint coveringValue = rates.convertUsdcToWei(loans[loanId].repaymentAmount)
+                .add(defaultingFee);
+            uint releasedCollateral;
+            if (coveringValue < loans[loanId].collateralAmount) {
+                releasedCollateral = loans[loanId].collateralAmount.sub(coveringValue);
+                loans[loanId].borrower.transfer(releasedCollateral);
+            }
+            uint collectedCollateral = loans[loanId].collateralAmount.sub(releasedCollateral);
+            address(augmintToken).transfer(collectedCollateral);
 
-            loans[loanId].state = LoanState.Defaulted;
             // move interest from InterestPoolAccount to MIR (augmintToken reserve)
             augmintToken.moveCollectedInterest(loans[loanId].interestAmount);
-            LoanCollected(loanId, loans[loanId].borrower);
+            LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
         }
 
     }
