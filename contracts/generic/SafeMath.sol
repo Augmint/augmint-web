@@ -1,5 +1,3 @@
-pragma solidity 0.4.18;
-
 /**
 * @title SafeMath
 * @dev Math operations with safety checks that throw on error
@@ -7,6 +5,8 @@ pragma solidity 0.4.18;
     TODO: check against ds-math: https://blog.dapphub.com/ds-math/
     TODO: move roundedDiv to a sep lib? (eg. Math.sol)
 */
+pragma solidity 0.4.18;
+
 
 library SafeMath {
     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -36,7 +36,7 @@ library SafeMath {
     function roundedDiv(uint a, uint b) internal pure returns (uint256) {
         // require(b > 0); // Solidity automatically throws when dividing by 0
         uint256 z = a / b;
-        if ( a % b >= b / 2) {
+        if (a % b >= b / 2) {
             z++;  // no need for safe add b/c it can happen only if we divided the input
         }
         return z;

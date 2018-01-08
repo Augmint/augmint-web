@@ -6,24 +6,20 @@ pragma solidity 0.4.18;
 import "./generic/SafeMath.sol";
 import "./generic/Owned.sol";
 
+
 contract Rates is Owned {
     using SafeMath for uint256;
 
-    uint constant ONE_ETH = 1000000000000000000; // 1 ETH in WEI
+    uint public constant ONE_ETH = 1000000000000000000; // 1 ETH in WEI
 
     // 1 USD = 10000 ACDc
     uint8 public constant USD_DECIMALS = 4; // USD values decimal places
     uint32 public constant USD_SCALE = 10 ** 4;  // USDc to USD conversion, 10 ** USD_DECIMALS
 
     // TODO: remove this when connected to an Oracle
-    uint public ethUsdcRate = 1950000   ;  //  1/195ETH = 512,820,512,821 WEI;
+    uint public ethUsdcRate = 1950000;  //  1/195ETH = 512,820,512,821 WEI;
 
     event e_ethToUsdcChanged(uint newEthUsdcRate);
-    function ethToUsdc(uint newEthUsdcRate) public onlyOwner {
-        ethUsdcRate = newEthUsdcRate;
-        e_ethToUsdcChanged(ethUsdcRate);
-        return;
-    }
 
     function convertWeiToUsdc(uint weiValue) external view returns(uint usdcValue) {
         return weiValue.mul(ethUsdcRate).roundedDiv(ONE_ETH);
@@ -33,4 +29,11 @@ contract Rates is Owned {
         // TODO: can we make this not loosing max scale?
         return ONE_ETH.mul(usdcValue).roundedDiv(ethUsdcRate) ;
     }
+
+    function ethToUsdc(uint newEthUsdcRate) external onlyOwner {
+        ethUsdcRate = newEthUsdcRate;
+        e_ethToUsdcChanged(ethUsdcRate);
+        return;
+    }
+
 }

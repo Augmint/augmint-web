@@ -8,6 +8,6 @@ pragma solidity 0.4.18;
 import "./generic/SystemAccount.sol";
 
 
-contract InterestEarnedAccount is SystemAccount {
+contract InterestEarnedAccount is SystemAccount { // solhint-disable-line no-empty-blocks
 
 }

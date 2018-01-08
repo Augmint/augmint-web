@@ -4,14 +4,14 @@ import "../generic/AugmintToken.sol";
 
 
 contract TokenAcdMock is AugmintToken {
-    string public constant name = "Augmint TEST Crypto Dollar";
-    string public constant symbol = "ACDTest";
-    uint8 public constant decimals = 4; // TODO: check if 4 enough - assuming rate will be around USD
+    string public constant name = "Augmint TEST Crypto Dollar"; // solhint-disable-line const-name-snakecase
+    string public constant symbol = "ACDTest"; // solhint-disable-line const-name-snakecase
+    uint8 public constant decimals = 4; // solhint-disable-line const-name-snakecase
 
     function TokenAcdMock(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
         uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public AugmintToken(
         _feeAccount, _interestPoolAccount, _interestEarnedAccount,
-        _transferFeePt, _transferFeeMin, _transferFeeMax ) {
+        _transferFeePt, _transferFeeMin, _transferFeeMax ) { // solhint-disable-line no-empty-blocks
     }
 
     function issue(uint amount) external restrict("issue") {
@@ -26,7 +26,7 @@ contract TokenAcdMock is AugmintToken {
         balances[this] = balances[this].sub(amount);
         TokenBurned(amount);
     }
-    
+
     function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {
         require(_amount <= balances[this]);
         balances[this] = balances[this].sub(_amount);

@@ -1,11 +1,11 @@
-/* Generic contract to authorise calls to certain functions only from a given address.
+/*
+    Generic contract to authorise calls to certain functions only from a given address.
     This is just for single adderss authorisation.
+
+    TODO: replace Owned with multisig permission
 */
 
-// TODO: replace Owned with multisig permission
-
 pragma solidity 0.4.18;
-
 import "./Owned.sol";
 
 
