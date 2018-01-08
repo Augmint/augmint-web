@@ -4,7 +4,7 @@
     If loan defaults then interest moves to MIR (Market Intervention Reserve held in TokenUcd contract)
  */
 
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 import "./generic/SystemAccount.sol";
 
 

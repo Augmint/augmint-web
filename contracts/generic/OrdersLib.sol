@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 
 library OrdersLib {
     uint80 constant None = uint80(0);

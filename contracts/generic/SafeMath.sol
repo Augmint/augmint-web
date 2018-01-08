@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 
 /**
 * @title SafeMath
@@ -7,6 +7,7 @@ pragma solidity ^0.4.18;
     TODO: check against ds-math: https://blog.dapphub.com/ds-math/
     TODO: move roundedDiv to a sep lib? (eg. Math.sol)
 */
+
 library SafeMath {
     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a * b;

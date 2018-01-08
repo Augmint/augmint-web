@@ -1,5 +1,5 @@
 /* Augmint Crypto Dollar token (ACD) implementation */
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 import "./generic/AugmintToken.sol";
 
 

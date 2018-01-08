@@ -1,6 +1,7 @@
-pragma solidity ^0.4.18;
 // TODO: this is halfbacked and not in use yet.
 //        it  should be a lib, used by AugmintToken and some fx should go there from here.
+pragma solidity 0.4.18;
+
 
 contract SignCheck {
 

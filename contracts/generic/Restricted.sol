@@ -4,7 +4,7 @@
 
 // TODO: replace Owned with multisig permission
 
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 
 import "./Owned.sol";
 

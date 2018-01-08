@@ -1,7 +1,7 @@
 /*  mock implamentation of ETH/USD exchange rate oracle
     TODO: use a more realistic rates oracle (eg. piggyback Oraclize pricing contract?)
 */
-pragma solidity ^0.4.11;
+pragma solidity 0.4.18;
 
 import "./generic/SafeMath.sol";
 import "./generic/Owned.sol";

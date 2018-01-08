@@ -15,7 +15,7 @@ TODO: add option to fill or kill (ie option to not place orders if can't fill fr
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
 TODO: add orderId to Acd transfer narrative
 */
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 import "./generic/SafeMath.sol";
 import "./generic/Owned.sol";
 import "./generic/OrdersLib.sol";

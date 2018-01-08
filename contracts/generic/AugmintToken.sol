@@ -18,7 +18,7 @@
                         https://github.com/OpenZeppelin/zeppelin-solidity
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
 */
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";

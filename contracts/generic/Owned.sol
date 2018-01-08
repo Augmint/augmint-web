@@ -1,8 +1,8 @@
+pragma solidity 0.4.18;
 
-pragma solidity ^0.4.18;
 
 contract Owned {
-    
+
     address public owner;
 
     event NewOwner(address indexed oldOwner, address indexed newOwner);

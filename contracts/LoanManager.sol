@@ -1,7 +1,7 @@
 /* Contract to manage Acd loan contracts
     TODO: add loanId to disbursement, repay and collection narrative
 */
-pragma solidity ^0.4.18;
+pragma solidity 0.4.18;
 
 import "./generic/Owned.sol";
 import "./Rates.sol";
