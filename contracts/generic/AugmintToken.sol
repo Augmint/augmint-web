@@ -14,11 +14,9 @@
     TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
     TODO: don't aloow transfer to 0x
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
-    TODO: ERC20 transferFrom attack protection: https://github.com/DecentLabs/dcm-poc/issues/57
     TODO: check more security best practices, eg: https://github.com/ConsenSys/smart-contract-best-practices,
                         https://github.com/OpenZeppelin/zeppelin-solidity
                         https://github.com/OpenZeppelin/zeppelin-solidity/tree/master/contracts/token
-    TODO: function should be ordered according to Solidity style guide
 */
 pragma solidity ^0.4.18;
 import "./Restricted.sol";
@@ -71,7 +69,7 @@ contract AugmintToken is AugmintTokenInterface {
             // move interest to InterestPoolAccount
             balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
         }
-        _transfer(address(this), borrower, loanAmount, narrative, 0);
+        _transfer(this, borrower, loanAmount, narrative, 0);
         TokenIssued(issuedAmount);
     }
 
@@ -80,7 +78,7 @@ contract AugmintToken is AugmintTokenInterface {
         require(isAllowed(_loanManager, "LoanManager")); // only whitelisted loanManagers
 
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
-        var (borrower, , ,repaymentAmount, ) = loanManager.loans(loanId);
+        var (borrower, , ,repaymentAmount, ) = loanManager.loans(loanId); // solhint-disable-line space-after-comma
         require(borrower == msg.sender);
         _increaseApproval(msg.sender, _loanManager, repaymentAmount);
         loanManager.releaseCollateral(loanId);
@@ -152,9 +150,10 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     /**
+     ERC20 transferFrom attack protection: https://github.com/DecentLabs/dcm-poc/issues/57
      approve should be called when allowed[_spender] == 0. To increment allowed value is better
      to use this function to avoid 2 calls (and wait until the first transaction is mined)
-     From MonolithDAO Token.sol */
+     Based on MonolithDAO Token.sol */
     function increaseApproval(address _spender, uint _addedValue) public returns (bool) {
         return _increaseApproval(msg.sender, _spender, _addedValue);
     }
