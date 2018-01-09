@@ -94,7 +94,7 @@ cd privatechain
 rm -r chaindata/geth
 ./createprivatechain.sh
 cd ..
-truffle migrate
+truffle migrate  --network privatechain
 cp ./build/contracts/* ./src/contractsBuild
 ```
 
@@ -125,3 +125,18 @@ gulp build-assets
 ```
 
 You can also use `gulp watch`
+
+## Tests
+
+### Contracts
+
+`truffle test`
+
+### FrontEnd - E2E
+
+_Note: Frontend tests are experimental and unfished yet_
+
+As of now you must restart testrpc and run `truffle migrate` each time you re-run tests to have a clean state.
+
+* Start interactive: `npm run cypress:open`
+* Start command line: `npm run cypress:run`

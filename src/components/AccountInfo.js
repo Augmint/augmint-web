@@ -6,19 +6,11 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AccountInfo extends React.Component {
     render() {
-        const {
-            header,
-            showMyAccountLink,
-            account,
-            tokenUcd,
-            userBalancesIsLoading
-        } = this.props;
+        const { header, showMyAccountLink, account, tokenUcd, userBalancesIsLoading } = this.props;
         return (
             <Pblock
                 loading={
-                    tokenUcd.isLoading ||
-                    (!tokenUcd.isConnected && !tokenUcd.connectionError) ||
-                    userBalancesIsLoading
+                    tokenUcd.isLoading || (!tokenUcd.isConnected && !tokenUcd.connectionError) || userBalancesIsLoading
                 }
                 header={header}
             >
@@ -28,29 +20,15 @@ export class AccountInfo extends React.Component {
                 <p>
                     ETH: {account.ethBalance}
                     {account.ethPendingBalance !== "?" &&
-                        account.ethPendingBalance - account.ethBalance !==
-                            0 && (
-                            <span>
-                                {" "}
-                                (Pending:{" "}
-                                {account.ethPendingBalance -
-                                    account.ethBalance}{" "}
-                                )
-                            </span>
+                        account.ethPendingBalance - account.ethBalance !== 0 && (
+                            <span> (Pending: {account.ethPendingBalance - account.ethBalance} )</span>
                         )}
                 </p>
                 <p>
-                    ACD: {account.ucdBalance}
+                    ACD: <span id="userAceBalance">{account.ucdBalance}</span>
                     {account.ucdPendingBalance !== "?" &&
-                        account.ucdPendingBalance - account.ucdBalance !==
-                            0 && (
-                            <span>
-                                {" "}
-                                (Pending:{" "}
-                                {account.ucdPendingBalance -
-                                    account.ucdBalance}{" "}
-                                )
-                            </span>
+                        account.ucdPendingBalance - account.ucdBalance !== 0 && (
+                            <span> (Pending: {account.ucdPendingBalance - account.ucdBalance} )</span>
                         )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}

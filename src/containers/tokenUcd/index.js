@@ -39,6 +39,7 @@ class TokenUcd extends React.Component {
                             <Button
                                 content="Loans to Collect"
                                 as={Link}
+                                id="loansToCollectBtn"
                                 to="/loan/collect"
                                 icon="right chevron"
                                 labelPosition="right"
