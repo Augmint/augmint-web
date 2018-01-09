@@ -2,23 +2,15 @@
     TODO: make this generic? ie. to use this for any address balances?
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
-import {
-    fetchTransferListTx,
-    processTransferTx
-} from "modules/ethereum/transferTransactions";
+import { fetchTransferListTx, processTransferTx } from "modules/ethereum/transferTransactions";
 
-export const USER_TRANSFERLIST_REQUESTED =
-    "userTransfers/USER_TRANSFERLIST_REQUESTED";
+export const USER_TRANSFERLIST_REQUESTED = "userTransfers/USER_TRANSFERLIST_REQUESTED";
 export const USER_TRANSFERLIST_ERROR = "userBalances/USER_TRANSFERLIST_ERROR";
-export const USER_TRANSFERLIST_RECEIVED =
-    "userTransfers/USER_TRANSFERLIST_RECEIVED";
+export const USER_TRANSFERLIST_RECEIVED = "userTransfers/USER_TRANSFERLIST_RECEIVED";
 
-export const USER_TRANSFERTX_FETCH_REQUESTED =
-    "userTransfers/USER_TRANSFERTX_FETCH_REQUESTED";
-export const USER_TRANSFERTX_FETCH_ERROR =
-    "userTransfers/USER_TRANSFERTX_FETCH_ERROR";
-export const USER_TRANSFERTX_FETCH_RECEIVED =
-    "userTransfers/USER_TRANSFERTX_FETCH_RECEIVED";
+export const USER_TRANSFERTX_FETCH_REQUESTED = "userTransfers/USER_TRANSFERTX_FETCH_REQUESTED";
+export const USER_TRANSFERTX_FETCH_ERROR = "userTransfers/USER_TRANSFERTX_FETCH_ERROR";
+export const USER_TRANSFERTX_FETCH_RECEIVED = "userTransfers/USER_TRANSFERTX_FETCH_RECEIVED";
 
 const initialState = {
     transfers: null,

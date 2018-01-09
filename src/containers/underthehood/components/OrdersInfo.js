@@ -14,11 +14,7 @@ export function OrdersInfo(props) {
     return (
         <Pblock header="Orders">
             <ArrayDump items={props.orders} />
-            <Button
-                size="small"
-                onClick={handleRefreshClick}
-                disabled={!props.orders || props.orders.isLoading}
-            >
+            <Button size="small" onClick={handleRefreshClick} disabled={!props.orders || props.orders.isLoading}>
                 Refresh orders
             </Button>
         </Pblock>

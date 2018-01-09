@@ -80,10 +80,7 @@ export function decodeMethod(data) {
     const abiItem = state.methodIDs[methodID];
     if (abiItem) {
         const params = abiItem.inputs.map(item => item.type);
-        let decoded = state.web3.eth.abi.decodeParameters(
-            params,
-            data.slice(10)
-        );
+        let decoded = state.web3.eth.abi.decodeParameters(params, data.slice(10));
         return {
             name: abiItem.name,
             params: decoded.map((param, index) => {
@@ -148,11 +145,7 @@ export function decodeLogs(logs) {
             //     topics
             // );
 
-            const decodedData = state.web3.eth.abi.decodeLog(
-                inputs,
-                logData,
-                topics
-            );
+            const decodedData = state.web3.eth.abi.decodeLog(inputs, logData, topics);
 
             let decodedParams;
             decodedParams = JSON.parse(JSON.stringify(decodedData)); // TODO: it's dirty, how to convert Result object ?

@@ -15,14 +15,7 @@ export default class Web3ConnectionInfo extends React.Component {
     }
 
     render() {
-        const {
-            isLoading,
-            isConnected,
-            web3Instance,
-            network,
-            error,
-            info
-        } = this.props.web3Connect;
+        const { isLoading, isConnected, web3Instance, network, error, info } = this.props.web3Connect;
         const stringify = stringifier({ maxDepth: 3, indent: "   " });
         const handleRefreshClick = e => {
             e.preventDefault();
@@ -31,23 +24,15 @@ export default class Web3ConnectionInfo extends React.Component {
         return (
             <Pblock header="Web3 connection">
                 <p>
-                    {isConnected
-                        ? "connected - " +
-                          web3Instance.currentProvider.constructor.name
-                        : "not connected"}{" "}
-                    | {isLoading ? "Loading..." : "not loading"}
+                    {isConnected ? "connected - " + web3Instance.currentProvider.constructor.name : "not connected"} |{" "}
+                    {isLoading ? "Loading..." : "not loading"}
                 </p>
                 <p>Web3 version: {info.web3Version}</p>
                 <p>
-                    Network: {network.name} | Id: {network.id} | Type:{" "}
-                    {network.type}
+                    Network: {network.name} | Id: {network.id} | Type: {network.type}
                 </p>
 
-                {error ? (
-                    <ErrorDetails header="Error">{error.message}</ErrorDetails>
-                ) : (
-                    <p>No connection error</p>
-                )}
+                {error ? <ErrorDetails header="Error">{error.message}</ErrorDetails> : <p>No connection error</p>}
 
                 <Button
                     basic
@@ -55,18 +40,15 @@ export default class Web3ConnectionInfo extends React.Component {
                     onClick={() =>
                         this.setState({
                             providerInfoOpen: !this.state.providerInfoOpen
-                        })}
+                        })
+                    }
                 >
-                    {this.state.providerInfoOpen
-                        ? "<< Hide provider info"
-                        : "Show provider info >>"}
+                    {this.state.providerInfoOpen ? "<< Hide provider info" : "Show provider info >>"}
                 </Button>
                 {this.state.providerInfoOpen && (
                     <Pblock>
                         <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
-                            {web3Instance
-                                ? stringify(web3Instance.currentProvider)
-                                : "No web3 Instance"}
+                            {web3Instance ? stringify(web3Instance.currentProvider) : "No web3 Instance"}
                         </pre>
                     </Pblock>
                 )}

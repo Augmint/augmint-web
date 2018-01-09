@@ -15,13 +15,11 @@ export async function fetchOrders() {
             let orderType = order[3].toNumber();
             let bn_amount, ccy;
             if (orderType === UCDSELL) {
-                ccy = "ACD";
+                ccy = "ACE";
                 bn_amount = order[4].div(10000);
             } else if (orderType === ETHSELL) {
                 ccy = "ETH";
-                bn_amount = new BigNumber(
-                    web3.utils.fromWei(order[4].toString())
-                );
+                bn_amount = new BigNumber(web3.utils.fromWei(order[4].toString()));
             } else {
                 throw new Error("Unknown orderType: " + orderType);
             }
@@ -66,9 +64,7 @@ export async function placeOrderTx(orderType, amount) {
                 break;
             case UCDSELL:
                 let tokenUcd = store.getState().tokenUcd;
-                submitAmount = amount
-                    .times(tokenUcd.info.bn_decimalsDiv)
-                    .toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
+                submitAmount = amount.times(tokenUcd.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
                 result = await exchange.placeSellUcdOrder(submitAmount, {
                     from: userAccount,
                     gas: gasEstimate
@@ -81,10 +77,7 @@ export async function placeOrderTx(orderType, amount) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error(
-                "Place order failed. All gas provided was used:  " +
-                    result.receipt.gasUsed
-            );
+            throw new Error("Place order failed. All gas provided was used:  " + result.receipt.gasUsed);
         }
 
         /* TODO:  process events properly for display (full new order, partly filled, fully filled) */
@@ -92,13 +85,9 @@ export async function placeOrderTx(orderType, amount) {
         if (
             !result.logs ||
             !result.logs[0] ||
-            (result.logs[0].event !== "e_newOrder" &&
-                result.logs[0].event !== "e_orderFill")
+            (result.logs[0].event !== "e_newOrder" && result.logs[0].event !== "e_orderFill")
         ) {
-            throw new Error(
-                "e_newOrder or e_orderFill event wasn't received. Check tx :  " +
-                    result.tx
-            );
+            throw new Error("e_newOrder or e_orderFill event wasn't received. Check tx :  " + result.tx);
         }
 
         //let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));

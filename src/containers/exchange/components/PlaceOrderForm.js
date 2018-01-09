@@ -5,24 +5,10 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import { Menu, Button, Label, Message } from "semantic-ui-react";
 import store from "modules/store";
-import {
-    EthSubmissionErrorPanel,
-    EthSubmissionSuccessPanel,
-    ConnectionStatus
-} from "components/MsgPanels";
-import {
-    reduxForm,
-    Field,
-    SubmissionError,
-    formValueSelector
-} from "redux-form";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
+import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import {
-    placeOrder,
-    PLACE_ORDER_SUCCESS,
-    ETHSELL,
-    UCDSELL
-} from "modules/reducers/orders";
+import { placeOrder, PLACE_ORDER_SUCCESS, ETHSELL, UCDSELL } from "modules/reducers/orders";
 import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
@@ -32,14 +18,8 @@ const UCD_DECIMALS = 2;
 
 const ethValidations = [Validations.required, Validations.ethAmount];
 const ucdValidations = [Validations.required, Validations.ucdAmount];
-const ucdValidationsWithBalance = [
-    ...ucdValidations,
-    Validations.ucdUserBalance
-];
-const ethValidationsWithBalance = [
-    ...ethValidations,
-    Validations.ethUserBalance
-];
+const ucdValidationsWithBalance = [...ucdValidations, Validations.ucdUserBalance];
+const ethValidationsWithBalance = [...ethValidations, Validations.ethUserBalance];
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -65,9 +45,7 @@ class PlaceOrderForm extends React.Component {
             return;
         }
 
-        let bn_ethAmount = bn_ucdAmount.div(
-            this.props.rates.info.bn_ethUsdRate
-        );
+        let bn_ethAmount = bn_ucdAmount.div(this.props.rates.info.bn_ethUsdRate);
 
         this.props.change(
             "ethAmount",
@@ -85,9 +63,7 @@ class PlaceOrderForm extends React.Component {
             return;
         }
 
-        let bn_ucdAmount = bn_ethAmount.times(
-            this.props.rates.info.bn_ethUsdRate
-        );
+        let bn_ucdAmount = bn_ethAmount.times(this.props.rates.info.bn_ethUsdRate);
 
         this.props.change(
             "ucdAmount",
@@ -143,12 +119,7 @@ class PlaceOrderForm extends React.Component {
             ethAmount
         } = this.props;
         const { isLoading } = this.props.exchange;
-        const {
-            orderCount,
-            bn_totalUcdSellOrders,
-            bn_totalEthSellOrders,
-            totalCcy
-        } = this.props.exchange.info;
+        const { orderCount, bn_totalUcdSellOrders, bn_totalEthSellOrders, totalCcy } = this.props.exchange.info;
         const { orderType } = this.state;
 
         let orderHelpText;
@@ -169,30 +140,23 @@ class PlaceOrderForm extends React.Component {
             )
                 orderHelpText = (
                     <p>
-                        Currently there are only sell {totalCcy} orders open.<br
-                        />
+                        Currently there are only sell {totalCcy} orders open.<br />
                         Your will add an order on market rate.
                     </p>
                 );
             else if (
-                (bn_totalUcdSellOrders.gte(bn_ucdAmount) &&
-                    orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.gte(bn_ethAmount) &&
-                    orderType === UCDSELL)
+                (bn_totalUcdSellOrders.gte(bn_ucdAmount) && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.gte(bn_ethAmount) && orderType === UCDSELL)
             )
                 orderHelpText = (
                     <p>
-                        Current open sell {totalCcy} orders will fully cover
-                        your order.<br />
-                        The whole amount of your order will be immediately
-                        filled.
+                        Current open sell {totalCcy} orders will fully cover your order.<br />
+                        The whole amount of your order will be immediately filled.
                     </p>
                 );
             else if (
-                (bn_totalUcdSellOrders.lte(bn_ucdAmount) &&
-                    orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.lte(bn_ethAmount) &&
-                    orderType === UCDSELL)
+                (bn_totalUcdSellOrders.lte(bn_ucdAmount) && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.lte(bn_ethAmount) && orderType === UCDSELL)
             ) {
                 // TODO: let difference;
                 // if (orderType == ETHSELL) {
@@ -200,8 +164,7 @@ class PlaceOrderForm extends React.Component {
                 // }
                 orderHelpText = (
                     <p>
-                        Current open sell ETH orders only partially will cover
-                        your order.<br />
+                        Current open sell ETH orders only partially will cover your order.<br />
                         The rest of your order will be placed as a market order.
                     </p>
                 );
@@ -211,19 +174,11 @@ class PlaceOrderForm extends React.Component {
         }
         let header = (
             <Menu size="massive" tabular>
-                <Menu.Item
-                    active={orderType === ETHSELL}
-                    index={ETHSELL}
-                    onClick={this.onOrderTypeChange}
-                >
-                    Buy ACD
+                <Menu.Item active={orderType === ETHSELL} index={ETHSELL} onClick={this.onOrderTypeChange}>
+                    Buy ACE
                 </Menu.Item>
-                <Menu.Item
-                    active={orderType === UCDSELL}
-                    index={UCDSELL}
-                    onClick={this.onOrderTypeChange}
-                >
-                    Sell ACD
+                <Menu.Item active={orderType === UCDSELL} index={UCDSELL} onClick={this.onOrderTypeChange}>
+                    Sell ACE
                 </Menu.Item>
             </Menu>
         );
@@ -243,10 +198,7 @@ class PlaceOrderForm extends React.Component {
                 )}
 
                 {!submitSucceeded && (
-                    <Form
-                        error={error ? true : false}
-                        onSubmit={handleSubmit(this.handleSubmit)}
-                    >
+                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
                         <EthSubmissionErrorPanel
                             error={error}
                             header={<h3>Transfer failed</h3>}
@@ -261,16 +213,12 @@ class PlaceOrderForm extends React.Component {
                             type="number"
                             disabled={submitting || isLoading}
                             onChange={this.onUcdAmountChange}
-                            validate={
-                                orderType === UCDSELL
-                                    ? ucdValidationsWithBalance
-                                    : ucdValidations
-                            }
+                            validate={orderType === UCDSELL ? ucdValidationsWithBalance : ucdValidations}
                             normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
                             <input />
-                            <Label>ACD</Label>
+                            <Label>ACE</Label>
                         </Field>
 
                         <Field
@@ -281,36 +229,17 @@ class PlaceOrderForm extends React.Component {
                             label="for: "
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
-                            validate={
-                                orderType === ETHSELL
-                                    ? ethValidationsWithBalance
-                                    : ethValidations
-                            }
+                            validate={orderType === ETHSELL ? ethValidationsWithBalance : ethValidations}
                             normalize={Normalizations.fiveDecimals}
                             labelPosition="right"
                         >
                             <input />
                             <Label>ETH</Label>
                         </Field>
-                        {orderHelpText && (
-                            <Message
-                                icon="info"
-                                size="tiny"
-                                info
-                                content={orderHelpText}
-                            />
-                        )}
-                        <Button
-                            size="big"
-                            primary
-                            loading={submitting}
-                            disabled={pristine}
-                        >
+                        {orderHelpText && <Message icon="info" size="tiny" info content={orderHelpText} />}
+                        <Button size="big" primary loading={submitting} disabled={pristine}>
                             {submitting && "Submitting..."}
-                            {!submitting &&
-                                (orderType === ETHSELL
-                                    ? "Place buy ACD order"
-                                    : "Place sell ACD order")}
+                            {!submitting && (orderType === ETHSELL ? "Place buy ACE order" : "Place sell ACE order")}
                         </Button>
                     </Form>
                 )}

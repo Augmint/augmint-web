@@ -41,29 +41,13 @@ class SubscribeForm extends React.Component {
     }
 
     render() {
-        const {
-            error,
-            handleSubmit,
-            pristine,
-            submitting,
-            submitSucceeded,
-            clearSubmitErrors,
-            reset
-        } = this.props;
+        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
 
         return (
             <Pblock>
-                {submitSucceeded && (
-                    <SuccessPanel
-                        header="Successful subscription"
-                        onDismiss={() => reset()}
-                    />
-                )}
+                {submitSucceeded && <SuccessPanel header="Successful subscription" onDismiss={() => reset()} />}
                 {!submitSucceeded && (
-                    <Form
-                        error={error ? true : false}
-                        onSubmit={handleSubmit(this.handleSubmit)}
-                    >
+                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
                         <ErrorPanel
                             content={error}
                             header={"Subscription failed"}
@@ -82,12 +66,7 @@ class SubscribeForm extends React.Component {
                             parse={Parsers.trim}
                             disabled={submitting}
                         />
-                        <Button
-                            loading={submitting}
-                            primary
-                            disabled={pristine}
-                            size="large"
-                        >
+                        <Button loading={submitting} primary disabled={pristine} size="large">
                             {submitting ? "Submitting..." : "Subscribe"}
                         </Button>
                     </Form>

@@ -121,7 +121,7 @@ class NewLoanForm extends React.Component {
                         </Label>
 
                         <input />
-                        <Label>ACD</Label>
+                        <Label>ACE</Label>
                     </Field>
                     <Field
                         component={Form.Field}
@@ -139,11 +139,11 @@ class NewLoanForm extends React.Component {
                         <Label basic>
                             Loan amount{": "}
                             <ToolTip>
-                                Loan ACD amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
+                                Loan ACE amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
                         <input />
-                        <Label>ACD</Label>
+                        <Label>ACE</Label>
                     </Field>
                     <Field
                         component={Form.Field}
@@ -161,8 +161,8 @@ class NewLoanForm extends React.Component {
                         <Label basic>
                             Collateral:{" "}
                             <ToolTip>
-                                ETH to be held as collateral = ACD Loan Amount / ETHUSD rate x (1 / Coverage ratio)
-                                <br />( ETH/USD Rate = {Math.round(this.props.rates.info.ethUsdRate * 100) / 100} )
+                                ETH to be held as collateral = ACE Loan Amount / ETHEUR rate x (1 / Coverage ratio)
+                                <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethUsdRate * 100) / 100} )
                             </ToolTip>
                         </Label>
                         <input />

@@ -1,5 +1,5 @@
 /*
-ETH and ACD balance for the active userAccount
+ETH and ACE balance for the active userAccount
     TODO: add all user accounts?
     TODO: make this generic? ie. to use this for any address balances?
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
@@ -8,12 +8,9 @@ import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
 
 export const USER_BALANCE_REQUESTED = "userBalances/BALANCE_REQUESTED";
 export const USER_BALANCE_RECEIVED = "userBalances/BALANCE_RECEIVED";
-export const USER_TRANSACTIONLIST_REQUESTED =
-    "userBalances/USER_TRANSACTIONLIST_REQUESTED";
-export const USER_TRANSACTIONLIST_ERROR =
-    "userBalances/USER_TRANSACTIONLIST_ERROR";
-export const USER_TRANSACTIONLIST_RECEIVED =
-    "userBalances/USER_TRANSACTIONLIST_RECEIVED";
+export const USER_TRANSACTIONLIST_REQUESTED = "userBalances/USER_TRANSACTIONLIST_REQUESTED";
+export const USER_TRANSACTIONLIST_ERROR = "userBalances/USER_TRANSACTIONLIST_ERROR";
+export const USER_TRANSACTIONLIST_RECEIVED = "userBalances/USER_TRANSACTIONLIST_RECEIVED";
 
 const initialState = {
     isLoading: false,

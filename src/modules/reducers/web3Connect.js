@@ -1,8 +1,5 @@
 import { default as Web3 } from "web3";
-import {
-    getNetworkDetails,
-    asyncGetAccounts
-} from "modules/ethereum/ethHelper";
+import { getNetworkDetails, asyncGetAccounts } from "modules/ethereum/ethHelper";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
@@ -80,15 +77,11 @@ export const setupWeb3 = () => {
                 console.debug(
                     "No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask"
                 );
-                web3 = new Web3(
-                    new Web3.providers.HttpProvider("http://localhost:8545")
-                );
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
             }
             let network = await getNetworkDetails(web3);
             let accounts = await asyncGetAccounts(web3);
-            let web3Version = web3.version.api
-                ? web3.version.api
-                : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
+            let web3Version = web3.version.api ? web3.version.api : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 web3Instance: web3,

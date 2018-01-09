@@ -16,13 +16,9 @@ export function UserAccountInfo(props) {
         <Pblock header="User Account">
             <p>{userBalances.account.address}</p>
             <p>ETH Balance: {userBalances.account.ethBalance} ETH</p>
-            <p>ACD Balance: {userBalances.account.ucdBalance} ACD</p>
+            <p>ACE Balance: {userBalances.account.ucdBalance} ACE</p>
 
-            <Button
-                size="small"
-                onClick={handleRefreshClick}
-                disabled={userBalances.isLoading}
-            >
+            <Button size="small" onClick={handleRefreshClick} disabled={userBalances.isLoading}>
                 Refresh balance
             </Button>
         </Pblock>

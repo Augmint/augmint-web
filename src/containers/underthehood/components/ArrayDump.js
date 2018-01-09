@@ -1,11 +1,7 @@
 import React from "react";
 import stringifier from "stringifier";
 import { Pblock } from "components/PageLayout";
-import {
-    MyGridTable,
-    MyGridTableRow as Row,
-    MyGridTableColumn as Col
-} from "components/MyListGroups";
+import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 
 const stringify = stringifier({ maxDepth: 3, indent: "   " });
 

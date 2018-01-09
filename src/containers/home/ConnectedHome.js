@@ -23,16 +23,10 @@ class ConnectedHome extends React.Component {
                 <EthereumState>
                     <Psegment>
                         <Container>
-                            <Header
-                                textAlign="center"
-                                style={{ fontSize: "2em" }}
-                            >
-                                ACD status
+                            <Header textAlign="center" style={{ fontSize: "2em" }}>
+                                ACE status
                             </Header>
-                            <TokenUcdStats
-                                tokenUcd={tokenUcd}
-                                showTokenUcdLink
-                            />
+                            <TokenUcdStats tokenUcd={tokenUcd} showTokenUcdLink />
                         </Container>
                     </Psegment>
                 </EthereumState>

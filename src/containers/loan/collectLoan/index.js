@@ -24,10 +24,7 @@ class CollectLoanMain extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (
-            this.props.loanManager &&
-            prevProps.loanManager !== this.props.loanManager
-        ) {
+        if (this.props.loanManager && prevProps.loanManager !== this.props.loanManager) {
             // loanManager mounted
             store.dispatch(fetchLoansToCollect());
         }
@@ -42,33 +39,25 @@ class CollectLoanMain extends React.Component {
                     <Pgrid.Column width={6}>
                         <Message info>
                             <p>
-                                When collecting a defaulted (not paid on time)
-                                loan the ETH held in contract escrow
-                                (collateral) will be transfered to system
-                                reserves.{" "}
+                                When collecting a defaulted (not paid on time) loan the ETH held in contract escrow
+                                (collateral) will be transfered to system reserves.{" "}
                             </p>
                             <p>
                                 TODO, Not yet implemented: <br />
-                                If the value of the ETH collateral (at the
-                                moment of collection) is higher than the ACD
-                                loan amount less the fees for the collection
-                                then the leftover ETH will be transfered back to
-                                the borrower's ETH account.
+                                If the value of the ETH collateral (at the moment of collection) is higher than the ACE
+                                loan amount less the fees for the collection then the leftover ETH will be transfered
+                                back to the borrower's ETH account.
                             </p>
                         </Message>
                     </Pgrid.Column>
                     <Pgrid.Column width={10}>
                         <CollectLoanButton
                             loansToCollect={loansToCollect}
-                            onSuccess={() =>
-                                store.dispatch(fetchLoansToCollect())
-                            }
+                            onSuccess={() => store.dispatch(fetchLoansToCollect())}
                         />
                         <LoanList
                             header="Loans to collect"
-                            noItemMessage={
-                                <p>No defaulted and uncollected loan.</p>
-                            }
+                            noItemMessage={<p>No defaulted and uncollected loan.</p>}
                             loans={loansToCollect}
                         />
                     </Pgrid.Column>

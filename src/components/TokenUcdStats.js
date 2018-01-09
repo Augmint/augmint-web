@@ -5,13 +5,7 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class TokenUcdStats extends React.Component {
     render() {
-        const {
-            showTokenUcdLink,
-            tokenUcd,
-            rates,
-            size,
-            showInUsd
-        } = this.props;
+        const { showTokenUcdLink, tokenUcd, rates, size, showInUsd } = this.props;
 
         const bn_ethUsdRate = showInUsd ? rates.info.bn_ethUsdRate : null;
         const { isConnected, isLoading, connectionError } = this.props.tokenUcd;
@@ -27,61 +21,41 @@ export class TokenUcdStats extends React.Component {
         } = tokenUcd.info;
 
         const ethBalanceInUsd =
-            bn_ethUsdRate == null || bn_ethBalance == null
-                ? "?"
-                : bn_ethUsdRate.mul(bn_ethBalance).toString();
+            bn_ethUsdRate == null || bn_ethBalance == null ? "?" : bn_ethUsdRate.mul(bn_ethBalance).toString();
 
         return (
-            <Segment
-                vertical
-                textAlign="center"
-                loading={isLoading || (!isConnected && !connectionError)}
-            >
+            <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
                 <ConnectionStatus contract={tokenUcd} />
 
                 <Statistic.Group widths="3" size={size}>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
-                        <Statistic.Value>{totalSupply} ACD</Statistic.Value>
+                        <Statistic.Value>{totalSupply} ACE</Statistic.Value>
                     </Statistic>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
                         <Statistic.Value>{ethBalance} ETH</Statistic.Value>
-                        {showInUsd && (
-                            <p style={{ textAlign: "center" }}>
-                                ({ethBalanceInUsd} USD)
-                            </p>
-                        )}
+                        {showInUsd && <p style={{ textAlign: "center" }}>({ethBalanceInUsd} EUR)</p>}
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>ACD reserve</Statistic.Label>
-                        <Statistic.Value>{ucdBalance} ACD</Statistic.Value>
+                        <Statistic.Label>ACE reserve</Statistic.Label>
+                        <Statistic.Value>{ucdBalance} ACE</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>ACD fee account</Statistic.Label>
-                        <Statistic.Value>
-                            {feeAccountAcdBalance} ACD
-                        </Statistic.Value>
+                        <Statistic.Label>ACE fee account</Statistic.Label>
+                        <Statistic.Value>{feeAccountAcdBalance} ACE</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>
-                            ACD interest pool account
-                        </Statistic.Label>
-                        <Statistic.Value>
-                            {interestPoolAccountAcdBalance} ACD
-                        </Statistic.Value>
+                        <Statistic.Label>ACE interest pool account</Statistic.Label>
+                        <Statistic.Value>{interestPoolAccountAcdBalance} ACE</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>
-                            ACD earned interest account
-                        </Statistic.Label>
-                        <Statistic.Value>
-                            {interestEarnedAccountAcdBalance} ACD
-                        </Statistic.Value>
+                        <Statistic.Label>ACE earned interest account</Statistic.Label>
+                        <Statistic.Value>{interestEarnedAccountAcdBalance} ACE</Statistic.Value>
                     </Statistic>
                 </Statistic.Group>
 

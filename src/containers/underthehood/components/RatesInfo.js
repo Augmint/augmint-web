@@ -14,12 +14,9 @@ export function RatesInfo(props) {
 
     return (
         <Pblock header="Rates contract">
-            <p>ETH/USD: {contract.info.ethUsdRate}</p>
+            <p>ETH/EUR: {contract.info.ethUsdRate}</p>
 
-            <ContractBaseInfo
-                contract={contract}
-                refreshCb={handleRefreshClick}
-            />
+            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

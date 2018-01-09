@@ -12,10 +12,7 @@ export default class SolidityContract {
         //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
         if (typeof contract.currentProvider.sendAsync !== "function") {
             contract.currentProvider.sendAsync = function() {
-                return contract.currentProvider.send.apply(
-                    contract.currentProvider,
-                    arguments
-                );
+                return contract.currentProvider.send.apply(contract.currentProvider, arguments);
             };
         }
         let instance = await contract.deployed();
@@ -28,11 +25,7 @@ export default class SolidityContract {
 
             if (owner === "0x") {
                 let contractName = artifacts.contract_name;
-                throw new Error(
-                    "Can't connect to " +
-                        contractName +
-                        " contract. Owner is 0x. Not deployed?"
-                );
+                throw new Error("Can't connect to " + contractName + " contract. Owner is 0x. Not deployed?");
             }
         }
         return new SolidityContract(web3, instance);

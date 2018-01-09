@@ -4,14 +4,8 @@ import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
 import { SubmissionError, reduxForm } from "redux-form";
-import {
-    collectLoans,
-    LOANMANAGER_COLLECT_SUCCESS
-} from "modules/reducers/loanManager";
-import {
-    EthSubmissionErrorPanel,
-    EthSubmissionSuccessPanel
-} from "components/MsgPanels";
+import { collectLoans, LOANMANAGER_COLLECT_SUCCESS } from "modules/reducers/loanManager";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 
@@ -74,10 +68,7 @@ class CollectLoanButton extends React.Component {
                             <Button
                                 size="large"
                                 primary
-                                disabled={
-                                    submitting ||
-                                    this.props.loansToCollect.length === 0
-                                }
+                                disabled={submitting || this.props.loansToCollect.length === 0}
                             >
                                 {submitting ? "Submitting..." : "Collect"}
                             </Button>
@@ -85,19 +76,12 @@ class CollectLoanButton extends React.Component {
                     )}
 
                 {(isLoading || loansToCollect == null) && (
-                    <LoadingPanel>
-                        Refreshing list of loans to collect...
-                    </LoadingPanel>
+                    <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>
                 )}
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={
-                            <h3>
-                                Successful collection of{" "}
-                                {this.state.result.loansCollected} loans
-                            </h3>
-                        }
+                        header={<h3>Successful collection of {this.state.result.loansCollected} loans</h3>}
                         onDismiss={() => reset()}
                         eth={this.state.result.eth}
                     />

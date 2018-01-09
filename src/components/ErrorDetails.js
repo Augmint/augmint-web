@@ -17,10 +17,7 @@ import React from "react";
 // });
 
 export default function ErrorDetails(props) {
-    const {
-        header = "Error details:",
-        style = { fontSize: "0.8em", overflow: "auto" }
-    } = props;
+    const { header = "Error details:", style = { fontSize: "0.8em", overflow: "auto" } } = props;
     return (
         <div>
             <p>{header}</p>

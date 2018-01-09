@@ -14,13 +14,10 @@ export function TokenUcdInfo(props) {
 
     return (
         <Pblock header="TokenUcd contract">
-            <p>Total token supply: {contract.info.totalSupply} ACD</p>
+            <p>Total token supply: {contract.info.totalSupply} ACE</p>
             <p>ETH Reserve: {contract.info.ethBalance} ETH</p>
-            <p>ACD Reserve: {contract.info.ucdBalance} ACD </p>
-            <ContractBaseInfo
-                contract={contract}
-                refreshCb={handleRefreshClick}
-            />
+            <p>ACE Reserve: {contract.info.ucdBalance} ACE </p>
+            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

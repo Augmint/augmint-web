@@ -15,8 +15,7 @@ export const TOKENUCD_CONNECT_ERROR = "tokenUcd/TOKENUCD_CONNECT_ERROR";
 export const TOKENUCD_REFRESH_REQUESTED = "tokenUcd/TOKENUCD_REFRESH_REQUESTED";
 export const TOKENUCD_REFRESHED = "tokenUcd/TOKENUCD_REFRESHED";
 
-export const TOKENUCD_TRANSFER_REQUESTED =
-    "tokenUcd/TOKENUCD_TRANSFER_REQUESTED";
+export const TOKENUCD_TRANSFER_REQUESTED = "tokenUcd/TOKENUCD_TRANSFER_REQUESTED";
 export const TOKENUCD_TRANSFER_SUCCESS = "tokenUcd/TOKENUCD_TRANSFER_SUCCESS";
 export const TOKENUCD_TRANSFER_ERROR = "tokenUcd/TOKENUCD_TRANSFER_ERROR";
 
@@ -148,23 +147,13 @@ export const refreshTokenUcd = () => {
         let interestPoolAccount = await tokenUcd.interestPoolAccount();
         let interestEarnedAccount = await tokenUcd.interestEarnedAccount();
         let bn_feeAccountAcdBalance = await getUcdBalance(feeAccount);
-        let bn_interestPoolAccountAcdBalance = await getUcdBalance(
-            interestPoolAccount
-        );
-        let bn_interestEarnedAccountAcdBalance = await getUcdBalance(
-            interestEarnedAccount
-        );
+        let bn_interestPoolAccountAcdBalance = await getUcdBalance(interestPoolAccount);
+        let bn_interestEarnedAccountAcdBalance = await getUcdBalance(interestEarnedAccount);
 
         let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
-        let bn_ethPendingBalance = await asyncGetBalance(
-            tokenUcd.address,
-            "pending"
-        );
+        let bn_ethPendingBalance = await asyncGetBalance(tokenUcd.address, "pending");
         let bn_ucdBalance = await getUcdBalance(tokenUcd.address);
-        let bn_ucdPendingBalance = await getUcdBalance(
-            tokenUcd.address,
-            "pending"
-        );
+        let bn_ucdPendingBalance = await getUcdBalance(tokenUcd.address, "pending");
 
         return dispatch({
             type: TOKENUCD_REFRESHED,

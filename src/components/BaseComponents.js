@@ -1,32 +1,22 @@
 /* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import BigNumber from "bignumber.js";
-import {
-    getTransferFee,
-    getMaxTransfer
-} from "modules/ethereum/transferTransactions";
+import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
 import { Form as SemanticForm } from "semantic-ui-react";
 import store from "modules/store";
 
 export const Validations = {
     required: value => {
-        return value || (value && value.toString().trim() === "")
-            ? undefined
-            : "Required";
+        return value || (value && value.toString().trim() === "") ? undefined : "Required";
     },
     email: value =>
-        value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-            ? "Invalid email address"
-            : undefined,
+        value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined,
 
     ucdAmount: value => {
-        return parseFloat(value) > 0
-            ? undefined
-            : "Amount must be bigger than 0";
+        return parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0";
     },
 
-    ethAmount: value =>
-        parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0",
+    ethAmount: value => (parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0"),
 
     address: value => {
         let web3 = store.getState().web3Connect.web3Instance;
@@ -37,17 +27,13 @@ export const Validations = {
     ucdUserBalance: value => {
         // TODO: shall we look for bn_ucdPendingBalance instead?
         let userBalance = store.getState().userBalances.account.bn_ucdBalance;
-        return userBalance.lt(parseFloat(value))
-            ? "Your ACD balance is less than the amount"
-            : undefined;
+        return userBalance.lt(parseFloat(value)) ? "Your ACE balance is less than the amount" : undefined;
     },
 
     acdUserBalanceWithTransferFee: value => {
         // TODO: shall we look for bn_ucdPendingBalance instead?
         let decimalsDiv = store.getState().tokenUcd.info.bn_decimalsDiv;
-        let userBalance = store
-            .getState()
-            .userBalances.account.bn_ucdBalance.mul(decimalsDiv);
+        let userBalance = store.getState().userBalances.account.bn_ucdBalance.mul(decimalsDiv);
         let amount;
         try {
             amount = new BigNumber(value).mul(decimalsDiv);
@@ -62,34 +48,28 @@ export const Validations = {
             .div(decimalsDiv)
             .toString();
         if (maxTransfer <= 0) {
-            return "Your ACD balance is less than the amount + transfer fee.";
+            return "Your ACE balance is less than the amount + transfer fee.";
         }
         return (
-            "Your ACD balance is less than the amount + transfer fee. Max amount you can transfer is " +
+            "Your ACE balance is less than the amount + transfer fee. Max amount you can transfer is " +
             maxTransfer +
-            " ACD"
+            " ACE"
         );
     },
 
     ethUserBalance: value => {
         // TODO: shall we look for bn_ucdPendingBalance instead?
         let userBalance = store.getState().userBalances.account.bn_ethBalance;
-        return userBalance.lt(parseFloat(value))
-            ? "Your ETH balance is less than the amount"
-            : undefined;
+        return userBalance.lt(parseFloat(value)) ? "Your ETH balance is less than the amount" : undefined;
     },
 
     notOwnAddress: value => {
         let userAccount = store.getState().web3Connect.userAccount;
-        return value.toLowerCase() === userAccount.toLowerCase()
-            ? "You can't transfer to yourself"
-            : undefined;
+        return value.toLowerCase() === userAccount.toLowerCase() ? "You can't transfer to yourself" : undefined;
     },
 
     minUcdAmount: minValue => value => {
-        return parseFloat(value) < minValue
-            ? "Amount must be at least " + minValue + " ACD"
-            : undefined;
+        return parseFloat(value) < minValue ? "Amount must be at least " + minValue + " ACE" : undefined;
     }
 };
 

@@ -10,17 +10,13 @@ export default class ExchangeSummary extends React.Component {
 
         return (
             <Pblock
-                loading={
-                    rates.isLoading ||
-                    exchange.isLoading ||
-                    (!exchange.isConnected && !exchange.connectionError)
-                }
+                loading={rates.isLoading || exchange.isLoading || (!exchange.isConnected && !exchange.connectionError)}
                 {...other}
             >
                 <ConnectionStatus contract={rates} />
                 <h4>
-                    1 ETH = {rates.info.ethUsdRate} ACD<br />
-                    1 ACD = {rates.info.usdEthRate} ETH
+                    1 ETH = {rates.info.ethUsdRate} ACE<br />
+                    1 ACE = {rates.info.usdEthRate} ETH
                 </h4>
 
                 {orderCount > 0 && (

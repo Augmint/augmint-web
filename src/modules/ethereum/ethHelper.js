@@ -224,7 +224,7 @@ export async function getUcdBalance(address, defaultBlock) {
                 if (error) {
                     reject(
                         new Error(
-                            "Can't get ACD balance from tokenUcd (getUcdBalance). Address: ",
+                            "Can't get ACE balance from tokenUcd (getUcdBalance). Address: ",
                             address + "\n" + error
                         )
                     );

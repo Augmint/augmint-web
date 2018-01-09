@@ -25,27 +25,20 @@ class AccountHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
-                                <AccountInfo
-                                    account={this.props.userAccount}
-                                    header="Overview"
-                                />
+                                <AccountInfo account={this.props.userAccount} header="Overview" />
 
                                 <UcdTransferForm />
 
                                 <TransferList
                                     transfers={this.props.userTransfers}
-                                    userAccountAddress={
-                                        this.props.userAccount.address
-                                    }
+                                    userAccountAddress={this.props.userAccount.address}
                                 />
                             </Pgrid.Column>
 
                             <Pgrid.Column>
                                 <LoanList
-                                    header="My ACD Loans"
-                                    noItemMessage={
-                                        <span>You have no loans</span>
-                                    }
+                                    header="My ACE Loans"
+                                    noItemMessage={<span>You have no loans</span>}
                                     loans={this.props.loans}
                                 />
                             </Pgrid.Column>

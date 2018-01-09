@@ -1,5 +1,5 @@
 /*
- ACD transfer ethereum functions
+ ACE transfer ethereum functions
 Use only from reducers.
 
     TODO: tune default gasPrice
@@ -78,7 +78,7 @@ export async function transferUcdTx(payload) {
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
-            throw new Error("ACD transfer failed. All gas provided was used:  " + result.receipt.gasUsed);
+            throw new Error("ACE transfer failed. All gas provided was used:  " + result.receipt.gasUsed);
         }
 
         /* TODO:  display result in confirmation */
@@ -102,7 +102,7 @@ export async function transferUcdTx(payload) {
             }
         };
     } catch (error) {
-        throw new Error("ACD transfer failed.\n" + error);
+        throw new Error("ACE transfer failed.\n" + error);
     }
 }
 

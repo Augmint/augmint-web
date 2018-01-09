@@ -1,7 +1,4 @@
-import {
-    fetchOrders,
-    placeOrderTx
-} from "modules/ethereum/exchangeTransactions";
+import { fetchOrders, placeOrderTx } from "modules/ethereum/exchangeTransactions";
 
 export const ETHSELL = 0,
     UCDSELL = 1;

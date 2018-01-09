@@ -23,36 +23,26 @@ class ExchangeHome extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Buy & Sell ACD" />
+                    <Pheader header="Buy & Sell ACE" />
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
-                                <PlaceOrderForm
-                                    orders={orders}
-                                    exchange={exchange}
-                                    rates={rates}
-                                />
+                                <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
 
                                 <OrderList
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="My orders"
                                     filter={item => {
-                                        return (
-                                            item.maker.toLowerCase() ===
-                                            userAccount.address.toLowerCase()
-                                        );
+                                        return item.maker.toLowerCase() === userAccount.address.toLowerCase();
                                     }}
                                 />
                             </Pgrid.Column>
 
                             <Pgrid.Column>
-                                <ExchangeSummary
-                                    exchange={exchange}
-                                    rates={rates}
-                                />
+                                <ExchangeSummary exchange={exchange} rates={rates} />
                                 <OrderList
                                     orders={orders}
                                     userAccountAddress={userAccount.address}

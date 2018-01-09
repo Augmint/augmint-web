@@ -21,9 +21,7 @@ export default () => {
 
 const setupListeners = () => {
     const rates = store.getState().rates.contract.instance;
-    rates
-        .e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onRateChange);
+    rates.e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onRateChange);
     // TODO: remove prev listeners
 };
 
@@ -36,9 +34,7 @@ const removeListeners = oldInstance => {
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug(
-            "ratesProvider - web3Connect.network changed. Dispatching connectRates()"
-        );
+        console.debug("ratesProvider - web3Connect.network changed. Dispatching connectRates()");
         store.dispatch(connectRates());
     }
 };
@@ -46,17 +42,13 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
 const onRatesContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
-        console.debug(
-            "ratesProvider - rates.contract changed. Dispatching refreshRates()"
-        );
+        console.debug("ratesProvider - rates.contract changed. Dispatching refreshRates()");
         store.dispatch(refreshRates());
         setupListeners();
     }
 };
 
 const onRateChange = (error, result) => {
-    console.debug(
-        "ratesProvider.onRateChange(): e_ethToUsdcChanged event. Dispatching refreshRates"
-    );
+    console.debug("ratesProvider.onRateChange(): e_ethToUsdcChanged event. Dispatching refreshRates");
     store.dispatch(refreshRates());
 };

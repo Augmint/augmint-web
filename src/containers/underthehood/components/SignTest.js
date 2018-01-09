@@ -6,10 +6,7 @@ export function SignTest(props) {
     const { web3Instance, userAccount } = props.web3Connect;
 
     const handleSignClick = async e => {
-        let encodedParams = await web3Instance.eth.abi.encodeParameters(
-            ["uint", "uint"],
-            ["10", "20"]
-        );
+        let encodedParams = await web3Instance.eth.abi.encodeParameters(["uint", "uint"], ["10", "20"]);
         let paramsString = "Param1: 10\nParam2: 20\n";
         let msg = paramsString + encodedParams;
         console.log(
@@ -18,18 +15,10 @@ export function SignTest(props) {
         );
         console.log(
             "web3.sha3('\x19Ethereum Signed Message:\n' + msg.length + msg);",
-            web3Instance.utils.soliditySha3(
-                "\x19Ethereum Signed Message:\n" + msg.length,
-                paramsString,
-                "10",
-                "20"
-            )
+            web3Instance.utils.soliditySha3("\x19Ethereum Signed Message:\n" + msg.length, paramsString, "10", "20")
         );
 
-        let h = web3Instance.utils.soliditySha3(
-            "\x19Ethereum Signed Message:\n" + msg.length,
-            msg
-        );
+        let h = web3Instance.utils.soliditySha3("\x19Ethereum Signed Message:\n" + msg.length, msg);
         let sig = await web3Instance.eth.personal.sign(msg, userAccount);
         console.log("Account: ", userAccount, "Data: ", msg);
         let sigInRemixFormat = '["' + sig.slice(0, 4) + '"';
@@ -38,19 +27,9 @@ export function SignTest(props) {
         }
         sigInRemixFormat += "]";
         console.log('Hash + sig: "' + h + '","' + sig + '"');
+        console.log('ecRecovery2(hash,sig) in remix format:\n"' + h + '", ' + sigInRemixFormat);
         console.log(
-            'ecRecovery2(hash,sig) in remix format:\n"' +
-                h +
-                '", ' +
-                sigInRemixFormat
-        );
-        console.log(
-            'ecVerify(message, signer, sig) in remix format:\n"' +
-                msg +
-                '", "' +
-                userAccount +
-                '", ' +
-                sigInRemixFormat
+            'ecVerify(message, signer, sig) in remix format:\n"' + msg + '", "' + userAccount + '", ' + sigInRemixFormat
         );
 
         sig = sig.slice(2);
@@ -58,17 +37,7 @@ export function SignTest(props) {
         let s = `0x${sig.slice(64, 128)}`;
         let v = web3Instance.utils.hexToNumber(sig.slice(128, 130));
 
-        console.log(
-            'ecRecovery(hash,v,r,s) in remix format:\n"' +
-                h +
-                '", ' +
-                v +
-                ', "' +
-                r +
-                '", "' +
-                s +
-                '"'
-        );
+        console.log('ecRecovery(hash,v,r,s) in remix format:\n"' + h + '", ' + v + ', "' + r + '", "' + s + '"');
     };
 
     return (

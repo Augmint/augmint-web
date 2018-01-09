@@ -19,18 +19,13 @@ export default function LoanList(props) {
                 .map((loan, index) => (
                     <MyListGroup.Row key={loan.loanId}>
                         <LoanListDetails loan={loan} />
-                        {props.selectComponent && (
-                            <props.selectComponent loanId={loan.loanId} />
-                        )}
+                        {props.selectComponent && <props.selectComponent loanId={loan.loanId} />}
                     </MyListGroup.Row>
                 ))
         );
 
     return (
-        <Pblock
-            loading={props.loans == null || props.loans.isLoading}
-            header={props.header}
-        >
+        <Pblock loading={props.loans == null || props.loans.isLoading} header={props.header}>
             {props.loans != null && listItems.length === 0 ? (
                 props.noItemMessage
             ) : (

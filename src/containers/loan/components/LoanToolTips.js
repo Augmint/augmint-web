@@ -14,7 +14,7 @@ export function DiscountRateToolTip(props) {
 export function LoanCollateralRatioToolTip(props) {
     return (
         <ToolTip header="Loan/collateral ratio">
-            ACE loan amount / USD value of ETH collateral.<br />
+            ACE loan amount / EUR value of ETH collateral.<br />
             I.e. How much ACE loan can you get for your ETH<br />
             E.g. 1ETH worth 200 EUR and the Loan Coverage ratio is {props.loanCollateralRatio * 100}% then you can get ~{Math.round(
                 props.loanCollateralRatio * 20000

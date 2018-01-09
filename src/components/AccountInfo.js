@@ -25,7 +25,7 @@ export class AccountInfo extends React.Component {
                         )}
                 </p>
                 <p>
-                    ACD: <span id="userAceBalance">{account.ucdBalance}</span>
+                    ACE: <span id="userAceBalance">{account.ucdBalance}</span>
                     {account.ucdPendingBalance !== "?" &&
                         account.ucdPendingBalance - account.ucdBalance !== 0 && (
                             <span> (Pending: {account.ucdPendingBalance - account.ucdBalance} )</span>

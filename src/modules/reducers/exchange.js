@@ -124,16 +124,14 @@ export const refreshExchange = () => {
             let bn_totalEthSellOrders = web3.utils.fromWei(
                 (await exchange.totalEthSellOrders()).toString() // toString() required to supress web3 error, why?
             );
-            let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(
-                new BigNumber(10000)
-            );
+            let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(new BigNumber(10000));
             let totalUcdSellOrders = bn_totalUcdSellOrders.toString();
             let totalEthSellOrders = bn_totalEthSellOrders.toString();
             let totalAmount = 0,
                 totalCcy = "";
             if (totalUcdSellOrders > 0) {
                 totalAmount = totalUcdSellOrders;
-                totalCcy = "ACD";
+                totalCcy = "ACE";
             } else if (totalEthSellOrders > 0) {
                 totalAmount = totalEthSellOrders;
                 totalCcy = "ETH";

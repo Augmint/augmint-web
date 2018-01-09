@@ -64,9 +64,7 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
         filterAllBlocks.unsubscribe();
     }
     if (newVal) {
-        console.debug(
-            "web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event "
-        );
+        console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event ");
         const web3 = store.getState().web3Connect.web3Instance;
         filterAllBlocks = web3.eth.subscribe("newBlockHeaders", onNewBlock);
     }

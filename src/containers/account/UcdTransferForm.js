@@ -1,6 +1,6 @@
 /*
 TODO: form client side validation. eg:
-    - ACD balance check
+    - ACE balance check
     - address format check
     - number  format check
     - To: can't be the same as From:
@@ -12,23 +12,11 @@ import React from "react";
 import { Button, Label } from "semantic-ui-react";
 import { connect } from "react-redux";
 import store from "modules/store";
-import {
-    EthSubmissionErrorPanel,
-    EthSubmissionSuccessPanel,
-    ConnectionStatus
-} from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
-import {
-    Form,
-    Validations,
-    Normalizations,
-    Parsers
-} from "components/BaseComponents";
+import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
-import {
-    transferUcd,
-    TOKENUCD_TRANSFER_SUCCESS
-} from "modules/reducers/tokenUcd";
+import { transferUcd, TOKENUCD_TRANSFER_SUCCESS } from "modules/reducers/tokenUcd";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
 import { BigNumber } from "bignumber.js";
@@ -92,11 +80,8 @@ class UcdTransferForm extends React.Component {
 
         return (
             <Pblock
-                loading={
-                    tokenUcd.isLoading ||
-                    (!tokenUcd.isConnected && !tokenUcd.connectionError)
-                }
-                header="Send ACD"
+                loading={tokenUcd.isLoading || (!tokenUcd.isConnected && !tokenUcd.connectionError)}
+                header="Send ACE"
             >
                 <ConnectionStatus contract={tokenUcd} />
                 {submitSucceeded && (
@@ -106,16 +91,12 @@ class UcdTransferForm extends React.Component {
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Sent {this.state.result.amount} ACD to{" "}
-                            {this.state.result.to}
+                            Sent {this.state.result.amount} ACE to {this.state.result.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
                 {!submitSucceeded && (
-                    <Form
-                        error={error ? true : false}
-                        onSubmit={handleSubmit(this.handleSubmit)}
-                    >
+                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
                         <EthSubmissionErrorPanel
                             error={error}
                             header={<h3>Transfer failed</h3>}
@@ -141,13 +122,12 @@ class UcdTransferForm extends React.Component {
                             disabled={submitting || !tokenUcd.isConnected}
                         >
                             <input />
-                            <Label>ACD</Label>
+                            <Label>ACE</Label>
                         </Field>
 
                         <small>
-                            Fee:{" "}
-                            <TransferFeeToolTip tokenAcdInfo={tokenUcd.info} />
-                            {this.state.feeAmount} ACD
+                            Fee: <TransferFeeToolTip tokenAcdInfo={tokenUcd.info} />
+                            {this.state.feeAmount} ACE
                         </small>
 
                         <Field
@@ -158,11 +138,7 @@ class UcdTransferForm extends React.Component {
                             name="payee"
                             type="text"
                             parse={Parsers.trim}
-                            validate={[
-                                Validations.required,
-                                Validations.address,
-                                Validations.notOwnAddress
-                            ]}
+                            validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
                             placeholder="0x0..."
                             disabled={submitting || !tokenUcd.isConnected}
                         />
@@ -176,11 +152,7 @@ class UcdTransferForm extends React.Component {
                             placeholder="short narrative (optional)"
                             disabled={submitting || !tokenUcd.isConnected}
                         />
-                        <Button
-                            loading={submitting}
-                            primary
-                            disabled={pristine}
-                        >
+                        <Button loading={submitting} primary disabled={pristine}>
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
                     </Form>

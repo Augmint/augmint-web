@@ -1,5 +1,5 @@
 /*
-    TODO: check here of user account ACD balance is enough for repayment
+    TODO: check here of user account ACE balance is enough for repayment
 */
 import React from "react";
 import { connect } from "react-redux";
@@ -168,7 +168,7 @@ class RepayLoanPage extends React.Component {
                                     >
                                         {this.props.submitting
                                             ? "Submitting..."
-                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " ACD"}
+                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " ACE"}
                                     </Button>
                                 )}
                                 {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
