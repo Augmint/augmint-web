@@ -32,8 +32,7 @@ describe("Augmint basic e2e", function() {
         cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
-        const aceBalanceBefore = 0;
-        // TODO: parseInt(cy.get("#userAceBalance").should("have.attr", "innerHTML")   );
+
         cy
             .get("#disbursedUcdAmount")
             .type("1000.55")
@@ -44,6 +43,7 @@ describe("Augmint basic e2e", function() {
         cy.get("#loanUcdAmount").type("1250.69");
         cy.get("#ethAmount").type("8.01724");
 
+        const aceBalanceBefore = parseInt(Cypress.$("#userAceBalance").text());
         cy.get("#submitBtn").click();
         cy.contains("You've got a loan");
         cy.contains("Disbursed: 1000.55 ACE");
