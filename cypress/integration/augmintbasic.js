@@ -12,24 +12,24 @@ describe("Augmint basic e2e", function() {
         cy.contains("Account: 0xd912AeCb07E9F4e1eA8E6b4779e7Fb6Aa1c3e4D8");
         cy.contains("No transactions");
 
-        cy.contains("Get ACD Loan").click();
+        cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
         cy.contains("Selected: loan product 1");
 
         cy.contains("Reserves").click();
         cy.contains("Augmint Reserves");
-        cy.contains("0 ACD");
+        cy.contains("0 ACE");
 
         cy.get("#loansToCollectBtn").click();
         cy.contains("No defaulted and uncollected loan.");
 
-        // TODO: Buy / Sell ACD (when new internal exchange is done)
+        // TODO: Buy / Sell ACE (when new internal exchange is done)
     });
 
     it("Should get and repay a loan", function() {
         // TODO: use fixtures for loan amounts etc.
-        cy.contains("Get ACD Loan").click();
+        cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
         const aceBalanceBefore = 0;
@@ -46,8 +46,8 @@ describe("Augmint basic e2e", function() {
 
         cy.get("#submitBtn").click();
         cy.contains("You've got a loan");
-        cy.contains("Disbursed: 1000.55 ACD");
-        cy.contains("To be repayed: 1250.69 ACD");
+        cy.contains("Disbursed: 1000.55 ACE");
+        cy.contains("To be repayed: 1250.69 ACE");
         cy.contains("Collateral in escrow: 8.01724 ETH");
         cy.get("#userAceBalance").contains(aceBalanceBefore + 1000.55);
 
