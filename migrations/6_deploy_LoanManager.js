@@ -1,15 +1,15 @@
-var TokenAcd = artifacts.require("./TokenAcd.sol");
-var Rates = artifacts.require("./Rates.sol");
-var SafeMath = artifacts.require("./SafeMath.sol");
-var LoanManager = artifacts.require("./LoanManager.sol");
+const TokenAce = artifacts.require("./TokenAce.sol");
+const Rates = artifacts.require("./Rates.sol");
+const SafeMath = artifacts.require("./SafeMath.sol");
+const LoanManager = artifacts.require("./LoanManager.sol");
 
 module.exports = function(deployer, network, accounts) {
     deployer.link(SafeMath, LoanManager);
-    deployer.deploy(LoanManager, TokenAcd.address, Rates.address);
+    deployer.deploy(LoanManager, TokenAce.address, Rates.address);
     deployer.then(async () => {
         let lm = LoanManager.at(LoanManager.address);
-        let tokenAcd = TokenAcd.at(TokenAcd.address);
-        await tokenAcd.grantMultiplePermissions(LoanManager.address, [
+        let tokenAce = TokenAce.at(TokenAce.address);
+        await tokenAce.grantMultiplePermissions(LoanManager.address, [
             "issueAndDisburse",
             "repayAndBurn",
             "moveCollectedInterest",

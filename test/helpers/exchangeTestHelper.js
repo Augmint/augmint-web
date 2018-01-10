@@ -9,9 +9,9 @@ module.exports = {
 
 let exchange;
 
-async function newExchange(tokenAcd, rates) {
-    exchange = await Exchange.new(tokenAcd.address, rates.address);
-    await tokenAcd.grantPermission(exchange.address, "transferNoFee");
+async function newExchange(tokenAce, rates) {
+    exchange = await Exchange.new(tokenAce.address, rates.address);
+    await tokenAce.grantPermission(exchange.address, "transferNoFee");
     return exchange;
 }
 

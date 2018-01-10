@@ -1,10 +1,10 @@
 const BigNumber = require("bignumber.js");
 const testHelper = new require("./testHelper.js");
-const TokenAcdMock = artifacts.require("./mocks/TokenAcdMock.sol");
+const TokenAceMock = artifacts.require("./mocks/TokenAceMock.sol");
 const TRANSFER_MAXFEE = web3.toWei(0.01); // TODO: set this to expected value (+set gasPrice)
 
 module.exports = {
-    newTokenAcdMock,
+    newTokenAceMock,
     transferTest,
     getTransferFee,
     getBalances,
@@ -18,20 +18,20 @@ module.exports = {
 const FeeAccount = artifacts.require("./FeeAccount.sol");
 const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
-let tokenAcd;
+let tokenAce;
 
-async function newTokenAcdMock() {
-    //if (typeof tokenAcd == "undefined") {
-    tokenAcd = await TokenAcdMock.new(
+async function newTokenAceMock() {
+    //if (typeof tokenAce == "undefined") {
+    tokenAce = await TokenAceMock.new(
         FeeAccount.address,
         InterestPoolAccount.address,
         InterestEarnedAccount.address,
         2000 /* transferFeePt in parts per million = 0.2% */,
-        200 /* min: 0.02 ACD */,
-        50000 /* max fee: 5 ACD */
+        200 /* min: 0.02 ACE */,
+        50000 /* max fee: 5 ACE */
     );
 
-    await tokenAcd.grantMultiplePermissions(web3.eth.accounts[0], [
+    await tokenAce.grantMultiplePermissions(web3.eth.accounts[0], [
         "setSystemAccounts",
         "setTransferFees",
         "transferNoFee",
@@ -41,30 +41,30 @@ async function newTokenAcdMock() {
     ]);
     //}
 
-    return tokenAcd;
+    return tokenAce;
 }
 
 async function transferTest(testInstance, expTransfer) {
     // if fee is provided than we are testing transferNoFee
     if (typeof expTransfer.fee === "undefined") expTransfer.fee = await getTransferFee(expTransfer.amount);
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
-    let feeAccount = await tokenAcd.feeAccount();
+    let feeAccount = await tokenAce.feeAccount();
 
     let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
     let tx, txName;
     if (expTransfer.fee === 0) {
         txName = "transferNoFee";
-        tx = await tokenAcd.transferNoFee(expTransfer.from, expTransfer.to, expTransfer.amount, expTransfer.narrative, {
+        tx = await tokenAce.transferNoFee(expTransfer.from, expTransfer.to, expTransfer.amount, expTransfer.narrative, {
             from: expTransfer.from
         });
     } else if (expTransfer.narrative === "") {
         txName = "transfer";
-        tx = await tokenAcd.transfer(expTransfer.to, expTransfer.amount, {
+        tx = await tokenAce.transfer(expTransfer.to, expTransfer.amount, {
             from: expTransfer.from
         });
     } else {
         txName = "transferWithNarrative";
-        tx = await tokenAcd.transferWithNarrative(expTransfer.to, expTransfer.amount, expTransfer.narrative, {
+        tx = await tokenAce.transferWithNarrative(expTransfer.to, expTransfer.amount, expTransfer.narrative, {
             from: expTransfer.from
         });
     }
@@ -74,20 +74,20 @@ async function transferTest(testInstance, expTransfer) {
         {
             name: "acc from",
             address: expTransfer.from,
-            ucd: balBefore[0].ucd.minus(expTransfer.amount).minus(expTransfer.fee),
+            ace: balBefore[0].ace.minus(expTransfer.amount).minus(expTransfer.fee),
             eth: balBefore[0].eth,
             gasFee: TRANSFER_MAXFEE
         },
         {
             name: "acc to",
             address: expTransfer.to,
-            ucd: balBefore[1].ucd.plus(expTransfer.amount),
+            ace: balBefore[1].ace.plus(expTransfer.amount),
             eth: balBefore[1].eth
         },
         {
             name: "acc fee",
             address: feeAccount,
-            ucd: balBefore[2].ucd.plus(expTransfer.fee),
+            ace: balBefore[2].ace.plus(expTransfer.fee),
             eth: balBefore[2].eth
         }
     ];
@@ -96,12 +96,12 @@ async function transferTest(testInstance, expTransfer) {
 }
 
 async function approveTest(testInstance, expApprove) {
-    let tx = await tokenAcd.approve(expApprove.spender, expApprove.value, {
+    let tx = await tokenAce.approve(expApprove.spender, expApprove.value, {
         from: expApprove.owner
     });
     approveEventAsserts(tx, expApprove);
     testHelper.logGasUse(testInstance, tx, "approve");
-    let newAllowance = await tokenAcd.allowance(expApprove.owner, expApprove.spender);
+    let newAllowance = await tokenAce.allowance(expApprove.owner, expApprove.spender);
     assert.equal(newAllowance.toString(), expApprove.value.toString(), "allowance value should be set");
 }
 
@@ -110,7 +110,7 @@ async function transferFromTest(testInstance, expTransfer) {
     let isNoFeeTest = typeof expTransfer.fee === "undefined" ? false : true;
     expTransfer.fee = 0; // transferFrom deducts transfer fee from beneficiary
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
-    let feeAccount = await tokenAcd.feeAccount();
+    let feeAccount = await tokenAce.feeAccount();
     let fee = 0;
     let expFeeTransfer;
     if (!isNoFeeTest) {
@@ -124,12 +124,12 @@ async function transferFromTest(testInstance, expTransfer) {
             fee: 0
         };
     }
-    let allowanceBefore = await tokenAcd.allowance(expTransfer.from, expTransfer.to);
+    let allowanceBefore = await tokenAce.allowance(expTransfer.from, expTransfer.to);
     let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
     let tx, txName;
     if (isNoFeeTest) {
         txName = "transferFromNoFee";
-        tx = await tokenAcd.transferFromNoFee(
+        tx = await tokenAce.transferFromNoFee(
             expTransfer.from,
             expTransfer.to,
             expTransfer.amount,
@@ -140,12 +140,12 @@ async function transferFromTest(testInstance, expTransfer) {
         );
     } else if (expTransfer.narrative === "") {
         txName = "transferFrom";
-        tx = await tokenAcd.transferFrom(expTransfer.from, expTransfer.to, expTransfer.amount, {
+        tx = await tokenAce.transferFrom(expTransfer.from, expTransfer.to, expTransfer.amount, {
             from: expTransfer.to
         });
     } else {
         txName = "transferFromWithNarrative";
-        tx = await tokenAcd.transferFromWithNarrative(
+        tx = await tokenAce.transferFromWithNarrative(
             expTransfer.from,
             expTransfer.to,
             expTransfer.amount,
@@ -160,7 +160,7 @@ async function transferFromTest(testInstance, expTransfer) {
     if (!isNoFeeTest) {
         transferEventAsserts(tx, expFeeTransfer, 2);
     }
-    let allowanceAfter = await tokenAcd.allowance(expTransfer.from, expTransfer.to);
+    let allowanceAfter = await tokenAce.allowance(expTransfer.from, expTransfer.to);
     assert.equal(
         allowanceBefore.sub(expTransfer.amount).toString(),
         allowanceAfter.toString(),
@@ -171,20 +171,20 @@ async function transferFromTest(testInstance, expTransfer) {
         {
             name: "acc from",
             address: expTransfer.from,
-            ucd: balBefore[0].ucd.minus(expTransfer.amount),
+            ace: balBefore[0].ace.minus(expTransfer.amount),
             eth: balBefore[0].eth
         },
         {
             name: "acc to",
             address: expTransfer.to,
-            ucd: balBefore[1].ucd.plus(expTransfer.amount).minus(fee), // amount less fee
+            ace: balBefore[1].ace.plus(expTransfer.amount).minus(fee), // amount less fee
             eth: balBefore[1].eth,
             gasFee: TRANSFER_MAXFEE
         },
         {
             name: "acc fee",
             address: feeAccount,
-            ucd: balBefore[2].ucd.plus(fee),
+            ace: balBefore[2].ace.plus(fee),
             eth: balBefore[2].eth
         }
     ];
@@ -197,9 +197,9 @@ async function getTransferFee(_amount) {
     let amount = new BigNumber(_amount);
 
     await Promise.all([
-        (feePt = await tokenAcd.transferFeePt()),
-        (feeMax = await tokenAcd.transferFeeMax()),
-        (feeMin = await tokenAcd.transferFeeMin())
+        (feePt = await tokenAce.transferFeePt()),
+        (feeMax = await tokenAce.transferFeeMax()),
+        (feeMin = await tokenAce.transferFeeMin())
     ]);
 
     let fee = amount
@@ -219,7 +219,7 @@ async function getBalances(addresses) {
     for (let addr of addresses) {
         balances.push({
             eth: await web3.eth.getBalance(addr),
-            ucd: await tokenAcd.balanceOf(addr)
+            ace: await tokenAce.balanceOf(addr)
         });
     }
     return balances;
@@ -268,7 +268,7 @@ async function approveEventAsserts(tx, expApprove) {
 async function balanceAsserts(expBalances) {
     for (let expBal of expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);
-        let newUcdBal = await tokenAcd.balanceOf(expBal.address);
+        let newAceBal = await tokenAce.balanceOf(expBal.address);
         let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
         assert.isAtMost(
             newEthBal
@@ -278,6 +278,6 @@ async function balanceAsserts(expBalances) {
             expGasFee,
             expBal.name + " new and initial ETH balance diferrence is higher than expecteed "
         );
-        assert.equal(newUcdBal.toString(), expBal.ucd.toString(), expBal.name + " new ACD balance is not as expected");
+        assert.equal(newAceBal.toString(), expBal.ace.toString(), expBal.name + " new ACE balance is not as expected");
     }
 }

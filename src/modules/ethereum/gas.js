@@ -5,7 +5,7 @@ export const cost = {
     COLLECT_BASE_GAS: 90000, // as of now on testRpc: 1 loan = 89744
     COLLECT_ONE_GAS: 40000, // as of now: ???
 
-    TRANSFER_UCD_GAS: 100000, // on testrpc: first: 75189 - 75405, rinkeby first: 76629
+    TRANSFER_AUGMINT_TOKEN_GAS: 100000, // on testrpc: first: 75189 - 75405, rinkeby first: 76629
     //consecutive : no narr: 45405 - 60405 (higher when sent to account which never received)
     // w narrative: 46733 - 56693
 

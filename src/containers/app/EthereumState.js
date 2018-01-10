@@ -13,7 +13,7 @@ import { GitterButton } from "components/LinkButtons";
 export class EthereumState extends React.Component {
     render() {
         let msg = null;
-        const { web3Connect, loanManager, rates, tokenUcd, exchange, children = null } = this.props;
+        const { web3Connect, loanManager, rates, augmintToken, exchange, children = null } = this.props;
         const { isConnected, isLoading, network, error } = this.props.web3Connect;
         if (isLoading || document.readyState !== "complete") {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
@@ -63,7 +63,7 @@ export class EthereumState extends React.Component {
         } else if (
             loanManager.connectionError ||
             rates.connectionError ||
-            tokenUcd.connectionError ||
+            augmintToken.connectionError ||
             (exchange && rates.connectionError)
         ) {
             msg = (
@@ -95,7 +95,7 @@ export class EthereumState extends React.Component {
                     <ErrorDetails>
                         {loanManager.connectionError ? loanManager.connectionError.message + "\n" : ""}
                         {rates.connectionError ? rates.connectionError.message + "\n" : ""}
-                        {tokenUcd.connectionError ? tokenUcd.connectionError.message + "\n" : ""}
+                        {augmintToken.connectionError ? augmintToken.connectionError.message + "\n" : ""}
                         {exchange.connectionError ? exchange.connectionError.message : ""}
                     </ErrorDetails>
                 </ErrorPanel>
@@ -119,7 +119,7 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
     loanManager: state.loanManager,
     rates: state.rates,
-    tokenUcd: state.tokenUcd,
+    augmintToken: state.augmintToken,
     exchange: state.exchange
 });
 

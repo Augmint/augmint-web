@@ -63,8 +63,8 @@ export async function fetchProductsTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
         const productCount = await loanManager.getProductCount();
-        // TODO: get this from store.tokenUcd (timing issues on first load..)
-        const decimalsDiv = new BigNumber(10).pow(await store.getState().tokenUcd.contract.instance.decimals());
+        // TODO: get this from store.augmintToken (timing issues on first load..)
+        const decimalsDiv = new BigNumber(10).pow(await store.getState().augmintToken.contract.instance.decimals());
 
         let products = [];
         for (let i = 0; i < productCount; i++) {
@@ -73,7 +73,7 @@ export async function fetchProductsTx() {
             // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
             const bn_discountRate = p[1].div(new BigNumber(1000000));
             const bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
-            const bn_minDisbursedAmountInUcd = p[3];
+            const bn_minDisbursedAmountInToken = p[3];
             const bn_defaultingFeePt = p[4].div(new BigNumber(1000000));
             const prod = {
                 id: i,
@@ -83,8 +83,8 @@ export async function fetchProductsTx() {
                 discountRate: bn_discountRate.toNumber(),
                 bn_loanCollateralRatio: bn_loanCollateralRatio,
                 loanCollateralRatio: bn_loanCollateralRatio.toNumber(),
-                bn_minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd,
-                minDisbursedAmountInUcd: bn_minDisbursedAmountInUcd.div(decimalsDiv).toNumber(),
+                bn_minDisbursedAmountInToken: bn_minDisbursedAmountInToken,
+                minDisbursedAmountInToken: bn_minDisbursedAmountInToken.div(decimalsDiv).toNumber(),
                 bn_defaultingFeePt: bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt.toNumber(),
                 isActive: p[5]
@@ -101,7 +101,7 @@ export async function repayLoanTx(loanId) {
     try {
         const userAccount = store.getState().web3Connect.userAccount;
         const loanManager = store.getState().loanManager.contract.instance;
-        const augmintToken = store.getState().tokenUcd.contract.instance;
+        const augmintToken = store.getState().augmintToken.contract.instance;
         const gasEstimate = cost.REPAY_GAS;
         let result = await augmintToken.repayLoan(loanManager.address, loanId, {
             from: userAccount,

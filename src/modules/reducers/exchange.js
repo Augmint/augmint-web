@@ -21,11 +21,11 @@ const initialState = {
     info: {
         bn_ethBalance: null,
         ethBalance: "?",
-        bn_ucdBalance: null,
-        ucdBalance: "?",
+        bn_tokenBalance: null,
+        tokenBalance: "?",
         orderCount: "?",
-        bn_totalUcdSellOrders: null,
-        totalUcdSellOrders: "?",
+        bn_totalTokenSellOrders: null,
+        totalTokenSellOrders: "?",
         bn_totalEthSellOrders: null,
         totalEthSellOrders: "?",
         totalAmount: "?",
@@ -113,23 +113,23 @@ export const refreshExchange = () => {
         });
         try {
             let exchange = store.getState().exchange.contract.instance;
-            const augmintToken = store.getState().tokenUcd.contract.instance;
+            const augmintToken = store.getState().augmintToken.contract.instance;
             let web3 = store.getState().web3Connect.web3Instance;
             let owner = await exchange.owner();
 
             let bn_ethBalance = await asyncGetBalance(exchange.address);
-            const bn_ucdBalance = (await augmintToken.balanceOf(exchange.address)).div(10000);
+            const bn_tokenBalance = (await augmintToken.balanceOf(exchange.address)).div(10000);
 
             let bn_totalEthSellOrders = web3.utils.fromWei(
                 (await exchange.totalEthSellOrders()).toString() // toString() required to supress web3 error, why?
             );
-            const bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(10000);
-            let totalUcdSellOrders = bn_totalUcdSellOrders.toString();
+            const bn_totalTokenSellOrders = (await exchange.totalTokenSellOrders()).div(10000);
+            let totalTokenSellOrders = bn_totalTokenSellOrders.toString();
             let totalEthSellOrders = bn_totalEthSellOrders.toString();
             let totalAmount = 0,
                 totalCcy = "";
-            if (totalUcdSellOrders > 0) {
-                totalAmount = totalUcdSellOrders;
+            if (totalTokenSellOrders > 0) {
+                totalAmount = totalTokenSellOrders;
                 totalCcy = "ACE";
             } else if (totalEthSellOrders > 0) {
                 totalAmount = totalEthSellOrders;
@@ -141,12 +141,12 @@ export const refreshExchange = () => {
                 result: {
                     bn_ethBalance: bn_ethBalance,
                     ethBalance: bn_ethBalance.toString(),
-                    bn_ucdBalance: bn_ucdBalance,
-                    ucdBalance: bn_ucdBalance.toString(),
+                    bn_tokenBalance: bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance.toString(),
                     bn_totalEthSellOrders: bn_totalEthSellOrders,
                     totalEthSellOrders: totalEthSellOrders,
-                    bn_totalUcdSellOrders: bn_totalUcdSellOrders,
-                    totalUcdSellOrders: totalUcdSellOrders,
+                    bn_totalTokenSellOrders: bn_totalTokenSellOrders,
+                    totalTokenSellOrders: totalTokenSellOrders,
                     orderCount: orderCount.toNumber(),
                     totalAmount: totalAmount,
                     totalCcy: totalCcy,

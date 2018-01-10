@@ -8,17 +8,17 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import { placeOrder, PLACE_ORDER_SUCCESS, ETHSELL, UCDSELL } from "modules/reducers/orders";
+import { placeOrder, PLACE_ORDER_SUCCESS, ETHSELL, TOKENSELL } from "modules/reducers/orders";
 import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 
 const ETH_DECIMALS = 5;
-const UCD_DECIMALS = 2;
+const TOKEN_DECIMALS = 2;
 
 const ethValidations = [Validations.required, Validations.ethAmount];
-const ucdValidations = [Validations.required, Validations.ucdAmount];
-const ucdValidationsWithBalance = [...ucdValidations, Validations.ucdUserBalance];
+const tokenValidations = [Validations.required, Validations.tokenAmount];
+const tokenValidationsWithBalance = [...tokenValidations, Validations.userTokenBalance];
 const ethValidationsWithBalance = [...ethValidations, Validations.ethUserBalance];
 
 class PlaceOrderForm extends React.Component {
@@ -27,7 +27,7 @@ class PlaceOrderForm extends React.Component {
         this.state = { result: null, orderType: ETHSELL };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderTypeChange = this.onOrderTypeChange.bind(this);
-        this.onUcdAmountChange = this.onUcdAmountChange.bind(this);
+        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
     }
 
@@ -35,17 +35,17 @@ class PlaceOrderForm extends React.Component {
         this.setState({ orderType: index });
     }
 
-    onUcdAmountChange(e) {
-        let bn_ucdAmount;
+    onTokenAmountChange(e) {
+        let bn_tokenAmount;
         try {
-            bn_ucdAmount = new BigNumber(e.target.value); //.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
+            bn_tokenAmount = new BigNumber(e.target.value); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
         } catch (error) {
-            this.props.change("ucdAmount", "");
+            this.props.change("tokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
 
-        let bn_ethAmount = bn_ucdAmount.div(this.props.rates.info.bn_ethUsdRate);
+        let bn_ethAmount = bn_tokenAmount.div(this.props.rates.info.bn_ethFiatRate);
 
         this.props.change(
             "ethAmount",
@@ -58,16 +58,16 @@ class PlaceOrderForm extends React.Component {
         try {
             bn_ethAmount = new BigNumber(e.target.value); //.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP);
         } catch (error) {
-            this.props.change("ucdAmount", "");
+            this.props.change("tokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
 
-        let bn_ucdAmount = bn_ethAmount.times(this.props.rates.info.bn_ethUsdRate);
+        let bn_tokenAmount = bn_ethAmount.times(this.props.rates.info.bn_ethFiatRate);
 
         this.props.change(
-            "ucdAmount",
-            bn_ucdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP) //.toFixed(18)
+            "tokenAmount",
+            bn_tokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP) //.toFixed(18)
         );
     }
 
@@ -78,7 +78,7 @@ class PlaceOrderForm extends React.Component {
             if (orderType === ETHSELL) {
                 amount = new BigNumber(values.ethAmount);
             } else {
-                amount = new BigNumber(values.ucdAmount);
+                amount = new BigNumber(values.tokenAmount);
             }
         } catch (error) {
             throw new SubmissionError({
@@ -115,16 +115,16 @@ class PlaceOrderForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            ucdAmount,
+            tokenAmount,
             ethAmount
         } = this.props;
         const { isLoading } = this.props.exchange;
-        const { orderCount, bn_totalUcdSellOrders, bn_totalEthSellOrders, totalCcy } = this.props.exchange.info;
+        const { orderCount, bn_totalTokenSellOrders, bn_totalEthSellOrders, totalCcy } = this.props.exchange.info;
         const { orderType } = this.state;
 
         let orderHelpText;
         try {
-            let bn_ucdAmount = new BigNumber(ucdAmount);
+            let bn_tokenAmount = new BigNumber(tokenAmount);
             let bn_ethAmount = new BigNumber(ethAmount);
 
             if (orderCount === 0)
@@ -135,8 +135,8 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalUcdSellOrders.isZero() && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.isZero() && orderType === UCDSELL)
+                (bn_totalTokenSellOrders.isZero() && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.isZero() && orderType === TOKENSELL)
             )
                 orderHelpText = (
                     <p>
@@ -145,8 +145,8 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalUcdSellOrders.gte(bn_ucdAmount) && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.gte(bn_ethAmount) && orderType === UCDSELL)
+                (bn_totalTokenSellOrders.gte(bn_tokenAmount) && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.gte(bn_ethAmount) && orderType === TOKENSELL)
             )
                 orderHelpText = (
                     <p>
@@ -155,12 +155,12 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalUcdSellOrders.lte(bn_ucdAmount) && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.lte(bn_ethAmount) && orderType === UCDSELL)
+                (bn_totalTokenSellOrders.lte(bn_tokenAmount) && orderType === ETHSELL) ||
+                (bn_totalEthSellOrders.lte(bn_ethAmount) && orderType === TOKENSELL)
             ) {
                 // TODO: let difference;
                 // if (orderType == ETHSELL) {
-                //     difference = bnTotalUcdSellOrders
+                //     difference = bnTotalTokenSellOrders
                 // }
                 orderHelpText = (
                     <p>
@@ -177,7 +177,7 @@ class PlaceOrderForm extends React.Component {
                 <Menu.Item active={orderType === ETHSELL} index={ETHSELL} onClick={this.onOrderTypeChange}>
                     Buy ACE
                 </Menu.Item>
-                <Menu.Item active={orderType === UCDSELL} index={UCDSELL} onClick={this.onOrderTypeChange}>
+                <Menu.Item active={orderType === TOKENSELL} index={TOKENSELL} onClick={this.onOrderTypeChange}>
                     Sell ACE
                 </Menu.Item>
             </Menu>
@@ -206,14 +206,14 @@ class PlaceOrderForm extends React.Component {
                         />
 
                         <Field
-                            name="ucdAmount"
+                            name="tokenAmount"
                             label={orderType === ETHSELL ? "Buy: " : "Sell: "}
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
                             disabled={submitting || isLoading}
-                            onChange={this.onUcdAmountChange}
-                            validate={orderType === UCDSELL ? ucdValidationsWithBalance : ucdValidations}
+                            onChange={this.onTokenAmountChange}
+                            validate={orderType === TOKENSELL ? tokenValidationsWithBalance : tokenValidations}
                             normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
@@ -251,8 +251,8 @@ class PlaceOrderForm extends React.Component {
 const selector = formValueSelector("PlaceOrderForm");
 
 PlaceOrderForm = connect(state => {
-    const { ethAmount, ucdAmount } = selector(state, "ethAmount", "ucdAmount");
-    return { ethAmount, ucdAmount }; // to get amounts for orderHelpText in render
+    const { ethAmount, tokenAmount } = selector(state, "ethAmount", "tokenAmount");
+    return { ethAmount, tokenAmount }; // to get amounts for orderHelpText in render
 })(PlaceOrderForm);
 
 export default reduxForm({

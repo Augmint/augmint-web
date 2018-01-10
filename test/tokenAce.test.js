@@ -1,6 +1,4 @@
-var TokenAcd = artifacts.require("./TokenAcd.sol");
-
-contract("TokenAcd tests", accounts => {
+contract("TokenAce tests", accounts => {
     it("should be possible to set transfer fees ");
     it("only owner should set transfer fees ");
 

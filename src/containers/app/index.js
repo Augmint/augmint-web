@@ -12,7 +12,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
-import TokenUcd from "containers/tokenUcd";
+import AugmintToken from "containers/augmintToken";
 import AboutUs from "containers/home/aboutUs";
 import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
@@ -50,7 +50,7 @@ class App extends React.Component {
                         <Route exact path="/" component={isConnected ? ConnectedHome : NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/exchange" component={ExchangeHome} />
-                        <Route exact path="/reserves" component={TokenUcd} />
+                        <Route exact path="/reserves" component={AugmintToken} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />

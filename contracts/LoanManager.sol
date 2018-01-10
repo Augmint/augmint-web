@@ -1,4 +1,4 @@
-/* Contract to manage Acd loan contracts
+/* Contract to manage Augmint token loan contracts backed by ETH
     TODO: add loanId to disbursement, repay and collection narrative
 */
 pragma solidity 0.4.18;
@@ -10,8 +10,8 @@ import "./interfaces/LoanManagerInterface.sol";
 
 
 contract LoanManager is LoanManagerInterface {
-    Rates public rates; // instance of ETH/USD rate provider contract
-    AugmintToken public augmintToken; // instance of UCD token contract
+    Rates public rates; // instance of ETH/pegged currency rate provider contract
+    AugmintToken public augmintToken; // instance of token contract
 
     event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
         uint repaymentAmount);
@@ -61,14 +61,14 @@ contract LoanManager is LoanManagerInterface {
     function newEthBackedLoan(uint8 productId) external payable {
         require(products[productId].isActive); // valid productId?
 
-        // calculate UCD loan values based on ETH sent in with Tx
-        uint usdcValue = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
-        uint repaymentAmount = usdcValue.mul(products[productId].collateralRatio).roundedDiv(100000000);
+        // calculate loan values based on ETH sent in with Tx
+        uint tokenValue = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
+        uint repaymentAmount = tokenValue.mul(products[productId].collateralRatio).roundedDiv(100000000);
         repaymentAmount = repaymentAmount * 100;  // rounding 4 decimals value to 2 decimals.
                                         // no safe mul needed b/c of prev divide
 
         uint mul = products[productId].collateralRatio.mul(products[productId].discountRate) / 1000000;
-        uint loanAmount = usdcValue.mul(mul).roundedDiv(100000000);
+        uint loanAmount = tokenValue.mul(mul).roundedDiv(100000000);
         loanAmount = loanAmount * 100;    // rounding 4 decimals value to 2 decimals.
                                                     // no safe mul needed b/c of prev divide
 
@@ -84,7 +84,7 @@ contract LoanManager is LoanManagerInterface {
         // Store ref to new loan
         mLoans[msg.sender].push(loanId);
 
-        // Issue ACD and send to borrower
+        // Issue tokens and send to borrower
         uint interestAmount;
         if (repaymentAmount > loanAmount) {
             interestAmount = repaymentAmount.sub(loanAmount);

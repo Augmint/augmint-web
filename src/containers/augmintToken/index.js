@@ -3,28 +3,28 @@ import { bindActionCreators } from "redux"; // TODO: do we really need this or s
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import { Link } from "react-router-dom";
-import tokenUcdProvider from "modules/tokenUcdProvider";
+import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
-import { refreshTokenUcd } from "modules/reducers/tokenUcd";
+import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
-import { TokenUcdStats } from "components/TokenUcdStats";
+import { AugmintStats } from "components/AugmintStats";
 import { EthereumState } from "containers/app/EthereumState";
 import { Button } from "semantic-ui-react";
 
-class TokenUcd extends React.Component {
+class AugmintToken extends React.Component {
     componentDidMount() {
         connectWeb3();
         ratesProvider();
-        tokenUcdProvider();
+        augmintTokenProvider();
     }
 
-    handleTokenUcdRefreshClick = e => {
+    handleAugmintTokenRefreshClick = e => {
         e.preventDefault();
-        this.props.refreshTokenUcd();
+        this.props.refreshAugmintToken();
     };
 
     render() {
-        const { tokenUcd, rates } = this.props;
+        const { augmintToken, rates } = this.props;
 
         return (
             <EthereumState>
@@ -33,7 +33,7 @@ class TokenUcd extends React.Component {
 
                     <Pgrid columns={1}>
                         <Pgrid.Column>
-                            <TokenUcdStats size="small" showInUsd tokenUcd={tokenUcd} rates={rates} />
+                            <AugmintStats size="small" showInFiat augmintToken={augmintToken} rates={rates} />
                         </Pgrid.Column>
                         <Pgrid.Column>
                             <Button
@@ -62,16 +62,16 @@ const mapStateToProps = state => ({
     isConnected: state.web3Connect.isConnected,
     web3Instance: state.web3Connect.web3Instance,
 
-    tokenUcd: state.tokenUcd,
+    augmintToken: state.augmintToken,
     rates: state.rates
 });
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-            refreshTokenUcd
+            refreshAugmintToken
         },
         dispatch
     );
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokenUcd);
+export default connect(mapStateToProps, mapDispatchToProps)(AugmintToken);

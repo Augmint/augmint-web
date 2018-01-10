@@ -13,9 +13,9 @@ import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
 
 export function getTransferFee(amount) {
-    let feePt = store.getState().tokenUcd.info.feePt;
-    let feeMin = store.getState().tokenUcd.info.feeMin;
-    let feeMax = store.getState().tokenUcd.info.feeMax;
+    let feePt = store.getState().augmintToken.info.feePt;
+    let feeMin = store.getState().augmintToken.info.feeMin;
+    let feeMax = store.getState().augmintToken.info.feeMax;
 
     let fee = amount
         .mul(feePt)
@@ -30,9 +30,9 @@ export function getTransferFee(amount) {
 }
 
 export function getMaxTransfer(amount) {
-    let feePt = store.getState().tokenUcd.info.feePt;
-    let feeMin = store.getState().tokenUcd.info.feeMin;
-    let feeMax = store.getState().tokenUcd.info.feeMax;
+    let feePt = store.getState().augmintToken.info.feePt;
+    let feeMin = store.getState().augmintToken.info.feeMin;
+    let feeMax = store.getState().augmintToken.info.feeMax;
     let maxAmount;
 
     let minLimit = feeMin
@@ -58,17 +58,17 @@ export function getMaxTransfer(amount) {
     return maxAmount;
 }
 
-export async function transferUcdTx(payload) {
-    let { payee, ucdAmount, narrative } = payload;
+export async function transferTokenTx(payload) {
+    let { payee, tokenAmount, narrative } = payload;
     try {
-        let gasEstimate = cost.TRANSFER_UCD_GAS;
+        let gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
         let userAccount = store.getState().web3Connect.userAccount;
-        let tokenUcd = store.getState().tokenUcd;
-        let ucdcAmount = ucdAmount.times(tokenUcd.info.bn_decimalsDiv);
+        let augmintToken = store.getState().augmintToken;
+        let tokencAmount = tokenAmount.times(augmintToken.info.bn_decimalsDiv);
         narrative = narrative == null ? "" : payload.narrative.trim();
-        let result = await tokenUcd.contract.instance.transferWithNarrative(
+        let result = await augmintToken.contract.instance.transferWithNarrative(
             payee,
-            ucdcAmount.toString(), // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
+            tokencAmount.toString(), // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
             narrative,
             {
                 from: userAccount,
@@ -108,10 +108,10 @@ export async function transferUcdTx(payload) {
 
 export async function fetchTransferListTx(address, fromBlock, toBlock) {
     try {
-        let tokenUcd = store.getState().tokenUcd.contract;
+        let augmintToken = store.getState().augmintToken.contract;
         let filterResult = await getEventLogs(
-            tokenUcd,
-            tokenUcd.instance.AugmintTransfer,
+            augmintToken,
+            augmintToken.instance.AugmintTransfer,
             { from: address, to: address }, // filter with OR!
             fromBlock,
             toBlock

@@ -40,7 +40,7 @@ class TryIt extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    tokenUcd: state.tokenUcd
+    augmintToken: state.augmintToken
 });
 
 export default connect(mapStateToProps)(TryIt);

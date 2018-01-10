@@ -1,30 +1,30 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectTokenUcd, refreshTokenUcd } from "modules/reducers/tokenUcd";
+import { connectAugmintToken, refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchTransferList, processTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
-    const tokenUcd = store.getState().tokenUcd;
+    const augmintToken = store.getState().augmintToken;
     let web3Connect = store.getState().web3Connect;
 
-    if (!tokenUcd.isLoading && !tokenUcd.isConnected) {
+    if (!augmintToken.isLoading && !augmintToken.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
+        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
         if (web3Connect.isConnected) {
             console.debug(
-                "tokenUcdProvider - tokenUcd not connected and not loading and web3 alreay loaded, dispatching connectTokenUcd() "
+                "augmintTokenProvider - augmintToken not connected and not loading and web3 alreay loaded, dispatching connectAugmintToken() "
             );
-            store.dispatch(connectTokenUcd());
+            store.dispatch(connectAugmintToken());
         }
     }
     return;
 };
 
 const setupListeners = () => {
-    const tokenUcd = store.getState().tokenUcd.contract.instance;
-    tokenUcd.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }).watch(onAugmintTransfer);
+    const augmintToken = store.getState().augmintToken.contract.instance;
+    augmintToken.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }).watch(onAugmintTransfer);
 };
 
 const removeListeners = oldInstance => {
@@ -36,8 +36,8 @@ const removeListeners = oldInstance => {
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug("tokenUcdProvider - web3Connect.network changed. Dispatching connectTokenUcd()");
-        store.dispatch(connectTokenUcd());
+        console.debug("augmintTokenProvider - web3Connect.network changed. Dispatching connectAugmintToken()");
+        store.dispatch(connectAugmintToken());
     }
 };
 
@@ -45,11 +45,11 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
         if (oldVal) {
-            console.debug("tokenUcdProvider - augmintToken.contract changed. Dispatching refreshTokenUcd()");
-            store.dispatch(refreshTokenUcd());
+            console.debug("augmintTokenProvider - augmintToken.contract changed. Dispatching refreshAugmintToken()");
+            store.dispatch(refreshAugmintToken());
         }
         console.debug(
-            "tokenUcdProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
+            "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         const userAccount = store.getState().web3Connect.userAccount;
 
@@ -60,10 +60,10 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
-    const tokenUcd = store.getState().tokenUcd;
-    if (tokenUcd.isConnected && newVal !== "?") {
+    const augmintToken = store.getState().augmintToken;
+    if (augmintToken.isConnected && newVal !== "?") {
         console.debug(
-            "tokenUcdProvider - web3Connect.userAccount changed. Dispatching fetchUserBalance() and fetchTransferList()"
+            "augmintTokenProvider - web3Connect.userAccount changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         store.dispatch(fetchUserBalance(newVal));
         store.dispatch(fetchTransferList(newVal, 0, "latest"));
@@ -71,15 +71,15 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
 };
 
 const onAugmintTransfer = (error, result) => {
-    console.debug("tokenUcdProvider.onAugmintTransfer: Dispatching refreshTokenUcd");
-    store.dispatch(refreshTokenUcd());
+    console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken");
+    store.dispatch(refreshAugmintToken());
     const userAccount = store.getState().web3Connect.userAccount;
     if (
         result.args.from.toLowerCase() === userAccount.toLowerCase() ||
         result.args.to.toLowerCase() === userAccount.toLowerCase()
     ) {
         console.debug(
-            "tokenUcdProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
+            "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
         store.dispatch(processTransfer(userAccount, result));

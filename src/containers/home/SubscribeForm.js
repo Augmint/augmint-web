@@ -77,7 +77,7 @@ class SubscribeForm extends React.Component {
 }
 
 // const mapStateToProps = state => ({
-//     tokenUcd: state.tokenUcd
+//     augmintToken: state.augmintToken
 // });
 //
 //SubscribeForm = connect(SubscribeForm);

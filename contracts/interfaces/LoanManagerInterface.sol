@@ -13,9 +13,9 @@ contract LoanManagerInterface is Owned {
     struct LoanProduct {
         uint term; // 0
         uint discountRate; // 1: discountRate in parts per million , ie. 10,000 = 1%
-        uint collateralRatio;   // 2: ucd loan amount / colleteral usd value
+        uint collateralRatio;   // 2: loan token amount / colleteral pegged ccy value
                                 // in parts per million , ie. 10,000 = 1%
-        uint minDisbursedAmount; // 3: with 4 decimals, ie. 31000 = 3.1UCD
+        uint minDisbursedAmount; // 3: with 4 decimals, e.g. 31000 = 3.1ACE
         uint defaultingFeePt; // 4: % of collateral in parts per million , ie. 50,000 = 5%
         bool isActive; // 5
     }

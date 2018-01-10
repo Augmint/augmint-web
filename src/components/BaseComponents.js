@@ -12,7 +12,7 @@ export const Validations = {
     email: value =>
         value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined,
 
-    ucdAmount: value => {
+    tokenAmount: value => {
         return parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0";
     },
 
@@ -24,16 +24,16 @@ export const Validations = {
         return web3.utils.isAddress(value) ? undefined : "Invalid address";
     },
 
-    ucdUserBalance: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
-        let userBalance = store.getState().userBalances.account.bn_ucdBalance;
+    userTokenBalance: value => {
+        // TODO: shall we look for bn_pendingTokenBalance instead?
+        let userBalance = store.getState().userBalances.account.bn_tokenBalance;
         return userBalance.lt(parseFloat(value)) ? "Your ACE balance is less than the amount" : undefined;
     },
 
-    acdUserBalanceWithTransferFee: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
-        let decimalsDiv = store.getState().tokenUcd.info.bn_decimalsDiv;
-        let userBalance = store.getState().userBalances.account.bn_ucdBalance.mul(decimalsDiv);
+    userTokenBalanceWithTransferFee: value => {
+        // TODO: shall we look for bn_pendingTokenBalance instead?
+        let decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
+        let userBalance = store.getState().userBalances.account.bn_tokenBalance.mul(decimalsDiv);
         let amount;
         try {
             amount = new BigNumber(value).mul(decimalsDiv);
@@ -58,7 +58,7 @@ export const Validations = {
     },
 
     ethUserBalance: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
+        // TODO: shall we look for bn_pendingTokenBalance instead?
         let userBalance = store.getState().userBalances.account.bn_ethBalance;
         return userBalance.lt(parseFloat(value)) ? "Your ETH balance is less than the amount" : undefined;
     },
@@ -68,7 +68,7 @@ export const Validations = {
         return value.toLowerCase() === userAccount.toLowerCase() ? "You can't transfer to yourself" : undefined;
     },
 
-    minUcdAmount: minValue => value => {
+    minTokenAmount: minValue => value => {
         return parseFloat(value) < minValue ? "Amount must be at least " + minValue + " ACE" : undefined;
     }
 };

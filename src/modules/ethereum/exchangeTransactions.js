@@ -1,6 +1,6 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
-import { ETHSELL, UCDSELL } from "modules/reducers/orders";
+import { ETHSELL, TOKENSELL } from "modules/reducers/orders";
 import { cost } from "./gas";
 
 export async function fetchOrders() {
@@ -14,7 +14,7 @@ export async function fetchOrders() {
         while (order[0] > 0 && nextOrderId > 0) {
             let orderType = order[3].toNumber();
             let bn_amount, ccy;
-            if (orderType === UCDSELL) {
+            if (orderType === TOKENSELL) {
                 ccy = "ACE";
                 bn_amount = order[4].div(10000);
             } else if (orderType === ETHSELL) {
@@ -62,10 +62,10 @@ export async function placeOrderTx(orderType, amount) {
                     gas: gasEstimate
                 });
                 break;
-            case UCDSELL:
-                let tokenUcd = store.getState().tokenUcd;
-                submitAmount = amount.times(tokenUcd.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-                result = await exchange.placeSellUcdOrder(submitAmount, {
+            case TOKENSELL:
+                let augmintToken = store.getState().augmintToken;
+                submitAmount = amount.times(augmintToken.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
+                result = await exchange.placeSellTokenOrder(submitAmount, {
                     from: userAccount,
                     gas: gasEstimate
                 });

@@ -1,11 +1,11 @@
 /*
-Exchange Acd <-> ETH
-It's mock only yet, basic implemantion of selling Acd for ETH or vica versa.
-All orders are on a market ethAcd rate at the moment of fullmilment
+Exchange augmint tokens <-> ETH
+It's mock only yet, basic implemantion of selling tokens for ETH or vica versa.
+All orders are on a market eth/pegged currency rate at the moment of fullmilment
 Market rate is provided  by the rates contract
 
 TODO: add reentrancy protection
-TODO: add min exchanged amount param (set in Acd for both?)
+TODO: add min exchanged amount param (set in token amount for both?)
     + what if total leftover from fills  carried over to new order but it's small than minamount?
 TODO: astronomical gas costs when filling a lot of orders
     + how to handle on client side (eg. estimate if it might be over the gas etc.)
@@ -14,13 +14,13 @@ TODO: test for rounding if could be any leftover after order fills
 TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
 TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting
         - it would ensure trade happens on predictable rate
-TODO: add orderId to Acd transfer narrative
+TODO: add orderId to token transfer narrative
 */
 pragma solidity 0.4.18;
 import "./generic/SafeMath.sol";
 import "./generic/Owned.sol";
 import "./generic/OrdersLib.sol";
-import "./TokenAcd.sol";
+import "./generic/AugmintToken.sol";
 import "./Rates.sol";
 
 
@@ -30,11 +30,11 @@ contract Exchange is Owned {
     using OrdersLib for OrdersLib.OrderData;
 
     Rates public rates;
-    TokenAcd public tokenUcd; // for UCD transfers
+    AugmintToken public augmintToken; // for transfers
 
-    // These should be equal to ETH and UCD Balances of contract
+    // These should be equal to ETH and token Balances of contract
     /* TODO: consider to remove these when rounding tested */
-    uint256 public totalUcdSellOrders;
+    uint256 public totalTokenSellOrders;
     uint256 public totalEthSellOrders;
 
     /*
@@ -48,9 +48,9 @@ contract Exchange is Owned {
 
     mapping(address => uint80[]) public m_orders; // orders for an account => orderId
 
-    function Exchange(address _tokenUcdAddress, address _ratesAddress) public Owned() {
+    function Exchange(address _augmintTokenAddress, address _ratesAddress) public Owned() {
         rates = Rates(_ratesAddress);
-        tokenUcd = TokenAcd(_tokenUcdAddress);
+        augmintToken = AugmintToken(_augmintTokenAddress);
     }
 
     function getMakerOrderCount(address maker) external view returns(uint orderCount) {
@@ -112,39 +112,39 @@ contract Exchange is Owned {
     }
 
     function placeSellEthOrder() external payable {
-        require(msg.value > 0); // FIXME: min amount? Shall we use min UCD amount instead of ETH value?
+        require(msg.value > 0); // FIXME: min amount? Shall we use min token amount instead of ETH value?
         uint weiToSellLeft = msg.value;
-        uint ucdValueTotal = rates.convertFromWei(tokenUcd.peggedSymbol(), weiToSellLeft);
-        uint ucdValueLeft = ucdValueTotal;
+        uint tokenValueTotal = rates.convertFromWei(augmintToken.peggedSymbol(), weiToSellLeft);
+        uint tokenValueLeft = tokenValueTotal;
         uint weiToPay;
-        uint ucdSold;
+        uint tokenSold;
         address maker;
         // fill as much as we can from open buy eth orders
         uint80 i;
         uint80 nextOrderId = orders.iterateFirst();
         while (orders.iterateValid(nextOrderId) && weiToSellLeft > 0 && // FIXME: minAmount to rounding acc?
-                totalUcdSellOrders != 0) {
+                totalTokenSellOrders != 0) {
             i = nextOrderId;
             nextOrderId = orders.iterateNext(i);
             maker = orders.orders[i-1].order.maker;
-            if (orders.orders[i-1].order.amount >= ucdValueLeft) {
+            if (orders.orders[i-1].order.amount >= tokenValueLeft) {
                 // sell order fully covered from maker buy order
-                ucdSold = ucdValueLeft;
+                tokenSold = tokenValueLeft;
                 weiToPay = weiToSellLeft;
             } else {
                 // sell order partially covers buy order
-                ucdSold = orders.orders[i - 1].order.amount;
-                weiToPay = rates.convertToWei(tokenUcd.peggedSymbol(), ucdSold);
+                tokenSold = orders.orders[i - 1].order.amount;
+                weiToPay = rates.convertToWei(augmintToken.peggedSymbol(), tokenSold);
             }
-            ucdValueLeft = ucdValueLeft.sub(ucdSold);
+            tokenValueLeft = tokenValueLeft.sub(tokenSold);
             weiToSellLeft = weiToSellLeft.sub(weiToPay);
 
-            fillOrder(i, msg.sender, ucdSold, weiToPay); // this pays the maker but not the taker yet
+            fillOrder(i, msg.sender, tokenSold, weiToPay); // this pays the maker but not the taker yet
 
         }
-        if (ucdValueTotal.sub(ucdValueLeft) > 0) {
-            // transfer the sum UCD value of all WEI sold with orderFills
-            tokenUcd.transferNoFee(this, msg.sender, ucdValueTotal.sub(ucdValueLeft), "UCD sold");
+        if (tokenValueTotal.sub(tokenValueLeft) > 0) {
+            // transfer the sum token value of all WEI sold with orderFills
+            augmintToken.transferNoFee(this, msg.sender, tokenValueTotal.sub(tokenValueLeft), "token sold");
         }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
@@ -153,16 +153,16 @@ contract Exchange is Owned {
         }
     }
 
-    function placeSellUcdOrder(uint ucdAmount) external {
-        require(ucdAmount > 0); // FIXME: min amount?
-        tokenUcd.transferNoFee(msg.sender, this, ucdAmount, "UCD sell order placed");
-        uint weiValueTotal = rates.convertToWei(tokenUcd.peggedSymbol(), ucdAmount);
+    function placeSellTokenOrder(uint tokenAmount) external {
+        require(tokenAmount > 0); // FIXME: min amount?
+        augmintToken.transferNoFee(msg.sender, this, tokenAmount, "token sell order placed");
+        uint weiValueTotal = rates.convertToWei(augmintToken.peggedSymbol(), tokenAmount);
         uint weiValueLeft = weiValueTotal;
-        uint ucdToSellLeft = ucdAmount;
+        uint tokenToSellLeft = tokenAmount;
         uint weiSold;
-        uint ucdToPay;
+        uint tokenToPay;
         address maker;
-        // fill as much as we can from open buy ucd orders
+        // fill as much as we can from open buy token orders
         uint80 i;
         uint80 nextOrderId = orders.iterateFirst();
         while (orders.iterateValid(nextOrderId) && weiValueLeft > 0 && // FIXME: minAmount to rounding acc?
@@ -173,21 +173,21 @@ contract Exchange is Owned {
             if (orders.orders[i-1].order.amount >= weiValueLeft) {
                 // sell order fully covered from maker buy order
                 weiSold = weiValueLeft;
-                ucdToPay = ucdToSellLeft;
+                tokenToPay = tokenToSellLeft;
             } else {
                 // sell order partially covers buy order
                 weiSold = orders.orders[i-1].order.amount;
-                ucdToPay = rates.convertFromWei(tokenUcd.peggedSymbol(), weiSold);
+                tokenToPay = rates.convertFromWei(augmintToken.peggedSymbol(), weiSold);
             }
             weiValueLeft = weiValueLeft.sub(weiSold);
-            ucdToSellLeft = ucdToSellLeft.sub(ucdToPay);
-            fillOrder(i, msg.sender, weiSold, ucdToPay); // this pays the maker but not the taker yet
+            tokenToSellLeft = tokenToSellLeft.sub(tokenToPay);
+            fillOrder(i, msg.sender, weiSold, tokenToPay); // this pays the maker but not the taker yet
         }
-        // pay the sum WEI value of all UCD sold with orderFills to taker
+        // pay the sum WEI value of all token sold with orderFills to taker
         msg.sender.transfer(weiValueTotal.sub(weiValueLeft));
-        if (ucdToSellLeft != 0) {
+        if (tokenToSellLeft != 0) {
             // No buy order or weren't enough buy orders to fully fill order
-            addOrder(OrdersLib.OrderType.UcdSell, msg.sender, ucdToSellLeft);
+            addOrder(OrdersLib.OrderType.TokenSell, msg.sender, tokenToSellLeft);
         }
     }
 
@@ -198,11 +198,11 @@ contract Exchange is Owned {
     event e_newOrder(uint80 orderId, OrdersLib.OrderType orderType, address maker, uint amount);
 
     function addOrder(OrdersLib.OrderType orderType, address maker, uint amount) internal {
-        // It's assumed that the ETH/UCD already taken from maker in calling function
+        // It's assumed that the ETH/token already taken from maker in calling function
         if (orderType == OrdersLib.OrderType.EthSell) {
             totalEthSellOrders = totalEthSellOrders.add(amount);
-        } else if (orderType == OrdersLib.OrderType.UcdSell) {
-            totalUcdSellOrders = totalUcdSellOrders.add(amount);
+        } else if (orderType == OrdersLib.OrderType.TokenSell) {
+            totalTokenSellOrders = totalTokenSellOrders.add(amount);
         } else {
             revert();
         }
@@ -223,11 +223,11 @@ contract Exchange is Owned {
         OrdersLib.OrderType orderType = orders.orders[orderId - 1].order.orderType;
         address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
-            tokenUcd.transferNoFee(this, maker, amountToPay, "ETH sold");
+            augmintToken.transferNoFee(this, maker, amountToPay, "ETH sold");
             totalEthSellOrders = totalEthSellOrders.sub(amountToSell);
-        } else if (orderType == OrdersLib.OrderType.UcdSell) {
+        } else if (orderType == OrdersLib.OrderType.TokenSell) {
             maker.transfer(amountToPay);
-            totalUcdSellOrders = totalUcdSellOrders.sub(amountToSell);
+            totalTokenSellOrders = totalTokenSellOrders.sub(amountToSell);
         } else {
             revert();
         }
@@ -259,7 +259,7 @@ contract Exchange is Owned {
 /*
     function cancelOrder( uint80 orderId ) external {
         // FIXME: to implement
-        // transfer ETH or UCD back
+        // transfer ETH or token back
          //orderId = orderId; // to supress compiler warnings
          // FIXME: check orderId
          // removeOrder( orderIdx)

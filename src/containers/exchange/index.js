@@ -4,7 +4,7 @@ import { connectWeb3 } from "modules/web3Provider";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
-import tokenUcdProvider from "modules/tokenUcdProvider";
+import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderList from "./components/OrderList";
 import ExchangeSummary from "./components/ExchangeSummary";
@@ -14,7 +14,7 @@ import { EthereumState } from "containers/app/EthereumState";
 class ExchangeHome extends React.Component {
     componentDidMount() {
         connectWeb3();
-        tokenUcdProvider();
+        augmintTokenProvider();
         exchangeProvider();
         ratesProvider();
     }

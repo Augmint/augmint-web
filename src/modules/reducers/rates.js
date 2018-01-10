@@ -24,16 +24,16 @@ const initialState = {
     info: {
         bn_ethBalance: null,
         ethBalance: "?",
-        bn_ucdBalance: null,
-        ucdBalance: "?",
-        bn_ethUsdcRate: null,
-        ethUsdcRate: "?",
-        bn_ethUsdRate: null,
-        usdEthRate: "?",
-        bn_usdEthRate: null,
-        ethUsdRate: "?",
+        bn_tokenBalance: null,
+        tokenBalance: "?",
+        bn_ethFiatcRate: null,
+        ethFiatcRate: "?",
+        bn_ethFiatRate: null,
+        fiatEthRate: "?",
+        bn_fiatEthRate: null,
+        ethFiatRate: "?",
         owner: "?",
-        usdScale: null
+        fiatScale: null
     }
 };
 
@@ -108,30 +108,30 @@ export const refreshRates = () => {
         try {
             //let web3 = store.getState().web3Connect.web3Instance;
             // TODO: make these parallel
-            const augmintToken = store.getState().tokenUcd;
+            const augmintToken = store.getState().augmintToken;
             const BN_1 = new BigNumber(1);
             const rates = store.getState().rates.contract.instance;
-            const usdScale = 10000; // 4 decimals
-            const bn_ethUsdcRate = await rates.convertFromWei(augmintToken.info.peggedSymbol, 1000000000000000000);
-            const bn_ethUsdRate = bn_ethUsdcRate.div(usdScale);
-            const bn_usdEthRate = BN_1.div(bn_ethUsdcRate).times(usdScale);
+            const fiatScale = 10000; // 4 decimals
+            const bn_ethFiatcRate = await rates.convertFromWei(augmintToken.info.peggedSymbol, 1000000000000000000);
+            const bn_ethFiatRate = bn_ethFiatcRate.div(fiatScale);
+            const bn_fiatEthRate = BN_1.div(bn_ethFiatcRate).times(fiatScale);
             const owner = await rates.owner();
             const bn_ethBalance = await asyncGetBalance(rates.address);
-            const bn_ucdBalance = (await augmintToken.contract.instance.balanceOf(rates.address)).div(10000);
+            const bn_tokenBalance = (await augmintToken.contract.instance.balanceOf(rates.address)).div(10000);
             return dispatch({
                 type: RATES_REFRESHED,
                 result: {
                     bn_ethBalance: bn_ethBalance,
                     ethBalance: bn_ethBalance.toNumber(),
-                    bn_ucdBalance: bn_ucdBalance,
-                    ucdBalance: bn_ucdBalance.toNumber(),
-                    bn_ethUsdcRate: bn_ethUsdcRate,
-                    ethUsdcRate: bn_ethUsdcRate.toNumber(),
-                    bn_ethUsdRate: bn_ethUsdRate,
-                    ethUsdRate: bn_ethUsdRate.toNumber(),
-                    bn_usdEthRate: bn_usdEthRate,
-                    usdEthRate: bn_usdEthRate.toNumber(),
-                    usdScale: usdScale,
+                    bn_tokenBalance: bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance.toNumber(),
+                    bn_ethFiatcRate: bn_ethFiatcRate,
+                    ethFiatcRate: bn_ethFiatcRate.toNumber(),
+                    bn_ethFiatRate: bn_ethFiatRate,
+                    ethFiatRate: bn_ethFiatRate.toNumber(),
+                    bn_fiatEthRate: bn_fiatEthRate,
+                    fiatEthRate: bn_fiatEthRate.toNumber(),
+                    fiatScale: fiatScale,
                     owner: owner
                 }
             });

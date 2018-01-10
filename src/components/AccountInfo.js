@@ -6,15 +6,17 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AccountInfo extends React.Component {
     render() {
-        const { header, showMyAccountLink, account, tokenUcd, userBalancesIsLoading } = this.props;
+        const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading } = this.props;
         return (
             <Pblock
                 loading={
-                    tokenUcd.isLoading || (!tokenUcd.isConnected && !tokenUcd.connectionError) || userBalancesIsLoading
+                    augmintToken.isLoading ||
+                    (!augmintToken.isConnected && !augmintToken.connectionError) ||
+                    userBalancesIsLoading
                 }
                 header={header}
             >
-                <ConnectionStatus contract={tokenUcd} />
+                <ConnectionStatus contract={augmintToken} />
 
                 <p>Account: {account.address}</p>
                 <p>
@@ -25,10 +27,10 @@ export class AccountInfo extends React.Component {
                         )}
                 </p>
                 <p>
-                    ACE: <span id="userAceBalance">{account.ucdBalance}</span>
-                    {account.ucdPendingBalance !== "?" &&
-                        account.ucdPendingBalance - account.ucdBalance !== 0 && (
-                            <span> (Pending: {account.ucdPendingBalance - account.ucdBalance} )</span>
+                    ACE: <span id="userAceBalance">{account.tokenBalance}</span>
+                    {account.pendingTokenBalance !== "?" &&
+                        account.pendingTokenBalance - account.tokenBalance !== 0 && (
+                            <span> (Pending: {account.pendingTokenBalance - account.tokenBalance} )</span>
                         )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
@@ -44,7 +46,7 @@ AccountInfo.defaultProps = {
 
 const mapStateToProps = state => ({
     userBalancesIsLoading: state.userBalances.isLoading,
-    tokenUcd: state.tokenUcd
+    augmintToken: state.augmintToken
 });
 
 export default connect(mapStateToProps)(AccountInfo);

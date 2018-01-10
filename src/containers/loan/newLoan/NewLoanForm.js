@@ -13,56 +13,63 @@ import { Pblock } from "components/PageLayout";
 import ToolTip from "components/ToolTip";
 
 const ETH_DECIMALS = 5;
-const UCD_DECIMALS = 2;
+const TOKEN_DECIMALS = 2;
 
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
-        this.onDisbursedUcdAmountChange = this.onDisbursedUcdAmountChange.bind(this);
-        this.onLoanUcdAmountChange = this.onLoanUcdAmountChange.bind(this);
+        this.onDisbursedTokenAmountChange = this.onDisbursedTokenAmountChange.bind(this);
+        this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
-        this.minUcd = Validations.minUcdAmount(this.props.product.minDisbursedAmountInUcd); // this a a workaround for validations with parameters causing issues , see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
+        // this a a workaround for validations with parameters causing issues,
+        //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
+        this.minToken = Validations.minTokenAmount(this.props.product.minDisbursedAmountInToken);
     }
 
-    onDisbursedUcdAmountChange(e) {
+    onDisbursedTokenAmountChange(e) {
         let val;
         try {
             val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("loanUcdAmount", "");
+            this.props.change("loanTokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        let bn_loanUcdAmount = val.div(this.props.product.bn_discountRate).round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
-        let usdcValue = bn_loanUcdAmount.div(this.props.product.bn_loanCollateralRatio);
+        const bn_loanTokenAmount = val
+            .div(this.props.product.bn_discountRate)
+            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
+        const fiatcValue = bn_loanTokenAmount.div(this.props.product.bn_loanCollateralRatio);
 
-        let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
+        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
 
-        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
+        this.props.change(
+            "loanTokenAmount",
+            bn_loanTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+        );
         this.props.change(
             "ethAmount",
             bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
         );
     }
 
-    onLoanUcdAmountChange(e) {
+    onLoanTokenAmountChange(e) {
         let val;
         try {
             val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("disbursedUcdAmount", "");
+            this.props.change("disbursedTokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        let usdcValue = val.div(this.props.product.bn_loanCollateralRatio);
+        const fiatcValue = val.div(this.props.product.bn_loanCollateralRatio);
 
-        let bn_disbursedUcdAmount = val
+        const bn_disbursedTokenAmount = val
             .times(this.props.product.bn_discountRate)
-            .round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP);
-        let bn_ethAmount = usdcValue.div(this.props.rates.info.bn_ethUsdRate);
+            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
+        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
         this.props.change(
-            "disbursedUcdAmount",
-            bn_disbursedUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+            "disbursedTokenAmount",
+            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
         );
         this.props.change(
             "ethAmount",
@@ -75,19 +82,22 @@ class NewLoanForm extends React.Component {
         try {
             val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("disbursedUcdAmount", "");
-            this.props.change("loanUcdAmount", "");
+            this.props.change("disbursedTokenAmount", "");
+            this.props.change("loanTokenAmount", "");
             return;
         }
-        let usdcValue = val.times(this.props.rates.info.bn_ethUsdRate);
+        const fiatcValue = val.times(this.props.rates.info.bn_ethFiatRate);
 
-        let bn_loanUcdAmount = this.props.product.bn_loanCollateralRatio.times(usdcValue);
-        let bn_disbursedUcdAmount = bn_loanUcdAmount.times(this.props.product.bn_discountRate);
+        const bn_loanTokenAmount = this.props.product.bn_loanCollateralRatio.times(fiatcValue);
+        const bn_disbursedTokenAmount = bn_loanTokenAmount.times(this.props.product.bn_discountRate);
         this.props.change(
-            "disbursedUcdAmount",
-            bn_disbursedUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+            "disbursedTokenAmount",
+            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
         );
-        this.props.change("loanUcdAmount", bn_loanUcdAmount.round(UCD_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
+        this.props.change(
+            "loanTokenAmount",
+            bn_loanTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+        );
     }
 
     render() {
@@ -105,13 +115,13 @@ class NewLoanForm extends React.Component {
                     <Field
                         component={Form.Field}
                         as={Form.Input}
-                        name="disbursedUcdAmount"
-                        id="disbursedUcdAmount"
+                        name="disbursedTokenAmount"
+                        id="disbursedTokenAmount"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
-                        validate={[Validations.required, Validations.ucdAmount, this.minUcd]}
+                        validate={[Validations.required, Validations.tokenAmount, this.minToken]}
                         normalize={Normalizations.twoDecimals}
-                        onChange={this.onDisbursedUcdAmountChange}
+                        onChange={this.onDisbursedTokenAmountChange}
                         labelPosition="right"
                         placeholder="pay out"
                     >
@@ -126,14 +136,14 @@ class NewLoanForm extends React.Component {
                     <Field
                         component={Form.Field}
                         as={Form.Input}
-                        name="loanUcdAmount"
-                        id="loanUcdAmount"
+                        name="loanTokenAmount"
+                        id="loanTokenAmount"
                         placeholder="to pay back"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
-                        validate={[Validations.required, Validations.ucdAmount]}
+                        validate={[Validations.required, Validations.tokenAmount]}
                         normalize={Normalizations.twoDecimals}
-                        onChange={this.onLoanUcdAmountChange}
+                        onChange={this.onLoanTokenAmountChange}
                         labelPosition="right"
                     >
                         <Label basic>
@@ -162,7 +172,7 @@ class NewLoanForm extends React.Component {
                             Collateral:{" "}
                             <ToolTip>
                                 ETH to be held as collateral = ACE Loan Amount / ETHEUR rate x (1 / Coverage ratio)
-                                <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethUsdRate * 100) / 100} )
+                                <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>
                         <input />

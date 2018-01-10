@@ -2,9 +2,6 @@ const testHelper = new require("./helpers/testHelper.js");
 const LoanManager = artifacts.require("./loanManager.sol");
 //const TRANSFER_MAXFEE = web3.toWei(0.006); // TODO: set this to expected value (+set gasPrice)
 
-const acc0 = web3.eth.accounts[0],
-    acc1 = web3.eth.accounts[1];
-const collateralWei = web3.toWei(0.5);
 let loanManager;
 
 contract("loanManager  tests", accounts => {
@@ -13,7 +10,7 @@ contract("loanManager  tests", accounts => {
     });
 
     beforeEach(async function() {
-        //balBefore = await tokenUcdTestHelper.getBalances(tokenUcd, testedAccounts);
+        //balBefore = await tokenAceTestHelper.getBalances(tokenAce, testedAccounts);
     });
 
     it("Should add new product");

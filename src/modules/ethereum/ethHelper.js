@@ -87,7 +87,7 @@ export function asyncGetBlock(blockNumber) {
 }
 
 export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
-    // It's only tested with getEventLogs(tokenUcd.Transfer, {topic1: value, topic2: value}, fromBlock, toBlock);
+    // It's only tested with getEventLogs(augmintToken.Transfer, {topic1: value, topic2: value}, fromBlock, toBlock);
     // TODO: add timeout & error handling for etherscan XMLHttpRequest
     // TODO: refactor abi-decoder to match structure of filter.get so we don't need to mess so much with decodedParams
     return new Promise(async function(resolve, reject) {

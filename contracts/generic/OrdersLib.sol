@@ -13,14 +13,14 @@ library OrdersLib {
         Order[] orders;
     }
 
-    enum OrderType {EthSell, UcdSell}
+    enum OrderType {EthSell, TokenSell}
 
     // all open orders
     struct OrderData {
         address maker;
         uint80 makerOrderIdx; // idx in map(maker => [])
         OrderType orderType;
-        uint amount; // actual amount to sell left (WEI or UCDC depending on orderType)
+        uint amount; // actual amount to sell left (WEI or token depending on orderType)
 
     }
 

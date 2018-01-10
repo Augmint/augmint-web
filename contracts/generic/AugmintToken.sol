@@ -30,8 +30,8 @@ contract AugmintToken is AugmintTokenInterface {
     address public interestPoolAccount;
     address public interestEarnedAccount;
     uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
-    uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
-    uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for TokenACD, 31000 = 3.1ACD
+    uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
+    uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
 
     event TokenIssued(uint amount);
     event TokenBurned(uint amount);

@@ -52,11 +52,11 @@ const initialState = {
     error: null,
     products: null,
     info: {
-        ucdBalance: "?",
+        tokenBalance: "?",
         ethBalance: "?",
         owner: "?",
         ratesAddress: "?",
-        tokenUcdAddress: "?",
+        augmintTokenAddress: "?",
         loanCount: "?",
         productCount: "?"
     }
@@ -239,7 +239,7 @@ export const refreshLoanManager = () => {
         });
         try {
             const loanManager = store.getState().loanManager.contract.instance;
-            const augmintToken = store.getState().tokenUcd.contract.instance;
+            const augmintToken = store.getState().augmintToken.contract.instance;
             // TODO: make calls paralel
             const loanCount = await loanManager.getLoanCount();
             const productCount = await loanManager.getProductCount();
@@ -249,18 +249,18 @@ export const refreshLoanManager = () => {
             const owner = await loanManager.owner();
 
             const bn_ethBalance = await asyncGetBalance(loanManager.address);
-            const bn_ucdBalance = (await augmintToken.balanceOf(loanManager.address)).div(10000);
+            const bn_tokenBalance = (await augmintToken.balanceOf(loanManager.address)).div(10000);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {
                     owner: owner,
                     bn_ethBalance: bn_ethBalance,
                     ethBalance: bn_ethBalance.toNumber(),
-                    bn_ucdBalance: bn_ucdBalance,
-                    ucdBalance: bn_ucdBalance.toNumber(),
+                    bn_tokenBalance: bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance.toNumber(),
                     loanCount: loanCount.toNumber(),
                     productCount: productCount.toNumber(),
-                    tokenUcdAddress: augmintTokenAddress,
+                    augmintTokenAddress: augmintTokenAddress,
                     ratesAddress: ratesAddress
                 }
             });

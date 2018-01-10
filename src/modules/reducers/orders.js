@@ -1,7 +1,7 @@
 import { fetchOrders, placeOrderTx } from "modules/ethereum/exchangeTransactions";
 
 export const ETHSELL = 0,
-    UCDSELL = 1;
+    TOKENSELL = 1;
 
 export const ORDERS_REFRESH_REQUESTED = "orders/ORDERS_REFRESH_REQUESTED";
 export const ORDERS_REFRESH_ERROR = "orders/ORDERS_REFRESH_ERROR";

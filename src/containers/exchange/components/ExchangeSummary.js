@@ -15,8 +15,8 @@ export default class ExchangeSummary extends React.Component {
             >
                 <ConnectionStatus contract={rates} />
                 <h4>
-                    1 ETH = {rates.info.ethUsdRate} ACE<br />
-                    1 ACE = {rates.info.usdEthRate} ETH
+                    1 ETH = {rates.info.ethFiatRate} ACE<br />
+                    1 ACE = {rates.info.fiatEthRate} ETH
                 </h4>
 
                 {orderCount > 0 && (

@@ -8,7 +8,7 @@ export default () => {
 
     if (!rates.isLoading && !rates.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
+        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("rates.contract", onRatesContractChange);
 
         if (web3Connect.isConnected) {
@@ -50,7 +50,7 @@ const onRatesContractChange = (newVal, oldVal, objectPath) => {
 
 const refreshRatesIfNeeded = (newVal, oldVal) => {
     removeListeners(oldVal);
-    if (newVal && store.getState().tokenUcd.isConnected) {
+    if (newVal && store.getState().augmintToken.isConnected) {
         console.debug("ratesProvider - new rates or augmintToken contract. Dispatching refreshRates()");
         store.dispatch(refreshRates());
         setupListeners();

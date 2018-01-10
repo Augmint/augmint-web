@@ -16,22 +16,22 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } 
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
-import { transferUcd, TOKENUCD_TRANSFER_SUCCESS } from "modules/reducers/tokenUcd";
+import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
 import { BigNumber } from "bignumber.js";
 
-class UcdTransferForm extends React.Component {
+class TokenTransferForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = { result: null, feeAmount: "0" };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onAcdAmountChange = this.onAcdAmountChange.bind(this);
+        this.onAceAmountChange = this.onAceAmountChange.bind(this);
     }
 
-    onAcdAmountChange(e) {
+    onAceAmountChange(e) {
         let val;
-        let decimalsDiv = this.props.tokenUcd.info.bn_decimalsDiv;
+        let decimalsDiv = this.props.augmintToken.info.bn_decimalsDiv;
         try {
             val = new BigNumber(e.target.value).mul(decimalsDiv);
         } catch (error) {
@@ -43,13 +43,13 @@ class UcdTransferForm extends React.Component {
 
     async handleSubmit(values) {
         let res = await store.dispatch(
-            transferUcd({
+            transferToken({
                 payee: values.payee,
-                ucdAmount: new BigNumber(values.ucdAmount),
+                tokenAmount: new BigNumber(values.tokenAmount),
                 narrative: values.narrative
             })
         );
-        if (res.type !== TOKENUCD_TRANSFER_SUCCESS) {
+        if (res.type !== TOKEN_TRANSFER_SUCCESS) {
             throw new SubmissionError({
                 _error: {
                     title: "Ethereum transaction Failed",
@@ -75,15 +75,15 @@ class UcdTransferForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            tokenUcd
+            augmintToken
         } = this.props;
 
         return (
             <Pblock
-                loading={tokenUcd.isLoading || (!tokenUcd.isConnected && !tokenUcd.connectionError)}
+                loading={augmintToken.isLoading || (!augmintToken.isConnected && !augmintToken.connectionError)}
                 header="Send ACE"
             >
-                <ConnectionStatus contract={tokenUcd} />
+                <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful transfer</h3>}
@@ -109,24 +109,24 @@ class UcdTransferForm extends React.Component {
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
-                            name="ucdAmount"
+                            name="tokenAmount"
                             placeholder="Amount"
                             labelPosition="right"
-                            onChange={this.onAcdAmountChange}
+                            onChange={this.onAceAmountChange}
                             validate={[
                                 Validations.required,
-                                Validations.ucdAmount,
-                                Validations.acdUserBalanceWithTransferFee
+                                Validations.tokenAmount,
+                                Validations.userTokenBalanceWithTransferFee
                             ]}
                             normalize={Normalizations.fourDecimals}
-                            disabled={submitting || !tokenUcd.isConnected}
+                            disabled={submitting || !augmintToken.isConnected}
                         >
                             <input />
                             <Label>ACE</Label>
                         </Field>
 
                         <small>
-                            Fee: <TransferFeeToolTip tokenAcdInfo={tokenUcd.info} />
+                            Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
                             {this.state.feeAmount} ACE
                         </small>
 
@@ -140,7 +140,7 @@ class UcdTransferForm extends React.Component {
                             parse={Parsers.trim}
                             validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
                             placeholder="0x0..."
-                            disabled={submitting || !tokenUcd.isConnected}
+                            disabled={submitting || !augmintToken.isConnected}
                         />
 
                         <Field
@@ -150,7 +150,7 @@ class UcdTransferForm extends React.Component {
                             name="narrative"
                             type="text"
                             placeholder="short narrative (optional)"
-                            disabled={submitting || !tokenUcd.isConnected}
+                            disabled={submitting || !augmintToken.isConnected}
                         />
                         <Button loading={submitting} primary disabled={pristine}>
                             {submitting ? "Submitting..." : "Transfer"}
@@ -163,14 +163,14 @@ class UcdTransferForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    tokenUcd: state.tokenUcd,
-    ucdBalance: state.userBalances.account.ucdBalance,
+    augmintToken: state.augmintToken,
+    tokenBalance: state.userBalances.account.tokenBalance,
     userAccount: state.web3Connect.userAccount,
     web3: state.web3Connect.web3Instance
 });
 
-UcdTransferForm = connect(mapStateToProps)(UcdTransferForm);
+TokenTransferForm = connect(mapStateToProps)(TokenTransferForm);
 
 export default reduxForm({
-    form: "UcdTransferForm"
-})(UcdTransferForm);
+    form: "TokenTransferForm"
+})(TokenTransferForm);

@@ -1,13 +1,13 @@
-const tokenAcdTestHelper = new require("./helpers/tokenUcdTestHelper.js");
+const tokenAceTestHelper = new require("./helpers/tokenAceTestHelper.js");
 const testHelper = new require("./helpers/testHelper.js");
-let tokenAcd, maxFee;
+let tokenAce, maxFee;
 
-contract("TransferFrom ACD tests", accounts => {
+contract("TransferFrom ACE tests", accounts => {
     before(async function() {
-        tokenAcd = await tokenAcdTestHelper.newTokenAcdMock();
-        await tokenAcd.issue(1000000000);
-        await tokenAcd.withdrawTokens(accounts[0], 1000000000);
-        maxFee = await tokenAcd.transferFeeMax();
+        tokenAce = await tokenAceTestHelper.newTokenAceMock();
+        await tokenAce.issue(1000000000);
+        await tokenAce.withdrawTokens(accounts[0], 1000000000);
+        maxFee = await tokenAce.transferFeeMax();
     });
 
     it("transferFrom", async function() {
@@ -17,15 +17,15 @@ contract("TransferFrom ACD tests", accounts => {
             value: 100000
         };
 
-        await tokenAcdTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.approveTest(this, expApprove);
 
-        await tokenAcdTestHelper.transferFromTest(this, {
+        await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
             to: expApprove.spender,
             amount: Math.round(expApprove.value / 2)
         });
 
-        await tokenAcdTestHelper.transferFromTest(this, {
+        await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
             to: expApprove.spender,
             amount: Math.round(expApprove.value / 2),
@@ -35,7 +35,7 @@ contract("TransferFrom ACD tests", accounts => {
 
     it("transferFrom only if approved", async function() {
         return testHelper.expectThrow(
-            tokenAcd.transferFrom(accounts[0], accounts[2], 100, {
+            tokenAce.transferFrom(accounts[0], accounts[2], 100, {
                 from: accounts[2]
             })
         );
@@ -48,26 +48,26 @@ contract("TransferFrom ACD tests", accounts => {
             value: 200000
         };
 
-        await tokenAcdTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.approveTest(this, expApprove);
         return testHelper.expectThrow(
-            tokenAcd.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
+            tokenAce.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
                 from: expApprove.spender
             })
         );
     });
 
     it("transferFrom only if balance is enough", async function() {
-        await tokenAcd.transfer(accounts[1], maxFee, { from: accounts[0] }); // to cover the transfer fee
-        let amount = await tokenAcd.balanceOf(accounts[0]);
+        await tokenAce.transfer(accounts[1], maxFee, { from: accounts[0] }); // to cover the transfer fee
+        let amount = await tokenAce.balanceOf(accounts[0]);
         let expApprove = {
             owner: accounts[0],
             spender: accounts[1],
             value: amount
         };
-        await tokenAcdTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.approveTest(this, expApprove);
 
         await testHelper.expectThrow(
-            tokenAcd.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
+            tokenAce.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
                 from: expApprove.spender
             })
         );
@@ -79,10 +79,10 @@ contract("TransferFrom ACD tests", accounts => {
             spender: accounts[0],
             value: 100000
         };
-        await tokenAcdTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.approveTest(this, expApprove);
         let amount = 100000;
-        await tokenAcd.transfer(expApprove.owner, amount, { from: accounts[0] });
-        await tokenAcdTestHelper.transferFromTest(this, {
+        await tokenAce.transfer(expApprove.owner, amount, { from: accounts[0] });
+        await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
             to: expApprove.spender,
             amount: expApprove.value,
@@ -96,11 +96,11 @@ contract("TransferFrom ACD tests", accounts => {
             spender: accounts[1],
             value: 100000
         };
-        await tokenAcdTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.approveTest(this, expApprove);
         let amount = maxFee.toNumber(); // to cover costs
-        await tokenAcd.transfer(expApprove.spender, amount, { from: accounts[0] });
+        await tokenAce.transfer(expApprove.spender, amount, { from: accounts[0] });
         await testHelper.expectThrow(
-            tokenAcdTestHelper.transferFromTest(this, {
+            tokenAceTestHelper.transferFromTest(this, {
                 from: expApprove.owner,
                 to: expApprove.spender,
                 amount: expApprove.value,

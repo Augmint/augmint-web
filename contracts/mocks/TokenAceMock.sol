@@ -3,9 +3,9 @@ pragma solidity 0.4.18;
 import "../generic/AugmintToken.sol";
 
 
-contract TokenAcdMock is AugmintToken {
+contract TokenAceMock is AugmintToken {
 
-    function TokenAcdMock(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
+    function TokenAceMock(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
         uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax)
     public AugmintToken("Augmint TEST Crypto EUR", "ACET", "EUR", 4, _feeAccount, _interestPoolAccount,
         _interestEarnedAccount, _transferFeePt, _transferFeeMin, _transferFeeMax)

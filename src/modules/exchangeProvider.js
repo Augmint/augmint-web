@@ -9,7 +9,7 @@ export default () => {
 
     if (!exchange.isLoading && !exchange.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
+        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("exchange.contract", onExchangeContractChange);
         if (web3Connect.isConnected) {
             console.debug(
@@ -53,7 +53,7 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
 
 const refreshExchangeIfNeeded = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
-    if (newVal && store.getState().tokenUcd.isConnected) {
+    if (newVal && store.getState().augmintToken.isConnected) {
         console.debug(
             "exchangeProvider - new augmintToken or Exchange contract. Dispatching refreshExchange() and refreshOrders()"
         );
