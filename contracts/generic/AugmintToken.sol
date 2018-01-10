@@ -44,9 +44,9 @@ contract AugmintToken is AugmintTokenInterface {
 
     function AugmintToken(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
         uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
-        require(_feeAccount != 0);
-        require(_interestPoolAccount != 0);
-        require(_interestEarnedAccount != 0);
+        require(_feeAccount != address(0));
+        require(_interestPoolAccount != address(0));
+        require(_interestEarnedAccount != address(0));
         feeAccount = _feeAccount;
         interestPoolAccount = _interestPoolAccount;
         interestEarnedAccount = _interestEarnedAccount;
