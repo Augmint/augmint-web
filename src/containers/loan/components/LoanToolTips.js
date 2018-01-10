@@ -5,8 +5,8 @@ export function DiscountRateToolTip(props) {
     return (
         <ToolTip header="Discount Rate">
             Disbursed ACE amount / amount due on maturity.<br />
-            E.g. Loan amount is 100 ACE and discount rate is {props.discountRate * 100}% then<br />
-            {Math.round(props.discountRate * 10000) / 100} ACE will be disbursed.
+            E.g. Disbursed loan amount is 100 ACE and discount rate is {props.discountRate * 100}% then<br />
+            {Math.round(10000 / props.discountRate) / 100} ACE will be repayable.
         </ToolTip>
     );
 }

@@ -34,29 +34,36 @@ describe("Augmint basic e2e", function() {
         cy.get("#selectLoanProduct-0").click();
 
         cy
-            .get("#disbursedUcdAmount")
+            .get("#disbursedTokenAmount")
             .type("1000.55")
             .should("have.value", "1000.55");
         // TODO: https://github.com/cypress-io/cypress/issues/1171
         // cy.get("#loanUcdAmount").should("have.value", "1250.69");
         // cy.get("#ethAmount").should("have.value", "8.01724");
-        cy.get("#loanUcdAmount").type("1250.69");
-        cy.get("#ethAmount").type("8.01724");
+        cy.get("#repaymentAmount").type("1250.69");
+        cy.get("#ethAmount").type("1.5665");
 
-        const aceBalanceBefore = parseInt(Cypress.$("#userAceBalance").text());
-        cy.get("#submitBtn").click();
-        cy.contains("You've got a loan");
-        cy.contains("Disbursed: 1000.55 ACE");
-        cy.contains("To be repayed: 1250.69 ACE");
-        cy.contains("Collateral in escrow: 8.01724 ETH");
-        cy.get("#userAceBalance").contains(aceBalanceBefore + 1000.55);
+        cy.get("#userAceBalance").then(bal => {
+            const aceBalanceBefore = Number(
+                Cypress.$("#userAceBalance").text()
+            );
+            const expBal =
+                Math.round((aceBalanceBefore + 1000.55) * 10000) / 10000;
+            cy.get("#submitBtn").click();
+            cy.contains("You've got a loan");
+            cy.contains("Disbursed: 1000.55 ACE");
+            cy.contains("To be repayed: 1250.69 ACE");
+            cy.contains("Collateral in escrow: 1.5665 ETH");
 
-        //cy.contains("My Account").click();
-        // TODO: check transfer history
-        // TODO: check my loans
-        // TODO: loan details page
-        // TODO: Repayment
-        // TODO: check reserves
+            cy.get("#userAceBalance").contains(expBal.toString());
+
+            //cy.contains("My Account").click();
+            // TODO: check transfer history
+            // TODO: check my loans
+            // TODO: loan details page
+            // TODO: Repayment
+            // TODO: check reserves
+        });
     });
 
     it("Should transfer ACE");

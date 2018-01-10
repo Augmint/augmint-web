@@ -19,7 +19,7 @@ class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
         this.onDisbursedTokenAmountChange = this.onDisbursedTokenAmountChange.bind(this);
-        this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
+        this.onRepaymentAmountAmountChange = this.onRepaymentAmountAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
@@ -31,20 +31,20 @@ class NewLoanForm extends React.Component {
         try {
             val = new BigNumber(e.target.value);
         } catch (error) {
-            this.props.change("loanTokenAmount", "");
+            this.props.change("repaymentAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        const bn_loanTokenAmount = val
+        const bn_repaymentAmountAmount = val
             .div(this.props.product.bn_discountRate)
             .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const fiatcValue = bn_loanTokenAmount.div(this.props.product.bn_loanCollateralRatio);
+        const fiatcValue = bn_repaymentAmountAmount.div(this.props.product.bn_loanCollateralRatio);
 
         const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
 
         this.props.change(
-            "loanTokenAmount",
-            bn_loanTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+            "repaymentAmount",
+            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
         );
         this.props.change(
             "ethAmount",
@@ -52,7 +52,7 @@ class NewLoanForm extends React.Component {
         );
     }
 
-    onLoanTokenAmountChange(e) {
+    onRepaymentAmountAmountChange(e) {
         let val;
         try {
             val = new BigNumber(e.target.value);
@@ -83,20 +83,20 @@ class NewLoanForm extends React.Component {
             val = new BigNumber(e.target.value);
         } catch (error) {
             this.props.change("disbursedTokenAmount", "");
-            this.props.change("loanTokenAmount", "");
+            this.props.change("repaymentAmount", "");
             return;
         }
         const fiatcValue = val.times(this.props.rates.info.bn_ethFiatRate);
 
-        const bn_loanTokenAmount = this.props.product.bn_loanCollateralRatio.times(fiatcValue);
-        const bn_disbursedTokenAmount = bn_loanTokenAmount.times(this.props.product.bn_discountRate);
+        const bn_repaymentAmountAmount = this.props.product.bn_loanCollateralRatio.times(fiatcValue);
+        const bn_disbursedTokenAmount = bn_repaymentAmountAmount.times(this.props.product.bn_discountRate);
         this.props.change(
             "disbursedTokenAmount",
             bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
         );
         this.props.change(
-            "loanTokenAmount",
-            bn_loanTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
+            "repaymentAmount",
+            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
         );
     }
 
@@ -126,8 +126,10 @@ class NewLoanForm extends React.Component {
                         placeholder="pay out"
                     >
                         <Label basic>
-                            Disbursed amount{": "}
-                            <ToolTip>Disbursed (payed out) amount = Loan amount x Discount Rate </ToolTip>
+                            Loan amount{": "}
+                            <ToolTip>
+                                Disbursed loan amount (payed out) = Repayable loan amount x Discount Rate{" "}
+                            </ToolTip>
                         </Label>
 
                         <input />
@@ -136,18 +138,18 @@ class NewLoanForm extends React.Component {
                     <Field
                         component={Form.Field}
                         as={Form.Input}
-                        name="loanTokenAmount"
-                        id="loanTokenAmount"
+                        name="repaymentAmount"
+                        id="repaymentAmount"
                         placeholder="to pay back"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
                         validate={[Validations.required, Validations.tokenAmount]}
                         normalize={Normalizations.twoDecimals}
-                        onChange={this.onLoanTokenAmountChange}
+                        onChange={this.onRepaymentAmountAmountChange}
                         labelPosition="right"
                     >
                         <Label basic>
-                            Loan amount{": "}
+                            Repayment amount{": "}
                             <ToolTip>
                                 Loan ACE amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
