@@ -52,7 +52,9 @@ export default class TransferList extends React.Component {
                 {error && <ErrorDetails header="Error while fetching transfer list">{error.message}</ErrorDetails>}
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
-                {transfers != null && listItems.length === 0 ? noItemMessage : <MyListGroup>{listItems}</MyListGroup>}
+                {transfers != null && (
+                    <MyListGroup id="transferListDiv">{listItems.length === 0 ? noItemMessage : listItems}</MyListGroup>
+                )}
             </Pblock>
         );
     }

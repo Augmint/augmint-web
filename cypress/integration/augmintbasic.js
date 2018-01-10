@@ -2,16 +2,16 @@ describe("Augmint basic e2e", function() {
     // TODO: expose testrpc snapshot take / revert via npm and use to create clean state when needed
     before(function() {
         cy.visit("/");
-
+        //cy.viewport("macbook-15");
         cy.contains("Try it").click();
         cy.contains("You are connected");
     });
 
     it("Click through main functions", function() {
         cy.contains("My Account").click();
-        cy.contains("Account: 0xd912AeCb07E9F4e1eA8E6b4779e7Fb6Aa1c3e4D8");
-        cy.contains("No transactions");
 
+        cy.contains("Account: 0xd912AeCb07E9F4e1eA8E6b4779e7Fb6Aa1c3e4D8");
+        cy.get("#transferListDiv");
         cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
