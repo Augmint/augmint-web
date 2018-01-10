@@ -1,4 +1,4 @@
-/* Augmint Crypto Dollar token (ACD) implementation */
+/* Augmint Crypto Euro token (ACE) implementation */
 pragma solidity 0.4.18;
 import "./generic/AugmintToken.sol";
 
