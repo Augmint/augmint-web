@@ -8,10 +8,12 @@ export default () => {
 
     if (!rates.isLoading && !rates.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
+        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
         setupWatch("rates.contract", onRatesContractChange);
+
         if (web3Connect.isConnected) {
             console.debug(
-                "ratesProvider - rates not connected or loading and web3 alreay loaded, dispatching connectRates() "
+                "ratesProvider - rates not connected or loading and web3 already connected, dispatching connectRates() "
             );
             store.dispatch(connectRates());
         }
@@ -21,13 +23,12 @@ export default () => {
 
 const setupListeners = () => {
     const rates = store.getState().rates.contract.instance;
-    rates.e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onRateChange);
-    // TODO: remove prev listeners
+    rates.RateChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onRateChange);
 };
 
 const removeListeners = oldInstance => {
     if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.e_ethToUsdcChanged().stopWatching();
+        oldInstance.instance.RateChanged().stopWatching();
     }
 };
 
@@ -39,16 +40,24 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     }
 };
 
+const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
+    refreshRatesIfNeeded(newVal, oldVal);
+};
+
 const onRatesContractChange = (newVal, oldVal, objectPath) => {
+    refreshRatesIfNeeded(newVal, oldVal);
+};
+
+const refreshRatesIfNeeded = (newVal, oldVal) => {
     removeListeners(oldVal);
-    if (newVal) {
-        console.debug("ratesProvider - rates.contract changed. Dispatching refreshRates()");
+    if (newVal && store.getState().tokenUcd.isConnected) {
+        console.debug("ratesProvider - new rates or augmintToken contract. Dispatching refreshRates()");
         store.dispatch(refreshRates());
         setupListeners();
     }
 };
 
 const onRateChange = (error, result) => {
-    console.debug("ratesProvider.onRateChange(): e_ethToUsdcChanged event. Dispatching refreshRates");
+    console.debug("ratesProvider.onRateChange(): RateChange event. Dispatching refreshRates()");
     store.dispatch(refreshRates());
 };

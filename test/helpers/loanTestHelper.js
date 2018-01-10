@@ -9,7 +9,7 @@ const testHelper = require("./testHelper.js");
 
 const LoanManager = artifacts.require("./loanManager.sol");
 
-let tokenAcd, loanManager, rates;
+let tokenAcd, loanManager, rates, peggedSymbol;
 let reserveAcc;
 let interestPoolAcc = null;
 let interestEarnedAcc = null;
@@ -27,6 +27,7 @@ module.exports = {
 
 async function newLoanManager(_tokenAcd, _rates) {
     tokenAcd = _tokenAcd;
+    peggedSymbol = web3.toAscii(await tokenAcd.peggedSymbol());
     rates = _rates;
     reserveAcc = tokenAcd.address;
     loanManager = await LoanManager.new(tokenAcd.address, rates.address);
@@ -192,7 +193,7 @@ async function collectLoan(testInstance, loan, collector) {
     ];
     const totalSupplyBefore = await tokenAcd.totalSupply();
     const balBefore = await tokenAcdTestHelper.getBalances(testedAccounts);
-    const coveringValue = (await rates.convertUsdcToWei(loan.repaymentAmount)).add(loan.defaultingFee);
+    const coveringValue = (await rates.convertToWei(peggedSymbol, loan.repaymentAmount)).add(loan.defaultingFee);
     let releasedCollateral;
     if (coveringValue < loan.collateral) {
         releasedCollateral = loan.collateral.sub(coveringValue);
@@ -278,7 +279,7 @@ async function calcLoanValues(rates, product, collateralWei) {
     // uint usdcValue = rates.convertWeiToUsdc(msg.value);
     // uint ucdDueAtMaturity = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
     // ucdDueAtMaturity = ucdDueAtMaturity * 100; // rounding 4 decimals value to 2 decimals. no safe mul needed b/c of prev divide
-    ret.usdcValue = await rates.convertWeiToUsdc(collateralWei);
+    ret.usdcValue = await rates.convertFromWei(peggedSymbol, collateralWei);
     ret.repaymentAmount = ret.usdcValue
         .mul(product.collateralRatio)
         .div(100000000)
@@ -368,8 +369,8 @@ async function loanAsserts(expLoan) {
         "disbursementDate should be at least the time at disbursement"
     );
     assert(
-        disbursementTimeActual <= expLoan.disbursementTime + 1,
-        "disbursementDate should be at most the time at disbursement + 1"
+        disbursementTimeActual <= expLoan.disbursementTime + 2,
+        "disbursementDate should be at most the time at disbursement + 2"
     );
 
     assert.equal(

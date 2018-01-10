@@ -5,7 +5,7 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import tokenUcd_artifacts from "contractsBuild/TokenAcd.json";
 import BigNumber from "bignumber.js";
-import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
+import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import { transferUcdTx } from "modules/ethereum/transferTransactions";
 
 export const TOKENUCD_CONNECT_REQUESTED = "tokenUcd/TOKENUCD_CONNECT_REQUESTED";
@@ -27,6 +27,8 @@ const initialState = {
     connectionError: null,
     info: {
         owner: "?",
+        peggedSymbol: "?",
+        symbol: "?",
         ethBalance: "?",
         bn_ethBalance: null,
         ethPendingBalance: "?",
@@ -59,7 +61,8 @@ export default (state = initialState, action) => {
                 isConnected: true,
                 error: null,
                 connectionError: null,
-                contract: action.contract
+                contract: action.contract,
+                info: action.info
             };
 
         case TOKENUCD_CONNECT_ERROR:
@@ -115,12 +118,15 @@ export const connectTokenUcd = () => {
         });
 
         try {
+            const contract = await SolidityContract.connectNew(
+                store.getState().web3Connect.web3Instance,
+                tokenUcd_artifacts
+            );
+            const info = await getAugmintTokenInfo(contract.instance);
             return dispatch({
                 type: TOKENUCD_CONNECT_SUCCESS,
-                contract: await SolidityContract.connectNew(
-                    store.getState().web3Connect.web3Instance,
-                    tokenUcd_artifacts
-                )
+                contract: contract,
+                info: info
             });
         } catch (error) {
             return dispatch({
@@ -136,53 +142,64 @@ export const refreshTokenUcd = () => {
         dispatch({
             type: TOKENUCD_REFRESH_REQUESTED
         });
-
-        let tokenUcd = store.getState().tokenUcd.contract.instance;
-        // TODO: make these paralel
-        let owner = await tokenUcd.owner();
-        let bn_totalSupply = await tokenUcd.totalSupply();
-        let bn_decimals = await tokenUcd.decimals();
-        let bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
-        let feeAccount = await tokenUcd.feeAccount();
-        let interestPoolAccount = await tokenUcd.interestPoolAccount();
-        let interestEarnedAccount = await tokenUcd.interestEarnedAccount();
-        let bn_feeAccountAcdBalance = await getUcdBalance(feeAccount);
-        let bn_interestPoolAccountAcdBalance = await getUcdBalance(interestPoolAccount);
-        let bn_interestEarnedAccountAcdBalance = await getUcdBalance(interestEarnedAccount);
-
-        let bn_ethBalance = await asyncGetBalance(tokenUcd.address);
-        let bn_ethPendingBalance = await asyncGetBalance(tokenUcd.address, "pending");
-        let bn_ucdBalance = await getUcdBalance(tokenUcd.address);
-        let bn_ucdPendingBalance = await getUcdBalance(tokenUcd.address, "pending");
-
+        const augmintToken = store.getState().tokenUcd.contract.instance;
+        const info = await getAugmintTokenInfo(augmintToken);
         return dispatch({
             type: TOKENUCD_REFRESHED,
-            result: {
-                owner: owner,
-                decimals: bn_decimals.toNumber(),
-                bn_decimalsDiv: bn_decimalsDiv,
-                decimalsDiv: bn_decimalsDiv.toNumber(),
-                ucdBalance: bn_ucdBalance.toNumber(),
-                bn_feeAccountAcdBalance: bn_feeAccountAcdBalance,
-                feeAccountAcdBalance: bn_feeAccountAcdBalance.toString(),
-                bn_interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance,
-                interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance.toString(),
-                bn_interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance,
-                interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance.toString(),
-                ucdPendingBalance: bn_ucdPendingBalance.toNumber(),
-                ethBalance: bn_ethBalance.toNumber(),
-                bn_ethBalance: bn_ethBalance,
-                bn_ethPendingBalance: bn_ethPendingBalance,
-                ethPendingBalance: bn_ethPendingBalance.toNumber(),
-                totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
-                feeAccount: feeAccount,
-                feePt: await tokenUcd.transferFeePt(),
-                feeMin: await tokenUcd.transferFeeMin(),
-                feeMax: await tokenUcd.transferFeeMax()
-            }
+            result: info
         });
     };
 };
+
+async function getAugmintTokenInfo(augmintToken) {
+    const web3 = store.getState().web3Connect.web3Instance;
+    // TODO: make these paralel
+    const owner = await augmintToken.owner();
+    const symbol = await augmintToken.symbol();
+    const peggedSymbol = web3.utils.toAscii(await augmintToken.peggedSymbol());
+    const bn_totalSupply = await augmintToken.totalSupply();
+    const bn_decimals = await augmintToken.decimals();
+    const bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
+    const feeAccount = await augmintToken.feeAccount();
+    const interestPoolAccount = await augmintToken.interestPoolAccount();
+    const interestEarnedAccount = await augmintToken.interestEarnedAccount();
+    const bn_feeAccountAcdBalance = (await augmintToken.balanceOf(feeAccount)).div(bn_decimalsDiv);
+    const bn_interestPoolAccountAcdBalance = (await augmintToken.balanceOf(interestPoolAccount)).div(bn_decimalsDiv);
+    const bn_interestEarnedAccountAcdBalance = (await augmintToken.balanceOf(interestEarnedAccount)).div(
+        bn_decimalsDiv
+    );
+    const bn_ethBalance = await asyncGetBalance(augmintToken.address);
+    const bn_ethPendingBalance = await asyncGetBalance(augmintToken.address, "pending");
+    const bn_ucdBalance = (await augmintToken.balanceOf(augmintToken.address)).div(bn_decimalsDiv);
+    const bn_ucdPendingBalance = (await augmintToken.balanceOf(augmintToken.address, { defaultBlock: "pending" })).div(
+        bn_decimalsDiv
+    );
+    return {
+        owner: owner,
+        symbol: symbol,
+        peggedSymbol: peggedSymbol,
+        decimals: bn_decimals.toNumber(),
+        bn_decimalsDiv: bn_decimalsDiv,
+        decimalsDiv: bn_decimalsDiv.toNumber(),
+        ucdBalance: bn_ucdBalance.toNumber(),
+        bn_feeAccountAcdBalance: bn_feeAccountAcdBalance,
+        feeAccountAcdBalance: bn_feeAccountAcdBalance.toString(),
+        bn_interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance,
+        interestPoolAccountAcdBalance: bn_interestPoolAccountAcdBalance.toString(),
+        bn_interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance,
+        interestEarnedAccountAcdBalance: bn_interestEarnedAccountAcdBalance.toString(),
+        ucdPendingBalance: bn_ucdPendingBalance.toNumber(),
+        ethBalance: bn_ethBalance.toNumber(),
+        bn_ethBalance: bn_ethBalance,
+        bn_ethPendingBalance: bn_ethPendingBalance,
+        ethPendingBalance: bn_ethPendingBalance.toNumber(),
+        totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
+        feeAccount: feeAccount,
+        feePt: await augmintToken.transferFeePt(),
+        feeMin: await augmintToken.transferFeeMin(),
+        feeMax: await augmintToken.transferFeeMax()
+    };
+}
 
 export function transferUcd(payload) {
     return async dispatch => {

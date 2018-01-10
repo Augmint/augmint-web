@@ -4,7 +4,8 @@ ETH and ACE balance for the active userAccount
     TODO: make this generic? ie. to use this for any address balances?
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
-import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
+import store from "modules/store";
+import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const USER_BALANCE_REQUESTED = "userBalances/BALANCE_REQUESTED";
 export const USER_BALANCE_RECEIVED = "userBalances/BALANCE_RECEIVED";
@@ -55,8 +56,9 @@ export function fetchUserBalance(address) {
             address: address
         });
 
-        let bn_ucdBalance = await getUcdBalance(address);
-        let bn_ucdPendingBalance = await getUcdBalance(address, "pending");
+        const augmintToken = store.getState().tokenUcd.contract.instance;
+        let bn_ucdBalance = (await augmintToken.balanceOf(address)).div(10000);
+        let bn_ucdPendingBalance = (await augmintToken.balanceOf(address, { defaultBlock: "pending" })).div(10000);
         let bn_ethBalance = await asyncGetBalance(address);
         let bn_ethPendingBalance = await asyncGetBalance(address, "pending");
         return dispatch({

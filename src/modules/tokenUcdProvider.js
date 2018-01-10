@@ -10,7 +10,7 @@ export default () => {
 
     if (!tokenUcd.isLoading && !tokenUcd.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("tokenUcd.contract", onTokenUcdContractChange);
+        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
         if (web3Connect.isConnected) {
             console.debug(
@@ -25,10 +25,6 @@ export default () => {
 const setupListeners = () => {
     const tokenUcd = store.getState().tokenUcd.contract.instance;
     tokenUcd.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }).watch(onAugmintTransfer);
-    /* TODO: use this once truffle exposes web3@1.0 interface: */
-    // tokenUcd.events.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }, (error, event) => {
-    //     console.log(event, error);
-    // });
 };
 
 const removeListeners = oldInstance => {
@@ -45,14 +41,18 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onTokenUcdContractChange = (newVal, oldVal, objectPath) => {
+const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
+        if (oldVal) {
+            console.debug("tokenUcdProvider - augmintToken.contract changed. Dispatching refreshTokenUcd()");
+            store.dispatch(refreshTokenUcd());
+        }
         console.debug(
-            "tokenUcdProvider - tokenUcd.contract changed. Dispatching refreshTokenUcd(), fetchUserBalance() and fetchTransferList()"
+            "tokenUcdProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         const userAccount = store.getState().web3Connect.userAccount;
-        store.dispatch(refreshTokenUcd());
+
         store.dispatch(fetchUserBalance(userAccount));
         store.dispatch(fetchTransferList(userAccount, 0, "latest"));
         setupListeners();

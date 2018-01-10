@@ -62,7 +62,7 @@ contract LoanManager is LoanManagerInterface {
         require(products[productId].isActive); // valid productId?
 
         // calculate UCD loan values based on ETH sent in with Tx
-        uint usdcValue = rates.convertWeiToUsdc(msg.value);
+        uint usdcValue = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
         uint repaymentAmount = usdcValue.mul(products[productId].collateralRatio).roundedDiv(100000000);
         repaymentAmount = repaymentAmount * 100;  // rounding 4 decimals value to 2 decimals.
                                         // no safe mul needed b/c of prev divide
@@ -118,7 +118,7 @@ contract LoanManager is LoanManagerInterface {
             loans[loanId].state = LoanState.Defaulted;
             // send ETH collateral to augmintToken reserve
             uint defaultingFee = loans[loanId].collateralAmount.mul(loans[loanId].defaultingFeePt).div(1000000);
-            uint coveringValue = rates.convertUsdcToWei(loans[loanId].repaymentAmount)
+            uint coveringValue = rates.convertToWei(augmintToken.peggedSymbol(), loans[loanId].repaymentAmount)
                 .add(defaultingFee);
             uint releasedCollateral;
             if (coveringValue < loans[loanId].collateralAmount) {

@@ -4,14 +4,10 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 
-export async function asyncGetBalance(address, defaultBlock) {
-    let web3 = store.getState().web3Connect.web3Instance;
-    let defBlock = defaultBlock;
-    if (defBlock == null) {
-        defBlock = "latest";
-    }
-    let bal = await web3.eth.getBalance(address, defBlock);
-    let ret = new BigNumber(web3.utils.fromWei(bal));
+export async function asyncGetBalance(address, defaultBlock = "latest") {
+    const web3 = store.getState().web3Connect.web3Instance;
+    const bal = await web3.eth.getBalance(address, defaultBlock);
+    const ret = new BigNumber(web3.utils.fromWei(bal));
     return ret;
 }
 
@@ -210,37 +206,3 @@ export function asyncFilterGet(filter) {
 //         });
 //     });
 // }
-
-export async function getUcdBalance(address, defaultBlock) {
-    return new Promise(
-        function(resolve, reject) {
-            let tokenUcd = store.getState().tokenUcd;
-            let defBlock = defaultBlock;
-            if (defBlock == null) {
-                defBlock = "latest";
-            }
-
-            tokenUcd.contract.instance.contract.balanceOf(address, defaultBlock, async function(error, bn_balance) {
-                if (error) {
-                    reject(
-                        new Error(
-                            "Can't get ACE balance from tokenUcd (getUcdBalance). Address: ",
-                            address + "\n" + error
-                        )
-                    );
-                } else {
-                    let bn_decimalsDiv = tokenUcd.info.bn_decimalsDiv;
-
-                    if (bn_decimalsDiv === null || bn_decimalsDiv === "?") {
-                        // this is a workround for timing issue with tokenUcd refresh
-                        // TODO: figure out how to rearrange refresh to avoid these checks
-                        bn_decimalsDiv = new BigNumber(10).pow(await tokenUcd.contract.instance.decimals());
-                    }
-
-                    resolve(bn_balance.div(bn_decimalsDiv));
-                }
-            });
-        }
-        // https://ethereum.stackexchange.com/questions/25756/passing-defaultblock-pending-param-to-a-truffle-contract-call
-    );
-}

@@ -1,9 +1,7 @@
 import store from "modules/store";
-import BigNumber from "bignumber.js";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import EXCHANGE_artifacts from "contractsBuild/Exchange.json";
-import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
-//import BigNumber from "bignumber.js";
+import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
 export const EXCHANGE_CONNECT_SUCCESS = "exchange/EXCHANGE_CONNECT_SUCCESS";
@@ -115,16 +113,17 @@ export const refreshExchange = () => {
         });
         try {
             let exchange = store.getState().exchange.contract.instance;
+            const augmintToken = store.getState().tokenUcd.contract.instance;
             let web3 = store.getState().web3Connect.web3Instance;
             let owner = await exchange.owner();
 
             let bn_ethBalance = await asyncGetBalance(exchange.address);
-            let bn_ucdBalance = await getUcdBalance(exchange.address);
+            const bn_ucdBalance = (await augmintToken.balanceOf(exchange.address)).div(10000);
 
             let bn_totalEthSellOrders = web3.utils.fromWei(
                 (await exchange.totalEthSellOrders()).toString() // toString() required to supress web3 error, why?
             );
-            let bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(new BigNumber(10000));
+            const bn_totalUcdSellOrders = (await exchange.totalUcdSellOrders()).div(10000);
             let totalUcdSellOrders = bn_totalUcdSellOrders.toString();
             let totalEthSellOrders = bn_totalEthSellOrders.toString();
             let totalAmount = 0,

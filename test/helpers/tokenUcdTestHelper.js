@@ -30,6 +30,7 @@ async function newTokenAcdMock() {
         200 /* min: 0.02 ACD */,
         50000 /* max fee: 5 ACD */
     );
+
     await tokenAcd.grantMultiplePermissions(web3.eth.accounts[0], [
         "setSystemAccounts",
         "setTransferFees",

@@ -6,7 +6,7 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import loanManager_artifacts from "contractsBuild/LoanManager.json";
-import { asyncGetBalance, getUcdBalance } from "modules/ethereum/ethHelper";
+import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import {
     repayLoanTx,
     newEthBackedLoanTx,
@@ -239,6 +239,7 @@ export const refreshLoanManager = () => {
         });
         try {
             const loanManager = store.getState().loanManager.contract.instance;
+            const augmintToken = store.getState().tokenUcd.contract.instance;
             // TODO: make calls paralel
             const loanCount = await loanManager.getLoanCount();
             const productCount = await loanManager.getProductCount();
@@ -248,7 +249,7 @@ export const refreshLoanManager = () => {
             const owner = await loanManager.owner();
 
             const bn_ethBalance = await asyncGetBalance(loanManager.address);
-            const bn_ucdBalance = await getUcdBalance(loanManager.address);
+            const bn_ucdBalance = (await augmintToken.balanceOf(loanManager.address)).div(10000);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {

@@ -11,11 +11,12 @@ export default () => {
 
     if (!loanManager.isLoading && !loanManager.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
+        setupWatch("tokenUcd.contract", onAugmintTokenContractChange);
         setupWatch("loanManager.contract", onLoanManagerContractChange);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
         if (web3Connect.isConnected) {
             console.debug(
-                "loanManagerProvider - loanManager not connected or loading and web3 alreay loaded, dispatching connectLoanManager() "
+                "loanManagerProvider - loanManager not connected or loading and web3 already loaded, dispatching connectLoanManager() "
             );
             store.dispatch(connectLoanManager());
         }
@@ -47,11 +48,19 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     }
 };
 
+const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
+    refreshLoanManagerIfNeeded(newVal, oldVal);
+};
+
 const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
+    refreshLoanManagerIfNeeded(newVal, oldVal);
+};
+
+const refreshLoanManagerIfNeeded = (newVal, oldVal) => {
     removeListeners(oldVal);
-    if (newVal) {
+    if (newVal && store.getState().tokenUcd.isConnected) {
         console.debug(
-            "loanManagerProvider - loanManager.contract changed. Dispatching refreshLoanManager, fetchProducts, fetchLoans"
+            "loanManagerProvider - new augmintToken or loanManager contract. Dispatching refreshLoanManager, fetchProducts, fetchLoans"
         );
         const userAccount = store.getState().web3Connect.userAccount;
         store.dispatch(refreshLoanManager());

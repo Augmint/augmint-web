@@ -79,7 +79,7 @@ export class EthereumState extends React.Component {
                         network.id !== 3 && (
                             <div>
                                 <p>Do you have all the contracts deployed?</p>
-                                <pre>{"truffle migrate --reset" + "\ncp ./build/contracts/* ./src/contractsBuild"}</pre>
+                                <pre>{"truffle migrate --reset \ncp ./build/contracts/* ./src/contractsBuild"}</pre>
                                 <p>
                                     See more on our{" "}
                                     <Link

@@ -2,7 +2,6 @@
 
 TODO: overload transfer() & transferFrom() instead of transferWithNarrative() & transferFromWithNarrative()
       when this fix available in web3& truffle also uses that web3: https://github.com/ethereum/web3.js/pull/1185
-TODO: move totalSupply and maybe other declarations here
 TODO: shall we use bytes for narrative?
 TODO: shall we replace repayLoan with a generic approveAndCall ?
 TODO: shall we put protection against accidentally sending in ETH?
@@ -15,6 +14,15 @@ import "./ERC20Interface.sol";
 
 contract AugmintTokenInterface is Restricted, ERC20Interface {
     using SafeMath for uint256;
+
+    string public name;
+    string public symbol;
+    bytes32 public peggedSymbol;
+    uint8 public decimals;
+
+    uint public totalSupply;
+    mapping(address => uint256) public balances; // Balances for each account
+    mapping(address => mapping (address => uint256)) public allowed; // allowances added with approve()
 
     function () public payable; // to accept ETH sent into reserve (from defaulted loan's collateral )
 

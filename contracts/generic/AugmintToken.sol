@@ -25,10 +25,6 @@ import "../interfaces/LoanManagerInterface.sol";
 
 
 contract AugmintToken is AugmintTokenInterface {
-    uint public totalSupply;
-
-    mapping(address => uint256) public balances; // Balances for each account
-    mapping(address => mapping (address => uint256)) public allowed; // allowances added with approve()
 
     address public feeAccount;
     address public interestPoolAccount;
@@ -42,11 +38,17 @@ contract AugmintToken is AugmintTokenInterface {
     event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
-    function AugmintToken(address _feeAccount, address _interestPoolAccount, address _interestEarnedAccount,
-        uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax) public {
+    function AugmintToken(string _name, string _symbol, bytes32 _peggedSymbol, uint8 _decimals, address _feeAccount,
+        address _interestPoolAccount, address _interestEarnedAccount, uint _transferFeePt, uint _transferFeeMin,
+        uint _transferFeeMax) public {
         require(_feeAccount != address(0));
         require(_interestPoolAccount != address(0));
         require(_interestEarnedAccount != address(0));
+        require(bytes(_name).length > 0);
+        name = _name;
+        symbol = _symbol;
+        peggedSymbol = _peggedSymbol;
+        decimals = _decimals;
         feeAccount = _feeAccount;
         interestPoolAccount = _interestPoolAccount;
         interestEarnedAccount = _interestEarnedAccount;

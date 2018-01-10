@@ -9,7 +9,7 @@ const ETHSELL = 0,
     UCDSELL = 1;
 
 let snapshotId;
-let rates, tokenAcd, exchange;
+let rates, tokenAcd, exchange, peggedSymbol;
 let balBefore;
 let maker = web3.eth.accounts[1],
     taker = web3.eth.accounts[2];
@@ -21,6 +21,7 @@ contract("Exchange order", accounts => {
         this.timeout(100000);
         rates = Rates.at(Rates.address);
         tokenAcd = await tokenAcdTestHelper.newTokenAcdMock();
+        peggedSymbol = web3.toAscii(await tokenAcd.peggedSymbol());
         await tokenAcd.issue(1000000000);
         await tokenAcd.withdrawTokens(maker, 100000000);
         await tokenAcd.withdrawTokens(taker, 100000000);
@@ -36,7 +37,7 @@ contract("Exchange order", accounts => {
     });
 
     afterEach(async function() {
-        let res = await testHelper.revertSnapshot(snapshotId);
+        await testHelper.revertSnapshot(snapshotId);
     });
 
     it("no sell a sellEth order below min amount ");
@@ -139,9 +140,8 @@ contract("Exchange order", accounts => {
             from: taker
         });
         testHelper.logGasUse(this, tx, "placeSellUcdOrder");
-
-        let expEthSold = await rates.convertUsdcToWei(sellUcdAmount);
-        let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, sellUcdAmount);
+        const expEthSold = await rates.convertToWei(peggedSymbol, sellUcdAmount);
+        const orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, sellUcdAmount);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -180,8 +180,8 @@ contract("Exchange order", accounts => {
     it("sellUcd - exactly filled from multiple sellEth order");
 
     it("sellEth - fully filled from open sellUcd order ", async function() {
-        let sellUcdAmount = 2000000;
-        let sellEthAmount = web3.toWei(1);
+        const sellUcdAmount = 20000000;
+        const sellEthAmount = web3.toWei(1);
 
         let orderType = UCDSELL;
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -199,8 +199,8 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
-        let expUcdSold = await rates.convertWeiToUsdc(sellEthAmount);
-        let orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, sellEthAmount);
+        const expUcdSold = await rates.convertFromWei(peggedSymbol, sellEthAmount);
+        const orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, sellEthAmount);
 
         await exchangeTestHelper.contractStateAsserts({
             orderCount: 1,
@@ -239,7 +239,7 @@ contract("Exchange order", accounts => {
     it("sellEth - exactly filled from multiple open sellUcd orders");
 
     it("sellUcd - partially filled from smaller open sellEth order ", async function() {
-        let sellUcdAmount = 2550000;
+        let sellUcdAmount = 25500000;
         let sellEthAmount = web3.toWei(1);
 
         let orderType = ETHSELL;
@@ -257,9 +257,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx, "placeSellUcdOrder");
 
-        let ucdPaid = await rates.convertWeiToUsdc(sellEthAmount);
+        let ucdPaid = await rates.convertFromWei(peggedSymbol, sellEthAmount);
         let expEthSold = sellEthAmount;
-        let ucdLeft = sellUcdAmount - (await rates.convertWeiToUsdc(sellEthAmount));
+        let ucdLeft = sellUcdAmount - (await rates.convertFromWei(peggedSymbol, sellEthAmount));
 
         let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, ucdPaid);
 
@@ -326,9 +326,9 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
-        let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
+        let ethPaid = await rates.convertToWei(peggedSymbol, sellUcdAmount);
         let expUcdSold = sellUcdAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertUsdcToWei(sellUcdAmount));
+        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertToWei(peggedSymbol, sellUcdAmount));
 
         let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, ethPaid);
 
@@ -377,8 +377,8 @@ contract("Exchange order", accounts => {
     });
 
     it("sellEth - fully filled from multiple open sellUcd orders", async function() {
-        let sellUcdAmount = 200000;
-        let sellEthAmount = web3.toWei(1);
+        const sellEthAmount = web3.toWei(1);
+        const sellUcdAmount = (await rates.convertFromWei(peggedSymbol, sellEthAmount)).div(2);
 
         let orderType = UCDSELL;
         let tx = await exchange.placeSellUcdOrder(sellUcdAmount, {
@@ -400,14 +400,14 @@ contract("Exchange order", accounts => {
         });
         testHelper.logGasUse(this, tx, "placeSellEthOrder");
 
-        let ethPaid = await rates.convertUsdcToWei(sellUcdAmount);
+        let ethPaid = await rates.convertToWei(peggedSymbol, sellUcdAmount);
         let expUcdSold = sellUcdAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertUsdcToWei(sellUcdAmount * 2));
+        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertToWei(peggedSymbol, sellUcdAmount * 2));
 
         let filledOrderId1 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expUcdSold, ethPaid);
 
         await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
+            orderCount: 0,
             orderType: UCDSELL,
             orderAmount: 0,
             maker: maker,
@@ -417,21 +417,11 @@ contract("Exchange order", accounts => {
         let filledOrderId2 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[1], taker, expUcdSold, ethPaid);
 
         await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
+            orderCount: 0,
             orderType: UCDSELL,
             orderAmount: 0,
             maker: maker,
             orderId: filledOrderId2
-        });
-
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[2], ETHSELL, taker, ethLeft);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ETHSELL,
-            orderAmount: ethLeft,
-            maker: taker,
-            orderId: newOrderId
         });
 
         let expBalances = [

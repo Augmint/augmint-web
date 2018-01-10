@@ -114,7 +114,7 @@ contract Exchange is Owned {
     function placeSellEthOrder() external payable {
         require(msg.value > 0); // FIXME: min amount? Shall we use min UCD amount instead of ETH value?
         uint weiToSellLeft = msg.value;
-        uint ucdValueTotal = rates.convertWeiToUsdc(weiToSellLeft);
+        uint ucdValueTotal = rates.convertFromWei(tokenUcd.peggedSymbol(), weiToSellLeft);
         uint ucdValueLeft = ucdValueTotal;
         uint weiToPay;
         uint ucdSold;
@@ -134,7 +134,7 @@ contract Exchange is Owned {
             } else {
                 // sell order partially covers buy order
                 ucdSold = orders.orders[i - 1].order.amount;
-                weiToPay = rates.convertUsdcToWei(ucdSold);
+                weiToPay = rates.convertToWei(tokenUcd.peggedSymbol(), ucdSold);
             }
             ucdValueLeft = ucdValueLeft.sub(ucdSold);
             weiToSellLeft = weiToSellLeft.sub(weiToPay);
@@ -156,7 +156,7 @@ contract Exchange is Owned {
     function placeSellUcdOrder(uint ucdAmount) external {
         require(ucdAmount > 0); // FIXME: min amount?
         tokenUcd.transferNoFee(msg.sender, this, ucdAmount, "UCD sell order placed");
-        uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
+        uint weiValueTotal = rates.convertToWei(tokenUcd.peggedSymbol(), ucdAmount);
         uint weiValueLeft = weiValueTotal;
         uint ucdToSellLeft = ucdAmount;
         uint weiSold;
@@ -177,7 +177,7 @@ contract Exchange is Owned {
             } else {
                 // sell order partially covers buy order
                 weiSold = orders.orders[i-1].order.amount;
-                ucdToPay = rates.convertWeiToUsdc(weiSold);
+                ucdToPay = rates.convertFromWei(tokenUcd.peggedSymbol(), weiSold);
             }
             weiValueLeft = weiValueLeft.sub(weiSold);
             ucdToSellLeft = ucdToSellLeft.sub(ucdToPay);
