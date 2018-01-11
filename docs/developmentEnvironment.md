@@ -8,12 +8,8 @@ Note: these steps are likely to work on linux too but it's not tested yet
 
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
-1. [nodejs](https://nodejs.org/en/download/)  
-   _tested with version 8.9.4_
-1. [node version manager](https://github.com/tj/n): `npm install -g n`
-1. Install node: `n 8.9.4` and `n 8.9.1`  
-   _ganache regularly crashes with node v8.9.4, `runganache.sh` selects the correct node version_
-1. `npm install -g ganache-cli@6.0.3` _(formerly testrpc)_
+1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
+   _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
 1. `npm install -g truffle@4.0.4`
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
@@ -30,12 +26,9 @@ _Note: windows install was not tested since a while, update on it is welcome_
 
 in Git bash:
 
-1. `nvm install 8.9.4`
-1. `nvm use 8.9.4`
-1. `npm install -g ganache-cli@6.0.3`  
-   _tested with version v6.0.3_
+1. `nvm install 8.5.0`
+1. `nvm use 8.5.0`
 1. `npm install -g truffle@4.0.4`
-   _tested with version 4.0.4_
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
@@ -51,11 +44,14 @@ in Git bash:
 
 #### ganache-cli (formerly testrpc)
 
-1. `./runganache.sh` or on windows: `./runganache.bat`
-1. in separate console:  
-   `truffle migrate` or  
-   `truffle migrate --reset` to overwrite existing migration
-1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
+1. `npm run ganache:runmigrate`  
+   or
+   * `./runganache.sh` (windows: `./runganache.bat`)
+   * in separate console:  
+     `truffle migrate` or  
+     `truffle migrate --reset` to overwrite existing migration
+1. `cp ./build/contracts/* ./src/contractsBuild`  
+   _TODO: this step is needed b/c of a [truffle-migrate issue](https://github.com/trufflesuite/truffle-migrate/issues/10)_
 
 #### Alternatively: Ganache UI
 

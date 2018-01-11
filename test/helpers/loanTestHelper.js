@@ -396,7 +396,8 @@ async function loanAsserts(expLoan) {
     );
     assert(
         disbursementTimeActual <= expLoan.disbursementTime + 2,
-        "disbursementDate should be at most the time at disbursement + 2"
+        "disbursementDate should be at most the time at disbursement + 2. Difference is: " +
+            (disbursementTimeActual - expLoan.disbursementTime)
     );
 
     assert.equal(
