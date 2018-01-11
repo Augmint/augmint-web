@@ -169,7 +169,7 @@ async function getAugmintTokenInfo(augmintToken) {
         bn_decimalsDiv
     );
     const bn_ethBalance = await asyncGetBalance(augmintToken.address);
-    const bn_ethPendingBalance = await asyncGetBalance(augmintToken.address, "pending");
+    const bn_ethPendingBalance = (await asyncGetBalance(augmintToken.address, "pending")).sub(bn_ethBalance);
     const bn_tokenBalance = (await augmintToken.balanceOf(augmintToken.address)).div(bn_decimalsDiv);
     const bn_pendingTokenBalance = (await augmintToken.balanceOf(augmintToken.address, {
         defaultBlock: "pending"
@@ -188,7 +188,7 @@ async function getAugmintTokenInfo(augmintToken) {
         interestPoolAccountAceBalance: bn_interestPoolAccountAceBalance.toString(),
         bn_interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance,
         interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance.toString(),
-        pendingTokenBalance: bn_pendingTokenBalance.toNumber(),
+        pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).toNumber(),
         ethBalance: bn_ethBalance.toNumber(),
         bn_ethBalance: bn_ethBalance,
         bn_ethPendingBalance: bn_ethPendingBalance,

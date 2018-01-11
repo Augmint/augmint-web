@@ -22,15 +22,13 @@ export class AccountInfo extends React.Component {
                 <p>
                     ETH: {account.ethBalance}
                     {account.ethPendingBalance !== "?" &&
-                        account.ethPendingBalance - account.ethBalance !== 0 && (
-                            <span> (Pending: {account.ethPendingBalance - account.ethBalance} )</span>
-                        )}
+                        account.ethPendingBalance !== 0 && <span> (Pending: {account.ethPendingBalance} )</span>}
                 </p>
                 <p>
                     ACE: <span id="userAceBalance">{account.tokenBalance}</span>
                     {account.pendingTokenBalance !== "?" &&
-                        account.pendingTokenBalance - account.tokenBalance !== 0 && (
-                            <span> (Pending: {account.pendingTokenBalance - account.tokenBalance} )</span>
+                        account.pendingTokenBalance !== 0 && (
+                            <span> (Pending: {typeof account.pendingTokenBalance} )</span>
                         )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}

@@ -57,10 +57,12 @@ export function fetchUserBalance(address) {
         });
 
         const augmintToken = store.getState().augmintToken.contract.instance;
-        let bn_tokenBalance = (await augmintToken.balanceOf(address)).div(10000);
-        let bn_pendingTokenBalance = (await augmintToken.balanceOf(address, { defaultBlock: "pending" })).div(10000);
-        let bn_ethBalance = await asyncGetBalance(address);
-        let bn_ethPendingBalance = await asyncGetBalance(address, "pending");
+        const bn_tokenBalance = (await augmintToken.balanceOf(address)).div(10000);
+        const bn_pendingTokenBalance = (await augmintToken.balanceOf(address, { defaultBlock: "pending" }))
+            .div(10000)
+            .sub(bn_tokenBalance);
+        const bn_ethBalance = await asyncGetBalance(address);
+        const bn_ethPendingBalance = (await asyncGetBalance(address, "pending")).sub(bn_ethBalance);
         return dispatch({
             type: USER_BALANCE_RECEIVED,
             account: {
@@ -68,11 +70,11 @@ export function fetchUserBalance(address) {
                 bn_ethBalance: bn_ethBalance,
                 ethBalance: bn_ethBalance.toString(),
                 bn_ethPendingBalance: bn_ethPendingBalance,
-                ethPendingBalance: bn_ethPendingBalance.toString(),
+                ethPendingBalance: bn_ethPendingBalance.toNumber(),
                 bn_tokenBalance: bn_tokenBalance,
                 tokenBalance: bn_tokenBalance.toString(),
                 bn_pendingTokenBalance: bn_pendingTokenBalance,
-                pendingTokenBalance: bn_pendingTokenBalance.toString()
+                pendingTokenBalance: bn_pendingTokenBalance.toNumber()
             }
         });
     };
