@@ -109,7 +109,7 @@ contract('Lock', (accounts) => {
 
     });
 
-    it('should allow tokens to be locked'});
+    it('should allow tokens to be locked');
 
     it('should allow tokens to be unlocked');
 
