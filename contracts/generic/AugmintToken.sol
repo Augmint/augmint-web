@@ -99,8 +99,10 @@ contract AugmintToken is AugmintTokenInterface {
         TokenBurned(repaymentAmount);
     }
 
-    function moveCollectedInterest(uint interestAmount) external restrict("moveCollectedInterest") {
-        _transfer(interestPoolAccount, address(this), interestAmount, "Defaulted loan interest", 0);
+    function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest") {
+        balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
+        totalSupply = totalSupply.sub(interestAmount);
+        TokenBurned(interestAmount);
     }
 
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {

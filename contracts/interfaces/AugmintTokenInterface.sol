@@ -49,7 +49,7 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function repayAndBurn(address borrower, uint repaymentAmount, uint interestAmount, string narrative)
         external restrict("repayAndBurn");
 
-    function moveCollectedInterest(uint interestAmount) external restrict("moveCollectedInterest");
+    function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest");
 
     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
     function transferFrom(address from, address to, uint value) public returns (bool);

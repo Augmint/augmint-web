@@ -12,7 +12,7 @@ module.exports = function(deployer, network, accounts) {
         await tokenAce.grantMultiplePermissions(LoanManager.address, [
             "issueAndDisburse",
             "repayAndBurn",
-            "moveCollectedInterest",
+            "burnCollectedInterest",
             "LoanManager"
         ]);
 

@@ -128,8 +128,8 @@ contract LoanManager is LoanManagerInterface {
             uint collectedCollateral = loans[loanId].collateralAmount.sub(releasedCollateral);
             address(augmintToken).transfer(collectedCollateral);
 
-            // move interest from InterestPoolAccount to MIR (augmintToken reserve)
-            augmintToken.moveCollectedInterest(loans[loanId].interestAmount);
+            // burn interest from InterestPoolAccount
+            augmintToken.burnCollectedInterest(loans[loanId].interestAmount);
             LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
         }
 

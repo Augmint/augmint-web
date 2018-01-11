@@ -44,7 +44,7 @@ async function newLoanManager(_tokenAce, _rates) {
     await tokenAce.grantMultiplePermissions(loanManager.address, [
         "issueAndDisburse",
         "repayAndBurn",
-        "moveCollectedInterest",
+        "burnCollectedInterest",
         "LoanManager"
     ]);
     interestPoolAcc = await tokenAce.interestPoolAccount();
@@ -204,21 +204,21 @@ async function collectLoan(testInstance, loan, collector) {
     loan.state = 2; // defaulted
 
     const tx = await loanManager.collect([loan.id], { from: loan.collector });
-
+    // TODO: test events: TokenBurned + LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
     await loanAsserts(loan);
     testHelper.logGasUse(testInstance, tx, "collect 1");
 
     assert.equal(
         (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.toString(),
-        "total ACE supply should be the same"
+        totalSupplyBefore.sub(loan.interestAmount).toString(),
+        "interest should be deducted from total ACE supply"
     );
 
     let expBalances = [
         {
             name: "reserve",
             address: reserveAcc,
-            ace: balBefore[0].ace.add(loan.interestAmount),
+            ace: balBefore[0].ace,
             eth: balBefore[0].eth.add(collectedCollateral)
         },
         {
