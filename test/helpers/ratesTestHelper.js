@@ -8,9 +8,12 @@ module.exports = {
 
 let rates;
 
-async function newRatesMock() {
+async function newRatesMock(symbol, rate) {
     rates = await Rates.new();
     await rates.grantPermission(web3.eth.accounts[0], "setRate");
+    if (symbol) {
+        await rates.setRate(symbol, rate);
+    }
 
     return rates;
 }

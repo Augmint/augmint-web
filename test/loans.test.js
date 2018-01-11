@@ -1,6 +1,7 @@
 const Rates = artifacts.require("./Rates.sol");
 const loanTestHelper = require("./helpers/loanTestHelper.js");
 const tokenAceTestHelper = require("./helpers/tokenAceTestHelper.js");
+const ratesTestHelper = require("./helpers/ratesTestHelper.js");
 const testHelper = require("./helpers/testHelper.js");
 
 let tokenAce, loanManager, rates, products;
@@ -8,7 +9,7 @@ let tokenAce, loanManager, rates, products;
 contract("ACE Loans tests", accounts => {
     before(async function() {
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
-        rates = Rates.at(Rates.address);
+        rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
         loanManager = await loanTestHelper.newLoanManager(tokenAce, rates);
         await tokenAce.issue(1000000000);
         await tokenAce.withdrawTokens(accounts[0], 1000000000);
