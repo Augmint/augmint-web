@@ -9,8 +9,7 @@ describe("Augmint basic e2e", function() {
 
     it("Click through main functions", function() {
         cy.contains("My Account").click();
-
-        cy.contains("Account: 0xd912AeCb07E9F4e1eA8E6b4779e7Fb6Aa1c3e4D8");
+        cy.contains("Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3");
         cy.get("#transferListDiv");
         cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");

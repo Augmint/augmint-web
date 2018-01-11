@@ -12,16 +12,16 @@ Note: these steps are likely to work on linux too but it's not tested yet
    _tested with version 8.9.4_
 1. [node version manager](https://github.com/tj/n): `npm install -g n`
 1. Install node: `n 8.9.4` and `n 8.9.1`  
-   _testrcp regularly crashes with node v8.9.4, `runtestrpc.sh` selects the correct node version_
-1. `npm install -g ganache-cli@6.0.3`  
-   _tested with version 6.0.3_
-1. `npm install -g truffle@4.0.4`  
-   _tested with version v4.0.4_
+   _ganache regularly crashes with node v8.9.4, `runganache.sh` selects the correct node version_
+1. `npm install -g ganache-cli@6.0.3` _(formerly testrpc)_
+1. `npm install -g truffle@4.0.4`
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
 
 ### Windows
+
+_Note: windows install was not tested since a while, update on it is welcome_
 
 1. [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
 1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
@@ -49,24 +49,33 @@ in Git bash:
 
 ### 2. Deploy to network
 
-#### Testrpc (ganache-cli)
+#### ganache-cli (formerly testrpc)
 
-1. `./runtestrpc` or on windows: `./runtestrpc.bat`
+1. `./runganache.sh` or on windows: `./runganache.bat`
 1. in separate console:  
    `truffle migrate` or  
    `truffle migrate --reset` to overwrite existing migration
 1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
 
-#### alternative using truffle only
+#### Alternatively: Ganache UI
 
-TODO: create accounts with balances for unit tests same as `runtestrpc.sh`
+If you use [ganache UI](http://truffleframework.com/ganache/) then
+
+* set the port to 8545
+* For running UI tests set mnemonic:  
+  `hello build tongue rack parade express shine salute glare rate spice stock`
+
+#### Alternatively: truffle develop
+
+_note: truffle runs local chain on localhost:9545_
 
 1. `truffle develop`
 1. in truffle console:  
    `migrate` or  
    `migrate --reset` to overwrite existing migration
 1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
-   note: truffle runs local chain on localhost:9545
+
+_TODO: use same mnemonic & port as `runganache.sh`_
 
 #### Private chain
 
@@ -134,9 +143,7 @@ You can also use `gulp watch`
 
 ### FrontEnd - E2E
 
-_Note: Frontend tests are experimental and unfished yet_
-
-As of now you must restart testrpc and run `truffle migrate` each time you re-run tests to have a clean state.
+_Note: Frontend tests are experimental and unfinished yet. Also ganache crashes time-to-time_
 
 * Start interactive: `npm run cypress:open`
 * Start command line: `npm run cypress:run`
