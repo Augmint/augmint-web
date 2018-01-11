@@ -20,7 +20,7 @@ const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
 let tokenAce;
 
-async function newTokenAceMock() {
+async function newTokenAceMock(superUserAddress = web3.eth.accounts[0]) {
     //if (typeof tokenAce == "undefined") {
     tokenAce = await TokenAceMock.new(
         FeeAccount.address,
@@ -31,7 +31,7 @@ async function newTokenAceMock() {
         50000 /* max fee: 5 ACE */
     );
 
-    await tokenAce.grantMultiplePermissions(web3.eth.accounts[0], [
+    await tokenAce.grantMultiplePermissions(superUserAddress, [
         "setSystemAccounts",
         "setTransferFees",
         "transferNoFee",
