@@ -22,6 +22,7 @@ pragma solidity 0.4.18;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
+import "../locker.sol";
 
 
 contract AugmintToken is AugmintTokenInterface {
@@ -32,6 +33,8 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
+
+    Locker public locker;
 
     event TokenIssued(uint amount);
     event TokenBurned(uint amount);
@@ -59,6 +62,35 @@ contract AugmintToken is AugmintTokenInterface {
 
     function () public payable { // solhint-disable-line no-empty-blocks
         // to accept ETH sent into reserve (from defaulted loan's collateral )
+    }
+
+    function setLocker(address lockerAddress) public restrict("setLocker") {
+
+        locker = Locker(lockerAddress);
+
+    }
+
+    function lockFunds(uint lockProductId, uint amountToLock) public {
+
+        // NB: calculateInterestForLockProduct will also validate lockProductId:
+        uint interestEarnedAmount = locker.calculateInterestForLockProduct(lockProductId, amountToLock);
+
+        _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
+        _transfer(interestEarnedAccount, address(locker), interestEarnedAmount, "Locking funds", 0);
+
+        locker.createLock(lockProductId, msg.sender, amountToLock.add(interestEarnedAmount));
+
+    }
+
+    function unlockFunds(address lockOwner, uint lockIndex) public {
+
+        // NB: getLockedAmountIfUnlockable will throw if the lock can't be unlocked yet:
+        uint amountLocked = locker.getLockedAmountIfUnlockable(lockOwner, lockIndex);
+
+        _transfer(address(locker), lockOwner, amountLocked, "Unlocking funds", 0);
+
+        locker.disableLock(lockOwner, lockIndex);
+
     }
 
     function issueAndDisburse(address borrower, uint loanAmount, uint interestAmount, string narrative)

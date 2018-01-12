@@ -10,5 +10,9 @@ module.exports = function(deployer, network) {
 
     deployer.link(SafeMath, Locker);
     deployer.deploy(Locker, TokenAce.address);
+    deployer.then(async () => {
+        const tokenAce = TokenAce.at(TokenAce.address);
+        await tokenAce.setLocker(Locker.address);
+    });
 
 };
