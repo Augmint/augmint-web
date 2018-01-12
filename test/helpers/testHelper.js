@@ -8,7 +8,8 @@ module.exports = {
     revertSnapshot,
     logGasUse,
     expectThrow,
-    waitForTimeStamp
+    waitForTimeStamp,
+    waitFor
 };
 var _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
@@ -121,7 +122,29 @@ function waitForTimeStamp(waitForTimeStamp) {
             }
         }, wait * 1000);
     });
-} // waitForTimeStamp()
+}
+
+function waitFor(durationInMs = 1000) {
+
+    return new Promise((resolve, reject) => {
+
+        setTimeout(() => {
+
+            // make a transaction to force the local dev node to create a new block with 
+            // new timestamp:
+            web3.eth.sendTransaction({ from: web3.eth.accounts[0] }, (err) => {
+
+                if (err) { return reject(err); }
+
+                resolve();
+
+            });
+
+        }, durationInMs);
+
+    });
+
+}
 
 function expectThrow(promise) {
     const onPrivateChain = web3.version.network === 1976 ? true : false; // set by .runprivatechain.sh (geth ...  --networkid 1976 ..)

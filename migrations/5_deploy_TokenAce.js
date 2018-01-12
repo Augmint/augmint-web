@@ -23,6 +23,7 @@ module.exports = async function(deployer, network, accounts) {
         "transferNoFee",
         "transferFromNoFee",
         "withdrawTokens",
-        "issue"
+        "issue",
+        "setLocker"
     ]);
 };

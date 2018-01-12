@@ -2,8 +2,10 @@
 'use strict';
 
 const Locker = artifacts.require('Locker');
-const tokenAceTestHelper = new require('./helpers/tokenAceTestHelper.js');
 const InterestEarnedAccount = artifacts.require('InterestEarnedAccount');
+
+const tokenAceTestHelper = require('./helpers/tokenAceTestHelper.js');
+const testHelpers = require('./helpers/testHelper.js');
 
 let tokenHolder = '';
 let lockerInstance = null;
@@ -18,6 +20,8 @@ contract('Lock', (accounts) => {
 
         tokenAceInstance = await tokenAceTestHelper.newTokenAceMock(superUserAddress);
         lockerInstance = await Locker.new(tokenAceInstance.address);
+
+        await tokenAceInstance.setLocker(lockerInstance.address);
 
         await tokenAceInstance.issue(20000);
         await tokenAceInstance.withdrawTokens(tokenHolder, 10000);
@@ -109,20 +113,144 @@ contract('Lock', (accounts) => {
 
     });
 
-    it('should allow tokens to be locked');
+    it('should allow tokens to be locked', async() => {
 
-    it('should allow tokens to be unlocked');
+        // TODO: also test balances of interestEarned and locker
 
-    it('should allow an account to see how many locks it has');
+        const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        const amountToLock = 1000;
 
-    it('should allow an account to see all it\'s locks');
+        await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+        
+        const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        
+        assert(finishingBalance === startingBalance - amountToLock);
 
-    it('should prevent someone from locking more token than they have');
+    });
 
-    it('should prevent someone from releasing a lock early');
+    it('should allow an account to see how many locks it has', async () => {
+
+        const startingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+        const amountToLock = 1000;
+
+        await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+
+        const finishingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+
+        assert(finishingNumLocks === startingNumLocks + 1);
+
+    });
+
+    it('should allow tokens to be unlocked', async() => {
+
+        // TODO: check balances more thoroughly
+
+        const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        const amountToLock = 1000;
+
+        // create lock product with 10% per annum, and 2 sec lock time:
+        await lockerInstance.addLockProduct(100000, 2, true);
+
+        const newLockProductId = (await lockerInstance.getLockProductCount()).toNumber() - 1;
+
+        await tokenAceInstance.lockFunds(newLockProductId, amountToLock, { from: tokenHolder });
+        
+        await testHelpers.waitFor(2500);
+
+        const newestLockId = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber() - 1;
+
+        await tokenAceInstance.unlockFunds(tokenHolder, newestLockId);
+
+        const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        
+        assert(finishingBalance > startingBalance);
+
+    });
+
+    it('should allow an account to see all it\'s locks', async() => {
+
+        // NB: this test assumes that tokenHolder has less than 20 locks (when checking newestLock)
+
+        // TODO: test returned data in locks more precisely
+
+        const amountToLock = 1000;
+        const startingTime = Math.floor(Date.now() / 1000);
+
+        await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+
+        const numLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+
+        const locks = await lockerInstance.getLocksForAddress(tokenHolder, 0);
+
+        // getLocksForAddress should return a 20 element array:
+        assert.isArray(locks);
+        assert(locks.length === 20);
+
+        const newestLock = locks[numLocks - 1];
+
+        // each lock should be a 3 element array
+        assert.isArray(newestLock);
+        assert(newestLock.length === 3);
+
+        // the locks should be [ amountLocked, lockedUntil, isActive ] all 
+        // represented as uints (i.e. BigNumber objects in JS land):
+        const [ amountLocked, lockedUntil, isActive ] = newestLock;
+        assert(amountLocked.toNumber() > amountToLock);
+        assert(lockedUntil.toNumber() > startingTime);
+        assert(isActive.toNumber() === 1);
+
+    });
+
+    it('should prevent someone from locking more token than they have', async () => {
+
+        // TODO: check all balances
+
+        const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        const amountToLock = startingBalance + 1000;
+        let success = true;
+
+        try {
+            await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+        } catch (err) {
+            success = false;
+        }
+
+        const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+
+        assert(!success);
+        assert(finishingBalance === startingBalance);
+
+    });
+
+    it('should prevent someone from releasing a lock early', async () => {
+
+        // TODO: check balances more thoroughly
+
+        const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        const amountToLock = 1000;
+        let success = true;
+
+        await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+        
+        const newestLockId = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber() - 1;
+
+        try {
+            await tokenAceInstance.unlockFunds(tokenHolder, newestLockId);
+        } catch (err) {
+            success = false;
+        }
+
+        const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
+        
+        assert(!success);
+        assert(finishingBalance === startingBalance - amountToLock);
+
+    });
+
+    it('should track the total amount of locked tokens');
     
     it('should prevent someone from using a disactivated lock');
-    
-    it('should track the total amount of locked tokens');
+
+    it('should only allow the token contract to call createLock and disableLock');
 
 });

@@ -7,15 +7,15 @@
 // -> index locks by address
 
 // to do/think about:
-// -> function for changing token contract?
 // -> self-destruct function?
 // -> return only active loan products from getLoanProducts?
 // -> add events
+// -> need to update token contract? probably not? a new token contract would imply a fresh deployment?
+// -> test locking small (<10) amounts - need a min lock amount in lockProducts
 
 pragma solidity ^0.4.18;
 
 import "./generic/Owned.sol";
-import "./generic/AugmintToken.sol";
 import "./generic/SafeMath.sol";
 
 contract Locker is Owned {
@@ -35,15 +35,15 @@ contract Locker is Owned {
         bool isActive;
     }
 
-    AugmintToken public token;
+    address public tokenAddress;
 
     LockProduct[] public lockProducts;
     // per account locks:
     mapping(address => Lock[]) public locks;
 
-    function Locker(address tokenAddress) public {
+    function Locker(address _tokenAddress) public {
 
-        token = AugmintToken(tokenAddress);
+        tokenAddress = _tokenAddress;
         
     }
 
@@ -78,8 +78,6 @@ contract Locker is Owned {
 
             LockProduct storage lockProduct = lockProducts[offset + i];
 
-            // TODO: think about copying storage to memory
-            // TODO: why are the struct[] getters weird?
             response[offset + i] = [ lockProduct.perAnnumInterest, lockProduct.durationInSecs, lockProduct.isActive ? 1 : 0 ];
 
         }
@@ -95,7 +93,7 @@ contract Locker is Owned {
     // 4) token contract calls createLock
 
     // helper for lockable tokens
-    function calculateInterestForLockProduct(uint lockProductId, uint amountToLock) public view returns (uint) {
+    function calculateInterestForLockProduct(uint lockProductId, uint amountToLock) external view returns (uint) {
 
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
@@ -107,11 +105,11 @@ contract Locker is Owned {
 
     }
 
-    // NB: totalAmountLocked includes the interest
-    function createLock(uint lockProductId, address lockOwner, uint totalAmountLocked) public {
+    // NB: totalAmountLocked includes both the lock amount AND the interest
+    function createLock(uint lockProductId, address lockOwner, uint totalAmountLocked) external {
 
         // only the token can call this:
-        require(msg.sender == address(token));
+        require(msg.sender == tokenAddress);
 
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
@@ -122,14 +120,24 @@ contract Locker is Owned {
 
     // the flow for unlocking tokens is:
     // 1) user calls token contract to unlock tokens
-    // 2) token contract gets lock from Locker
+    // 2) token contract calls isUnlockable
     // 3) token contract transfers tokens from Locker to user
     // 4) token contract calls disableLock
 
-    function disableLock(address lockOwner, uint lockIndex) public {
+    // returns the amount stored in a lock, but throws if that lock can't be unlocked yet:
+    function getLockedAmountIfUnlockable(address lockOwner, uint lockIndex) external view returns (uint) {
+
+        Lock storage lock = locks[lockOwner][lockIndex];
+        require(lock.isActive && now >= lock.lockedUntil);
+
+        return lock.amountLocked;
+
+    }
+
+    function disableLock(address lockOwner, uint lockIndex) external {
 
         // only the token can call this:
-        require(msg.sender == address(token));
+        require(msg.sender == tokenAddress);
 
         Lock storage lock = locks[lockOwner][lockIndex];
         require(lock.isActive && now >= lock.lockedUntil);
