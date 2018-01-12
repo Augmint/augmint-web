@@ -7,6 +7,7 @@ export function LoanRepayLink(props) {
         as = Link,
         to = "/loan/repay/" + props.loan.loanId,
         key = "repaybtn-" + props.loan.loanId,
+        className = props.loan.isDue ? "repayButton" : "repayEarlyButton",
         content = props.loan.isDue ? "Repay" : "Repay Early",
         icon = "right chevron",
         labelPosition = "right",
@@ -18,6 +19,7 @@ export function LoanRepayLink(props) {
     return loan.isRepayable ? (
         <Button
             as={as}
+            className={className}
             key={key}
             to={to}
             icon={icon}
