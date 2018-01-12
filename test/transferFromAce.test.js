@@ -41,6 +41,37 @@ contract("TransferFrom ACE tests", accounts => {
         );
     });
 
+    it("transferFrom 0 amount when some approved", async function() {
+        const expApprove = {
+            owner: accounts[0],
+            spender: accounts[1],
+            value: 100000
+        };
+
+        await tokenAceTestHelper.approveTest(this, expApprove);
+        await tokenAceTestHelper.transferFromTest(this, {
+            from: expApprove.owner,
+            to: expApprove.spender,
+            amount: 0,
+            narrative: "Test with narrative"
+        });
+    });
+
+    it("shouldn't transferFrom even 0 amount when not approved", async function() {
+        const expApprove = {
+            owner: accounts[0],
+            spender: accounts[2],
+            value: 0
+        };
+
+        await tokenAceTestHelper.approveTest(this, expApprove);
+        return testHelper.expectThrow(
+            tokenAce.transferFrom(expApprove.owner, expApprove.spender, 0, {
+                from: expApprove.spender
+            })
+        );
+    });
+
     it("transferFrom only if approved is greater than amount", async function() {
         let expApprove = {
             owner: accounts[0],

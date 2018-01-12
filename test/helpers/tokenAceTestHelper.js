@@ -113,7 +113,6 @@ async function transferFromTest(testInstance, expTransfer) {
     let expFeeTransfer;
     if (!isNoFeeTest) {
         fee = (await getTransferFee(expTransfer.amount)).toNumber();
-
         expFeeTransfer = {
             from: expTransfer.to,
             to: feeAccount,
@@ -199,16 +198,19 @@ async function getTransferFee(_amount) {
         (feeMax = await tokenAce.transferFeeMax()),
         (feeMin = await tokenAce.transferFeeMin())
     ]);
-
-    let fee = amount
-        .mul(feePt)
-        .div(1000000)
-        .round(0, BigNumber.ROUND_DOWN);
+    let fee =
+        amount === 0
+            ? 0
+            : amount
+                  .mul(feePt)
+                  .div(1000000)
+                  .round(0, BigNumber.ROUND_DOWN);
     if (fee < feeMin) {
         fee = feeMin;
     } else if (fee > feeMax) {
         fee = feeMax;
     }
+    // console.log("calc fee", _amount, feeMin.toString(), fee.toString());
     return fee;
 }
 

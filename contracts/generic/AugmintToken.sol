@@ -215,7 +215,11 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function getFee(uint amount) internal view returns (uint256 fee) {
-        fee = amount.mul(transferFeePt).div(1000000);
+        if (amount > 0) {
+            fee = amount.mul(transferFeePt).div(1000000);
+        } else {
+            fee = 0;
+        }
         if (fee > transferFeeMax) {
             fee = transferFeeMax;
         } else if (fee < transferFeeMin) {
@@ -227,7 +231,6 @@ contract AugmintToken is AugmintTokenInterface {
     function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) internal {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
-        require(_amount > 0);
 
         _transfer(_from, _to, _amount, _narrative, 0);
         if (_fee > 0) {
@@ -241,7 +244,6 @@ contract AugmintToken is AugmintTokenInterface {
 
     function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
-        require(_amount > 0);
         if (_fee > 0) {
             balances[feeAccount] = balances[feeAccount].add(_fee);
             balances[_from] = balances[_from].sub(_amount).sub(_fee);
