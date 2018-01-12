@@ -1,10 +1,21 @@
+/*
+TODO: testprc crashes sometime from these tests (and with normal use too).
+        Follow this bug: https://github.com/trufflesuite/ganache-cli/issues/453
+*/
+
 describe("Augmint basic e2e", function() {
-    // TODO: expose testrpc snapshot take / revert via npm and use to create clean state when needed
     before(function() {
         cy.visit("/");
-        //cy.viewport("macbook-15");
         cy.contains("Try it").click();
         cy.contains("You are connected");
+    });
+
+    beforeEach(function() {
+        cy.ganacheTakeSnapshot();
+    });
+
+    afterEach(function() {
+        cy.ganacheRevertSnapshot();
     });
 
     it("Click through main functions", function() {
@@ -53,10 +64,15 @@ describe("Augmint basic e2e", function() {
             cy.contains("Disbursed: 1000.55 ACE");
             cy.contains("To be repayed: 1250.69 ACE");
             cy.contains("Collateral in escrow: 1.5665 ETH");
-
-            cy.get("#userAceBalance").contains(expBal.toString());
-
-            //cy.contains("My Account").click();
+            cy.log("exp", expBal);
+            cy
+                .get("#userAceBalance")
+                .contains(expBal.toString())
+                .then(res => {
+                    cy.get(".accountInfo");
+                    cy.should("not.have.class", "loading");
+                });
+            cy.contains("My Account").click();
             // TODO: check transfer history
             // TODO: check my loans
             // TODO: loan details page
