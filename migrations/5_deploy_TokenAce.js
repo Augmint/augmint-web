@@ -18,7 +18,6 @@ module.exports = async function(deployer, network, accounts) {
 
     let tokenAce = TokenAce.at(TokenAce.address);
     await tokenAce.grantMultiplePermissions(accounts[0], [
-        "setSystemAccounts",
         "setTransferFees",
         "transferNoFee",
         "transferFromNoFee",

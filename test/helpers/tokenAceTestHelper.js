@@ -31,7 +31,6 @@ async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
     );
 
     await tokenAce.grantMultiplePermissions(tokenOwner, [
-        "setSystemAccounts",
         "setTransferFees",
         "transferNoFee",
         "transferFromNoFee",

@@ -38,7 +38,6 @@ contract AugmintToken is AugmintTokenInterface {
 
     event TokenIssued(uint amount);
     event TokenBurned(uint amount);
-    event SystemAccountsChanged(address newFeeAccount, address newInteresPoolAccount, address newInterestEarnedAccount);
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
     function AugmintToken(string _name, string _symbol, bytes32 _peggedSymbol, uint8 _decimals, address _feeAccount,
@@ -139,17 +138,6 @@ contract AugmintToken is AugmintTokenInterface {
     function transferNoFee(address _to, uint256 _amount, string _narrative)
     external restrict("transferNoFee") {
         _transfer(msg.sender, _to, _amount, _narrative, 0);
-    }
-
-    function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,
-            address newInterestEarnedAccount) external restrict("setSystemAccounts") {
-        require(newFeeAccount != 0);
-        require(newInteresPoolAccount != 0);
-        require(newInterestEarnedAccount != 0);
-        feeAccount = newFeeAccount;
-        interestPoolAccount = newInteresPoolAccount;
-        interestEarnedAccount = newInterestEarnedAccount;
-        SystemAccountsChanged(newFeeAccount, newInteresPoolAccount, newInterestEarnedAccount);
     }
 
     function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax)
