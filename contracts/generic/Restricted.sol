@@ -22,10 +22,6 @@ contract Restricted is Owned {
         _;
     }
 
-    function isAllowed(address agent, bytes32 permission) public view returns (bool) {
-        return(permissions[agent][permission]);
-    }
-
     function grantPermission(address agent, bytes32 requiredPermission) public onlyOwner {
         permissions[agent][requiredPermission] = true;
         PermissionGranted(agent, requiredPermission);

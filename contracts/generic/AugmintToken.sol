@@ -98,7 +98,7 @@ contract AugmintToken is AugmintTokenInterface {
 
     /* Optional convenience function for users to be able to repay with one transaction */
     function repayLoan(address _loanManager, uint loanId) external {
-        require(isAllowed(_loanManager, "LoanManager")); // only whitelisted loanManagers
+        require(permissions[_loanManager]["LoanManager"]); // only whitelisted loanManagers
 
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
         var (borrower, , ,repaymentAmount, ) = loanManager.loans(loanId); // solhint-disable-line space-after-comma
