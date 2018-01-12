@@ -76,20 +76,9 @@ contract AugmintToken is AugmintTokenInterface {
         uint interestEarnedAmount = locker.calculateInterestForLockProduct(lockProductId, amountToLock);
 
         _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
-        _transfer(interestEarnedAccount, address(locker), interestEarnedAmount, "Locking funds", 0);
+        _transfer(interestEarnedAccount, address(locker), interestEarnedAmount, "Accrue lock interest", 0);
 
         locker.createLock(lockProductId, msg.sender, amountToLock.add(interestEarnedAmount));
-
-    }
-
-    function unlockFunds(address lockOwner, uint lockIndex) public {
-
-        // NB: getLockedAmountIfUnlockable will throw if the lock can't be unlocked yet:
-        uint amountLocked = locker.getLockedAmountIfUnlockable(lockOwner, lockIndex);
-
-        _transfer(address(locker), lockOwner, amountLocked, "Unlocking funds", 0);
-
-        locker.disableLock(lockOwner, lockIndex);
 
     }
 
@@ -141,9 +130,15 @@ contract AugmintToken is AugmintTokenInterface {
         _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative)
+    /* FIXME: remove this function when new exchange is ready */
+    function transferNoFee_legacy(address _from, address _to, uint256 _amount, string _narrative)
     external restrict("transferNoFee") {
         _transfer(_from, _to, _amount, _narrative, 0);
+    }
+
+    function transferNoFee(address _to, uint256 _amount, string _narrative)
+    external restrict("transferNoFee") {
+        _transfer(msg.sender, _to, _amount, _narrative, 0);
     }
 
     function setSystemAccounts(address newFeeAccount, address newInteresPoolAccount,

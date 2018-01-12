@@ -144,7 +144,7 @@ contract Exchange is Owned {
         }
         if (tokenValueTotal.sub(tokenValueLeft) > 0) {
             // transfer the sum token value of all WEI sold with orderFills
-            augmintToken.transferNoFee(this, msg.sender, tokenValueTotal.sub(tokenValueLeft), "token sold");
+            augmintToken.transferNoFee_legacy(this, msg.sender, tokenValueTotal.sub(tokenValueLeft), "token sold");
         }
         if (weiToSellLeft != 0) {
             // No buy order or buy orders wasn't enough to fully fill order
@@ -155,7 +155,7 @@ contract Exchange is Owned {
 
     function placeSellTokenOrder(uint tokenAmount) external {
         require(tokenAmount > 0); // FIXME: min amount?
-        augmintToken.transferNoFee(msg.sender, this, tokenAmount, "token sell order placed");
+        augmintToken.transferNoFee_legacy(msg.sender, this, tokenAmount, "token sell order placed");
         uint weiValueTotal = rates.convertToWei(augmintToken.peggedSymbol(), tokenAmount);
         uint weiValueLeft = weiValueTotal;
         uint tokenToSellLeft = tokenAmount;
@@ -223,7 +223,7 @@ contract Exchange is Owned {
         OrdersLib.OrderType orderType = orders.orders[orderId - 1].order.orderType;
         address maker = orders.orders[orderId-1].order.maker;
         if (orderType == OrdersLib.OrderType.EthSell) {
-            augmintToken.transferNoFee(this, maker, amountToPay, "ETH sold");
+            augmintToken.transferNoFee_legacy(this, maker, amountToPay, "ETH sold");
             totalEthSellOrders = totalEthSellOrders.sub(amountToSell);
         } else if (orderType == OrdersLib.OrderType.TokenSell) {
             maker.transfer(amountToPay);

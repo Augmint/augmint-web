@@ -38,7 +38,7 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
 
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external;
 
-    function transferNoFee(address _from, address _to, uint256 _amount, string _narrative)
+    function transferNoFee(address _to, uint256 _amount, string _narrative)
     external restrict("transferNoFee");
 
     function repayLoan(address loanManager, uint loanId) external;

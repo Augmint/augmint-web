@@ -21,7 +21,6 @@ const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
 let tokenAce;
 
 async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
-
     tokenAce = await TokenAceMock.new(
         FeeAccount.address,
         InterestPoolAccount.address,
@@ -42,7 +41,6 @@ async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
     ]);
 
     return tokenAce;
-
 }
 
 async function transferTest(testInstance, expTransfer) {
@@ -55,7 +53,7 @@ async function transferTest(testInstance, expTransfer) {
     let tx, txName;
     if (expTransfer.fee === 0) {
         txName = "transferNoFee";
-        tx = await tokenAce.transferNoFee(expTransfer.from, expTransfer.to, expTransfer.amount, expTransfer.narrative, {
+        tx = await tokenAce.transferNoFee(expTransfer.to, expTransfer.amount, expTransfer.narrative, {
             from: expTransfer.from
         });
     } else if (expTransfer.narrative === "") {
