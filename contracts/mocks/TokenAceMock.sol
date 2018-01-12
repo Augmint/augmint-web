@@ -18,14 +18,12 @@ contract TokenAceMock is AugmintToken {
     }
 
     function burn(uint amount) external restrict("burn") {
-        require(amount <= balances[this]);
-        totalSupply = totalSupply.sub(amount);
         balances[this] = balances[this].sub(amount);
+        totalSupply = totalSupply.sub(amount);
         TokenBurned(amount);
     }
 
     function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {
-        require(_amount <= balances[this]);
         balances[this] = balances[this].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
     }
