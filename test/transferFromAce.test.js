@@ -21,13 +21,31 @@ contract("TransferFrom ACE tests", accounts => {
 
         await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
-            to: expApprove.spender,
+            spender: expApprove.spender,
             amount: Math.round(expApprove.value / 2)
         });
 
         await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
-            to: expApprove.spender,
+            spender: expApprove.spender,
+            amount: Math.round(expApprove.value / 2),
+            narrative: "Test with narrative"
+        });
+    });
+
+    it("transferFrom spender to send to different to than itself", async function() {
+        let expApprove = {
+            owner: accounts[0],
+            spender: accounts[1],
+            value: 200000
+        };
+
+        await tokenAceTestHelper.approveTest(this, expApprove);
+
+        await tokenAceTestHelper.transferFromTest(this, {
+            from: expApprove.owner,
+            spender: expApprove.spender,
+            to: accounts[2],
             amount: Math.round(expApprove.value / 2),
             narrative: "Test with narrative"
         });
@@ -41,7 +59,7 @@ contract("TransferFrom ACE tests", accounts => {
         );
     });
 
-    it("transferFrom 0 amount when some approved", async function() {
+    it("should transferFrom 0 amount when some approved", async function() {
         const expApprove = {
             owner: accounts[0],
             spender: accounts[1],
@@ -51,7 +69,7 @@ contract("TransferFrom ACE tests", accounts => {
         await tokenAceTestHelper.approveTest(this, expApprove);
         await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
-            to: expApprove.spender,
+            spender: expApprove.spender,
             amount: 0,
             narrative: "Test with narrative"
         });
@@ -115,7 +133,7 @@ contract("TransferFrom ACE tests", accounts => {
         await tokenAce.transfer(expApprove.owner, amount, { from: accounts[0] });
         await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
-            to: expApprove.spender,
+            spender: expApprove.spender,
             amount: expApprove.value,
             fee: 0
         });
@@ -133,7 +151,7 @@ contract("TransferFrom ACE tests", accounts => {
         await testHelper.expectThrow(
             tokenAceTestHelper.transferFromTest(this, {
                 from: expApprove.owner,
-                to: expApprove.spender,
+                spender: expApprove.spender,
                 amount: expApprove.value,
                 fee: 0
             })

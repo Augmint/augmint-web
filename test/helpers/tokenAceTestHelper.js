@@ -106,6 +106,9 @@ async function approveTest(testInstance, expApprove) {
 async function transferFromTest(testInstance, expTransfer) {
     // if fee is provided than we are testing transferFromNoFee
     let isNoFeeTest = typeof expTransfer.fee === "undefined" ? false : true;
+    if (!expTransfer.to) {
+        expTransfer.to = expTransfer.spender;
+    }
     expTransfer.fee = 0; // transferFrom deducts transfer fee from beneficiary
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
     let feeAccount = await tokenAce.feeAccount();
@@ -114,15 +117,15 @@ async function transferFromTest(testInstance, expTransfer) {
     if (!isNoFeeTest) {
         fee = (await getTransferFee(expTransfer.amount)).toNumber();
         expFeeTransfer = {
-            from: expTransfer.to,
+            from: expTransfer.spender,
             to: feeAccount,
             amount: fee,
             narrative: "TransferFrom fee",
             fee: 0
         };
     }
-    let allowanceBefore = await tokenAce.allowance(expTransfer.from, expTransfer.to);
-    let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
+    let allowanceBefore = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
+    let balBefore = await getBalances([expTransfer.from, expTransfer.to, expTransfer.spender, feeAccount]);
     let tx, txName;
     if (isNoFeeTest) {
         txName = "transferFromNoFee";
@@ -132,13 +135,13 @@ async function transferFromTest(testInstance, expTransfer) {
             expTransfer.amount,
             expTransfer.narrative,
             {
-                from: expTransfer.to
+                from: expTransfer.spender
             }
         );
     } else if (expTransfer.narrative === "") {
         txName = "transferFrom";
         tx = await tokenAce.transferFrom(expTransfer.from, expTransfer.to, expTransfer.amount, {
-            from: expTransfer.to
+            from: expTransfer.spender
         });
     } else {
         txName = "transferFromWithNarrative";
@@ -148,7 +151,7 @@ async function transferFromTest(testInstance, expTransfer) {
             expTransfer.amount,
             expTransfer.narrative,
             {
-                from: expTransfer.to
+                from: expTransfer.spender
             }
         );
     }
@@ -157,7 +160,7 @@ async function transferFromTest(testInstance, expTransfer) {
     if (!isNoFeeTest) {
         transferEventAsserts(tx, expFeeTransfer, 2);
     }
-    let allowanceAfter = await tokenAce.allowance(expTransfer.from, expTransfer.to);
+    let allowanceAfter = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
     assert.equal(
         allowanceBefore.sub(expTransfer.amount).toString(),
         allowanceAfter.toString(),
@@ -174,15 +177,22 @@ async function transferFromTest(testInstance, expTransfer) {
         {
             name: "acc to",
             address: expTransfer.to,
-            ace: balBefore[1].ace.plus(expTransfer.amount).minus(fee), // amount less fee
+            ace: balBefore[1].ace.plus(expTransfer.amount).minus(expTransfer.to === expTransfer.spender ? fee : 0), // amount less fee
             eth: balBefore[1].eth,
+            gasFee: expTransfer.to === expTransfer.spender ? TRANSFER_MAXFEE : 0
+        },
+        {
+            name: "acc spender",
+            address: expTransfer.spender,
+            ace: balBefore[2].ace.plus(expTransfer.to === expTransfer.spender ? expTransfer.amount : 0).minus(fee), // amount less fee
+            eth: balBefore[2].eth,
             gasFee: TRANSFER_MAXFEE
         },
         {
             name: "acc fee",
             address: feeAccount,
-            ace: balBefore[2].ace.plus(fee),
-            eth: balBefore[2].eth
+            ace: balBefore[3].ace.plus(fee),
+            eth: balBefore[3].eth
         }
     ];
 

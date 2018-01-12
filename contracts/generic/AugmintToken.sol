@@ -231,12 +231,13 @@ contract AugmintToken is AugmintTokenInterface {
     function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) internal {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
+        require(allowed[_from][msg.sender] > 0 || _amount > 0); // don't allow 0 transferFrom if no approval
 
         _transfer(_from, _to, _amount, _narrative, 0);
         if (_fee > 0) {
             /* we need to deduct fee from _to unlike normal transfer
              TODO: better way to do this? E.g. allow transfer fee to be deducted from beneficiary? */
-            _transfer(_to, feeAccount, _fee, "TransferFrom fee", 0);
+            _transfer(msg.sender, feeAccount, _fee, "TransferFrom fee", 0);
         }
 
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
