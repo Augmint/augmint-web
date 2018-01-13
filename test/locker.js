@@ -167,16 +167,19 @@ contract("Lock", accounts => {
 
         const newestLock = locks[numLocks - 1];
 
-        // each lock should be a 3 element array
+        // each lock should be a 5 element array
         assert.isArray(newestLock);
-        assert(newestLock.length === 3);
+        assert(newestLock.length === 5);
 
-        // the locks should be [ amountLocked, lockedUntil, isActive ] all
+        // the locks should be [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] all
         // represented as uints (i.e. BigNumber objects in JS land):
-        const [amountLocked, lockedUntil, isActive] = newestLock;
+        const [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] = newestLock;
         assert(amountLocked.toNumber() > amountToLock);
         assert(lockedUntil.toNumber() > startingTime);
+        assert(perAnnumInterest.toNumber() > 0);
+        assert(durationInSecs.toNumber() > 0);
         assert(isActive.toNumber() === 1);
+        
     });
 
     it("should prevent someone from locking more token than they have", async () => {
