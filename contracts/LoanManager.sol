@@ -5,13 +5,13 @@ pragma solidity 0.4.18;
 
 import "./generic/Owned.sol";
 import "./Rates.sol";
-import "./generic/AugmintToken.sol"; /* TODO: shall we use AugmintTokenInterface instead? */
+import "./interfaces/AugmintTokenInterface.sol";
 import "./interfaces/LoanManagerInterface.sol";
 
 
 contract LoanManager is LoanManagerInterface {
     Rates public rates; // instance of ETH/pegged currency rate provider contract
-    AugmintToken public augmintToken; // instance of token contract
+    AugmintTokenInterface public augmintToken; // instance of token contract
 
     event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
         uint repaymentAmount);
@@ -22,7 +22,7 @@ contract LoanManager is LoanManagerInterface {
         uint releasedCollateral, uint defaultingFee);
 
     function LoanManager(address _augmintTokenAddress, address _ratesAddress) public Owned() {
-        augmintToken = AugmintToken(_augmintTokenAddress);
+        augmintToken = AugmintTokenInterface(_augmintTokenAddress);
         rates = Rates(_ratesAddress);
     }
 
