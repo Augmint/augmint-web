@@ -78,6 +78,14 @@ contract("Transfer ACE tests", accounts => {
         );
     });
 
+    it("Shouldn't be able to transfer to 0x0", async function() {
+        return testHelper.expectThrow(
+            tokenAce.transfer("0x0", 20000, {
+                from: accounts[0]
+            })
+        );
+    });
+
     it("transferNoFee", async function() {
         await tokenAceTestHelper.transferTest(this, {
             from: accounts[0],
@@ -88,16 +96,26 @@ contract("Transfer ACE tests", accounts => {
         });
     });
 
+    it("transferNoFee to 0x should fail", async function() {
+        const amount = 10000;
+        return testHelper.expectThrow(
+            tokenAce.transferNoFee(accounts[0], amount, "transferNoFee to 0x0 should fail", {
+                from: accounts[0],
+                to: accounts[1],
+                amount: amount
+            })
+        );
+    });
+
     it("transferNoFee only from allowed account", async function() {
         const amount = 10000;
-        await tokenAce.transfer(accounts[1], amount + maxFee.toNumber(), { from: accounts[0] });
-        return testHelper.expectThrow(
-            tokenAceTestHelper.transferTest(this, {
-                from: accounts[1],
+        const fromAcc = accounts[1];
+        await tokenAce.transfer(fromAcc, amount + maxFee.toNumber(), { from: accounts[0] });
+        testHelper.expectThrow(
+            tokenAce.transferNoFee(accounts[2], amount, "transferNo fee from unauthorised account should fail", {
+                from: fromAcc,
                 to: accounts[2],
-                amount: amount,
-                narrative: "transferNofee test",
-                fee: 0
+                amount: amount
             })
         );
     });

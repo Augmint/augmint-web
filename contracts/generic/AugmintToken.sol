@@ -162,6 +162,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function approve(address _spender, uint256 _amount) public returns (bool) {
+        require(_spender != 0x0);
         require(msg.sender != _spender); // no need to approve for myself. Makes client code simpler if we don't allow
         allowed[msg.sender][_spender] = _amount;
         Approval(msg.sender, _spender, _amount);
@@ -244,6 +245,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) private {
+        require(_to != 0x0);
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
         if (_fee > 0) {
             balances[feeAccount] = balances[feeAccount].add(_fee);
