@@ -125,25 +125,19 @@ function waitForTimeStamp(waitForTimeStamp) {
 }
 
 function waitFor(durationInMs = 1000) {
-
     return new Promise((resolve, reject) => {
-
         setTimeout(() => {
-
-            // make a transaction to force the local dev node to create a new block with 
+            // make a transaction to force the local dev node to create a new block with
             // new timestamp:
-            web3.eth.sendTransaction({ from: web3.eth.accounts[0] }, (err) => {
-
-                if (err) { return reject(err); }
+            web3.eth.sendTransaction({ from: web3.eth.accounts[0] }, err => {
+                if (err) {
+                    return reject(err);
+                }
 
                 resolve();
-
             });
-
         }, durationInMs);
-
     });
-
 }
 
 function expectThrow(promise) {
@@ -151,8 +145,8 @@ function expectThrow(promise) {
     return promise
         .then(res => {
             if (!onPrivateChain) {
-                console.log("Received tx instead of throw: \r\n", JSON.stringify(res, null, 4));
-                assert.fail("Expected throw not received");
+                //console.log("Received solidity tx instead of throw: \r\n", JSON.stringify(res, null, 4));
+                throw new Error("Received solidity transaction when expected tx to revert");
             } // on privatechain we check gasUsed after tx sent
             return;
         })
@@ -181,7 +175,7 @@ function expectThrow(promise) {
                     invalidJump ||
                     outOfGas ||
                     (onPrivateChain && (outOfGasPrivateChain || allGasUsed)),
-                "Expected solidity throw, got '" + error + "' instead. onPrivateChain: " + onPrivateChain
+                "Expected solidity revert, got '" + error + "' instead. onPrivateChain: " + onPrivateChain
             );
             return;
         });
