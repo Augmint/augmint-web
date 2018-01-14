@@ -63,13 +63,13 @@ contract AugmintToken is AugmintTokenInterface {
         // to accept ETH sent into reserve (from defaulted loan's collateral )
     }
 
-    function setLocker(address lockerAddress) public restrict("setLocker") {
+    function setLocker(address lockerAddress) external restrict("setLocker") {
 
         locker = Locker(lockerAddress);
 
     }
 
-    function lockFunds(uint lockProductId, uint amountToLock) public {
+    function lockFunds(uint lockProductId, uint amountToLock) external {
 
         // NB: calculateInterestForLockProduct will also validate lockProductId:
         uint interestEarnedAmount = locker.calculateInterestForLockProduct(lockProductId, amountToLock);
