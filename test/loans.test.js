@@ -9,10 +9,11 @@ contract("ACE Loans tests", accounts => {
     before(async function() {
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
         rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
-        loanManager = await loanTestHelper.newLoanManager(tokenAce, rates);
+        loanManager = await loanTestHelper.newLoanManagerMock(tokenAce, rates);
         await tokenAce.issue(1000000000);
         await tokenAce.withdrawTokens(accounts[0], 1000000000);
         products = {
+            disabledProduct: await loanTestHelper.getProductInfo(4),
             defaultingNoLeftOver: await loanTestHelper.getProductInfo(3),
             defaulting: await loanTestHelper.getProductInfo(2),
             repaying: await loanTestHelper.getProductInfo(1),
@@ -30,10 +31,16 @@ contract("ACE Loans tests", accounts => {
         // }
     });
 
-    it("Should NOT get a loan less than minLoanAmount");
-
     it("Should get an ACE loan", async function() {
         await loanTestHelper.createLoan(this, products.repaying, accounts[0], web3.toWei(0.5));
+    });
+
+    it("Should NOT get a loan less than minLoanAmount");
+
+    it("Shouldn't get a loan for a disabled product", async function() {
+        await testHelper.expectThrow(
+            loanManager.newEthBackedLoan(products.disabledProduct.id, { from: accounts[0], value: web3.toWei(0.5) })
+        );
     });
 
     it("Should NOT collect a loan before it's due");

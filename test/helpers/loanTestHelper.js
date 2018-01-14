@@ -15,7 +15,7 @@ let interestPoolAcc = null;
 let interestEarnedAcc = null;
 
 module.exports = {
-    newLoanManager,
+    newLoanManagerMock,
     createLoan,
     repayLoan,
     collectLoan,
@@ -25,21 +25,24 @@ module.exports = {
     loanAsserts
 };
 
-async function newLoanManager(_tokenAce, _rates) {
+async function newLoanManagerMock(_tokenAce, _rates) {
     tokenAce = _tokenAce;
     peggedSymbol = web3.toAscii(await tokenAce.peggedSymbol());
     rates = _rates;
     reserveAcc = tokenAce.address;
     loanManager = await LoanManager.new(tokenAce.address, rates.address);
+    loanManager.grantMultiplePermissions(web3.eth.accounts[0], ["addLoanProduct", "setLoanProductActiveState"]);
     // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmount (w/ 4 decimals), defaultingFeePt, isActive
     // notDue: (due in 1 day)
-    await loanManager.addProduct(86400, 970000, 850000, 300000, 50000, true);
+    await loanManager.addLoanProduct(86400, 970000, 850000, 300000, 50000, true);
     // repaying: due in 60 sec for testing repayment
-    await loanManager.addProduct(60, 985000, 900000, 200000, 50000, true);
+    await loanManager.addLoanProduct(60, 985000, 900000, 200000, 50000, true);
     // defaulting: due in 1 sec, repay in 1sec for testing defaults
-    await loanManager.addProduct(1, 990000, 600000, 100000, 50000, true);
+    await loanManager.addLoanProduct(1, 990000, 600000, 100000, 50000, true);
     // defaulting no left over collateral: due in 1 sec, repay in 1sec for testing defaults without leftover
-    await loanManager.addProduct(1, 990000, 990000, 100000, 50000, true);
+    await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, true);
+    // disabled product
+    await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, false);
 
     await tokenAce.grantMultiplePermissions(loanManager.address, [
         "issueAndDisburse",

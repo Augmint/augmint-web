@@ -3,18 +3,22 @@
 */
 pragma solidity 0.4.18;
 
-import "./generic/Owned.sol";
+import "./generic/Restricted.sol";
 import "./Rates.sol";
 import "./interfaces/AugmintTokenInterface.sol";
 import "./interfaces/LoanManagerInterface.sol";
 
 
-contract LoanManager is LoanManagerInterface {
+contract LoanManager is LoanManagerInterface, Restricted {
     Rates public rates; // instance of ETH/pegged currency rate provider contract
     AugmintTokenInterface public augmintToken; // instance of token contract
 
     event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
         uint repaymentAmount);
+
+    event LoanProductActiveStateChanged(uint8 productId, bool newState);
+
+    event LoanProductAdded(uint productId);
 
     event LoanRepayed(uint loanId, address borrower);
 
@@ -26,24 +30,19 @@ contract LoanManager is LoanManagerInterface {
         rates = Rates(_ratesAddress);
     }
 
-    function addProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
-        uint _defaultingFee, bool _isActive) external onlyOwner returns (uint newProductId) {
+    function addLoanProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
+        uint _defaultingFee, bool _isActive)
+    external restrict("addLoanProduct") returns (uint newProductId) {
         newProductId = products.push(
             LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
         );
-
         return newProductId - 1;
-        // TODO: emit event
+        LoanProductAdded(newProductId - 1);
     }
 
-    function disableProduct(uint8 productId) external onlyOwner {
+    function setLoanProductActiveState(uint8 productId, bool newState) external restrict ("setLoanProductActiveState") {
         products[productId].isActive = false;
-        // TODO: emit event
-    }
-
-    function enableProduct(uint8 productId) external onlyOwner {
-        products[productId].isActive = true;
-        // TODO: emit event
+        LoanProductActiveStateChanged(productId, newState);
     }
 
     function newEthBackedLoan(uint8 productId) external payable {
