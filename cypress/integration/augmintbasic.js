@@ -13,12 +13,12 @@ describe("Augmint basic e2e", function() {
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.contains("Get ACE Loan").click();
         cy.contains("Select type of loan");
-        cy.log("PROD", prodId);
         cy.get("#selectLoanProduct-" + prodId).click();
         cy.contains("Selected: loan product " + (prodId + 1));
+        // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("#disbursedTokenAmount")
-            .type(disbursedAmount)
+            .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy
             .get("#repaymentAmount")
@@ -33,13 +33,11 @@ describe("Augmint basic e2e", function() {
             cy.contains("Disbursed: " + disbursedAmount + " ACE");
             cy.contains("To be repayed: " + repaymentAmount + " ACE");
             cy.contains("Collateral in escrow: " + ethAmount + " ETH");
-            return cy
+            cy
                 .get("#userAceBalance")
                 .contains(expBal.toString())
                 .then(res => {
-                    return cy
-                        .get(".accountInfo")
-                        .should("not.have.class", "loading");
+                    cy.get(".accountInfo").should("not.have.class", "loading");
                 });
         });
     };
@@ -58,7 +56,7 @@ describe("Augmint basic e2e", function() {
         cy.ganacheRevertSnapshot();
     });
 
-    it.skip("Click through main functions", function() {
+    it("Click through main functions", function() {
         cy.contains("My Account").click();
         cy.contains("Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3");
         cy.get("#transferListDiv");
@@ -76,20 +74,23 @@ describe("Augmint basic e2e", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(6, 1000.55, 1010.66, 1.06598).then(res => {
-            cy.contains("My Account").click();
-            // TODO: check transfer history
-            // TODO: check my loans
-            // TODO: loan details page
-            // TODO: Repayment
-            // TODO: check reserves
-        });
+        getLoan(6, 1000, 1010.1, 1.06539)
+            .then(res => {
+                cy.log(res);
+                return getUserAceBalance();
+            })
+            .then(aceBalanceBefore => {
+                cy.log(aceBalanceBefore);
+                cy.contains("Reserves").click();
+                // // TODO: check reserves
+                cy.get(".loansToCollectButton").click();
+                cy.get(".collectLoanButton").click();
+                cy.contains("Successful collection of 1 loans");
+            });
     });
 
-    it("Should collect a loan");
-
-    it.only("Should repay a loan", function() {
-        cy.reload();
+    it("Should repay a loan", function() {
+        cy.reload(); // required because ganache RevertSnapshot doesn't trigger events which messes up UI state
         // take 2 loans to have enough ace to repay one of them loan
         getLoan(0, 200, 250, 0.31313)
             .then(res => {
