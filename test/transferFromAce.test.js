@@ -34,7 +34,7 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("transferFrom spender to send to different to than itself", async function() {
-        let expApprove = {
+        const expApprove = {
             owner: accounts[0],
             spender: accounts[1],
             value: 200000
@@ -52,7 +52,7 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("Shouldn't approve 0x0 spender", async function() {
-        return testHelper.expectThrow(
+        await testHelper.expectThrow(
             tokenAce.approve("0x0", 100, {
                 from: accounts[2]
             })
@@ -60,7 +60,7 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("transferFrom only if approved", async function() {
-        return testHelper.expectThrow(
+        await testHelper.expectThrow(
             tokenAce.transferFrom(accounts[0], accounts[2], 100, {
                 from: accounts[2]
             })
@@ -91,7 +91,7 @@ contract("TransferFrom ACE tests", accounts => {
         };
 
         await tokenAceTestHelper.approveTest(this, expApprove);
-        return testHelper.expectThrow(
+        await testHelper.expectThrow(
             tokenAce.transferFrom(expApprove.owner, expApprove.spender, 0, {
                 from: expApprove.spender
             })
@@ -106,7 +106,7 @@ contract("TransferFrom ACE tests", accounts => {
         };
 
         await tokenAceTestHelper.approveTest(this, expApprove);
-        return testHelper.expectThrow(
+        await testHelper.expectThrow(
             tokenAce.transferFrom(expApprove.owner, "0x0", 0, {
                 from: expApprove.spender
             })
@@ -114,14 +114,14 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("transferFrom only if approved is greater than amount", async function() {
-        let expApprove = {
+        const expApprove = {
             owner: accounts[0],
             spender: accounts[1],
             value: 200000
         };
 
         await tokenAceTestHelper.approveTest(this, expApprove);
-        return testHelper.expectThrow(
+        await testHelper.expectThrow(
             tokenAce.transferFrom(expApprove.owner, expApprove.spender, expApprove.value + 1, {
                 from: expApprove.spender
             })
@@ -130,8 +130,8 @@ contract("TransferFrom ACE tests", accounts => {
 
     it("transferFrom only if balance is enough", async function() {
         await tokenAce.transfer(accounts[1], maxFee, { from: accounts[0] }); // to cover the transfer fee
-        let amount = await tokenAce.balanceOf(accounts[0]);
-        let expApprove = {
+        const amount = await tokenAce.balanceOf(accounts[0]);
+        const expApprove = {
             owner: accounts[0],
             spender: accounts[1],
             value: amount
@@ -146,13 +146,13 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("transferFromNoFee", async function() {
-        let expApprove = {
+        const expApprove = {
             owner: accounts[1],
             spender: accounts[0],
             value: 100000
         };
         await tokenAceTestHelper.approveTest(this, expApprove);
-        let amount = 100000;
+        const amount = 100000;
         await tokenAce.transfer(expApprove.owner, amount, { from: accounts[0] });
         await tokenAceTestHelper.transferFromTest(this, {
             from: expApprove.owner,
@@ -178,7 +178,7 @@ contract("TransferFrom ACE tests", accounts => {
     });
 
     it("transferFromNoFee only by allowed", async function() {
-        let expApprove = {
+        const expApprove = {
             owner: accounts[0],
             spender: accounts[1],
             value: 100000
