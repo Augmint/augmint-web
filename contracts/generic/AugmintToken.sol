@@ -97,26 +97,21 @@ contract AugmintToken is AugmintTokenInterface {
         _transfer(this, borrower, loanAmount, narrative, 0);
     }
 
-    /* Optional convenience function for users to be able to repay with one transaction */
+    /* Users must repay through AugmintToken.repayLoan()*/
     function repayLoan(address _loanManager, uint loanId) external {
         require(permissions[_loanManager]["LoanManager"]); // only whitelisted loanManagers
-
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
-        var (borrower, , ,repaymentAmount, ) = loanManager.loans(loanId); // solhint-disable-line space-after-comma
+        // solhint-disable-next-line space-after-comma
+        var (borrower, , ,repaymentAmount, ,interestAmount, ) = loanManager.loans(loanId);
         require(borrower == msg.sender);
-        _increaseApproval(msg.sender, _loanManager, repaymentAmount);
-        loanManager.releaseCollateral(loanId);
-    }
-
-    function repayAndBurn(address borrower, uint repaymentAmount, uint interestAmount, string narrative)
-    external restrict("repayAndBurn") {
-        _transferFrom(borrower, this, repaymentAmount, narrative, 0);
+        _transfer(msg.sender, this, repaymentAmount, "Loan repayment", 0);
         _burn(this, repaymentAmount);
         if (interestAmount > 0) {
             // transfer interestAmount to InterestEarnedAccount
             balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
             balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
         }
+        loanManager.releaseCollateral(loanId);
     }
 
     function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest") {

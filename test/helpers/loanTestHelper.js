@@ -43,7 +43,6 @@ async function newLoanManager(_tokenAce, _rates) {
 
     await tokenAce.grantMultiplePermissions(loanManager.address, [
         "issueAndDisburse",
-        "repayAndBurn",
         "burnCollectedInterest",
         "LoanManager"
     ]);
@@ -116,24 +115,15 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
     return loan;
 }
 
-async function repayLoan(testInstance, loan, viaToken = true) {
+async function repayLoan(testInstance, loan) {
     const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestPoolAcc, interestEarnedAcc];
     const totalSupplyBefore = await tokenAce.totalSupply();
     const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
 
     loan.state = 1; // repaid
-    let tx;
-    if (viaToken) {
-        tx = await tokenAce.repayLoan(loanManager.address, loan.id, { from: loan.borrower });
-        testHelper.logGasUse(testInstance, tx, "AugmintToken.repayLoan");
-        // TODO: assert events (truffle is missing LoanRepayed event)
-    } else {
-        const appTx = await tokenAce.approve(loanManager.address, loan.repaymentAmount, { from: loan.borrower });
-        testHelper.logGasUse(testInstance, appTx, "AugmintToken.approve");
-        tx = await loanManager.releaseCollateral(loan.id, { from: loan.borrower });
-        testHelper.logGasUse(testInstance, tx, "LoanManager.releaseCollateral");
-        // TODO: assert all events, ie. Transfer etc. (truffle is missing all events but LoanRepayed )
-    }
+    const tx = await tokenAce.repayLoan(loanManager.address, loan.id, { from: loan.borrower });
+    testHelper.logGasUse(testInstance, tx, "AugmintToken.repayLoan");
+    // TODO: assert events (truffle is missing LoanRepayed event)
 
     await loanAsserts(loan);
 

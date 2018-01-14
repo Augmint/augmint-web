@@ -82,13 +82,12 @@ contract LoanManager is LoanManagerInterface {
         NewLoan(productId, loanId, msg.sender, msg.value, loanAmount, repaymentAmount);
     }
 
+    /* users must call AugmintToken.repayLoan() to release collateral */
     function releaseCollateral(uint loanId) external {
-        require(loans[loanId].borrower == msg.sender || msg.sender == address(augmintToken));
+        require(msg.sender == address(augmintToken));
         require(loans[loanId].state == LoanState.Open);
         require(now <= loans[loanId].maturity);
         loans[loanId].state = LoanState.Repaid;
-        augmintToken.repayAndBurn(loans[loanId].borrower, loans[loanId].repaymentAmount,
-            loans[loanId].interestAmount, "Loan repayment");
         loans[loanId].borrower.transfer(loans[loanId].collateralAmount); // send back ETH collateral
 
         LoanRepayed(loanId, loans[loanId].borrower);

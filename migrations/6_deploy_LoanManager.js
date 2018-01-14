@@ -11,7 +11,6 @@ module.exports = function(deployer, network, accounts) {
         let tokenAce = TokenAce.at(TokenAce.address);
         await tokenAce.grantMultiplePermissions(LoanManager.address, [
             "issueAndDisburse",
-            "repayAndBurn",
             "burnCollectedInterest",
             "LoanManager"
         ]);

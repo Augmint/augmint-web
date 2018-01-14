@@ -6,8 +6,8 @@ actor Borrower
 control AugmintToken
 control LoanManager
 actor Anyone
-== new loan ==
-Borrower -> LoanManager : getLoan\n(productId, {ethToEscrow})
+== New loan ==
+Borrower -> LoanManager : newEthBackedLoan\n(productId, {ethToEscrow})
 LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
 LoanManager -> AugmintToken : issueAndDisburse\n(borrower, loanAmount, interestAmount)
 note over AugmintToken
@@ -17,37 +17,25 @@ AugmintToken -> AugmintToken : issue(repaymentAmount)\nbalances[interestPool] +=
 AugmintToken -> AugmintToken : _transfer\n(borrower, loanAmount, "loan disbursment", 0)
 AugmintToken --> Borrower : loanAmount transferred
 
-== repay loan Alt 1. (with a single TX from user)  ==
+== Repay loan  ==
 Borrower -> AugmintToken : repayLoan(loanManager, loanId)
 note over AugmintToken
-    Only accepts whitelisted loanManagerAddress
+    Only accepts whitelisted loanManagers
     to avoid phising attacks
 end note
-AugmintToken -> AugmintToken : approve\n(loanManager, repaymentAmount)
-
+AugmintToken -> AugmintToken : transfer\n(from: borrower, to: augmintToken, narr: "Loan repayment", fee: 0)
+Borrower --> AugmintToken : repaymentAmount transferred
+AugmintToken -> AugmintToken : burn(repaymentAmount)
+AugmintToken -> AugmintToken : transfer interestAmount from interestHoldingAcc to interestEarnedAcc
 AugmintToken -> LoanManager : releaseCollateral(loanId)
 note left LoanManager
-    releaseCollateral() is not restricted but
-    it checks loan status and transfers repaymentAmount from user
+    releaseCollateral() is restricted to trusted AugmintTokens
 end note
-LoanManager -> AugmintToken : repayAndBurn(borrower, repaymentAmount, interestAmount, narrative)
-note right AugmintToken
-    RepayAndBurn() is restricted to trusted loanManagers
-end note
-activate AugmintToken
-AugmintToken -> AugmintToken : transferFromNoFee\n(from: borrower, to: loanManager, , "loan repayment", fee: 0)
-Borrower --> LoanManager : repaymentAmount transferred
-AugmintToken -> AugmintToken : balances[loanManager] -= repaymentAmount\nbalances[AugmintToken] += repaymentAmount\nburn(repaymentAmount)\nbalances[interestPool] + = interestAmount\nbalances[interestEarned] += interestAmount
-deactivate AugmintToken
+activate LoanManager
+LoanManager -> LoanManager : loan state = repaid
 LoanManager --> Borrower : borrower.send(ethInEscrow)
-
-== repay loan Alt 2., fallback (two user Txs but direclty via loanManager)  ==
-Borrower -> AugmintToken : Tx1: approve(loanContract, repaymentAmount)
-Borrower -> LoanManager : Tx2: releaseCollateral(loanId)
-note over Borrower, LoanManager
-    from here the same as Alt 1.
-end note
-== collect loan  ==
+deactivate LoanManager
+== Collect loan  ==
 Anyone -> LoanManager : collectMultiple(loanIds[])
 note left
     collectMultiple() is not restricted

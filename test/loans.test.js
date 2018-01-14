@@ -1,4 +1,3 @@
-const Rates = artifacts.require("./Rates.sol");
 const loanTestHelper = require("./helpers/loanTestHelper.js");
 const tokenAceTestHelper = require("./helpers/tokenAceTestHelper.js");
 const ratesTestHelper = require("./helpers/ratesTestHelper.js");
@@ -53,7 +52,7 @@ contract("ACE Loans tests", accounts => {
         await loanTestHelper.repayLoan(this, loan, true); // repaymant via AugmintToken.repayLoan convenience func
     });
 
-    it("Should repay a loan directly via loanManager", async function() {
+    it("Shouldn't releaseCollateral directly on loanManager", async function() {
         const loan = await loanTestHelper.createLoan(this, products.notDue, accounts[1], web3.toWei(0.5));
 
         // send interest to borrower to have enough ACE to repay in test
@@ -61,7 +60,7 @@ contract("ACE Loans tests", accounts => {
             from: accounts[0]
         });
 
-        await loanTestHelper.repayLoan(this, loan, false); // repayment via AugmintToken.approve + LoanManager.releaseCollateral
+        await testHelper.expectThrow(loanManager.releaseCollateral(loan.id, { from: loan.borrower }));
     });
 
     it("Should collect a defaulted ACE loan and send back leftover collateral", async function() {
