@@ -1,4 +1,7 @@
 language: node_js
+cache:
+  directories:
+    - "node_modules"
 before_install:
     - npm install -g truffle@4.0.4
 install:
@@ -7,10 +10,7 @@ before_script:
     - npm run ganache:run &
 build:
     - truffle migrate && cp builds/contracts/* src/
-test:
+script:
     - yarn start &
     - truffle test
     - npm run cypress:run
-cache:
-  directories:
-    - "node_modules"
