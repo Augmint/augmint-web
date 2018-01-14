@@ -31,8 +31,6 @@ contract AugmintToken is AugmintTokenInterface {
 
     Locker public locker;
 
-    event TokenIssued(uint amount);
-    event TokenBurned(uint amount);
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
     function AugmintToken(string _name, string _symbol, bytes32 _peggedSymbol, uint8 _decimals, address _feeAccount,
@@ -58,6 +56,16 @@ contract AugmintToken is AugmintTokenInterface {
         // to accept ETH sent into reserve (from defaulted loan's collateral )
     }
 
+    // Issue tokens to Reserve
+    function issue(uint amount) external restrict("issue") {
+        _issue(this, amount);
+    }
+
+    // Burn tokens from Reserve
+    function burn(uint amount) external restrict("burn") {
+        _burn(this, amount);
+    }
+
     function setLocker(address lockerAddress) external restrict("setLocker") {
 
         locker = Locker(lockerAddress);
@@ -80,14 +88,13 @@ contract AugmintToken is AugmintTokenInterface {
     external restrict("issueAndDisburse") {
         require(loanAmount > 0);
         uint issuedAmount = loanAmount.add(interestAmount);
-        totalSupply = totalSupply.add(issuedAmount);
-        balances[this] = balances[this].add(loanAmount);
+        _issue(this, issuedAmount);
         if (interestAmount > 0) {
             // move interest to InterestPoolAccount
+            balances[this] = balances[this].sub(interestAmount);
             balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
         }
         _transfer(this, borrower, loanAmount, narrative, 0);
-        TokenIssued(issuedAmount);
     }
 
     /* Optional convenience function for users to be able to repay with one transaction */
@@ -104,20 +111,16 @@ contract AugmintToken is AugmintTokenInterface {
     function repayAndBurn(address borrower, uint repaymentAmount, uint interestAmount, string narrative)
     external restrict("repayAndBurn") {
         _transferFrom(borrower, this, repaymentAmount, narrative, 0);
-        totalSupply = totalSupply.sub(repaymentAmount);
-        balances[this] = balances[this].sub(repaymentAmount);
+        _burn(this, repaymentAmount);
         if (interestAmount > 0) {
             // transfer interestAmount to InterestEarnedAccount
             balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
             balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
         }
-        TokenBurned(repaymentAmount);
     }
 
     function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest") {
-        balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
-        totalSupply = totalSupply.sub(interestAmount);
-        TokenBurned(interestAmount);
+        _burn(interestPoolAccount, interestAmount);
     }
 
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
@@ -253,4 +256,15 @@ contract AugmintToken is AugmintTokenInterface {
         AugmintTransfer(_from, _to, _amount, narrative, _fee);
     }
 
+    function _burn(address from, uint amount) private {
+        balances[from] = balances[from].sub(amount);
+        totalSupply = totalSupply.sub(amount);
+        Transfer(from, 0x0, amount);
+    }
+
+    function _issue(address to, uint amount) private {
+        balances[to] = balances[to].add(amount);
+        totalSupply = totalSupply.add(amount);
+        Transfer(0x0, to, amount);
+    }
 }

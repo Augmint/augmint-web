@@ -132,7 +132,7 @@ async function repayLoan(testInstance, loan, viaToken = true) {
         testHelper.logGasUse(testInstance, appTx, "AugmintToken.approve");
         tx = await loanManager.releaseCollateral(loan.id, { from: loan.borrower });
         testHelper.logGasUse(testInstance, tx, "LoanManager.releaseCollateral");
-        // TODO: assert all events, ie. TokenBurned, Transfer etc. (truffle is missing all events but LoanRepayed )
+        // TODO: assert all events, ie. Transfer etc. (truffle is missing all events but LoanRepayed )
     }
 
     await loanAsserts(loan);
@@ -206,8 +206,9 @@ async function collectLoan(testInstance, loan, collector) {
     const tx = await loanManager.collect([loan.id], { from: loan.collector });
     testHelper.logGasUse(testInstance, tx, "collect 1");
     /* Truffle/web3 doesn't pick up event from other contract? (it's emmitted but not in tx.logs)
-    assert.equal(tx.logs[0].event, "TokenBurned", "TokenBurned event should be emited");
-    assert.equal(tx.logs[0].args.amount.toString(), loan.interestAmount, "interestAmount should be set in TokenBurned event");
+    assert.equal(tx.logs[0].event, "Transfer", "Transfer event should be emited for burn");
+    assert.equal(tx.logs[0].args.to, "0x0", "to should be 0x0 in trasnfer event");
+    assert.equal(tx.logs[0].args.amount.toString(), loan.interestAmount, "interestAmount should be set in Transfer event");
     */
     let log = tx.logs[0];
     assert.equal(log.event, "LoanCollected", "LoanCollected event should be emited");

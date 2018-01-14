@@ -36,6 +36,7 @@ async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
         "transferFromNoFee",
         "withdrawTokens",
         "issue",
+        "burn",
         "setLocker"
     ]);
 
