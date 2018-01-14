@@ -4,10 +4,11 @@ before_install:
 install:
     - npm install
 before_script:
-    - npm run ganache:runmigrate
+    - npm run ganache:run &
 build:
     - truffle migrate && cp builds/contracts/* src/
 test:
+    - yarn start &
     - truffle test
     - npm run cypress:run
 cache:
