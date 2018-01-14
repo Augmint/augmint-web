@@ -13,10 +13,10 @@ contract LoanManager is LoanManagerInterface, Restricted {
     Rates public rates; // instance of ETH/pegged currency rate provider contract
     AugmintTokenInterface public augmintToken; // instance of token contract
 
-    event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
+    event NewLoan(uint productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
         uint repaymentAmount);
 
-    event LoanProductActiveStateChanged(uint8 productId, bool newState);
+    event LoanProductActiveStateChanged(uint productId, bool newState);
 
     event LoanProductAdded(uint productId);
 
