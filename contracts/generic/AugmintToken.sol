@@ -228,7 +228,7 @@ contract AugmintToken is AugmintTokenInterface {
         return fee;
     }
 
-    function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) internal {
+    function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) private {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
         require(allowed[_from][msg.sender] > 0 || _amount > 0); // don't allow 0 transferFrom if no approval
@@ -243,7 +243,7 @@ contract AugmintToken is AugmintTokenInterface {
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }
 
-    function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) internal {
+    function _transfer(address _from, address _to, uint256 _amount, string narrative, uint _fee) private {
         require(_from != _to); // no need to send to myself. Makes client code simpler if we don't allow
         if (_fee > 0) {
             balances[feeAccount] = balances[feeAccount].add(_fee);
