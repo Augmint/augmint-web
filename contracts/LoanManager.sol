@@ -26,18 +26,6 @@ contract LoanManager is LoanManagerInterface {
         rates = Rates(_ratesAddress);
     }
 
-    function getLoanCount() external view returns (uint ct) {
-        return loans.length;
-    }
-
-    function getProductCount() external view returns (uint ct) {
-        return products.length;
-    }
-
-    function getLoanIds(address borrower) external view returns (uint[] loans) {
-        return mLoans[borrower];
-    }
-
     function addProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
         uint _defaultingFee, bool _isActive) external onlyOwner returns (uint newProductId) {
         newProductId = products.push(
@@ -133,6 +121,18 @@ contract LoanManager is LoanManagerInterface {
             LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
         }
 
+    }
+
+    function getLoanCount() external view returns (uint ct) {
+        return loans.length;
+    }
+
+    function getProductCount() external view returns (uint ct) {
+        return products.length;
+    }
+
+    function getLoanIds(address borrower) external view returns (uint[] loans) {
+        return mLoans[borrower];
     }
 
 }

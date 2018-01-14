@@ -27,17 +27,6 @@ contract Rates is Restricted {
 
     event RateChanged(bytes32 symbol, uint newRate);
 
-    function convertFromWei(bytes32 bSymbol, uint weiValue) external view returns(uint value) {
-        require(rates[bSymbol].rate > 0);
-        return weiValue.mul(rates[bSymbol].rate).roundedDiv(1000000000000000000);
-    }
-
-    function convertToWei(bytes32 bSymbol, uint value) external view returns(uint weiValue) {
-        // no require(rates[symbol].rate >  0) needed b/c it will revert with div by zero
-        /* TODO: can we make this not loosing max scale? */
-        return value.mul(1000000000000000000).roundedDiv(rates[bSymbol].rate);
-    }
-
     function setRate(bytes32 symbol, uint newRate) external restrict("setRate") {
         rates[symbol] = RateInfo(newRate, now);
         RateChanged(symbol, newRate);
@@ -49,7 +38,17 @@ contract Rates is Restricted {
             rates[symbols[i]] = RateInfo(newRates[i], now);
             RateChanged(symbols[i], newRates[i]);
         }
+    }
 
+    function convertFromWei(bytes32 bSymbol, uint weiValue) external view returns(uint value) {
+        require(rates[bSymbol].rate > 0);
+        return weiValue.mul(rates[bSymbol].rate).roundedDiv(1000000000000000000);
+    }
+
+    function convertToWei(bytes32 bSymbol, uint value) external view returns(uint weiValue) {
+        // no require(rates[symbol].rate >  0) needed b/c it will revert with div by zero
+        /* TODO: can we make this not loosing max scale? */
+        return value.mul(1000000000000000000).roundedDiv(rates[bSymbol].rate);
     }
 
 }
