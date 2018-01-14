@@ -167,16 +167,19 @@ contract("Lock", accounts => {
 
         const newestLock = locks[numLocks - 1];
 
-        // each lock should be a 3 element array
+        // each lock should be a 5 element array
         assert.isArray(newestLock);
-        assert(newestLock.length === 3);
+        assert(newestLock.length === 5);
 
-        // the locks should be [ amountLocked, lockedUntil, isActive ] all
+        // the locks should be [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] all
         // represented as uints (i.e. BigNumber objects in JS land):
-        const [amountLocked, lockedUntil, isActive] = newestLock;
+        const [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] = newestLock;
         assert(amountLocked.toNumber() > amountToLock);
         assert(lockedUntil.toNumber() > startingTime);
+        assert(perAnnumInterest.toNumber() > 0);
+        assert(durationInSecs.toNumber() > 0);
         assert(isActive.toNumber() === 1);
+
     });
 
     it("should prevent someone from locking more token than they have", async () => {
@@ -184,18 +187,13 @@ contract("Lock", accounts => {
 
         const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
         const amountToLock = startingBalance + 1000;
-        let success = true;
 
-        try {
-            await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
-        } catch (err) {
-            success = false;
-        }
+        await testHelpers.expectThrow(tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder }));
 
         const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
 
-        assert(!success);
         assert(finishingBalance === startingBalance);
+
     });
 
     it("should prevent someone from releasing a lock early", async () => {
@@ -203,23 +201,17 @@ contract("Lock", accounts => {
 
         const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
         const amountToLock = 1000;
-        let success = true;
 
         await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
 
         const newestLockId = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber() - 1;
 
-        try {
-            await lockerInstance.releaseFunds(tokenHolder, newestLockId);
-        } catch (err) {
-            // TODO: use testHelper expectThrow
-            success = false;
-        }
+        await testHelpers.expectThrow(lockerInstance.releaseFunds(tokenHolder, newestLockId));
 
         const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
 
-        assert(!success);
         assert(finishingBalance === startingBalance - amountToLock);
+
     });
 
     it("should track the total amount of locked tokens");

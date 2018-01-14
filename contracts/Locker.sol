@@ -34,6 +34,8 @@ contract Locker is Owned {
     struct Lock {
         uint amountLocked;
         uint lockedUntil;
+        uint perAnnumInterest;
+        uint durationInSecs;
         bool isActive;
     }
 
@@ -117,7 +119,8 @@ contract Locker is Owned {
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
 
-        locks[lockOwner].push(Lock(totalAmountLocked, now.add(lockProduct.durationInSecs), true));
+        locks[lockOwner].push(Lock(totalAmountLocked, now.add(lockProduct.durationInSecs), lockProduct.perAnnumInterest, 
+                                    lockProduct.durationInSecs, true));
 
     }
 
@@ -135,11 +138,12 @@ contract Locker is Owned {
     }
 
     // returns 20 locks starting from some offset
-    // lock products are encoded as [ amountLocked, lockedUntil, isActive ]
-    function getLocksForAddress(address lockOwner, uint offset) public view returns (uint[3][20]) {
+    // lock products are encoded as [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ]
+    // NB: perAnnumInterest is in millionths (i.e. 1,000,000 = 100%):
+    function getLocksForAddress(address lockOwner, uint offset) public view returns (uint[5][20]) {
 
         Lock[] storage locksForAddress = locks[lockOwner];
-        uint[3][20] memory response;
+        uint[5][20] memory response;
 
         for (uint8 i = 0; i < 20; i++) {
 
@@ -147,7 +151,8 @@ contract Locker is Owned {
 
             Lock storage lock = locksForAddress[offset + i];
 
-            response[offset + i] = [ lock.amountLocked, lock.lockedUntil, lock.isActive ? 1 : 0 ];
+            response[offset + i] = [ lock.amountLocked, lock.lockedUntil, lock.perAnnumInterest, 
+                                        lock.durationInSecs, lock.isActive ? 1 : 0 ];
 
         }
 
