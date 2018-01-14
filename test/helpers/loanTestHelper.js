@@ -7,7 +7,7 @@ const moment = require("moment");
 const tokenAceTestHelper = require("./tokenAceTestHelper.js");
 const testHelper = require("./testHelper.js");
 
-const LoanManager = artifacts.require("./loanManager.sol");
+const LoanManager = artifacts.require("./LoanManager.sol");
 
 let tokenAce, loanManager, rates, peggedSymbol;
 let reserveAcc;
