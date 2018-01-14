@@ -8,7 +8,7 @@ install:
     - npm install
 before_script:
     - npm run ganache:run > ganache.out &
-    - truffle migrate && cp builds/contracts/* src/
+    - truffle migrate && cp build/contracts/* src/
     - yarn start > yarn_start.out &
 script:
     - truffle test
