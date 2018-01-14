@@ -112,10 +112,18 @@ export async function repayLoanTx(loanId) {
             // TODO: add more tx info
             throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
         }
-        if (!result.logs || !result.logs[3] || result.logs[3].event !== "TokenBurned") {
+        if (
+            !result.logs ||
+            !result.logs[2] ||
+            result.logs[2].event !== "Transfer" ||
+            result.logs[2].args.to !== "0x0000000000000000000000000000000000000000"
+        ) {
             // TODO: web3 doesn't return last event (LoanRepayed) on testrpc, so we test only for TokenBurned
             throw new Error(
-                "TokenBurned event wasn't received. Check tx :  " + result.tx + "\nResult:\n" + stringify(result)
+                "Transfer to 0x0 (burn) event wasn't received. Check tx :  " +
+                    result.tx +
+                    "\nResult:\n" +
+                    stringify(result)
             );
         }
 
