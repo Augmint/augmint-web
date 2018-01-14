@@ -6,12 +6,10 @@ before_install:
     - npm install -g truffle@4.0.4
 install:
     - npm install
-after_install:
-    - npm run ganache:run > ganache.out &
 before_script:
+    - npm run ganache:run > ganache.out &
     - truffle migrate && cp builds/contracts/* src/
     - yarn start > yarn_start.out &
 script:
-    -
     - truffle test
     - cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a
