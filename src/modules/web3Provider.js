@@ -5,7 +5,8 @@ import { setupWeb3, accountChange } from "modules/reducers/web3Connect";
 /*
     TODO: make it to a HOC
 */
-let filterAllBlocks, intervalId;
+let newBlockHeadersFilter, pendingTransactionsFilter;
+let intervalId;
 let watches = {};
 
 export const connectWeb3 = () => {
@@ -60,17 +61,34 @@ export const setupWatch = (stateToWatch, callback) => {
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-    if (filterAllBlocks) {
-        filterAllBlocks.unsubscribe();
+    // TODO: make filters + subscriptions generic, e.g use an array
+    if (newBlockHeadersFilter) {
+        newBlockHeadersFilter.unsubscribe();
+    }
+    if (pendingTransactionsFilter) {
+        pendingTransactionsFilter.unsubscribe();
     }
     if (newVal) {
-        console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event ");
-        const web3 = store.getState().web3Connect.web3Instance;
-        filterAllBlocks = web3.eth.subscribe("newBlockHeaders", onNewBlock);
+        console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
+        // const web3 = store.getState().web3Connect.web3Instance;
+        // FIXME: these are not working b/c: https://github.com/MetaMask/metamask-extension/issues/2393
+        // newBlockHeadersFilter = web3.eth.subscribe("newBlockHeaders", onNewBlock);
+        // pendingTransactionsFilter = web3.eth
+        //     .subscribe("pendingTransactions", (error, tx) => {
+        //         if (error) {
+        //             console.error("pendingTransaction error:", error);
+        //         } else {
+        //             console.debug("pendingTransactions", tx);
+        //         }
+        //     })
+        //     .on("data", tx => onPendingTransaction(tx));
     }
 };
 
 const onNewBlock = (error, result) => {
-    // TODO: this is not working
     console.debug("web3Provider.onNewBlock");
+};
+
+const onPendingTransaction = tx => {
+    console.debug("onPendingTransaction", tx);
 };
