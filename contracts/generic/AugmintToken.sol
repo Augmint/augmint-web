@@ -225,7 +225,7 @@ contract AugmintToken is AugmintTokenInterface {
     function _transferFrom(address _from, address _to, uint256 _amount, string _narrative, uint _fee) private {
         require(balances[_from] >= _amount);
         require(allowed[_from][msg.sender] >= _amount);
-        require(allowed[_from][msg.sender] > 0 || _amount > 0); // don't allow 0 transferFrom if no approval
+        require(allowed[_from][msg.sender] > 0); // don't allow 0 transferFrom if no approval
 
         _transfer(_from, _to, _amount, _narrative, 0);
         if (_fee > 0) {

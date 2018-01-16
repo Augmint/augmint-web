@@ -76,11 +76,9 @@ describe("Augmint basic e2e", function() {
         //get a loan which defaults in 1 sec
         getLoan(6, 1000, 1010.1, 1.06539)
             .then(res => {
-                cy.log(res);
                 return getUserAceBalance();
             })
             .then(aceBalanceBefore => {
-                cy.log(aceBalanceBefore);
                 cy.contains("Reserves").click();
                 // // TODO: check reserves
                 cy.get(".loansToCollectButton").click();
