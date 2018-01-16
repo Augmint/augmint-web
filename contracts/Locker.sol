@@ -25,8 +25,8 @@ contract Locker is Owned {
     using SafeMath for uint256;
 
     struct LockProduct {
-        // perAnnumInterest is in millionths (i.e. 1,000,000 = 100%):
-        uint perAnnumInterest;
+        // perTermInterest is in millionths (i.e. 1,000,000 = 100%):
+        uint perTermInterest;
         uint durationInSecs;
         bool isActive;
     }
@@ -34,7 +34,7 @@ contract Locker is Owned {
     struct Lock {
         uint amountLocked;
         uint lockedUntil;
-        uint perAnnumInterest;
+        uint perTermInterest;
         uint durationInSecs;
         bool isActive;
     }
@@ -51,9 +51,9 @@ contract Locker is Owned {
 
     }
 
-    function addLockProduct(uint perAnnumInterest, uint durationInSecs, bool isActive) public onlyOwner {
+    function addLockProduct(uint perTermInterest, uint durationInSecs, bool isActive) public onlyOwner {
 
-        lockProducts.push(LockProduct(perAnnumInterest, durationInSecs, isActive));
+        lockProducts.push(LockProduct(perTermInterest, durationInSecs, isActive));
 
     }
 
@@ -71,7 +71,7 @@ contract Locker is Owned {
     }
 
     // returns 20 lock products starting from some offset
-    // lock products are encoded as [ perAnnumInterest, durationInSecs, isActive ]
+    // lock products are encoded as [ perTermInterest, durationInSecs, isActive ]
     function getLockProducts(uint offset) public view returns (uint[3][20]) {
 
         uint[3][20] memory response;
@@ -82,7 +82,7 @@ contract Locker is Owned {
 
             LockProduct storage lockProduct = lockProducts[offset + i];
 
-            response[offset + i] = [ lockProduct.perAnnumInterest, lockProduct.durationInSecs,
+            response[offset + i] = [ lockProduct.perTermInterest, lockProduct.durationInSecs,
                 lockProduct.isActive ? 1 : 0 ];
 
         }
@@ -103,8 +103,7 @@ contract Locker is Owned {
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
 
-        // TODO: take care of per annum issue:
-        uint interestEarned = amountToLock.mul(lockProduct.perAnnumInterest).div(1000000);
+        uint interestEarned = amountToLock.mul(lockProduct.perTermInterest).div(1000000);
 
         return interestEarned;
 
@@ -119,7 +118,7 @@ contract Locker is Owned {
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
 
-        locks[lockOwner].push(Lock(totalAmountLocked, now.add(lockProduct.durationInSecs), lockProduct.perAnnumInterest, 
+        locks[lockOwner].push(Lock(totalAmountLocked, now.add(lockProduct.durationInSecs), lockProduct.perTermInterest, 
                                     lockProduct.durationInSecs, true));
 
     }
@@ -138,8 +137,8 @@ contract Locker is Owned {
     }
 
     // returns 20 locks starting from some offset
-    // lock products are encoded as [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ]
-    // NB: perAnnumInterest is in millionths (i.e. 1,000,000 = 100%):
+    // lock products are encoded as [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ]
+    // NB: perTermInterest is in millionths (i.e. 1,000,000 = 100%):
     function getLocksForAddress(address lockOwner, uint offset) public view returns (uint[5][20]) {
 
         Lock[] storage locksForAddress = locks[lockOwner];
@@ -151,7 +150,7 @@ contract Locker is Owned {
 
             Lock storage lock = locksForAddress[offset + i];
 
-            response[offset + i] = [ lock.amountLocked, lock.lockedUntil, lock.perAnnumInterest, 
+            response[offset + i] = [ lock.amountLocked, lock.lockedUntil, lock.perTermInterest, 
                                         lock.durationInSecs, lock.isActive ? 1 : 0 ];
 
         }
