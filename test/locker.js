@@ -27,14 +27,14 @@ contract("Lock", accounts => {
     });
 
     it("should allow lock products to be created", async () => {
-        // create lock product with 5% per annum, and 60 sec lock time:
+        // create lock product with 5% per term, and 60 sec lock time:
         await lockerInstance.addLockProduct(50000, 60, true);
     });
 
     it("should allow the number of lock products to be queried", async () => {
         const startingNumLocks = (await lockerInstance.getLockProductCount()).toNumber();
 
-        // create lock product with 5% per annum, and 120 sec lock time:
+        // create lock product with 5% per term, and 120 sec lock time:
         await lockerInstance.addLockProduct(50000, 120, true);
 
         const endNumLocks = (await lockerInstance.getLockProductCount()).toNumber();
@@ -43,7 +43,7 @@ contract("Lock", accounts => {
     });
 
     it("should allow the getting of individual lock products", async () => {
-        // create lock product with 8% per annum, and 120 sec lock time:
+        // create lock product with 8% per term, and 120 sec lock time:
         await lockerInstance.addLockProduct(80000, 120, true);
 
         const numLocks = (await lockerInstance.getLockProductCount()).toNumber();
@@ -54,15 +54,15 @@ contract("Lock", accounts => {
         assert.isArray(product);
         assert(product.length === 3);
 
-        // the product should be [ perAnnumInterest, durationInSecs, isActive ]:
-        const [perAnnumInterest, durationInSecs, isActive] = product;
-        assert(perAnnumInterest.toNumber() === 80000);
+        // the product should be [ perTermInterest, durationInSecs, isActive ]:
+        const [perTermInterest, durationInSecs, isActive] = product;
+        assert(perTermInterest.toNumber() === 80000);
         assert(durationInSecs.toNumber() === 120);
         assert(isActive === true);
     });
 
     it("should allow the listing of lock products", async () => {
-        // create lock product with 10% per annum, and 120 sec lock time:
+        // create lock product with 10% per term, and 120 sec lock time:
         await lockerInstance.addLockProduct(100000, 120, true);
 
         const numLocks = (await lockerInstance.getLockProductCount()).toNumber();
@@ -79,10 +79,10 @@ contract("Lock", accounts => {
         assert.isArray(newestProduct);
         assert(newestProduct.length === 3);
 
-        // the products should be [ perAnnumInterest, durationInSecs, isActive ] all
+        // the products should be [ perTermInterest, durationInSecs, isActive ] all
         // represented as uints (i.e. BigNumber objects in JS land):
-        const [perAnnumInterest, durationInSecs, isActive] = newestProduct;
-        assert(perAnnumInterest.toNumber() === 100000);
+        const [perTermInterest, durationInSecs, isActive] = newestProduct;
+        assert(perTermInterest.toNumber() === 100000);
         assert(durationInSecs.toNumber() === 120);
         assert(isActive.toNumber() === 1);
     });
@@ -129,8 +129,9 @@ contract("Lock", accounts => {
         const startingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
         const amountToLock = 1000;
 
-        // create lock product with 10% per annum, and 2 sec lock time:
+        // create lock product with 10% per term, and 2 sec lock time:
         await lockerInstance.addLockProduct(100000, 2, true);
+        const interestEarned = Math.floor(amountToLock / 10);  // 10%
 
         const newLockProductId = (await lockerInstance.getLockProductCount()).toNumber() - 1;
 
@@ -144,7 +145,7 @@ contract("Lock", accounts => {
 
         const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
 
-        assert(finishingBalance > startingBalance);
+        assert(finishingBalance === startingBalance + interestEarned);
     });
 
     it("should allow an account to see all it's locks", async () => {
@@ -171,12 +172,12 @@ contract("Lock", accounts => {
         assert.isArray(newestLock);
         assert(newestLock.length === 5);
 
-        // the locks should be [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] all
+        // the locks should be [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ] all
         // represented as uints (i.e. BigNumber objects in JS land):
-        const [ amountLocked, lockedUntil, perAnnumInterest, durationInSecs, isActive ] = newestLock;
+        const [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ] = newestLock;
         assert(amountLocked.toNumber() > amountToLock);
         assert(lockedUntil.toNumber() > startingTime);
-        assert(perAnnumInterest.toNumber() > 0);
+        assert(perTermInterest.toNumber() > 0);
         assert(durationInSecs.toNumber() > 0);
         assert(isActive.toNumber() === 1);
 
