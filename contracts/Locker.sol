@@ -9,9 +9,10 @@
 // to do/think about:
 // -> self-destruct function?
 // -> return only active loan products from getLoanProducts?
-// -> add events
 // -> need to update token contract? probably not? a new token contract would imply a fresh deployment?
 // -> test locking small (<10) amounts - need a min lock amount in lockProducts
+// -> NewLock has totalAmountLocked which includes interest, but maybe it would be better to have amount
+//      locked without interest?
 
 pragma solidity 0.4.18;
 
@@ -23,6 +24,13 @@ import "./interfaces/AugmintTokenInterface.sol";
 contract Locker is Owned {
 
     using SafeMath for uint256;
+
+    event NewLockProduct(uint indexed lockProductId, uint perTermInterest, uint durationInSecs, bool isActive);
+    event LockProductActiveChange(uint indexed lockProductId, bool newActiveState);
+    // NB: totalAmountLocked includes the original amount, plus interested
+    event NewLock(uint indexed lockId, address indexed lockOwner, uint totalAmountLocked, uint lockedUntil, 
+                    uint perTermInterest, uint durationInSecs, bool isActive);
+    event LockReleased(uint indexed lockId, address indexed lockOwner);
 
     struct LockProduct {
         // perTermInterest is in millionths (i.e. 1,000,000 = 100%):
@@ -51,20 +59,22 @@ contract Locker is Owned {
 
     }
 
-    function addLockProduct(uint perTermInterest, uint durationInSecs, bool isActive) public onlyOwner {
+    function addLockProduct(uint perTermInterest, uint durationInSecs, bool isActive) external onlyOwner {
 
-        lockProducts.push(LockProduct(perTermInterest, durationInSecs, isActive));
-
-    }
-
-    function setLockProductActiveState(uint productIndex, bool isActive) public onlyOwner {
-
-        require(productIndex < lockProducts.length);
-        lockProducts[productIndex].isActive = isActive;
+        uint newLockProductId = lockProducts.push(LockProduct(perTermInterest, durationInSecs, isActive)) - 1;
+        NewLockProduct(newLockProductId, perTermInterest, durationInSecs, isActive);
 
     }
 
-    function getLockProductCount() public view returns (uint) {
+    function setLockProductActiveState(uint lockProductId, bool isActive) external onlyOwner {
+
+        require(lockProductId < lockProducts.length);
+        lockProducts[lockProductId].isActive = isActive;
+        LockProductActiveChange(lockProductId, isActive);
+
+    }
+
+    function getLockProductCount() external view returns (uint) {
 
         return lockProducts.length;
 
@@ -72,7 +82,7 @@ contract Locker is Owned {
 
     // returns 20 lock products starting from some offset
     // lock products are encoded as [ perTermInterest, durationInSecs, isActive ]
-    function getLockProducts(uint offset) public view returns (uint[3][20]) {
+    function getLockProducts(uint offset) external view returns (uint[3][20]) {
 
         uint[3][20] memory response;
 
@@ -118,19 +128,28 @@ contract Locker is Owned {
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
 
-        locks[lockOwner].push(Lock(totalAmountLocked, now.add(lockProduct.durationInSecs), lockProduct.perTermInterest, 
-                                    lockProduct.durationInSecs, true));
+        uint lockedUntil = now.add(lockProduct.durationInSecs);
+        uint lockId = locks[lockOwner].push(Lock(totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+                                    lockProduct.durationInSecs, true)) - 1;
+
+        NewLock(lockId, lockOwner, totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+                    lockProduct.durationInSecs, true);
 
     }
 
-    function releaseFunds(address lockOwner, uint lockIndex) external {
-        Lock storage lock = locks[lockOwner][lockIndex];
+    function releaseFunds(address lockOwner, uint lockId) external {
+        
+        Lock storage lock = locks[lockOwner][lockId];
+        
         require(lock.isActive && now >= lock.lockedUntil);
+        
         lock.isActive = false;
         augmintToken.transferNoFee(lockOwner, lock.amountLocked, "Releasing funds from lock");
+        
+        LockReleased(lockId, lockOwner);
     }
 
-    function getLockCountForAddress(address lockOwner) public view returns (uint) {
+    function getLockCountForAddress(address lockOwner) external view returns (uint) {
 
         return locks[lockOwner].length;
 
@@ -139,7 +158,7 @@ contract Locker is Owned {
     // returns 20 locks starting from some offset
     // lock products are encoded as [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ]
     // NB: perTermInterest is in millionths (i.e. 1,000,000 = 100%):
-    function getLocksForAddress(address lockOwner, uint offset) public view returns (uint[5][20]) {
+    function getLocksForAddress(address lockOwner, uint offset) external view returns (uint[5][20]) {
 
         Lock[] storage locksForAddress = locks[lockOwner];
         uint[5][20] memory response;

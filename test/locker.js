@@ -10,6 +10,42 @@ let tokenHolder = "";
 let lockerInstance = null;
 let tokenAceInstance = null;
 
+function getEvents(contractInstance, eventName) {
+
+    return new Promise((resolve, reject) => {
+
+        contractInstance[eventName]().get((err, res) => {
+
+            if (err) { return reject(err); }
+
+            resolve(res);
+
+        });
+
+    });
+
+}
+
+async function assertEvent(contractInstance, eventName, expectedArgs) {
+
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 1);
+    const event = events[0];
+
+    assert(event.event === eventName);
+
+    const eventArgs = event.args;
+
+    Object.keys(expectedArgs).forEach((argName) => {
+
+        const value = typeof event.args[argName].toNumber === 'function' ? event.args[argName].toNumber() : event.args[argName];
+        const expectedValue = expectedArgs[argName];
+        assert(value === expectedValue, `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`);
+
+    });
+
+}
+
 contract("Lock", accounts => {
     before(async () => {
         const superUserAddress = accounts[0];
@@ -27,8 +63,17 @@ contract("Lock", accounts => {
     });
 
     it("should allow lock products to be created", async () => {
+
         // create lock product with 5% per term, and 60 sec lock time:
         await lockerInstance.addLockProduct(50000, 60, true);
+
+        await assertEvent(lockerInstance, 'NewLockProduct', {
+            lockProductId: 0,
+            perTermInterest: 50000,
+            durationInSecs: 60,
+            isActive: true
+        });
+
     });
 
     it("should allow the number of lock products to be queried", async () => {
@@ -55,7 +100,7 @@ contract("Lock", accounts => {
         assert(product.length === 3);
 
         // the product should be [ perTermInterest, durationInSecs, isActive ]:
-        const [perTermInterest, durationInSecs, isActive] = product;
+        const [ perTermInterest, durationInSecs, isActive ] = product;
         assert(perTermInterest.toNumber() === 80000);
         assert(durationInSecs.toNumber() === 120);
         assert(isActive === true);
@@ -88,15 +133,31 @@ contract("Lock", accounts => {
     });
 
     it("should allow lock products to be enabled/disabled", async () => {
-        await lockerInstance.setLockProductActiveState(0, false);
-        let product = await lockerInstance.lockProducts(0);
+
+        const lockProductId = 0;
+        
+        await lockerInstance.setLockProductActiveState(lockProductId, false);
+
+        await assertEvent(lockerInstance, 'LockProductActiveChange', {
+            lockProductId: lockProductId,
+            newActiveState: false
+        });
+
+        let product = await lockerInstance.lockProducts(lockProductId);
 
         assert(product[2] === false);
 
-        await lockerInstance.setLockProductActiveState(0, true);
-        product = await lockerInstance.lockProducts(0);
+        await lockerInstance.setLockProductActiveState(lockProductId, true);
+
+        await assertEvent(lockerInstance, 'LockProductActiveChange', {
+            lockProductId: lockProductId,
+            newActiveState: true
+        });
+
+        product = await lockerInstance.lockProducts(lockProductId);
 
         assert(product[2] === true);
+
     });
 
     it("should allow tokens to be locked", async () => {
@@ -106,6 +167,17 @@ contract("Lock", accounts => {
         const amountToLock = 1000;
 
         await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+
+        // TODO: get values for commented out properties, and test for them:
+        await assertEvent(lockerInstance, 'NewLock', {
+            lockId: 0, 
+            lockOwner: tokenHolder,
+            // totalAmountLocked: 0,
+            // lockedUntil: 0, 
+            // perTermInterest: 0,
+            // durationInSecs: 0,
+            isActive: true
+        });
 
         const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
 
@@ -142,6 +214,11 @@ contract("Lock", accounts => {
         const newestLockId = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber() - 1;
 
         await lockerInstance.releaseFunds(tokenHolder, newestLockId);
+
+        await assertEvent(lockerInstance, 'LockReleased', {
+            lockId: newestLockId, 
+            lockOwner: tokenHolder
+        });
 
         const finishingBalance = (await tokenAceInstance.balances(tokenHolder)).toNumber();
 
