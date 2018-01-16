@@ -17,6 +17,7 @@ pragma solidity 0.4.18;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
+import "../interfaces/ExchangeInterface.sol";
 import "../Locker.sol";
 
 
@@ -118,14 +119,17 @@ contract AugmintToken is AugmintTokenInterface {
         _burn(interestPoolAccount, interestAmount);
     }
 
-    function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
-        _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
+    /* convenience function - alternative to Exchange.placeBuyEthOrder without approval required */
+    function placeBuyEthOrderOnExchange(address _exchange, uint price, uint tokenAmount)
+    external returns (uint buyEthorderId) {
+        require(permissions[_exchange]["Exchange"]); // only whitelisted exchanges
+        ExchangeInterface exchange = ExchangeInterface(_exchange);
+        _transfer(msg.sender, _exchange, tokenAmount, "Sell token order placed", 0);
+        return exchange.placeBuyEthOrderTrusted(msg.sender, price, tokenAmount);
     }
 
-    /* FIXME: remove this function when new exchange is ready */
-    function transferNoFee_legacy(address _from, address _to, uint256 _amount, string _narrative)
-    external restrict("transferNoFee") {
-        _transfer(_from, _to, _amount, _narrative, 0);
+    function transferWithNarrative(address _to, uint256 _amount, string _narrative) external {
+        _transfer(msg.sender, _to, _amount, _narrative, getFee(_amount));
     }
 
     function transferNoFee(address _to, uint256 _amount, string _narrative)

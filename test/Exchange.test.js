@@ -1,452 +1,192 @@
-const Rates = artifacts.require("./Rates.sol");
-const BigNumber = require("bignumber.js");
 const testHelper = new require("./helpers/testHelper.js");
 const tokenAceTestHelper = require("./helpers/tokenAceTestHelper.js");
 const exchangeTestHelper = require("./helpers/exchangeTestHelper.js");
+const ratesTestHelper = new require("./helpers/ratesTestHelper.js");
 
-const PLACE_ORDER_MAXFEE = web3.toWei(0.03);
-const ETHSELL = 0,
-    ACESELL = 1;
+const ONEWEI = 1000000000000000000;
+const ETH_SELL = 0;
+const ETH_BUY = 1;
 
 let snapshotId;
 let rates, tokenAce, exchange, peggedSymbol;
-let balBefore;
-let maker = web3.eth.accounts[1],
-    taker = web3.eth.accounts[2];
-let testedAccounts;
+const maker = web3.eth.accounts[1];
+const taker = web3.eth.accounts[2];
 
-/* TODO: refactor this spagetthi */
-contract("Exchange order", accounts => {
+contract("Exchange tests", accounts => {
     before(async function() {
-        this.timeout(100000);
-        rates = Rates.at(Rates.address);
+        rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
         peggedSymbol = web3.toAscii(await tokenAce.peggedSymbol());
         await tokenAce.issue(1000000000);
         await tokenAce.withdrawTokens(maker, 100000000);
         await tokenAce.withdrawTokens(taker, 100000000);
 
-        exchange = await exchangeTestHelper.newExchange(tokenAce, rates);
-        testedAccounts = [exchange.address, maker, taker];
+        exchange = await exchangeTestHelper.newExchangeMock(tokenAce, rates, 1000000);
     });
 
     beforeEach(async function() {
-        this.timeout(50000);
         snapshotId = await testHelper.takeSnapshot();
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
     });
 
     afterEach(async function() {
         await testHelper.revertSnapshot(snapshotId);
     });
 
-    it("no sell a sellEth order below min amount ");
-    it("no sell a sellAce order below min amount ");
-
-    it("no sellEth order when user doesn't have enough ETH");
-    it("no sellAce order when user doesn't have enough ACE");
-
-    it("take my own make order");
-
-    it("place a sellEth order when no sellAce orders", async function() {
-        let orderType = ETHSELL;
-        let orderAmount = web3.toWei(1);
-
-        let tx = await exchange.placeSellEthOrder({
-            value: orderAmount,
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: orderType,
-            orderAmount: orderAmount,
+    it("place sell Eth orders", async function() {
+        const order = {
+            amount: web3.toWei(1),
             maker: maker,
-            orderId: orderId
-        });
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace,
-                eth: balBefore[0].eth.plus(orderAmount)
-            },
-            {
-                name: "maker",
-                address: maker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[1].ace,
-                eth: balBefore[1].eth.minus(orderAmount)
-            }
-        ];
+            price: 11000,
+            orderType: ETH_SELL,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 0,
+            mapIdx: 0
+        };
 
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        await exchangeTestHelper.newOrder(this, order);
+        order.mapIdx = 1;
+        order.sellEthOrderCount = 2;
+        await exchangeTestHelper.newOrder(this, order);
+        //await exchangeTestHelper.printOrderBook();
     });
 
-    it("place a sellAce when no sellETH orders", async function() {
-        let orderType = ACESELL;
-        let orderAmount = 500000;
-
-        let tx = await exchange.placeSellTokenOrder(orderAmount, {
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
-        let orderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[0], orderType, maker, orderAmount);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: orderType,
-            orderAmount: orderAmount,
+    it("place buy ETH orders directly on Exchange", async function() {
+        const order = {
+            amount: 1000000,
             maker: maker,
-            orderId: orderId
-        });
+            price: 110000,
+            orderType: ETH_BUY,
+            viaAugmintToken: false,
+            // expected values:
+            sellEthOrderCount: 0,
+            buyEthOrderCount: 1,
+            mapIdx: 0
+        };
 
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace.plus(orderAmount),
-                eth: balBefore[0].eth
-            },
-            {
-                name: "maker",
-                address: maker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[1].ace.minus(orderAmount),
-                eth: balBefore[1].eth
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        const tx = await tokenAce.approve(exchange.address, order.amount * 2, { from: order.maker });
+        testHelper.logGasUse(this, tx, "approve");
+        await exchangeTestHelper.newOrder(this, order);
+        order.mapIdx = 1;
+        order.buyEthOrderCount = 2;
+        await exchangeTestHelper.newOrder(this, order);
     });
 
-    it("sellAce - fully filled from bigger open sellEth order ", async function() {
-        let sellAceAmount = 500000;
-        let sellEthAmount = web3.toWei(1);
-
-        let orderType = ETHSELL;
-        let tx = await exchange.placeSellEthOrder({
-            value: sellEthAmount,
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-
-        orderType = ACESELL;
-        tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: taker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
-        const expEthSold = await rates.convertToWei(peggedSymbol, sellAceAmount);
-        const orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, sellAceAmount);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ETHSELL,
-            orderAmount: new BigNumber(sellEthAmount).minus(expEthSold),
+    it("place a buy ETH orders via AugmintToken", async function() {
+        const order = {
+            amount: 1000000,
             maker: maker,
-            orderId: orderId
-        });
+            price: 110000,
+            orderType: ETH_BUY,
+            // expected values:
+            sellEthOrderCount: 0,
+            buyEthOrderCount: 1,
+            mapIdx: 0
+        };
 
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace,
-                eth: balBefore[0].eth.minus(expEthSold)
-            },
-            {
-                name: "maker",
-                address: maker,
-                ace: balBefore[1].ace.plus(sellAceAmount),
-                eth: balBefore[1].eth
-            },
-
-            {
-                name: "taker",
-                address: taker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[2].ace.minus(sellAceAmount),
-                eth: balBefore[2].eth.plus(expEthSold)
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        await exchangeTestHelper.newOrder(this, order);
+        order.mapIdx = 1;
+        order.buyEthOrderCount = 2;
+        await exchangeTestHelper.newOrder(this, order);
     });
 
-    it("sellAce - exactly filled from multiple sellEth order");
+    it("shouldn't place a buy ETH order directly if approval < amount");
 
-    it("sellEth - fully filled from open sellAce order ", async function() {
-        const sellAceAmount = 20000000;
-        const sellEthAmount = web3.toWei(1);
+    it("shouldn't place a buy ETH order below minOrderAmount");
+    it("shouldn't place a sell ETH order below minOrderAmount");
+    it("shouldn't place a buy ETH order with 0 price");
+    it("shouldn't place a sell ETH order with 0 price");
 
-        let orderType = ACESELL;
-        let tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: maker
-        });
+    it("no sell Eth order when user doesn't have enough ETH");
+    it("no buy Eth order when user doesn't have enough ACE");
 
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
+    it("should be able to match my own order");
 
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-
-        orderType = ETHSELL;
-        tx = await exchange.placeSellEthOrder({
-            value: sellEthAmount,
-            from: taker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        const expAceSold = await rates.convertFromWei(peggedSymbol, sellEthAmount);
-        const orderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expAceSold, sellEthAmount);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ACESELL,
-            orderAmount: sellAceAmount - expAceSold,
+    it("should match two matching orders (sell ETH partially filled)", async function() {
+        const sellOrder = {
+            amount: web3.toWei(1),
             maker: maker,
-            orderId: orderId
-        });
+            price: 11000,
+            orderType: ETH_SELL,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 0,
+            mapIdx: 0
+        };
 
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace.minus(expAceSold),
-                eth: balBefore[0].eth
-            },
-            {
-                name: "maker",
-                address: maker,
-                ace: balBefore[1].ace,
-                eth: balBefore[1].eth.plus(sellEthAmount)
-            },
-
-            {
-                name: "taker",
-                address: taker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[2].ace.plus(expAceSold),
-                eth: balBefore[2].eth.minus(sellEthAmount)
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
-    });
-
-    it("sellEth - exactly filled from multiple open sellAce orders");
-
-    it("sellAce - partially filled from smaller open sellEth order ", async function() {
-        let sellAceAmount = 25500000;
-        let sellEthAmount = web3.toWei(1);
-
-        let orderType = ETHSELL;
-        let tx = await exchange.placeSellEthOrder({
-            value: sellEthAmount,
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-
-        orderType = ACESELL;
-        tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: taker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
-
-        let acePaid = await rates.convertFromWei(peggedSymbol, sellEthAmount);
-        let expEthSold = sellEthAmount;
-        let aceLeft = sellAceAmount - (await rates.convertFromWei(peggedSymbol, sellEthAmount));
-
-        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expEthSold, acePaid);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ETHSELL,
-            orderAmount: 0,
-            maker: maker,
-            orderId: filledOrderId
-        });
-
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[1], ACESELL, taker, aceLeft);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ACESELL,
-            orderAmount: aceLeft,
+        const buyOrder = {
+            amount: 1000000,
             maker: taker,
-            orderId: newOrderId
-        });
+            price: 11000,
+            orderType: ETH_BUY,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 1,
+            mapIdx: 0
+        };
+        const marketEurEth = 10000000;
+        await rates.setRate("EUR", marketEurEth);
+        await exchangeTestHelper.newOrder(this, sellOrder);
+        await exchangeTestHelper.newOrder(this, buyOrder);
+        //await exchangeTestHelper.printOrderBook(10);
+        const tx = await exchange.matchOrders(0, 0);
+        testHelper.logGasUse(this, tx, "matchOrders");
+        const expPrice =
+            Math.abs(buyOrder.price - 1) > Math.abs(sellOrder.price - 1) ? sellOrder.price : buyOrder.price;
+        const expMatch = {
+            buyer: buyOrder.maker,
+            seller: sellOrder.maker,
+            price: expPrice,
+            weiAmount: marketEurEth / 10000 * expPrice / 10000 * buyOrder.amount / 10000 * (ONEWEI / 1000000),
+            tokenAmount: buyOrder.amount
+        };
 
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace.plus(aceLeft),
-                eth: balBefore[0].eth.minus(expEthSold)
-            },
-            {
-                name: "maker",
-                address: maker,
-                ace: balBefore[1].ace.plus(sellAceAmount).minus(aceLeft),
-                eth: balBefore[1].eth
-            },
-
-            {
-                name: "taker",
-                address: taker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[2].ace.minus(sellAceAmount),
-                eth: balBefore[2].eth.plus(expEthSold)
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        exchangeTestHelper.orderMatchEventAsserts(tx.logs[0], expMatch);
+        //await exchangeTestHelper.printOrderBook();
+        // TODO: asserts: orderCounts + orders in contract
     });
 
-    it("sellEth - partially filled from smaller open sellAce order ", async function() {
-        let sellAceAmount = 1900000;
-        let sellEthAmount = web3.toWei(1);
+    it("should match two matching orders (buy ETH partially filled)");
+    it("should match two matching orders (both fully filled)");
+    it("should NOT match two non-matching orders");
 
-        let orderType = ACESELL;
-        let tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
+    it("should match multiple orders");
 
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
+    it("should NOT match multiple orders if one is non-matching");
 
-        orderType = ETHSELL;
-        tx = await exchange.placeSellEthOrder({
-            value: sellEthAmount,
-            from: taker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        let ethPaid = await rates.convertToWei(peggedSymbol, sellAceAmount);
-        let expAceSold = sellAceAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertToWei(peggedSymbol, sellAceAmount));
-
-        let filledOrderId = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expAceSold, ethPaid);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ACESELL,
-            orderAmount: 0,
+    it("should cancel a sell ETH order", async function() {
+        const order = {
+            amount: web3.toWei(1),
             maker: maker,
-            orderId: filledOrderId
-        });
+            price: 110000,
+            orderType: ETH_SELL,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 0,
+            mapIdx: 0
+        };
 
-        let newOrderId = await exchangeTestHelper.newOrderEventAsserts(tx.logs[1], ETHSELL, taker, ethLeft);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 1,
-            orderType: ETHSELL,
-            orderAmount: ethLeft,
-            maker: taker,
-            orderId: newOrderId
-        });
-
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace.minus(expAceSold),
-                eth: balBefore[0].eth.plus(ethLeft)
-            },
-            {
-                name: "maker",
-                address: maker,
-                ace: balBefore[1].ace,
-                eth: balBefore[1].eth.plus(ethPaid)
-            },
-
-            {
-                name: "taker",
-                address: taker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[2].ace.plus(expAceSold),
-                eth: balBefore[2].eth.minus(sellEthAmount)
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        await exchangeTestHelper.newOrder(this, order);
+        const tx = await exchange.cancelSellEthOrder(order.id, { from: order.maker });
+        testHelper.logGasUse(this, tx, "cancelSellEthOrder");
     });
 
-    it("sellEth - fully filled from multiple open sellAce orders", async function() {
-        const sellEthAmount = web3.toWei(1);
-        const sellAceAmount = (await rates.convertFromWei(peggedSymbol, sellEthAmount)).div(2);
-
-        let orderType = ACESELL;
-        let tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
-
-        tx = await exchange.placeSellTokenOrder(sellAceAmount, {
-            from: maker
-        });
-        testHelper.logGasUse(this, tx, "placeSellTokenOrder");
-
-        balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-
-        orderType = ETHSELL;
-        tx = await exchange.placeSellEthOrder({
-            value: sellEthAmount,
-            from: taker
-        });
-        testHelper.logGasUse(this, tx, "placeSellEthOrder");
-
-        let ethPaid = await rates.convertToWei(peggedSymbol, sellAceAmount);
-        let expAceSold = sellAceAmount;
-        let ethLeft = new BigNumber(sellEthAmount).minus(await rates.convertToWei(peggedSymbol, sellAceAmount * 2));
-
-        let filledOrderId1 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[0], taker, expAceSold, ethPaid);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 0,
-            orderType: ACESELL,
-            orderAmount: 0,
+    it("should cancel a buy ETH order", async function() {
+        const order = {
+            amount: 1000000,
             maker: maker,
-            orderId: filledOrderId1
-        });
+            price: 110000,
+            orderType: ETH_BUY,
+            // expected values:
+            sellEthOrderCount: 0,
+            buyEthOrderCount: 1,
+            mapIdx: 0
+        };
 
-        let filledOrderId2 = await exchangeTestHelper.orderFillEventAsserts(tx.logs[1], taker, expAceSold, ethPaid);
-
-        await exchangeTestHelper.contractStateAsserts({
-            orderCount: 0,
-            orderType: ACESELL,
-            orderAmount: 0,
-            maker: maker,
-            orderId: filledOrderId2
-        });
-
-        let expBalances = [
-            {
-                name: "exchange contract",
-                address: exchange.address,
-                ace: balBefore[0].ace.minus(expAceSold * 2),
-                eth: balBefore[0].eth.plus(ethLeft)
-            },
-            {
-                name: "maker",
-                address: maker,
-                ace: balBefore[1].ace,
-                eth: balBefore[1].eth.plus(ethPaid.times(2))
-            },
-
-            {
-                name: "taker",
-                address: taker,
-                gasFee: PLACE_ORDER_MAXFEE,
-                ace: balBefore[2].ace.plus(expAceSold * 2),
-                eth: balBefore[2].eth.minus(sellEthAmount)
-            }
-        ];
-
-        await tokenAceTestHelper.balanceAsserts(expBalances);
+        await exchangeTestHelper.newOrder(this, order);
+        const tx = await exchange.cancelBuyEthOrder(order.id, { from: order.maker });
+        testHelper.logGasUse(this, tx, "cancelBuyEthOrder");
     });
+
+    it("only own orders should be possible to cancel");
 });

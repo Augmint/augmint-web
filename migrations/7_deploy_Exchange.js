@@ -7,9 +7,9 @@ const Exchange = artifacts.require("./Exchange.sol");
 module.exports = function(deployer, network) {
     deployer.link(SafeMath, Exchange);
     deployer.link(OrdersLib, Exchange);
-    deployer.deploy(Exchange, TokenAce.address, Rates.address);
+    deployer.deploy(Exchange, TokenAce.address, Rates.address, 100);
     deployer.then(async () => {
         const tokenAce = TokenAce.at(TokenAce.address);
-        await tokenAce.grantPermission(Exchange.address, "transferNoFee");
+        await tokenAce.grantMultiplePermissions(Exchange.address, ["Exchange", "transferNoFee", "transferFromNoFee"]);
     });
 };

@@ -41,6 +41,7 @@
         "cypress": "1.4.1",
         "eslint-plugin-cypress": "2.0.1",
         "ganache-cli": "6.0.3",
+        "random-seed": "0.3.0",
         "redux-logger": "3.0.6",
         "semantic-ui": "2.2.13"
     }
