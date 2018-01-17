@@ -1,268 +1,175 @@
-/*
-Exchange augmint tokens <-> ETH
-It's mock only yet, basic implemantion of selling tokens for ETH or vica versa.
-All orders are on a market eth/pegged currency rate at the moment of fullmilment
-Market rate is provided  by the rates contract
-
-TODO: add reentrancy protection
-TODO: add min exchanged amount param (set in token amount for both?)
-    + what if total leftover from fills  carried over to new order but it's small than minamount?
-TODO: astronomical gas costs when filling a lot of orders
-    + how to handle on client side (eg. estimate if it might be over the gas etc.)
-TODO: make orders generic, ie. more generic placeSellOrder func.
-TODO: test for rounding if could be any leftover after order fills
-TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
-TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting
-        - it would ensure trade happens on predictable rate
-TODO: add orderId to token transfer narrative
+/* Augmint's internal Exchange
+    TODO: check/test if underflow possible on sell/buyORder.amount -= token/weiAmount in matchOrders()
+    TODO: use a lib for orders?
+    TODO: use generic new order and remove order events? (and price sign would indicate buy/sell?
+            or have both wei and tokenamounts?)
+    TODO: deduct fee
+    TODO: minOrderAmount setter
+    TODO: index event args
+    TODO: add multiple orders getter with offset param
 */
 pragma solidity 0.4.18;
-import "./generic/SafeMath.sol";
-import "./generic/Owned.sol";
-import "./generic/OrdersLib.sol";
-import "./generic/AugmintToken.sol";
-import "./Rates.sol";
+import "./interfaces/ExchangeInterface.sol";
 
 
-contract Exchange is Owned {
-    using SafeMath for uint256;
-    using OrdersLib for OrdersLib.OrderList;
-    using OrdersLib for OrdersLib.OrderData;
+contract Exchange is ExchangeInterface {
+    uint public minOrderAmount;
 
-    Rates public rates;
-    AugmintToken public augmintToken; // for transfers
+    event NewSellEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint weiAmount);
+    event NewBuyEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint tokenAmount);
 
-    // These should be equal to ETH and token Balances of contract
-    /* TODO: consider to remove these when rounding tested */
-    uint256 public totalTokenSellOrders;
-    uint256 public totalEthSellOrders;
+    event OrderFill(address seller, address buyer, uint buyOrderId, uint sellOrderId, uint price,
+        uint weiAmount, uint tokenAmount);
 
-    /*
-     orders stores all open orders. It's a linked array, ordered by the order was placed
-     Order removed  when fully filled and updated when partially filled
-     Note that it contains only one type of orders (EthSell or UtcSell) at any given time
-        because all orders are on market rate
-     Ie. it's not a real order book
-    */
-    OrdersLib.OrderList public orders;
+    event CancelledSellEthOrder(uint orderId, address maker, uint weiAmount);
+    event CancelledBuyEthOrder(uint orderId, address maker, uint tokenAmount);
 
-    mapping(address => uint80[]) public m_orders; // orders for an account => orderId
-
-    function Exchange(address _augmintTokenAddress, address _ratesAddress) public Owned() {
-        rates = Rates(_ratesAddress);
-        augmintToken = AugmintToken(_augmintTokenAddress);
+    function Exchange(address augmintTokenAddress, address ratesAddress, uint _minOrderAmount) public {
+        augmintToken = AugmintTokenInterface(augmintTokenAddress);
+        rates = Rates(ratesAddress);
+        minOrderAmount = _minOrderAmount;
     }
 
-    function getMakerOrderCount(address maker) external view returns(uint orderCount) {
-        return m_orders[maker].length;
+    function placeSellEthOrder(uint price) external payable returns (uint orderIndex, uint orderId) {
+        require(price > 0);
+        uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
+        require(tokenAmount >= minOrderAmount);
+
+        lastOrderId++;
+        orderIndex = sellEthOrders.push(Order(lastOrderId, msg.sender, now, price, msg.value)) - 1;
+
+        NewSellEthOrder(orderIndex, lastOrderId, msg.sender, price, msg.value);
+        return(orderIndex, lastOrderId);
     }
 
-    function getMakerOrder(address maker, uint80 _makerOrderIdx) external view
-    returns(uint80 orderId, uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
-        orderId = m_orders[maker][_makerOrderIdx];
-        return (
-                orderId,
-                orders.orders[orderId - 1].order.makerOrderIdx,
-                orders.orders[orderId - 1].order.orderType,
-                orders.orders[orderId - 1].order.amount);
+    /* this function requires previous approval to transfer tokens */
+    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint orderIndex, uint orderId) {
+        augmintToken.transferFromNoFee(msg.sender, this, tokenAmount, "Sell token order placed");
+        return _placeBuyEthOrder(msg.sender, price, tokenAmount);
     }
 
-    function getOrder(uint80 orderId) external view
-    returns(address maker, uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
-        return (orders.orders[orderId - 1].order.maker,
-                orders.orders[orderId - 1].order.makerOrderIdx,
-                orders.orders[orderId - 1].order.orderType,
-                orders.orders[orderId - 1].order.amount);
+    /* This func assuming that token already transferred to Exchange so it can be only called
+        via AugmintToken.placeBuyEthOrderOnExchange() convenience function */
+    function placeBuyEthOrderTrusted(address maker, uint price, uint tokenAmount)
+    external returns (uint orderIndex, uint orderId) {
+        require(msg.sender == address(augmintToken));
+        return _placeBuyEthOrder(maker, price, tokenAmount);
     }
 
-    /* Helper function for client to reduce web3 calls when getting orderlist
-        Note: client should handle potential state changes in orders during iteration
-        Returns:
-            order data for orderId if order is open + next open orderId.
-            Passing 0 orderId will return first open order
-        Return values:
-         order.amount 0 returned then orderId is not open
-         nextOrderId 0 returned then no more open orders
-         For invalid orderId returns 0 order.amount and nextOrderId
-    */
-    function iterateOpenOrders(uint80 orderId) external view
-    returns (uint80 _orderId,
-                address maker,
-                uint80 makerOrderIdx,
-                OrdersLib.OrderType orderType,
-                uint amount,
-                uint80 nextOrderId) {
-        if (orders.first == 0) { // OrdersLib.None
-            // no open orders
-            return (0, address(0), 0, OrdersLib.OrderType.EthSell, 0, 0);
-        }
-        if (orderId == 0) {
-            //|| orders.orders[orderid-1].first == OrdersLib.None) {
-            _orderId = orders.first;
-        } else {
-            _orderId = orderId;
-        }
-
-        return (_orderId,
-                orders.orders[_orderId - 1].order.maker,
-                orders.orders[_orderId - 1].order.makerOrderIdx,
-                orders.orders[_orderId - 1].order.orderType,
-                orders.orders[_orderId - 1].order.amount,
-                orders.orders[_orderId - 1].next);
+    function cancelSellEthOrder(uint sellIndex, uint sellId) external {
+        require(sellEthOrders[sellIndex].maker == msg.sender);
+        require(sellId == sellEthOrders[sellIndex].id);
+        uint amount = sellEthOrders[sellIndex].amount;
+        _removeOrder(sellEthOrders, sellIndex);
+        CancelledSellEthOrder(sellId, msg.sender, amount);
     }
 
-    function placeSellEthOrder() external payable {
-        require(msg.value > 0); // FIXME: min amount? Shall we use min token amount instead of ETH value?
-        uint weiToSellLeft = msg.value;
-        uint tokenValueTotal = rates.convertFromWei(augmintToken.peggedSymbol(), weiToSellLeft);
-        uint tokenValueLeft = tokenValueTotal;
-        uint weiToPay;
-        uint tokenSold;
-        address maker;
-        // fill as much as we can from open buy eth orders
-        uint80 i;
-        uint80 nextOrderId = orders.iterateFirst();
-        while (orders.iterateValid(nextOrderId) && weiToSellLeft > 0 && // FIXME: minAmount to rounding acc?
-                totalTokenSellOrders != 0) {
-            i = nextOrderId;
-            nextOrderId = orders.iterateNext(i);
-            maker = orders.orders[i-1].order.maker;
-            if (orders.orders[i-1].order.amount >= tokenValueLeft) {
-                // sell order fully covered from maker buy order
-                tokenSold = tokenValueLeft;
-                weiToPay = weiToSellLeft;
+    function cancelBuyEthOrder(uint buyIndex, uint buyId) external {
+        require(buyEthOrders[buyIndex].maker == msg.sender);
+        require(buyId == buyEthOrders[buyIndex].id);
+        uint amount = buyEthOrders[buyIndex].amount;
+        _removeOrder(buyEthOrders, buyIndex);
+        CancelledBuyEthOrder(buyId, msg.sender, amount);
+    }
+
+    function matchOrders(uint sellIndex, uint sellId, uint buyIndex, uint buyId) external {
+        Order storage sellOrder = sellEthOrders[sellIndex];
+        Order storage buyOrder = buyEthOrders[buyIndex];
+        require(sellOrder.price <= buyOrder.price);
+        require(sellOrder.id == sellId);
+        require(buyOrder.id == buyId);
+        address sellMaker = sellOrder.maker;
+        address buyMaker = buyOrder.maker;
+
+        uint price = getMatchPrice(sellOrder.price, buyOrder.price); // use price which is closer to par
+        uint buyEthWeiAmount = rates.convertToWei(augmintToken.peggedSymbol(), buyOrder.amount).mul(price).div(10000);
+        uint tradedWeiAmount;
+        uint tradedTokenAmount;
+
+        if (buyEthWeiAmount <= sellOrder.amount) {
+            // fully filled buy order
+            tradedWeiAmount = buyEthWeiAmount;
+            if (buyEthWeiAmount == sellOrder.amount) {
+                // sell order fully filled as well
+                tradedTokenAmount = sellOrder.amount;
+                _removeOrder(sellEthOrders, sellIndex);
             } else {
-                // sell order partially covers buy order
-                tokenSold = orders.orders[i - 1].order.amount;
-                weiToPay = rates.convertToWei(augmintToken.peggedSymbol(), tokenSold);
+                // sell order only partially filled
+                tradedTokenAmount = buyOrder.amount;
+                sellOrder.amount -= tradedWeiAmount;
             }
-            tokenValueLeft = tokenValueLeft.sub(tokenSold);
-            weiToSellLeft = weiToSellLeft.sub(weiToPay);
-
-            fillOrder(i, msg.sender, tokenSold, weiToPay); // this pays the maker but not the taker yet
-
-        }
-        if (tokenValueTotal.sub(tokenValueLeft) > 0) {
-            // transfer the sum token value of all WEI sold with orderFills
-            augmintToken.transferNoFee_legacy(this, msg.sender, tokenValueTotal.sub(tokenValueLeft), "token sold");
-        }
-        if (weiToSellLeft != 0) {
-            // No buy order or buy orders wasn't enough to fully fill order
-            // ETH amount already on contract balance
-            addOrder(OrdersLib.OrderType.EthSell, msg.sender, weiToSellLeft);
-        }
-    }
-
-    function placeSellTokenOrder(uint tokenAmount) external {
-        require(tokenAmount > 0); // FIXME: min amount?
-        augmintToken.transferNoFee_legacy(msg.sender, this, tokenAmount, "token sell order placed");
-        uint weiValueTotal = rates.convertToWei(augmintToken.peggedSymbol(), tokenAmount);
-        uint weiValueLeft = weiValueTotal;
-        uint tokenToSellLeft = tokenAmount;
-        uint weiSold;
-        uint tokenToPay;
-        address maker;
-        // fill as much as we can from open buy token orders
-        uint80 i;
-        uint80 nextOrderId = orders.iterateFirst();
-        while (orders.iterateValid(nextOrderId) && weiValueLeft > 0 && // FIXME: minAmount to rounding acc?
-                totalEthSellOrders != 0) {
-            i = nextOrderId;
-            nextOrderId = orders.iterateNext(i);
-            maker = orders.orders[i-1].order.maker;
-            if (orders.orders[i-1].order.amount >= weiValueLeft) {
-                // sell order fully covered from maker buy order
-                weiSold = weiValueLeft;
-                tokenToPay = tokenToSellLeft;
-            } else {
-                // sell order partially covers buy order
-                weiSold = orders.orders[i-1].order.amount;
-                tokenToPay = rates.convertFromWei(augmintToken.peggedSymbol(), weiSold);
-            }
-            weiValueLeft = weiValueLeft.sub(weiSold);
-            tokenToSellLeft = tokenToSellLeft.sub(tokenToPay);
-            fillOrder(i, msg.sender, weiSold, tokenToPay); // this pays the maker but not the taker yet
-        }
-        // pay the sum WEI value of all token sold with orderFills to taker
-        msg.sender.transfer(weiValueTotal.sub(weiValueLeft));
-        if (tokenToSellLeft != 0) {
-            // No buy order or weren't enough buy orders to fully fill order
-            addOrder(OrdersLib.OrderType.TokenSell, msg.sender, tokenToSellLeft);
-        }
-    }
-
-    function getOrderCount() public view returns(uint80 orderCount) {
-        return orders.count;
-    }
-
-    event e_newOrder(uint80 orderId, OrdersLib.OrderType orderType, address maker, uint amount);
-
-    function addOrder(OrdersLib.OrderType orderType, address maker, uint amount) internal {
-        // It's assumed that the ETH/token already taken from maker in calling function
-        if (orderType == OrdersLib.OrderType.EthSell) {
-            totalEthSellOrders = totalEthSellOrders.add(amount);
-        } else if (orderType == OrdersLib.OrderType.TokenSell) {
-            totalTokenSellOrders = totalTokenSellOrders.add(amount);
+            _removeOrder(buyEthOrders, buyIndex);
         } else {
-            revert();
+            // partially filled buy order + fully filled sell order
+            tradedWeiAmount = sellOrder.amount;
+            tradedTokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), sellOrder.amount)
+                .mul(price).div(10000);
+            buyOrder.amount -= tradedTokenAmount;
+            _removeOrder(sellEthOrders, sellIndex);
         }
 
-        uint80 orderId = orders.append(OrdersLib.OrderData(maker, 0, orderType, amount));
-        uint80 makerOrderIdx = uint80(m_orders[maker].push(orderId));
-        orders.orders[orderId-1].order.makerOrderIdx = makerOrderIdx - 1;
+        buyMaker.transfer(tradedWeiAmount);
+        augmintToken.transferNoFee(sellMaker, tradedTokenAmount, "Buy token order fill");
 
-        e_newOrder(orderId, orderType, maker, amount);
-        return;
+        OrderFill(sellMaker, buyMaker, sellId, buyId, price, tradedWeiAmount,
+            tradedTokenAmount);
     }
 
-    event e_orderFill(uint80 orderId, address taker, uint amountSold, uint amountPaid);
+    /* Mathes [orderIndex, orderId] orders.
+        Runs as long as gas avialable for the call
+        Returns the number of orders matched
+        Reverts if any match is invalid
+        */
+    function matchMultipleOrders(uint[2][] sellOrders, uint[2][] buyOrders) external returns(uint matchCount) {
+        /* FIXME: to be implemented */
+        matchCount = 0;
+        require(sellOrders[0].length == buyOrders[0].length);
+        require(sellOrders[1].length == buyOrders[1].length);
+        require(sellOrders[0].length == sellOrders[1].length);
+        require(buyOrders[0].length == buyOrders[1].length);
+        revert();
+    }
 
-    function fillOrder(uint80 orderId, address taker,
-            uint amountToSell, uint amountToPay) internal {
-        // we only pay the maker here. Calling function must pay the sum of all buys to taker
-        OrdersLib.OrderType orderType = orders.orders[orderId - 1].order.orderType;
-        address maker = orders.orders[orderId-1].order.maker;
-        if (orderType == OrdersLib.OrderType.EthSell) {
-            augmintToken.transferNoFee_legacy(this, maker, amountToPay, "ETH sold");
-            totalEthSellOrders = totalEthSellOrders.sub(amountToSell);
-        } else if (orderType == OrdersLib.OrderType.TokenSell) {
-            maker.transfer(amountToPay);
-            totalTokenSellOrders = totalTokenSellOrders.sub(amountToSell);
-        } else {
-            revert();
+    function getOrderCounts() external view returns(uint sellEthOrderCount, uint buyEthOrderCount) {
+        return(sellEthOrders.length, buyEthOrders.length);
+    }
+
+    /* Helper for UI to reduce web3 calls
+        Returns an unordered array of sell/buy orders from offset, starting with sell orders
+        Returns empty array if offset out of range ? Return lastOrderId? lastChangedOrderId? */
+    function getOrders(uint offset) external view returns(Order[] orders) {
+        /* FIXME: to be implemented */
+        orders = sellEthOrders;
+        require(offset < sellEthOrders.length + buyEthOrders.length - 1);
+        revert();
+    }
+
+    // return the price which is closer to par
+    function getMatchPrice(uint sellPrice, uint buyPrice) internal pure returns(uint price) {
+        uint sellPriceDeviationFromPar = sellPrice > 1 ? sellPrice - 1 : 1 - sellPrice;
+        uint buyPriceDeviationFromPar = buyPrice > 1 ? buyPrice - 1 : 1 - buyPrice;
+        return price = sellPriceDeviationFromPar > buyPriceDeviationFromPar ?
+            buyPrice : sellPrice;
+    }
+
+    function _placeBuyEthOrder(address maker, uint price, uint tokenAmount)
+    private returns (uint orderIndex, uint orderId) {
+        require(price > 0);
+        require(tokenAmount >= minOrderAmount);
+
+        lastOrderId++;
+        orderIndex = buyEthOrders.push(Order(lastOrderId, maker, now, price, tokenAmount)) - 1;
+
+        NewBuyEthOrder(orderIndex, lastOrderId, maker, price, tokenAmount);
+        return(orderIndex, lastOrderId);
+    }
+
+    function _removeOrder(Order[] storage orders, uint orderIndex) private {
+        if (orderIndex < orders.length - 1) {
+            orders[orderIndex] = orders[orders.length - 1];
         }
-
-        orders.orders[orderId - 1].order.amount = orders.orders[orderId - 1].order.amount.sub(amountToSell);
-
-        if (orders.orders[orderId - 1].order.amount == 0) {
-            removeOrder(orderId);
-        }
-
-        e_orderFill(orderId, taker, amountToSell, amountToPay);
+        delete orders[orders.length - 1];
+        orders.length--;
     }
 
-    function removeOrder(uint80 orderId) internal {
-        uint80 makerOrderIdx = orders.orders[orderId-1].order.makerOrderIdx;
-        address maker = orders.orders[orderId-1].order.maker;
-        orders.remove(orderId);
-        uint len = m_orders[maker].length;
-        if (makerOrderIdx == len - 1) {
-            // last item
-            m_orders[maker].length--;
-        } else {
-            // not the last item, overwrite with last item and shrink array
-            m_orders[maker][makerOrderIdx] = m_orders[maker][len - 1];
-            orders.orders[m_orders[maker][len - 1] - 1].order.makerOrderIdx = makerOrderIdx;
-            m_orders[maker].length--;
-        }
-    }
-/*
-    function cancelOrder( uint80 orderId ) external {
-        // FIXME: to implement
-        // transfer ETH or token back
-         //orderId = orderId; // to supress compiler warnings
-         // FIXME: check orderId
-         // removeOrder( orderIdx)
-    }
-*/
 }
