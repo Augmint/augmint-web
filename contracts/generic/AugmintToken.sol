@@ -121,7 +121,7 @@ contract AugmintToken is AugmintTokenInterface {
 
     /* convenience function - alternative to Exchange.placeBuyEthOrder without approval required */
     function placeBuyEthOrderOnExchange(address _exchange, uint price, uint tokenAmount)
-    external returns (uint buyEthorderId) {
+    external returns (uint buyEthOrderIndex, uint buyEthorderId) {
         require(permissions[_exchange]["Exchange"]); // only whitelisted exchanges
         ExchangeInterface exchange = ExchangeInterface(_exchange);
         _transfer(msg.sender, _exchange, tokenAmount, "Sell token order placed", 0);

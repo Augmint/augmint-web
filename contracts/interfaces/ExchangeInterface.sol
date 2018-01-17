@@ -2,6 +2,7 @@
     TODO: rates setter?
     TODO: make a rates interface and use it instead?
     TODO: uint32 for now?
+    TODO: do we need all funcs or just orders + placeBuyEthOrderTrusted  here?
 */
 pragma solidity 0.4.18;
 import "../generic/SafeMath.sol";
@@ -14,10 +15,12 @@ contract ExchangeInterface is Restricted {
     using SafeMath for uint256;
     AugmintTokenInterface public augmintToken;
     Rates public rates;
+    uint public lastOrderId; // a unique id accross buy/sell orders to avoid potential issues referencing by only idx
+                            // 0 means no order were placed yet
 
     struct Order {
+        uint id;
         address maker;
-        uint mapIdx; // index in mSellEthOrders or mBuyEthOrders
         uint addedTime;
         uint price;
         uint amount; // SELL_ETH: amount in wei BUY_ETH: token amount with 4 decimals
@@ -25,17 +28,19 @@ contract ExchangeInterface is Restricted {
 
     Order[] public sellEthOrders;
     Order[] public buyEthOrders;
-    mapping(address => uint[]) public mSellEthOrders;
-    mapping(address => uint[]) public mBuyEthOrders;
 
-    function placeSellEthOrder(uint price) external payable returns (uint sellEthOrderId);
-    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint buyEthOrderId);
+    function placeSellEthOrder(uint price) external payable returns (uint sellEthOrderIndex, uint orderId);
+    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint buyEthOrderIndex, uint orderId);
 
-    function placeBuyEthOrderTrusted(address maker, uint price, uint tokenAmount) external returns (uint buyEthOrderId);
+    function placeBuyEthOrderTrusted(address maker, uint price, uint tokenAmount)
+        external returns (uint buyEthOrderIndex, uint orderId);
 
-    function cancelBuyEthOrder(uint buyEthOrderId) external;
-    function cancelSellEthOrder(uint sellEthOrderId) external;
-    function matchOrders(uint sellEthOrderId, uint buyEthOrderId) external;
-    function matchMultipleOrders(uint[] sellEthOrderIds, uint[] buyEthOrderIds) external;
+    function cancelBuyEthOrder(uint buyEtherOrderIndex, uint buyEthOrderId) external;
+    function cancelSellEthOrder(uint sellEthOrderIndex, uint sellEthOrderId) external;
+
+    function matchOrders(uint sellEthOrderIndex, uint sellEthOrderId, uint buyEthOrderIndex, uint buyEthOrderId)
+        external;
+
+    function matchMultipleOrders(uint[2][] _sellEthOrders, uint[2][] _buyEthOrders) external returns(uint matchCount);
 
 }

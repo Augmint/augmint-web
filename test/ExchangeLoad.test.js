@@ -21,19 +21,23 @@ const ACC_INIT_ACE = 100000000;
 
 let rates, tokenAce, exchange, peggedSymbol;
 const random = new RandomSeed("Have the same test data");
+let sellOrders = [];
 
 const getOrderToFill = async () => {
+    // this could be optimized ...
     const orderCounts = await exchange.getOrderCounts();
     const sellCt = orderCounts[0].toNumber();
     const buyCt = orderCounts[1].toNumber();
-    const sellOrders = [];
-    // retreive sell orders (this could be optimized a lot...)
-    for (let i = 0; i < sellCt; i++) {
-        sellOrders.push(await exchangeTestHelper.getSellOrder(i));
+    if (sellOrders.length !== sellCt) {
+        // retreive sell orders
+        sellOrders = [];
+        for (let i = 0; i < sellCt; i++) {
+            sellOrders.push(await exchangeTestHelper.getSellOrder(i));
+        }
     }
     let match;
     for (let i = 0; i < buyCt && !match; i++) {
-        const buyOrder = await exchangeTestHelper.getBuyOrder(0);
+        const buyOrder = await exchangeTestHelper.getBuyOrder(i);
         for (let j = 0; j < sellOrders.length && !match; j++) {
             const sellOrder = sellOrders[j];
 
@@ -97,12 +101,51 @@ contract("Exchange load tests", accounts => {
                 "  Sell amount: " + web3.fromWei(match.sellOrder.amount) + " ETH",
                 "  Buy amount: " + match.buyOrder.amount.div(10000).toString() + " ACE"
             );
-            const tx = await exchange.matchOrders(match.sellOrder.id, match.buyOrder.id);
-            testHelper.logGasUse(this, tx, "matchOrder");
+            //await exchangeTestHelper.printOrderBook(10);
+            const tx = await exchange.matchOrders(
+                match.sellOrder.index,
+                match.sellOrder.id,
+                match.buyOrder.index,
+                match.buyOrder.id
+            );
+            testHelper.logGasUse(this, tx, "matchOrders");
             match = await getOrderToFill();
         }
 
         await testHelper.revertSnapshot(snapshotId);
         //await exchangeTestHelper.printOrderBook(10);
+    });
+
+    it("it would cancel all orders", async function() {
+        const snapshotId = await testHelper.takeSnapshot();
+        //await exchangeTestHelper.printOrderBook(10);
+        let orderCounts = await exchange.getOrderCounts();
+        let sellCt = orderCounts[0].toNumber();
+        let buyCt = orderCounts[1].toNumber();
+
+        // delete in a random order
+        for (let i = sellCt - 1; i >= 0; i--) {
+            const delIdx = Math.floor(random.random() * i);
+            const order = await exchangeTestHelper.getSellOrder(delIdx);
+            const tx = await exchange.cancelSellEthOrder(order.index, order.id, { from: order.maker });
+            testHelper.logGasUse(this, tx, "cancelSellEthOrder");
+        }
+
+        for (let i = buyCt - 1; i >= 0; i--) {
+            const delIdx = Math.floor(random.random() * i);
+            const order = await exchangeTestHelper.getBuyOrder(delIdx);
+            const tx = await exchange.cancelBuyEthOrder(order.index, order.id, { from: order.maker });
+            testHelper.logGasUse(this, tx, "cancelBuyEthOrder");
+        }
+
+        orderCounts = await exchange.getOrderCounts();
+        sellCt = orderCounts[0].toNumber();
+        buyCt = orderCounts[1].toNumber();
+
+        //await exchangeTestHelper.printOrderBook(10);
+        assert.equal(sellCt, 0);
+        assert.equal(buyCt, 0);
+
+        await testHelper.revertSnapshot(snapshotId);
     });
 });

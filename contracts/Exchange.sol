@@ -1,11 +1,12 @@
 /* Augmint's internal Exchange
     TODO: check/test if underflow possible on sell/buyORder.amount -= token/weiAmount in matchOrders()
     TODO: use a lib for orders?
-    TODO: use generic new order and remove order events?
-    TODO: handle potential issues with using array idx as id. Generate an orderId and pass + cross check?
+    TODO: use generic new order and remove order events? (and price sign would indicate buy/sell?
+            or have both wei and tokenamounts?)
     TODO: deduct fee
     TODO: minOrderAmount setter
     TODO: index event args
+    TODO: add multiple orders getter with offset param
 */
 pragma solidity 0.4.18;
 import "./interfaces/ExchangeInterface.sol";
@@ -14,14 +15,14 @@ import "./interfaces/ExchangeInterface.sol";
 contract Exchange is ExchangeInterface {
     uint public minOrderAmount;
 
-    event NewSellEthOrder(uint sellEthOrderId, address maker, uint price, uint weiAmount);
-    event NewBuyEthOrder(uint buyEthOrderId, address maker, uint price, uint tokenAmount);
+    event NewSellEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint weiAmount);
+    event NewBuyEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint tokenAmount);
 
-    event OrderFill(address seller, address buyer, uint buyEthOrderId, uint sellEthOrderId, uint price,
+    event OrderFill(address seller, address buyer, uint buyOrderId, uint sellOrderId, uint price,
         uint weiAmount, uint tokenAmount);
 
-    event CancelledSellEthOrder(address maker, uint weiAmount);
-    event CancelledBuyEthOrder(address maker, uint tokenAmount);
+    event CancelledSellEthOrder(uint orderId, address maker, uint weiAmount);
+    event CancelledBuyEthOrder(uint orderId, address maker, uint tokenAmount);
 
     function Exchange(address augmintTokenAddress, address ratesAddress, uint _minOrderAmount) public {
         augmintToken = AugmintTokenInterface(augmintTokenAddress);
@@ -29,21 +30,20 @@ contract Exchange is ExchangeInterface {
         minOrderAmount = _minOrderAmount;
     }
 
-    function placeSellEthOrder(uint price) external payable returns (uint sellEthOrderId) {
+    function placeSellEthOrder(uint price) external payable returns (uint orderIndex, uint orderId) {
         require(price > 0);
         uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
         require(tokenAmount >= minOrderAmount);
-        sellEthOrderId = sellEthOrders.length;
-        uint mapIdx = mSellEthOrders[msg.sender].push(sellEthOrderId) - 1;
-        sellEthOrders.push(
-                Order(msg.sender, mapIdx, now, price, msg.value)
-            ) - 1;
 
-        NewSellEthOrder(sellEthOrderId, msg.sender, price, msg.value);
+        lastOrderId++;
+        orderIndex = sellEthOrders.push(Order(lastOrderId, msg.sender, now, price, msg.value)) - 1;
+
+        NewSellEthOrder(orderIndex, lastOrderId, msg.sender, price, msg.value);
+        return(orderIndex, lastOrderId);
     }
 
     /* this function requires previous approval to transfer tokens */
-    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint buyEthOrderId) {
+    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint orderIndex, uint orderId) {
         augmintToken.transferFromNoFee(msg.sender, this, tokenAmount, "Sell token order placed");
         return _placeBuyEthOrder(msg.sender, price, tokenAmount);
     }
@@ -51,31 +51,33 @@ contract Exchange is ExchangeInterface {
     /* This func assuming that token already transferred to Exchange so it can be only called
         via AugmintToken.placeBuyEthOrderOnExchange() convenience function */
     function placeBuyEthOrderTrusted(address maker, uint price, uint tokenAmount)
-    external returns (uint buyEthOrderId) {
+    external returns (uint orderIndex, uint orderId) {
         require(msg.sender == address(augmintToken));
         return _placeBuyEthOrder(maker, price, tokenAmount);
     }
 
-    function cancelSellEthOrder(uint sellEthOrderId) external {
-        require(sellEthOrders[sellEthOrderId].maker == msg.sender);
-        uint amount = sellEthOrders[sellEthOrderId].amount;
-        removeItem(mSellEthOrders[msg.sender], sellEthOrders[sellEthOrderId].mapIdx);
-        removeOrder(sellEthOrders, sellEthOrderId);
-        CancelledSellEthOrder(msg.sender, amount);
+    function cancelSellEthOrder(uint sellIndex, uint sellId) external {
+        require(sellEthOrders[sellIndex].maker == msg.sender);
+        require(sellId == sellEthOrders[sellIndex].id);
+        uint amount = sellEthOrders[sellIndex].amount;
+        _removeOrder(sellEthOrders, sellIndex);
+        CancelledSellEthOrder(sellId, msg.sender, amount);
     }
 
-    function cancelBuyEthOrder(uint buyEthOrderId) external {
-        require(buyEthOrders[buyEthOrderId].maker == msg.sender);
-        uint amount = buyEthOrders[buyEthOrderId].amount;
-        removeItem(mBuyEthOrders[msg.sender], buyEthOrders[buyEthOrderId].mapIdx);
-        removeOrder(buyEthOrders, buyEthOrderId);
-        CancelledBuyEthOrder(msg.sender, amount);
+    function cancelBuyEthOrder(uint buyIndex, uint buyId) external {
+        require(buyEthOrders[buyIndex].maker == msg.sender);
+        require(buyId == buyEthOrders[buyIndex].id);
+        uint amount = buyEthOrders[buyIndex].amount;
+        _removeOrder(buyEthOrders, buyIndex);
+        CancelledBuyEthOrder(buyId, msg.sender, amount);
     }
 
-    function matchOrders(uint sellId, uint buyId) external {
-        Order storage sellOrder = sellEthOrders[sellId];
-        Order storage buyOrder = buyEthOrders[buyId];
+    function matchOrders(uint sellIndex, uint sellId, uint buyIndex, uint buyId) external {
+        Order storage sellOrder = sellEthOrders[sellIndex];
+        Order storage buyOrder = buyEthOrders[buyIndex];
         require(sellOrder.price <= buyOrder.price);
+        require(sellOrder.id == sellId);
+        require(buyOrder.id == buyId);
         address sellMaker = sellOrder.maker;
         address buyMaker = buyOrder.maker;
 
@@ -90,23 +92,20 @@ contract Exchange is ExchangeInterface {
             if (buyEthWeiAmount == sellOrder.amount) {
                 // sell order fully filled as well
                 tradedTokenAmount = sellOrder.amount;
-                removeItem(mSellEthOrders[sellOrder.maker], sellOrder.mapIdx);
-                removeOrder(sellEthOrders, sellId);
+                _removeOrder(sellEthOrders, sellIndex);
             } else {
                 // sell order only partially filled
                 tradedTokenAmount = buyOrder.amount;
                 sellOrder.amount -= tradedWeiAmount;
             }
-            removeItem(mBuyEthOrders[buyOrder.maker], buyOrder.mapIdx);
-            removeOrder(buyEthOrders, buyId);
+            _removeOrder(buyEthOrders, buyIndex);
         } else {
             // partially filled buy order + fully filled sell order
             tradedWeiAmount = sellOrder.amount;
             tradedTokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), sellOrder.amount)
                 .mul(price).div(10000);
             buyOrder.amount -= tradedTokenAmount;
-            removeItem(mSellEthOrders[sellOrder.maker], sellOrder.mapIdx);
-            removeOrder(sellEthOrders, sellId);
+            _removeOrder(sellEthOrders, sellIndex);
         }
 
         buyMaker.transfer(tradedWeiAmount);
@@ -116,9 +115,18 @@ contract Exchange is ExchangeInterface {
             tradedTokenAmount);
     }
 
-    function matchMultipleOrders(uint[] sellEthOrderIds, uint[] buyEthOrderIds) external {
+    /* Mathes [orderIndex, orderId] orders.
+        Runs as long as gas avialable for the call
+        Returns the number of orders matched
+        Reverts if any match is invalid
+        */
+    function matchMultipleOrders(uint[2][] sellOrders, uint[2][] buyOrders) external returns(uint matchCount) {
         /* FIXME: to be implemented */
-        require(sellEthOrderIds.length == buyEthOrderIds.length);
+        matchCount = 0;
+        require(sellOrders[0].length == buyOrders[0].length);
+        require(sellOrders[1].length == buyOrders[1].length);
+        require(sellOrders[0].length == sellOrders[1].length);
+        require(buyOrders[0].length == buyOrders[1].length);
         revert();
     }
 
@@ -126,8 +134,14 @@ contract Exchange is ExchangeInterface {
         return(sellEthOrders.length, buyEthOrders.length);
     }
 
-    function getAccountOrders(address maker) external view returns (uint[] sellEthOrderIds, uint[] buyEthOrderIds) {
-        return (mSellEthOrders[maker], mBuyEthOrders[maker]);
+    /* Helper for UI to reduce web3 calls
+        Returns an unordered array of sell/buy orders from offset, starting with sell orders
+        Returns empty array if offset out of range ? Return lastOrderId? lastChangedOrderId? */
+    function getOrders(uint offset) external view returns(Order[] orders) {
+        /* FIXME: to be implemented */
+        orders = sellEthOrders;
+        require(offset < sellEthOrders.length + buyEthOrders.length - 1);
+        revert();
     }
 
     // return the price which is closer to par
@@ -138,34 +152,24 @@ contract Exchange is ExchangeInterface {
             buyPrice : sellPrice;
     }
 
-    function _placeBuyEthOrder(address maker, uint price, uint tokenAmount) private returns (uint buyEthOrderId) {
+    function _placeBuyEthOrder(address maker, uint price, uint tokenAmount)
+    private returns (uint orderIndex, uint orderId) {
         require(price > 0);
         require(tokenAmount >= minOrderAmount);
-        buyEthOrderId = buyEthOrders.length;
-        uint mapIdx = mBuyEthOrders[maker].push(buyEthOrderId) - 1;
-        buyEthOrders.push(
-                Order(maker, mapIdx, now, price, tokenAmount)
-            ) - 1;
 
-        NewBuyEthOrder(buyEthOrderId, maker, price, tokenAmount);
+        lastOrderId++;
+        orderIndex = buyEthOrders.push(Order(lastOrderId, maker, now, price, tokenAmount)) - 1;
+
+        NewBuyEthOrder(orderIndex, lastOrderId, maker, price, tokenAmount);
+        return(orderIndex, lastOrderId);
     }
 
-    function removeOrder(Order[] storage orders, uint pos) private {
-        require(orders.length > 0);
-        if (pos < orders.length - 1) {
-            orders[pos] = orders[orders.length - 1];
+    function _removeOrder(Order[] storage orders, uint orderIndex) private {
+        if (orderIndex < orders.length - 1) {
+            orders[orderIndex] = orders[orders.length - 1];
         }
         delete orders[orders.length - 1];
         orders.length--;
-    }
-
-    function removeItem(uint[] storage arr, uint pos) private {
-        require(arr.length > 0);
-        if (pos < arr.length - 1) {
-            arr[pos] = arr[arr.length - 1];
-        }
-        delete arr[arr.length - 1];
-        arr.length--;
     }
 
 }

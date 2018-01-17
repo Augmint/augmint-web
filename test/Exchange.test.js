@@ -40,12 +40,10 @@ contract("Exchange tests", accounts => {
             orderType: ETH_SELL,
             // expected values:
             sellEthOrderCount: 1,
-            buyEthOrderCount: 0,
-            mapIdx: 0
+            buyEthOrderCount: 0
         };
 
         await exchangeTestHelper.newOrder(this, order);
-        order.mapIdx = 1;
         order.sellEthOrderCount = 2;
         await exchangeTestHelper.newOrder(this, order);
         //await exchangeTestHelper.printOrderBook();
@@ -60,14 +58,12 @@ contract("Exchange tests", accounts => {
             viaAugmintToken: false,
             // expected values:
             sellEthOrderCount: 0,
-            buyEthOrderCount: 1,
-            mapIdx: 0
+            buyEthOrderCount: 1
         };
 
         const tx = await tokenAce.approve(exchange.address, order.amount * 2, { from: order.maker });
         testHelper.logGasUse(this, tx, "approve");
         await exchangeTestHelper.newOrder(this, order);
-        order.mapIdx = 1;
         order.buyEthOrderCount = 2;
         await exchangeTestHelper.newOrder(this, order);
     });
@@ -80,8 +76,7 @@ contract("Exchange tests", accounts => {
             orderType: ETH_BUY,
             // expected values:
             sellEthOrderCount: 0,
-            buyEthOrderCount: 1,
-            mapIdx: 0
+            buyEthOrderCount: 1
         };
 
         await exchangeTestHelper.newOrder(this, order);
@@ -110,8 +105,7 @@ contract("Exchange tests", accounts => {
             orderType: ETH_SELL,
             // expected values:
             sellEthOrderCount: 1,
-            buyEthOrderCount: 0,
-            mapIdx: 0
+            buyEthOrderCount: 0
         };
 
         const buyOrder = {
@@ -121,15 +115,15 @@ contract("Exchange tests", accounts => {
             orderType: ETH_BUY,
             // expected values:
             sellEthOrderCount: 1,
-            buyEthOrderCount: 1,
-            mapIdx: 0
+            buyEthOrderCount: 1
         };
         const marketEurEth = 10000000;
         await rates.setRate("EUR", marketEurEth);
         await exchangeTestHelper.newOrder(this, sellOrder);
         await exchangeTestHelper.newOrder(this, buyOrder);
         //await exchangeTestHelper.printOrderBook(10);
-        const tx = await exchange.matchOrders(0, 0);
+        const tx = await exchange.matchOrders(sellOrder.index, sellOrder.id, buyOrder.index, buyOrder.id);
+
         testHelper.logGasUse(this, tx, "matchOrders");
         const expPrice =
             Math.abs(buyOrder.price - 1) > Math.abs(sellOrder.price - 1) ? sellOrder.price : buyOrder.price;
@@ -140,8 +134,7 @@ contract("Exchange tests", accounts => {
             weiAmount: marketEurEth / 10000 * expPrice / 10000 * buyOrder.amount / 10000 * (ONEWEI / 1000000),
             tokenAmount: buyOrder.amount
         };
-
-        exchangeTestHelper.orderMatchEventAsserts(tx.logs[0], expMatch);
+        const match = exchangeTestHelper.orderMatchEventAsserts(tx.logs[0], expMatch);
         //await exchangeTestHelper.printOrderBook();
         // TODO: asserts: orderCounts + orders in contract
     });
@@ -162,12 +155,11 @@ contract("Exchange tests", accounts => {
             orderType: ETH_SELL,
             // expected values:
             sellEthOrderCount: 1,
-            buyEthOrderCount: 0,
-            mapIdx: 0
+            buyEthOrderCount: 0
         };
 
         await exchangeTestHelper.newOrder(this, order);
-        const tx = await exchange.cancelSellEthOrder(order.id, { from: order.maker });
+        const tx = await exchange.cancelSellEthOrder(order.index, order.id, { from: order.maker });
         testHelper.logGasUse(this, tx, "cancelSellEthOrder");
     });
 
@@ -179,14 +171,17 @@ contract("Exchange tests", accounts => {
             orderType: ETH_BUY,
             // expected values:
             sellEthOrderCount: 0,
-            buyEthOrderCount: 1,
-            mapIdx: 0
+            buyEthOrderCount: 1
         };
 
         await exchangeTestHelper.newOrder(this, order);
-        const tx = await exchange.cancelBuyEthOrder(order.id, { from: order.maker });
+        const tx = await exchange.cancelBuyEthOrder(order.index, order.id, { from: order.maker });
         testHelper.logGasUse(this, tx, "cancelBuyEthOrder");
     });
 
     it("only own orders should be possible to cancel");
+
+    it("shouldn't match orders if orders changed");
+    it("shouldn't cancel ETH buy order if orders changed");
+    it("shouldn't cancel ETH sell order if orders changed");
 });

@@ -44,7 +44,7 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     external restrict("issueAndDisburse");
 
     function placeBuyEthOrderOnExchange(address exchange, uint price, uint tokenAmount)
-    external returns (uint buyEthorderId);
+    external returns (uint buyEthOrderIndex, uint buyEthorderId);
 
     function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest");
 
