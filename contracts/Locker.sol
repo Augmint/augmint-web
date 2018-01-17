@@ -25,17 +25,19 @@ contract Locker is Owned {
 
     using SafeMath for uint256;
 
-    event NewLockProduct(uint indexed lockProductId, uint perTermInterest, uint durationInSecs, bool isActive);
+    event NewLockProduct(uint indexed lockProductId, uint perTermInterest, uint durationInSecs, 
+                            uint minimumLockAmount, bool isActive);
     event LockProductActiveChange(uint indexed lockProductId, bool newActiveState);
     // NB: totalAmountLocked includes the original amount, plus interested
-    event NewLock(uint indexed lockId, address indexed lockOwner, uint totalAmountLocked, uint lockedUntil, 
+    event NewLock(address indexed lockOwner, uint indexed lockIndex, uint totalAmountLocked, uint lockedUntil, 
                     uint perTermInterest, uint durationInSecs, bool isActive);
-    event LockReleased(uint indexed lockId, address indexed lockOwner);
+    event LockReleased(address indexed lockOwner, uint indexed lockIndex);
 
     struct LockProduct {
         // perTermInterest is in millionths (i.e. 1,000,000 = 100%):
         uint perTermInterest;
         uint durationInSecs;
+        uint minimumLockAmount;
         bool isActive;
     }
 
@@ -50,7 +52,7 @@ contract Locker is Owned {
     AugmintTokenInterface public augmintToken;
 
     LockProduct[] public lockProducts;
-    // per account locks:
+    // per account locks (i.e. an id for a lock is a tuple (owner, index)):
     mapping(address => Lock[]) public locks;
 
     function Locker(address augmintTokenAddress) public {
@@ -59,10 +61,10 @@ contract Locker is Owned {
 
     }
 
-    function addLockProduct(uint perTermInterest, uint durationInSecs, bool isActive) external onlyOwner {
+    function addLockProduct(uint perTermInterest, uint durationInSecs, uint minimumLockAmount, bool isActive) external onlyOwner {
 
-        uint newLockProductId = lockProducts.push(LockProduct(perTermInterest, durationInSecs, isActive)) - 1;
-        NewLockProduct(newLockProductId, perTermInterest, durationInSecs, isActive);
+        uint newLockProductId = lockProducts.push(LockProduct(perTermInterest, durationInSecs, minimumLockAmount, isActive)) - 1;
+        NewLockProduct(newLockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive);
 
     }
 
@@ -81,10 +83,10 @@ contract Locker is Owned {
     }
 
     // returns 20 lock products starting from some offset
-    // lock products are encoded as [ perTermInterest, durationInSecs, isActive ]
-    function getLockProducts(uint offset) external view returns (uint[3][20]) {
+    // lock products are encoded as [ perTermInterest, durationInSecs, minimumLockAmount, isActive ]
+    function getLockProducts(uint offset) external view returns (uint[4][20]) {
 
-        uint[3][20] memory response;
+        uint[4][20] memory response;
 
         for (uint8 i = 0; i < 20; i++) {
 
@@ -93,7 +95,7 @@ contract Locker is Owned {
             LockProduct storage lockProduct = lockProducts[offset + i];
 
             response[offset + i] = [ lockProduct.perTermInterest, lockProduct.durationInSecs,
-                lockProduct.isActive ? 1 : 0 ];
+                                        lockProduct.minimumLockAmount, lockProduct.isActive ? 1 : 0 ];
 
         }
 
@@ -108,10 +110,11 @@ contract Locker is Owned {
     // 4) token contract calls createLock
     //
     // helper for lockable tokens
-    function calculateInterestForLockProduct(uint lockProductId, uint amountToLock) external view returns (uint) {
+    function calculateInterestForLockProduct(uint lockProductId, uint amountToLock) public view returns (uint) {
 
         LockProduct storage lockProduct = lockProducts[lockProductId];
         require(lockProduct.isActive);
+        require(amountToLock >= lockProduct.minimumLockAmount);
 
         uint interestEarned = amountToLock.mul(lockProduct.perTermInterest).div(1000000);
 
@@ -120,33 +123,36 @@ contract Locker is Owned {
     }
 
     // NB: totalAmountLocked includes both the lock amount AND the interest
-    function createLock(uint lockProductId, address lockOwner, uint totalAmountLocked) external {
+    function createLock(uint lockProductId, address lockOwner, uint amountToLock) external {
 
         // only the token can call this:
         require(msg.sender == address(augmintToken));
 
+        // NB: calculateInterestForLockProduct will validate the lock product and amountToLock:
+        uint interestEarned = calculateInterestForLockProduct(lockProductId, amountToLock);
+
         LockProduct storage lockProduct = lockProducts[lockProductId];
-        require(lockProduct.isActive);
 
         uint lockedUntil = now.add(lockProduct.durationInSecs);
-        uint lockId = locks[lockOwner].push(Lock(totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+        uint totalAmountLocked = amountToLock.add(interestEarned);
+        uint lockIndex = locks[lockOwner].push(Lock(totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
                                     lockProduct.durationInSecs, true)) - 1;
 
-        NewLock(lockId, lockOwner, totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+        NewLock(lockOwner, lockIndex, totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
                     lockProduct.durationInSecs, true);
 
     }
 
-    function releaseFunds(address lockOwner, uint lockId) external {
+    function releaseFunds(address lockOwner, uint lockIndex) external {
         
-        Lock storage lock = locks[lockOwner][lockId];
+        Lock storage lock = locks[lockOwner][lockIndex];
         
         require(lock.isActive && now >= lock.lockedUntil);
         
         lock.isActive = false;
         augmintToken.transferNoFee(lockOwner, lock.amountLocked, "Releasing funds from lock");
         
-        LockReleased(lockId, lockOwner);
+        LockReleased(lockOwner, lockIndex);
     }
 
     function getLockCountForAddress(address lockOwner) external view returns (uint) {

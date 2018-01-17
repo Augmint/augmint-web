@@ -81,7 +81,7 @@ contract AugmintToken is AugmintTokenInterface {
         _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
         _transfer(interestEarnedAccount, address(locker), interestEarnedAmount, "Accrue lock interest", 0);
 
-        locker.createLock(lockProductId, msg.sender, amountToLock.add(interestEarnedAmount));
+        locker.createLock(lockProductId, msg.sender, amountToLock);
 
     }
 
