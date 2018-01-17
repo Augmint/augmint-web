@@ -6,7 +6,6 @@
     TODO: deduct fee
     TODO: minOrderAmount setter
     TODO: index event args
-    TODO: add multiple orders getter with offset param
 */
 pragma solidity 0.4.18;
 import "./interfaces/ExchangeInterface.sol";
@@ -132,16 +131,6 @@ contract Exchange is ExchangeInterface {
 
     function getOrderCounts() external view returns(uint sellEthOrderCount, uint buyEthOrderCount) {
         return(sellEthOrders.length, buyEthOrders.length);
-    }
-
-    /* Helper for UI to reduce web3 calls
-        Returns an unordered array of sell/buy orders from offset, starting with sell orders
-        Returns empty array if offset out of range ? Return lastOrderId? lastChangedOrderId? */
-    function getOrders(uint offset) external view returns(Order[] orders) {
-        /* FIXME: to be implemented */
-        orders = sellEthOrders;
-        require(offset < sellEthOrders.length + buyEthOrders.length - 1);
-        revert();
     }
 
     // return the price which is closer to par
