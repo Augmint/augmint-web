@@ -75,13 +75,11 @@ contract AugmintToken is AugmintTokenInterface {
 
     function lockFunds(uint lockProductId, uint amountToLock) external {
 
-        // NB: calculateInterestForLockProduct will also validate lockProductId:
-        uint interestEarnedAmount = locker.calculateInterestForLockProduct(lockProductId, amountToLock);
+        // NB: locker.createLock will validate lockProductId and amountToLock:
+        uint interestEarnedAmount = locker.createLock(lockProductId, msg.sender, amountToLock);
 
         _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
         _transfer(interestEarnedAccount, address(locker), interestEarnedAmount, "Accrue lock interest", 0);
-
-        locker.createLock(lockProductId, msg.sender, amountToLock);
 
     }
 

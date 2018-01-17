@@ -36,13 +36,26 @@ async function assertEvent(contractInstance, eventName, expectedArgs) {
 
     const eventArgs = event.args;
 
-    Object.keys(expectedArgs).forEach((argName) => {
+    const expectedArgNames = Object.keys(expectedArgs);
+    const receivedArgNames = Object.keys(eventArgs);
+
+    assert(expectedArgNames.length === receivedArgNames.length, 
+            `Expected event to have ${expectedArgNames.length} arguments, but it had ${receivedArgNames.length}`);
+
+    expectedArgNames.forEach((argName) => {
 
         const value = typeof event.args[argName].toNumber === 'function' ? event.args[argName].toNumber() : event.args[argName];
         const expectedValue = expectedArgs[argName];
         assert(value === expectedValue, `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`);
 
     });
+
+}
+
+async function assertNoEvents(contractInstance, eventName) {
+
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 0);
 
 }
 
@@ -74,8 +87,8 @@ contract("Lock", accounts => {
         await tokenAceInstance.grantPermission(lockerInstance.address, "transferNoFee");
 
         await tokenAceInstance.issue(50000);
-        await tokenAceInstance.withdrawTokens(tokenHolder, 25000);
-        await tokenAceInstance.withdrawTokens(interestEarnedAddress, 25000);
+        await tokenAceInstance.withdrawTokens(tokenHolder, 40000);
+        await tokenAceInstance.withdrawTokens(interestEarnedAddress, 10000);
     });
 
     it("should allow lock products to be created", async () => {
@@ -94,6 +107,7 @@ contract("Lock", accounts => {
     });
 
     it("should allow the number of lock products to be queried", async () => {
+
         const startingNumLocks = (await lockerInstance.getLockProductCount()).toNumber();
 
         // create lock product with 5% per term, and 120 sec lock time:
@@ -102,6 +116,7 @@ contract("Lock", accounts => {
         const endNumLocks = (await lockerInstance.getLockProductCount()).toNumber();
 
         assert(startingNumLocks + 1 === endNumLocks);
+
     });
 
     it("should allow the getting of individual lock products", async () => {
@@ -185,20 +200,27 @@ contract("Lock", accounts => {
         const amountToLock = 1000;
 
         // lock funds, and get the product that was used:
-        const [ product ] = await Promise.all([ lockerInstance.lockProducts(0), 
+        const [ product, lockingTransaction ] = await Promise.all([ lockerInstance.lockProducts(0), 
                                                 tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder }) ]);
 
-        const perTermInterest = product[0];
+        const perTermInterest = product[0].toNumber();
+        const durationInSecs = product[1].toNumber();
         const interestEarned = Math.floor(amountToLock * perTermInterest / 1000000);
 
-        // TODO: get values for commented out properties, and test for them:
+        // need the block to get the timestamp to check lockedUntil in NewLock event:
+        const block = await web3.eth.getBlock(lockingTransaction.receipt.blockHash);
+        const expectedLockedUntil = block.timestamp + durationInSecs;
+        // sanity check:
+        assert(expectedLockedUntil > Math.floor(Date.now() / 1000));
+
         await assertEvent(lockerInstance, 'NewLock', {
             lockOwner: tokenHolder,
             lockIndex: 0,
-            // totalAmountLocked: 0,
-            // lockedUntil: 0, 
-            // perTermInterest: 0,
-            // durationInSecs: 0,
+            amountLocked: amountToLock,
+            interestEarned: interestEarned,
+            lockedUntil: expectedLockedUntil, 
+            perTermInterest: perTermInterest,
+            durationInSecs: durationInSecs,
             isActive: true
         });
 
@@ -211,6 +233,7 @@ contract("Lock", accounts => {
     });
 
     it("should allow an account to see how many locks it has", async () => {
+
         const startingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
         const amountToLock = 1000;
 
@@ -219,6 +242,7 @@ contract("Lock", accounts => {
         const finishingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
 
         assert(finishingNumLocks === startingNumLocks + 1);
+
     });
 
     it("should allow tokens to be unlocked", async () => {
@@ -253,18 +277,63 @@ contract("Lock", accounts => {
 
     });
 
+    it("should allow an account to see it's individual locks", async () => {
+
+        const amountToLock = 1000;
+
+        // lock funds, and get the product that was used:
+        const [ product, lockingTransaction ] = await Promise.all([ lockerInstance.lockProducts(0), 
+                                                tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder }) ]);
+
+        const expectedPerTermInterest = product[0].toNumber();
+        const expectedDurationInSecs = product[1].toNumber();
+        const expectedInterestEarned = Math.floor(amountToLock * expectedPerTermInterest / 1000000);
+
+        // need the block to get the timestamp to check lockedUntil in NewLock event:
+        const block = await web3.eth.getBlock(lockingTransaction.receipt.blockHash);
+        const expectedLockedUntil = block.timestamp + expectedDurationInSecs;
+        // sanity check:
+        assert(expectedLockedUntil > Math.floor(Date.now() / 1000));
+
+        const numLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+        const newestLock = await lockerInstance.locks(tokenHolder, numLocks - 1);
+
+        // each lock should be a 6 element array
+        assert.isArray(newestLock);
+        assert(newestLock.length === 6);
+
+        // the locks should be [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] all
+        // represented as uints (i.e. BigNumber objects in JS land):
+        const [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] = newestLock;
+        assert(amountLocked.toNumber() === amountToLock);
+        assert(interestEarned.toNumber() === expectedInterestEarned);
+        assert(lockedUntil.toNumber() === expectedLockedUntil);
+        assert(perTermInterest.toNumber() === expectedPerTermInterest);
+        assert(durationInSecs.toNumber() === expectedDurationInSecs);
+        assert(isActive === true);
+
+    });
+
     it("should allow an account to see all it's locks", async () => {
         // NB: this test assumes that tokenHolder has less than 20 locks (when checking newestLock)
 
-        // TODO: test returned data in locks more precisely
-
         const amountToLock = 1000;
-        const startingTime = Math.floor(Date.now() / 1000);
 
-        await tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder });
+        // lock funds, and get the product that was used:
+        const [ product, lockingTransaction ] = await Promise.all([ lockerInstance.lockProducts(0), 
+                                                tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder }) ]);
+
+        const expectedPerTermInterest = product[0].toNumber();
+        const expectedDurationInSecs = product[1].toNumber();
+        const expectedInterestEarned = Math.floor(amountToLock * expectedPerTermInterest / 1000000);
+
+        // need the block to get the timestamp to check lockedUntil in NewLock event:
+        const block = await web3.eth.getBlock(lockingTransaction.receipt.blockHash);
+        const expectedLockedUntil = block.timestamp + expectedDurationInSecs;
+        // sanity check:
+        assert(expectedLockedUntil > Math.floor(Date.now() / 1000));
 
         const numLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
-
         const locks = await lockerInstance.getLocksForAddress(tokenHolder, 0);
 
         // getLocksForAddress should return a 20 element array:
@@ -273,33 +342,67 @@ contract("Lock", accounts => {
 
         const newestLock = locks[numLocks - 1];
 
-        // each lock should be a 5 element array
+        // each lock should be a 6 element array
         assert.isArray(newestLock);
-        assert(newestLock.length === 5);
+        assert(newestLock.length === 6);
 
-        // the locks should be [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ] all
+        // the locks should be [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] all
         // represented as uints (i.e. BigNumber objects in JS land):
-        const [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ] = newestLock;
-        assert(amountLocked.toNumber() > amountToLock);
-        assert(lockedUntil.toNumber() > startingTime);
-        assert(perTermInterest.toNumber() > 0);
-        assert(durationInSecs.toNumber() > 0);
+        const [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] = newestLock;
+        assert(amountLocked.toNumber() === amountToLock);
+        assert(interestEarned.toNumber() === expectedInterestEarned);
+        assert(lockedUntil.toNumber() === expectedLockedUntil);
+        assert(perTermInterest.toNumber() === expectedPerTermInterest);
+        assert(durationInSecs.toNumber() === expectedDurationInSecs);
         assert(isActive.toNumber() === 1);
 
     });
 
-    it("should prevent someone from locking more token than they have", async () => {
+    it("should prevent someone from locking more tokens than they have", async () => {
 
         const startingBalances = await getBalances(tokenAceInstance, [ tokenHolder, lockerInstance.address, interestEarnedAddress ]);
+        const startingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
         const amountToLock = startingBalances[tokenHolder] + 1000;
 
         await testHelpers.expectThrow(tokenAceInstance.lockFunds(0, amountToLock, { from: tokenHolder }));
+        await assertNoEvents(lockerInstance, 'NewLock');
 
         const finishingBalances = await getBalances(tokenAceInstance, [ tokenHolder, lockerInstance.address, interestEarnedAddress ]);
+        const finishingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
 
         assert(finishingBalances[tokenHolder] === startingBalances[tokenHolder]);
         assert(finishingBalances[lockerInstance.address] === startingBalances[lockerInstance.address]);
         assert(finishingBalances[interestEarnedAddress] === startingBalances[interestEarnedAddress]);
+
+        assert(finishingNumLocks === startingNumLocks);
+
+    });
+
+    it("should prevent someone from depleting the interestEarnedAccount via locking", async () => {
+
+        // create lock product with 100% per term interest:
+        await lockerInstance.addLockProduct(1000000, 120, 0, true);
+        const newLockProductId = (await lockerInstance.getLockProductCount()).toNumber() - 1;
+
+        const startingBalances = await getBalances(tokenAceInstance, [ tokenHolder, lockerInstance.address, interestEarnedAddress ]);
+        const startingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+        const amountToLock = startingBalances[interestEarnedAddress] + 100;
+
+        // this is less a test for the code, a more a sanity check for the test
+        // (so that the lockFunds doesn't fail due to tokenHolder having insufficient funds):
+        assert(amountToLock <= startingBalances[tokenHolder]);
+
+        await testHelpers.expectThrow(tokenAceInstance.lockFunds(newLockProductId, amountToLock, { from: tokenHolder }));
+        await assertNoEvents(lockerInstance, 'NewLock');
+
+        const finishingBalances = await getBalances(tokenAceInstance, [ tokenHolder, lockerInstance.address, interestEarnedAddress ]);
+        const finishingNumLocks = (await lockerInstance.getLockCountForAddress(tokenHolder)).toNumber();
+
+        assert(finishingBalances[tokenHolder] === startingBalances[tokenHolder]);
+        assert(finishingBalances[lockerInstance.address] === startingBalances[lockerInstance.address]);
+        assert(finishingBalances[interestEarnedAddress] === startingBalances[interestEarnedAddress]);
+
+        assert(finishingNumLocks === startingNumLocks);
 
     });
 

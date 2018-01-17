@@ -11,8 +11,6 @@
 // -> return only active loan products from getLoanProducts?
 // -> need to update token contract? probably not? a new token contract would imply a fresh deployment?
 // -> test locking small (<10) amounts - need a min lock amount in lockProducts
-// -> NewLock has totalAmountLocked which includes interest, but maybe it would be better to have amount
-//      locked without interest?
 
 pragma solidity 0.4.18;
 
@@ -29,8 +27,8 @@ contract Locker is Owned {
                             uint minimumLockAmount, bool isActive);
     event LockProductActiveChange(uint indexed lockProductId, bool newActiveState);
     // NB: totalAmountLocked includes the original amount, plus interested
-    event NewLock(address indexed lockOwner, uint indexed lockIndex, uint totalAmountLocked, uint lockedUntil, 
-                    uint perTermInterest, uint durationInSecs, bool isActive);
+    event NewLock(address indexed lockOwner, uint indexed lockIndex, uint amountLocked, uint interestEarned, 
+                    uint lockedUntil, uint perTermInterest, uint durationInSecs, bool isActive);
     event LockReleased(address indexed lockOwner, uint indexed lockIndex);
 
     struct LockProduct {
@@ -43,6 +41,7 @@ contract Locker is Owned {
 
     struct Lock {
         uint amountLocked;
+        uint interestEarned;
         uint lockedUntil;
         uint perTermInterest;
         uint durationInSecs;
@@ -105,11 +104,8 @@ contract Locker is Owned {
 
     // the flow for locking tokens is:
     // 1) user calls token contract to lock tokens
-    // 2) token contract calls calculateInterestForLockProduct to get interestEarned
+    // 2) token contract calls createLock, which creates the locks and returns the interestEarned
     // 3) token contract transfers tokens from user and interestEarnedPool to Locker
-    // 4) token contract calls createLock
-    //
-    // helper for lockable tokens
     function calculateInterestForLockProduct(uint lockProductId, uint amountToLock) public view returns (uint) {
 
         LockProduct storage lockProduct = lockProducts[lockProductId];
@@ -123,7 +119,7 @@ contract Locker is Owned {
     }
 
     // NB: totalAmountLocked includes both the lock amount AND the interest
-    function createLock(uint lockProductId, address lockOwner, uint amountToLock) external {
+    function createLock(uint lockProductId, address lockOwner, uint amountToLock) external returns (uint) {
 
         // only the token can call this:
         require(msg.sender == address(augmintToken));
@@ -134,12 +130,13 @@ contract Locker is Owned {
         LockProduct storage lockProduct = lockProducts[lockProductId];
 
         uint lockedUntil = now.add(lockProduct.durationInSecs);
-        uint totalAmountLocked = amountToLock.add(interestEarned);
-        uint lockIndex = locks[lockOwner].push(Lock(totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+        uint lockIndex = locks[lockOwner].push(Lock(amountToLock, interestEarned, lockedUntil, lockProduct.perTermInterest, 
                                     lockProduct.durationInSecs, true)) - 1;
 
-        NewLock(lockOwner, lockIndex, totalAmountLocked, lockedUntil, lockProduct.perTermInterest, 
+        NewLock(lockOwner, lockIndex, amountToLock, interestEarned, lockedUntil, lockProduct.perTermInterest, 
                     lockProduct.durationInSecs, true);
+
+        return interestEarned;
 
     }
 
@@ -150,7 +147,7 @@ contract Locker is Owned {
         require(lock.isActive && now >= lock.lockedUntil);
         
         lock.isActive = false;
-        augmintToken.transferNoFee(lockOwner, lock.amountLocked, "Releasing funds from lock");
+        augmintToken.transferNoFee(lockOwner, lock.amountLocked.add(lock.interestEarned), "Releasing funds from lock");
         
         LockReleased(lockOwner, lockIndex);
     }
@@ -162,12 +159,12 @@ contract Locker is Owned {
     }
 
     // returns 20 locks starting from some offset
-    // lock products are encoded as [ amountLocked, lockedUntil, perTermInterest, durationInSecs, isActive ]
+    // lock products are encoded as [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ]
     // NB: perTermInterest is in millionths (i.e. 1,000,000 = 100%):
-    function getLocksForAddress(address lockOwner, uint offset) external view returns (uint[5][20]) {
+    function getLocksForAddress(address lockOwner, uint offset) external view returns (uint[6][20]) {
 
         Lock[] storage locksForAddress = locks[lockOwner];
-        uint[5][20] memory response;
+        uint[6][20] memory response;
 
         for (uint8 i = 0; i < 20; i++) {
 
@@ -175,7 +172,7 @@ contract Locker is Owned {
 
             Lock storage lock = locksForAddress[offset + i];
 
-            response[offset + i] = [ lock.amountLocked, lock.lockedUntil, lock.perTermInterest, 
+            response[offset + i] = [ lock.amountLocked, lock.interestEarned, lock.lockedUntil, lock.perTermInterest, 
                                         lock.durationInSecs, lock.isActive ? 1 : 0 ];
 
         }
