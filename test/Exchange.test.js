@@ -142,10 +142,12 @@ contract("Exchange tests", accounts => {
     it("should match two matching orders (buy ETH partially filled)");
     it("should match two matching orders (both fully filled)");
     it("should NOT match two non-matching orders");
+    it("shouldn't match orders if one order removed");
 
     it("should match multiple orders");
-
+    it("multipleMatch should match as many orders as fits into gas provided");
     it("should NOT match multiple orders if one is non-matching");
+    it("matchMultipleOrders should stop if one of the orders removed");
 
     it("should cancel a sell ETH order", async function() {
         const order = {
@@ -180,8 +182,6 @@ contract("Exchange tests", accounts => {
     });
 
     it("only own orders should be possible to cancel");
-
-    it("shouldn't match orders if orders changed");
     it("shouldn't cancel ETH buy order if orders changed");
     it("shouldn't cancel ETH sell order if orders changed");
 });

@@ -38,9 +38,10 @@ contract ExchangeInterface is Restricted {
     function cancelBuyEthOrder(uint buyEtherOrderIndex, uint buyEthOrderId) external;
     function cancelSellEthOrder(uint sellEthOrderIndex, uint sellEthOrderId) external;
 
+    function matchMultipleOrders(uint[] sellIndexes, uint[] sellIds, uint[] buyIndexes, uint[] buyIds)
+        external returns(uint matchCount);
+
     function matchOrders(uint sellEthOrderIndex, uint sellEthOrderId, uint buyEthOrderIndex, uint buyEthOrderId)
         external;
-
-    function matchMultipleOrders(uint[2][] _sellEthOrders, uint[2][] _buyEthOrders) external returns(uint matchCount);
 
 }

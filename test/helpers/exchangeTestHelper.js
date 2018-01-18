@@ -13,6 +13,7 @@ module.exports = {
     newOrderEventAsserts,
     orderMatchEventAsserts,
     contractStateAsserts,
+    getState,
     getSellOrder,
     getBuyOrder,
     printOrderBook
@@ -142,9 +143,9 @@ function orderMatchEventAsserts(logItem, expMatch) {
 }
 
 async function contractStateAsserts(expOrder) {
-    const orderCounts = await exchange.getOrderCounts();
-    assert.equal(orderCounts[0].toString(), expOrder.sellEthOrderCount, "sellEthOrderCount should be set");
-    assert.equal(orderCounts[1].toString(), expOrder.buyEthOrderCount, "buyEthOrderCount should be set");
+    const state = await getState();
+    assert.equal(state.sellCount, expOrder.sellEthOrderCount, "sellEthOrderCount should be set");
+    assert.equal(state.buyCount, expOrder.buyEthOrderCount, "buyEthOrderCount should be set");
     let order;
     if (expOrder.orderType === ETH_SELL) {
         order = await exchange.sellEthOrders(expOrder.index);
@@ -157,6 +158,14 @@ async function contractStateAsserts(expOrder) {
     // TODO: assert time (addedTime[2])
     assert.equal(order[3].toString(), expOrder.price.toString(), "price should be set in contract's order array");
     assert.equal(order[4].toString(), expOrder.amount, "amount should be set in contract's order array");
+}
+
+async function getState() {
+    const ret = {};
+    const orderCounts = await exchange.getOrderCounts();
+    ret.sellCount = orderCounts[0].toNumber();
+    ret.buyCount = orderCounts[1].toNumber();
+    return ret;
 }
 
 async function getSellOrder(i) {
