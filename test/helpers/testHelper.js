@@ -4,6 +4,9 @@ var gasUseLog = [];
 
 module.exports = {
     stringify,
+    getEvents,
+    assertEvent,
+    assertNoEvents,
     takeSnapshot,
     revertSnapshot,
     logGasUse,
@@ -15,6 +18,51 @@ var _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function stringify(values) {
     return _stringify(values);
+}
+
+function getEvents(contractInstance, eventName) {
+    return new Promise((resolve, reject) => {
+        contractInstance[eventName]().get((err, res) => {
+            if (err) {
+                return reject(err);
+            }
+
+            resolve(res);
+        });
+    });
+}
+
+async function assertEvent(contractInstance, eventName, expectedArgs) {
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 1);
+    const event = events[0];
+
+    assert(event.event === eventName);
+
+    const eventArgs = event.args;
+
+    const expectedArgNames = Object.keys(expectedArgs);
+    const receivedArgNames = Object.keys(eventArgs);
+
+    assert(
+        expectedArgNames.length === receivedArgNames.length,
+        `Expected event to have ${expectedArgNames.length} arguments, but it had ${receivedArgNames.length}`
+    );
+
+    expectedArgNames.forEach(argName => {
+        const value =
+            typeof event.args[argName].toNumber === "function" ? event.args[argName].toNumber() : event.args[argName];
+        const expectedValue = expectedArgs[argName];
+        assert(
+            value === expectedValue,
+            `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`
+        );
+    });
+}
+
+async function assertNoEvents(contractInstance, eventName) {
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 0);
 }
 
 /*before(function() {
