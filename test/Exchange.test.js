@@ -151,7 +151,7 @@ contract("Exchange tests", accounts => {
 
     it("should cancel a sell ETH order", async function() {
         const order = {
-            amount: web3.toWei(1),
+            amount: parseInt(web3.toWei(1), 10),
             maker: maker,
             price: 110000,
             orderType: ETH_SELL,
@@ -161,8 +161,7 @@ contract("Exchange tests", accounts => {
         };
 
         await exchangeTestHelper.newOrder(this, order);
-        const tx = await exchange.cancelSellEthOrder(order.index, order.id, { from: order.maker });
-        testHelper.logGasUse(this, tx, "cancelSellEthOrder");
+        await exchangeTestHelper.cancelSellEthOrder(this, order);
     });
 
     it("should cancel a buy ETH order", async function() {
@@ -177,8 +176,7 @@ contract("Exchange tests", accounts => {
         };
 
         await exchangeTestHelper.newOrder(this, order);
-        const tx = await exchange.cancelBuyEthOrder(order.index, order.id, { from: order.maker });
-        testHelper.logGasUse(this, tx, "cancelBuyEthOrder");
+        await exchangeTestHelper.cancelBuyEthOrder(this, order);
     });
 
     it("only own orders should be possible to cancel");

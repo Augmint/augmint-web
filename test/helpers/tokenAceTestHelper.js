@@ -7,12 +7,14 @@ module.exports = {
     newTokenAceMock,
     transferTest,
     getTransferFee,
-    getBalances,
+    getAllBalances, // new
     transferEventAsserts,
-    balanceAsserts,
+    assertBalances, // new
     approveEventAsserts,
     transferFromTest,
-    approveTest
+    approveTest,
+    getBalances, // legacy
+    balanceAsserts // legacy
 };
 
 const FeeAccount = artifacts.require("./FeeAccount.sol");
@@ -225,15 +227,41 @@ async function getTransferFee(_amount) {
     return fee;
 }
 
-async function getBalances(addresses) {
-    let balances = [];
-    for (let addr of addresses) {
-        balances.push({
-            eth: await web3.eth.getBalance(addr),
-            ace: await tokenAce.balanceOf(addr)
-        });
+/* new func */
+async function getAllBalances(accs) {
+    const ret = {};
+    for (const ac of Object.keys(accs)) {
+        const address = accs[ac].address ? accs[ac].address : accs[ac];
+        ret[ac] = {};
+        ret[ac].address = address;
+        ret[ac].eth = (await web3.eth.getBalance(address)).toNumber();
+        ret[ac].ace = (await tokenAce.balanceOf(address)).toNumber();
     }
-    return balances;
+
+    return ret;
+}
+
+/* new func */
+async function assertBalances(before, exp) {
+    // get addresses from before arg
+    for (const ac of Object.keys(before)) {
+        exp[ac].address = before[ac].address;
+    }
+    const newBal = await getAllBalances(exp);
+
+    for (const acc of Object.keys(newBal)) {
+        if (exp[acc].gasFee && exp[acc].gasFee > 0) {
+            const diff = Math.abs(newBal[acc].eth - exp[acc].eth);
+            assert.isAtMost(
+                diff,
+                exp[acc].gasFee,
+                `Account ${acc} ETH balance diferrence higher than expecteed gas fee`
+            );
+        } else {
+            assert.equal(newBal[acc].eth, exp[acc].eth, `Account ${acc} ETH balance is not as expected`);
+        }
+        assert.equal(newBal[acc].ace, exp[acc].ace, `Account ${acc} ACE balance is not as expected`);
+    }
 }
 
 async function transferEventAsserts(tx, expTransfer, logIndex) {
@@ -276,6 +304,19 @@ async function approveEventAsserts(tx, expApprove) {
     );
 }
 
+/* legacy func */
+async function getBalances(addresses) {
+    let balances = [];
+    for (let addr of addresses) {
+        balances.push({
+            eth: await web3.eth.getBalance(addr),
+            ace: await tokenAce.balanceOf(addr)
+        });
+    }
+    return balances;
+}
+
+/* legacy func */
 async function balanceAsserts(expBalances) {
     for (let expBal of expBalances) {
         let newEthBal = await web3.eth.getBalance(expBal.address);

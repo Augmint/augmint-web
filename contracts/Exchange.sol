@@ -19,14 +19,13 @@ contract Exchange is ExchangeInterface {
         actual is much less, just leaving enough matchMultipleOrders() to finish TODO: fine tune & test it*/
     uint32 public constant ORDER_MATCH_WORST_GAS = 200000;
 
-    event NewSellEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint weiAmount);
-    event NewBuyEthOrder(uint orderIndex, uint orderId, address maker, uint price, uint tokenAmount);
+    event NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount,
+        uint weiAmount);
 
-    event OrderFill(address seller, address buyer, uint buyOrderId, uint sellOrderId, uint price,
-        uint weiAmount, uint tokenAmount);
+    event OrderFill(address indexed seller, address indexed buyer, uint buyOrderId, uint sellOrderId,
+        uint price, uint weiAmount, uint tokenAmount);
 
-    event CancelledSellEthOrder(uint orderId, address maker, uint weiAmount);
-    event CancelledBuyEthOrder(uint orderId, address maker, uint tokenAmount);
+    event CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
 
     function Exchange(address augmintTokenAddress, address ratesAddress, uint _minOrderAmount) public {
         augmintToken = AugmintTokenInterface(augmintTokenAddress);
@@ -42,7 +41,7 @@ contract Exchange is ExchangeInterface {
         lastOrderId++;
         orderIndex = sellEthOrders.push(Order(lastOrderId, msg.sender, now, price, msg.value)) - 1;
 
-        NewSellEthOrder(orderIndex, lastOrderId, msg.sender, price, msg.value);
+        NewOrder(orderIndex, lastOrderId, msg.sender, price, 0, msg.value);
         return(orderIndex, lastOrderId);
     }
 
@@ -63,17 +62,21 @@ contract Exchange is ExchangeInterface {
     function cancelSellEthOrder(uint sellIndex, uint sellId) external {
         require(sellEthOrders[sellIndex].maker == msg.sender);
         require(sellId == sellEthOrders[sellIndex].id);
-        uint amount = sellEthOrders[sellIndex].amount;
+
+        msg.sender.transfer(sellEthOrders[sellIndex].amount);
+
+        CancelledOrder(sellId, msg.sender, 0, sellEthOrders[sellIndex].amount);
         _removeOrder(sellEthOrders, sellIndex);
-        CancelledSellEthOrder(sellId, msg.sender, amount);
     }
 
     function cancelBuyEthOrder(uint buyIndex, uint buyId) external {
         require(buyEthOrders[buyIndex].maker == msg.sender);
         require(buyId == buyEthOrders[buyIndex].id);
-        uint amount = buyEthOrders[buyIndex].amount;
+
+        augmintToken.transferNoFee(msg.sender, buyEthOrders[buyIndex].amount, "Sell token order cancelled");
+
+        CancelledOrder(buyId, msg.sender, buyEthOrders[buyIndex].amount, 0);
         _removeOrder(buyEthOrders, buyIndex);
-        CancelledBuyEthOrder(buyId, msg.sender, amount);
     }
 
     /* matches any two orders if the sell price >= buy price
@@ -120,14 +123,14 @@ contract Exchange is ExchangeInterface {
         return i;
     }
 
+    function getOrderCounts() external view returns(uint sellEthOrderCount, uint buyEthOrderCount) {
+        return(sellEthOrders.length, buyEthOrders.length);
+    }
+
     function isValidMatch(uint sellIndex, uint sellId, uint buyIndex, uint buyId) public view returns (bool) {
         return (sellId == sellEthOrders[sellIndex].id &&
                 buyId == buyEthOrders[buyIndex].id &&
                 sellEthOrders[sellIndex].price <= buyEthOrders[buyIndex].price);
-    }
-
-    function getOrderCounts() external view returns(uint sellEthOrderCount, uint buyEthOrderCount) {
-        return(sellEthOrders.length, buyEthOrders.length);
     }
 
     /* internal fill function, called by matchOrders and matchMultipleOrders.
@@ -187,7 +190,7 @@ contract Exchange is ExchangeInterface {
         lastOrderId++;
         orderIndex = buyEthOrders.push(Order(lastOrderId, maker, now, price, tokenAmount)) - 1;
 
-        NewBuyEthOrder(orderIndex, lastOrderId, maker, price, tokenAmount);
+        NewOrder(orderIndex, lastOrderId, maker, price, tokenAmount, 0);
         return(orderIndex, lastOrderId);
     }
 

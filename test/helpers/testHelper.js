@@ -34,10 +34,11 @@ function getEvents(contractInstance, eventName) {
 
 async function assertEvent(contractInstance, eventName, expectedArgs) {
     const events = await getEvents(contractInstance, eventName);
-    assert(events.length === 1);
+    assert(events.length === 1, `Expected ${eventName} event wasn't received from ${contractInstance.address}`); // how to get contract name?
+
     const event = events[0];
 
-    assert(event.event === eventName);
+    assert(event.event === eventName, `Expected ${eventName} event but got ${event.event}`);
 
     const eventArgs = event.args;
 

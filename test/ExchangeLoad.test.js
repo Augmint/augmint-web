@@ -42,7 +42,7 @@ const getOrderToFill = async () => {
         for (let j = 0; j < sellOrders.length && !match; j++) {
             const sellOrder = sellOrders[j];
 
-            if (buyOrder.price.gte(sellOrder.price)) {
+            if (buyOrder.price >= sellOrder.price) {
                 match = { sellOrder: sellOrder, buyOrder: buyOrder };
             }
         }
@@ -67,29 +67,30 @@ contract("Exchange load tests", accounts => {
     });
 
     it("place x buy / sell orders", async function() {
+        let sellCt = 0;
+        let buyCt = 0;
         for (let i = 0; i < ORDER_COUNT; i++) {
             const tokenAmount = Math.round(random.random() * 10000 * (MAX_TOKEN - MIN_TOKEN) / 10000) + MIN_TOKEN;
             const price = Math.floor(random.random() * (MAX_ORDER_RATE - MIN_ORDER_RATE)) + MIN_ORDER_RATE;
             const weiAmount =
                 Math.round(tokenAmount * price / 10000 / MARKET_WEI_RATE * ONEWEI / ETH_ROUND) * ETH_ROUND;
             const orderType = random.random() < 0.5 ? ETH_SELL : ETH_BUY;
+            if (orderType === ETH_SELL) {
+                sellCt++;
+            } else {
+                buyCt++;
+            }
+
             const order = {
                 amount: orderType === ETH_SELL ? weiAmount : tokenAmount,
                 maker: accounts[Math.floor(random.random() * (TEST_ACCS_CT - 1))],
                 price: price,
-                tokenAmount: tokenAmount,
-                weiAmount: weiAmount,
-                orderType: orderType
+                orderType: orderType,
+                // expected values:
+                sellEthOrderCount: sellCt,
+                buyEthOrderCount: buyCt
             };
-            if (order.orderType === ETH_SELL) {
-                const tx = await exchange.placeSellEthOrder(order.price, { value: order.amount, from: order.maker });
-                testHelper.logGasUse(this, tx, "SELL order");
-            } else {
-                const tx = await tokenAce.placeBuyEthOrderOnExchange(exchange.address, order.price, order.amount, {
-                    from: order.maker
-                });
-                testHelper.logGasUse(this, tx, "BUY order");
-            }
+            await exchangeTestHelper.newOrder(this, order);
         }
         //await exchangeTestHelper.printOrderBook(10);
     });
@@ -100,10 +101,10 @@ contract("Exchange load tests", accounts => {
         let match = await getOrderToFill();
         while (match) {
             console.log(
-                "MATCH:  Sell price: " + match.sellOrder.price.div(10000).toString(),
-                "  Buy price: " + match.buyOrder.price.div(10000).toString(),
+                "MATCH:  Sell price: " + match.sellOrder.price / 10000,
+                "  Buy price: " + match.buyOrder.price / 10000,
                 "  Sell amount: " + web3.fromWei(match.sellOrder.amount) + " ETH",
-                "  Buy amount: " + match.buyOrder.amount.div(10000).toString() + " ACE",
+                "  Buy amount: " + match.buyOrder.amount / 10000 + " ACE",
                 "  Sell Id: " + match.sellOrder.id,
                 "  Buy id: " + match.buyOrder.id
             );
@@ -114,11 +115,24 @@ contract("Exchange load tests", accounts => {
                 match.buyOrder.index,
                 match.buyOrder.id
             );
-            // save match for later use by other test cases (calculating matches is time consuming)
+            // save match for later use by matchMultipleOrders test (calculating matches is time consuming)
             matches.push(match);
             testHelper.logGasUse(this, tx, "matchOrders");
             match = await getOrderToFill();
         }
+
+        // save state to compare it with matchMultipleOrders' results
+        stateAfterAllMatch = await exchangeTestHelper.getState();
+
+        //await exchangeTestHelper.printOrderBook(10);
+
+        await testHelper.revertSnapshot(snapshotId);
+    });
+
+    /* FIXME: matchMultipleOrders() is not finished */
+    it.skip("should x orders at once (matchMultipleOrders)", async function() {
+        const snapshotId = await testHelper.takeSnapshot();
+        //await exchangeTestHelper.printOrderBook(10);
 
         // convert & transpose matches to the format required by matchMultipleOrders
         matchArgs = matches.reduce(
@@ -136,21 +150,7 @@ contract("Exchange load tests", accounts => {
                 buyIds: []
             }
         );
-        // save state to compare it with matchMultipleOrders' results
-        stateAfterAllMatch = await exchangeTestHelper.getState();
 
-        //await exchangeTestHelper.printOrderBook(10);
-
-        await testHelper.revertSnapshot(snapshotId);
-    });
-
-    /* FIXME: matchMultipleOrders() is not finished */
-    it.skip("should x orders at once (matchMultipleOrders)", async function() {
-        const snapshotId = await testHelper.takeSnapshot();
-        //await exchangeTestHelper.printOrderBook(10);
-        // console.log(stateAfterAllMatch, matchArgs.sellIndexes.length);
-        // console.log(matches);
-        // console.log(matchArgs);
         const tx = await exchange.matchMultipleOrders(
             matchArgs.sellIndexes,
             matchArgs.sellIds,
@@ -177,15 +177,13 @@ contract("Exchange load tests", accounts => {
         for (let i = stateBefore.sellCount - 1; i >= 0; i--) {
             const delIdx = Math.floor(random.random() * i);
             const order = await exchangeTestHelper.getSellOrder(delIdx);
-            const tx = await exchange.cancelSellEthOrder(order.index, order.id, { from: order.maker });
-            testHelper.logGasUse(this, tx, "cancelSellEthOrder");
+            await exchangeTestHelper.cancelSellEthOrder(this, order);
         }
 
         for (let i = stateBefore.buyCount - 1; i >= 0; i--) {
             const delIdx = Math.floor(random.random() * i);
             const order = await exchangeTestHelper.getBuyOrder(delIdx);
-            const tx = await exchange.cancelBuyEthOrder(order.index, order.id, { from: order.maker });
-            testHelper.logGasUse(this, tx, "cancelBuyEthOrder");
+            await exchangeTestHelper.cancelBuyEthOrder(this, order);
         }
 
         const stateAfter = await exchangeTestHelper.getState();
