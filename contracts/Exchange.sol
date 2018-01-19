@@ -1,12 +1,10 @@
 /* Augmint's internal Exchange
+    TODO: store price as 1/price to avoid div ? higher precision needed for rate then
+    TODO: sellToken and buyToken instead of sellEth and buyEth?
     TODO: finish matchMuiltipleOrders()
     TODO: check/test if underflow possible on sell/buyORder.amount -= token/weiAmount in matchOrders()
-    TODO: use a lib for orders?
-    TODO: use generic new order and remove order events? (and price sign would indicate buy/sell?
-            or have both wei and tokenamounts?)
     TODO: deduct fee
     TODO: minOrderAmount setter
-    TODO: index event args
     TODO: consider takeSell/BuyOrder funcs (frequent rate changes with takeBuyEth? send more and send back remainder?)
 */
 pragma solidity 0.4.18;
@@ -22,7 +20,7 @@ contract Exchange is ExchangeInterface {
     event NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount,
         uint weiAmount);
 
-    event OrderFill(address indexed seller, address indexed buyer, uint buyOrderId, uint sellOrderId,
+    event OrderFill(address indexed seller, address indexed buyer, uint sellOrderId, uint buyOrderId,
         uint price, uint weiAmount, uint tokenAmount);
 
     event CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
@@ -35,7 +33,8 @@ contract Exchange is ExchangeInterface {
 
     function placeSellEthOrder(uint price) external payable returns (uint orderIndex, uint orderId) {
         require(price > 0);
-        uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
+
+        uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value.roundedDiv(price).mul(10000));
         require(tokenAmount >= minOrderAmount);
 
         lastOrderId++;
@@ -96,9 +95,8 @@ contract Exchange is ExchangeInterface {
         Returns the number of orders matched
         Stops if any match is invalid (case when any of the orders removed after client generated the match list sent)
         Reverts if sizes of arrays passed shorter than passed sellIndexes.
-        */
 
-    /* FIXME: finish this func */
+        FIXME: finish this func */
     function matchMultipleOrders(uint[] sellIndexes, uint[] sellIds, uint[] buyIndexes, uint[] buyIds)
     external returns(uint i) {
         // fill but don't remove yet to keep indexes
@@ -140,7 +138,8 @@ contract Exchange is ExchangeInterface {
         Order storage buyOrder = buyEthOrders[buyIndex];
 
         uint price = getMatchPrice(sellOrder.price, buyOrder.price); // use price which is closer to par
-        uint buyEthWeiAmount = rates.convertToWei(augmintToken.peggedSymbol(), buyOrder.amount).mul(price).div(10000);
+        uint buyEthWeiAmount = rates.convertToWei(augmintToken.peggedSymbol(), buyOrder.amount)
+                                                    .roundedDiv(price).mul(10000);
         uint tradedWeiAmount;
         uint tradedTokenAmount;
 
@@ -160,8 +159,8 @@ contract Exchange is ExchangeInterface {
         } else {
             // partially filled buy order + fully filled sell order
             tradedWeiAmount = sellOrder.amount;
-            tradedTokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), sellOrder.amount)
-                .mul(price).div(10000);
+            tradedTokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(),
+                                                        sellOrder.amount.roundedDiv(price).mul(10000));
             buyOrder.amount -= tradedTokenAmount;
             sellFilled = true;
         }
@@ -174,12 +173,16 @@ contract Exchange is ExchangeInterface {
         return(sellFilled, buyFilled);
     }
 
-    // return the price which is closer to par
+    // return par if it's between par otherwise the price which is closer to par
     function getMatchPrice(uint sellPrice, uint buyPrice) internal pure returns(uint price) {
-        uint sellPriceDeviationFromPar = sellPrice > 1 ? sellPrice - 1 : 1 - sellPrice;
-        uint buyPriceDeviationFromPar = buyPrice > 1 ? buyPrice - 1 : 1 - buyPrice;
-        return price = sellPriceDeviationFromPar > buyPriceDeviationFromPar ?
-            buyPrice : sellPrice;
+        if (sellPrice <= 10000 && buyPrice >= 10000) {
+            price = 10000;
+        } else {
+            uint sellPriceDeviationFromPar = sellPrice > 10000 ? sellPrice - 10000 : 10000 - sellPrice;
+            uint buyPriceDeviationFromPar = buyPrice > 10000 ? buyPrice - 10000 : 10000 - buyPrice;
+            price = sellPriceDeviationFromPar > buyPriceDeviationFromPar ? buyPrice : sellPrice;
+        }
+        return price;
     }
 
     function _placeBuyEthOrder(address maker, uint price, uint tokenAmount)

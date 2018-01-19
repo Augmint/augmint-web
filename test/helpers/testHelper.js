@@ -51,13 +51,23 @@ async function assertEvent(contractInstance, eventName, expectedArgs) {
     );
 
     expectedArgNames.forEach(argName => {
+        const ret = {}; // we return values from event (useful when  custom validator passed for an id)
         const value =
             typeof event.args[argName].toNumber === "function" ? event.args[argName].toNumber() : event.args[argName];
         const expectedValue = expectedArgs[argName];
-        assert(
-            value === expectedValue,
-            `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`
-        );
+        if (typeof expectedValue === "function") {
+            assert(
+                expectedValue(value),
+                `${argName} value of ${value} in ${eventName} didn't pass validation function provided`
+            );
+        } else {
+            assert(
+                value === expectedValue,
+                `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`
+            );
+        }
+        ret.argName = value;
+        return ret;
     });
 }
 

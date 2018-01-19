@@ -29,13 +29,13 @@ let stateAfterAllMatch = {};
 const getOrderToFill = async () => {
     // this could be optimized ...
     const state = await exchangeTestHelper.getState();
-    if (sellOrders.length !== state.sellCount) {
-        // retreive sell orders
-        sellOrders = [];
-        for (let i = 0; i < state.sellCount; i++) {
-            sellOrders.push(await exchangeTestHelper.getSellOrder(i));
-        }
+
+    // retreive sell orders
+    sellOrders = [];
+    for (let i = 0; i < state.sellCount; i++) {
+        sellOrders.push(await exchangeTestHelper.getSellOrder(i));
     }
+
     let match;
     for (let i = 0; i < state.buyCount && !match; i++) {
         const buyOrder = await exchangeTestHelper.getBuyOrder(i);
@@ -109,15 +109,10 @@ contract("Exchange load tests", accounts => {
                 "  Buy id: " + match.buyOrder.id
             );
             //await exchangeTestHelper.printOrderBook(10);
-            const tx = await exchange.matchOrders(
-                match.sellOrder.index,
-                match.sellOrder.id,
-                match.buyOrder.index,
-                match.buyOrder.id
-            );
+            await exchangeTestHelper.matchOrders(this, match.sellOrder, match.buyOrder, MARKET_WEI_RATE);
+
             // save match for later use by matchMultipleOrders test (calculating matches is time consuming)
             matches.push(match);
-            testHelper.logGasUse(this, tx, "matchOrders");
             match = await getOrderToFill();
         }
 
@@ -168,7 +163,7 @@ contract("Exchange load tests", accounts => {
         await testHelper.revertSnapshot(snapshotId);
     });
 
-    it("should cancel all orders", async function() {
+    it.skip("should cancel all orders", async function() {
         const snapshotId = await testHelper.takeSnapshot();
         //await exchangeTestHelper.printOrderBook(10);
         const stateBefore = await exchangeTestHelper.getState();

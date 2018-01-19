@@ -3,7 +3,6 @@ const tokenAceTestHelper = require("./helpers/tokenAceTestHelper.js");
 const exchangeTestHelper = require("./helpers/exchangeTestHelper.js");
 const ratesTestHelper = new require("./helpers/ratesTestHelper.js");
 
-const ONEWEI = 1000000000000000000;
 const ETH_SELL = 0;
 const ETH_BUY = 1;
 
@@ -11,10 +10,11 @@ let snapshotId;
 let rates, tokenAce, exchange, peggedSymbol;
 const maker = web3.eth.accounts[1];
 const taker = web3.eth.accounts[2];
+let marketRate = 9980000;
 
 contract("Exchange tests", accounts => {
     before(async function() {
-        rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
+        rates = await ratesTestHelper.newRatesMock("EUR", marketRate);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
         peggedSymbol = web3.toAscii(await tokenAce.peggedSymbol());
         await tokenAce.issue(1000000000);
@@ -53,7 +53,7 @@ contract("Exchange tests", accounts => {
         const order = {
             amount: 1000000,
             maker: maker,
-            price: 110000,
+            price: 11000,
             orderType: ETH_BUY,
             viaAugmintToken: false,
             // expected values:
@@ -72,7 +72,7 @@ contract("Exchange tests", accounts => {
         const order = {
             amount: 1000000,
             maker: maker,
-            price: 110000,
+            price: 11000,
             orderType: ETH_BUY,
             // expected values:
             sellEthOrderCount: 0,
@@ -117,29 +117,42 @@ contract("Exchange tests", accounts => {
             sellEthOrderCount: 1,
             buyEthOrderCount: 1
         };
+        const marketEurEth = 5000000;
+        await rates.setRate("EUR", marketEurEth);
+        await exchangeTestHelper.newOrder(this, sellOrder);
+        await exchangeTestHelper.newOrder(this, buyOrder);
+        //await exchangeTestHelper.printOrderBook(10);
+        await exchangeTestHelper.matchOrders(this, sellOrder, buyOrder, marketEurEth);
+    });
+
+    it("should match two matching orders (buy ETH partially filled)", async function() {
+        const sellOrder = {
+            amount: web3.toWei(0.751574),
+            maker: maker,
+            price: 9560,
+            orderType: ETH_SELL,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 0
+        };
+
+        const buyOrder = {
+            amount: 7238581,
+            maker: taker,
+            price: 10250,
+            orderType: ETH_BUY,
+            // expected values:
+            sellEthOrderCount: 1,
+            buyEthOrderCount: 1
+        };
         const marketEurEth = 10000000;
         await rates.setRate("EUR", marketEurEth);
         await exchangeTestHelper.newOrder(this, sellOrder);
         await exchangeTestHelper.newOrder(this, buyOrder);
         //await exchangeTestHelper.printOrderBook(10);
-        const tx = await exchange.matchOrders(sellOrder.index, sellOrder.id, buyOrder.index, buyOrder.id);
-
-        testHelper.logGasUse(this, tx, "matchOrders");
-        const expPrice =
-            Math.abs(buyOrder.price - 1) > Math.abs(sellOrder.price - 1) ? sellOrder.price : buyOrder.price;
-        const expMatch = {
-            buyer: buyOrder.maker,
-            seller: sellOrder.maker,
-            price: expPrice,
-            weiAmount: marketEurEth / 10000 * expPrice / 10000 * buyOrder.amount / 10000 * (ONEWEI / 1000000),
-            tokenAmount: buyOrder.amount
-        };
-        const match = exchangeTestHelper.orderMatchEventAsserts(tx.logs[0], expMatch);
-        //await exchangeTestHelper.printOrderBook();
-        // TODO: asserts: orderCounts + orders in contract
+        await exchangeTestHelper.matchOrders(this, sellOrder, buyOrder, marketEurEth);
     });
 
-    it("should match two matching orders (buy ETH partially filled)");
     it("should match two matching orders (both fully filled)");
     it("should NOT match two non-matching orders");
     it("shouldn't match orders if one order removed");
@@ -153,7 +166,7 @@ contract("Exchange tests", accounts => {
         const order = {
             amount: parseInt(web3.toWei(1), 10),
             maker: maker,
-            price: 110000,
+            price: 11000,
             orderType: ETH_SELL,
             // expected values:
             sellEthOrderCount: 1,
@@ -168,7 +181,7 @@ contract("Exchange tests", accounts => {
         const order = {
             amount: 1000000,
             maker: maker,
-            price: 110000,
+            price: 11000,
             orderType: ETH_BUY,
             // expected values:
             sellEthOrderCount: 0,
