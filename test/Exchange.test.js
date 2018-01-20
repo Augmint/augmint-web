@@ -3,20 +3,19 @@ const tokenAceTestHelper = require("./helpers/tokenAceTestHelper.js");
 const exchangeTestHelper = require("./helpers/exchangeTestHelper.js");
 const ratesTestHelper = new require("./helpers/ratesTestHelper.js");
 
-const ETH_SELL = 0;
-const ETH_BUY = 1;
+const TOKEN_BUY = 0;
+const TOKEN_SELL = 1;
 
 let snapshotId;
-let rates, tokenAce, exchange, peggedSymbol;
+let rates, tokenAce, exchange;
 const maker = web3.eth.accounts[1];
 const taker = web3.eth.accounts[2];
-let marketRate = 9980000;
 
 contract("Exchange tests", accounts => {
     before(async function() {
-        rates = await ratesTestHelper.newRatesMock("EUR", marketRate);
+        rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
-        peggedSymbol = web3.toAscii(await tokenAce.peggedSymbol());
+
         await tokenAce.issue(1000000000);
         await tokenAce.withdrawTokens(maker, 100000000);
         await tokenAce.withdrawTokens(taker, 100000000);
@@ -32,164 +31,126 @@ contract("Exchange tests", accounts => {
         await testHelper.revertSnapshot(snapshotId);
     });
 
-    it("place sell Eth orders", async function() {
-        const order = {
-            amount: web3.toWei(1),
-            maker: maker,
-            price: 11000,
-            orderType: ETH_SELL,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 0
-        };
+    it("place buy token orders", async function() {
+        const order = { amount: web3.toWei(1), maker: maker, price: 11000, orderType: TOKEN_BUY };
 
         await exchangeTestHelper.newOrder(this, order);
-        order.sellEthOrderCount = 2;
         await exchangeTestHelper.newOrder(this, order);
         //await exchangeTestHelper.printOrderBook();
     });
 
-    it("place buy ETH orders directly on Exchange", async function() {
-        const order = {
-            amount: 1000000,
-            maker: maker,
-            price: 11000,
-            orderType: ETH_BUY,
-            viaAugmintToken: false,
-            // expected values:
-            sellEthOrderCount: 0,
-            buyEthOrderCount: 1
-        };
+    it("place sell token orders directly on Exchange", async function() {
+        const order = { amount: 1000000, maker: maker, price: 11000, orderType: TOKEN_SELL, viaAugmintToken: false };
 
         const tx = await tokenAce.approve(exchange.address, order.amount * 2, { from: order.maker });
         testHelper.logGasUse(this, tx, "approve");
-        await exchangeTestHelper.newOrder(this, order);
-        order.buyEthOrderCount = 2;
-        await exchangeTestHelper.newOrder(this, order);
-    });
-
-    it("place a buy ETH orders via AugmintToken", async function() {
-        const order = {
-            amount: 1000000,
-            maker: maker,
-            price: 11000,
-            orderType: ETH_BUY,
-            // expected values:
-            sellEthOrderCount: 0,
-            buyEthOrderCount: 1
-        };
 
         await exchangeTestHelper.newOrder(this, order);
-        order.mapIdx = 1;
-        order.buyEthOrderCount = 2;
         await exchangeTestHelper.newOrder(this, order);
     });
 
-    it("shouldn't place a buy ETH order directly if approval < amount");
+    it("place a sell token order via AugmintToken", async function() {
+        const order = { amount: 1000000, maker: maker, price: 11000, orderType: TOKEN_SELL };
 
-    it("shouldn't place a buy ETH order below minOrderAmount");
-    it("shouldn't place a sell ETH order below minOrderAmount");
-    it("shouldn't place a buy ETH order with 0 price");
-    it("shouldn't place a sell ETH order with 0 price");
+        await exchangeTestHelper.newOrder(this, order);
+        await exchangeTestHelper.newOrder(this, order);
+    });
 
-    it("no sell Eth order when user doesn't have enough ETH");
-    it("no buy Eth order when user doesn't have enough ACE");
+    it("shouldn't place a sell token order directly if approval < amount");
 
-    it("should be able to match my own order");
+    it("shouldn't place a sell token order below minOrderAmount");
+    it("shouldn't place a buy token order below minOrderAmount");
+    it("shouldn't place a sell token order with 0 price");
+    it("shouldn't place a buy token order with 0 price");
 
-    it("should match two matching orders (sell ETH partially filled)", async function() {
-        const sellOrder = {
-            amount: web3.toWei(1),
-            maker: maker,
-            price: 11000,
-            orderType: ETH_SELL,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 0
-        };
+    it("no buy token order when user doesn't have enough ETH");
+    it("no sell token order when user doesn't have enough ACE");
 
-        const buyOrder = {
-            amount: 1000000,
-            maker: taker,
-            price: 11000,
-            orderType: ETH_BUY,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 1
-        };
+    it("should match two matching orders (buy token fully filled)", async function() {
+        const buyTokenOrder = { amount: web3.toWei(0.535367), maker: maker, price: 10565, orderType: TOKEN_BUY };
+        const sellTokenOrder = { amount: 9558237, maker: taker, price: 10263, orderType: TOKEN_SELL };
         const marketEurEth = 5000000;
         await rates.setRate("EUR", marketEurEth);
-        await exchangeTestHelper.newOrder(this, sellOrder);
-        await exchangeTestHelper.newOrder(this, buyOrder);
+
+        await exchangeTestHelper.newOrder(this, buyTokenOrder);
+        await exchangeTestHelper.newOrder(this, sellTokenOrder);
         //await exchangeTestHelper.printOrderBook(10);
-        await exchangeTestHelper.matchOrders(this, sellOrder, buyOrder, marketEurEth);
+        await exchangeTestHelper.matchOrders(this, buyTokenOrder, sellTokenOrder, marketEurEth);
+
+        //await exchangeTestHelper.printOrderBook(10);
+        const stateAfter = await exchangeTestHelper.getState();
+        assert.equal(stateAfter.sellCount, 1, "Sell token order count should be 1");
+        assert.equal(stateAfter.buyCount, 0, "Buy token order count should be 0");
     });
 
-    it("should match two matching orders (buy ETH partially filled)", async function() {
-        const sellOrder = {
-            amount: web3.toWei(0.751574),
-            maker: maker,
-            price: 9560,
-            orderType: ETH_SELL,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 0
-        };
-
-        const buyOrder = {
-            amount: 7238581,
-            maker: taker,
-            price: 10250,
-            orderType: ETH_BUY,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 1
-        };
-        const marketEurEth = 10000000;
+    it("should match two matching orders (sell token fully filled)", async function() {
+        const buyTokenOrder = { amount: web3.toWei(1.750401), maker: maker, price: 10710, orderType: TOKEN_BUY };
+        const sellTokenOrder = { amount: 5614113, maker: taker, price: 10263, orderType: TOKEN_SELL };
+        const marketEurEth = 5000000;
         await rates.setRate("EUR", marketEurEth);
-        await exchangeTestHelper.newOrder(this, sellOrder);
-        await exchangeTestHelper.newOrder(this, buyOrder);
+
+        await exchangeTestHelper.newOrder(this, buyTokenOrder);
+        await exchangeTestHelper.newOrder(this, sellTokenOrder);
         //await exchangeTestHelper.printOrderBook(10);
-        await exchangeTestHelper.matchOrders(this, sellOrder, buyOrder, marketEurEth);
+        await exchangeTestHelper.matchOrders(this, buyTokenOrder, sellTokenOrder, marketEurEth);
+
+        const stateAfter = await exchangeTestHelper.getState();
+        assert.equal(stateAfter.sellCount, 0, "Sell token order count should be 0");
+        assert.equal(stateAfter.buyCount, 1, "Buy token order count should be 1");
     });
 
-    it("should match two matching orders (both fully filled)");
-    it("should NOT match two non-matching orders");
-    it("shouldn't match orders if one order removed");
+    it("should match two matching orders (both fully filled)", async function() {
+        const buyTokenOrder = { amount: web3.toWei(1), maker: maker, price: 12000, orderType: TOKEN_BUY };
+        const sellTokenOrder = { amount: 4545455, maker: maker, price: 11000, orderType: TOKEN_SELL };
+        const marketEurEth = 5000000;
+        await rates.setRate("EUR", marketEurEth);
 
-    it("should match multiple orders");
+        await exchangeTestHelper.newOrder(this, buyTokenOrder);
+        await exchangeTestHelper.newOrder(this, sellTokenOrder);
+        //await exchangeTestHelper.printOrderBook(10);
+        await exchangeTestHelper.matchOrders(this, buyTokenOrder, sellTokenOrder, marketEurEth);
+
+        const stateAfter = await exchangeTestHelper.getState();
+        assert.equal(stateAfter.sellCount, 0, "Sell token order count should be 0");
+        assert.equal(stateAfter.buyCount, 0, "Buy token order count should be 0");
+    });
+
+    it("should match two matching orders from the same account", async function() {
+        const buyTokenOrder = { amount: web3.toWei(1.750401), maker: maker, price: 10710, orderType: TOKEN_BUY };
+        const sellTokenOrder = { amount: 5614113, maker: maker, price: 10263, orderType: TOKEN_SELL };
+        const marketEurEth = 5000000;
+        await rates.setRate("EUR", marketEurEth);
+
+        await exchangeTestHelper.newOrder(this, buyTokenOrder);
+        await exchangeTestHelper.newOrder(this, sellTokenOrder);
+        //await exchangeTestHelper.printOrderBook(10);
+        await exchangeTestHelper.matchOrders(this, buyTokenOrder, sellTokenOrder, marketEurEth);
+
+        const stateAfter = await exchangeTestHelper.getState();
+        assert.equal(stateAfter.sellCount, 0, "Sell token order count should be 0");
+        assert.equal(stateAfter.buyCount, 1, "Buy token order count should be 1");
+    });
+
+    it("should NOT match two non-matching orders");
+    it("should NOT match orders if one order removed");
+
+    it("should match multiple orders"); // ensure edge cases of passing the same order twice
     it("multipleMatch should match as many orders as fits into gas provided");
-    it("should NOT match multiple orders if one is non-matching");
+    it("matchMultipleOrders should stop if one is non-matching");
     it("matchMultipleOrders should stop if one of the orders removed");
 
-    it("should cancel a sell ETH order", async function() {
-        const order = {
-            amount: parseInt(web3.toWei(1), 10),
-            maker: maker,
-            price: 11000,
-            orderType: ETH_SELL,
-            // expected values:
-            sellEthOrderCount: 1,
-            buyEthOrderCount: 0
-        };
+    it("should cancel a buy token order", async function() {
+        const order = { amount: web3.toWei(1), maker: maker, price: 11000, orderType: TOKEN_BUY };
 
         await exchangeTestHelper.newOrder(this, order);
-        await exchangeTestHelper.cancelSellEthOrder(this, order);
+        await exchangeTestHelper.cancelOrder(this, order);
     });
 
-    it("should cancel a buy ETH order", async function() {
-        const order = {
-            amount: 1000000,
-            maker: maker,
-            price: 11000,
-            orderType: ETH_BUY,
-            // expected values:
-            sellEthOrderCount: 0,
-            buyEthOrderCount: 1
-        };
+    it("should cancel a sell token order", async function() {
+        const order = { amount: 1000000, maker: maker, price: 11000, orderType: TOKEN_SELL };
 
         await exchangeTestHelper.newOrder(this, order);
-        await exchangeTestHelper.cancelBuyEthOrder(this, order);
+        await exchangeTestHelper.cancelOrder(this, order);
     });
 
     it("only own orders should be possible to cancel");

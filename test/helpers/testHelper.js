@@ -47,28 +47,49 @@ async function assertEvent(contractInstance, eventName, expectedArgs) {
 
     assert(
         expectedArgNames.length === receivedArgNames.length,
-        `Expected event to have ${expectedArgNames.length} arguments, but it had ${receivedArgNames.length}`
+        `Expected ${eventName} event to have ${expectedArgNames.length} arguments, but it had ${
+            receivedArgNames.length
+        }`
     );
 
+    const ret = {}; // we return values from event (useful when  custom validator passed for an id)
     expectedArgNames.forEach(argName => {
-        const ret = {}; // we return values from event (useful when  custom validator passed for an id)
-        const value =
-            typeof event.args[argName].toNumber === "function" ? event.args[argName].toNumber() : event.args[argName];
+        assert(
+            typeof event.args[argName] !== "undefined",
+            `${argName} expected in ${eventName} event but it's not found`
+        );
+
         const expectedValue = expectedArgs[argName];
-        if (typeof expectedValue === "function") {
-            assert(
-                expectedValue(value),
-                `${argName} value of ${value} in ${eventName} didn't pass validation function provided`
-            );
-        } else {
+        let value;
+        switch (typeof expectedValue) {
+            case "function":
+                value = expectedValue(event.args[argName]);
+                break;
+            case "number":
+                value =
+                    typeof event.args[argName].toNumber === "function"
+                        ? event.args[argName].toNumber()
+                        : event.args[argName];
+                break;
+            case "string":
+                value =
+                    typeof event.args[argName].toString === "function"
+                        ? event.args[argName].toString()
+                        : event.args[argName];
+                break;
+            default:
+                value = event.args[argName];
+        }
+
+        if (typeof expectedValue !== "function") {
             assert(
                 value === expectedValue,
-                `Event ${eventName} has ${argName} with a value of ${value} but expected ${expectedValue}`
+                `Event ${eventName} has ${argName} arg with a value of ${value} but expected ${expectedValue}`
             );
         }
-        ret.argName = value;
-        return ret;
+        ret[argName] = value;
     });
+    return ret;
 }
 
 async function assertNoEvents(contractInstance, eventName) {

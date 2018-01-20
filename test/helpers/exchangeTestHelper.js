@@ -6,20 +6,18 @@ const Exchange = artifacts.require("./Exchange.sol");
 const ONEWEI = 1000000000000000000;
 const PLACE_ORDER_MAXFEE = web3.toWei(0.03);
 const CANCEL_SELL_MAXFEE = web3.toWei(0.03);
-const ETH_SELL = 0;
-const ETH_BUY = 1;
+const MATCH_ORDER_MAXFEE = web3.toWei(0.03);
+const TOKEN_BUY = 0;
+const TOKEN_SELL = 1;
 
 module.exports = {
     newExchangeMock,
     newOrder,
-    cancelBuyEthOrder,
-    cancelSellEthOrder,
-    newOrderEventAsserts,
+    cancelOrder,
     matchOrders,
-    contractStateAsserts,
     getState,
-    getSellOrder,
-    getBuyOrder,
+    getBuyTokenOrder,
+    getSellTokenOrder,
     printOrderBook
 };
 
@@ -34,33 +32,33 @@ async function newExchangeMock(_tokenAce, _rates, minOrderAmount) {
 }
 
 async function newOrder(testInstance, order) {
-    const testedAccounts = [exchange.address, order.maker];
-    const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-    let tx;
-    let eventAssertLogIndex = 0;
+    const stateBefore = await getState();
+    const balBefore = await tokenAceTestHelper.getAllBalances({ exchange: exchange.address, maker: order.maker });
 
-    if (order.orderType === ETH_SELL) {
-        tx = await exchange.placeSellEthOrder(order.price, {
+    order.amount = parseInt(order.amount); // to allow passing web3.toWei or literal numbers (maybe refactor to BN)
+    order.viaAugmintToken =
+        typeof order.viaAugmintToken === "undefined" && order.orderType === TOKEN_SELL ? true : order.viaAugmintToken;
+    let tx;
+    if (order.orderType === TOKEN_BUY) {
+        tx = await exchange.placeBuyTokenOrder(order.price, {
             value: order.amount,
             from: order.maker
         });
-        testHelper.logGasUse(testInstance, tx, "placeSellEthOrder");
+        testHelper.logGasUse(testInstance, tx, "placeBuyTokenOrder");
         order.tokenAmount = 0;
-        order.weiAmount = order.amount; //, 10); // parsint b/c eventAssers === comp, fails even if both numbers?
+        order.weiAmount = order.amount;
     } else {
-        order.viaAugmintToken = typeof order.viaAugmintToken === "undefined" ? true : order.viaAugmintToken;
         if (order.viaAugmintToken) {
-            eventAssertLogIndex = 1;
-            tx = await tokenAce.placeBuyEthOrderOnExchange(exchange.address, order.price, order.amount, {
+            tx = await tokenAce.placeSellTokenOrderOnExchange(exchange.address, order.price, order.amount, {
                 from: order.maker
             });
-            testHelper.logGasUse(testInstance, tx, "tokenAce.placeBuyEthOrderOnExchange");
+            testHelper.logGasUse(testInstance, tx, "tokenAce.placeSellTokenOrderOnExchange");
         } else {
             const approvedBefore = await tokenAce.allowed(order.maker, exchange.address);
-            tx = await exchange.placeBuyEthOrder(order.price, order.amount, {
+            tx = await exchange.placeSellTokenOrder(order.price, order.amount, {
                 from: order.maker
             });
-            testHelper.logGasUse(testInstance, tx, "tokenAce.placeBuyEthOrderOnExchange");
+            testHelper.logGasUse(testInstance, tx, "tokenAce.placeSellTokenOrderOnExchange");
             const approvedAfter = await tokenAce.allowed(order.maker, exchange.address);
             assert.equal(
                 approvedAfter.toString(),
@@ -72,100 +70,84 @@ async function newOrder(testInstance, order) {
         order.tokenAmount = order.amount;
         order.weiAmount = 0;
     }
-    await newOrderEventAsserts(order, tx.logs[eventAssertLogIndex]);
 
-    await contractStateAsserts(order);
-    const expBalances = [
-        {
-            name: "exchange contract",
-            address: exchange.address,
-            ace: balBefore[0].ace.plus(order.tokenAmount),
-            eth: balBefore[0].eth.plus(order.weiAmount)
-        },
-        {
-            name: "maker",
-            address: order.maker,
-            gasFee: PLACE_ORDER_MAXFEE,
-            ace: balBefore[1].ace.minus(order.tokenAmount),
-            eth: balBefore[1].eth.minus(order.weiAmount)
-        }
-    ];
+    const eventResult = await newOrderEventAsserts(order);
+    order.id = parseInt(eventResult.orderId);
+    order.index = parseInt(eventResult.orderIndex);
 
-    await tokenAceTestHelper.balanceAsserts(expBalances);
-}
+    const state = await getState();
 
-async function newOrderEventAsserts(order, logItem) {
-    // TODO: const ret = await testHelper.assertEvent(exchange, "OrderFill", {
-    //     buyOrderId: x => Number.isInteger(x),
-    //     sellOrderId: x => Number.isInteger(x),
-    //     buyer: expMatch.buyer,
-    //     seller: expMatch.seller,
-    //     price: expMatch.price,
-    //     weiAmount: expMatch.weiAmount,
-    //     tokenAmount: expMatch.tokenAmount
-    // });
-    order.viaAugmintToken = typeof order.viaAugmintToken === "undefined" ? true : order.viaAugmintToken;
-    if (order.orderType === ETH_BUY && order.viaAugmintToken) {
-        // TODO: hack b/c truffle doesn't pick up events emmitted from contracts called by the invoked contracts
-        const orderCounts = await exchange.getOrderCounts();
-        order.index = orderCounts[1].toNumber() - 1;
-        order.id = (await exchange.lastOrderId()).toNumber();
-        assert.equal(logItem.event, "AugmintTransfer", "AugmintTransfer event should be emited");
-        assert.equal(logItem.args.from, order.maker, "from: should be the maker");
-        assert.equal(logItem.args.to, exchange.address, "to: should be the exchange");
-        assert.equal(logItem.args.amount.toNumber(), order.amount, "transfer amount should be the order amount");
+    let actualOrder, expBuyCount, expSellCount;
+    if (order.orderType === TOKEN_BUY) {
+        expBuyCount = stateBefore.buyCount + 1;
+        expSellCount = stateBefore.sellCount;
+        actualOrder = await getBuyTokenOrder(order.index);
     } else {
-        assert.equal(logItem.event, "NewOrder", "NewOrder event should be emited");
-
-        order.id = logItem.args.orderId.toNumber();
-        order.index = logItem.args.orderIndex.toNumber();
-        assert.isNumber(order.index, "orderIndex should be set to a number");
-        assert.isNumber(order.id, "orderId should be set to a number");
-        assert.equal(logItem.args.maker, order.maker, "maker should be the initiating userAccount");
-        assert.equal(logItem.args.price.toNumber(), order.price, "price should be set");
-        assert.equal(logItem.args.tokenAmount.toNumber(), order.tokenAmount, "tokenAmount should be set");
-        assert.equal(logItem.args.weiAmount.toNumber(), order.weiAmount, "weiAmount should be set");
+        expBuyCount = stateBefore.buyCount;
+        expSellCount = stateBefore.sellCount + 1;
+        actualOrder = await getSellTokenOrder(order.index);
     }
-    return;
-}
 
-async function cancelBuyEthOrder(testInstance, order) {
-    const stateBefore = await getState();
-    const balBefore = await tokenAceTestHelper.getAllBalances({ exchange: exchange.address, maker: order.maker });
+    assert.equal(state.buyCount, expBuyCount, "buyCount should be set");
+    assert.equal(state.sellCount, expSellCount, "sellCount should be set");
+    assert.equal(actualOrder.id, order.id, "orderId should be set in contract's order array");
+    assert.equal(actualOrder.maker, order.maker, "maker should be the userAccount in contract's order array");
+    // TODO: assert order.addedTime
+    assert.equal(actualOrder.price, order.price, "price should be set in contract's order array");
+    assert.equal(actualOrder.amount, order.amount, "amount should be set in contract's order array");
 
-    const tx = await exchange.cancelBuyEthOrder(order.index, order.id, { from: order.maker });
-    testHelper.logGasUse(testInstance, tx, "cancelBuyEthOrder");
-    await testHelper.assertEvent(exchange, "CancelledOrder", {
-        orderId: order.id,
-        maker: order.maker,
-        tokenAmount: order.amount,
-        weiAmount: order.weiAmount
-    });
-    await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
-        amount: order.amount,
-        from: exchange.address,
-        to: order.maker,
-        fee: 0,
-        narrative: "Sell token order cancelled"
-    });
-
-    const stateAfter = await getState();
-    assert.equal(stateAfter.sellCount, stateBefore.sellCount, "sell order count shouldn't change");
-    assert.equal(stateAfter.buyCount, stateBefore.buyCount - 1, "buy order count should be reduced by 1");
     await tokenAceTestHelper.assertBalances(balBefore, {
-        exchange: { eth: balBefore.exchange.eth, ace: balBefore.exchange.ace - order.amount },
-        maker: { eth: balBefore.maker.eth, ace: balBefore.maker.ace + order.amount, gasFee: CANCEL_SELL_MAXFEE }
+        exchange: {
+            eth: balBefore.exchange.eth.add(order.weiAmount),
+            ace: balBefore.exchange.ace.add(order.tokenAmount)
+        },
+        maker: {
+            eth: balBefore.maker.eth.sub(order.weiAmount),
+            ace: balBefore.maker.ace.sub(order.tokenAmount),
+            gasFee: PLACE_ORDER_MAXFEE
+        }
     });
-
-    return;
 }
 
-async function cancelSellEthOrder(testInstance, order) {
+async function newOrderEventAsserts(order) {
+    const res = await testHelper.assertEvent(exchange, "NewOrder", {
+        orderIndex: x => x,
+        orderId: x => x,
+        maker: order.maker,
+        price: order.price,
+        weiAmount: order.weiAmount,
+        tokenAmount: order.tokenAmount
+    });
+
+    if (order.orderType === TOKEN_SELL) {
+        await testHelper.assertEvent(tokenAce, "Transfer", {
+            from: order.maker,
+            to: exchange.address,
+            amount: order.tokenAmount
+        });
+        await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+            from: order.maker,
+            to: exchange.address,
+            amount: order.tokenAmount,
+            fee: 0,
+            narrative: "Sell token order placed"
+        });
+    }
+    return res;
+}
+
+async function cancelOrder(testInstance, order) {
     const stateBefore = await getState();
     const balBefore = await tokenAceTestHelper.getAllBalances({ exchange: exchange.address, maker: order.maker });
 
-    const tx = await exchange.cancelSellEthOrder(order.index, order.id, { from: order.maker });
-    testHelper.logGasUse(testInstance, tx, "cancelSellEthOrder");
+    if (order.orderType === TOKEN_SELL) {
+        const tx = await exchange.cancelSellTokenOrder(order.index, order.id, { from: order.maker });
+        testHelper.logGasUse(testInstance, tx, "cancelSellTokenOrder");
+    } else {
+        const tx = await exchange.cancelBuyTokenOrder(order.index, order.id, { from: order.maker });
+        testHelper.logGasUse(testInstance, tx, "cancelBuyTokenOrder");
+    }
+
     await testHelper.assertEvent(exchange, "CancelledOrder", {
         orderId: order.id,
         maker: order.maker,
@@ -173,137 +155,202 @@ async function cancelSellEthOrder(testInstance, order) {
         weiAmount: order.weiAmount
     });
 
-    const stateAfter = await getState();
-    assert.equal(stateAfter.sellCount, stateBefore.sellCount - 1, "sell order count should be reduced by 1");
-    assert.equal(stateAfter.buyCount, stateBefore.buyCount, "buy order count shouldn't change");
+    let expSellCount, expBuyCount;
+    if (order.orderType === TOKEN_SELL) {
+        await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+            amount: order.amount,
+            from: exchange.address,
+            to: order.maker,
+            fee: 0,
+            narrative: "Sell token order cancelled"
+        });
+        expSellCount = stateBefore.sellCount - 1;
+        expBuyCount = stateBefore.buyCount;
+    } else {
+        expSellCount = stateBefore.sellCount;
+        expBuyCount = stateBefore.buyCount - 1;
+    }
 
+    const stateAfter = await getState();
+    assert.equal(stateAfter.sellCount, expSellCount, "sell order count should be set");
+    assert.equal(stateAfter.buyCount, expBuyCount, "buy order count should be set");
     await tokenAceTestHelper.assertBalances(balBefore, {
-        exchange: { eth: balBefore.exchange.eth - order.amount, ace: balBefore.exchange.ace },
-        maker: { eth: balBefore.maker.eth + order.amount, ace: balBefore.maker.ace, gasFee: CANCEL_SELL_MAXFEE }
+        exchange: {
+            eth: balBefore.exchange.eth.sub(order.weiAmount),
+            ace: balBefore.exchange.ace.sub(order.tokenAmount)
+        },
+        maker: {
+            eth: balBefore.maker.eth.add(order.weiAmount),
+            ace: balBefore.maker.ace.add(order.tokenAmount),
+            gasFee: CANCEL_SELL_MAXFEE
+        }
     });
+
+    return;
 }
 
-async function matchOrders(testInstance, sellOrder, buyOrder, marketRate) {
-    // TODO:
-    // const stateBefore = await getState();
-    // const balBefore = await tokenAceTestHelper.getAllBalances({ exchange: exchange.address, maker: order.maker });
+async function matchOrders(testInstance, buyTokenOrder, sellTokenOrder, marketRate) {
+    const stateBefore = await getState();
+    const balancesBefore = await tokenAceTestHelper.getAllBalances({
+        exchange: exchange.address,
+        seller: sellTokenOrder.maker,
+        buyer: buyTokenOrder.maker
+    });
     //await printOrderBook();
 
+    const matchCaller = web3.eth.accounts[0];
     let expPrice;
-    if (buyOrder.price >= 10000 && sellOrder.price <= 10000) {
+    if (sellTokenOrder.price <= 10000 && buyTokenOrder.price >= 10000) {
         expPrice = 10000;
     } else {
         expPrice =
-            Math.abs(buyOrder.price - 10000) > Math.abs(sellOrder.price - 10000) ? sellOrder.price : buyOrder.price;
+            Math.abs(sellTokenOrder.price - 10000) > Math.abs(buyTokenOrder.price - 10000)
+                ? buyTokenOrder.price
+                : sellTokenOrder.price;
     }
+    const sellWeiValue = Math.round(sellTokenOrder.amount * expPrice / 10000 / marketRate * ONEWEI / 10000) * 10000;
+    const buyTokenValue = Math.round(buyTokenOrder.amount / ONEWEI * marketRate / expPrice * 10000);
+    const tradedWeiAmount = Math.min(buyTokenOrder.amount, sellWeiValue);
+    const tradedTokenAmount = Math.min(sellTokenOrder.amount, buyTokenValue);
 
-    const buyWeiValue = Math.round(buyOrder.amount / marketRate * ONEWEI / expPrice) * 10000;
-    const sellTokenValue = Math.round(sellOrder.amount / ONEWEI * marketRate / expPrice * 10000);
-    const tradedWeiAmount = Math.min(sellOrder.amount, buyWeiValue);
-    const tradedTokenAmount = Math.min(buyOrder.amount, sellTokenValue);
-
+    const buyFilled = tradedWeiAmount === buyTokenOrder.amount;
+    const sellFilled = tradedTokenAmount === sellTokenOrder.amount;
     //if (expPrice !== 10000) {
-    // if (sellOrder.id === 97 && buyOrder.id === 99) {
-    //     console.log(await getSellOrder(sellOrder.index));
-    //     console.log(await getBuyOrder(buyOrder.index));
-    //
-    //     console.log(
-    //         ` Match to be executed:
+    //if (buyTokenOrder.id === 55 && sellTokenOrder.id === 80) {
+    // console.log(await getBuyTokenOrder(buyTokenOrder.index));
+    // console.log(await getSellTokenOrder(sellTokenOrder.index));
+    // console.log(
+    //     `*** Match to be executed:
     //     exchange balance: ${web3.fromWei(await web3.eth.getBalance(exchange.address)).toString()} ETH` +
-    //             ` | ${(await tokenAce.balanceOf(exchange.address)) / 10000} ACE
-    //     Sellorder amount: ${web3.fromWei(sellOrder.amount).toString()} ETH
-    //     buy order amount: ${buyOrder.amount / 10000} ACE
-    //           sell price: ${sellOrder.price / 10000}
-    //            buy price: ${buyOrder.price / 10000}`
-    //     );
-    //
-    //     console.log(`Match expected:
-    //                 ETH/EUR rate: ${marketRate / 10000}
-    //                ACE/EUR price: ${expPrice / 10000}
-    //             Sellorder amount: ${web3.fromWei(sellOrder.amount).toString()} ETH
-    //        sell order tokenValue: ${sellTokenValue / 10000} ACE
-    //             buy order amount: ${buyOrder.amount / 10000} ACE
-    //           buy order WeiValue: ${web3.fromWei(buyWeiValue).toString()} ETH
-    //                  tradedToken: ${tradedTokenAmount / 10000} ACE
-    //                    tradedWei: ${web3.fromWei(tradedWeiAmount).toString()} ETH`);
-    // }
+    //         ` | ${(await tokenAce.balanceOf(exchange.address)) / 10000} ACE
+    //     \tBUY\t\t   SELL
+    //     amount:\t${web3.fromWei(buyTokenOrder.amount).toString()} ETH\t${sellTokenOrder.amount / 10000} ACE
+    //     price:\t${buyTokenOrder.price / 10000}\t\t${sellTokenOrder.price / 10000}
+    //     id:   \t${buyTokenOrder.id}\t\t${sellTokenOrder.id}` +
+    //         `\n***`
+    // );
+
+    // console.log(
+    //     `*** Match expected on ETH/EUR rate: ${marketRate / 10000}
+    //     \tBUY\t\t   SELL
+    //     amount:\t${web3.fromWei(buyTokenOrder.amount).toString()} ETH\t${sellTokenOrder.amount / 10000} ACE
+    //     price:\t${buyTokenOrder.price / 10000}\t\t${sellTokenOrder.price / 10000}
+    //     value:\t${buyTokenValue / 10000} ACE\t${web3.fromWei(sellWeiValue).toString()} ETH
+    //     id:   \t${buyTokenOrder.id}\t\t${sellTokenOrder.id}
+    //     ---------------------------------------------
+    //     ${buyFilled ? "Buy fully filled" : "Buy partially filled"}\t${
+    //         sellFilled ? "Sell fully filled" : "Sell partially filled"
+    //     }
+    //         ACE/EUR price: ${expPrice / 10000}
+    //         tradedToken:   ${tradedTokenAmount / 10000} ACE
+    //         tradedETH:     ${web3.fromWei(tradedWeiAmount).toString()} ETH\n***`
+    // );
+    //}
 
     const expMatch = {
-        buyer: buyOrder.maker,
-        seller: sellOrder.maker,
+        sellTokenOrderId: sellTokenOrder.id,
+        buyTokenOrderId: buyTokenOrder.id,
+        tokenSeller: sellTokenOrder.maker,
+        tokenBuyer: buyTokenOrder.maker,
         price: expPrice,
         weiAmount: tradedWeiAmount,
-        tokenAmount: tradedTokenAmount
+        tokenAmount: tradedTokenAmount,
+        buyFilled: buyFilled,
+        sellFilled: sellFilled,
+        sellCount: sellFilled ? stateBefore.sellCount - 1 : stateBefore.sellCount,
+        buyCount: buyFilled ? stateBefore.buyCount - 1 : stateBefore.buyCount
     };
 
-    const tx = await exchange.matchOrders(sellOrder.index, sellOrder.id, buyOrder.index, buyOrder.id);
+    const tx = await exchange.matchOrders(
+        buyTokenOrder.index,
+        buyTokenOrder.id,
+        sellTokenOrder.index,
+        sellTokenOrder.id
+    );
     testHelper.logGasUse(testInstance, tx, "matchOrders");
 
-    const ret = await testHelper.assertEvent(exchange, "OrderFill", {
-        buyOrderId: x => Number.isInteger(x),
-        sellOrderId: x => Number.isInteger(x),
-        buyer: expMatch.buyer,
-        seller: expMatch.seller,
+    await testHelper.assertEvent(exchange, "OrderFill", {
+        sellTokenOrderId: expMatch.sellTokenOrderId,
+        buyTokenOrderId: expMatch.buyTokenOrderId,
+        tokenSeller: expMatch.tokenSeller,
+        tokenBuyer: expMatch.tokenBuyer,
         price: expMatch.price,
         weiAmount: expMatch.weiAmount,
         tokenAmount: expMatch.tokenAmount
     });
-    /* TODO:
-        Transfer(from: <indexed>, to: <indexed>, amount: 3799749)
-        AugmintTransfer(from: <indexed>, to: <indexed>, amount: 3799749, narrative: Buy token order fill, fee: 0)
-    */
-    /* TODO:
-    const stateAfter = await getState();
-    assert.equal(stateAfter.sellCount, stateBefore.sellCount - 1, "sell order count should be reduced by 1");
-    assert.equal(stateAfter.buyCount, stateBefore.buyCount, "buy order count shouldn't change");
 
-    await tokenAceTestHelper.assertBalances(balBefore, {
-        exchange: { eth: balBefore.exchange.eth - order.amount, ace: balBefore.exchange.ace },
-        maker: { eth: balBefore.maker.eth + order.amount, ace: balBefore.maker.ace, gasFee: CANCEL_SELL_MAXFEE }
+    await testHelper.assertEvent(tokenAce, "Transfer", {
+        from: exchange.address,
+        to: expMatch.tokenBuyer,
+        amount: expMatch.tokenAmount
     });
-    */
-    return ret;
-}
+    await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+        from: exchange.address,
+        to: expMatch.tokenBuyer,
+        amount: expMatch.tokenAmount,
+        fee: 0,
+        narrative: "Buy token order fill"
+    });
 
-async function contractStateAsserts(expOrder) {
-    const state = await getState();
-    assert.equal(state.sellCount, expOrder.sellEthOrderCount, "sellEthOrderCount should be set");
-    assert.equal(state.buyCount, expOrder.buyEthOrderCount, "buyEthOrderCount should be set");
-    let order;
-    if (expOrder.orderType === ETH_SELL) {
-        order = await getSellOrder(expOrder.index);
+    const stateAfter = await getState();
+    assert.equal(stateAfter.sellCount, expMatch.sellCount, "sell order count should be as expected");
+    assert.equal(stateAfter.buyCount, expMatch.buyCount, "buy order count should be as expected");
+
+    await tokenAceTestHelper.assertBalances(balancesBefore, {
+        exchange: {
+            eth: balancesBefore.exchange.eth.sub(expMatch.weiAmount),
+            ace: balancesBefore.exchange.ace.sub(expMatch.tokenAmount)
+        }
+    });
+    if (balancesBefore.seller.address === balancesBefore.buyer.address) {
+        await tokenAceTestHelper.assertBalances(balancesBefore, {
+            seller: {
+                eth: balancesBefore.seller.eth.add(expMatch.weiAmount),
+                ace: balancesBefore.seller.ace.add(expMatch.tokenAmount),
+                gasFee: matchCaller === sellTokenOrder.maker ? MATCH_ORDER_MAXFEE : 0
+            }
+        });
     } else {
-        order = await getBuyOrder(expOrder.index);
+        await tokenAceTestHelper.assertBalances(balancesBefore, {
+            seller: {
+                eth: balancesBefore.seller.eth.add(expMatch.weiAmount),
+                ace: balancesBefore.seller.ace,
+                gasFee: matchCaller === sellTokenOrder.maker ? MATCH_ORDER_MAXFEE : 0
+            },
+            buyer: {
+                eth: balancesBefore.buyer.eth,
+                ace: balancesBefore.buyer.ace.add(expMatch.tokenAmount),
+                gasFee: matchCaller === buyTokenOrder.maker ? MATCH_ORDER_MAXFEE : 0
+            }
+        });
     }
 
-    assert.equal(order.id, expOrder.id, "orderId should be set in contract's order array");
-    assert.equal(order.maker, expOrder.maker, "maker should be the userAccount in contract's order array");
-    // TODO: assert order.addedTime
-    assert.equal(order.price, expOrder.price, "price should be set in contract's order array");
-    assert.equal(order.amount, expOrder.amount, "amount should be set in contract's order array");
+    return expMatch;
 }
 
 async function getState() {
     const ret = {};
     const orderCounts = await exchange.getOrderCounts();
-    ret.sellCount = orderCounts[0].toNumber();
-    ret.buyCount = orderCounts[1].toNumber();
+    ret.buyCount = orderCounts[0].toNumber();
+    ret.sellCount = orderCounts[1].toNumber();
     return ret;
 }
 
-async function getSellOrder(i) {
-    const order = parseOrder(await exchange.sellEthOrders(i));
+async function getBuyTokenOrder(i) {
+    const order = parseOrder(await exchange.buyTokenOrders(i));
     order.weiAmount = order.amount;
     order.tokenAmount = 0;
     order.index = i;
+    order.orderType = TOKEN_BUY;
     return order;
 }
 
-async function getBuyOrder(i) {
-    const order = parseOrder(await exchange.buyEthOrders(i));
+async function getSellTokenOrder(i) {
+    const order = parseOrder(await exchange.sellTokenOrders(i));
     order.weiAmount = 0;
     order.tokenAmount = order.amount;
     order.index = i;
+    order.orderType = TOKEN_SELL;
     return order;
 }
 
@@ -318,34 +365,35 @@ function parseOrder(order) {
     return ret;
 }
 
-async function printOrderBook(limit) {
-    const orderCounts = await exchange.getOrderCounts();
-    const sellCt = orderCounts[0].toNumber();
-    const buyCt = orderCounts[1].toNumber();
+async function printOrderBook(_limit) {
+    const state = await getState();
     const marketRate = (await rates.rates("EUR"))[0].toNumber();
-    let limitText;
-    if (typeof limit === "undefined") {
-        limit = sellCt > buyCt ? sellCt : buyCt;
+
+    let limitText, limit;
+    if (typeof _limit === "undefined") {
+        limit = state.buyCount > state.sellCount ? state.buyCount : state.sellCount;
         limitText = "(all orders)";
     } else {
-        limitText = "(top " + limit + " orders)";
+        limit = _limit;
+        limitText = "(top " + _limit + " orders)";
     }
-    console.log(`========= Order Book  ${limitText} ETH/EUR: ${marketRate / 10000} =========
-              Buy ct:  ${buyCt}    Sell ct:  ${sellCt}`);
 
-    for (let i = 0; i < buyCt && i < limit; i++) {
-        const order = await getBuyOrder(i);
+    console.log(`========= Order Book  ${limitText} ETH/EUR: ${marketRate / 10000} =========
+              Sell token ct:  ${state.sellCount}    Buy token ct:  ${state.buyCount}`);
+
+    for (let i = 0; i < state.sellCount && i < limit; i++) {
+        const order = await getSellTokenOrder(i);
         console.log(
-            `BUY: ACE/EUR: ${order.price / 10000} amount: ${order.amount / 10000} ACE` +
+            `SELL token: ACE/EUR: ${order.price / 10000} amount: ${order.amount / 10000} ACE` +
                 ` ${moment.unix(order.addedTime).format("HH:mm:ss")}` +
                 ` orderIdx: ${i} orderId: ${order.id} acc: ${order.maker}`
         );
     }
 
-    for (let i = 0; i < sellCt && i < limit; i++) {
-        const order = await getSellOrder(i);
+    for (let i = 0; i < state.buyCount && i < limit; i++) {
+        const order = await getBuyTokenOrder(i);
         console.log(
-            `        SELL: ACE/EUR: ${order.price / 10000} amount: ${web3.fromWei(order.amount)} ETH` +
+            `        BUY token: ACE/EUR: ${order.price / 10000} amount: ${web3.fromWei(order.amount)} ETH` +
                 ` ${moment.unix(order.addedTime).format("HH:mm:ss")}` +
                 ` orderIdx: ${i} orderId: ${order.id} acc: ${order.maker}`
         );

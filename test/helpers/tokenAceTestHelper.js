@@ -234,33 +234,41 @@ async function getAllBalances(accs) {
         const address = accs[ac].address ? accs[ac].address : accs[ac];
         ret[ac] = {};
         ret[ac].address = address;
-        ret[ac].eth = (await web3.eth.getBalance(address)).toNumber();
-        ret[ac].ace = (await tokenAce.balanceOf(address)).toNumber();
+        ret[ac].eth = await web3.eth.getBalance(address);
+        ret[ac].ace = await tokenAce.balanceOf(address);
     }
 
     return ret;
 }
 
-/* new func */
+/* new func , replacing balanceAsserts */
 async function assertBalances(before, exp) {
     // get addresses from before arg
-    for (const ac of Object.keys(before)) {
+    for (const ac of Object.keys(exp)) {
         exp[ac].address = before[ac].address;
     }
     const newBal = await getAllBalances(exp);
 
     for (const acc of Object.keys(newBal)) {
         if (exp[acc].gasFee && exp[acc].gasFee > 0) {
-            const diff = Math.abs(newBal[acc].eth - exp[acc].eth);
+            const diff = newBal[acc].eth.sub(exp[acc].eth).abs();
             assert.isAtMost(
-                diff,
+                diff.toNumber(),
                 exp[acc].gasFee,
                 `Account ${acc} ETH balance diferrence higher than expecteed gas fee`
             );
         } else {
-            assert.equal(newBal[acc].eth, exp[acc].eth, `Account ${acc} ETH balance is not as expected`);
+            assert.equal(
+                newBal[acc].eth.toString(),
+                exp[acc].eth.toString(),
+                `Account ${acc} ETH balance is not as expected`
+            );
         }
-        assert.equal(newBal[acc].ace, exp[acc].ace, `Account ${acc} ACE balance is not as expected`);
+        assert.equal(
+            newBal[acc].ace.toString(),
+            exp[acc].ace.toString(),
+            `Account ${acc} ACE balance is not as expected`
+        );
     }
 }
 

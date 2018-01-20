@@ -2,7 +2,7 @@
     TODO: rates setter?
     TODO: make a rates interface and use it instead?
     TODO: uint32 for now?
-    TODO: do we need all funcs or just orders + placeBuyEthOrderTrusted  here?
+    TODO: do we need all funcs or just orders + placeSellTokenOrderTrusted  here?
 */
 pragma solidity 0.4.18;
 import "../generic/SafeMath.sol";
@@ -23,25 +23,27 @@ contract ExchangeInterface is Restricted {
         address maker;
         uint addedTime;
         uint price;
-        uint amount; // SELL_ETH: amount in wei BUY_ETH: token amount with 4 decimals
+        uint amount; // buy token: amount in wei sell token: token amount with 4 decimals
     }
 
-    Order[] public sellEthOrders;
-    Order[] public buyEthOrders;
+    Order[] public buyTokenOrders;
+    Order[] public sellTokenOrders;
 
-    function placeSellEthOrder(uint price) external payable returns (uint sellEthOrderIndex, uint orderId);
-    function placeBuyEthOrder(uint price, uint tokenAmount) external returns (uint buyEthOrderIndex, uint orderId);
+    function placeBuyTokenOrder(uint price) external payable returns (uint buyTokenOrderIndex, uint orderId);
 
-    function placeBuyEthOrderTrusted(address maker, uint price, uint tokenAmount)
-        external returns (uint buyEthOrderIndex, uint orderId);
+    function placeSellTokenOrder(uint price, uint tokenAmount)
+        external returns (uint sellTokenOrderIndex, uint orderId);
 
-    function cancelBuyEthOrder(uint buyEtherOrderIndex, uint buyEthOrderId) external;
-    function cancelSellEthOrder(uint sellEthOrderIndex, uint sellEthOrderId) external;
+    function placeSellTokenOrderTrusted(address maker, uint price, uint tokenAmount)
+        external returns (uint sellTokenOrderIndex, uint orderId);
 
-    function matchMultipleOrders(uint[] sellIndexes, uint[] sellIds, uint[] buyIndexes, uint[] buyIds)
-        external returns(uint matchCount);
+    function cancelSellTokenOrder(uint buyEtherOrderIndex, uint sellTokenOrderId) external;
+    function cancelBuyTokenOrder(uint buyTokenOrderIndex, uint buyTokenOrderId) external;
 
-    function matchOrders(uint sellEthOrderIndex, uint sellEthOrderId, uint buyEthOrderIndex, uint buyEthOrderId)
+    function matchMultipleOrders(uint[] buyTokenIndexes, uint[] buyTokenIds, uint[] sellTokenIndexes,
+        uint[] sellTokenIds) external returns(uint matchCount);
+
+    function matchOrders(uint buyTokenOrderIndex, uint buyTokenOrderId, uint sellTokenOrderIndex, uint sellTokenOrderId)
         external;
 
 }
