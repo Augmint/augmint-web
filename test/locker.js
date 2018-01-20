@@ -82,7 +82,7 @@ contract("Lock", accounts => {
         assert(isActive === true);
     });
 
-    it("should allow the listing of lock products", async () => {
+    it("should allow the listing of lock products (0 offset)", async () => {
         // create lock product with 10% per term, and 120 sec lock time:
         await lockerInstance.addLockProduct(100000, 120, 75, true);
 
@@ -108,6 +108,37 @@ contract("Lock", accounts => {
         assert(minimumLockAmount.toNumber() === 75);
         assert(isActive.toNumber() === 1);
     });
+
+    it("should allow the listing of lock products (non-zero offset)", async () => {
+
+        const offset = 1;
+
+        const products = await lockerInstance.getLockProducts(offset);
+
+        // getLockProducts should return a 20 element array:
+        assert.isArray(products);
+        assert(products.length === 20);
+
+        const product = products[0];
+
+        // each product should be a 4 element array
+        assert.isArray(product);
+        assert(product.length === 4);
+
+        const expectedProduct = await lockerInstance.lockProducts(offset);
+        const [ expectedPerTermInterest, expectedDurationInSecs, expectedMinimumLockAmount, expectedIsActive ] = expectedProduct;
+
+        // the products should be [ perTermInterest, durationInSecs, isActive ] all
+        // represented as uints (i.e. BigNumber objects in JS land):
+        const [ perTermInterest, durationInSecs, minimumLockAmount, isActive ] = product;
+        assert(perTermInterest.toNumber() === expectedPerTermInterest.toNumber());
+        assert(durationInSecs.toNumber() === expectedDurationInSecs.toNumber());
+        assert(minimumLockAmount.toNumber() === expectedMinimumLockAmount.toNumber());
+        assert(!!isActive.toNumber() === expectedIsActive);
+
+    });
+
+    it("should allow the listing of lock products when there are more than 20 products");
 
     it("should allow lock products to be enabled/disabled", async () => {
         const lockProductId = 0;
@@ -270,7 +301,7 @@ contract("Lock", accounts => {
         assert(isActive === true);
     });
 
-    it("should allow an account to see all it's locks", async () => {
+    it("should allow an account to see all it's locks (0 offset)", async () => {
         // NB: this test assumes that tokenHolder has less than 20 locks (when checking newestLock)
 
         const amountToLock = 1000;
@@ -314,6 +345,39 @@ contract("Lock", accounts => {
         assert(durationInSecs.toNumber() === expectedDurationInSecs);
         assert(isActive.toNumber() === 1);
     });
+
+    it("should allow an account to see all it's locks (non-zero offset)", async () => {
+
+        const offset = 1;
+        
+        const locks = await lockerInstance.getLocksForAddress(tokenHolder, offset);
+
+        // getLocksForAddress should return a 20 element array:
+        assert.isArray(locks);
+        assert(locks.length === 20);
+
+        const lock = locks[0];
+
+        // each lock should be a 6 element array
+        assert.isArray(lock);
+        assert(lock.length === 6);
+
+        const expectedLock = await lockerInstance.locks(tokenHolder, offset);
+        const [ expectedAmountLocked, expectedInterestEarned, expectedLockedUntil, expectedPerTermInterest, 
+                    expectedDurationInSecs, expectedIsActive ] = expectedLock;
+
+        // the locks should be [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] all
+        // represented as uints (i.e. BigNumber objects in JS land):
+        const [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ] = lock;
+        assert(amountLocked.toNumber() === expectedAmountLocked.toNumber());
+        assert(interestEarned.toNumber() === expectedInterestEarned.toNumber());
+        assert(lockedUntil.toNumber() === expectedLockedUntil.toNumber());
+        assert(perTermInterest.toNumber() === expectedPerTermInterest.toNumber());
+        assert(durationInSecs.toNumber() === expectedDurationInSecs.toNumber());
+        assert(!!isActive.toNumber() === expectedIsActive);
+    });
+
+    it("should allow an account to see all it's locks when it has more than 20 locks");
 
     it("should prevent someone from locking more tokens than they have", async () => {
         const startingBalances = await getBalances(tokenAceInstance, [

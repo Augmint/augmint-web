@@ -93,7 +93,7 @@ contract Locker is Owned {
 
             LockProduct storage lockProduct = lockProducts[offset + i];
 
-            response[offset + i] = [ lockProduct.perTermInterest, lockProduct.durationInSecs,
+            response[i] = [ lockProduct.perTermInterest, lockProduct.durationInSecs,
                                         lockProduct.minimumLockAmount, lockProduct.isActive ? 1 : 0 ];
 
         }
@@ -172,7 +172,7 @@ contract Locker is Owned {
 
             Lock storage lock = locksForAddress[offset + i];
 
-            response[offset + i] = [ lock.amountLocked, lock.interestEarned, lock.lockedUntil, lock.perTermInterest, 
+            response[i] = [ lock.amountLocked, lock.interestEarned, lock.lockedUntil, lock.perTermInterest, 
                                         lock.durationInSecs, lock.isActive ? 1 : 0 ];
 
         }

@@ -1,5 +1,5 @@
+
 const stringifier = require("stringifier");
-const moment = require("moment");
 var gasUseLog = [];
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
     waitForTimeStamp,
     waitFor
 };
-var _stringify = stringifier({ maxDepth: 3, indent: "   " });
+const _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function stringify(values) {
     return _stringify(values);
@@ -76,38 +76,6 @@ async function assertNoEvents(contractInstance, eventName) {
     assert(events.length === 0);
 }
 
-/*before(function() {
-    //  TODO: this way would be nicer  but throws: ReferenceError: toIntVal is not defined
-    //        use takeSnapshot() and revertSnapshot(snapshotId) instead.
-    //        Keep an eye on: https://ethereum.stackexchange.com/questions/24899/referenceerror-tointval-is-not-defined-when-extending-web3-with-evm-snapshot
-    //
-    // web3._extend({
-    //     property: "evm",
-    //     methods: [
-    //         new web3._extend.Method({
-    //             name: "snapshot",
-    //             call: "evm_snapshot",
-    //             params: 0,
-    //             outputFormatter: toIntVal
-    //         })
-    //     ]
-    // });
-    //
-    // web3._extend({
-    //     property: "evm",
-    //     methods: [
-    //         new web3._extend.Method({
-    //             name: "revert",
-    //             call: "evm_revert",
-    //             params: 1,
-    //             inputFormatter: [toIntVal]
-    //         })
-    //     ]
-    // });
-
-});
-*/
-
 //let snapshotCount = 0;
 function takeSnapshot() {
     return new Promise(function(resolve, reject) {
@@ -152,35 +120,6 @@ function revertSnapshot(snapshotId) {
 
 function logGasUse(testObj, tx, txName) {
     gasUseLog.push([testObj.test.parent.title, testObj.test.fullTitle(), txName || "", tx.receipt.gasUsed]);
-} //  logGasUse ()
-
-function waitForTimeStamp(waitForTimeStamp) {
-    var currentTimeStamp = moment()
-        .utc()
-        .unix();
-    var wait = waitForTimeStamp <= currentTimeStamp ? 1 : waitForTimeStamp - currentTimeStamp; // 0 wait caused tests to be flaky, why?
-    console.log(
-        "\x1b[2m        ... waiting ",
-        wait,
-        "seconds then sending a dummy tx for blockTimeStamp to reach time required by test ...\x1b[0m"
-    );
-
-    return new Promise((resolve, reject) => {
-        setTimeout(function() {
-            var blockTimeStamp = web3.eth.getBlock(web3.eth.blockNumber).timestamp;
-            if (blockTimeStamp < waitForTimeStamp) {
-                web3.eth.sendTransaction({ from: web3.eth.accounts[0] }, function(error, res) {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve();
-                    }
-                });
-            } else {
-                resolve();
-            }
-        }, wait * 1000);
-    });
 }
 
 function waitFor(durationInMs = 1000) {
@@ -197,6 +136,12 @@ function waitFor(durationInMs = 1000) {
             });
         }, durationInMs);
     });
+}
+
+async function waitForTimeStamp(UnixTimestamp) {
+
+    await waitFor((UnixTimestamp * 1000) - Date.now());
+
 }
 
 function expectThrow(promise) {
@@ -238,7 +183,7 @@ function expectThrow(promise) {
             );
             return;
         });
-} // expectThrow
+}
 
 after(function() {
     // runs after all tests
@@ -257,4 +202,5 @@ after(function() {
 
         console.log("=========== Total gas usage : " + sum);
     }
-}); // after()
+});
+
