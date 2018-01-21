@@ -198,7 +198,6 @@ contract Exchange is ExchangeInterface {
         if (orderIndex < orders.length - 1) {
             orders[orderIndex] = orders[orders.length - 1];
         }
-        delete orders[orders.length - 1];
         orders.length--;
     }
 
