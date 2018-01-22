@@ -1,9 +1,7 @@
 /* Augmint's internal Exchange
-    TODO: store price as 1/price to avoid div ? higher precision needed for rate then
-    TODO: finish matchMuiltipleOrders()
+    TODO: finish matchMultipleOrders()
     TODO: check/test if underflow possible on sell/buyORder.amount -= token/weiAmount in matchOrders()
     TODO: deduct fee
-    TODO: minOrderAmount setter
     TODO: consider take funcs (frequent rate changes with takeBuyToken? send more and send back remainder?)
 */
 pragma solidity 0.4.18;
@@ -11,7 +9,8 @@ import "./interfaces/ExchangeInterface.sol";
 
 
 contract Exchange is ExchangeInterface {
-    uint public minOrderAmount;
+    uint public minOrderAmount; // 0: no limit. For placeBuyTokenOrder it's calculated on current rate & price provided
+
     /* used to stop executing matchMultiple when running out of gas.
         actual is much less, just leaving enough matchMultipleOrders() to finish TODO: fine tune & test it*/
     uint32 public constant ORDER_MATCH_WORST_GAS = 200000;
@@ -24,6 +23,8 @@ contract Exchange is ExchangeInterface {
 
     event CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
 
+    event MinOrderAmountChanged(uint newMinOrderAmount);
+
     function Exchange(address augmintTokenAddress, address ratesAddress, uint _minOrderAmount) public {
         augmintToken = AugmintTokenInterface(augmintTokenAddress);
         rates = Rates(ratesAddress);
@@ -32,6 +33,7 @@ contract Exchange is ExchangeInterface {
 
     function placeBuyTokenOrder(uint price) external payable returns (uint orderIndex, uint orderId) {
         require(price > 0);
+        require(msg.value > 0);
 
         uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value.roundedDiv(price).mul(10000));
         require(tokenAmount >= minOrderAmount);
@@ -120,6 +122,12 @@ contract Exchange is ExchangeInterface {
         return i;
     }
 
+    /* only allowed for Monetary Board. */
+    function setMinOrderAmount(uint _minOrderAmount) external restrict("setMinOrderAmount") {
+        minOrderAmount = _minOrderAmount;
+        MinOrderAmountChanged(minOrderAmount);
+    }
+
     function getOrderCounts() external view returns(uint buyTokenOrderCount, uint sellTokenOrderCount) {
         return(buyTokenOrders.length, sellTokenOrders.length);
     }
@@ -185,6 +193,7 @@ contract Exchange is ExchangeInterface {
     function _placeSellTokenOrder(address maker, uint price, uint tokenAmount)
     private returns (uint orderIndex, uint orderId) {
         require(price > 0);
+        require(tokenAmount > 0);
         require(tokenAmount >= minOrderAmount);
 
         lastOrderId++;

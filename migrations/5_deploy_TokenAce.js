@@ -16,7 +16,7 @@ module.exports = async function(deployer, network, accounts) {
         50000 /* max fee: 5 ACE */
     );
 
-    let tokenAce = TokenAce.at(TokenAce.address);
+    const tokenAce = TokenAce.at(TokenAce.address);
     await tokenAce.grantMultiplePermissions(accounts[0], [
         "setTransferFees",
         "transferNoFee",

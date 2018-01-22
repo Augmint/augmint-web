@@ -122,7 +122,7 @@ contract("Exchange load tests", accounts => {
     });
 
     /* FIXME: matchMultipleOrders() is not finished */
-    it.skip("should x orders at once (matchMultipleOrders)", async function() {
+    it.skip("should match x orders at once (matchMultipleOrders)", async function() {
         const snapshotId = await testHelper.takeSnapshot();
         //await exchangeTestHelper.printOrderBook(10);
 
