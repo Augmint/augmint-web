@@ -62,12 +62,12 @@ const getOrderToFill = async () => {
 /*
  NB: These tests dependend on each other i.e. place orders then match one by one has to run first
 */
-contract("Exchange load tests", accounts => {
+contract("Exchange random tests", accounts => {
     before(async function() {
         rates = await ratesTestHelper.newRatesMock("EUR", MARKET_WEI_RATE);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
         await tokenAce.issue(TEST_ACCS_CT * ACC_INIT_ACE);
-        console.log(`*** Topping up ${TEST_ACCS_CT} accounts each with ${ACC_INIT_ACE / 10000} A-EURO`);
+        console.log(`\x1b[2m\t*** Topping up ${TEST_ACCS_CT} accounts each with ${ACC_INIT_ACE / 10000} A-EURO\x1b[0m`);
         for (let i = 0; i < TEST_ACCS_CT; i++) {
             await tokenAce.withdrawTokens(accounts[i], ACC_INIT_ACE);
         }
