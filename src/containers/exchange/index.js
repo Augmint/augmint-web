@@ -6,7 +6,7 @@ import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
-import OrderList from "./components/OrderList";
+import OrderBook from "./components/OrderBook";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
@@ -23,7 +23,7 @@ class ExchangeHome extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Buy & Sell ACE" />
+                    <Pheader header="Buy & Sell A-EUR" />
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
@@ -31,7 +31,7 @@ class ExchangeHome extends React.Component {
 
                                 <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
 
-                                <OrderList
+                                <OrderBook
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="My orders"
@@ -43,7 +43,7 @@ class ExchangeHome extends React.Component {
 
                             <Pgrid.Column>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
-                                <OrderList
+                                <OrderBook
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="All orders"

@@ -14,9 +14,8 @@ export const EXCHANGE_REFRESH_SUCCESS = "exchange/EXCHANGE_REFRESH_SUCCESS";
 const initialState = {
     contract: null,
     error: null,
-    connectionError: null,
+    connectionError: false,
     isLoading: false,
-    isRefreshing: false,
     isConnected: false,
     info: {
         minOrderAmount: null,
@@ -36,7 +35,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                connectionError: null,
                 error: null
             };
 
@@ -47,7 +45,7 @@ export default (state = initialState, action) => {
                 info: action.info,
                 isLoading: false,
                 isConnected: true,
-                connectionError: null,
+                connectionError: false,
                 error: null
             };
 
@@ -61,6 +59,7 @@ export default (state = initialState, action) => {
 
         case EXCHANGE_REFRESH_REQUESTED:
             return {
+                isLoading: true,
                 ...state
             };
 
@@ -74,7 +73,8 @@ export default (state = initialState, action) => {
         case EXCHANGE_REFRESH_SUCCESS:
             return {
                 ...state,
-                info: action.result
+                isLoading: false,
+                info: action.info
             };
 
         default:
@@ -134,11 +134,12 @@ export const refreshExchange = () => {
 async function getAugmintTokenInfo(exchange) {
     const augmintToken = store.getState().augmintToken.contract.instance;
 
-    const [owner, bn_ethBalance, bn_tokenBalance, orderCount] = await Promise.all([
+    const [owner, bn_ethBalance, bn_tokenBalance, orderCount, bn_minOrderAmount] = await Promise.all([
         exchange.owner(),
         asyncGetBalance(exchange.address),
         augmintToken.balanceOf(exchange.address),
-        exchange.getOrderCounts()
+        exchange.getOrderCounts(),
+        exchange.minOrderAmount()
     ]);
 
     return {
@@ -148,6 +149,8 @@ async function getAugmintTokenInfo(exchange) {
         tokenBalance: bn_tokenBalance.div(10000).toString(),
         buyOrderCount: orderCount[0].toNumber(),
         sellOrderCount: orderCount[1].toNumber(),
-        owner: owner
+        owner: owner,
+        bn_minOrderAmount: bn_minOrderAmount,
+        minOrderAmount: bn_minOrderAmount.div(10000).toNumber()
     };
 }

@@ -11,7 +11,7 @@ export default function LoanDetails(props) {
             </Row>
             <Row>
                 <Col>Repayment amount:</Col>
-                <Col>{loan.repaymentAmount} ACE</Col>
+                <Col>{loan.repaymentAmount} A-EUR</Col>
             </Row>
 
             <Row>
@@ -38,7 +38,7 @@ export default function LoanDetails(props) {
 
             <Row>
                 <Col>Loan amount (disbursed):</Col>
-                <Col>{loan.loanAmount} ACE</Col>
+                <Col>{loan.loanAmount} A-EUR</Col>
             </Row>
         </MyGridTable>
     );

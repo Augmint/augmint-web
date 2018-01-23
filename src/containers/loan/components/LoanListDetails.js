@@ -10,7 +10,7 @@ export default function LoanListDetails(props) {
         <MyGridTable header={loan.loanStateText + " loan #" + loan.loanId}>
             <Row>
                 <Col>Repayment amount:</Col>
-                <Col>{loan.repaymentAmount} ACE</Col>
+                <Col>{loan.repaymentAmount} A-EUR</Col>
             </Row>
 
             <Row>

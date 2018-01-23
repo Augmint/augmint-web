@@ -30,18 +30,18 @@ export function TryItConnected(props) {
                     </p>
                 </Tblock>
 
-                <Tblock header="Get ACE">
+                <Tblock header="Get A-EUR">
                     <p>
                         <Link to="/loan/new">Get a loan</Link> by leaving your ETH in escrow
                     </p>
                     <p>
-                        Buy ACE on <Link to="/exchange">Augmint's exchange</Link>
+                        Buy A-EUR on <Link to="/exchange">Augmint's exchange</Link>
                     </p>
                 </Tblock>
 
                 <Tblock header="Play around">
                     <p>
-                        See your loans, transactions and transfer ACE from your <Link to="/account">account</Link>
+                        See your loans, transactions and transfer A-EUR from your <Link to="/account">account</Link>
                     </p>
                     <p>
                         Check the <Link to="/reserves">Augmint reserves</Link>

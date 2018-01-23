@@ -47,6 +47,7 @@ export default (state = initialState, action) => {
                 ...state,
                 error: null,
                 amount: action.amount,
+                price: action.price,
                 orderType: action.orderType
             };
 
@@ -87,16 +88,17 @@ export const refreshOrders = () => {
     };
 };
 
-export function placeOrder(orderType, amount) {
+export function placeOrder(orderType, amount, price) {
     return async dispatch => {
         dispatch({
             type: PLACE_ORDER_REQUESTED,
             orderType: orderType,
+            price: price,
             amount: amount
         });
 
         try {
-            let result = await placeOrderTx(orderType, amount);
+            let result = await placeOrderTx(orderType, amount, price);
             return dispatch({
                 type: PLACE_ORDER_SUCCESS,
                 result: result

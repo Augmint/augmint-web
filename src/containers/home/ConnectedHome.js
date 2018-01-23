@@ -24,7 +24,7 @@ class ConnectedHome extends React.Component {
                     <Psegment>
                         <Container>
                             <Header textAlign="center" style={{ fontSize: "2em" }}>
-                                ACE status
+                                A-EUR status
                             </Header>
                             <AugmintStats augmintToken={augmintToken} showDetailsLink />
                         </Container>

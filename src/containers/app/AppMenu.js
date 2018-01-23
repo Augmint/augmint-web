@@ -36,12 +36,12 @@ export function AppMenu(props) {
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/exchange">
-                            Buy/Sell ACE
+                            Buy/Sell A-EUR
                         </Menu.Item>
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/loan/new">
-                            Get ACE Loan
+                            Get A-EUR Loan
                         </Menu.Item>
                     )}
                     {isConnected && (

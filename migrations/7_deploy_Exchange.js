@@ -5,7 +5,7 @@ const Exchange = artifacts.require("./Exchange.sol");
 
 module.exports = function(deployer, network, accounts) {
     deployer.link(SafeMath, Exchange);
-    deployer.deploy(Exchange, TokenAce.address, Rates.address, 100);
+    deployer.deploy(Exchange, TokenAce.address, Rates.address, 1000000);
     deployer.then(async () => {
         const exchange = Exchange.at(Exchange.address);
         await exchange.grantMultiplePermissions(accounts[0], ["setMinOrderAmount"]);

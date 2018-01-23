@@ -46,7 +46,14 @@ export function SuccessPanel(props) {
 }
 
 export function InfoPanel(props) {
-    return <MsgPanel info {...props} />;
+    const { info = true, icon = "info", header, ...other } = props;
+    return (
+        <MsgPanel info={info} icon={icon ? true : false} {...other}>
+            {icon && <Icon name={icon} />}
+            <Message.Header>{header}</Message.Header>
+            {props.children}
+        </MsgPanel>
+    );
 }
 
 export function WarningPanel(props) {

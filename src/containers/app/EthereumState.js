@@ -14,9 +14,24 @@ export class EthereumState extends React.Component {
         let msg = null;
         const { web3Connect, loanManager, rates, augmintToken, exchange, children = null } = this.props;
         const { isConnected, isLoading, network, error } = this.props.web3Connect;
+
+        const anyLoading =
+            isLoading ||
+            exchange.isLoading ||
+            augmintToken.isLoading ||
+            rates.isLoading ||
+            loanManager.isLoading ||
+            document.readyState !== "complete";
+        const anyConnectionError =
+            loanManager.connectionError ||
+            rates.connectionError ||
+            augmintToken.connectionError ||
+            (exchange && rates.connectionError) ||
+            (exchange && exchange.connectionError);
+
         if (isLoading || document.readyState !== "complete") {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
-        } else if (!isConnected && !isLoading) {
+        } else if (!isConnected && !anyLoading) {
             msg = (
                 <WarningPanel header="Can't connect Ethereum network">
                     <p>
@@ -59,13 +74,7 @@ export class EthereumState extends React.Component {
                     </p>
                 </div>
             );
-        } else if (
-            loanManager.connectionError ||
-            rates.connectionError ||
-            augmintToken.connectionError ||
-            (exchange && rates.connectionError) ||
-            (exchange && exchange.connectionError)
-        ) {
+        } else if (!anyLoading && anyConnectionError) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to Augmint contracts</h3>}>
                     <p>You seem to be connected to {network.name} but can't connect to Augmint contracts.</p>

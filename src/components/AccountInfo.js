@@ -26,7 +26,7 @@ export class AccountInfo extends React.Component {
                         account.ethPendingBalance !== 0 && <span> (Pending: {account.ethPendingBalance} )</span>}
                 </p>
                 <p>
-                    ACE: <span id="userAceBalance">{account.tokenBalance}</span>
+                    A-EUR: <span id="userAceBalance">{account.tokenBalance}</span>
                     {account.pendingTokenBalance !== "?" &&
                         account.pendingTokenBalance !== 0 && (
                             <span> (Pending: {typeof account.pendingTokenBalance} )</span>

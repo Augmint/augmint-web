@@ -1,4 +1,5 @@
 import store from "modules/store";
+import moment from "moment";
 //import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 
@@ -29,6 +30,7 @@ export async function fetchOrders() {
 async function getOrders(offset) {
     const exchange = store.getState().exchange.contract.instance;
     const result = await exchange.getOrders(offset);
+    const web3 = store.getState().web3Connect.web3Instance;
     // result format: [maker] [id, addedTime, price, tokenAmount, weiAmount]
     const orders = result[0].reduce(
         (res, order, idx) => {
@@ -37,17 +39,22 @@ async function getOrders(offset) {
                     index: order[0].toNumber(),
                     id: order[1].toNumber(),
                     addedTime: order[2],
-                    price: order[3].toNumber(),
+                    bn_price: order[3],
                     tokenAmount: order[4],
                     weiAmount: order[5],
                     maker: result[1][idx]
                 };
+                parsed.addedTimeText = moment.unix(parsed.addedTime).format("D MMM YYYY HH:mm:ss");
+                parsed.price = parsed.bn_price.div(10000).toNumber();
+
                 if (parsed.weiAmount.toString() !== "0") {
-                    parsed.amount = parsed.weiAmount;
+                    parsed.amount = parseFloat(web3.utils.fromWei(parsed.weiAmount.toString()));
+                    parsed.bn_amount = parsed.weiAmount;
                     parsed.orderType = TOKEN_BUY;
                     res.buyOrders.push(parsed);
                 } else {
-                    parsed.amount = parsed.tokenAmount;
+                    parsed.bn_amount = parsed.tokenAmount;
+                    parsed.amount = parsed.tokenAmount.div(10000).toNumber();
                     parsed.orderType = TOKEN_SELL;
                     res.sellOrders.push(parsed);
                 }
@@ -61,30 +68,35 @@ async function getOrders(offset) {
     return orders;
 }
 
-export async function placeOrderTx(orderType, amount) {
+export async function placeOrderTx(orderType, amount, price) {
     try {
-        let gasEstimate = cost.PLACE_ORDER_GAS;
-        let userAccount = store.getState().web3Connect.userAccount;
-        let exchange = store.getState().exchange.contract.instance;
+        const gasEstimate = cost.PLACE_ORDER_GAS;
+        const userAccount = store.getState().web3Connect.userAccount;
+        const exchange = store.getState().exchange.contract.instance;
         let submitAmount, result;
 
         switch (orderType) {
             case TOKEN_BUY:
-                let web3 = store.getState().web3Connect.web3Instance;
+                const web3 = store.getState().web3Connect.web3Instance;
                 submitAmount = web3.utils.toWei(amount.toString());
-                result = await exchange.placeSellEthOrder({
+                result = await exchange.placeBuyTokenOrder(price * 10000, {
                     value: submitAmount,
                     from: userAccount,
                     gas: gasEstimate
                 });
                 break;
             case TOKEN_SELL:
-                let augmintToken = store.getState().augmintToken;
+                const augmintToken = store.getState().augmintToken;
                 submitAmount = amount.times(augmintToken.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-                result = await exchange.placeSellTokenOrder(submitAmount, {
-                    from: userAccount,
-                    gas: gasEstimate
-                });
+                result = await augmintToken.contract.instance.placeSellTokenOrderOnExchange(
+                    exchange.address,
+                    price * 10000,
+                    submitAmount,
+                    {
+                        from: userAccount,
+                        gas: gasEstimate
+                    }
+                );
                 break;
             default:
                 throw new Error("Unknown orderType: " + orderType);
@@ -96,20 +108,18 @@ export async function placeOrderTx(orderType, amount) {
             throw new Error("Place order failed. All gas provided was used:  " + result.receipt.gasUsed);
         }
 
-        /* TODO:  process events properly for display (full new order, partly filled, fully filled) */
-
         if (
             !result.logs ||
             !result.logs[0] ||
-            (result.logs[0].event !== "e_newOrder" && result.logs[0].event !== "e_orderFill")
+            (result.logs[0].event !== "NewOrder" && result.logs[1].event !== "AugmintTransfer")
         ) {
-            throw new Error("e_newOrder or e_orderFill event wasn't received. Check tx :  " + result.tx);
+            const error = new Error("NewOrder or Augmint transfer event wasn't received. Check tx :  " + result.tx);
+            console.error(error, "\nResult received:", result);
+            throw error;
         }
 
-        //let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
         return {
             txResult: result,
-            orderId: "TODO",
             eth: {
                 gasProvided: gasEstimate,
                 gasUsed: result.receipt.gasUsed,

@@ -18,6 +18,8 @@ export const Validations = {
 
     ethAmount: value => (parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0"),
 
+    price: value => (parseFloat(value) > 0 ? undefined : "Price must be bigger than 0"),
+
     address: value => {
         let web3 = store.getState().web3Connect.web3Instance;
         //TODO: different error when checksum error
@@ -27,39 +29,50 @@ export const Validations = {
     userTokenBalance: value => {
         // TODO: shall we look for bn_pendingTokenBalance instead?
         let userBalance = store.getState().userBalances.account.bn_tokenBalance;
-        return userBalance.lt(parseFloat(value)) ? "Your ACE balance is less than the amount" : undefined;
+        return userBalance.lt(parseFloat(value)) ? "Your A-EUR balance is less than the amount" : undefined;
     },
 
     userTokenBalanceWithTransferFee: value => {
         // TODO: shall we look for bn_pendingTokenBalance instead?
-        let decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
-        let userBalance = store.getState().userBalances.account.bn_tokenBalance.mul(decimalsDiv);
+        const decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
+        const userBalance = store.getState().userBalances.account.bn_tokenBalance.mul(decimalsDiv);
         let amount;
         try {
             amount = new BigNumber(value).mul(decimalsDiv);
         } catch (error) {
             return;
         }
-        let fee = getTransferFee(amount);
+        const fee = getTransferFee(amount);
         if (userBalance.gte(amount.add(fee))) {
             return undefined;
         }
-        let maxTransfer = getMaxTransfer(userBalance)
+        const maxTransfer = getMaxTransfer(userBalance)
             .div(decimalsDiv)
             .toString();
         if (maxTransfer <= 0) {
-            return "Your ACE balance is less than the amount + transfer fee.";
+            return "Your A-EUR balance is less than the amount + transfer fee.";
         }
-        return (
-            "Your ACE balance is less than the amount + transfer fee. Max amount you can transfer is " +
-            maxTransfer +
-            " ACE"
-        );
+        return `Your A-EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A-EUR`;
+    },
+
+    minOrderTokenAmount: minValue => value => {
+        let amount;
+        try {
+            amount = new BigNumber(value);
+        } catch (error) {
+            return;
+        }
+
+        if (amount.gte(minValue)) {
+            return undefined;
+        } else {
+            return `Token amount is less than minimum order amount of ${minValue} `;
+        }
     },
 
     ethUserBalance: value => {
         // TODO: shall we look for bn_pendingTokenBalance instead?
-        let userBalance = store.getState().userBalances.account.bn_ethBalance;
+        const userBalance = store.getState().userBalances.account.bn_ethBalance;
         return userBalance.lt(parseFloat(value)) ? "Your ETH balance is less than the amount" : undefined;
     },
 
@@ -69,7 +82,7 @@ export const Validations = {
     },
 
     minTokenAmount: minValue => value => {
-        return parseFloat(value) < minValue ? "Amount must be at least " + minValue + " ACE" : undefined;
+        return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A-EUR` : undefined;
     }
 };
 

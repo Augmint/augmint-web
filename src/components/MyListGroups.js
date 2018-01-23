@@ -20,6 +20,17 @@ export function MyListGroupRow(props) {
     );
 }
 
+export function MyListGroupRowColumn(props) {
+    const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, ...other } = props;
+    return (
+        <Grid.Column style={style} {...other}>
+            {header && <Header as="h3">{header}</Header>}
+            {children}
+        </Grid.Column>
+    );
+}
+MyListGroupRowColumn.Col = MyListGroupRowColumn;
+
 MyListGroup.Row = MyListGroupRow;
 
 export function MyGridTable(props) {
@@ -60,3 +71,4 @@ export function MyGridTableColumn(props) {
     );
 }
 MyGridTable.Column = MyGridTableColumn;
+MyGridTable.Col = MyGridTableColumn;
