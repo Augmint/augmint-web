@@ -10,7 +10,7 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
    _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
-1. `npm install -g truffle@4.0.4`
+1. `npm install -g truffle@4.0.5`
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
@@ -28,7 +28,7 @@ in Git bash:
 
 1. `nvm install 8.5.0`
 1. `nvm use 8.5.0`
-1. `npm install -g truffle@4.0.4`
+1. `npm install -g truffle@4.0.5`
 1. `git clone https://github.com/DecentLabs/dcm-poc.git`
 1. `cd dcm-poc`
 1. `npm install`
@@ -46,70 +46,12 @@ in Git bash:
 
 1. `npm run ganache:runmigrate`  
    or
-   * `./runganache.sh` (windows: `./runganache.bat`)
-   * in separate console:  
-     `truffle migrate` or  
-     `truffle migrate --reset` to overwrite existing migration
+    * `./runganache.sh` (windows: `./runganache.bat`)
+    * in separate console:  
+      `truffle migrate` or  
+      `truffle migrate --reset` to overwrite existing migration
 1. `cp ./build/contracts/* ./src/contractsBuild`  
    _TODO: this step is needed b/c of a [truffle-migrate issue](https://github.com/trufflesuite/truffle-migrate/issues/10)_
-
-#### Alternatively: Ganache UI
-
-If you use [ganache UI](http://truffleframework.com/ganache/) then
-
-* set the port to 8545
-* For running UI tests set mnemonic:  
-  `hello build tongue rack parade express shine salute glare rate spice stock`
-
-#### Alternatively: truffle develop
-
-_note: truffle runs local chain on localhost:9545_
-
-1. `truffle develop`
-1. in truffle console:  
-   `migrate` or  
-   `migrate --reset` to overwrite existing migration
-1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
-
-_TODO: use same mnemonic & port as `runganache.sh`_
-
-#### Private chain
-
-##### First init
-
-```
-cd privatechain
-./createprivatechain.sh
-cd ..
-truffle migrate
-cp ./build/contracts/* ./src/contractsBuild
-```
-
-##### Launch
-
-```
-cd privatechain
-./runprivatechain.sh
-```
-
-##### Reset privatechain
-
-```
-cd privatechain
-rm -r chaindata/geth
-./createprivatechain.sh
-cd ..
-truffle migrate  --network privatechain
-cp ./build/contracts/* ./src/contractsBuild
-```
-
-#### Rinkeby
-
-```
-./runrinkeby.sh
-truffle migrate --network rinkeby
-cp ./build/contracts/* ./src/contractsBuild
-```
 
 ### 3. Launch local dev server
 
@@ -143,3 +85,65 @@ _Note: Frontend tests are experimental and unfinished yet. Also ganache crashes 
 
 * Start interactive: `npm run cypress:open`
 * Start command line: `npm run cypress:run`
+
+## Non ganache launches/deploys
+
+### Private chain
+
+#### First init
+
+```
+cd privatechain
+./createprivatechain.sh
+cd ..
+truffle migrate
+cp ./build/contracts/* ./src/contractsBuild
+```
+
+#### Launch
+
+```
+cd privatechain
+./runprivatechain.sh
+```
+
+#### Reset privatechain
+
+```
+cd privatechain
+rm -r chaindata/geth
+./createprivatechain.sh
+cd ..
+truffle migrate  --network privatechain
+cp ./build/contracts/* ./src/contractsBuild
+```
+
+### Rinkeby
+
+```
+./runrinkeby.sh
+truffle migrate --network rinkeby
+cp ./build/contracts/* ./src/contractsBuild
+```
+
+### WIP (ignore it) alternative ganache launches
+
+#### Alternatively: Ganache UI
+
+If you use [ganache UI](http://truffleframework.com/ganache/) then
+
+* set the port to 8545
+* For running UI tests set mnemonic:  
+  `hello build tongue rack parade express shine salute glare rate spice stock`
+
+#### Alternatively: truffle develop
+
+_note: truffle runs local chain on localhost:9545_
+
+1. `truffle develop`
+1. in truffle console:  
+   `migrate` or  
+   `migrate --reset` to overwrite existing migration
+1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
+
+_TODO: use same mnemonic & port as `runganache.sh`_
