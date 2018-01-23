@@ -1,7 +1,7 @@
 import { fetchOrders, placeOrderTx } from "modules/ethereum/exchangeTransactions";
 
-export const ETHSELL = 0,
-    TOKENSELL = 1;
+export const TOKEN_BUY = 0;
+export const TOKEN_SELL = 1;
 
 export const ORDERS_REFRESH_REQUESTED = "orders/ORDERS_REFRESH_REQUESTED";
 export const ORDERS_REFRESH_ERROR = "orders/ORDERS_REFRESH_ERROR";
@@ -73,7 +73,7 @@ export const refreshOrders = () => {
             type: ORDERS_REFRESH_REQUESTED
         });
         try {
-            let orders = await fetchOrders();
+            const orders = await fetchOrders();
             return dispatch({
                 type: ORDERS_REFRESH_SUCCESS,
                 result: orders

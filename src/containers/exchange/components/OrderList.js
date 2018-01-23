@@ -1,63 +1,58 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
-import { Pblock } from "components/PageLayout";
-import { MyListGroup } from "components/MyListGroups";
-import ErrorDetails from "components/ErrorDetails";
+//import { Button } from "semantic-ui-react";
+import { Pblock, Pgrid } from "components/PageLayout";
+import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
+import { ErrorPanel } from "components/MsgPanels";
+
+const OrderItem = props => {
+    const { order } = props;
+    return (
+        <MyListGroup.Row key={`ordersRow-${order.id}`}>
+            Buy {`${order.amount} ACE sell order for ${order.price}`}
+            <small>
+                <br />Order Id: {order.id} | index: {order.index} | Maker: {order.maker}
+                {order.maker.toLowerCase() === this.props.userAccountAddress.toLowerCase()
+                    ? " TODO: Cancel my order"
+                    : ""}
+            </small>
+        </MyListGroup.Row>
+    );
+};
 
 export default class OrderList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            orderListOpen: false
-        };
-    }
-
     render() {
-        const { filter, header, noItemMessage, userAccountAddress } = this.props;
+        const { filter, header, noItemMessage } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
-        const filteredOrders = orders == null ? null : orders.filter(filter);
-        const listItems =
-            filteredOrders != null &&
-            filteredOrders.map((order, index) => (
-                <MyListGroup.Row key={`ordersRow-${order.orderId}`}>
-                    {`${order.amount} ${order.ccy} sell order for ${order.ccy === "ETH" ? "ACE" : "ETH"}`}
-                    <small>
-                        <br />Order Id: {order.orderId} | makerOrderIdx: {order.makerOrderIdx} | Maker: {order.maker}
-                        {order.maker.toLowerCase() === userAccountAddress.toLowerCase() ? " TODO: Cancel my order" : ""}
-                    </small>
-                </MyListGroup.Row>
-            ));
-        const totalAmount =
-            filteredOrders === null ? "?" : filteredOrders.reduce((sum, val) => val.bn_amount.plus(sum), 0).toString();
-        let totalCcy;
-        if (filteredOrders !== null && filteredOrders.length > 0) totalCcy = orders[0].ccy;
-        let orderCount = orders === null ? "?" : filteredOrders.length;
-        let ordersLabel = "Sell " + totalAmount + " " + totalCcy + " in " + orderCount + " orders";
+        const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
+        const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
+        const buyItems = buyOrders.map((order, index) => <OrderItem order={buyOrders} />);
+        const sellItems = buyOrders.map((order, index) => <OrderItem order={sellOrders} />);
+
+        const totalBuyAmount = isLoading ? "?" : buyOrders.reduce((sum, val) => val.bn_amount.plus(sum), 0).toString();
+        const totalSellAmount = isLoading
+            ? "?"
+            : sellOrders.reduce((sum, val) => val.bn_amount.plus(sum), 0).toString();
+
         return (
-            <Pblock header={header}>
+            <Pblock loading={isLoading} header={header}>
                 {refreshError && (
-                    <ErrorDetails header="Error while fetching order list">{refreshError.message}</ErrorDetails>
+                    <ErrorPanel header="Error while fetching order list">{refreshError.message}</ErrorPanel>
                 )}
                 {orders == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing order list...</p>}
-                {orders != null && !refreshError && filteredOrders.length === 0 ? (
-                    noItemMessage
-                ) : (
-                    <MyListGroup>
-                        <Button
-                            basic
-                            content={ordersLabel}
-                            labelPosition="left"
-                            icon={this.state.orderListOpen ? "chevron up" : "chevron down"}
-                            onClick={() =>
-                                this.setState({
-                                    orderListOpen: !this.state.orderListOpen
-                                })
-                            }
-                        />
-                        {this.state.orderListOpen && listItems}
-                    </MyListGroup>
-                )}
+
+                <MyGridTable>
+                    <Row columns={2}>
+                        <Col header="Buy ACE">
+                            <p>Total: {totalBuyAmount} ETH</p>
+                            {buyItems.length === 0 ? noItemMessage : <MyListGroup>{buyItems}</MyListGroup>}
+                        </Col>
+                        <Col header="Sell ACE">
+                            <p>Total: {totalSellAmount} ACE</p>
+                            {sellItems.length === 0 ? noItemMessage : <MyListGroup>{sellItems}</MyListGroup>}
+                        </Col>
+                    </Row>
+                </MyGridTable>
             </Pblock>
         );
     }

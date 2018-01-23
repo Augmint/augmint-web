@@ -8,7 +8,7 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import { placeOrder, PLACE_ORDER_SUCCESS, ETHSELL, TOKENSELL } from "modules/reducers/orders";
+import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
@@ -24,7 +24,7 @@ const ethValidationsWithBalance = [...ethValidations, Validations.ethUserBalance
 class PlaceOrderForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, orderType: ETHSELL };
+        this.state = { result: null, orderType: TOKEN_BUY };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderTypeChange = this.onOrderTypeChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
@@ -75,7 +75,7 @@ class PlaceOrderForm extends React.Component {
         let amount;
         let orderType = this.state.orderType;
         try {
-            if (orderType === ETHSELL) {
+            if (orderType === TOKEN_BUY) {
                 amount = new BigNumber(values.ethAmount);
             } else {
                 amount = new BigNumber(values.tokenAmount);
@@ -135,8 +135,8 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalTokenSellOrders.isZero() && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.isZero() && orderType === TOKENSELL)
+                (bn_totalTokenSellOrders.isZero() && orderType === TOKEN_BUY) ||
+                (bn_totalEthSellOrders.isZero() && orderType === TOKEN_SELL)
             )
                 orderHelpText = (
                     <p>
@@ -145,8 +145,8 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalTokenSellOrders.gte(bn_tokenAmount) && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.gte(bn_ethAmount) && orderType === TOKENSELL)
+                (bn_totalTokenSellOrders.gte(bn_tokenAmount) && orderType === TOKEN_BUY) ||
+                (bn_totalEthSellOrders.gte(bn_ethAmount) && orderType === TOKEN_SELL)
             )
                 orderHelpText = (
                     <p>
@@ -155,8 +155,8 @@ class PlaceOrderForm extends React.Component {
                     </p>
                 );
             else if (
-                (bn_totalTokenSellOrders.lte(bn_tokenAmount) && orderType === ETHSELL) ||
-                (bn_totalEthSellOrders.lte(bn_ethAmount) && orderType === TOKENSELL)
+                (bn_totalTokenSellOrders.lte(bn_tokenAmount) && orderType === TOKEN_BUY) ||
+                (bn_totalEthSellOrders.lte(bn_ethAmount) && orderType === TOKEN_SELL)
             ) {
                 // TODO: let difference;
                 // if (orderType == ETHSELL) {
@@ -174,10 +174,10 @@ class PlaceOrderForm extends React.Component {
         }
         let header = (
             <Menu size="massive" tabular>
-                <Menu.Item active={orderType === ETHSELL} index={ETHSELL} onClick={this.onOrderTypeChange}>
+                <Menu.Item active={orderType === TOKEN_BUY} index={TOKEN_BUY} onClick={this.onOrderTypeChange}>
                     Buy ACE
                 </Menu.Item>
-                <Menu.Item active={orderType === TOKENSELL} index={TOKENSELL} onClick={this.onOrderTypeChange}>
+                <Menu.Item active={orderType === TOKEN_SELL} index={TOKEN_SELL} onClick={this.onOrderTypeChange}>
                     Sell ACE
                 </Menu.Item>
             </Menu>
@@ -207,13 +207,13 @@ class PlaceOrderForm extends React.Component {
 
                         <Field
                             name="tokenAmount"
-                            label={orderType === ETHSELL ? "Buy: " : "Sell: "}
+                            label={orderType === TOKEN_BUY ? "Buy: " : "Sell: "}
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
                             disabled={submitting || isLoading}
                             onChange={this.onTokenAmountChange}
-                            validate={orderType === TOKENSELL ? tokenValidationsWithBalance : tokenValidations}
+                            validate={orderType === TOKEN_SELL ? tokenValidationsWithBalance : tokenValidations}
                             normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
@@ -229,7 +229,7 @@ class PlaceOrderForm extends React.Component {
                             label="for: "
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
-                            validate={orderType === ETHSELL ? ethValidationsWithBalance : ethValidations}
+                            validate={orderType === TOKEN_BUY ? ethValidationsWithBalance : ethValidations}
                             normalize={Normalizations.fiveDecimals}
                             labelPosition="right"
                         >
@@ -239,7 +239,7 @@ class PlaceOrderForm extends React.Component {
                         {orderHelpText && <Message icon="info" size="tiny" info content={orderHelpText} />}
                         <Button size="big" primary loading={submitting} disabled={pristine}>
                             {submitting && "Submitting..."}
-                            {!submitting && (orderType === ETHSELL ? "Place buy ACE order" : "Place sell ACE order")}
+                            {!submitting && (orderType === TOKEN_BUY ? "Place buy ACE order" : "Place sell ACE order")}
                         </Button>
                     </Form>
                 )}

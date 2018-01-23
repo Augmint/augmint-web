@@ -1,7 +1,7 @@
 import React from "react";
 import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import ErrorDetails from "components/ErrorDetails";
+import { ErrorPanel } from "components/MsgPanels";
 
 export default class TransferList extends React.Component {
     render() {
@@ -49,7 +49,7 @@ export default class TransferList extends React.Component {
 
         return (
             <Pblock loading={isLoading} header={header}>
-                {error && <ErrorDetails header="Error while fetching transfer list">{error.message}</ErrorDetails>}
+                {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
                 {transfers != null && (

@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Message, Button, Icon } from "semantic-ui-react";
-import ErrorDetails from "components/ErrorDetails";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -130,5 +129,15 @@ export function ConnectionStatus(props) {
                 Couldn't connect to Ethereum contract.
             </Message>
         )
+    );
+}
+
+export function ErrorDetails(props) {
+    const { header = "Error details:", style = { fontSize: "0.8em", overflow: "auto" } } = props;
+    return (
+        <div>
+            <p>{header}</p>
+            <pre style={style}>{props.children}</pre>
+        </div>
     );
 }

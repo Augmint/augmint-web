@@ -14,9 +14,8 @@ export function ExchangeInfo(props) {
 
     return (
         <Pblock header="Exchange contract">
-            <p>OrderCount: {contract.info.orderCount}</p>
             <p>
-                To sell: {contract.info.totalEthSellOrders} ETH | {contract.info.totalTokenSellOrders} ACE
+                Order Count: Buy: {contract.info.buyOrderCount} | Sell: {contract.info.sellOrderCount}
             </p>
             <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>

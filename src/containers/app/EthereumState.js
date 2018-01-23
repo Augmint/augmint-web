@@ -5,8 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
-import ErrorDetails from "components/ErrorDetails";
+import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
 import { GitterButton } from "components/LinkButtons";
 
@@ -64,7 +63,8 @@ export class EthereumState extends React.Component {
             loanManager.connectionError ||
             rates.connectionError ||
             augmintToken.connectionError ||
-            (exchange && rates.connectionError)
+            (exchange && rates.connectionError) ||
+            (exchange && exchange.connectionError)
         ) {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to Augmint contracts</h3>}>

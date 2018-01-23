@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 
 export function MyListGroup(props) {
     const { children, divided = "vertically", container = false, style = { margin: "0em 0em" }, ...other } = props;
@@ -51,9 +51,10 @@ export function MyGridTableRow(props) {
 MyGridTable.Row = MyGridTableRow;
 
 export function MyGridTableColumn(props) {
-    const { children, style = { padding: "0.5em 0", margin: "0em 0" }, ...other } = props;
+    const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, ...other } = props;
     return (
         <Grid.Column style={style} {...other}>
+            {header && <Header as="h3">{header}</Header>}
             {children}
         </Grid.Column>
     );

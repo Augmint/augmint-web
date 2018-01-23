@@ -19,17 +19,13 @@ const initialState = {
     isRefreshing: false,
     isConnected: false,
     info: {
+        minOrderAmount: null,
         bn_ethBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
         tokenBalance: "?",
-        orderCount: "?",
-        bn_totalTokenSellOrders: null,
-        totalTokenSellOrders: "?",
-        bn_totalEthSellOrders: null,
-        totalEthSellOrders: "?",
-        totalAmount: "?",
-        totalCcy: "?",
+        sellOrderCount: "?",
+        buyOrderCount: "?",
         owner: "?"
     }
 };
@@ -48,6 +44,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 contract: action.contract,
+                info: action.info,
                 isLoading: false,
                 isConnected: true,
                 connectionError: null,
@@ -70,6 +67,7 @@ export default (state = initialState, action) => {
         case EXCHANGE_REFRESH_ERROR:
             return {
                 ...state,
+                isLoading: false,
                 error: action.error
             };
 
@@ -90,12 +88,17 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
+            const contract = await SolidityContract.connectNew(
+                store.getState().web3Connect.web3Instance,
+                EXCHANGE_artifacts
+            );
+
+            const info = await getAugmintTokenInfo(contract.instance);
+
             return dispatch({
                 type: EXCHANGE_CONNECT_SUCCESS,
-                contract: await SolidityContract.connectNew(
-                    store.getState().web3Connect.web3Instance,
-                    EXCHANGE_artifacts
-                )
+                contract: contract,
+                info: info
             });
         } catch (error) {
             return dispatch({
@@ -112,46 +115,12 @@ export const refreshExchange = () => {
             type: EXCHANGE_REFRESH_REQUESTED
         });
         try {
-            let exchange = store.getState().exchange.contract.instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
-            let web3 = store.getState().web3Connect.web3Instance;
-            let owner = await exchange.owner();
+            const exchange = store.getState().exchange.contract.instance;
+            const info = await getAugmintTokenInfo(exchange);
 
-            let bn_ethBalance = await asyncGetBalance(exchange.address);
-            const bn_tokenBalance = (await augmintToken.balanceOf(exchange.address)).div(10000);
-
-            let bn_totalEthSellOrders = web3.utils.fromWei(
-                (await exchange.totalEthSellOrders()).toString() // toString() required to supress web3 error, why?
-            );
-            const bn_totalTokenSellOrders = (await exchange.totalTokenSellOrders()).div(10000);
-            let totalTokenSellOrders = bn_totalTokenSellOrders.toString();
-            let totalEthSellOrders = bn_totalEthSellOrders.toString();
-            let totalAmount = 0,
-                totalCcy = "";
-            if (totalTokenSellOrders > 0) {
-                totalAmount = totalTokenSellOrders;
-                totalCcy = "ACE";
-            } else if (totalEthSellOrders > 0) {
-                totalAmount = totalEthSellOrders;
-                totalCcy = "ETH";
-            }
-            let orderCount = await exchange.getOrderCount();
             return dispatch({
                 type: EXCHANGE_REFRESH_SUCCESS,
-                result: {
-                    bn_ethBalance: bn_ethBalance,
-                    ethBalance: bn_ethBalance.toString(),
-                    bn_tokenBalance: bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance.toString(),
-                    bn_totalEthSellOrders: bn_totalEthSellOrders,
-                    totalEthSellOrders: totalEthSellOrders,
-                    bn_totalTokenSellOrders: bn_totalTokenSellOrders,
-                    totalTokenSellOrders: totalTokenSellOrders,
-                    orderCount: orderCount.toNumber(),
-                    totalAmount: totalAmount,
-                    totalCcy: totalCcy,
-                    owner: owner
-                }
+                info: info
             });
         } catch (error) {
             return dispatch({
@@ -161,3 +130,24 @@ export const refreshExchange = () => {
         }
     };
 };
+
+async function getAugmintTokenInfo(exchange) {
+    const augmintToken = store.getState().augmintToken.contract.instance;
+
+    const [owner, bn_ethBalance, bn_tokenBalance, orderCount] = await Promise.all([
+        exchange.owner(),
+        asyncGetBalance(exchange.address),
+        augmintToken.balanceOf(exchange.address),
+        exchange.getOrderCounts()
+    ]);
+
+    return {
+        bn_ethBalance: bn_ethBalance,
+        ethBalance: bn_ethBalance.toString(),
+        bn_tokenBalance: bn_tokenBalance,
+        tokenBalance: bn_tokenBalance.div(10000).toString(),
+        buyOrderCount: orderCount[0].toNumber(),
+        sellOrderCount: orderCount[1].toNumber(),
+        owner: owner
+    };
+}

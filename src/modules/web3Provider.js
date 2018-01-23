@@ -85,10 +85,10 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewBlock = (error, result) => {
-    console.debug("web3Provider.onNewBlock");
-};
-
-const onPendingTransaction = tx => {
-    console.debug("onPendingTransaction", tx);
-};
+// const onNewBlock = (error, result) => {
+//     console.debug("web3Provider.onNewBlock");
+// };
+//
+// const onPendingTransaction = tx => {
+//     console.debug("onPendingTransaction", tx);
+// };

@@ -1,48 +1,64 @@
 import store from "modules/store";
-import BigNumber from "bignumber.js";
-import { ETHSELL, TOKENSELL } from "modules/reducers/orders";
+//import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 
-export async function fetchOrders() {
-    // FIXME: what to do if orders changes while iterating?
-    try {
-        let exchange = store.getState().exchange.contract.instance;
-        let web3 = store.getState().web3Connect.web3Instance;
-        let orders = [];
-        let order = await exchange.iterateOpenOrders(0); // returns first open order
-        let nextOrderId = 999;
-        while (order[0] > 0 && nextOrderId > 0) {
-            let orderType = order[3].toNumber();
-            let bn_amount, ccy;
-            if (orderType === TOKENSELL) {
-                ccy = "ACE";
-                bn_amount = order[4].div(10000);
-            } else if (orderType === ETHSELL) {
-                ccy = "ETH";
-                bn_amount = new BigNumber(web3.utils.fromWei(order[4].toString()));
-            } else {
-                throw new Error("Unknown orderType: " + orderType);
-            }
-            let amount = bn_amount.toString();
-            orders.push({
-                orderId: order[0].toNumber(),
-                maker: order[1],
-                makerOrderIdx: order[2].toNumber(),
-                orderType: orderType,
-                bn_amount: bn_amount,
-                amount: amount,
-                ccy: ccy
-            });
+export const TOKEN_BUY = 0;
+export const TOKEN_SELL = 1;
 
-            nextOrderId = order[5];
-            if (nextOrderId > 0) {
-                order = await exchange.iterateOpenOrders(nextOrderId);
-            }
+export async function fetchOrders() {
+    // TODO: handle when order changes while iterating
+    try {
+        const exchange = store.getState().exchange;
+        const sellCount = exchange.info.sellOrderCount;
+        const buyCount = exchange.info.buyOrderCount;
+        // retreive all orders
+        let buyOrders = [];
+        let sellOrders = [];
+        const queryCount = Math.ceil((sellCount + buyCount) / 50);
+        for (let i = 0; i < queryCount; i++) {
+            const fetchedOrders = await getOrders(i * 50);
+            buyOrders = buyOrders.concat(fetchedOrders.buyOrders);
+            sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
         }
-        return orders;
+        return { buyOrders: buyOrders, sellOrders: sellOrders };
     } catch (error) {
         throw new Error("fetchOrders failed.\n" + error);
     }
+}
+
+async function getOrders(offset) {
+    const exchange = store.getState().exchange.contract.instance;
+    const result = await exchange.getOrders(offset);
+    // result format: [maker] [id, addedTime, price, tokenAmount, weiAmount]
+    const orders = result[0].reduce(
+        (res, order, idx) => {
+            if (order[2].toString() !== "0") {
+                const parsed = {
+                    index: order[0].toNumber(),
+                    id: order[1].toNumber(),
+                    addedTime: order[2],
+                    price: order[3].toNumber(),
+                    tokenAmount: order[4],
+                    weiAmount: order[5],
+                    maker: result[1][idx]
+                };
+                if (parsed.weiAmount.toString() !== "0") {
+                    parsed.amount = parsed.weiAmount;
+                    parsed.orderType = TOKEN_BUY;
+                    res.buyOrders.push(parsed);
+                } else {
+                    parsed.amount = parsed.tokenAmount;
+                    parsed.orderType = TOKEN_SELL;
+                    res.sellOrders.push(parsed);
+                }
+            }
+
+            return res;
+        },
+        { buyOrders: [], sellOrders: [] }
+    );
+
+    return orders;
 }
 
 export async function placeOrderTx(orderType, amount) {
@@ -53,7 +69,7 @@ export async function placeOrderTx(orderType, amount) {
         let submitAmount, result;
 
         switch (orderType) {
-            case ETHSELL:
+            case TOKEN_BUY:
                 let web3 = store.getState().web3Connect.web3Instance;
                 submitAmount = web3.utils.toWei(amount.toString());
                 result = await exchange.placeSellEthOrder({
@@ -62,7 +78,7 @@ export async function placeOrderTx(orderType, amount) {
                     gas: gasEstimate
                 });
                 break;
-            case TOKENSELL:
+            case TOKEN_SELL:
                 let augmintToken = store.getState().augmintToken;
                 submitAmount = amount.times(augmintToken.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
                 result = await exchange.placeSellTokenOrder(submitAmount, {

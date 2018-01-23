@@ -8,7 +8,7 @@ export default () => {
     const web3Connect = store.getState().web3Connect;
 
     if (!exchange.isLoading && !exchange.isConnected) {
-        setupWatch("web3Connect.network", onWeb3NetworkChange);
+        //setupWatch("web3Connect.network", onWeb3NetworkChange);
         setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("exchange.contract", onExchangeContractChange);
         if (web3Connect.isConnected) {
@@ -23,47 +23,46 @@ export default () => {
 
 const setupListeners = () => {
     const exchange = store.getState().exchange.contract.instance;
-    exchange.e_newOrder({ fromBlock: "latest", toBlock: "pending" }).watch(onNewOrder);
-    exchange.e_orderFill({ fromBlock: "latest", toBlock: "pending" }).watch(onOrderFill);
+    exchange.NewOrder({ fromBlock: "latest", toBlock: "pending" }).watch(onNewOrder);
+    exchange.OrderFill({ fromBlock: "latest", toBlock: "pending" }).watch(onOrderFill);
+    exchange.CancelledOrder({ fromBlock: "latest", toBlock: "pending" }).watch(onCancelledOrder);
+    exchange.MinOrderAmountChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onMinOrderAmountChanged);
 };
 
 const removeListeners = oldInstance => {
     if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.e_newOrder().stopWatching();
-        oldInstance.instance.e_orderFill().stopWatching();
+        oldInstance.instance.NewOrder().stopWatching();
+        oldInstance.instance.OrderFill().stopWatching();
+        oldInstance.instance.CancelledOrder().stopWatching();
     }
 };
 
-const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-    removeListeners(oldVal);
-    if (newVal !== null) {
-        console.debug("exchangeProvider - web3Connect.network changed. Dispatching connectExchange()");
+// const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+//     removeListeners(oldVal);
+//     if (newVal !== null) {
+//         console.debug("exchangeProvider - web3Connect.network changed. Dispatching connectExchange()");
+//         store.dispatch(connectExchange());
+//     }
+// };
 
+const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
+    removeListeners(oldVal);
+    if (newVal) {
+        console.debug("exchangeProvider - augmintToken contract changed. Dispatching connectExchange()");
         store.dispatch(connectExchange());
     }
 };
 
-const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
-    refreshExchangeIfNeeded(newVal, oldVal);
-};
-
 const onExchangeContractChange = (newVal, oldVal, objectPath) => {
-    refreshExchangeIfNeeded(newVal, oldVal);
-};
-
-const refreshExchangeIfNeeded = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal && store.getState().augmintToken.isConnected) {
-        console.debug(
-            "exchangeProvider - new augmintToken or Exchange contract. Dispatching refreshExchange() and refreshOrders()"
-        );
-        store.dispatch(refreshExchange());
+        console.debug("exchangeProvider - new Exchange contract. Dispatching refreshOrders()");
         store.dispatch(refreshOrders());
         setupListeners();
     }
 };
 
-// event e_newOrder(uint orderId, OrdersLib.OrderType orderType, address maker, uint amount);
+// NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
 const onNewOrder = (error, result) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
@@ -71,12 +70,27 @@ const onNewOrder = (error, result) => {
     // Userbalance is refreshed because Transfer is emmitted from neworder tx
 };
 
-// event e_orderFill(uint orderId, OrdersLib.OrderType orderType, address maker, address taker, uint amountSold, uint amountPaid);
+// CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
+const onCancelledOrder = (error, result) => {
+    console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
+    store.dispatch(refreshExchange());
+    store.dispatch(refreshOrders());
+    // Userbalance is refreshed because Transfer is emmitted from neworder tx
+};
+
+// OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
 const onOrderFill = (error, result) => {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and regreshOrders()");
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    // Userbalance is refreshed because Transfer is emmitted from orderfill tx
+};
+
+// MinOrderAmountChanged(uint newMinOrderAmount);
+const onMinOrderAmountChanged = (error, result) => {
+    console.debug("exchangeProvider.onMinOrderAmountChanged: dispatching refreshExchange()");
+    store.dispatch(refreshExchange());
     // Userbalance is refreshed because Transfer is emmitted from orderfill tx
 };

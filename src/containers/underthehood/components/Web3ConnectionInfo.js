@@ -1,7 +1,7 @@
 import React from "react";
 import store from "modules/store";
 import { setupWeb3 } from "modules/reducers/web3Connect";
-import ErrorDetails from "components/ErrorDetails";
+import { ErrorPanel } from "components/MsgPanels";
 import stringifier from "stringifier";
 import { Button } from "semantic-ui-react";
 import { Pblock } from "components/PageLayout";
@@ -32,7 +32,7 @@ export default class Web3ConnectionInfo extends React.Component {
                     Network: {network.name} | Id: {network.id} | Type: {network.type}
                 </p>
 
-                {error ? <ErrorDetails header="Error">{error.message}</ErrorDetails> : <p>No connection error</p>}
+                {error ? <ErrorPanel header="Error">{error.message}</ErrorPanel> : <p>No connection error</p>}
 
                 <Button
                     basic
