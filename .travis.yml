@@ -11,8 +11,8 @@ before_script:
     - truffle migrate && cp build/contracts/* src/contractsBuild
     - yarn start > yarn_start.out &
 script:
-    # park it until ganache crashing often:
-    - cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a
+    # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
+    # - cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a
     - truffle test
 notifications:
   slack:
