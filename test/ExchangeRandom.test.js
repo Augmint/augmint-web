@@ -30,31 +30,24 @@ let stateAfterAllMatch = {};
 const getOrderToFill = async () => {
     const state = await exchangeTestHelper.getState();
 
-    // retreive sell orders
+    // retreive all orders
     buyTokenOrders = [];
     sellTokenOrders = [];
+    const queryCount = Math.ceil((state.sellCount + state.buyCount) / 50);
+    for (let i = 0; i < queryCount; i++) {
+        const fetchedOrders = await exchangeTestHelper.getOrders(i * 50);
+        buyTokenOrders = buyTokenOrders.concat(fetchedOrders.buyOrders);
+        sellTokenOrders = sellTokenOrders.concat(fetchedOrders.sellOrders);
+    }
 
+    // find match
     let match = null;
-    let i = 0;
-    let j = 0;
-
-    while (!match && i < state.buyCount) {
-        if (i >= buyTokenOrders.length) {
-            buyTokenOrders.push(await exchangeTestHelper.getBuyTokenOrder(i));
-        }
-        j = 0;
-        while (!match && j < state.sellCount) {
-            if (j >= sellTokenOrders.length) {
-                sellTokenOrders.push(await exchangeTestHelper.getSellTokenOrder(j));
+    for (let buyIdx = 0; !match && buyIdx < state.buyCount; buyIdx++) {
+        for (let sellIdx = 0; !match && sellIdx < state.sellCount; sellIdx++) {
+            if (sellTokenOrders[sellIdx].price <= buyTokenOrders[buyIdx].price) {
+                match = { buyTokenOrder: buyTokenOrders[buyIdx], sellTokenOrder: sellTokenOrders[sellIdx] };
             }
-
-            if (sellTokenOrders[j].price <= buyTokenOrders[i].price) {
-                match = { buyTokenOrder: buyTokenOrders[i], sellTokenOrder: sellTokenOrders[j] };
-            }
-            j++;
         }
-
-        i++;
     }
     return match;
 };
@@ -68,14 +61,13 @@ contract("Exchange random tests", accounts => {
         tokenAce = await tokenAceTestHelper.newTokenAceMock();
         await tokenAce.issue(TEST_ACCS_CT * ACC_INIT_ACE);
         console.log(`\x1b[2m\t*** Topping up ${TEST_ACCS_CT} accounts each with ${ACC_INIT_ACE / 10000} A-EURO\x1b[0m`);
-        for (let i = 0; i < TEST_ACCS_CT; i++) {
-            await tokenAce.withdrawTokens(accounts[i], ACC_INIT_ACE);
-        }
+        await Promise.all(accounts.slice(0, TEST_ACCS_CT).map(acc => tokenAce.withdrawTokens(acc, ACC_INIT_ACE)));
+
         exchange = await exchangeTestHelper.newExchangeMock(tokenAce, rates, MIN_TOKEN);
     });
 
     it("place x buy / sell orders", async function() {
-        console.log("");
+        const orders = [];
         for (let i = 0; i < ORDER_COUNT; i++) {
             const tokenAmount = Math.round(random.random() * 10000 * (MAX_TOKEN - MIN_TOKEN) / 10000) + MIN_TOKEN;
             const price = Math.floor(random.random() * (MAX_ORDER_RATE - MIN_ORDER_RATE)) + MIN_ORDER_RATE;
@@ -83,15 +75,38 @@ contract("Exchange random tests", accounts => {
                 Math.round(tokenAmount * price / 10000 / MARKET_WEI_RATE * ONEWEI / ETH_ROUND) * ETH_ROUND;
             const orderType = random.random() < 0.5 ? TOKEN_BUY : TOKEN_SELL;
 
-            const order = {
+            orders.push({
                 amount: orderType === TOKEN_BUY ? weiAmount : tokenAmount,
                 maker: accounts[Math.floor(random.random() * (TEST_ACCS_CT - 1))],
                 price: price,
                 orderType: orderType
-            };
-            console.log(`\x1b[1A\x1b[2m\t*** Placing order #${i + 1} / ${ORDER_COUNT}\t\x1b[0m`);
-            await exchangeTestHelper.newOrder(this, order);
+            });
         }
+
+        console.log(`\x1b[2m\t*** Placing ${ORDER_COUNT} random orders\t\x1b[0m`);
+        const txs = await Promise.all(
+            orders.map(order => {
+                let tx;
+                if (order.orderType === TOKEN_BUY) {
+                    tx = exchange.placeBuyTokenOrder(order.price, { value: order.amount, from: order.maker });
+                } else {
+                    tx = tokenAce.placeSellTokenOrderOnExchange(exchange.address, order.price, order.amount, {
+                        from: order.maker
+                    });
+                }
+                return tx;
+            })
+        );
+        txs.map(tx =>
+            testHelper.logGasUse(
+                this,
+                tx,
+                typeof tx.logs[0].args.weiAmount === "undefined"
+                    ? "placeBuyTokenOrder"
+                    : "tokenAce.placeSellTokenOrderOnExchange"
+            )
+        );
+        assert(txs.length, ORDER_COUNT);
         //await exchangeTestHelper.printOrderBook(10);
     });
 

@@ -19,6 +19,7 @@ module.exports = {
     getState,
     getBuyTokenOrder,
     getSellTokenOrder,
+    getOrders,
     printOrderBook
 };
 
@@ -367,6 +368,38 @@ function parseOrder(order) {
         amount: order[4]
     };
     return ret;
+}
+
+async function getOrders(offset) {
+    const result = await exchange.getOrders(offset);
+    // result format: [maker] [id, addedTime, price, tokenAmount, weiAmount]
+    return result[0].reduce(
+        (res, order, idx) => {
+            if (order[2].toString() !== "0") {
+                const parsed = {
+                    index: order[0].toNumber(),
+                    id: order[1].toNumber(),
+                    addedTime: order[2],
+                    price: order[3].toNumber(),
+                    tokenAmount: order[4],
+                    weiAmount: order[5],
+                    maker: result[1][idx]
+                };
+                if (parsed.weiAmount.toString() !== "0") {
+                    parsed.amount = parsed.weiAmount;
+                    parsed.orderType = TOKEN_BUY;
+                    res.buyOrders.push(parsed);
+                } else {
+                    parsed.amount = parsed.tokenAmount;
+                    parsed.orderType = TOKEN_SELL;
+                    res.sellOrders.push(parsed);
+                }
+            }
+
+            return res;
+        },
+        { buyOrders: [], sellOrders: [] }
+    );
 }
 
 async function printOrderBook(_limit) {

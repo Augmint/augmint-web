@@ -132,6 +132,30 @@ contract Exchange is ExchangeInterface {
         return(buyTokenOrders.length, sellTokenOrders.length);
     }
 
+    // returns 50 buy and sell token orders starting from some offset
+    //      orders are encoded as [maker], [index, id, addedTime, price, tokenAmount, weiAmount]
+    //      if weiAmount == 0 then SELL token order, if tokenAmount == 0 then BUY token order
+    function getOrders(uint offset) external view returns (uint[6][50] response, address[50] makers) {
+        Order memory order; // we should maybe use storage pointer here but that gives a warning
+
+        uint sellOffset = buyTokenOrders.length < offset ? offset - buyTokenOrders.length : 0;
+
+        for (uint8 i = 0; i < 50 && i + offset < buyTokenOrders.length; i++) {
+            order = buyTokenOrders[offset + i];
+            response[i] = [offset + i, order.id, order.addedTime, order.price, 0, order.amount];
+            makers[i] = order.maker;
+        }
+
+        for (uint8 j = 0; j + i < 50 && sellOffset + j < sellTokenOrders.length; j++) {
+            order = sellTokenOrders[sellOffset + j];
+            response[i + j] = [sellOffset + j, order.id, order.addedTime, order.price,
+                                order.amount, 0];
+            makers[i + j] = order.maker;
+        }
+
+        return (response, makers);
+    }
+
     function isValidMatch(uint buyTokenIndex, uint buyTokenId, uint sellTokenIndex, uint sellTokenId)
     public view returns (bool) {
         return (buyTokenId == buyTokenOrders[buyTokenIndex].id &&
