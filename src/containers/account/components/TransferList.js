@@ -2,6 +2,7 @@ import React from "react";
 import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
+import { MoreInfoTip } from "components/ToolTip";
 
 export default class TransferList extends React.Component {
     render() {
@@ -21,7 +22,14 @@ export default class TransferList extends React.Component {
                             <Col>
                                 {tx.from.toLowerCase() === userAccountAddress.toLowerCase()
                                     ? "To: " + tx.to
-                                    : "From: " + tx.from}
+                                    : "From: " + tx.from}{" "}
+                                <MoreInfoTip>
+                                    blockNumber: {tx.blockNumber}
+                                    <br />blockHash: <small>{tx.blockHash}</small>
+                                    <br />transactionIndex: {tx.transactionIndex}
+                                    <br />transaction hash: <small>{tx.transactionHash}</small>
+                                    <br />type: {tx.type}
+                                </MoreInfoTip>
                             </Col>
                         </Row>
                         <Row columns={3}>
@@ -35,14 +43,6 @@ export default class TransferList extends React.Component {
                                 <Col>{tx.narrative}</Col>
                             </Row>
                         )}
-                        <Row columns={1}>
-                            <Col>
-                                <small>
-                                    blockNumber: {tx.blockNumber} | transactionIndex: {tx.transactionIndex} | type:{" "}
-                                    {tx.type}
-                                </small>
-                            </Col>
-                        </Row>
                     </MyGridTable>
                 </MyListGroup.Row>
             ));

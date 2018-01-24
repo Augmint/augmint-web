@@ -151,7 +151,7 @@ export async function processTransferTx(address, tx) {
 }
 
 async function formatTransfer(address, tx) {
-    //console.debug("formatTransfer args tx: ", tx);
+    console.debug("formatTransfer args tx: ", tx);
     let direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
     let blockTimeStamp, bn_amount, bn_fee;
     let feeTmp, amountTmp;
@@ -170,6 +170,7 @@ async function formatTransfer(address, tx) {
 
     let result = {
         blockNumber: tx.blockNumber,
+        blockHash: tx.blockHash,
         transactionIndex: tx.transactionIndex,
         transactionHash: tx.transactionHash,
         logIndex: tx.logIndex,

@@ -21,7 +21,7 @@ const OrderList = props => {
                 <Col>
                     <p>
                         <MoreInfoTip>
-                            <br />Maker: {order.maker}
+                            Maker: {order.maker}
                             <br />Time: {order.addedTimeText}
                             <br />Order Id: {order.id} | index: {order.index}
                         </MoreInfoTip>
