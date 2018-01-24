@@ -29,7 +29,8 @@ export async function fetchOrders() {
 
 async function getOrders(offset) {
     const exchange = store.getState().exchange.contract.instance;
-    const result = await exchange.getOrders(offset);
+    const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
+    const result = await exchange.getOrders(offset, { gas: blockGasLimit });
     const web3 = store.getState().web3Connect.web3Instance;
     // result format: [maker] [id, addedTime, price, tokenAmount, weiAmount]
     const orders = result[0].reduce(

@@ -79,16 +79,19 @@ export const setupWeb3 = () => {
                 );
                 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
             }
-            let network = await getNetworkDetails(web3);
-            let accounts = await asyncGetAccounts(web3);
-            let web3Version = web3.version.api ? web3.version.api : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
+            const [lastBlock, network, accounts] = await Promise.all([
+                web3.eth.getBlock("latest"),
+                getNetworkDetails(web3),
+                asyncGetAccounts(web3)
+            ]);
+            const web3Version = web3.version.api ? web3.version.api : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 web3Instance: web3,
                 userAccount: accounts[0], // TODO: could we use web3.eth.defaultAccount?
                 accounts: accounts,
                 network: network,
-                info: { web3Version: web3Version }
+                info: { web3Version: web3Version, gasLimit: lastBlock.gasLimit }
             });
         } catch (error) {
             return dispatch({
