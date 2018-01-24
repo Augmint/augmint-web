@@ -39,7 +39,7 @@ async function getOrders(offset) {
                 const parsed = {
                     index: order[0].toNumber(),
                     id: order[1].toNumber(),
-                    addedTime: order[2],
+                    addedTime: order[2].toNumber(),
                     bn_price: order[3],
                     tokenAmount: order[4],
                     weiAmount: order[5],
@@ -66,7 +66,19 @@ async function getOrders(offset) {
         { buyOrders: [], sellOrders: [] }
     );
 
+    orders.buyOrders.sort((o1, o2) => isOrderBetter(o1, o2));
+    orders.sellOrders.sort((o1, o2) => isOrderBetter(o1, o2));
     return orders;
+}
+
+export function isOrderBetter(o1, o2) {
+    if (o1.orderType !== o2.orderType) {
+        throw new Error("isOrderBetter(): ordertypes must be the same" + o1 + o2);
+    }
+
+    const dir = o1.orderType === TOKEN_SELL ? 1 : -1;
+    console.log(dir, o1.price, o2.price, o1.price * dir > o2.price * dir, o1.addedTime, o2.addedTime);
+    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.addedTime > o2.addedTime);
 }
 
 export async function placeOrderTx(orderType, amount, price) {
