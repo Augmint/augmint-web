@@ -13,8 +13,8 @@ import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 
-const ETH_DECIMALS = 5;
-const TOKEN_DECIMALS = 2;
+const ETH_DECIMALS = 8;
+const TOKEN_DECIMALS = 4;
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -26,10 +26,10 @@ class PlaceOrderForm extends React.Component {
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
     }
-
-    componentDidMount() {
-        this.props.change("price", "1");
-    }
+    //
+    // componentDidMount() {
+    //     this.props.change("price", "1");
+    // }
 
     onOrderTypeChange(e, { name, index }) {
         this.setState({ orderType: index });
@@ -246,7 +246,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || isLoading}
                             onChange={this.onTokenAmountChange}
                             validate={[tokenAmountValidation]}
-                            normalize={Normalizations.twoDecimals}
+                            normalize={Normalizations.fourDecimals}
                             labelPosition="right"
                         >
                             <input />
@@ -264,7 +264,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
                             validate={[ethAmountValidation]}
-                            normalize={Normalizations.fiveDecimals}
+                            normalize={Normalizations.eightDecimals}
                             labelPosition="right"
                         >
                             <input />
@@ -311,5 +311,6 @@ PlaceOrderForm = connect(state => {
 })(PlaceOrderForm);
 
 export default reduxForm({
-    form: "PlaceOrderForm"
+    form: "PlaceOrderForm",
+    initialValues: { price: 1 }
 })(PlaceOrderForm);

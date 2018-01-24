@@ -118,6 +118,14 @@ export const Normalizations = {
 
     fiveDecimals: (value, previousValue) => {
         return normalizeDecimals(5, value);
+    },
+
+    sixDecimals: (value, previousValue) => {
+        return normalizeDecimals(6, value);
+    },
+
+    eightDecimals: (value, previousValue) => {
+        return normalizeDecimals(8, value);
     }
 };
 
