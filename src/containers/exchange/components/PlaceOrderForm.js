@@ -159,50 +159,15 @@ class PlaceOrderForm extends React.Component {
         const { orderType } = this.state;
         const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
-        const ethAmountValidation = value => {
-            const validations = [Validations.required, Validations.ethAmount];
-            if (orderType === TOKEN_SELL) {
-                // TODO: ?
-            } else {
-                validations.push(Validations.ethUserBalance);
-            }
+        const ethAmountValidations = [Validations.required, Validations.ethAmount];
+        if (orderType === TOKEN_BUY) {
+            ethAmountValidations.push(Validations.ethUserBalance);
+        }
 
-            let result = undefined;
-            validations.some(validation => {
-                const res = validation(value);
-
-                console.log("ethAmountValidation", validation, value, res);
-                if (value !== undefined) {
-                    result = res;
-                    return false;
-                }
-                return true;
-            });
-            return result;
-        };
-
-        const tokenAmountValidation = value => {
-            const validations = [
-                Validations.required,
-                Validations.tokenAmount,
-                Validations.minOrderTokenAmount(this.props.exchange.info.minOrderAmount)
-            ];
-            if (orderType === TOKEN_SELL) {
-                validations.push(Validations.userTokenBalance);
-            }
-
-            let result = undefined;
-            validations.some(validation => {
-                const res = validation(value);
-                console.log("tokenAmountValidation", validation, value, res);
-                if (value !== undefined) {
-                    result = res;
-                    return false;
-                }
-                return true;
-            });
-            return { tokenAmount: result };
-        };
+        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
+        if (orderType === TOKEN_SELL) {
+            tokenAmountValidations.push(Validations.userTokenBalance);
+        }
 
         const header = (
             <Menu size="massive" tabular>
@@ -245,7 +210,7 @@ class PlaceOrderForm extends React.Component {
                             type="number"
                             disabled={submitting || isLoading}
                             onChange={this.onTokenAmountChange}
-                            validate={[tokenAmountValidation]}
+                            validate={tokenAmountValidations}
                             normalize={Normalizations.fourDecimals}
                             labelPosition="right"
                         >
@@ -263,7 +228,7 @@ class PlaceOrderForm extends React.Component {
                             }
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
-                            validate={[ethAmountValidation]}
+                            validate={ethAmountValidations}
                             normalize={Normalizations.eightDecimals}
                             labelPosition="right"
                         >
@@ -312,5 +277,15 @@ PlaceOrderForm = connect(state => {
 
 export default reduxForm({
     form: "PlaceOrderForm",
-    initialValues: { price: 1 }
+    initialValues: { price: 1 },
+    shouldValidate: params => {
+        // workaround for issue that validations are not triggered when changing orderType in menu.
+        // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
+        //       is not always happening before submission attempt.
+        //       also lot of unnecessary validation call
+        if (params.props.error) {
+            return false; // needed otherwise submission error is not shown
+        }
+        return true;
+    }
 })(PlaceOrderForm);

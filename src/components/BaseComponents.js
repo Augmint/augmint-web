@@ -55,7 +55,8 @@ export const Validations = {
         return `Your A-EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A-EUR`;
     },
 
-    minOrderTokenAmount: minValue => value => {
+    minOrderTokenAmount: value => {
+        const minValue = store.getState().exchange.info.minOrderAmount;
         let amount;
         try {
             amount = new BigNumber(value);
@@ -66,7 +67,7 @@ export const Validations = {
         if (amount.gte(minValue)) {
             return undefined;
         } else {
-            return `Token amount is less than minimum order amount of ${minValue} `;
+            return `Token amount is less than minimum order amount of ${minValue} A-EUR`;
         }
     },
 
