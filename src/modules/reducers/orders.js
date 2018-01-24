@@ -1,4 +1,4 @@
-import { fetchOrders, placeOrderTx } from "modules/ethereum/exchangeTransactions";
+import { fetchOrders, placeOrderTx, matchOrdersTx } from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -10,6 +10,10 @@ export const ORDERS_REFRESH_SUCCESS = "orders/ORDERS_REFRESH_SUCCESS";
 export const PLACE_ORDER_REQUESTED = "orders/PLACE_ORDER_REQUESTED";
 export const PLACE_ORDER_ERROR = "orders/PLACE_ORDER_ERROR";
 export const PLACE_ORDER_SUCCESS = "orders/PLACE_ORDER_SUCCESS";
+
+export const MATCH_ORDERS_REQUESTED = "orders/MATCH_ORDERS__REQUESTED";
+export const MATCH_ORDERS_ERROR = "orders/MATCH_ORDERS__ERROR";
+export const MATCH_ORDERS_SUCCESS = "orders/MATCH_ORDERS__SUCCESS";
 
 const initialState = {
     refreshError: null,
@@ -63,6 +67,26 @@ export default (state = initialState, action) => {
                 error: action.error
             };
 
+        case MATCH_ORDERS_REQUESTED:
+            return {
+                ...state,
+                error: null,
+                buyOrder: action.buyOrder,
+                sellOrder: action.sellOrder
+            };
+
+        case MATCH_ORDERS_SUCCESS:
+            return {
+                ...state,
+                result: action.result
+            };
+
+        case MATCH_ORDERS_ERROR:
+            return {
+                ...state,
+                error: action.error
+            };
+
         default:
             return state;
     }
@@ -106,6 +130,29 @@ export function placeOrder(orderType, amount, price) {
         } catch (error) {
             return dispatch({
                 type: PLACE_ORDER_ERROR,
+                error: error
+            });
+        }
+    };
+}
+
+export function matchOrders(buyOrder, sellOrder) {
+    return async dispatch => {
+        dispatch({
+            type: MATCH_ORDERS_REQUESTED,
+            buyOrder: buyOrder,
+            sellOrder: sellOrder
+        });
+
+        try {
+            const result = await matchOrdersTx(buyOrder.index, buyOrder.id, sellOrder.index, sellOrder.id);
+            return dispatch({
+                type: MATCH_ORDERS_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: MATCH_ORDERS_ERROR,
                 error: error
             });
         }

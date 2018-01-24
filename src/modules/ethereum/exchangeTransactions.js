@@ -77,7 +77,6 @@ export function isOrderBetter(o1, o2) {
     }
 
     const dir = o1.orderType === TOKEN_SELL ? 1 : -1;
-    console.log(dir, o1.price, o2.price, o1.price * dir > o2.price * dir, o1.addedTime, o2.addedTime);
     return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.addedTime > o2.addedTime);
 }
 
@@ -142,5 +141,42 @@ export async function placeOrderTx(orderType, amount, price) {
     } catch (error) {
         console.error("Place order failed.\n", error);
         throw new Error("Place order failed.\n" + error);
+    }
+}
+
+export async function matchOrdersTx(buyIndex, buyId, sellIndex, sellId) {
+    try {
+        const gasEstimate = cost.MATCH_ORDERS_GAS;
+        const userAccount = store.getState().web3Connect.userAccount;
+        const exchange = store.getState().exchange.contract.instance;
+
+        const result = await exchange.matchOrders(buyIndex, buyId, sellIndex, sellId, {
+            from: userAccount,
+            gas: gasEstimate
+        });
+
+        if (result.receipt.gasUsed === gasEstimate) {
+            // Neeed for testnet behaviour (TODO: test it!)
+            // TODO: add more tx info
+            throw new Error("Match orders failed. All gas provided was used:  " + result.receipt.gasUsed);
+        }
+
+        if (!result.logs || !result.logs[0] || result.logs[0].event !== "OrderFill") {
+            const error = new Error("OrderFill event wasn't received. Check tx :  " + result.tx);
+            console.error(error, "\nResult received:", result);
+            throw error;
+        }
+
+        return {
+            txResult: result,
+            eth: {
+                gasProvided: gasEstimate,
+                gasUsed: result.receipt.gasUsed,
+                tx: result.tx
+            }
+        };
+    } catch (error) {
+        console.error("Order matching failed.\n", error);
+        throw new Error("Order matching failed.\n" + error);
     }
 }

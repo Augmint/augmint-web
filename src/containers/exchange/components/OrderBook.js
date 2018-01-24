@@ -1,45 +1,86 @@
 import React from "react";
 //import { Button } from "semantic-ui-react";
 import { Pblock } from "components/PageLayout";
-import { MyListGroup, MyListGroupRow as Row, MyListGroupRowColumn as Col, MyGridTable } from "components/MyListGroups";
+import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTable } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/ToolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
 import { TOKEN_SELL } from "modules/reducers/orders";
 
-const OrderList = props => {
-    const { orders, userAccountAddress } = props;
+const OrderItem = props => {
+    const { order, userAccountAddress } = props;
+    const ret = [
+        <Col width={3} key={`${order.orderType}-amount`}>
+            {order.amount}
+            {order.orderType === TOKEN_SELL ? ` A-EUR` : ` ETH`}
+        </Col>,
+        <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
+            {order.price}
+        </Col>,
+        <Col textAlign="right" key={`${order.orderType}-action`}>
+            <MoreInfoTip>
+                Maker: {order.maker}
+                <br />Time: {order.addedTimeText}
+                <br />Order Id: {order.id} | index: {order.index}
+            </MoreInfoTip>
+            {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && "Cancel"}
+        </Col>
+    ];
+    return ret;
+};
 
-    const itemList = orders.map(order => {
-        return (
-            <Row columns={3} key={`ordersRow-${order.orderType}-${order.id}`}>
-                <Col>
-                    {order.amount}
-                    {order.orderType === TOKEN_SELL ? ` A-EUR` : ` ETH`}
-                </Col>
-                <Col>{order.price}</Col>
-                <Col>
-                    <p>
-                        <MoreInfoTip>
-                            Maker: {order.maker}
-                            <br />Time: {order.addedTimeText}
-                            <br />Order Id: {order.id} | index: {order.index}
-                        </MoreInfoTip>
-                        {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && "Cancel order"}
-                    </p>
-                </Col>
+const DummyCols = props => {
+    const ret = [props.count];
+    return ret.map((item, i) => <Col key={i} />);
+};
+
+const OrderList = props => {
+    const { sellOrders, buyOrders, userAccountAddress } = props;
+
+    const totalBuyAmount = buyOrders.reduce((sum, order) => order.amount + sum, 0).toString();
+    const totalSellAmount = sellOrders.reduce((sum, order) => order.amount + sum, 0).toString();
+    const listLen = Math.max(buyOrders.length, sellOrders.length);
+    const itemList = [];
+
+    for (let i = 0; i < listLen; i++) {
+        itemList.push(
+            <Row columns={7} key={`ordersRow-${i}`}>
+                {i < buyOrders.length ? (
+                    <OrderItem order={buyOrders[i]} userAccountAddress={userAccountAddress} />
+                ) : (
+                    <DummyCols count={3} />
+                )}
+                <Col width={1} />
+
+                {i < sellOrders.length ? (
+                    <OrderItem order={sellOrders[i]} userAccountAddress={userAccountAddress} />
+                ) : (
+                    <DummyCols count={3} />
+                )}
             </Row>
         );
-    });
+    }
 
-    return orders.length === 0 ? (
-        "No orders"
-    ) : (
+    return (
         <MyListGroup>
-            <Row columns={3}>
-                <Col>amount</Col>
-                <Col>
-                    price <PriceToolTip />
+            <Row textAlign="center" columns={2}>
+                <Col header="Buy A-EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
+                <Col header="Sell A-EUR">{totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}</Col>
+            </Row>
+            <Row columns={7} textAlign="center">
+                <Col width={3}>
+                    <strong>Amount</strong>
+                </Col>
+                <Col width={2}>
+                    <strong>Price</strong> <PriceToolTip />
+                </Col>
+                <Col />
+                <Col width={1} />
+                <Col width={3}>
+                    <strong>Amount</strong>
+                </Col>
+                <Col width={2}>
+                    <strong>Price</strong> <PriceToolTip />
                 </Col>
                 <Col />
             </Row>
@@ -55,29 +96,23 @@ export default class OrderBook extends React.Component {
         const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
 
-        const totalBuyAmount = isLoading ? "?" : buyOrders.reduce((sum, order) => order.amount + sum, 0).toString();
-        const totalSellAmount = isLoading ? "?" : sellOrders.reduce((sum, order) => order.amount + sum, 0).toString();
-
         return (
             <Pblock loading={isLoading} header={header}>
                 {refreshError && (
                     <ErrorPanel header="Error while fetching order list">{refreshError.message}</ErrorPanel>
                 )}
                 {orders == null && !isLoading && <p>Connecting...</p>}
-                {isLoading && <p>Refreshing order list...</p>}
-
-                <MyGridTable>
-                    <MyGridTable.Row columns={2}>
-                        <MyGridTable.Col header="Buy A-EUR">
-                            {totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
-                            <OrderList orders={buyOrders} userAccountAddress={userAccountAddress} />
-                        </MyGridTable.Col>
-                        <MyGridTable.Col header="Sell A-EUR">
-                            {totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}
-                            <OrderList orders={sellOrders} userAccountAddress={userAccountAddress} />
-                        </MyGridTable.Col>
-                    </MyGridTable.Row>
-                </MyGridTable>
+                {isLoading ? (
+                    <p>Refreshing orders...</p>
+                ) : (
+                    <MyGridTable>
+                        <OrderList
+                            buyOrders={buyOrders}
+                            sellOrders={sellOrders}
+                            userAccountAddress={userAccountAddress}
+                        />
+                    </MyGridTable>
+                )}
             </Pblock>
         );
     }

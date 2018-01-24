@@ -10,6 +10,7 @@ import OrderBook from "./components/OrderBook";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
+import MatchOrdersButton from "./components/MatchOrdersButton";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -43,6 +44,13 @@ class ExchangeHome extends React.Component {
 
                             <Pgrid.Column>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
+                                {orders.orders && (
+                                    <MatchOrdersButton
+                                        buyOrder={orders.orders.buyOrders[0]}
+                                        sellOrder={orders.orders.sellOrders[0]}
+                                        label="Match top sell and buy order"
+                                    />
+                                )}
                                 <OrderBook
                                     orders={orders}
                                     userAccountAddress={userAccount.address}

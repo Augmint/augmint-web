@@ -9,5 +9,6 @@ export const cost = {
     //consecutive : no narr: 45405 - 60405 (higher when sent to account which never received)
     // w narrative: 46733 - 56693
 
-    PLACE_ORDER_GAS: 4000000 // tx going to be replaced
+    PLACE_ORDER_GAS: 250000,
+    MATCH_ORDERS_GAS: 200000
 };
