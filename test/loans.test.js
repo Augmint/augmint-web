@@ -86,6 +86,9 @@ contract("ACE Loans tests", accounts => {
         await loanTestHelper.collectLoan(this, loan, accounts[2]);
     });
 
+    it("Should get loans from offset"); // contract func to be implemented
+    it("Should get loans for one account from offset"); // contract func to be implemented
+
     it("Should NOT repay a loan after paymentperiod is over");
 
     it("Should NOT collect an already collected ACE loan");
@@ -96,4 +99,5 @@ contract("ACE Loans tests", accounts => {
     it("Should get and repay a loan with colletaralRatio > 1");
     it("Should get and collect a loan with colletaralRatio = 1");
     it("Should get and collect a loan with colletaralRatio > 1");
+    it("Should not get a loan when rates = 0");
 });
