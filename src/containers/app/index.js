@@ -21,6 +21,7 @@ import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
+import FlashMessages from "./FlashMessages";
 //import { AppFooter } from "containers/app/AppFooter";
 
 class ScrollToTop extends React.Component {
@@ -44,7 +45,7 @@ class App extends React.Component {
             <div className="Site">
                 <ScrollToTop />
                 <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} />
-
+                <FlashMessages />
                 <div className="Site-content">
                     <Switch>
                         <Route exact path="/" component={isConnected ? ConnectedHome : NotConnectedHome} />

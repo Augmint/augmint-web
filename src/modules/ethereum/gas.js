@@ -10,5 +10,6 @@ export const cost = {
     // w narrative: 46733 - 56693
 
     PLACE_ORDER_GAS: 250000,
-    MATCH_ORDERS_GAS: 200000
+    MATCH_ORDERS_GAS: 200000,
+    CANCEL_ORDER_GAS: 150000
 };

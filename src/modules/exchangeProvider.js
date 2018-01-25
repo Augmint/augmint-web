@@ -2,6 +2,7 @@ import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectExchange, refreshExchange } from "modules/reducers/exchange";
 import { refreshOrders } from "modules/reducers/orders";
+import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
     const exchange = store.getState().exchange;
@@ -67,7 +68,14 @@ const onNewOrder = (error, result) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // Userbalance is refreshed because Transfer is emmitted from neworder tx
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (result.args.weiAmount.toString !== "0" && result.args.maker.toLowerCase() === userAccount.toLowerCase()) {
+        // buy order, no Transfer is emmitted so onNewTransfer is not triggered
+        console.debug(
+            "exchangeProvider.onNewOrder: new buy tokenOrder for current user, dispatching fetchUserBalance()"
+        );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
@@ -75,7 +83,13 @@ const onCancelledOrder = (error, result) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // Userbalance is refreshed because Transfer is emmitted from neworder tx
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (result.args.weiAmount.toString !== "0" && result.args.maker.toLowerCase() === userAccount.toLowerCase()) {
+        console.debug(
+            "exchangeProvider.onCancelledOrder: cancelled buy tokenOrder for current user, dispatching fetchUserBalance()"
+        );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
@@ -85,12 +99,17 @@ const onOrderFill = (error, result) => {
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // Userbalance is refreshed because Transfer is emmitted from orderfill tx
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (result.args.tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
+        console.debug(
+            "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"
+        );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };
 
 // MinOrderAmountChanged(uint newMinOrderAmount);
 const onMinOrderAmountChanged = (error, result) => {
     console.debug("exchangeProvider.onMinOrderAmountChanged: dispatching refreshExchange()");
     store.dispatch(refreshExchange());
-    // Userbalance is refreshed because Transfer is emmitted from orderfill tx
 };
