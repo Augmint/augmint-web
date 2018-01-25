@@ -216,12 +216,9 @@ contract AugmintToken is AugmintTokenInterface {
         require(allowed[_from][msg.sender] >= _amount);
         require(allowed[_from][msg.sender] > 0); // don't allow 0 transferFrom if no approval
 
-        _transfer(_from, _to, _amount, _narrative, 0);
-        if (_fee > 0) {
-            /* we need to deduct fee from _to unlike normal transfer
-             TODO: better way to do this? E.g. allow transfer fee to be deducted from beneficiary? */
-            _transfer(msg.sender, feeAccount, _fee, "TransferFrom fee", 0);
-        }
+        /* NB: fee is deducted from owner. It can result that transferFrom of amount x to fail
+                when x + fee is not availale on owner balance */
+        _transfer(_from, _to, _amount, _narrative, _fee);
 
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }
