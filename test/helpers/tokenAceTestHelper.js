@@ -18,14 +18,12 @@ module.exports = {
 };
 
 const FeeAccount = artifacts.require("./FeeAccount.sol");
-const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
 let tokenAce;
 
 async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
     tokenAce = await TokenAceMock.new(
         FeeAccount.address,
-        InterestPoolAccount.address,
         InterestEarnedAccount.address,
         2000 /* transferFeePt in parts per million = 0.2% */,
         200 /* min: 0.02 ACE */,

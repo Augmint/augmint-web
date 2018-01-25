@@ -44,12 +44,7 @@ async function newLoanManagerMock(_tokenAce, _rates) {
     // disabled product
     await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, false);
 
-    await tokenAce.grantMultiplePermissions(loanManager.address, [
-        "issueAndDisburse",
-        "burnCollectedInterest",
-        "LoanManager"
-    ]);
-    interestPoolAcc = await tokenAce.interestPoolAccount();
+    await tokenAce.grantMultiplePermissions(loanManager.address, ["issueAndDisburse", "LoanManager"]);
     interestEarnedAcc = await tokenAce.interestEarnedAccount();
 
     return loanManager;
@@ -60,7 +55,7 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
     loan.state = 0;
     loan.borrower = borrower;
 
-    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestPoolAcc, interestEarnedAcc];
+    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestEarnedAcc];
 
     const totalSupplyBefore = await tokenAce.totalSupply();
     const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
@@ -75,8 +70,8 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
 
     assert.equal(
         (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.add(loan.repaymentAmount).toString(),
-        "total ACE supply should be increased by the loan amount"
+        totalSupplyBefore.add(loan.loanAmount).toString(),
+        "total ACE supply should be increased by the disbursed loan amount"
     );
 
     let expBalances = [
@@ -100,16 +95,10 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
             eth: balBefore[2].eth.plus(loan.collateral)
         },
         {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[3].ace.add(loan.interestAmount),
-            eth: balBefore[3].eth
-        },
-        {
             name: "interestEarned Acc",
             address: interestEarnedAcc,
-            ace: balBefore[4].ace,
-            eth: balBefore[4].eth
+            ace: balBefore[3].ace,
+            eth: balBefore[3].eth
         }
     ];
 
@@ -119,7 +108,7 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
 }
 
 async function repayLoan(testInstance, loan) {
-    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestPoolAcc, interestEarnedAcc];
+    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestEarnedAcc];
     const totalSupplyBefore = await tokenAce.totalSupply();
     const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
 
@@ -132,8 +121,8 @@ async function repayLoan(testInstance, loan) {
 
     assert.equal(
         (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.sub(loan.repaymentAmount).toString(),
-        "total ACE supply should be reduced by the repaid loan amount"
+        totalSupplyBefore.sub(loan.loanAmount).toString(),
+        "total ACE supply should be reduced by the loan amount (what was disbursed)"
     );
 
     let expBalances = [
@@ -157,16 +146,10 @@ async function repayLoan(testInstance, loan) {
             eth: balBefore[2].eth.minus(loan.collateral)
         },
         {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[3].ace.sub(loan.interestAmount),
-            eth: balBefore[3].eth
-        },
-        {
             name: "interestEarned Acc",
             address: interestEarnedAcc,
-            ace: balBefore[4].ace.add(loan.interestAmount),
-            eth: balBefore[4].eth
+            ace: balBefore[3].ace.add(loan.interestAmount),
+            eth: balBefore[3].eth
         }
     ];
 
@@ -176,14 +159,7 @@ async function repayLoan(testInstance, loan) {
 async function collectLoan(testInstance, loan, collector) {
     loan.collector = collector;
 
-    const testedAccounts = [
-        reserveAcc,
-        loan.borrower,
-        loan.collector,
-        loanManager.address,
-        interestPoolAcc,
-        interestEarnedAcc
-    ];
+    const testedAccounts = [reserveAcc, loan.borrower, loan.collector, loanManager.address, interestEarnedAcc];
     const totalSupplyBefore = await tokenAce.totalSupply();
     const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
     const coveringValue = (await rates.convertToWei(peggedSymbol, loan.repaymentAmount)).add(loan.defaultingFee);
@@ -227,8 +203,8 @@ async function collectLoan(testInstance, loan, collector) {
 
     assert.equal(
         (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.sub(loan.interestAmount).toString(),
-        "interest should be deducted from total ACE supply"
+        totalSupplyBefore.toString(),
+        "totalSupply should be the same"
     );
 
     let expBalances = [
@@ -258,16 +234,10 @@ async function collectLoan(testInstance, loan, collector) {
             eth: balBefore[3].eth.minus(loan.collateral)
         },
         {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[4].ace.sub(loan.interestAmount),
-            eth: balBefore[4].eth
-        },
-        {
             name: "interestEarned Acc",
             address: interestEarnedAcc,
-            ace: balBefore[5].ace,
-            eth: balBefore[5].eth
+            ace: balBefore[4].ace,
+            eth: balBefore[4].eth
         }
     ];
 

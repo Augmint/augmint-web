@@ -76,7 +76,7 @@ contract LoanManager is LoanManagerInterface, Restricted {
         if (repaymentAmount > loanAmount) {
             interestAmount = repaymentAmount.sub(loanAmount);
         }
-        augmintToken.issueAndDisburse(msg.sender, loanAmount, interestAmount, "Loan disbursement");
+        augmintToken.issueAndDisburse(msg.sender, loanAmount, "Loan disbursement");
 
         NewLoan(productId, loanId, msg.sender, msg.value, loanAmount, repaymentAmount);
     }
@@ -114,8 +114,6 @@ contract LoanManager is LoanManagerInterface, Restricted {
             uint collectedCollateral = loans[loanId].collateralAmount.sub(releasedCollateral);
             address(augmintToken).transfer(collectedCollateral);
 
-            // burn interest from InterestPoolAccount
-            augmintToken.burnCollectedInterest(loans[loanId].interestAmount);
             LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
         }
 

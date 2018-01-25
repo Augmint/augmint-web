@@ -14,7 +14,6 @@ export class AugmintStats extends React.Component {
             totalSupply,
             tokenBalance,
             feeAccountAceBalance,
-            interestPoolAccountAceBalance,
             interestEarnedAccountAceBalance,
             ethBalance,
             bn_ethBalance
@@ -46,11 +45,6 @@ export class AugmintStats extends React.Component {
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR fee account</Statistic.Label>
                         <Statistic.Value>{feeAccountAceBalance} A-EUR</Statistic.Value>
-                    </Statistic>
-
-                    <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR interest pool account</Statistic.Label>
-                        <Statistic.Value>{interestPoolAccountAceBalance} A-EUR</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
