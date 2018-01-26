@@ -21,7 +21,7 @@ import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
-//import { AppFooter } from "containers/app/AppFooter";
+import { AppFooter } from "containers/app/AppFooter";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -60,9 +60,9 @@ class App extends React.Component {
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>
-                {/* <div className="Site-footer">
+                <div className="Site-footer">
                     <AppFooter />
-                </div>  */}
+                </div>
             </div>
         );
     }
