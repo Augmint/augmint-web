@@ -50,7 +50,7 @@ async function newLoanManagerMock(_tokenAce, _rates) {
     // defaulting: due in 1 sec, repay in 1sec for testing defaults
     await loanManager.addLoanProduct(1, 990000, 600000, 100000, 50000, true);
     // defaulting no left over collateral: due in 1 sec, repay in 1sec for testing defaults without leftover
-    await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, true);
+    await loanManager.addLoanProduct(1, 900000, 900000, 100000, 100000, true);
     // disabled product
     await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, false);
 
@@ -180,7 +180,20 @@ async function repayLoan(testInstance, loan) {
 
 async function collectLoan(testInstance, loan, collector) {
     loan.collector = collector;
-    const [totalSupplyBefore, balBefore, repaymentEthValue] = await Promise.all([
+    loan.state = 2; // defaulted
+
+    const targetCollectionInToken = loan.repaymentAmount.mul(loan.product.defaultingFeePt.add(1000000)).div(1000000);
+    const targetFeeInToken = loan.repaymentAmount.mul(loan.product.defaultingFeePt).div(1000000);
+    //.round(0, BigNumber.ROUND_DOWN);
+
+    const [
+        totalSupplyBefore,
+        balBefore,
+        collateralInToken,
+        repaymentAmountInWei,
+        targetCollectionInWei,
+        targetFeeInWei
+    ] = await Promise.all([
         tokenAce.totalSupply(),
 
         tokenAceTestHelper.getAllBalances({
@@ -190,19 +203,32 @@ async function collectLoan(testInstance, loan, collector) {
             loanManager: loanManager.address,
             interestEarned: interestEarnedAcc
         }),
-
-        rates.convertToWei(peggedSymbol, loan.repaymentAmount)
+        rates.convertFromWei(peggedSymbol, loan.collateral),
+        rates.convertToWei(peggedSymbol, loan.repaymentAmount),
+        rates.convertToWei(peggedSymbol, targetCollectionInToken),
+        rates.convertToWei(peggedSymbol, targetFeeInToken)
     ]);
 
-    const coveringValue = repaymentEthValue.add(loan.defaultingFee);
-    let releasedCollateral;
-    if (coveringValue < loan.collateral) {
-        releasedCollateral = loan.collateral.sub(coveringValue);
-    } else {
-        releasedCollateral = 0;
-    }
+    const releasedCollateral = BigNumber.max(loan.collateral.sub(targetCollectionInWei), 0);
     const collectedCollateral = loan.collateral.sub(releasedCollateral);
-    loan.state = 2; // defaulted
+    const defaultingFee = BigNumber.min(targetFeeInWei, collectedCollateral);
+
+    const rate = await rates.rates("EUR");
+    // console.log(
+    //     `    *** Collection params:
+    //      A-EUR/EUR: ${rate[0] / 10000}
+    //      defaulting fee pt: ${loan.product.defaultingFeePt / 10000} %
+    //      repaymentAmount: ${loan.repaymentAmount / 10000} A-EUR = ${web3.fromWei(repaymentAmountInWei)} ETH
+    //      collateral: ${web3.fromWei(loan.collateral).toString()} ETH = ${collateralInToken / 10000} A-EUR
+    //      --------------------
+    //      targetFee: ${targetFeeInToken / 10000} A-EUR = ${web3.fromWei(targetFeeInWei).toString()} ETH
+    //      target collection : ${targetCollectionInToken / 10000} A-EUR = ${web3
+    //         .fromWei(targetCollectionInWei)
+    //         .toString()} ETH
+    //      collected: ${web3.fromWei(collectedCollateral).toString()} ETH
+    //      released: ${web3.fromWei(releasedCollateral).toString()} ETH
+    //      defaultingFee: ${web3.fromWei(defaultingFee).toString()} ETH`
+    // );
 
     const tx = await loanManager.collect([loan.id], { from: loan.collector });
     testHelper.logGasUse(testInstance, tx, "collect 1");
@@ -215,7 +241,7 @@ async function collectLoan(testInstance, loan, collector) {
             borrower: loan.borrower,
             collectedCollateral: collectedCollateral.toString(),
             releasedCollateral: releasedCollateral.toString(),
-            defaultingFee: loan.defaultingFee.toString()
+            defaultingFee: defaultingFee.toString()
         }),
 
         loanAsserts(loan),
@@ -301,10 +327,6 @@ async function calcLoanValues(rates, product, collateralWei) {
     ret.disbursementTime = moment()
         .utc()
         .unix();
-    ret.defaultingFee = ret.collateral
-        .mul(product.defaultingFeePt)
-        .div(1000000)
-        .round(0, BigNumber.ROUND_DOWN);
     ret.product = product;
     return ret;
 }
@@ -320,7 +342,7 @@ async function newLoanEventAsserts(expLoan) {
             repaymentAmount: expLoan.repaymentAmount.toString()
         }),
 
-        await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+        testHelper.assertEvent(tokenAce, "AugmintTransfer", {
             from: tokenAce.address,
             to: expLoan.borrower,
             amount: expLoan.loanAmount.toString(),

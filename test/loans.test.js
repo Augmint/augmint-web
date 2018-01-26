@@ -70,7 +70,7 @@ contract("ACE Loans tests", accounts => {
         await testHelper.expectThrow(loanManager.releaseCollateral(loan.id, { from: loan.borrower }));
     });
 
-    it("Should collect a defaulted ACE loan and send back leftover collateral", async function() {
+    it("Should collect a defaulted ACE loan and send back leftover collateral ", async function() {
         const loan = await loanTestHelper.createLoan(this, products.defaulting, accounts[1], web3.toWei(0.5));
 
         await testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber());
@@ -78,12 +78,50 @@ contract("ACE Loans tests", accounts => {
         await loanTestHelper.collectLoan(this, loan, accounts[2]);
     });
 
-    it("Should collect a defaulted ACE loan when no leftover collateral", async function() {
-        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(2));
+    it("Should collect a defaulted ACE loan when no leftover collateral (collection exactly covered)", async function() {
+        await rates.setRate("EUR", 10000000);
+        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(1));
 
-        await testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber());
+        await Promise.all([
+            rates.setRate("EUR", 9900000),
+            testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber())
+        ]);
 
         await loanTestHelper.collectLoan(this, loan, accounts[2]);
+    });
+
+    it("Should collect a defaulted ACE loan when no leftover collateral (collection partially covered)", async function() {
+        await rates.setRate("EUR", 10000000);
+        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(1));
+
+        await Promise.all([
+            rates.setRate("EUR", 9890000),
+            testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber())
+        ]);
+
+        await loanTestHelper.collectLoan(this, loan, accounts[2]);
+    });
+
+    it("Should collect a defaulted ACE loan when no leftover collateral (only fee covered)", async function() {
+        await rates.setRate("EUR", 9980000);
+        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(2));
+        await Promise.all([
+            rates.setRate("EUR", 1),
+            testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber())
+        ]);
+
+        await loanTestHelper.collectLoan(this, loan, accounts[2]);
+    });
+
+    it("Should not collect when rate = 0", async function() {
+        await rates.setRate("EUR", 9980000);
+        const loan = await loanTestHelper.createLoan(this, products.defaultingNoLeftOver, accounts[1], web3.toWei(2));
+        await Promise.all([
+            rates.setRate("EUR", 0),
+            testHelper.waitForTimeStamp((await loanManager.loans(loan.id))[8].toNumber())
+        ]);
+
+        testHelper.expectThrow(loanTestHelper.collectLoan(this, loan, accounts[2]));
     });
 
     it("Should get loans from offset"); // contract func to be implemented

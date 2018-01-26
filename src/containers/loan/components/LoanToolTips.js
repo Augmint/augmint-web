@@ -29,14 +29,15 @@ export function DefaultingFeeTooltip(props) {
         <ToolTip header="Defaulting fee">
             If you don't repay your loan on maturity then the system will calculate the ETH collateral required to cover
             your A-EUR repayment due. It will use the ETH/EUR rates at moment of the collection executed.<br />
-            It will add a percentage of your collateral as fee. The leftover collateral ETH (if any) will be sent back
-            to your account.
+            It will add a percentage of your repayment amount as fee. The leftover collateral ETH (if any) will be sent
+            back to your account.
             <br />
-            E.g. 1 ETH worth 200 EUR at the moment of collection and the defaulting fee is 5%.<br />
-            You don't repay 200 A-EUR for a loan with 2 ETH in escrow.<br />
-            To cover you missed repayment 1 ETH required. An additional 0.05ETH is required to cover the 5% defaulting
-            fee. The collector will send you back 0.95 ETH from your collateral and will take the rest into the Augmint
-            reserves.
+            <small>
+                E.g. 1 ETH worth 200 EUR at the moment of collection and the defaulting fee is 5%.<br />
+                You don't repay 200 A-EUR with 2 ETH in escrow.<br />
+                To cover you missed repayment 1 ETH + 0.05ETH (5% of 200 A-EUR) is required.<br />
+                The collector will send you back 0.95 ETH and will take 1.05 ETH into the Augmint reserves.
+            </small>
         </ToolTip>
     );
 }
