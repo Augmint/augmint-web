@@ -1,0 +1,30 @@
+.key-features > * {
+    margin-bottom: 150px;
+    margin-top: 150px;
+}
+
+.key-features__header {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 620px;
+}
+
+h2,
+.key-features__header > h2.ui.header {
+    font-weight: 250;
+}
+
+h5,
+h5.ui.header {
+    font-weight: 200;
+    font-size: 12px;
+}
+
+p {
+    line-height: 22px;
+    font-size: 16px;
+}
+
+p.opac {
+    opacity: 0.6;
+}
