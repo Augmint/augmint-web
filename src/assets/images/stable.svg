@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="105" height="66" viewBox="0 0 105 66">
+    <defs>
+        <linearGradient id="a" x1="50%" x2="50%" y1="32.207%" y2="149.759%">
+            <stop offset="0%" stop-color="#FFAD00"/>
+            <stop offset="100%" stop-color="#C500FF" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="b" cy="-97.295%" r="147.295%" fx="50%" fy="-97.295%" gradientTransform="matrix(0 1 -.85714 0 -.334 -1.473)">
+            <stop offset="0%" stop-color="#F00"/>
+            <stop offset="100%" stop-color="#EF0" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path fill="url(#a)" d="M35 30l17.5 9.5L70 30v20L52.5 60 35 50z" transform="translate(0 -15)"/>
+        <path fill="url(#b)" d="M35 0l17.5 9.5L70 0v20L52.5 30 35 20z" transform="rotate(-180 52.5 7.5)"/>
+        <path fill="url(#a)" d="M70 51l17.5 9.5L105 51v20L87.5 81 70 71z" transform="translate(0 -15)"/>
+        <path fill="url(#b)" d="M70 21l17.5 9.5L105 21v20L87.5 51 70 41z" transform="rotate(-180 87.5 28.5)"/>
+        <path fill="url(#a)" d="M0 51l17.5 9.5L35 51v20L17.5 81 0 71z" transform="translate(0 -15)"/>
+        <path fill="url(#b)" d="M0 21l17.5 9.5L35 21v20L17.5 51 0 41z" transform="rotate(-180 17.5 28.5)"/>
+    </g>
+</svg>
