@@ -40,7 +40,7 @@ module.exports = {
             port: 8545,
             network_id: 3,
             gas: 4700000, // Gas limit used for deploys
-            gasPrice: 21000000000 // 21 Gwei
+            gasPrice: 140000000000 // 140 Gwei
         }
     }
 };
