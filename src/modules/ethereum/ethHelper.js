@@ -137,21 +137,26 @@ export function getEventLogs(contract, event, filters, fromBlock, toBlock) {
                     //     decodedData
                     // );
                     for (let i = 0; i < decodedData.length; i++) {
-                        let r = res.result[i];
-                        let blockNumber = parseInt(r.blockNumber, 16);
-                        filterResult.push({
-                            address: r.address,
-                            blockNumber: blockNumber,
-                            gasPrice: parseInt(r.gasPrice, 16),
-                            gasUsed: parseInt(r.gasUsed, 16),
-                            logIndex: r.logIndex === "0x" ? 0 : parseInt(r.logIndex, 16),
-                            timeStamp: parseInt(r.timeStamp, 16),
-                            transactionHash: r.transactionHash,
-                            transactionIndex: r.transactionIndex === "0x" ? 0 : parseInt(r.transactionIndex, 16),
-                            type: blockNumber > 0 ? "mined" : "pending",
-                            event: decodedData[i].name,
-                            args: decodedData[i].args
-                        });
+                        const r = res.result[i];
+                        const blockNumber = parseInt(r.blockNumber, 16);
+
+                        // For some reasone Etherscan returns other topics with topic[0] even if filter passed for topic0
+                        //    so we filter manually TODO: check if it's b/c incorrectly passed topic0_x_opr args
+                        if (r.topics[0] === topic0) {
+                            filterResult.push({
+                                address: r.address,
+                                blockNumber: blockNumber,
+                                gasPrice: parseInt(r.gasPrice, 16),
+                                gasUsed: parseInt(r.gasUsed, 16),
+                                logIndex: r.logIndex === "0x" ? 0 : parseInt(r.logIndex, 16),
+                                timeStamp: parseInt(r.timeStamp, 16),
+                                transactionHash: r.transactionHash,
+                                transactionIndex: r.transactionIndex === "0x" ? 0 : parseInt(r.transactionIndex, 16),
+                                type: blockNumber > 0 ? "mined" : "pending",
+                                event: decodedData[i].name,
+                                args: decodedData[i].args
+                            });
+                        }
                     }
                     resolve(filterResult);
                 }

@@ -108,16 +108,15 @@ export async function transferTokenTx(payload) {
 
 export async function fetchTransferListTx(address, fromBlock, toBlock) {
     try {
-        let augmintToken = store.getState().augmintToken.contract;
-        let filterResult = await getEventLogs(
+        const augmintToken = store.getState().augmintToken.contract;
+        const filterResult = await getEventLogs(
             augmintToken,
             augmintToken.instance.AugmintTransfer,
             { from: address, to: address }, // filter with OR!
             fromBlock,
             toBlock
         );
-        //console.debug("fetchTransferListTx filterResult", filterResult);
-        let transfers = await Promise.all(
+        const transfers = await Promise.all(
             filterResult.map((tx, index) => {
                 return formatTransfer(address, tx);
             })
@@ -135,7 +134,7 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
 
 export async function processTransferTx(address, tx) {
     try {
-        let transfers = store.getState().userTransfers.transfers;
+        const transfers = store.getState().userTransfers.transfers;
         let result = await formatTransfer(address, tx);
         // TODO: sort and look for dupes?
 
