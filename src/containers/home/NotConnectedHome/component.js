@@ -99,15 +99,19 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                     </Container>
-                    {/* <Rail attached internal position='left'>
-                        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-                            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: 'black'}}>
-                                <span style={{fontSize: '100px'}}>1</span>
-                                <span>Euro</span>
+                    {<Rail attached internal position='left' style={{width: 'auto'}}>
+                        <div style={styles.howItWorksRail}>
+                            <div style={styles.howItWorksRailBox}>
+                                <div>1</div>
+                                <div style={styles.howItWorksRailBoxSpan}>Euro</div>
                             </div>
                             <InterchangeIcon />
+                            <div style={styles.howItWorksRailBox}>
+                                <div>1</div>
+                                <div style={styles.howItWorksRailBoxSpan}>A-Euro</div>
+                            </div>
                         </div>
-                    </Rail> */}
+                    </Rail>}
                 </Segment>
             </Segment>
         );
