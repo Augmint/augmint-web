@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from "semantic-ui-react";
 
-import { StableIcon, DecentralizedIcon, SecureIcon } from '../../../components/Icons';
+import { StableIcon, DecentralizedIcon, SecureIcon, DownArrowIcon } from '../../../components/Icons';
 
 export const keyFeatures = [
     {
@@ -53,5 +53,14 @@ export const keyBenefits = [
         type: 'individual',
         text: 'Utilise the blockchain with secure, decentralised way of spending',
     },
-    
+];
+
+export const howItWorks = [
+    {
+        pk: 'hiw-1',
+        image: <DownArrowIcon/>,
+        type: 'loan',
+        title: 'DEPOSIT ETH',
+        text: 'Donec id elit non mi porta gravida at eget metus.',
+    }
 ];

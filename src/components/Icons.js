@@ -6,6 +6,8 @@ import {Image} from 'semantic-ui-react';
 import stableSVG from "assets/images/stable.svg";
 import decentralizedSVG from "assets/images/decentralized.svg";
 import secureSVG from "assets/images/secure.svg";
+import downArrowSVG from "assets/images/down-arrow.svg";
+import interchangeSVG from "assets/images/interchange.svg";
 
 export const BalanceIcon = () => (
   <Image centered>
@@ -42,3 +44,10 @@ export const SecureIcon = () => (
   <Image centered src={secureSVG} />
 );
 
+export const DownArrowIcon = () => (
+  <Image centered src={downArrowSVG} />
+);
+
+export const InterchangeIcon = () => (
+  <Image src={interchangeSVG} />
+);

@@ -18,7 +18,7 @@ import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import ConnectedHome from "containers/home/ConnectedHome";
-import NotConnectedHome from "containers/home/NotConnectedHome/index";
+import NotConnectedHome from "containers/home/NotConnectedHome/component";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
 import { AppFooter } from "containers/app/AppFooter";
@@ -73,3 +73,4 @@ const mapStateToProps = state => ({
 });
 
 export default (App = withRouter(connect(mapStateToProps)(App)));
+
