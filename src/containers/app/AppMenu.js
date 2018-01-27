@@ -1,6 +1,10 @@
 import React from "react";
-import { Menu, Dropdown } from "semantic-ui-react";
+import { Menu, Dropdown, Image, Segment } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
+
+import augmintLogo from "assets/images/logo/logo.png";
+import augmintLogo2x from "assets/images/logo/logo@2x.png";
+import augmintLogo3x from "assets/images/logo/logo@3x.png";
 
 export function AppMenu(props) {
     const { isConnected, network, isLoading } = props.web3Connect;
@@ -14,64 +18,65 @@ export function AppMenu(props) {
         connectionStatus = "not connected";
     }
     return (
-        <Menu size="large">
-                <Menu.Item
-                    active={location.pathname === "/"}
-                    as={Link}
-                    to="/"
-                >
-                    Home
-                </Menu.Item>
-
-                <Menu.Item
-                    active={location.pathname === "/concept"}
-                    as={Link}
-                    to="/concept"
-                >
-                    Concept
-                </Menu.Item>
-
-                {isConnected && (
-                    <Menu.Item as={NavLink} to="/account">
-                        My Account
-                    </Menu.Item>
-                )}
-                {isConnected && (
-                    <Menu.Item as={NavLink} to="/exchange">
-                        Buy/Sell ACD
-                    </Menu.Item>
-                )}
-                {isConnected && (
-                    <Menu.Item as={NavLink} to="/loan/new">
-                        Get ACD Loan
-                    </Menu.Item>
-                )}
-                {isConnected && (
-                    <Menu.Item as={NavLink} to="/reserves">
-                        Reserves
-                    </Menu.Item>
-                )}
-
-                <Menu.Menu position="right">
-                    <Menu.Item as={NavLink} to="/faq">
-                        FAQ
+        <div>
+            <Menu size="large" style={{margin: '0'}}>
+                    <Menu.Item
+                        active={location.pathname === "/"}
+                        as={Link}
+                        to="/"
+                    >
+                        Home
                     </Menu.Item>
 
-                    <Menu.Item>
-                        <small>
-                            <Dropdown text={connectionStatus}>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item
-                                        icon="settings"
-                                        as={NavLink}
-                                        to="/under-the-hood"
-                                        text="Under the hood"
-                                    />
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </small>
+                    <Menu.Item
+                        active={location.pathname === "/concept"}
+                        as={Link}
+                        to="/concept"
+                    >
+                        Concept
                     </Menu.Item>
-                </Menu.Menu>
-        </Menu>
+
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/account">
+                            My Account
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/exchange">
+                            Buy/Sell ACD
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/loan/new">
+                            Get ACD Loan
+                        </Menu.Item>
+                    )}
+                    {isConnected && (
+                        <Menu.Item as={NavLink} to="/reserves">
+                            Reserves
+                        </Menu.Item>
+                    )}
+
+                    <Menu.Menu position="right">
+                        <Menu.Item>
+                            <small>
+                                <Dropdown text={connectionStatus}>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item
+                                            icon="settings"
+                                            as={NavLink}
+                                            to="/under-the-hood"
+                                            text="Under the hood"
+                                        />
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </small>
+                        </Menu.Item>
+                    </Menu.Menu>
+            </Menu>
+            <Segment basic textAlign="center" style={{display: 'flex', justifyContent: 'center', marginTop: '0', padding: '0', padding: '0'}}>
+                <Image src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}/>
+            </Segment>
+        </div>
     );
 }
