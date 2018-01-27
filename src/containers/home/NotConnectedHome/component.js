@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Container, Grid, Segment, Rail } from "semantic-ui-react";
 
-import { BalanceIcon, InterchangeIcon } from '../../../components/Icons';
+import { BalanceIcon, InterchangeIcon } from 'components/Icons';
 
 import { keyFeatures, keyBenefits, howItWorks } from './helpers.js';
 

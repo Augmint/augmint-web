@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Grid } from "semantic-ui-react";
-
 import { StableIcon, DecentralizedIcon, SecureIcon, DownArrowIcon } from '../../../components/Icons';
 
 export const keyFeatures = [
