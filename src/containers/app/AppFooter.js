@@ -14,15 +14,15 @@ const segmentStyle = {
 
 export function AppFooter(props) {
     let community = "WE'RE AN ACTIVE COMUNITY",
-        description = "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance stucture - anyone ca join at any time.";
+        description = "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance stucture - anyone can join at any time.";
 
     return (
         <Segment basic textAlign="center" className='footer' style={segmentStyle}>
             <Container fluid>
-                <Segment basic className='title'>
+                <Segment basic as='h5'className='title'>
                   {community}
                 </Segment>
-                <Segment basic className='description'>
+                <Segment basic as='p' className='description'>
                   {description}
                 </Segment>
                 <Segment basic className='join-slack' size="tiny" as="a" href="https://decent-team.slack.com/messages/C7J38BUM6/" target="_blank">
