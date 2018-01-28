@@ -153,7 +153,7 @@ export async function processTransferTx(address, tx) {
 async function formatTransfer(address, tx) {
     //console.debug("formatTransfer args tx: ", tx);
     const direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
-    const blockTimeStamp, bn_amount, bn_fee;
+    let blockTimeStamp, bn_amount, bn_fee;
     let feeTmp, amountTmp;
     if (tx.timeStamp) {
         // when we query from etherscan we get timestamp and args are not BigNumber
