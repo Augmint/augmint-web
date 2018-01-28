@@ -22,32 +22,32 @@ export const keyFeatures = [
 
 export const keyBenefits = [
     {
-        pk: 1,
+        pk: 'benefit-1',
         type: 'business',
         text: 'Offer your services in a variety of digital currencies',
     },
     {
-        pk: 2,
+        pk: 'benefit-2',
         type: 'business',
         text: 'Keep prices simple by using a digital currency people can relate to',
     },
     {
-        pk: 3,
+        pk: 'benefit-3',
         type: 'business',
         text: 'Lower costs and reduce time by avoiding financial institutions',
     },
     {
-        pk: 4,
+        pk: 'benefit-4',
         type: 'individual',
         text: 'Move money between exchanges with peace of mind',
     },
     {
-        pk: 5,
+        pk: 'benefit-5',
         type: 'individual',
         text: 'Spend your cryptocurrencies without losing from future earnings',
     },
     {
-        pk: 6,
+        pk: 'benefit-6',
         type: 'individual',
         text: 'Utilise the blockchain with secure, decentralised way of spending',
     },

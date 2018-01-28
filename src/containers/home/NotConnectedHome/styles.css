@@ -59,6 +59,10 @@ p.opac {
 .ui.basic.segment.how-to-use {
     padding-top: 200px;
     padding-bottom: 200px;
-    padding-left: 300px;
     background: linear-gradient(rgba(53, 0, 55, 0) 0%,rgba(53, 0, 55, 1) 20%, rgba(53, 0, 55, 1) 80%, rgba(53, 0, 55, 0) 100%);
+}
+@media (min-height: 768px) {
+    .ui.basic.segment.how-to-use {
+        padding-left: 300px;
+    }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Container, Grid, Segment, Rail } from "semantic-ui-react";
+import { Header, Container, Grid, Segment, Rail, Responsive } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from 'components/Icons';
 
@@ -26,7 +26,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyFeatures.map(feature => (
-                                <Grid.Column textAlign="center" key={feature.title}>
+                                <Grid.Column mobile="16" textAlign="center" key={feature.title}>
                                     <Segment style={styles.keyFeaturesSegment} basic>
                                         {feature.image}
                                     </Segment>
@@ -47,7 +47,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyBenefits.filter(item => item.type === 'business').map(item => (
-                            <Grid.Column textAlign="left" key={item.title}>
+                            <Grid.Column  mobile="16" textAlign="left" key={item.pk}>
                                 <div className="list-item">
                                     <p className="opac">
                                         {item.text}
@@ -63,7 +63,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyBenefits.filter(item => item.type === 'individual').map(item => (
-                            <Grid.Column textAlign="left" key={item.pk}>
+                            <Grid.Column  mobile="16" textAlign="left" key={item.pk}>
                                 <div className="list-item">
                                     <p className="opac">
                                         {item.text}
@@ -80,7 +80,7 @@ export default class NotConnectedHome extends React.Component {
                         <Header as="h2">
                             Augmint loans
                         </Header>
-                        <p class="opac">
+                        <p className="opac">
                             Augmint offers the ability to use your cryptocurrencies without<br/>losing them. Get an ACD loan and spend easily.
                         </p>
                         <Grid columns="equal">
@@ -99,7 +99,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                     </Container>
-                    {<Rail attached internal position='left' style={{width: 'auto'}}>
+                    {<Responsive as={Rail} minWidth={768} attached internal position='left' style={{width: 'auto'}}>
                         <div style={styles.howItWorksRail}>
                             <div style={styles.howItWorksRailBox}>
                                 <div>1</div>
@@ -111,7 +111,7 @@ export default class NotConnectedHome extends React.Component {
                                 <div style={styles.howItWorksRailBoxSpan}>A-Euro</div>
                             </div>
                         </div>
-                    </Rail>}
+                    </Responsive>}
                 </Segment>
             </Segment>
         );
