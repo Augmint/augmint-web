@@ -29,5 +29,5 @@ export const howItWorksRailBox = {
 export const howItWorksRailBoxSpan = {
     fontSize: '14px',
     lineHeight: '14px',
-    fontWeight: '200'
+    fontWeight: '300'
 };
