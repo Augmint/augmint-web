@@ -23,19 +23,21 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const exchange = store.getState().exchange.contract.instance;
-    exchange.NewOrder({ fromBlock: "latest", toBlock: "pending" }).watch(onNewOrder);
-    exchange.OrderFill({ fromBlock: "latest", toBlock: "pending" }).watch(onOrderFill);
-    exchange.CancelledOrder({ fromBlock: "latest", toBlock: "pending" }).watch(onCancelledOrder);
-    exchange.MinOrderAmountChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onMinOrderAmountChanged);
+    const exchange = store.getState().exchange.contract.ethersInstance;
+    console.debug("**** setup list: ", exchange);
+    exchange.onneworder = onNewOrder;
+    exchange.onorderfill = onOrderFill;
+    exchange.oncancelledorder = onCancelledOrder;
+    exchange.onminorderamountchanged = onMinOrderAmountChanged;
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.NewOrder().stopWatching();
-        oldInstance.instance.OrderFill().stopWatching();
-        oldInstance.instance.CancelledOrder().stopWatching();
-    }
+    // TODO: test if we need this with ethers
+    // if (oldInstance && oldInstance.instance) {
+    //     oldInstance.instance.NewOrder().stopWatching();
+    //     oldInstance.instance.OrderFill().stopWatching();
+    //     oldInstance.instance.CancelledOrder().stopWatching();
+    // }
 };
 
 // const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
@@ -64,12 +66,12 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
 };
 
 // NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = (error, result) => {
+const onNewOrder = (orderIndex, orderId, maker, price, tokenAmount, weiAmount) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.weiAmount.toString !== "0" && result.args.maker.toLowerCase() === userAccount.toLowerCase()) {
+    if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
         console.debug(
             "exchangeProvider.onNewOrder: new buy tokenOrder for current user, dispatching fetchUserBalance()"
@@ -79,12 +81,12 @@ const onNewOrder = (error, result) => {
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
-const onCancelledOrder = (error, result) => {
+const onCancelledOrder = (orderId, maker, tokenAmount, weiAmount) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.weiAmount.toString !== "0" && result.args.maker.toLowerCase() === userAccount.toLowerCase()) {
+    if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onCancelledOrder: cancelled buy tokenOrder for current user, dispatching fetchUserBalance()"
         );
@@ -93,14 +95,14 @@ const onCancelledOrder = (error, result) => {
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
-const onOrderFill = (error, result) => {
+const onOrderFill = (tokenBuyer, tokenSeller, buyTokenOrderId, sellTokenOrderId, price, weiAmount, tokenAmount) => {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and regreshOrders()");
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (result.args.tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
+    if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"
         );
@@ -109,7 +111,7 @@ const onOrderFill = (error, result) => {
 };
 
 // MinOrderAmountChanged(uint newMinOrderAmount);
-const onMinOrderAmountChanged = (error, result) => {
+const onMinOrderAmountChanged = newMinOrderAmount => {
     console.debug("exchangeProvider.onMinOrderAmountChanged: dispatching refreshExchange()");
     store.dispatch(refreshExchange());
 };

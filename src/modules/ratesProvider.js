@@ -22,14 +22,15 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const rates = store.getState().rates.contract.instance;
-    rates.RateChanged({ fromBlock: "latest", toBlock: "pending" }).watch(onRateChange);
+    const rates = store.getState().rates.contract.ethersInstance;
+    rates.onratechanged = onRateChange;
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.RateChanged().stopWatching();
-    }
+    // TODO: test if we need this with ethers
+    // if (oldInstance && oldInstance.instance) {
+    //     oldInstance.instance.RateChanged().stopWatching();
+    // }
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
@@ -57,7 +58,8 @@ const refreshRatesIfNeeded = (newVal, oldVal) => {
     }
 };
 
-const onRateChange = (error, result) => {
+// RateChanged(bytes32 symbol, uint newRate);
+const onRateChange = (symbol, newRate) => {
     console.debug("ratesProvider.onRateChange(): RateChange event. Dispatching refreshRates()");
     store.dispatch(refreshRates());
 };

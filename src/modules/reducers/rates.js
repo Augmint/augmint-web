@@ -3,7 +3,7 @@
     */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import rates_artifacts from "contractsBuild/Rates.json";
+import ratesArtifacts from "contractsBuild/Rates.json";
 import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import BigNumber from "bignumber.js";
 
@@ -89,7 +89,7 @@ export const connectRates = () => {
         try {
             return dispatch({
                 type: RATES_CONNECT_SUCCESS,
-                contract: await SolidityContract.connectNew(store.getState().web3Connect.web3Instance, rates_artifacts)
+                contract: await SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
             });
         } catch (error) {
             return dispatch({

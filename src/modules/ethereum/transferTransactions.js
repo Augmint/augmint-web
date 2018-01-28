@@ -13,9 +13,9 @@ import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
 
 export function getTransferFee(amount) {
-    let feePt = store.getState().augmintToken.info.feePt;
-    let feeMin = store.getState().augmintToken.info.feeMin;
-    let feeMax = store.getState().augmintToken.info.feeMax;
+    const feePt = store.getState().augmintToken.info.feePt;
+    const feeMin = store.getState().augmintToken.info.feeMin;
+    const feeMax = store.getState().augmintToken.info.feeMax;
 
     let fee = amount
         .mul(feePt)
@@ -30,19 +30,20 @@ export function getTransferFee(amount) {
 }
 
 export function getMaxTransfer(amount) {
-    let feePt = store.getState().augmintToken.info.feePt;
-    let feeMin = store.getState().augmintToken.info.feeMin;
-    let feeMax = store.getState().augmintToken.info.feeMax;
-    let maxAmount;
+    const feePt = store.getState().augmintToken.info.feePt;
+    const feeMin = store.getState().augmintToken.info.feeMin;
+    const feeMax = store.getState().augmintToken.info.feeMax;
 
-    let minLimit = feeMin
+    const minLimit = feeMin
         .div(feePt)
         .mul(1000000)
         .round(0, BigNumber.ROUND_DOWN);
-    let maxLimit = feeMax
+    const maxLimit = feeMax
         .div(feePt)
         .mul(1000000)
         .round(0, BigNumber.ROUND_DOWN);
+
+    let maxAmount;
     if (amount.lte(minLimit)) {
         maxAmount = amount.sub(feeMin);
     } else if (amount.gte(maxLimit)) {
@@ -61,12 +62,12 @@ export function getMaxTransfer(amount) {
 export async function transferTokenTx(payload) {
     let { payee, tokenAmount, narrative } = payload;
     try {
-        let gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
-        let userAccount = store.getState().web3Connect.userAccount;
-        let augmintToken = store.getState().augmintToken;
-        let tokencAmount = tokenAmount.times(augmintToken.info.bn_decimalsDiv);
+        const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
+        const userAccount = store.getState().web3Connect.userAccount;
+        const augmintToken = store.getState().augmintToken;
+        const tokencAmount = tokenAmount.times(augmintToken.info.bn_decimalsDiv);
         narrative = narrative == null ? "" : payload.narrative.trim();
-        let result = await augmintToken.contract.instance.transferWithNarrative(
+        const result = await augmintToken.contract.instance.transferWithNarrative(
             payee,
             tokencAmount.toString(), // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
             narrative,
@@ -87,7 +88,7 @@ export async function transferTokenTx(payload) {
             throw new Error("Transfer event wasn't received. Check tx :  " + result.tx);
         }
 
-        let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
+        const bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
         return {
             txResult: result,
             to: result.logs[0].args.to,
@@ -151,8 +152,8 @@ export async function processTransferTx(address, tx) {
 
 async function formatTransfer(address, tx) {
     //console.debug("formatTransfer args tx: ", tx);
-    let direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
-    let blockTimeStamp, bn_amount, bn_fee;
+    const direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
+    const blockTimeStamp, bn_amount, bn_fee;
     let feeTmp, amountTmp;
     if (tx.timeStamp) {
         // when we query from etherscan we get timestamp and args are not BigNumber
@@ -167,7 +168,7 @@ async function formatTransfer(address, tx) {
     bn_amount = amountTmp.div(new BigNumber(10000));
     bn_fee = direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
 
-    let result = {
+    const result = {
         blockNumber: tx.blockNumber,
         blockHash: tx.blockHash,
         transactionIndex: tx.transactionIndex,

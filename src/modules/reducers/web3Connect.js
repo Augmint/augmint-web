@@ -1,5 +1,6 @@
 import { default as Web3 } from "web3";
 import { getNetworkDetails, asyncGetAccounts } from "modules/ethereum/ethHelper";
+import ethers from "ethers";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
@@ -14,7 +15,8 @@ const initialState = {
     accounts: null,
     isLoading: false,
     isConnected: false,
-    network: { id: "?", name: "?" }
+    network: { id: "?", name: "?" },
+    ethers: { provider: null, signer: null }
 };
 
 var web3;
@@ -38,7 +40,8 @@ export default (state = initialState, action) => {
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
                 network: action.network,
-                info: action.info
+                info: action.info,
+                ethers: action.ethers
             };
 
         case WEB3_SETUP_ERROR:
@@ -68,9 +71,14 @@ export const setupWeb3 = () => {
         });
 
         try {
+            let provider, signer;
             if (typeof window.web3 !== "undefined") {
                 console.debug("Using web3 detected from external source.");
                 web3 = new Web3(window.web3.currentProvider);
+
+                // Ethers: Use Mist/MetaMask's provider
+                provider = new ethers.providers.Web3Provider(web3.currentProvider);
+                signer = provider.getSigner();
             } else {
                 //throw new Error("No web3 detected.");
                 //set the provider you want from Web3.providers
@@ -78,19 +86,28 @@ export const setupWeb3 = () => {
                     "No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask"
                 );
                 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+                // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
+                //provider = ethers.providers.getDefaultProvider();
+                provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+                signer = null;
             }
+
             const [lastBlock, network, accounts] = await Promise.all([
                 web3.eth.getBlock("latest"),
                 getNetworkDetails(web3),
                 asyncGetAccounts(web3)
             ]);
+
             const web3Version = web3.version.api ? web3.version.api : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
+
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 web3Instance: web3,
                 userAccount: accounts[0], // TODO: could we use web3.eth.defaultAccount?
                 accounts: accounts,
                 network: network,
+                ethers: { signer: signer, provider: provider },
                 info: { web3Version: web3Version, gasLimit: lastBlock.gasLimit }
             });
         } catch (error) {

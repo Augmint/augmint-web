@@ -1,6 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import EXCHANGE_artifacts from "contractsBuild/Exchange.json";
+import exchangeArtifacts from "contractsBuild/Exchange.json";
 import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
@@ -88,10 +88,7 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
-            const contract = await SolidityContract.connectNew(
-                store.getState().web3Connect.web3Instance,
-                EXCHANGE_artifacts
-            );
+            const contract = await SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
 
             const info = await getAugmintTokenInfo(contract.instance);
 

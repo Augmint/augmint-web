@@ -117,10 +117,7 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(
-                store.getState().web3Connect.web3Instance,
-                augmintToken_artifacts
-            );
+            const contract = await SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
             const info = await getAugmintTokenInfo(contract.instance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,
@@ -205,7 +202,7 @@ export function transferToken(payload) {
         });
 
         try {
-            let result = await transferTokenTx(payload);
+            const result = await transferTokenTx(payload);
             return dispatch({
                 type: TOKEN_TRANSFER_SUCCESS,
                 result: result

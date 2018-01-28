@@ -51,7 +51,7 @@ export const setupWatch = (stateToWatch, callback) => {
     } else if (watches[stateToWatch].unsubscribe) {
         //watches[stateToWatch].unsubscribe(); // TODO: do we need to unsubscribe? ie. when network change? if so then we need to track each callback added other wise subsequent setupWatches for the same state var are removing previous watches
     }
-    let watchConf = watch(store.getState, stateToWatch);
+    const watchConf = watch(store.getState, stateToWatch);
     watches[stateToWatch].unsubscribe = store.subscribe(
         watchConf((newVal, oldVal, objectPath) => {
             callback(newVal, oldVal, objectPath);
