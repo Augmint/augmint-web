@@ -2,6 +2,15 @@ import React from 'react';
 
 import { StableIcon, DecentralizedIcon, SecureIcon, DownArrowIcon } from '../../../components/Icons';
 
+import petrovics from 'assets/images/team/ppetrovics.jpg';
+import bdebreczeni from 'assets/images/team/bdebreczeni.jpg';
+import kszabo from 'assets/images/team/kszabo.jpg';
+import bjackson from 'assets/images/team/bjackson.jpg';
+import emarton from 'assets/images/team/emarton.jpg';
+import lheves from 'assets/images/team/lheves.jpg';
+import pbanik from 'assets/images/team/pbanik.jpg';
+import vszatmahry from 'assets/images/team/vszatmahry.jpg';
+
 export const keyFeatures = [
     {
         image: <StableIcon/>,
@@ -60,5 +69,62 @@ export const howItWorks = [
         type: 'loan',
         title: 'DEPOSIT ETH',
         text: 'Donec id elit non mi porta gravida at eget metus.',
+    }
+];
+
+export const teamMembers = [
+    {
+        pk: 'team-1',
+        name: 'Peter Petrovics',
+        imgSrc: petrovics,
+        title: 'Founder, technologist',
+    },
+    {
+        pk: 'team-2',
+        name: 'Karoly Szabo',
+        imgSrc: kszabo,
+        title: 'Founder, economist',
+    },
+    {
+        pk: 'team-3',
+        name: 'Marton Elek',
+        imgSrc: emarton,
+        title: 'Marketing, PR strategy',
+    },
+    {
+        pk: 'team-9',
+        name: 'Peter Banik',
+        imgSrc: pbanik,
+        title: '',
+    },
+    {
+        pk: 'team-4',
+        name: 'Barnabas Debreczeni',
+        imgSrc: bdebreczeni,
+        title: 'Cryptocurrency specialist, Shinrai founder',
+    },
+    {
+        pk: 'team-5',
+        name: 'Viktor Szathmáry',
+        imgSrc: vszatmahry,
+        title: 'Blockchain expert / development',
+    },
+    {
+        pk: 'team-6',
+        name: 'Ben Jackson',
+        imgSrc: bjackson,
+        title: 'Blockchain developer',
+    },
+    {
+        pk: 'team-7',
+        name: 'Tom Hume',
+        imgSrc: bjackson,
+        title: 'Branding & Visual',
+    },
+    {
+        pk: 'team-8',
+        name: 'Laszlo Heves',
+        imgSrc: lheves,
+        title: 'Frontend, UX developer',
     }
 ];

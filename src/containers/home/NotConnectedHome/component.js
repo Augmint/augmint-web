@@ -1,9 +1,9 @@
 import React from "react";
-import { Header, Container, Grid, Segment, Rail, Responsive } from "semantic-ui-react";
+import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from 'components/Icons';
 
-import { keyFeatures, keyBenefits, howItWorks } from './helpers.js';
+import { keyFeatures, keyBenefits, howItWorks, teamMembers } from './helpers.js';
 
 import './styles.css';
 import * as styles from './styles.js';
@@ -85,7 +85,7 @@ export default class NotConnectedHome extends React.Component {
                         </p>
                         <Grid columns="equal">
                             {howItWorks.map(feature => (
-                                <Grid.Column textAlign="left" key={feature.pk}>
+                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
                                     <Segment style={styles.keyFeaturesSegment} basic>
                                         {feature.image}
                                     </Segment>
@@ -113,6 +113,26 @@ export default class NotConnectedHome extends React.Component {
                         </div>
                     </Responsive>}
                 </Segment>
+                <Container>
+                    <Segment basic textAlign="left" as="section">
+                        <Header as="h2">
+                            Team
+                        </Header>
+                        <Grid columns="equal">
+                            {teamMembers.map(member => (
+                                <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
+                                    <Image style={{filter: 'grayscale(100%)', width: '120px', height: '120px', marginRight: '36px'}} src={member.imgSrc} avatar floated="left" />
+                                    <Header as="h3" style={{margin: '30px 0 0'}}>
+                                        {member.name}
+                                    </Header>
+                                    <Header as="h5" style={{marginTop: '10px'}}>
+                                        {member.title}
+                                    </Header>
+                                </Grid.Column>
+                            ))}
+                        </Grid>
+                    </Segment>
+                </Container>
             </Segment>
         );
     }

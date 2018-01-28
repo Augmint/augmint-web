@@ -21,7 +21,9 @@ h2,
 h1,
 h1.ui.header,
 h2,
-h2.ui.header {
+h2.ui.header,
+h3,
+h3.ui.header {
     font-weight: 200;
 }
 
@@ -29,6 +31,12 @@ h2,
 h2.ui.header {
     font-size: 34px;
     margin-bottom: 50px;
+}
+
+h3,
+h3.ui.header {
+    font-size: 26px;
+    line-height: 26px;
 }
 
 h5,
