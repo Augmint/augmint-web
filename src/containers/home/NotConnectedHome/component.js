@@ -26,7 +26,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyFeatures.map(feature => (
-                                <Grid.Column mobile="16" textAlign="center" key={feature.title}>
+                                <Grid.Column mobile="16" computer="5" textAlign="center" key={feature.title}>
                                     <Segment style={styles.keyFeaturesSegment} basic>
                                         {feature.image}
                                     </Segment>
@@ -47,7 +47,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyBenefits.filter(item => item.type === 'business').map(item => (
-                            <Grid.Column  mobile="16" textAlign="left" key={item.pk}>
+                            <Grid.Column  mobile="16" computer="5" textAlign="left" key={item.pk}>
                                 <div className="list-item">
                                     <p className="opac">
                                         {item.text}
@@ -63,7 +63,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <Grid columns="equal">
                             {keyBenefits.filter(item => item.type === 'individual').map(item => (
-                            <Grid.Column  mobile="16" textAlign="left" key={item.pk}>
+                            <Grid.Column  mobile="16" computer="5" textAlign="left" key={item.pk}>
                                 <div className="list-item">
                                     <p className="opac">
                                         {item.text}
