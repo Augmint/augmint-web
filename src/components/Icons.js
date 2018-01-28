@@ -1,7 +1,16 @@
 
 import React from "react";
 
+import {Image} from 'semantic-ui-react';
+
+import stableSVG from "assets/images/stable.svg";
+import decentralizedSVG from "assets/images/decentralized.svg";
+import secureSVG from "assets/images/secure.svg";
+import downArrowSVG from "assets/images/down-arrow.svg";
+import interchangeSVG from "assets/images/interchange.svg";
+
 export const BalanceIcon = () => (
+  <Image centered>
   <svg xmlns="http://www.w3.org/2000/svg" width="393" height="148" viewBox="0 0 393 148">
     <defs>
         <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="70.821%">
@@ -20,73 +29,25 @@ export const BalanceIcon = () => (
         <path fill="#FFF" d="M25 113.9h7.021v-1.02h-5.916v-4.624h5.44v-.986h-5.44v-4.25h5.916V102H25v11.9zm9.741-3.128c0 2.431 1.377 3.383 3.213 3.383 1.751 0 2.448-1.122 2.448-1.122h.034v.867h1.105v-9.01h-1.105v5.661c0 1.547-.748 2.584-2.227 2.584-1.7 0-2.363-.697-2.363-2.567v-5.678h-1.105v5.882zm9.86 3.128h1.105v-5.865c0-1.479.748-2.142 1.7-2.142.527 0 .714.136.714.136l.221-1.122s-.255-.17-.765-.17c-.646 0-1.462.323-1.87 1.122h-.034v-.969h-1.071v9.01zm9.316-.765c1.547 0 2.856-1.309 2.856-3.74s-1.258-3.74-2.856-3.74c-1.632 0-2.941 1.258-2.941 3.74s1.343 3.74 2.941 3.74zm0 1.02c-2.261 0-4.046-1.683-4.046-4.76s1.887-4.76 4.046-4.76c2.108 0 3.961 1.683 3.961 4.76s-1.734 4.76-3.961 4.76zM332.585 113.9l-.901-2.567h-5.678l-.901 2.567H324l4.267-11.9h1.156l4.267 11.9h-1.105zm-3.757-10.557l-2.499 7.106h5.032l-2.499-7.106h-.034zm6.307 5.236h5.593v-1.105h-5.593v1.105zm8.313 5.321h7.021v-1.02h-5.916v-4.624h5.44v-.986h-5.44v-4.25h5.916V102h-7.021v11.9zm9.741-3.128c0 2.431 1.377 3.383 3.213 3.383 1.751 0 2.448-1.122 2.448-1.122h.034v.867h1.105v-9.01h-1.105v5.661c0 1.547-.748 2.584-2.227 2.584-1.7 0-2.363-.697-2.363-2.567v-5.678h-1.105v5.882zm9.86 3.128h1.105v-5.865c0-1.479.748-2.142 1.7-2.142.527 0 .714.136.714.136l.221-1.122s-.255-.17-.765-.17c-.646 0-1.462.323-1.87 1.122h-.034v-.969h-1.071v9.01zm9.316-.765c1.547 0 2.856-1.309 2.856-3.74s-1.258-3.74-2.856-3.74c-1.632 0-2.941 1.258-2.941 3.74s1.343 3.74 2.941 3.74zm0 1.02c-2.261 0-4.046-1.683-4.046-4.76s1.887-4.76 4.046-4.76c2.108 0 3.961 1.683 3.961 4.76s-1.734 4.76-3.961 4.76z"/>
     </g>
   </svg>
+  </Image>
 );
 
 export const StableIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="105" height="66" viewBox="0 0 105 66">
-    <defs>
-      <linearGradient id="a" x1="50%" x2="50%" y1="32.207%" y2="149.759%">
-        <stop offset="0%" stopColor="#FFAD00"/>
-        <stop offset="100%" stopColor="#C500FF" stopOpacity="0"/>
-      </linearGradient>
-      <radialGradient id="b" cy="-97.295%" r="147.295%" fx="50%" fy="-97.295%" gradientTransform="matrix(0 1 -.85714 0 -.334 -1.473)">
-        <stop offset="0%" stopColor="#F00"/>
-        <stop offset="100%" stopColor="#EF0" stopOpacity="0"/>
-      </radialGradient>
-    </defs>
-    <g fill="none" fillRule="evenodd">
-      <path fill="url(#a)" d="M0 30l17.5 9.5L35 30v20L17.5 60 0 50z" transform="translate(35 -15)"/>
-      <path fill="url(#b)" d="M0 0l17.5 9.5L35 0v20L17.5 30 0 20z" transform="rotate(-180 35 7.5)"/>
-      <path fill="url(#a)" d="M0 30l17.5 9.5L35 30v20L17.5 60 0 50z" transform="translate(70 6)"/>
-      <path fill="url(#b)" d="M0 0l17.5 9.5L35 0v20L17.5 30 0 20z" transform="rotate(-180 52.5 18)"/>
-      <g>
-        <path fill="url(#a)" d="M0 30l17.5 9.5L35 30v20L17.5 60 0 50z" transform="translate(0 6)"/>
-        <path fill="url(#b)" d="M0 0l17.5 9.5L35 0v20L17.5 30 0 20z" transform="rotate(-180 17.5 18)"/>
-      </g>
-    </g>
-</svg>
+  <Image centered src={stableSVG} />
 );
 
 export const DecentralizedIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="77" height="85" viewBox="0 0 77 85">
-  <defs>
-      <linearGradient id="a" x1="50%" x2="50%" y1="32.207%" y2="87.157%">
-          <stop offset="0%" stopColor="#FFAD00"/>
-          <stop offset="100%" stopColor="#C500FF" stopOpacity="0"/>
-      </linearGradient>
-  </defs>
-  <g fill="url(#a)" fillRule="evenodd" transform="translate(-602 -901)">
-      <path d="M619.5 943c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM605.5 960c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM631.5 972c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM649.5 960c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM664.5 943c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM675.5 972c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM657.5 991c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21zM614.5 991c1.933 0 3.5-9.402 3.5-21 0-3.945-.181-7.636-.497-10.79-.611-6.117-1.728-10.21-3.003-10.21-1.933 0-3.5 9.402-3.5 21s1.567 21 3.5 21z"/>
-  </g>
-</svg>
+  <Image centered src={decentralizedSVG} />
 );
 
 export const SecureIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="95" viewBox="0 0 100 95">
-  <defs>
-      <radialGradient id="a" cy="-97.295%" r="147.295%" fx="50%" fy="-97.295%" gradientTransform="matrix(0 .97087 -1 0 -.473 -1.458)">
-          <stop offset="0%" stopColor="#F00"/>
-          <stop offset="100%" stopColor="#EF0" stopOpacity="0"/>
-      </radialGradient>
-      <linearGradient id="b" x1="50%" x2="50%" y1="32.207%" y2="149.759%">
-          <stop offset="0%" stopColor="#FFAD00" stopOpacity=".519"/>
-          <stop offset="100%" stopColor="#C500FF" stopOpacity="0"/>
-      </linearGradient>
-      <linearGradient id="c" x1="50%" x2="50%" y1="32.207%" y2="100%">
-          <stop offset="0%" stopColor="#FFAD00" stopOpacity=".519"/>
-          <stop offset="100%" stopColor="#C500FF" stopOpacity="0"/>
-      </linearGradient>
-      <linearGradient id="d" x1="50%" x2="50%" y1="32.207%" y2="110.555%">
-          <stop offset="0%" stopColor="#FFAD00"/>
-          <stop offset="100%" stopColor="#FFAD00" stopOpacity=".53"/>
-      </linearGradient>
-  </defs>
-  <g fill="none" fillRule="evenodd">
-      <ellipse cx="50" cy="51.5" fill="url(#a)" opacity=".993" rx="50" ry="51.5"/>
-      <path fill="url(#b)" d="M64.718 76.199c-4.183 4.363-9.233 8.114-15.016 11.153-5.784-3.042-10.835-6.792-15.016-11.153-15.56-16.225-15.022-36.599-13.682-46.11 5.79-.255 25.041-6.679 28.7-9.089 3.658 2.41 22.907 8.834 28.7 9.089 1.337 9.511 1.874 29.885-13.686 46.11"/>
-      <path fill="url(#c)" d="M64.718 84.199c-4.183 4.363-9.233 8.114-15.016 11.153-5.784-3.042-10.835-6.792-15.016-11.153-15.56-16.225-15.022-36.599-13.682-46.11 5.79-.255 25.041-6.679 28.7-9.089 3.658 2.41 22.907 8.834 28.7 9.089 1.337 9.511 1.874 29.885-13.686 46.11"/>
-      <path fill="url(#d)" d="M64.718 70.199c-4.183 4.363-9.233 8.114-15.016 11.153-5.784-3.042-10.835-6.792-15.016-11.153-15.56-16.225-15.022-36.599-13.682-46.11 5.79-.255 25.041-6.679 28.7-9.089 3.658 2.41 22.907 8.834 28.7 9.089 1.337 9.511 1.874 29.885-13.686 46.11"/>
-  </g>
-</svg>
+  <Image centered src={secureSVG} />
+);
 
+export const DownArrowIcon = () => (
+  <Image centered src={downArrowSVG} />
+);
+
+export const InterchangeIcon = () => (
+  <Image src={interchangeSVG} />
 );
