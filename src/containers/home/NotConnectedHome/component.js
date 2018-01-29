@@ -88,7 +88,7 @@ export default class NotConnectedHome extends React.Component {
                                 .filter(feature => feature.type === 'loan')
                                 .map(feature => (
                                     <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                        <Segment style={styles.howItWorksImage} basic>
                                             {feature.image}
                                         </Segment>
                                         <Header as="h5">
@@ -108,7 +108,7 @@ export default class NotConnectedHome extends React.Component {
                                 .filter(feature => feature.type === 'exchange')
                                 .map(feature => (
                                     <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                        <Segment style={styles.howItWorksImage} basic>
                                             {feature.image}
                                         </Segment>
                                         <Header as="h5">
@@ -128,7 +128,7 @@ export default class NotConnectedHome extends React.Component {
                                 .filter(feature => feature.type === 'use')
                                 .map(feature => (
                                     <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                        <Segment style={styles.howItWorksImage} basic>
                                             {feature.image}
                                         </Segment>
                                         <Header as="h5">
@@ -148,7 +148,7 @@ export default class NotConnectedHome extends React.Component {
                                 .filter(feature => feature.type === 'lock')
                                 .map(feature => (
                                     <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                        <Segment style={styles.howItWorksImage} basic>
                                             {feature.image}
                                         </Segment>
                                         <Header as="h5">
