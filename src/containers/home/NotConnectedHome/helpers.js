@@ -1,6 +1,23 @@
 import React from 'react';
 
-import { StableIcon, DecentralizedIcon, SecureIcon, DepositIcon, SpendIcon, GetDepositIcon } from '../../../components/Icons';
+import { 
+    StableIcon,
+    DecentralizedIcon,
+    SecureIcon,
+    DepositIcon,
+    SpendIcon,
+    GetDepositIcon,
+    ExchangeIcon,
+    PartnersIcon,
+    EtherDeltaIcon,
+    AtmIcon,
+    ShopIcon,
+    TransferIcon,
+    InvestIcon,
+    LockIcon,
+    WaitIcon,
+    PremiumIcon
+} from '../../../components/Icons';
 
 import petrovics from 'assets/images/team/ppetrovics.jpg';
 import bdebreczeni from 'assets/images/team/bdebreczeni.jpg';
@@ -83,7 +100,79 @@ export const howItWorks = [
         type: 'loan',
         title: 'Get deposit back',
         text: 'Payback your loan at maturity to get back your ETH collateral.',
-    }
+    },
+    {
+        pk: 'hiw-4',
+        image: <ExchangeIcon/>,
+        type: 'exchange',
+        title: 'Augmint Exchange',
+        text: 'Buy or sell A-EUR for ETH on Augmint’s decentralised internal exchange.',
+    },
+    {
+        pk: 'hiw-5',
+        image: <PartnersIcon/>,
+        type: 'exchange',
+        title: 'Partners',
+        text: 'Buy or sell A-EUR for fiat on one of our partner gateways.',
+    },
+    {
+        pk: 'hiw-6',
+        image: <EtherDeltaIcon/>,
+        type: 'exchange',
+        title: 'EtherDelta',
+        text: 'Trade with A-EUR on anu ERC20 exchanges like EtherDelta.',
+    },
+    {
+        pk: 'hiw-7',
+        image: <AtmIcon/>,
+        type: 'use',
+        title: 'ATMS',
+        text: 'Withdraw fiat cash from your A-EUR account at one of our partners’ ATMs.',
+    },
+    {
+        pk: 'hiw-8',
+        image: <ShopIcon/>,
+        type: 'use',
+        title: 'Shops',
+        text: 'Use your A-EUR at partner merchants.',
+    },
+    {
+        pk: 'hiw-9',
+        image: <TransferIcon/>,
+        type: 'use',
+        title: 'Transfer',
+        text: ' Send your A-EUR to any other A-EUR account.',
+    },
+    {
+        pk: 'hiw-10',
+        image: <InvestIcon/>,
+        type: 'use',
+        title: 'Use in smart contracts',
+        text: 'A-EUR is usable in any smart contract service because it’s ERC-20 standard token.',
+    },
+    {
+        pk: 'hiw-11',
+        image: <LockIcon/>,
+        type: 'lock',
+        title: 'Lock',
+        text: 'Choose lock time. Your premium is immediately credited to your lock account.',
+    },
+    {
+        pk: 'hiw-12',
+        image: <WaitIcon/>,
+        type: 'lock',
+        title: 'Wait',
+        text: '',
+    },
+    {
+        pk: 'hiw-13',
+        image: <PremiumIcon/>,
+        type: 'lock',
+        title: 'Get premium',
+        text: 'Your locked amount including your premium is available.',
+    },
+
+    
 ];
 
 export const teamMembers = [

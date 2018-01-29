@@ -84,18 +84,80 @@ export default class NotConnectedHome extends React.Component {
                             Augmint offers the ability to use your cryptocurrencies without<br/>losing them. Get an ACD loan and spend easily.
                         </p>
                         <Grid columns="equal">
-                            {howItWorks.map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                    <Segment style={styles.keyFeaturesSegment} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h5">
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac">
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
+                            {howItWorks
+                                .filter(feature => feature.type === 'loan')
+                                .map(feature => (
+                                    <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
+                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                            {feature.image}
+                                        </Segment>
+                                        <Header as="h5">
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac">
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Column>
+                                ))}
+                        </Grid>
+                        <Header as="h2">
+                            Buy and sell A-Euro
+                        </Header>
+                        <Grid columns="equal">
+                            {howItWorks
+                                .filter(feature => feature.type === 'exchange')
+                                .map(feature => (
+                                    <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
+                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                            {feature.image}
+                                        </Segment>
+                                        <Header as="h5">
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac">
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Column>
+                            ))}
+                        </Grid>
+                        <Header as="h2">
+                            How to use your ACE
+                        </Header>
+                        <Grid columns="equal">
+                            {howItWorks
+                                .filter(feature => feature.type === 'use')
+                                .map(feature => (
+                                    <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
+                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                            {feature.image}
+                                        </Segment>
+                                        <Header as="h5">
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac">
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Column>
+                            ))}
+                        </Grid>
+                        <Header as="h2">
+                            Earn more with A-Euro, get premium by locking
+                        </Header>
+                        <Grid columns="equal">
+                            {howItWorks
+                                .filter(feature => feature.type === 'lock')
+                                .map(feature => (
+                                    <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
+                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                            {feature.image}
+                                        </Segment>
+                                        <Header as="h5">
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac">
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Column>
                             ))}
                         </Grid>
                     </Container>
