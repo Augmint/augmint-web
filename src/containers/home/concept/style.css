@@ -2,18 +2,53 @@
   padding-top: 73px;
 }
 
+.Site-content article.ui.basic.concept .content{
+  margin: 0 135px;
+}
+
 .Site-content article .segment .ui.text.container {
   margin: 0 135px;
   max-width: 100% !important;
 }
 
-.Site-content article .segment .ui.text.container h2.header{
-  font-size: 34px;
-  line-height: 1.09;
+.Site-content article section .ui.grid>.row,
+.Site-content article section .ui.segment.custom-column,
+.Site-content article section .ui.segment.custom-column h5 {
+  margin: 0;
+  padding: 0;
   text-align: left;
 }
 
+.Site-content article section .ui.segment.custom-column h5 {
+  font-size: 13px;
+  letter-spacing: 2.6px;
+  margin-bottom: 10px;
+}
+
+.Site-content article section .ui.segment.custom-column p {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  line-height: 21px;
+  opacity: .6;
+  max-width: 394px;
+}
+
+.Site-content article h2.segment.header {
+  font-size: 34px;
+  letter-spacing: 2.4px;
+  line-height: 1.09;
+  text-align: left;
+  margin: 0;
+  margin-bottom: 77px;
+  margin-top: 104px;
+  padding:0;
+}
+
 article.concept section.ui.segment {
+  padding: 0 135px;
+}
+
+article.concept section.ui.segment.green-gradient {
   background: linear-gradient(rgba(0, 53, 49, 0) 0%,rgba(0, 53, 49, 1) 20%, rgba(0, 53, 49, 1) 80%, rgba(0, 53, 49, 0) 100%);
   font-weight: 200;
   padding-top: 200px;
@@ -37,8 +72,13 @@ article.concept .ui.horizontal.list:last-child {
 }
 
 .Site-content article.concept .whitepaper-manifesto {
-  display: flex;
-  justify-content: center;
+  margin: 0 366px;
+}
+
+.Site-content article.concept .whitepaper-manifesto img {
+  margin: auto;
+  height: 341px;
+  width: 240px;
 }
 
 .Site-content article.concept .whitepaper-manifesto a,
@@ -47,4 +87,13 @@ article.concept .ui.horizontal.list:last-child {
   font-size: 13px;
   letter-spacing: 2.6px;
   margin: 0;
+}
+
+.Site-content article .try-now {
+  color: #051d2d;
+  font-size: 13px;
+  height: 47px;
+  letter-spacing: 2.6px;
+  padding: 17px;
+  width: 142px;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
-import { Button, List, Segment, Image } from "semantic-ui-react";
+import { Button, List, Segment, Image, Grid } from "semantic-ui-react";
 
 import './style.css';
 import whitePaper from "assets/images/white-paper.png";
@@ -15,54 +15,59 @@ export default () => (
             <List.Item as='a' href={'#section3'} content="GOVERNANCE" />
             <List.Item as='a' href="/" content="ROADMAP" />
         </List>
-        <Tsegment header="Overview" id={'section1'}>
-            <Tblock header="Modern money">
-                <p>
-                    Modern currencies are credit based. In layman's terms the amount of money in circulation (supply) is
-                    automatically adjusted by market participants (i.e. banks). Banks are creating money when issuing loans
-                    and burning money when a loan is repaid.
-                </p>
-                <p>
-                    The stability is secured or fortified by central banks, adjusting certain base parameters and by the
-                    market via the banks adjusting their loan conditions.
-                </p>
-                <p>
-                    This system has its flaws and it can be corrupted by governments and banks but in general that's how the
-                    monetary system ensures there is always as much money available in the economy as needed.
-                </p>
-            </Tblock>
-            <Tblock header="Augmint tokens">
-                <p>
-                    Augmint is built on the concept of automatically adjusting the supply of each Augmint token in a similar
-                    way as modern fiat money but in a transparent, decentralised and secure fashion.
-                </p>
-                <p>
-                    Augmint tokens are only issued when a new, collateral based loan is created. Tokens are burnt on
-                    repayment. In case of loan default the collateral goes to Augmint stability reserves, managed by smart
-                    contracts. It all happens in an automated, cryptographically secure and decentralised way.{" "}
-                </p>
-                <p>
-                    Parameters for the new loans, the use of the reserves for market interventions are decided by
-                    transparent and open governance processes.
-                </p>
-                <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
-            </Tblock>
-
-            <Tsegment.Row centered columns={1}>
-                <Tsegment.Column textAlign="center">
-                    <Button
-                        content="TRY NOW"
-                        as={Link}
-                        to="/tryit"
-                        icon="right chevron"
-                        labelPosition="right"
-                        primary
-                        size="huge"
-                    />
-                </Tsegment.Column>
-            </Tsegment.Row>
-        </Tsegment>
-        <Segment basic as="section">
+        <Segment basiv basic as="section">
+            <Segment basic as="h2" className="header" content="Overview" id={'section1'} />
+            <Grid divided='vertically' basic >
+                <Grid.Row columns={2}>
+                    <Grid.Column>
+                        <Segment basic className="custom-column">
+                            <Segment basic as="h5" content="MODERN MONEY" />
+                            <p>
+                                Modern currencies are credit based. In layman's terms the amount of money in circulation (supply) is
+                                automatically adjusted by market participants (i.e. banks). Banks are creating money when issuing loans
+                                and burning money when a loan is repaid.
+                            </p>
+                            <p>
+                                The stability is secured or fortified by central banks, adjusting certain base parameters and by the
+                                market via the banks adjusting their loan conditions.
+                            </p>
+                            <p>
+                                This system has its flaws and it can be corrupted by governments and banks but in general that's how the
+                                monetary system ensures there is always as much money available in the economy as needed.
+                            </p>
+                        </Segment>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Segment basic className="custom-column">
+                            <Segment basic as="h5" content="AUGMINT" />
+                            <p>
+                                Augmint is built on the concept of automatically adjusting the supply of each Augmint token in a similar
+                                way as modern fiat money but in a transparent, decentralised and secure fashion.
+                            </p>
+                            <p>
+                                Augmint tokens are only issued when a new, collateral based loan is created. Tokens are burnt on
+                                repayment. In case of loan default the collateral goes to Augmint stability reserves, managed by smart
+                                contracts. It all happens in an automated, cryptographically secure and decentralised way.{" "}
+                            </p>
+                            <p>
+                                Parameters for the new loans, the use of the reserves for market interventions are decided by
+                                transparent and open governance processes.
+                            </p>
+                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
+                        </Segment>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+            <Segment basic textAlign="center">
+                <Button
+                    content="TRY NOW"
+                    as={Link}
+                    to="/tryit"
+                    className="try-now"
+                />
+            </Segment>
+        </Segment>
+        <Segment basic as="section" className="green-gradient">
             <Tsegment header="How it works" id={'section2'}>
                 <Tblock header="Price stability">
                     <p>
@@ -115,10 +120,7 @@ export default () => (
                             content="TRY NOW"
                             as={Link}
                             to="/tryit"
-                            icon="right chevron"
-                            labelPosition="right"
-                            primary
-                            size="huge"
+                            className="try-now"
                         />
                     </Tsegment.Column>
                 </Tsegment.Row>
@@ -145,15 +147,21 @@ export default () => (
                 </Tblock>
             </Tsegment>
         </Segment>
-        <Segment basic className="whitepaper-manifesto">
-            <Segment basic as="a" href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit" target="_blank" >
-                <h5>WHITEPAPER</h5>
-                <Image basic src={whitePaper} />
-            </Segment>
-            <Segment basic as="a" href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit" target="_blank" >
-                <h5>MANIFESTO</h5>
-                <Image basic src={manifesto} />
-            </Segment>
-        </Segment>
+        <Grid divided='vertically' basic className="whitepaper-manifesto">
+            <Grid.Row columns={2}>
+                <Grid.Column>
+                    <Segment basic as="a" href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit" target="_blank" >
+                        <h5>WHITEPAPER</h5>
+                        <Image basic src={whitePaper} />
+                    </Segment>
+                </Grid.Column>
+              <Grid.Column>
+                  <Segment basic as="a" href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit" target="_blank" >
+                      <h5>MANIFESTO</h5>
+                      <Image basic src={manifesto} />
+                  </Segment>
+              </Grid.Column>
+            </Grid.Row>
+        </Grid>
     </Segment>
 );
