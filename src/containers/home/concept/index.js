@@ -56,7 +56,7 @@ export default () => (
                                 decided by transparent and open governance processes.
                             </p>
                             <p>
-                                <nobr>A-EUR</nobr> is the first Augmint token to be implemented. <nobr>A-EUR</nobr> will
+                                A&#8209;EUR is the first Augmint token to be implemented. A&#8209;EUR will
                                 be pegged to EUR.
                             </p>
                         </Segment>
@@ -85,9 +85,9 @@ export default () => (
                     </p>
                     <Tblock.SubHeader header="Loan parameters" />
                     <p>
-                        If <nobr>A-EUR</nobr> price deviating from parity then loan parameters are adjusted to make it
-                        more or less compelling to get <nobr>A-EUR</nobr> loan for a certain digital asset. This has an
-                        effect on <nobr>A-EUR</nobr> demand/supply.
+                        If A&#8209;EUR price deviating from parity then loan parameters are adjusted to make it
+                        more or less compelling to get A&#8209;EUR loan for a certain digital asset. This has an
+                        effect on A&#8209;EUR demand/supply.
                     </p>
                     <Tblock.SubHeader header="Market intervention" />
                     <p>
@@ -104,16 +104,16 @@ export default () => (
                 </Tblock>
                 <Tblock header="Getting A-EUR">
                     <p>
-                        You can always buy or sell your <nobr>A-EUR</nobr> for cryptocurrencies (ETH, BTC etc.) on a
+                        You can always buy or sell your A&#8209;EUR for cryptocurrencies (ETH, BTC etc.) on a
                         decentralised exchange. Secondary exchanges will offer direct fiat conversions to/from{" "}
-                        <nobr>A-EUR</nobr> as well. As the Augmint ecosystem grows you will need less and less to
+                        A&#8209;EUR as well. As the Augmint ecosystem grows you will need less and less to
                         exchange Augmint tokens to fiat money.
                     </p>
                     <Tblock.SubHeader>
-                        <nobr>A-EUR</nobr> loans
+                        A&#8209;EUR loans
                     </Tblock.SubHeader>
                     <p>
-                        You can also get <nobr>A-EUR</nobr> by putting your digital assets (ETH or BTC at the beginning)
+                        You can also get A&#8209;EUR by putting your digital assets (ETH or BTC at the beginning)
                         into a decentralised escrow contract.
                     </p>
                 </Tblock>
@@ -140,7 +140,7 @@ export default () => (
                         model ensures that all decisions are democratic and transparent.
                     </p>
                     <p>
-                        Access to GDC is open to anyone who is willing to deposit <nobr>A-EUR</nobr> tokens. To
+                        Access to GDC is open to anyone who is willing to deposit A&#8209;EUR tokens. To
                         incentify holding and voting with GDCs the profit from fees is distributed among GDC holders.
                     </p>
                 </Tblock>

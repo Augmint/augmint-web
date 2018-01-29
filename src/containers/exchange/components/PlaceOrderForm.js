@@ -172,10 +172,10 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <Menu size="massive" tabular>
                 <Menu.Item active={orderType === TOKEN_BUY} index={TOKEN_BUY} onClick={this.onOrderTypeChange}>
-                    Buy <nobr>A-EUR</nobr>
+                    Buy A&#8209;EUR
                 </Menu.Item>
                 <Menu.Item active={orderType === TOKEN_SELL} index={TOKEN_SELL} onClick={this.onOrderTypeChange}>
-                    Sell <nobr>A-EUR</nobr>
+                    Sell A&#8209;EUR
                 </Menu.Item>
             </Menu>
         );
@@ -206,7 +206,7 @@ class PlaceOrderForm extends React.Component {
                             name="tokenAmount"
                             label={
                                 orderType === TOKEN_BUY
-                                    ? `<nobr>A-EUR</nobr> amount expected on ${fiatRate} ETH/EUR rate: `
+                                    ? `A&#8209;EUR amount expected on ${fiatRate} ETH/EUR rate: `
                                     : "Sell amount: "
                             }
                             component={Form.Field}
@@ -219,7 +219,9 @@ class PlaceOrderForm extends React.Component {
                             labelPosition="right"
                         >
                             <input />
-                            <Label><nobr>A-EUR</nobr></Label>
+                            <Label>
+                                A&#8209;EUR
+                            </Label>
                         </Field>
 
                         <Field
@@ -255,7 +257,9 @@ class PlaceOrderForm extends React.Component {
                             labelPosition="right"
                         >
                             <input />
-                            <Label><nobr>A-EUR</nobr> / EUR</Label>
+                            <Label>
+                                A&#8209;EUR / EUR
+                            </Label>
                         </Field>
 
                         <InfoPanel size="tiny" info>
@@ -265,7 +269,9 @@ class PlaceOrderForm extends React.Component {
                         <Button size="big" primary loading={submitting} disabled={pristine}>
                             {submitting && "Submitting..."}
                             {!submitting &&
-                                (orderType === TOKEN_BUY ? "Submit buy <nobr>A-EUR</nobr> order" : "Submit sell <nobr>A-EUR</nobr> order")}
+                                (orderType === TOKEN_BUY
+                                    ? "Submit buy A&#8209;EUR order"
+                                    : "Submit sell A&#8209;EUR order")}
                         </Button>
                     </Form>
                 )}

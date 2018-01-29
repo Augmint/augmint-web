@@ -34,10 +34,10 @@ export default class TransferList extends React.Component {
                         </Row>
                         <Row columns={3}>
                             <Col>
-                                Amount: {tx.signedAmount} <nobr>A-EUR</nobr>
+                                Amount: {tx.signedAmount} A&#8209;EUR
                             </Col>
                             <Col>
-                                Fee: {tx.senderFee} <nobr>A-EUR</nobr>
+                                Fee: {tx.senderFee} A&#8209;EUR
                             </Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>

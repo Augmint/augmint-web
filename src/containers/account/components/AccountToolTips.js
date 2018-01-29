@@ -9,9 +9,9 @@ export function TransferFeeToolTip(props) {
     return (
         <ToolTip header="A&#8209;EUR transfer fees">
             Fee: {_feePt}%<br />
-            Min fee: {feeMinAmount} <nobr>A-EUR</nobr>
+            Min fee: {feeMinAmount} A&#8209;EUR
             <br />
-            Max fee: {feeMaxAmount} <nobr>A-EUR</nobr> <br />
+            Max fee: {feeMaxAmount} A&#8209;EUR <br />
             Transfer fees are used for Augmint system improvements, maintenance and contributor rewards.
         </ToolTip>
     );
