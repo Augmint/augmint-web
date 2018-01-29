@@ -40,7 +40,6 @@ ScrollToTop = withRouter(ScrollToTop);
 
 class App extends React.Component {
     render() {
-        const { isConnected } = this.props.web3Connect;
         return (
             <div className="Site">
                 <ScrollToTop />
@@ -48,7 +47,7 @@ class App extends React.Component {
                 <FlashMessages />
                 <div className="Site-content">
                     <Switch>
-                        <Route exact path="/" component={isConnected ? ConnectedHome : NotConnectedHome} />
+                        <Route exact path="/" component={NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/reserves" component={AugmintToken} />

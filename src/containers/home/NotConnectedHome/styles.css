@@ -51,8 +51,12 @@ p {
     font-weight: 300;
 }
 
-p.opac {
-    opacity: 0.6;
+@media 
+(-webkit-min-device-pixel-ratio: 2), 
+(min-resolution: 192dpi) { 
+    p.opac {
+        opacity: 0.6;
+    }
 }
 
 .list-item {
