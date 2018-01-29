@@ -1,0 +1,37 @@
+.Site-content article.ui.basic.concept {
+  padding-top: 73px;
+}
+
+.Site-content article .segment .ui.text.container {
+  margin: 0 135px;
+  max-width: 100% !important;
+}
+
+.Site-content article .segment .ui.text.container h2.header{
+  font-size: 34px;
+  line-height: 1.09;
+  text-align: left;
+}
+
+article.concept section.ui.segment {
+  background: linear-gradient(rgba(0, 53, 49, 0) 0%,rgba(0, 53, 49, 1) 20%, rgba(0, 53, 49, 1) 80%, rgba(0, 53, 49, 0) 100%);
+  font-weight: 200;
+  padding-top: 200px;
+  padding-bottom: 200px;
+}
+
+article.concept .ui.horizontal.list>.item {
+  border: none;
+  color: rgba(255,255,255,.6);
+  font-weight: 200;
+  letter-spacing: 2.4px;
+  margin: 0 16px;
+}
+
+article.concept .ui.horizontal.list:first-child {
+  margin-left: 0;
+}
+
+article.concept .ui.horizontal.list:last-child {
+  margin-right: 0;
+}
