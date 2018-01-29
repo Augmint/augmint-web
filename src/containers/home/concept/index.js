@@ -10,13 +10,12 @@ import manifesto from "assets/images/manifesto.png";
 export default () => (
     <Segment basic textAlign="center" as="article" className="concept">
         <List horizontal inverted divided link>
-            <List.Item as='a' href={'#section1'} content="OVERVIEW" />
-            <List.Item as='a' href={'#section2'} content="HOW IT WORKS" />
-            <List.Item as='a' href={'#section3'} content="GOVERNANCE" />
-            <List.Item as='a' href="/" content="ROADMAP" />
+            <List.Item as='a' href={'#overview'} content="OVERVIEW" />
+            <List.Item as='a' href={'#how-it-works'} content="HOW IT WORKS" />
+            <List.Item as='a' href={'#governance'} content="GOVERNANCE" />
         </List>
         <Segment basiv basic as="section">
-            <Segment basic as="h2" className="header" content="Overview" id={'section1'} />
+            <Segment basic as="h2" className="header" content="Overview" id={'overview'} />
             <Grid divided='vertically' basic >
                 <Grid.Row columns={2}>
                     <Grid.Column>
@@ -37,7 +36,7 @@ export default () => (
                             </p>
                         </Segment>
                     </Grid.Column>
-                    <Grid.Column>
+                    <Grid.Column className="second-column">
                         <Segment basic className="custom-column">
                             <Segment basic as="h5" content="AUGMINT" />
                             <p>
@@ -68,7 +67,7 @@ export default () => (
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
-            <Tsegment header="How it works" id={'section2'}>
+            <Tsegment header="How it works" id={'how-it-works'}>
                 <Tblock header="Price stability">
                     <p>
                         There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
@@ -125,7 +124,7 @@ export default () => (
                     </Tsegment.Column>
                 </Tsegment.Row>
             </Tsegment>
-            <Tsegment header="Governance" id={'section3'}>
+            <Tsegment header="Governance" id={'governance'}>
                 <Tblock>
                     <p>
                         The fundamental rules, agreements and funds are maintained and enforced by smart contracts -

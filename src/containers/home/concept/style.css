@@ -11,6 +11,10 @@
   max-width: 100% !important;
 }
 
+.Site-content article section .second-column .ui.segment.custom-column {
+  padding-left: 98px;
+}
+
 .Site-content article section .ui.grid>.row,
 .Site-content article section .ui.segment.custom-column,
 .Site-content article section .ui.segment.custom-column h5 {
@@ -20,16 +24,17 @@
 }
 
 .Site-content article section .ui.segment.custom-column h5 {
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 2.6px;
   margin-bottom: 10px;
 }
 
 .Site-content article section .ui.segment.custom-column p {
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 300;
   letter-spacing: 1.5px;
   line-height: 21px;
-  opacity: .6;
+  /*opacity: .6;*/
   max-width: 394px;
 }
 
