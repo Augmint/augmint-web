@@ -3,36 +3,37 @@ import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { Button, List, Segment, Image, Grid } from "semantic-ui-react";
 
-import './style.css';
+import "./style.css";
 import whitePaper from "assets/images/white-paper.png";
 import manifesto from "assets/images/manifesto.png";
 
 export default () => (
     <Segment basic textAlign="center" as="article" className="concept">
         <List horizontal inverted divided link>
-            <List.Item as='a' href={'#overview'} content="OVERVIEW" />
-            <List.Item as='a' href={'#how-it-works'} content="HOW IT WORKS" />
-            <List.Item as='a' href={'#governance'} content="GOVERNANCE" />
+            <List.Item as="a" href={"#overview"} content="OVERVIEW" />
+            <List.Item as="a" href={"#how-it-works"} content="HOW IT WORKS" />
+            <List.Item as="a" href={"#governance"} content="GOVERNANCE" />
         </List>
         <Segment basiv basic as="section">
-            <Segment basic as="h2" className="header" content="Overview" id={'overview'} />
-            <Grid divided='vertically' basic >
+            <Segment basic as="h2" className="header" content="Overview" id={"overview"} />
+            <Grid divided="vertically" basic>
                 <Grid.Row columns={2}>
                     <Grid.Column>
                         <Segment basic className="custom-column">
                             <Segment basic as="h5" content="MODERN MONEY" />
                             <p>
-                                Modern currencies are credit based. In layman's terms the amount of money in circulation (supply) is
-                                automatically adjusted by market participants (i.e. banks). Banks are creating money when issuing loans
-                                and burning money when a loan is repaid.
+                                Modern currencies are credit based. In layman's terms the amount of money in circulation
+                                (supply) is automatically adjusted by market participants (i.e. banks). Banks are
+                                creating money when issuing loans and burning money when a loan is repaid.
                             </p>
                             <p>
-                                The stability is secured or fortified by central banks, adjusting certain base parameters and by the
-                                market via the banks adjusting their loan conditions.
+                                The stability is secured or fortified by central banks, adjusting certain base
+                                parameters and by the market via the banks adjusting their loan conditions.
                             </p>
                             <p>
-                                This system has its flaws and it can be corrupted by governments and banks but in general that's how the
-                                monetary system ensures there is always as much money available in the economy as needed.
+                                This system has its flaws and it can be corrupted by governments and banks but in
+                                general that's how the monetary system ensures there is always as much money available
+                                in the economy as needed.
                             </p>
                         </Segment>
                     </Grid.Column>
@@ -40,30 +41,30 @@ export default () => (
                         <Segment basic className="custom-column">
                             <Segment basic as="h5" content="AUGMINT" />
                             <p>
-                                Augmint is built on the concept of automatically adjusting the supply of each Augmint token in a similar
-                                way as modern fiat money but in a transparent, decentralised and secure fashion.
+                                Augmint is built on the concept of automatically adjusting the supply of each Augmint
+                                token in a similar way as modern fiat money but in a transparent, decentralised and
+                                secure fashion.
                             </p>
                             <p>
-                                Augmint tokens are only issued when a new, collateral based loan is created. Tokens are burnt on
-                                repayment. In case of loan default the collateral goes to Augmint stability reserves, managed by smart
-                                contracts. It all happens in an automated, cryptographically secure and decentralised way.{" "}
+                                Augmint tokens are only issued when a new, collateral based loan is created. Tokens are
+                                burnt on repayment. In case of loan default the collateral goes to Augmint stability
+                                reserves, managed by smart contracts. It all happens in an automated, cryptographically
+                                secure and decentralised way.{" "}
                             </p>
                             <p>
-                                Parameters for the new loans, the use of the reserves for market interventions are decided by
-                                transparent and open governance processes.
+                                Parameters for the new loans, the use of the reserves for market interventions are
+                                decided by transparent and open governance processes.
                             </p>
-                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
+                            <p>
+                                A&#8209;EUR is the first Augmint token to be implemented. A&#8209;EUR will
+                                be pegged to EUR.
+                            </p>
                         </Segment>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
             <Segment basic textAlign="center">
-                <Button
-                    content="TRY NOW"
-                    as={Link}
-                    to="/tryit"
-                    className="try-now"
-                />
+                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
@@ -132,20 +133,30 @@ export default () => (
                 with GDCs the profit from fees is distributed among GDC holders.
             </p>
         </Segment>
-        <Grid divided='vertically' basic className="whitepaper-manifesto">
+        <Grid divided="vertically" basic className="whitepaper-manifesto">
             <Grid.Row columns={2}>
                 <Grid.Column>
-                    <Segment basic as="a" href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit" target="_blank" >
+                    <Segment
+                        basic
+                        as="a"
+                        href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
+                        target="_blank"
+                    >
                         <h5>WHITEPAPER</h5>
                         <Image basic src={whitePaper} />
                     </Segment>
                 </Grid.Column>
-              <Grid.Column>
-                  <Segment basic as="a" href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit" target="_blank" >
-                      <h5>MANIFESTO</h5>
-                      <Image basic src={manifesto} />
-                  </Segment>
-              </Grid.Column>
+                <Grid.Column>
+                    <Segment
+                        basic
+                        as="a"
+                        href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit"
+                        target="_blank"
+                    >
+                        <h5>MANIFESTO</h5>
+                        <Image basic src={manifesto} />
+                    </Segment>
+                </Grid.Column>
             </Grid.Row>
         </Grid>
     </Segment>

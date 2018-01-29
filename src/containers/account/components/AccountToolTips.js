@@ -7,10 +7,11 @@ export function TransferFeeToolTip(props) {
     const feeMinAmount = feeMin ? feeMin.div(decimalsDiv).toString() : "?";
     const feeMaxAmount = feeMax ? feeMax.div(decimalsDiv).toString() : "?";
     return (
-        <ToolTip header="A-EUR transfer fees">
+        <ToolTip header="A&#8209;EUR transfer fees">
             Fee: {_feePt}%<br />
-            Min fee: {feeMinAmount} A-EUR<br />
-            Max fee: {feeMaxAmount} A-EUR <br />
+            Min fee: {feeMinAmount} A&#8209;EUR
+            <br />
+            Max fee: {feeMaxAmount} A&#8209;EUR <br />
             Transfer fees are used for Augmint system improvements, maintenance and contributor rewards.
         </ToolTip>
     );

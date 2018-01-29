@@ -9,8 +9,8 @@ export function DcmOverview(props) {
         <Tsegment>
             <Tblock header="Stable tokens">
                 <p>Augmint offers digital tokens, value of each token pegged to a fiat currency.</p>
-                <p>The first Augmint token will be Augmint Crypto Euro (A-EUR), pegged to Euro.</p>
-                <p>The value of 1 A-EUR is expected closely around 1 EUR.</p>
+                <p>The first Augmint token will be Augmint Crypto Euro (A&#8209;EUR), pegged to Euro.</p>
+                <p>The value of 1 A&#8209;EUR is expected closely around 1 EUR.</p>
                 <p>
                     Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely
                     in a decentralised manner and instantly transferable worldwide.

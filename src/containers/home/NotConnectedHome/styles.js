@@ -31,3 +31,10 @@ export const howItWorksRailBoxSpan = {
     lineHeight: '14px',
     fontWeight: '300'
 };
+
+export const howItWorksImage = {
+    minHeight: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '0',
+};

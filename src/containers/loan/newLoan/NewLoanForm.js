@@ -133,7 +133,7 @@ class NewLoanForm extends React.Component {
                         </Label>
 
                         <input />
-                        <Label>A-EUR</Label>
+                        <Label>A&#8209;EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
@@ -151,11 +151,11 @@ class NewLoanForm extends React.Component {
                         <Label basic>
                             Repayment amount{": "}
                             <ToolTip>
-                                Loan A-EUR amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
+                                Loan A&#8209;EUR amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
                         <input />
-                        <Label>A-EUR</Label>
+                        <Label>A&#8209;EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
@@ -173,7 +173,7 @@ class NewLoanForm extends React.Component {
                         <Label basic>
                             Collateral:{" "}
                             <ToolTip>
-                                ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 / Coverage ratio)
+                                ETH to be held as collateral = A&#8209;EUR Loan Amount / ETHEUR rate x (1 / Coverage ratio)
                                 <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>

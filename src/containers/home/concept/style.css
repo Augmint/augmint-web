@@ -36,7 +36,8 @@
   margin-top: 60px;
 }
 
-.Site-content article section .ui.segment.custom-column p {
+.Site-content article section .ui.segment.custom-column p,
+.Site-content article section.ui.segment.green-gradient p {
   font-size: 13px;
   letter-spacing: 1.5px;
   line-height: 21px;

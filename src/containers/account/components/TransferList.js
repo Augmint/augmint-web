@@ -33,8 +33,12 @@ export default class TransferList extends React.Component {
                             </Col>
                         </Row>
                         <Row columns={3}>
-                            <Col>Amount: {tx.signedAmount} A-EUR</Col>
-                            <Col>Fee: {tx.senderFee} A-EUR</Col>
+                            <Col>
+                                Amount: {tx.signedAmount} A&#8209;EUR
+                            </Col>
+                            <Col>
+                                Fee: {tx.senderFee} A&#8209;EUR
+                            </Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 
@@ -67,5 +71,5 @@ TransferList.defaultProps = {
         return true; // no filter passed
     },
     noItemMessage: <p>No transactions</p>,
-    header: "A-EUR transfer history"
+    header: "A&#8209;EUR transfer history"
 };

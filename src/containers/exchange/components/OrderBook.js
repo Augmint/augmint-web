@@ -14,7 +14,7 @@ const OrderItem = props => {
     const ret = [
         <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
             {order.amount}
-            {order.orderType === TOKEN_SELL ? ` A-EUR` : ` ETH`}
+            {order.orderType === TOKEN_SELL ? ` A&#8209;EUR` : ` ETH`}
         </Col>,
         <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
             {order.price}
@@ -69,8 +69,14 @@ const OrderList = props => {
     return (
         <MyListGroup>
             <Row textAlign="center" columns={2}>
-                <Col header="Buy A-EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
-                <Col header="Sell A-EUR">{totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}</Col>
+                <Col header="Buy A&#8209;EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
+                <Col header="Sell A&#8209;EUR">
+                    {totalSellAmount > 0 && (
+                        <p>
+                            Total: {totalSellAmount} A&#8209;EUR
+                        </p>
+                    )}
+                </Col>
             </Row>
             <Row columns={7} textAlign="center">
                 <Col width={3}>

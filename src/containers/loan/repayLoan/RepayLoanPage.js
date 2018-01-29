@@ -1,5 +1,5 @@
 /*
-    TODO: check here of user account A-EUR balance is enough for repayment
+    TODO: check here of user account A&#8209;EUR balance is enough for repayment
 */
 import React from "react";
 import { connect } from "react-redux";
@@ -169,7 +169,7 @@ class RepayLoanPage extends React.Component {
                                     >
                                         {this.props.submitting
                                             ? "Submitting..."
-                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
+                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " A&#8209;EUR"}
                                     </Button>
                                 )}
                                 {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}

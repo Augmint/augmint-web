@@ -29,7 +29,7 @@ export class AugmintStats extends React.Component {
                 <Statistic.Group widths="3" size={size}>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
-                        <Statistic.Value>{totalSupply} A-EUR</Statistic.Value>
+                        <Statistic.Value>{totalSupply} A&#8209;EUR</Statistic.Value>
                     </Statistic>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
@@ -38,18 +38,18 @@ export class AugmintStats extends React.Component {
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR reserve</Statistic.Label>
-                        <Statistic.Value>{tokenBalance} A-EUR</Statistic.Value>
+                        <Statistic.Label>A&#8209;EUR reserve</Statistic.Label>
+                        <Statistic.Value>{tokenBalance} A&#8209;EUR</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR fee account</Statistic.Label>
-                        <Statistic.Value>{feeAccountAceBalance} A-EUR</Statistic.Value>
+                        <Statistic.Label>A&#8209;EUR fee account</Statistic.Label>
+                        <Statistic.Value>{feeAccountAceBalance} A&#8209;EUR</Statistic.Value>
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR earned interest account</Statistic.Label>
-                        <Statistic.Value>{interestEarnedAccountAceBalance} A-EUR</Statistic.Value>
+                        <Statistic.Label>A&#8209;EUR earned interest account</Statistic.Label>
+                        <Statistic.Value>{interestEarnedAccountAceBalance} A&#8209;EUR</Statistic.Value>
                     </Statistic>
                 </Statistic.Group>
 
