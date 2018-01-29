@@ -17,27 +17,15 @@ export function AppMenu(props) {
         <Segment inverted style={{ margin: 0 }}>
             <Menu inverted pointing secondary stackable size="large">
                 <Container>
-                    <Menu.Item
-                        active={location.pathname === "/"}
-                        as={Link}
-                        to="/"
-                    >
+                    <Menu.Item active={location.pathname === "/"} as={Link} to="/">
                         Home
                     </Menu.Item>
 
-                    <Menu.Item
-                        active={location.pathname === "/concept"}
-                        as={Link}
-                        to="/concept"
-                    >
+                    <Menu.Item active={location.pathname === "/concept"} as={Link} to="/concept">
                         Concept
                     </Menu.Item>
 
-                    <Menu.Item
-                        active={location.pathname === "/tryit"}
-                        as={Link}
-                        to="/tryit"
-                    >
+                    <Menu.Item active={location.pathname === "/tryit"} as={Link} to="/tryit">
                         Try it
                     </Menu.Item>
 
@@ -48,12 +36,12 @@ export function AppMenu(props) {
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/exchange">
-                            Buy/Sell ACD
+                            Buy/Sell A-EUR
                         </Menu.Item>
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/loan/new">
-                            Get ACD Loan
+                            Get A-EUR Loan
                         </Menu.Item>
                     )}
                     {isConnected && (

@@ -17,9 +17,7 @@ class TryIt extends React.Component {
         const { isLoading, isConnected } = this.props.web3Connect;
         return (
             <Tsegment header="Try Augmint">
-                {isLoading && (
-                    <LoadingPanel header="Trying to connect to Ethereum network..." />
-                )}
+                {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
                 {!isLoading && !isConnected && <HowToConnect />}
                 {!isLoading && isConnected && <TryItConnected />}
 
@@ -42,7 +40,7 @@ class TryIt extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    tokenUcd: state.tokenUcd
+    augmintToken: state.augmintToken
 });
 
 export default connect(mapStateToProps)(TryIt);

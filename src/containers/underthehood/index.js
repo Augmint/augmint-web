@@ -59,9 +59,7 @@ export default class underTheHood extends React.Component {
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
                             {selectedGroup === "loans" && <LoansInfoGroup />}
-                            {selectedGroup === "exchange" && (
-                                <ExchangeInfoGroup />
-                            )}
+                            {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                         </Pgrid.Column>
                     </Pgrid>
                 </Psegment>

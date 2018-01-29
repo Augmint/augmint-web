@@ -4,15 +4,7 @@ import { Tsegment } from "components/TextContent";
 import { Image } from "semantic-ui-react";
 import decentLogo from "assets/images/decent-logo.svg";
 
-const decentImg = (
-    <Image
-        src={decentLogo}
-        as="a"
-        size="small"
-        href="http://decent.org"
-        target="_blank"
-    />
-);
+const decentImg = <Image src={decentLogo} as="a" size="small" href="http://decent.org" target="_blank" />;
 export default () => (
     <Tsegment header="About us">
         <Tsegment.Row textAlign="center">

@@ -14,15 +14,10 @@ export function ExchangeInfo(props) {
 
     return (
         <Pblock header="Exchange contract">
-            <p>OrderCount: {contract.info.orderCount}</p>
             <p>
-                To sell: {contract.info.totalEthSellOrders} ETH |{" "}
-                {contract.info.totalUcdSellOrders} ACD
+                Order Count: Buy: {contract.info.buyOrderCount} | Sell: {contract.info.sellOrderCount}
             </p>
-            <ContractBaseInfo
-                contract={contract}
-                refreshCb={handleRefreshClick}
-            />
+            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

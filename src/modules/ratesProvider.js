@@ -8,10 +8,12 @@ export default () => {
 
     if (!rates.isLoading && !rates.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
+        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("rates.contract", onRatesContractChange);
+
         if (web3Connect.isConnected) {
             console.debug(
-                "ratesProvider - rates not connected or loading and web3 alreay loaded, dispatching connectRates() "
+                "ratesProvider - rates not connected or loading and web3 already connected, dispatching connectRates() "
             );
             store.dispatch(connectRates());
         }
@@ -20,43 +22,44 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const rates = store.getState().rates.contract.instance;
-    rates
-        .e_ethToUsdcChanged({ fromBlock: "latest", toBlock: "pending" })
-        .watch(onRateChange);
-    // TODO: remove prev listeners
+    const rates = store.getState().rates.contract.ethersInstance;
+    rates.onratechanged = onRateChange;
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.e_ethToUsdcChanged().stopWatching();
-    }
+    // TODO: test if we need this with ethers
+    // if (oldInstance && oldInstance.instance) {
+    //     oldInstance.instance.RateChanged().stopWatching();
+    // }
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug(
-            "ratesProvider - web3Connect.network changed. Dispatching connectRates()"
-        );
+        console.debug("ratesProvider - web3Connect.network changed. Dispatching connectRates()");
         store.dispatch(connectRates());
     }
 };
 
+const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
+    refreshRatesIfNeeded(newVal, oldVal);
+};
+
 const onRatesContractChange = (newVal, oldVal, objectPath) => {
+    refreshRatesIfNeeded(newVal, oldVal);
+};
+
+const refreshRatesIfNeeded = (newVal, oldVal) => {
     removeListeners(oldVal);
-    if (newVal) {
-        console.debug(
-            "ratesProvider - rates.contract changed. Dispatching refreshRates()"
-        );
+    if (newVal && store.getState().augmintToken.isConnected) {
+        console.debug("ratesProvider - new rates or augmintToken contract. Dispatching refreshRates()");
         store.dispatch(refreshRates());
         setupListeners();
     }
 };
 
-const onRateChange = (error, result) => {
-    console.debug(
-        "ratesProvider.onRateChange(): e_ethToUsdcChanged event. Dispatching refreshRates"
-    );
+// RateChanged(bytes32 symbol, uint newRate);
+const onRateChange = (symbol, newRate) => {
+    console.debug("ratesProvider.onRateChange(): RateChange event. Dispatching refreshRates()");
     store.dispatch(refreshRates());
 };

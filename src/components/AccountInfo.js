@@ -6,51 +6,30 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AccountInfo extends React.Component {
     render() {
-        const {
-            header,
-            showMyAccountLink,
-            account,
-            tokenUcd,
-            userBalancesIsLoading
-        } = this.props;
+        const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading } = this.props;
         return (
             <Pblock
+                className="accountInfo"
                 loading={
-                    tokenUcd.isLoading ||
-                    (!tokenUcd.isConnected && !tokenUcd.connectionError) ||
+                    augmintToken.isLoading ||
+                    (!augmintToken.isConnected && !augmintToken.connectionError) ||
                     userBalancesIsLoading
                 }
                 header={header}
             >
-                <ConnectionStatus contract={tokenUcd} />
+                <ConnectionStatus contract={augmintToken} />
 
                 <p>Account: {account.address}</p>
                 <p>
                     ETH: {account.ethBalance}
                     {account.ethPendingBalance !== "?" &&
-                        account.ethPendingBalance - account.ethBalance !==
-                            0 && (
-                            <span>
-                                {" "}
-                                (Pending:{" "}
-                                {account.ethPendingBalance -
-                                    account.ethBalance}{" "}
-                                )
-                            </span>
-                        )}
+                        account.ethPendingBalance !== 0 && <span> (Pending: {account.ethPendingBalance} )</span>}
                 </p>
                 <p>
-                    ACD: {account.ucdBalance}
-                    {account.ucdPendingBalance !== "?" &&
-                        account.ucdPendingBalance - account.ucdBalance !==
-                            0 && (
-                            <span>
-                                {" "}
-                                (Pending:{" "}
-                                {account.ucdPendingBalance -
-                                    account.ucdBalance}{" "}
-                                )
-                            </span>
+                    A-EUR: <span id="userAceBalance">{account.tokenBalance}</span>
+                    {account.pendingTokenBalance !== "?" &&
+                        account.pendingTokenBalance !== 0 && (
+                            <span> (Pending: {typeof account.pendingTokenBalance} )</span>
                         )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
@@ -66,7 +45,7 @@ AccountInfo.defaultProps = {
 
 const mapStateToProps = state => ({
     userBalancesIsLoading: state.userBalances.isLoading,
-    tokenUcd: state.tokenUcd
+    augmintToken: state.augmintToken
 });
 
 export default connect(mapStateToProps)(AccountInfo);

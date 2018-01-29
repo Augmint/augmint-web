@@ -5,7 +5,8 @@ import { setupWeb3, accountChange } from "modules/reducers/web3Connect";
 /*
     TODO: make it to a HOC
 */
-let filterAllBlocks, intervalId;
+let newBlockHeadersFilter, pendingTransactionsFilter;
+let intervalId;
 let watches = {};
 
 export const connectWeb3 = () => {
@@ -31,8 +32,8 @@ const onLoad = () => {
         intervalId = setInterval(async function() {
             const web3 = store.getState().web3Connect;
             if (web3 && web3.isConnected & !web3.isLoading) {
-                let currentAccounts = await web3.web3Instance.eth.getAccounts();
-                let userAccount = store.getState().web3Connect.userAccount;
+                const currentAccounts = await web3.web3Instance.eth.getAccounts();
+                const userAccount = store.getState().web3Connect.userAccount;
                 if (currentAccounts[0] !== userAccount) {
                     console.debug(
                         "App.setInterval - web3.eth.accounts[0] change detected. dispatching accountChange()"
@@ -40,7 +41,7 @@ const onLoad = () => {
                     store.dispatch(accountChange(currentAccounts));
                 }
             }
-        }, 500);
+        }, 1000);
     }
 };
 
@@ -50,7 +51,7 @@ export const setupWatch = (stateToWatch, callback) => {
     } else if (watches[stateToWatch].unsubscribe) {
         //watches[stateToWatch].unsubscribe(); // TODO: do we need to unsubscribe? ie. when network change? if so then we need to track each callback added other wise subsequent setupWatches for the same state var are removing previous watches
     }
-    let watchConf = watch(store.getState, stateToWatch);
+    const watchConf = watch(store.getState, stateToWatch);
     watches[stateToWatch].unsubscribe = store.subscribe(
         watchConf((newVal, oldVal, objectPath) => {
             callback(newVal, oldVal, objectPath);
@@ -60,19 +61,34 @@ export const setupWatch = (stateToWatch, callback) => {
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-    if (filterAllBlocks) {
-        filterAllBlocks.unsubscribe();
+    // TODO: make filters + subscriptions generic, e.g use an array
+    if (newBlockHeadersFilter) {
+        newBlockHeadersFilter.unsubscribe();
+    }
+    if (pendingTransactionsFilter) {
+        pendingTransactionsFilter.unsubscribe();
     }
     if (newVal) {
-        console.debug(
-            "web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event "
-        );
-        const web3 = store.getState().web3Connect.web3Instance;
-        filterAllBlocks = web3.eth.subscribe("newBlockHeaders", onNewBlock);
+        console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
+        // const web3 = store.getState().web3Connect.web3Instance;
+        // FIXME: these are not working b/c: https://github.com/MetaMask/metamask-extension/issues/2393
+        // newBlockHeadersFilter = web3.eth.subscribe("newBlockHeaders", onNewBlock);
+        // pendingTransactionsFilter = web3.eth
+        //     .subscribe("pendingTransactions", (error, tx) => {
+        //         if (error) {
+        //             console.error("pendingTransaction error:", error);
+        //         } else {
+        //             console.debug("pendingTransactions", tx);
+        //         }
+        //     })
+        //     .on("data", tx => onPendingTransaction(tx));
     }
 };
 
-const onNewBlock = (error, result) => {
-    // TODO: this is not working
-    console.debug("web3Provider.onNewBlock");
-};
+// const onNewBlock = (error, result) => {
+//     console.debug("web3Provider.onNewBlock");
+// };
+//
+// const onPendingTransaction = tx => {
+//     console.debug("onPendingTransaction", tx);
+// };

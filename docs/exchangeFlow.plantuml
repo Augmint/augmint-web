@@ -1,0 +1,82 @@
+@startuml
+title **Augmint** - Exchange flow
+skinparam ArrowColor #blue
+skinparam noteBackgroundColor #lightgrey
+actor Seller
+control AugmintToken
+control ExchangeContract
+control ERC20Token
+actor Taker
+actor Anyone
+== Token sell order ALT 1. - works only with Augmint tokens (requires only a single TX from seller) ==
+Seller -> AugmintToken : placeSellOrder\n(exchangeAddress, price, amount)
+AugmintToken -> AugmintToken : approve(to: exchange, amount)
+AugmintToken -> ExchangeContract : placeSellOrder\n(augmintToken, userAddress, amount)
+ExchangeContract -> AugmintToken : transferFromNoFee\n(from: seller, to: ExchangeContract, amount, narr: "sell order", fee: 0)
+note over AugmintToken
+    transferFromNoFee() is restricted to trusted Exchanges
+    Exchange needs to call standard transferFrom when
+    trading non-Augmint ERC20 tokens
+end note
+Seller --> ExchangeContract : tokens to sell transfered
+ExchangeContract -> ExchangeContract : save order
+note left
+    we could just queue new orders to have constant gas
+    cost for place order and a match could add orders
+    to the orderbook in batch.
+end note
+== taker order  ==
+Taker -> ExchangeContract : placeBuyOrder\n(AugmintToken, price, {ethValue})
+ExchangeContract -> ExchangeContract : save order
+note over ExchangeContract, Taker
+    shall we have an additional placeAndMatchBuyOrder()
+    which would do match immediately?
+end note
+== matching  ==
+Taker -> ExchangeContract : matchMultiple(tokenContracts[])
+note left
+    matchMultiple() and match() is not restricted
+    Caller can be a 3rd party service and will be rewarded with Eth
+end note
+loop as many times as fits to gas provided to tx call
+    ExchangeContract -> ExchangeContract : match(tokenContract)
+    ExchangeContract -> ExchangeContract : fill/partially fill order
+    ExchangeContract -> Seller : seller.send( ethValue - tradeFee )
+    ExchangeContract --> AugmintToken : send(feesAccount, tradeFee - matchReward)
+    ExchangeContract -> AugmintToken : transferNoFee\n(to: taker, amountSold - tradeFee, narr: "Order fill")
+    note over AugmintToken, ExchangeContract
+        transferNoFee is restricted to trusted Exchange only
+        Exchange needs to call standard transfer when
+        trading non-Augmint ERC20 tokens
+    end note
+    ExchangeContract --> Taker : amountSold - tradeFee transferred
+end
+ExchangeContract -> Anyone : send(Anyone, sum matchReward)
+== cancel buy order  ==
+Taker -> ExchangeContract : cancelBuyOrder\n(ERC20Token, orderId)
+ExchangeContract -> ExchangeContract : remove order
+ExchangeContract -> Taker : seller.send( unfilledEthValue)
+== cancel sell order  ==
+Seller -> ExchangeContract : cancelSellOrder\n(ERC20Token, orderId)
+ExchangeContract -> AugmintToken : transferNoFee\n(to: taker, amount, narr: "Order cancel")
+note over ExchangeContract
+ Q: how do we decide if transfer or transferNoFee
+ should be called on ERC20Token?
+end note
+ExchangeContract --> Seller : unfilled amount transferred back
+== Token sell order ALT 2. - works with any ERC20 token (requires 2 TXs from seller) ==
+note over ExchangeContract
+    To be implemented later
+    (not fully fleshed out)
+end note
+Seller -> ERC20Token : Tx1: approve(ExchangeContract, amount)
+Seller -> ExchangeContract : Tx2: placeSellOrder(ERC20Token, amount)
+note over ExchangeContract
+ Q: how do we decide if transferFrom or transferFromNoFee
+ should be called on ERC20Token?
+end note
+ExchangeContract -> ERC20Token : transferFrom\n(from: msg.sender, to: ExchangeContract, amount)
+Seller --> ExchangeContract : tokens to sell transfered
+ExchangeContract -> ExchangeContract : save order
+
+@enduml

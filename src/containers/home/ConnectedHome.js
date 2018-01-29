@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import { Hero } from "./Hero";
 import { DcmOverview } from "./DcmOverview";
 import { ProjectStatus } from "./ProjectStatus";
-import tokenUcdProvider from "modules/tokenUcdProvider";
-import { TokenUcdStats } from "components/TokenUcdStats";
+import augmintTokenProvider from "modules/augmintTokenProvider";
+import { AugmintStats } from "components/AugmintStats";
 import { Psegment } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import { Container, Header } from "semantic-ui-react";
 
 class ConnectedHome extends React.Component {
     componentDidMount() {
-        tokenUcdProvider();
+        augmintTokenProvider();
     }
     render() {
-        const { tokenUcd } = this.props;
+        const { augmintToken } = this.props;
         return (
             <div>
                 <Hero />
@@ -23,16 +23,10 @@ class ConnectedHome extends React.Component {
                 <EthereumState>
                     <Psegment>
                         <Container>
-                            <Header
-                                textAlign="center"
-                                style={{ fontSize: "2em" }}
-                            >
-                                ACD status
+                            <Header textAlign="center" style={{ fontSize: "2em" }}>
+                                A-EUR status
                             </Header>
-                            <TokenUcdStats
-                                tokenUcd={tokenUcd}
-                                showTokenUcdLink
-                            />
+                            <AugmintStats augmintToken={augmintToken} showDetailsLink />
                         </Container>
                     </Psegment>
                 </EthereumState>
@@ -43,7 +37,7 @@ class ConnectedHome extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    tokenUcd: state.tokenUcd
+    augmintToken: state.augmintToken
 });
 
 export default connect(mapStateToProps)(ConnectedHome);

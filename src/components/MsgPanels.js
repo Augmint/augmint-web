@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Message, Button, Icon } from "semantic-ui-react";
-import ErrorDetails from "components/ErrorDetails";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -19,22 +18,11 @@ export default class MsgPanel extends React.Component {
     }
 
     render() {
-        let {
-            children,
-            eth,
-            dismissable,
-            dismissed,
-            onDismiss,
-            header,
-            ...other
-        } = this.props;
+        let { children, eth, dismissable, dismissed, onDismiss, header, ...other } = this.props;
         return (
             (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
-                    <Message
-                        onDismiss={onDismiss ? this.dismiss : null}
-                        {...other}
-                    >
+                    <Message onDismiss={onDismiss ? this.dismiss : null} {...other}>
                         <Message.Header>{header}</Message.Header>
                         {children !== null && children}
                         {onDismiss && (
@@ -58,7 +46,14 @@ export function SuccessPanel(props) {
 }
 
 export function InfoPanel(props) {
-    return <MsgPanel info {...props} />;
+    const { info = true, icon = "info", header, ...other } = props;
+    return (
+        <MsgPanel info={info} icon={icon ? true : false} {...other}>
+            {icon && <Icon name={icon} />}
+            <Message.Header>{header}</Message.Header>
+            {props.children}
+        </MsgPanel>
+    );
 }
 
 export function WarningPanel(props) {
@@ -88,20 +83,17 @@ export class EthSubmissionErrorPanel extends React.Component {
                 {children}
                 {error && error.title}
                 {error != null &&
-                error.eth && (
-                    <div>
-                        <p>Tx hash: {error.eth.tx}</p>
-                        <p>
-                            Gas used: {error.eth.gasUsed} (from{" "}
-                            {error.eth.gasProvided} provided)
-                        </p>
-                    </div>
-                )}
+                    error.eth && (
+                        <div>
+                            <p>Tx hash: {error.eth.tx}</p>
+                            <p>
+                                Gas used: {error.eth.gasUsed} (from {error.eth.gasProvided} provided)
+                            </p>
+                        </div>
+                    )}
                 {error != null &&
-                error.details != null &&
-                error.details.message && (
-                    <ErrorDetails>{error.details.message}</ErrorDetails>
-                )}
+                    error.details != null &&
+                    error.details.message && <ErrorDetails>{error.details.message}</ErrorDetails>}
             </MsgPanel>
         );
     }
@@ -122,8 +114,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 <small>
                     <p>Tx hash: {eth.tx}</p>
                     <p>
-                        Gas used: {eth.gasUsed} (from {eth.gasProvided}{" "}
-                        provided)
+                        Gas used: {eth.gasUsed} (from {eth.gasProvided} provided)
                     </p>
                 </small>
             </MsgPanel>
@@ -145,5 +136,15 @@ export function ConnectionStatus(props) {
                 Couldn't connect to Ethereum contract.
             </Message>
         )
+    );
+}
+
+export function ErrorDetails(props) {
+    const { header = "Error details:", style = { fontSize: "0.8em", overflow: "auto" } } = props;
+    return (
+        <div>
+            <p>{header}</p>
+            <pre style={style}>{props.children}</pre>
+        </div>
     );
 }

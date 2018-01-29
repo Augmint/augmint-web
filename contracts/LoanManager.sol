@@ -1,54 +1,133 @@
-/* Contract to manage Acd loan contracts
+/* Contract to manage Augmint token loan contracts backed by ETH
     TODO: add loanId to disbursement, repay and collection narrative
-    TODO: check if we could do repayment without "direct" access to borrower's balance (i.e. systemTransfer)
-           eg. transfer Acd to EthBackedLoan initiates repayment? or using ECR20 transfer approval?
-           it wouldn't restrict access more but would be better seperation of functions
 */
-pragma solidity ^0.4.18;
-import "./Owned.sol";
-import "./SafeMath.sol";
+pragma solidity 0.4.18;
+
+import "./generic/Restricted.sol";
 import "./Rates.sol";
-import "./TokenAcd.sol";
-import "./EthBackedLoan.sol";
+import "./interfaces/AugmintTokenInterface.sol";
+import "./interfaces/LoanManagerInterface.sol";
 
 
-contract LoanManager is owned {
-    using SafeMath for uint256;
+contract LoanManager is LoanManagerInterface, Restricted {
+    Rates public rates; // instance of ETH/pegged currency rate provider contract
+    AugmintTokenInterface public augmintToken; // instance of token contract
 
-    Rates public rates; // instance of ETH/USD rate provider contract
-                        // TODO:  setter to be able to change? (consider trust questions)
-    TokenAcd public tokenUcd; // instance of UCD token contract
+    event NewLoan(uint productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount,
+        uint repaymentAmount);
 
-    struct Product {
-        uint term;
-        uint discountRate; // discountRate in parts per million , ie. 10,000 = 1%
-        uint loanCollateralRatio;  // ucd loan amount / colleteral usd value
-                                    // in parts per million , ie. 10,000 = 1%
-        uint minDisbursedAmountInUcd; // with 4 decimals, ie. 31000 = 3.1UCD
-        uint repayPeriod; // number of seconds after maturity before collect can be executed
-        bool isActive;
-    }
+    event LoanProductActiveStateChanged(uint productId, bool newState);
 
-    Product[] public products;
+    event LoanProductAdded(uint productId);
 
-    enum LoanState { Open, Repaid, Defaulted }
+    event LoanRepayed(uint loanId, address borrower);
 
-    struct LoanPointer {
-        address contractAddress;
-        LoanState loanState;    // Redundant, stored in loan contract as well but saves us to instantiate each contract
-                                //   when need to iterate through
-    }
+    event LoanCollected(uint indexed loanId, address indexed borrower, uint collectedCollateral,
+        uint releasedCollateral, uint defaultingFee);
 
-    LoanPointer[] public loanPointers;
-    mapping(address => uint[]) public m_loanPointers;  // owner account address =>  array of loanContracts array idx-s (idx + 1)
-
-    function LoanManager(address _tokenUcdAddress, address _ratesAddress) public owned() {
-        tokenUcd = TokenAcd(_tokenUcdAddress);
+    function LoanManager(address _augmintTokenAddress, address _ratesAddress) public Owned() {
+        augmintToken = AugmintTokenInterface(_augmintTokenAddress);
         rates = Rates(_ratesAddress);
     }
 
+    function addLoanProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
+        uint _defaultingFee, bool _isActive)
+    external restrict("addLoanProduct") returns (uint newProductId) {
+        newProductId = products.push(
+            LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
+        ) - 1;
+
+        LoanProductAdded(newProductId);
+        return newProductId;
+    }
+
+    function setLoanProductActiveState(uint8 productId, bool newState) external restrict ("setLoanProductActiveState") {
+        products[productId].isActive = false;
+        LoanProductActiveStateChanged(productId, newState);
+    }
+
+    function newEthBackedLoan(uint8 productId) external payable {
+        require(products[productId].isActive); // valid productId?
+
+        // calculate loan values based on ETH sent in with Tx
+        uint tokenValue = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value);
+        uint repaymentAmount = tokenValue.mul(products[productId].collateralRatio).roundedDiv(100000000);
+        repaymentAmount = repaymentAmount * 100;  // rounding 4 decimals value to 2 decimals.
+                                        // no safe mul needed b/c of prev divide
+
+        uint mul = products[productId].collateralRatio.mul(products[productId].discountRate) / 1000000;
+        uint loanAmount = tokenValue.mul(mul).roundedDiv(100000000);
+        loanAmount = loanAmount * 100;    // rounding 4 decimals value to 2 decimals.
+                                                    // no safe mul needed b/c of prev divide
+
+        require(loanAmount >= products[productId].minDisbursedAmount);
+
+        // Create new loan
+        uint loanId = loans.push(
+            LoanData(msg.sender, LoanState.Open, msg.value, repaymentAmount, loanAmount,
+                repaymentAmount.sub(loanAmount), products[productId].term, now, now + products[productId].term,
+                products[productId].defaultingFeePt)
+            ) - 1;
+
+        // Store ref to new loan
+        mLoans[msg.sender].push(loanId);
+
+        // Issue tokens and send to borrower
+        uint interestAmount;
+        if (repaymentAmount > loanAmount) {
+            interestAmount = repaymentAmount.sub(loanAmount);
+        }
+        augmintToken.issueAndDisburse(msg.sender, loanAmount, "Loan disbursement");
+
+        NewLoan(productId, loanId, msg.sender, msg.value, loanAmount, repaymentAmount);
+    }
+
+    /* users must call AugmintToken.repayLoan() to release collateral */
+    function releaseCollateral(uint loanId) external {
+        require(msg.sender == address(augmintToken));
+        require(loans[loanId].state == LoanState.Open);
+        require(now <= loans[loanId].maturity);
+        loans[loanId].state = LoanState.Repaid;
+        loans[loanId].borrower.transfer(loans[loanId].collateralAmount); // send back ETH collateral
+
+        LoanRepayed(loanId, loans[loanId].borrower);
+    }
+
+    function collect(uint[] loanIds) external {
+        /* when there are a lots of loans to be collected then
+             the client need to call it in batches to make sure tx won't exceed block gas limit.
+         Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted
+         TODO: optimise these calculation
+        */
+        for (uint i = 0; i < loanIds.length; i++) {
+            uint loanId = loanIds[i];
+            require(loans[loanId].state == LoanState.Open);
+            require(now >= loans[loanId].maturity);
+            loans[loanId].state = LoanState.Defaulted;
+            // send ETH collateral to augmintToken reserve
+            uint defaultingFeeInToken = loans[loanId].repaymentAmount.mul(loans[loanId].defaultingFeePt).div(1000000);
+            uint defaultingFee = rates.convertToWei(augmintToken.peggedSymbol(), defaultingFeeInToken);
+            uint targetCollection = rates.convertToWei(augmintToken.peggedSymbol(), loans[loanId].repaymentAmount)
+                .add(defaultingFee);
+            uint releasedCollateral;
+            if (targetCollection < loans[loanId].collateralAmount) {
+                releasedCollateral = loans[loanId].collateralAmount.sub(targetCollection);
+                loans[loanId].borrower.transfer(releasedCollateral);
+            }
+            uint collectedCollateral = loans[loanId].collateralAmount.sub(releasedCollateral);
+            if (defaultingFee > collectedCollateral) {
+                defaultingFee = collectedCollateral;
+            }
+
+            address(augmintToken).transfer(collectedCollateral);
+
+            LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
+        }
+
+    }
+
     function getLoanCount() external view returns (uint ct) {
-        return loanPointers.length;
+        return loans.length;
     }
 
     function getProductCount() external view returns (uint ct) {
@@ -56,124 +135,7 @@ contract LoanManager is owned {
     }
 
     function getLoanIds(address borrower) external view returns (uint[] loans) {
-        return m_loanPointers[borrower];
-    }
-
-    function addProduct(uint _term, uint _discountRate, uint _loanCollateralRatio, uint _minDisbursedAmountInUcd,
-            uint _repayPeriod, bool _isActive) external onlyOwner returns (uint newProductId) {
-        newProductId = products.push(
-            Product(
-                {term: _term, discountRate: _discountRate,
-                loanCollateralRatio: _loanCollateralRatio, minDisbursedAmountInUcd: _minDisbursedAmountInUcd,
-                repayPeriod: _repayPeriod, isActive: _isActive}
-            )
-        );
-
-        return newProductId - 1;
-        // TODO: emit event
-    }
-
-    function disableProduct(uint8 productId) external onlyOwner {
-        products[productId].isActive = false;
-        // TODO: emit event
-    }
-
-    function enableProduct(uint8 productId) external onlyOwner {
-        products[productId].isActive = true;
-        // TODO: emit event
-    }
-
-    event e_newLoan(uint8 productId, uint loanId, address borrower, address loanContract, uint disbursedLoanInUcd);
-
-    function newEthBackedLoan(uint8 productId) external payable {
-        require(products[productId].isActive); // valid productId?
-
-        // calculate UCD loan values based on ETH sent in with Tx
-        uint usdcValue = rates.convertWeiToUsdc(msg.value);
-        uint loanAmount = usdcValue.mul(products[productId].loanCollateralRatio).roundedDiv(100000000);
-        loanAmount = loanAmount * 100;  // rounding 4 decimals value to 2 decimals.
-                                                    // no safe mul needed b/c of prev divide
-
-        uint mul = products[productId].loanCollateralRatio.mul(products[productId].discountRate) / 1000000;
-        uint disbursedAmount = usdcValue.mul(mul).roundedDiv(100000000);
-        disbursedAmount = disbursedAmount * 100;  // rounding 4 decimals value to 2 decimals.
-                                                        // no safe mul needed b/c of prev divide
-
-        require(disbursedAmount >= products[productId].minDisbursedAmountInUcd);
-
-        // Create new loan contract
-        uint loanId = loanPointers.push(LoanPointer(address(0), LoanState.Open)) - 1;
-        // TODO: check if it's better to pass productId or Product struct
-        address loanContractAddress = new EthBackedLoan(loanId, msg.sender, products[productId].term,
-                    disbursedAmount, loanAmount, products[productId].repayPeriod);
-        loanPointers[loanId].contractAddress = loanContractAddress;
-
-        // Store ref to new loan contract in this contract
-        m_loanPointers[msg.sender].push(loanId);
-
-        // Send ETH collateral to loan contract
-        loanContractAddress.transfer(msg.value);
-
-        // Issue ACD and send to borrower. TODO: interest should go to Interest Pool
-        tokenUcd.issue(loanAmount);
-        tokenUcd.transferNoFee(address(tokenUcd), msg.sender, disbursedAmount, "Loan disbursement");
-        if (loanAmount > disbursedAmount) {
-            tokenUcd.transferNoFee(address(tokenUcd), tokenUcd.interestPoolAccount(),
-                loanAmount.sub(disbursedAmount), "Loan interest at origination");
-        }
-
-        e_newLoan(productId, loanId, msg.sender, loanContractAddress, disbursedAmount);
-    }
-
-    event e_repayed(address loanContractAddress, address borrower);
-
-    function repay(uint loanId) external {
-        // TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
-        require(loanPointers[loanId].loanState == LoanState.Open);
-
-        address loanContractAddress = loanPointers[loanId].contractAddress;
-        EthBackedLoan loanContract = EthBackedLoan(loanContractAddress);
-
-        require(loanContract.owner() == msg.sender);
-
-        uint disbursedAmount = loanContract.disbursedLoanInUcd();
-        uint loanAmount = loanContract.ucdDueAtMaturity();
-        tokenUcd.transferNoFee(msg.sender, address(tokenUcd), loanAmount, "Loan repayment");
-        tokenUcd.burn(loanAmount);
-        if (loanAmount > disbursedAmount) {
-            tokenUcd.transferNoFee(tokenUcd.interestPoolAccount(), tokenUcd.interestEarnedAccount(),
-                loanAmount.sub(disbursedAmount), "Loan interest at repayment");
-        }
-
-        loanContract.releaseCollateral();
-
-        loanPointers[loanId].loanState = LoanState.Repaid;
-        e_repayed(loanContractAddress, loanContract.owner());
-    }
-
-    event e_collected(address borrower, address loanContractAddress);
-
-    function collect(uint[] loanIds) external {
-        /* when there are a lots of loans to be collected then
-             the client need to call it in batches to make sure tx won't exceed block gas limit.
-         Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted
-         TODO: remove contract from loanPointers & m_loanPointer on SUCCESS
-        */
-        for (uint i = 0; i < loanIds.length; i++) {
-            uint loanId = loanIds[i];
-            require(loanPointers[loanId].loanState == LoanState.Open);
-
-            address loanContractAddress = loanPointers[loanId].contractAddress;
-            EthBackedLoan loanContract = EthBackedLoan(loanContractAddress);
-
-            loanContract.collect();
-            loanPointers[loanId].loanState = LoanState.Defaulted;
-            // move interest from InterestPoolAccount to MIR (tokenAcd reserve)
-            tokenUcd.transferNoFee(tokenUcd.interestPoolAccount(), address(tokenUcd),
-                loanContract.ucdDueAtMaturity().sub(loanContract.disbursedLoanInUcd()), "Defaulted loan interest");
-            e_collected(loanContract.owner(), loanContractAddress);
-        }
-
+        return mLoans[borrower];
     }
 
 }

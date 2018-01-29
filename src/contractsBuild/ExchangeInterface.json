@@ -1,0 +1,1899 @@
+{
+  "contractName": "ExchangeInterface",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "revokeMulitplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "tokenAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "placeSellTokenOrder",
+      "outputs": [
+        {
+          "name": "sellTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "orderId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "rates",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "lastOrderId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "permissions",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokePermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "buyTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "buyTokenOrderId",
+          "type": "uint256"
+        }
+      ],
+      "name": "cancelBuyTokenOrder",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "placeBuyTokenOrder",
+      "outputs": [
+        {
+          "name": "buyTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "orderId",
+          "type": "uint256"
+        }
+      ],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "buyTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "buyTokenOrderId",
+          "type": "uint256"
+        },
+        {
+          "name": "sellTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "sellTokenOrderId",
+          "type": "uint256"
+        }
+      ],
+      "name": "matchOrders",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "sellTokenOrders",
+      "outputs": [
+        {
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "name": "maker",
+          "type": "address"
+        },
+        {
+          "name": "addedTime",
+          "type": "uint256"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "buyTokenIndexes",
+          "type": "uint256[]"
+        },
+        {
+          "name": "buyTokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "sellTokenIndexes",
+          "type": "uint256[]"
+        },
+        {
+          "name": "sellTokenIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "matchMultipleOrders",
+      "outputs": [
+        {
+          "name": "matchCount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "augmintToken",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "grantMultiplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "buyEtherOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "sellTokenOrderId",
+          "type": "uint256"
+        }
+      ],
+      "name": "cancelSellTokenOrder",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "buyTokenOrders",
+      "outputs": [
+        {
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "name": "maker",
+          "type": "address"
+        },
+        {
+          "name": "addedTime",
+          "type": "uint256"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantPermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "maker",
+          "type": "address"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "tokenAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "placeSellTokenOrderTrusted",
+      "outputs": [
+        {
+          "name": "sellTokenOrderIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "orderId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "grantedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "revokedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "NewOwner",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "/* Interface for Augmint's internal Exchange\n    TODO: rates setter?\n    TODO: make a rates interface and use it instead?\n    TODO: uint32 for now?\n    TODO: do we need all funcs or just orders + placeSellTokenOrderTrusted  here?\n*/\npragma solidity 0.4.18;\nimport \"../generic/SafeMath.sol\";\nimport \"../generic/Restricted.sol\";\nimport \"./AugmintTokenInterface.sol\";\nimport \"../Rates.sol\";\n\n\ncontract ExchangeInterface is Restricted {\n    using SafeMath for uint256;\n    AugmintTokenInterface public augmintToken;\n    Rates public rates;\n    uint public lastOrderId; // a unique id accross buy/sell orders to avoid potential issues referencing by only idx\n                            // 0 means no order were placed yet\n\n    struct Order {\n        uint id;\n        address maker;\n        uint addedTime;\n        uint price;\n        uint amount; // buy token: amount in wei sell token: token amount with 4 decimals\n    }\n\n    Order[] public buyTokenOrders;\n    Order[] public sellTokenOrders;\n\n    function placeBuyTokenOrder(uint price) external payable returns (uint buyTokenOrderIndex, uint orderId);\n\n    function placeSellTokenOrder(uint price, uint tokenAmount)\n        external returns (uint sellTokenOrderIndex, uint orderId);\n\n    function placeSellTokenOrderTrusted(address maker, uint price, uint tokenAmount)\n        external returns (uint sellTokenOrderIndex, uint orderId);\n\n    function cancelSellTokenOrder(uint buyEtherOrderIndex, uint sellTokenOrderId) external;\n    function cancelBuyTokenOrder(uint buyTokenOrderIndex, uint buyTokenOrderId) external;\n\n    function matchMultipleOrders(uint[] buyTokenIndexes, uint[] buyTokenIds, uint[] sellTokenIndexes,\n        uint[] sellTokenIds) external returns(uint matchCount);\n\n    function matchOrders(uint buyTokenOrderIndex, uint buyTokenOrderId, uint sellTokenOrderIndex, uint sellTokenOrderId)\n        external;\n\n}\n",
+  "sourcePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/ExchangeInterface.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/ExchangeInterface.sol",
+      "exportedSymbols": {
+        "ExchangeInterface": [
+          2986
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 2878,
+        "name": "PragmaDirective",
+        "src": "233:23:10"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2592,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SafeMath.sol",
+          "file": "../generic/SafeMath.sol",
+          "scope": 2987,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2879,
+        "name": "ImportDirective",
+        "src": "257:33:10"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2467,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/Restricted.sol",
+          "file": "../generic/Restricted.sol",
+          "scope": 2987,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2880,
+        "name": "ImportDirective",
+        "src": "291:35:10"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2813,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/AugmintTokenInterface.sol",
+          "file": "./AugmintTokenInterface.sol",
+          "scope": 2987,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2881,
+        "name": "ImportDirective",
+        "src": "327:37:10"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 1220,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/Rates.sol",
+          "file": "../Rates.sol",
+          "scope": 2987,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2882,
+        "name": "ImportDirective",
+        "src": "365:22:10"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            2311,
+            2466
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            2986,
+            2466,
+            2311
+          ],
+          "name": "ExchangeInterface",
+          "scope": 2987
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Restricted",
+                  "referencedDeclaration": 2466,
+                  "type": "contract Restricted"
+                },
+                "id": 2883,
+                "name": "UserDefinedTypeName",
+                "src": "420:10:10"
+              }
+            ],
+            "id": 2884,
+            "name": "InheritanceSpecifier",
+            "src": "420:10:10"
+          },
+          {
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "SafeMath",
+                  "referencedDeclaration": 2591,
+                  "type": "library SafeMath"
+                },
+                "id": 2885,
+                "name": "UserDefinedTypeName",
+                "src": "443:8:10"
+              },
+              {
+                "attributes": {
+                  "name": "uint256",
+                  "type": "uint256"
+                },
+                "id": 2886,
+                "name": "ElementaryTypeName",
+                "src": "456:7:10"
+              }
+            ],
+            "id": 2887,
+            "name": "UsingForDirective",
+            "src": "437:27:10"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "augmintToken",
+              "scope": 2986,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "contract AugmintTokenInterface",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "AugmintTokenInterface",
+                  "referencedDeclaration": 2812,
+                  "type": "contract AugmintTokenInterface"
+                },
+                "id": 2888,
+                "name": "UserDefinedTypeName",
+                "src": "469:21:10"
+              }
+            ],
+            "id": 2889,
+            "name": "VariableDeclaration",
+            "src": "469:41:10"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "rates",
+              "scope": 2986,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "contract Rates",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Rates",
+                  "referencedDeclaration": 1219,
+                  "type": "contract Rates"
+                },
+                "id": 2890,
+                "name": "UserDefinedTypeName",
+                "src": "516:5:10"
+              }
+            ],
+            "id": 2891,
+            "name": "VariableDeclaration",
+            "src": "516:18:10"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "lastOrderId",
+              "scope": 2986,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "uint256",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "uint",
+                  "type": "uint256"
+                },
+                "id": 2892,
+                "name": "ElementaryTypeName",
+                "src": "540:4:10"
+              }
+            ],
+            "id": 2893,
+            "name": "VariableDeclaration",
+            "src": "540:23:10"
+          },
+          {
+            "attributes": {
+              "canonicalName": "ExchangeInterface.Order",
+              "name": "Order",
+              "scope": 2986,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "id",
+                  "scope": 2904,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint",
+                      "type": "uint256"
+                    },
+                    "id": 2894,
+                    "name": "ElementaryTypeName",
+                    "src": "746:4:10"
+                  }
+                ],
+                "id": 2895,
+                "name": "VariableDeclaration",
+                "src": "746:7:10"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "maker",
+                  "scope": 2904,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "type": "address"
+                    },
+                    "id": 2896,
+                    "name": "ElementaryTypeName",
+                    "src": "763:7:10"
+                  }
+                ],
+                "id": 2897,
+                "name": "VariableDeclaration",
+                "src": "763:13:10"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "addedTime",
+                  "scope": 2904,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint",
+                      "type": "uint256"
+                    },
+                    "id": 2898,
+                    "name": "ElementaryTypeName",
+                    "src": "786:4:10"
+                  }
+                ],
+                "id": 2899,
+                "name": "VariableDeclaration",
+                "src": "786:14:10"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "price",
+                  "scope": 2904,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint",
+                      "type": "uint256"
+                    },
+                    "id": 2900,
+                    "name": "ElementaryTypeName",
+                    "src": "810:4:10"
+                  }
+                ],
+                "id": 2901,
+                "name": "VariableDeclaration",
+                "src": "810:10:10"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "amount",
+                  "scope": 2904,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "uint256",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "uint",
+                      "type": "uint256"
+                    },
+                    "id": 2902,
+                    "name": "ElementaryTypeName",
+                    "src": "830:4:10"
+                  }
+                ],
+                "id": 2903,
+                "name": "VariableDeclaration",
+                "src": "830:11:10"
+              }
+            ],
+            "id": 2904,
+            "name": "StructDefinition",
+            "src": "723:194:10"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "buyTokenOrders",
+              "scope": 2986,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct ExchangeInterface.Order storage ref[] storage ref",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "length": null,
+                  "type": "struct ExchangeInterface.Order storage ref[] storage pointer"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "contractScope": null,
+                      "name": "Order",
+                      "referencedDeclaration": 2904,
+                      "type": "struct ExchangeInterface.Order storage pointer"
+                    },
+                    "id": 2905,
+                    "name": "UserDefinedTypeName",
+                    "src": "923:5:10"
+                  }
+                ],
+                "id": 2906,
+                "name": "ArrayTypeName",
+                "src": "923:7:10"
+              }
+            ],
+            "id": 2907,
+            "name": "VariableDeclaration",
+            "src": "923:29:10"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "sellTokenOrders",
+              "scope": 2986,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct ExchangeInterface.Order storage ref[] storage ref",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "length": null,
+                  "type": "struct ExchangeInterface.Order storage ref[] storage pointer"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "contractScope": null,
+                      "name": "Order",
+                      "referencedDeclaration": 2904,
+                      "type": "struct ExchangeInterface.Order storage pointer"
+                    },
+                    "id": 2908,
+                    "name": "UserDefinedTypeName",
+                    "src": "958:5:10"
+                  }
+                ],
+                "id": 2909,
+                "name": "ArrayTypeName",
+                "src": "958:7:10"
+              }
+            ],
+            "id": 2910,
+            "name": "VariableDeclaration",
+            "src": "958:30:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "placeBuyTokenOrder",
+              "payable": true,
+              "scope": 2986,
+              "stateMutability": "payable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "price",
+                      "scope": 2919,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2911,
+                        "name": "ElementaryTypeName",
+                        "src": "1023:4:10"
+                      }
+                    ],
+                    "id": 2912,
+                    "name": "VariableDeclaration",
+                    "src": "1023:10:10"
+                  }
+                ],
+                "id": 2913,
+                "name": "ParameterList",
+                "src": "1022:12:10"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenOrderIndex",
+                      "scope": 2919,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2914,
+                        "name": "ElementaryTypeName",
+                        "src": "1061:4:10"
+                      }
+                    ],
+                    "id": 2915,
+                    "name": "VariableDeclaration",
+                    "src": "1061:23:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "orderId",
+                      "scope": 2919,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2916,
+                        "name": "ElementaryTypeName",
+                        "src": "1086:4:10"
+                      }
+                    ],
+                    "id": 2917,
+                    "name": "VariableDeclaration",
+                    "src": "1086:12:10"
+                  }
+                ],
+                "id": 2918,
+                "name": "ParameterList",
+                "src": "1060:39:10"
+              }
+            ],
+            "id": 2919,
+            "name": "FunctionDefinition",
+            "src": "995:105:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "placeSellTokenOrder",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "price",
+                      "scope": 2930,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2920,
+                        "name": "ElementaryTypeName",
+                        "src": "1135:4:10"
+                      }
+                    ],
+                    "id": 2921,
+                    "name": "VariableDeclaration",
+                    "src": "1135:10:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "tokenAmount",
+                      "scope": 2930,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2922,
+                        "name": "ElementaryTypeName",
+                        "src": "1147:4:10"
+                      }
+                    ],
+                    "id": 2923,
+                    "name": "VariableDeclaration",
+                    "src": "1147:16:10"
+                  }
+                ],
+                "id": 2924,
+                "name": "ParameterList",
+                "src": "1134:30:10"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenOrderIndex",
+                      "scope": 2930,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2925,
+                        "name": "ElementaryTypeName",
+                        "src": "1191:4:10"
+                      }
+                    ],
+                    "id": 2926,
+                    "name": "VariableDeclaration",
+                    "src": "1191:24:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "orderId",
+                      "scope": 2930,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2927,
+                        "name": "ElementaryTypeName",
+                        "src": "1217:4:10"
+                      }
+                    ],
+                    "id": 2928,
+                    "name": "VariableDeclaration",
+                    "src": "1217:12:10"
+                  }
+                ],
+                "id": 2929,
+                "name": "ParameterList",
+                "src": "1190:40:10"
+              }
+            ],
+            "id": 2930,
+            "name": "FunctionDefinition",
+            "src": "1106:125:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "placeSellTokenOrderTrusted",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "maker",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2931,
+                        "name": "ElementaryTypeName",
+                        "src": "1273:7:10"
+                      }
+                    ],
+                    "id": 2932,
+                    "name": "VariableDeclaration",
+                    "src": "1273:13:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "price",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2933,
+                        "name": "ElementaryTypeName",
+                        "src": "1288:4:10"
+                      }
+                    ],
+                    "id": 2934,
+                    "name": "VariableDeclaration",
+                    "src": "1288:10:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "tokenAmount",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2935,
+                        "name": "ElementaryTypeName",
+                        "src": "1300:4:10"
+                      }
+                    ],
+                    "id": 2936,
+                    "name": "VariableDeclaration",
+                    "src": "1300:16:10"
+                  }
+                ],
+                "id": 2937,
+                "name": "ParameterList",
+                "src": "1272:45:10"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenOrderIndex",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2938,
+                        "name": "ElementaryTypeName",
+                        "src": "1344:4:10"
+                      }
+                    ],
+                    "id": 2939,
+                    "name": "VariableDeclaration",
+                    "src": "1344:24:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "orderId",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2940,
+                        "name": "ElementaryTypeName",
+                        "src": "1370:4:10"
+                      }
+                    ],
+                    "id": 2941,
+                    "name": "VariableDeclaration",
+                    "src": "1370:12:10"
+                  }
+                ],
+                "id": 2942,
+                "name": "ParameterList",
+                "src": "1343:40:10"
+              }
+            ],
+            "id": 2943,
+            "name": "FunctionDefinition",
+            "src": "1237:147:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "cancelSellTokenOrder",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyEtherOrderIndex",
+                      "scope": 2950,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2944,
+                        "name": "ElementaryTypeName",
+                        "src": "1420:4:10"
+                      }
+                    ],
+                    "id": 2945,
+                    "name": "VariableDeclaration",
+                    "src": "1420:23:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenOrderId",
+                      "scope": 2950,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2946,
+                        "name": "ElementaryTypeName",
+                        "src": "1445:4:10"
+                      }
+                    ],
+                    "id": 2947,
+                    "name": "VariableDeclaration",
+                    "src": "1445:21:10"
+                  }
+                ],
+                "id": 2948,
+                "name": "ParameterList",
+                "src": "1419:48:10"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2949,
+                "name": "ParameterList",
+                "src": "1476:0:10"
+              }
+            ],
+            "id": 2950,
+            "name": "FunctionDefinition",
+            "src": "1390:87:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "cancelBuyTokenOrder",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenOrderIndex",
+                      "scope": 2957,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2951,
+                        "name": "ElementaryTypeName",
+                        "src": "1511:4:10"
+                      }
+                    ],
+                    "id": 2952,
+                    "name": "VariableDeclaration",
+                    "src": "1511:23:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenOrderId",
+                      "scope": 2957,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2953,
+                        "name": "ElementaryTypeName",
+                        "src": "1536:4:10"
+                      }
+                    ],
+                    "id": 2954,
+                    "name": "VariableDeclaration",
+                    "src": "1536:20:10"
+                  }
+                ],
+                "id": 2955,
+                "name": "ParameterList",
+                "src": "1510:47:10"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2956,
+                "name": "ParameterList",
+                "src": "1566:0:10"
+              }
+            ],
+            "id": 2957,
+            "name": "FunctionDefinition",
+            "src": "1482:85:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "matchMultipleOrders",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenIndexes",
+                      "scope": 2974,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256[] calldata",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "uint256[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2958,
+                            "name": "ElementaryTypeName",
+                            "src": "1602:4:10"
+                          }
+                        ],
+                        "id": 2959,
+                        "name": "ArrayTypeName",
+                        "src": "1602:6:10"
+                      }
+                    ],
+                    "id": 2960,
+                    "name": "VariableDeclaration",
+                    "src": "1602:22:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenIds",
+                      "scope": 2974,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256[] calldata",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "uint256[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2961,
+                            "name": "ElementaryTypeName",
+                            "src": "1626:4:10"
+                          }
+                        ],
+                        "id": 2962,
+                        "name": "ArrayTypeName",
+                        "src": "1626:6:10"
+                      }
+                    ],
+                    "id": 2963,
+                    "name": "VariableDeclaration",
+                    "src": "1626:18:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenIndexes",
+                      "scope": 2974,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256[] calldata",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "uint256[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2964,
+                            "name": "ElementaryTypeName",
+                            "src": "1646:4:10"
+                          }
+                        ],
+                        "id": 2965,
+                        "name": "ArrayTypeName",
+                        "src": "1646:6:10"
+                      }
+                    ],
+                    "id": 2966,
+                    "name": "VariableDeclaration",
+                    "src": "1646:23:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenIds",
+                      "scope": 2974,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256[] calldata",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "uint256[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2967,
+                            "name": "ElementaryTypeName",
+                            "src": "1679:4:10"
+                          }
+                        ],
+                        "id": 2968,
+                        "name": "ArrayTypeName",
+                        "src": "1679:6:10"
+                      }
+                    ],
+                    "id": 2969,
+                    "name": "VariableDeclaration",
+                    "src": "1679:19:10"
+                  }
+                ],
+                "id": 2970,
+                "name": "ParameterList",
+                "src": "1601:98:10"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "matchCount",
+                      "scope": 2974,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2971,
+                        "name": "ElementaryTypeName",
+                        "src": "1717:4:10"
+                      }
+                    ],
+                    "id": 2972,
+                    "name": "VariableDeclaration",
+                    "src": "1717:15:10"
+                  }
+                ],
+                "id": 2973,
+                "name": "ParameterList",
+                "src": "1716:17:10"
+              }
+            ],
+            "id": 2974,
+            "name": "FunctionDefinition",
+            "src": "1573:161:10"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "matchOrders",
+              "payable": false,
+              "scope": 2986,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenOrderIndex",
+                      "scope": 2985,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2975,
+                        "name": "ElementaryTypeName",
+                        "src": "1761:4:10"
+                      }
+                    ],
+                    "id": 2976,
+                    "name": "VariableDeclaration",
+                    "src": "1761:23:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "buyTokenOrderId",
+                      "scope": 2985,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2977,
+                        "name": "ElementaryTypeName",
+                        "src": "1786:4:10"
+                      }
+                    ],
+                    "id": 2978,
+                    "name": "VariableDeclaration",
+                    "src": "1786:20:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenOrderIndex",
+                      "scope": 2985,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2979,
+                        "name": "ElementaryTypeName",
+                        "src": "1808:4:10"
+                      }
+                    ],
+                    "id": 2980,
+                    "name": "VariableDeclaration",
+                    "src": "1808:24:10"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "sellTokenOrderId",
+                      "scope": 2985,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2981,
+                        "name": "ElementaryTypeName",
+                        "src": "1834:4:10"
+                      }
+                    ],
+                    "id": 2982,
+                    "name": "VariableDeclaration",
+                    "src": "1834:21:10"
+                  }
+                ],
+                "id": 2983,
+                "name": "ParameterList",
+                "src": "1760:96:10"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2984,
+                "name": "ParameterList",
+                "src": "1873:0:10"
+              }
+            ],
+            "id": 2985,
+            "name": "FunctionDefinition",
+            "src": "1740:134:10"
+          }
+        ],
+        "id": 2986,
+        "name": "ContractDefinition",
+        "src": "390:1487:10"
+      }
+    ],
+    "id": 2987,
+    "name": "SourceUnit",
+    "src": "233:1645:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-01-27T20:31:00.033Z"
+}

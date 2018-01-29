@@ -20,22 +20,9 @@ export default function LoanProductList(props) {
             listItems = <span>No products</span>;
         } else {
             listItems = filteredProducts.map((prod, index) => (
-                <MyListGroup.Row
-                    header={
-                        "Product " +
-                        (prod.id + 1) +
-                        " - Repay in " +
-                        prod.termText
-                    }
-                    key={prod.id}
-                >
-                    <LoanProductDetails
-                        key={`loanProdDiv-${prod.id}`}
-                        product={prod}
-                    />
-                    {props.selectComponent && (
-                        <props.selectComponent productId={prod.id} />
-                    )}
+                <MyListGroup.Row header={"Product " + (prod.id + 1) + " - Repay in " + prod.termText} key={prod.id}>
+                    <LoanProductDetails key={`loanProdDiv-${prod.id}`} product={prod} />
+                    {props.selectComponent && <props.selectComponent productId={prod.id} />}
                 </MyListGroup.Row>
             ));
         }

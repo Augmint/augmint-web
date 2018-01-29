@@ -4,10 +4,7 @@ import { Pgrid, Pblock } from "components/PageLayout";
 import store from "modules/store";
 import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
-import {
-    newLoan,
-    LOANMANAGER_NEWLOAN_CREATED
-} from "modules/reducers/loanManager";
+import { newLoan, LOANMANAGER_NEWLOAN_CREATED } from "modules/reducers/loanManager";
 import LoanProductDetails from "containers/loan/components/LoanProductDetails";
 import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";
@@ -61,9 +58,7 @@ class NewLoanPage extends React.Component {
     async handleSubmit(values) {
         // e.preventDefault(); // not needed with redux-form?
         // TODO: add productId to Form and change state ref here to values.prodcutId ?
-        let res = await store.dispatch(
-            newLoan(this.state.productId, values.ethAmount)
-        );
+        let res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
         if (res.type !== LOANMANAGER_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: {
@@ -83,23 +78,13 @@ class NewLoanPage extends React.Component {
     render() {
         let msg;
         if (this.state.isLoading) {
-            msg = (
-                <LoadingPanel>
-                    Fetching data (loan product id: {this.state.productId})...
-                </LoadingPanel>
-            );
+            msg = <LoadingPanel>Fetching data (loan product id: {this.state.productId})...</LoadingPanel>;
         } else if (!this.state.isProductFound) {
-            msg = (
-                <ErrorPanel>
-                    Can't find this loan product (loan product id:{" "}
-                    {this.state.productId}){" "}
-                </ErrorPanel>
-            );
+            msg = <ErrorPanel>Can't find this loan product (loan product id: {this.state.productId}) </ErrorPanel>;
         } else if (!this.state.product.isActive) {
             msg = (
                 <ErrorPanel>
-                    This loan product is not active currently (loan product id:{" "}
-                    {this.state.productId}){" "}
+                    This loan product is not active currently (loan product id: {this.state.productId}){" "}
                 </ErrorPanel>
             );
         }
@@ -111,7 +96,7 @@ class NewLoanPage extends React.Component {
             <Pgrid>
                 <Pgrid.Row columns={2}>
                     <Pgrid.Column width={6}>
-                        <Pblock header="Selected Loan">
+                        <Pblock header={"Selected: loan product " + (this.state.product.id + 1)}>
                             <LoanProductDetails product={this.state.product} />
                         </Pblock>
                         <AccountInfo account={this.props.userAccount} />

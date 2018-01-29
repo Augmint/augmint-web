@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { routerReducer } from "react-router-redux";
 import web3Connect from "modules/reducers/web3Connect";
 import rates from "modules/reducers/rates";
-import tokenUcd from "modules/reducers/tokenUcd";
+import augmintToken from "modules/reducers/augmintToken";
 import loanManager from "modules/reducers/loanManager";
 import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
@@ -11,12 +11,13 @@ import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
 import subscriptions from "modules/reducers/subscriptions";
 import { reducer as formReducer } from "redux-form";
+import { reducer as flashReducer } from "redux-flash";
 
 export default combineReducers({
     routing: routerReducer,
     web3Connect,
     rates,
-    tokenUcd,
+    augmintToken,
     loanManager,
     userBalances,
     userTransfers,
@@ -24,5 +25,6 @@ export default combineReducers({
     orders,
     loans,
     subscriptions,
+    flash: flashReducer,
     form: formReducer
 });

@@ -4,10 +4,7 @@ export const SUBSCRIBE_ERROR = "subscriptions/SUBSCRIBE_ERROR";
 
 var Parse = require("parse");
 Parse.serverURL = "https://parseapi.back4app.com";
-Parse.initialize(
-    "hRJh9HuWN8an0VjQGgKMuF2lv914yYgrSMLvP4E5",
-    "IMKlkv7rVi3KoaDDHo8QTBPs2Y6yLc3tFXb8ekc4"
-);
+Parse.initialize("hRJh9HuWN8an0VjQGgKMuF2lv914yYgrSMLvP4E5", "IMKlkv7rVi3KoaDDHo8QTBPs2Y6yLc3tFXb8ekc4");
 
 const initialState = {
     error: null

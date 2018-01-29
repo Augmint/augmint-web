@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import tokenUcdProvider from "modules/tokenUcdProvider";
+import augmintTokenProvider from "modules/augmintTokenProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import AccountInfo from "components/AccountInfo";
 import LoanList from "containers/loan/components/LoanList";
-import UcdTransferForm from "./UcdTransferForm";
+import TokenTransferForm from "./TokenTransferForm";
 import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
@@ -14,7 +14,7 @@ class AccountHome extends React.Component {
     componentDidMount() {
         connectWeb3();
         loanManagerProvider();
-        tokenUcdProvider();
+        augmintTokenProvider();
     }
     render() {
         return (
@@ -25,27 +25,20 @@ class AccountHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>
-                                <AccountInfo
-                                    account={this.props.userAccount}
-                                    header="Overview"
-                                />
+                                <AccountInfo account={this.props.userAccount} header="Overview" />
 
-                                <UcdTransferForm />
+                                <TokenTransferForm />
 
                                 <TransferList
                                     transfers={this.props.userTransfers}
-                                    userAccountAddress={
-                                        this.props.userAccount.address
-                                    }
+                                    userAccountAddress={this.props.userAccount.address}
                                 />
                             </Pgrid.Column>
 
                             <Pgrid.Column>
                                 <LoanList
-                                    header="My ACD Loans"
-                                    noItemMessage={
-                                        <span>You have no loans</span>
-                                    }
+                                    header="My A-EUR Loans"
+                                    noItemMessage={<span>You have no loans</span>}
                                     loans={this.props.loans}
                                 />
                             </Pgrid.Column>

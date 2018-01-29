@@ -1,34 +1,17 @@
 import React from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 
 export function MyListGroup(props) {
-    const {
-        children,
-        divided = "vertically",
-        container = false,
-        style = { margin: "0em 0em" },
-        ...other
-    } = props;
+    const { children, divided = "vertically", container = false, style = { margin: "0em 0em" }, ...other } = props;
     return (
-        <Grid
-            stackable
-            divided={divided}
-            style={style}
-            container={container}
-            {...other}
-        >
+        <Grid stackable divided={divided} style={style} container={container} {...other}>
             {children}
         </Grid>
     );
 }
 
 export function MyListGroupRow(props) {
-    const {
-        children,
-        header,
-        style /*= { margin: "0em 0em" }*/,
-        ...other
-    } = props;
+    const { children, header, style /*= { margin: "0em 0em" }*/, ...other } = props;
     return (
         <Grid.Row style={style} {...other}>
             {header && <h3>{header}</h3>}
@@ -36,8 +19,18 @@ export function MyListGroupRow(props) {
         </Grid.Row>
     );
 }
-
 MyListGroup.Row = MyListGroupRow;
+
+export function MyListGroupColumn(props) {
+    const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, ...other } = props;
+    return (
+        <Grid.Column style={style} {...other}>
+            {header && <Header as="h3">{header}</Header>}
+            {children}
+        </Grid.Column>
+    );
+}
+MyListGroup.Col = MyListGroupColumn;
 
 export function MyGridTable(props) {
     const {
@@ -50,13 +43,7 @@ export function MyGridTable(props) {
         ...other
     } = props;
     return (
-        <Grid
-            divided={divided}
-            stackable={stackable}
-            style={style}
-            container={container}
-            {...other}
-        >
+        <Grid divided={divided} stackable={stackable} style={style} container={container} {...other}>
             {header && <h4>{header}</h4>}
             {children}
         </Grid>
@@ -64,12 +51,7 @@ export function MyGridTable(props) {
 }
 
 export function MyGridTableRow(props) {
-    const {
-        children,
-        columns = 2,
-        style = { padding: "0 0.5em" },
-        ...other
-    } = props;
+    const { children, columns = 2, style = { padding: "0 0.5em" }, ...other } = props;
     return (
         <Grid.Row columns={columns} style={style} {...other}>
             {children}
@@ -79,15 +61,13 @@ export function MyGridTableRow(props) {
 MyGridTable.Row = MyGridTableRow;
 
 export function MyGridTableColumn(props) {
-    const {
-        children,
-        style = { padding: "0.5em 0", margin: "0em 0" },
-        ...other
-    } = props;
+    const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, ...other } = props;
     return (
         <Grid.Column style={style} {...other}>
+            {header && <Header as="h3">{header}</Header>}
             {children}
         </Grid.Column>
     );
 }
 MyGridTable.Column = MyGridTableColumn;
+MyGridTable.Col = MyGridTableColumn;

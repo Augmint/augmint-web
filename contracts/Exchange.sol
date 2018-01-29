@@ -1,266 +1,237 @@
-/*
-Exchange Acd <-> ETH
-It's mock only yet, basic implemantion of selling Acd for ETH or vica versa.
-All orders are on a market ethAcd rate at the moment of fullmilment
-Market rate is provided  by the rates contract
-
-TODO: add reentrancy protection
-TODO: add min exchanged amount param (set in Acd for both?)
-    + what if total leftover from fills  carried over to new order but it's small than minamount?
-TODO: astronomical gas costs when filling a lot of orders
-    + how to handle on client side (eg. estimate if it might be over the gas etc.)
-TODO: make orders generic, ie. more generic placeSellOrder func.
-TODO: test for rounding if could be any leftover after order fills
-TODO: add option to fill or kill (ie option to not place orders if can't fill from open orders)
-TODO: add option to pass a rate for fill or kill orders to avoid different rate if it changes while submitting - it would ensure trade happens on predictable rate
-TODO: add orderId to Acd transfer narrative
+/* Augmint's internal Exchange
+    TODO: finish matchMultipleOrders()
+    TODO: check/test if underflow possible on sell/buyORder.amount -= token/weiAmount in matchOrders()
+    TODO: deduct fee
+    TODO: consider take funcs (frequent rate changes with takeBuyToken? send more and send back remainder?)
 */
-pragma solidity ^0.4.18;
-import "./SafeMath.sol";
-import "./Owned.sol";
-import "./OrdersLib.sol";
-import "./TokenAcd.sol";
-import "./Rates.sol";
+pragma solidity 0.4.18;
+import "./interfaces/ExchangeInterface.sol";
 
-contract Exchange is owned {
-    using SafeMath for uint256;
-    using OrdersLib for OrdersLib.OrderList;
-    using OrdersLib for OrdersLib.OrderData;
 
-    Rates public rates;
-    TokenAcd public tokenUcd; // for UCD transfers
+contract Exchange is ExchangeInterface {
+    uint public minOrderAmount; // 0: no limit. For placeBuyTokenOrder it's calculated on current rate & price provided
 
-    // These should be equal to ETH and UCD Balances of contract
-    /* TODO: consider to remove these when rounding tested */
-    uint256 public totalUcdSellOrders;
-    uint256 public totalEthSellOrders;
+    /* used to stop executing matchMultiple when running out of gas.
+        actual is much less, just leaving enough matchMultipleOrders() to finish TODO: fine tune & test it*/
+    uint32 public constant ORDER_MATCH_WORST_GAS = 200000;
 
-    /*
-     orders stores all open orders. It's a linked array, ordered by the order was placed
-     Order removed  when fully filled and updated when partially filled
-     Note that it contains only one type of orders (EthSell or UtcSell) at any given time because all orders are on market rate
-     Ie. it's not a real order book
+    event NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount,
+        uint weiAmount);
+
+    event OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId,
+        uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
+
+    event CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
+
+    event MinOrderAmountChanged(uint newMinOrderAmount);
+
+    function Exchange(address augmintTokenAddress, address ratesAddress, uint _minOrderAmount) public {
+        augmintToken = AugmintTokenInterface(augmintTokenAddress);
+        rates = Rates(ratesAddress);
+        minOrderAmount = _minOrderAmount;
+    }
+
+    function placeBuyTokenOrder(uint price) external payable returns (uint orderIndex, uint orderId) {
+        require(price > 0);
+        require(msg.value > 0);
+
+        uint tokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(), msg.value.roundedDiv(price).mul(10000));
+        require(tokenAmount >= minOrderAmount);
+
+        lastOrderId++;
+        orderIndex = buyTokenOrders.push(Order(lastOrderId, msg.sender, now, price, msg.value)) - 1;
+
+        NewOrder(orderIndex, lastOrderId, msg.sender, price, 0, msg.value);
+        return(orderIndex, lastOrderId);
+    }
+
+    /* this function requires previous approval to transfer tokens */
+    function placeSellTokenOrder(uint price, uint tokenAmount) external returns (uint orderIndex, uint orderId) {
+        augmintToken.transferFromNoFee(msg.sender, this, tokenAmount, "Sell token order placed");
+        return _placeSellTokenOrder(msg.sender, price, tokenAmount);
+    }
+
+    /* This func assuming that token already transferred to Exchange so it can be only called
+        via AugmintToken.placeSellTokenOrderOnExchange() convenience function */
+    function placeSellTokenOrderTrusted(address maker, uint price, uint tokenAmount)
+    external returns (uint orderIndex, uint orderId) {
+        require(msg.sender == address(augmintToken));
+        return _placeSellTokenOrder(maker, price, tokenAmount);
+    }
+
+    function cancelBuyTokenOrder(uint buyTokenIndex, uint buyTokenId) external {
+        require(buyTokenOrders[buyTokenIndex].maker == msg.sender);
+        require(buyTokenId == buyTokenOrders[buyTokenIndex].id);
+
+        msg.sender.transfer(buyTokenOrders[buyTokenIndex].amount);
+
+        CancelledOrder(buyTokenId, msg.sender, 0, buyTokenOrders[buyTokenIndex].amount);
+        _removeOrder(buyTokenOrders, buyTokenIndex);
+    }
+
+    function cancelSellTokenOrder(uint sellTokenIndex, uint sellTokenId) external {
+        require(sellTokenOrders[sellTokenIndex].maker == msg.sender);
+        require(sellTokenId == sellTokenOrders[sellTokenIndex].id);
+
+        augmintToken.transferNoFee(msg.sender, sellTokenOrders[sellTokenIndex].amount, "Sell token order cancelled");
+
+        CancelledOrder(sellTokenId, msg.sender, sellTokenOrders[sellTokenIndex].amount, 0);
+        _removeOrder(sellTokenOrders, sellTokenIndex);
+    }
+
+    /* matches any two orders if the sell price >= buy price
+        trade price is the price which is closer to par.
+        reverts if any of the orders been removed (i.e. passed orderId is not matching the orderIndex in contract)
     */
-    OrdersLib.OrderList public orders;
+    function matchOrders(uint buyTokenIndex, uint buyTokenId, uint sellTokenIndex, uint sellTokenId) external {
+        require(isValidMatch(buyTokenIndex, buyTokenId, sellTokenIndex, sellTokenId));
 
-    mapping(address => uint80[]) public m_orders; // orders for an account => orderId
-
-    function Exchange(address _tokenUcdAddress, address _ratesAddress) public owned() {
-         rates = Rates(_ratesAddress);
-         tokenUcd = TokenAcd(_tokenUcdAddress);
+        var (buyFilled, sellFilled) = _fillOrder(buyTokenIndex, sellTokenIndex);
+        if (sellFilled) { _removeOrder(sellTokenOrders, sellTokenIndex);}
+        if (buyFilled) { _removeOrder(buyTokenOrders, buyTokenIndex); }
     }
 
-    function getMakerOrderCount(address maker) external view returns(uint orderCount) {
-        return m_orders[maker].length;
-    }
+    /*  matches as many orders as possible from the passed orders
+        Runs as long as gas avialable for the call
+        Returns the number of orders matched
+        Stops if any match is invalid (case when any of the orders removed after client generated the match list sent)
+        Reverts if sizes of arrays passed shorter than passed buyTokenIndexes.
 
-    function getOrderCount() public view returns(uint80 orderCount) {
-        return orders.count;
-    }
+        FIXME: finish this func */
+    function matchMultipleOrders(uint[] buyTokenIndexes, uint[] buyTokenIds, uint[] sellTokenIndexes,
+    uint[] sellTokenIds) external returns(uint i) {
+        // fill but don't remove yet to keep indexes
+        for (i = 0; i < buyTokenIndexes.length && msg.gas > ORDER_MATCH_WORST_GAS; i++) {
+            /* stop processing next match is not valid but let the others pass */
+            if (!isValidMatch(buyTokenIndexes[i], buyTokenIds[i], sellTokenIndexes[i], sellTokenIds[i])) { break; }
 
-    function getMakerOrder(address maker, uint80 _makerOrderIdx) external view
-            returns(uint80 orderId, uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount)  {
-        orderId = m_orders[maker][_makerOrderIdx];
-        return (
-                orderId,
-                orders.orders[ orderId -1].order.makerOrderIdx,
-                orders.orders[ orderId -1].order.orderType,
-                orders.orders[ orderId -1].order.amount);
-    }
+            var (buyFilled, sellFilled) = _fillOrder(buyTokenIndexes[i], sellTokenIndexes[i]);
 
-    function getOrder(uint80 orderId) external view
-            returns(address maker,  uint80 makerOrderIdx, OrdersLib.OrderType orderType, uint amount) {
-        return (orders.orders[ orderId -1 ].order.maker,
-                orders.orders[ orderId -1 ].order.makerOrderIdx,
-                orders.orders[ orderId -1 ].order.orderType,
-                orders.orders[ orderId -1 ].order.amount);
-    }
-
-    /* Helper function for client to reduce web3 calls when getting orderlist
-        Note: client should handle potential state changes in orders during iteration
-        Returns:
-            order data for orderId if order is open + next open orderId.
-            Passing 0 orderId will return first open order
-        Return values:
-         order.amount 0 returned then orderId is not open
-         nextOrderId 0 returned then no more open orders
-         For invalid orderId returns 0 order.amount and nextOrderId
-    */
-    function iterateOpenOrders(uint80 orderId) external view
-        returns (uint80 _orderId,
-                address maker,
-                uint80 makerOrderIdx,
-                OrdersLib.OrderType orderType,
-                uint amount,
-                uint80 nextOrderId) {
-        if( orders.first == 0) { // OrdersLib.None
-            // no open orders
-            return (0,address(0), 0,OrdersLib.OrderType.EthSell,0,0);
+            /* mark orders for removal - we can't remove yet as it would change indexes in buyTokenOrders storage array
+                TODO: more gas effecient way? i.e. without writing storage */
+            if (buyFilled) { buyTokenOrders[buyTokenIndexes[i]].amount = 0; }
+            if (sellFilled) { sellTokenOrders[sellTokenIndexes[i]].amount = 0; }
         }
-        if(orderId == 0) {
-            //|| orders.orders[orderid-1].first == OrdersLib.None) {
-            _orderId = orders.first;
+
+        /* FIXME: do removal
+            potentially with a func optimised for multiple removals (instead of _removeOrder)
+            TODO: fix gas cost left over calculation to count in removals gas cost */
+
+        revert(); // function is not finished
+
+        return i;
+    }
+
+    /* only allowed for Monetary Board. */
+    function setMinOrderAmount(uint _minOrderAmount) external restrict("setMinOrderAmount") {
+        minOrderAmount = _minOrderAmount;
+        MinOrderAmountChanged(minOrderAmount);
+    }
+
+    function getOrderCounts() external view returns(uint buyTokenOrderCount, uint sellTokenOrderCount) {
+        return(buyTokenOrders.length, sellTokenOrders.length);
+    }
+
+    // returns 50 buy and sell token orders starting from some offset
+    //      orders are encoded as [maker], [index, id, addedTime, price, tokenAmount, weiAmount]
+    //      if weiAmount == 0 then SELL token order, if tokenAmount == 0 then BUY token order
+    function getOrders(uint offset) external view returns (uint[6][50] response, address[50] makers) {
+        Order memory order; // we should maybe use storage pointer here but that gives a warning
+
+        uint sellOffset = buyTokenOrders.length < offset ? offset - buyTokenOrders.length : 0;
+
+        for (uint8 i = 0; i < 50 && i + offset < buyTokenOrders.length; i++) {
+            order = buyTokenOrders[offset + i];
+            response[i] = [offset + i, order.id, order.addedTime, order.price, 0, order.amount];
+            makers[i] = order.maker;
+        }
+
+        for (uint8 j = 0; j + i < 50 && sellOffset + j < sellTokenOrders.length; j++) {
+            order = sellTokenOrders[sellOffset + j];
+            response[i + j] = [sellOffset + j, order.id, order.addedTime, order.price,
+                                order.amount, 0];
+            makers[i + j] = order.maker;
+        }
+
+        return (response, makers);
+    }
+
+    function isValidMatch(uint buyTokenIndex, uint buyTokenId, uint sellTokenIndex, uint sellTokenId)
+    public view returns (bool) {
+        return (buyTokenId == buyTokenOrders[buyTokenIndex].id &&
+                sellTokenId == sellTokenOrders[sellTokenIndex].id &&
+                buyTokenOrders[buyTokenIndex].price >= sellTokenOrders[sellTokenIndex].price);
+    }
+
+    /* internal fill function, called by matchOrders and matchMultipleOrders.
+        NB: it doesn't remove or check the match, calling function must do it */
+    function _fillOrder(uint buyTokenIndex, uint sellTokenIndex) internal returns (bool buyFilled, bool sellFilled) {
+        Order storage buyTokenOrder = buyTokenOrders[buyTokenIndex];
+        Order storage sellTokenOrder = sellTokenOrders[sellTokenIndex];
+
+        uint price = getMatchPrice(buyTokenOrder.price, sellTokenOrder.price); // use price which is closer to par
+        uint sellTokenWeiAmount = rates.convertToWei(augmintToken.peggedSymbol(),
+                                    sellTokenOrder.amount.mul(price)).roundedDiv(10000);
+        uint tradedWeiAmount;
+        uint tradedTokenAmount;
+
+        if (sellTokenWeiAmount <= buyTokenOrder.amount) {
+            tradedWeiAmount = sellTokenWeiAmount;
+            tradedTokenAmount = sellTokenOrder.amount;
         } else {
-            _orderId = orderId;
+            tradedWeiAmount = buyTokenOrder.amount;
+            tradedTokenAmount = rates.convertFromWei(augmintToken.peggedSymbol(),
+                                                        buyTokenOrder.amount.roundedDiv(price).mul(10000));
         }
 
-        return (_orderId,
-                orders.orders[ _orderId -1 ].order.maker,
-                orders.orders[ _orderId -1 ].order.makerOrderIdx,
-                orders.orders[ _orderId -1 ].order.orderType,
-                orders.orders[ _orderId -1 ].order.amount,
-                orders.orders[ _orderId -1 ].next);
+        sellFilled = tradedTokenAmount == sellTokenOrder.amount;
+        buyFilled = tradedWeiAmount == buyTokenOrder.amount;
+
+        if (!buyFilled) {
+            buyTokenOrder.amount -= tradedWeiAmount;
+        }
+        if (!sellFilled) {
+            sellTokenOrder.amount -= tradedTokenAmount;
+        }
+
+        sellTokenOrder.maker.transfer(tradedWeiAmount);
+        augmintToken.transferNoFee(buyTokenOrder.maker, tradedTokenAmount, "Buy token order fill");
+
+        OrderFill(buyTokenOrder.maker, sellTokenOrder.maker, buyTokenOrders[buyTokenIndex].id,
+            sellTokenOrders[sellTokenIndex].id, price, tradedWeiAmount, tradedTokenAmount);
+        return(buyFilled, sellFilled);
     }
 
-
-    function placeSellEthOrder() external payable {
-        require(msg.value > 0); // FIXME: min amount? Shall we use min UCD amount instead of ETH value?
-        uint weiToSellLeft = msg.value;
-        uint ucdValueTotal = rates.convertWeiToUsdc(weiToSellLeft);
-        uint ucdValueLeft = ucdValueTotal;
-        uint weiToPay;
-        uint ucdSold;
-        address maker;
-        // fill as much as we can from open buy eth orders
-        uint80 i;
-        uint80 nextOrderId = orders.iterateFirst();
-        while ( orders.iterateValid(nextOrderId) &&
-                weiToSellLeft > 0 && // FIXME: minAmount to rounding acc?
-                totalUcdSellOrders != 0 ) {
-            i = nextOrderId;
-            nextOrderId = orders.iterateNext(i);
-            maker = orders.orders[i-1].order.maker;
-            if (orders.orders[i-1].order.amount >= ucdValueLeft) {
-                // sell order fully covered from maker buy order
-                ucdSold = ucdValueLeft ;
-                weiToPay = weiToSellLeft;
-            } else {
-                // sell order partially covers buy order
-                ucdSold = orders.orders[i-1].order.amount ;
-                weiToPay = rates.convertUsdcToWei(ucdSold);
-            }
-            ucdValueLeft = ucdValueLeft.sub(ucdSold);
-            weiToSellLeft = weiToSellLeft.sub(weiToPay);
-
-            fillOrder(i, msg.sender, ucdSold, weiToPay); // this pays the maker but not the taker yet
-
-        }
-        if( ucdValueTotal.sub(ucdValueLeft) > 0 ) {
-            // transfer the sum UCD value of all WEI sold with orderFills
-            tokenUcd.transferNoFee(this, msg.sender, ucdValueTotal.sub(ucdValueLeft), "UCD sold");
-        }
-        if (weiToSellLeft != 0) {
-            // No buy order or buy orders wasn't enough to fully fill order
-            // ETH amount already on contract balance
-            addOrder(OrdersLib.OrderType.EthSell, msg.sender,  weiToSellLeft);
-        }
-    }
-
-    function placeSellUcdOrder(uint ucdAmount) external {
-        require(ucdAmount > 0); // FIXME: min amount?
-        tokenUcd.transferNoFee(msg.sender, this, ucdAmount, "UCD sell order placed" );
-        uint weiValueTotal = rates.convertUsdcToWei(ucdAmount);
-        uint weiValueLeft = weiValueTotal;
-        uint ucdToSellLeft = ucdAmount;
-        uint weiSold;
-        uint ucdToPay;
-        address maker;
-        // fill as much as we can from open buy ucd orders
-        uint80 i;
-        uint80 nextOrderId = orders.iterateFirst();
-        while ( orders.iterateValid(nextOrderId) &&
-                weiValueLeft > 0 && // FIXME: minAmount to rounding acc?
-                totalEthSellOrders != 0 ) {
-            i = nextOrderId;
-            nextOrderId = orders.iterateNext(i);
-            maker = orders.orders[i-1].order.maker;
-            if (orders.orders[i-1].order.amount >= weiValueLeft) {
-                // sell order fully covered from maker buy order
-                weiSold = weiValueLeft;
-                ucdToPay = ucdToSellLeft;
-           } else {
-                // sell order partially covers buy order
-                weiSold = orders.orders[i-1].order.amount;
-                ucdToPay = rates.convertWeiToUsdc(weiSold);
-            }
-            weiValueLeft = weiValueLeft.sub(weiSold);
-            ucdToSellLeft = ucdToSellLeft.sub(ucdToPay);
-            fillOrder(i, msg.sender, weiSold, ucdToPay); // this pays the maker but not the taker yet
-        }
-        // pay the sum WEI value of all UCD sold with orderFills to taker
-        msg.sender.transfer( weiValueTotal.sub(weiValueLeft));
-        if (ucdToSellLeft != 0) {
-            // No buy order or weren't enough buy orders to fully fill order
-            addOrder(OrdersLib.OrderType.UcdSell, msg.sender, ucdToSellLeft);
-        }
-    }
-
-    event e_newOrder(uint80 orderId, OrdersLib.OrderType orderType, address maker, uint amount);
-    function addOrder(OrdersLib.OrderType orderType, address maker, uint amount) internal {
-        // It's assumed that the ETH/UCD already taken from maker in calling function
-        if (orderType == OrdersLib.OrderType.EthSell) {
-            totalEthSellOrders = totalEthSellOrders.add(amount);
-        } else if(orderType == OrdersLib.OrderType.UcdSell ){
-            totalUcdSellOrders = totalUcdSellOrders.add(amount);
+    // return par if it's between par otherwise the price which is closer to par
+    function getMatchPrice(uint buyPrice, uint sellPrice) internal pure returns(uint price) {
+        if (sellPrice <= 10000 && buyPrice >= 10000) {
+            price = 10000;
         } else {
-            revert();
+            uint sellPriceDeviationFromPar = sellPrice > 10000 ? sellPrice - 10000 : 10000 - sellPrice;
+            uint buyPriceDeviationFromPar = buyPrice > 10000 ? buyPrice - 10000 : 10000 - buyPrice;
+            price = sellPriceDeviationFromPar > buyPriceDeviationFromPar ? buyPrice : sellPrice;
         }
-
-        uint80 orderId = orders.append(OrdersLib.OrderData(maker, 0, orderType, amount));
-        uint80 makerOrderIdx = uint80( m_orders[maker].push(orderId));
-        orders.orders[orderId-1].order.makerOrderIdx = makerOrderIdx - 1;
-
-        e_newOrder(orderId, orderType, maker, amount );
-        return;
+        return price;
     }
 
-    event e_orderFill(uint80 orderId, address taker, uint amountSold, uint amountPaid);
-    function fillOrder(uint80 orderId, address taker,
-            uint amountToSell, uint amountToPay) internal {
-        // we only pay the maker here. Calling function must pay the sum of all buys to taker
-        OrdersLib.OrderType orderType = orders.orders[orderId -1].order.orderType;
-        address maker = orders.orders[orderId-1].order.maker;
-        if (orderType == OrdersLib.OrderType.EthSell) {
-            tokenUcd.transferNoFee(this, maker, amountToPay, "ETH sold");
-            totalEthSellOrders = totalEthSellOrders.sub(amountToSell);
-        } else if(orderType == OrdersLib.OrderType.UcdSell ){
-            maker.transfer(amountToPay);
-            totalUcdSellOrders = totalUcdSellOrders.sub(amountToSell);
-        } else {
-            revert();
-        }
+    function _placeSellTokenOrder(address maker, uint price, uint tokenAmount)
+    private returns (uint orderIndex, uint orderId) {
+        require(price > 0);
+        require(tokenAmount > 0);
+        require(tokenAmount >= minOrderAmount);
 
-        orders.orders[orderId -1 ].order.amount = orders.orders[orderId -1 ].order.amount.sub(amountToSell);
+        lastOrderId++;
+        orderIndex = sellTokenOrders.push(Order(lastOrderId, maker, now, price, tokenAmount)) - 1;
 
-        if (orders.orders[orderId -1].order.amount == 0) {
-            removeOrder(orderId);
-        }
-
-        e_orderFill(orderId, taker, amountToSell, amountToPay);
+        NewOrder(orderIndex, lastOrderId, maker, price, tokenAmount, 0);
+        return(orderIndex, lastOrderId);
     }
 
-    function removeOrder(uint80 orderId) internal {
-        uint80 makerOrderIdx = orders.orders[orderId-1].order.makerOrderIdx;
-        address maker = orders.orders[orderId-1].order.maker;
-        orders.remove(orderId);
-        uint len = m_orders[maker].length;
-        if(makerOrderIdx == len -1 ) {
-            // last item
-            m_orders[maker].length--;
-        } else {
-            // not the last item, overwrite with last item and shrink array
-            m_orders[maker][makerOrderIdx] = m_orders[maker][len -1];
-            orders.orders[  m_orders[maker][len -1] - 1 ].order.makerOrderIdx = makerOrderIdx;
-            m_orders[maker].length--;
+    function _removeOrder(Order[] storage orders, uint orderIndex) private {
+        if (orderIndex < orders.length - 1) {
+            orders[orderIndex] = orders[orders.length - 1];
         }
+        orders.length--;
     }
-/*
-    function cancelOrder( uint80 orderId ) external {
-        // FIXME: to implement
-        // transfer ETH or UCD back
-         //orderId = orderId; // to supress compiler warnings
-         // FIXME: check orderId
-         // removeOrder( orderIdx)
-    }
-*/
+
 }

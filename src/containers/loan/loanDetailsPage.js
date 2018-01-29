@@ -4,18 +4,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import { Link } from "react-router-dom";
-import { Header, Button } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
+import { LoanRepayLink } from "./components/LoanRepayLink";
+import CollectLoanButton from "./collectLoan/CollectLoanButton";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
         super(props);
-        let loanId = parseInt(this.props.match.params.loanId, 10);
         this.state = {
             loan: null,
-            loanId: loanId,
+            loanId: this.props.match.params.loanId,
             isLoading: true
         };
     }
@@ -36,7 +36,7 @@ class LoanDetailsPage extends React.Component {
             return;
         } // not loaded yet
         let isLoanFound;
-        let loan = this.props.loans.find(item => {
+        const loan = this.props.loans.find(item => {
             return item.loanId === this.state.loanId;
         });
         if (typeof loan === "undefined") {
@@ -55,18 +55,13 @@ class LoanDetailsPage extends React.Component {
         return (
             <Psegment>
                 <Pheader header="Loan details" />
-                {this.state.isLoading && (
-                    <LoadingPanel>
-                        Fetching data (loan id: {this.state.loanId})...
-                    </LoadingPanel>
-                )}
+                {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
-                !this.state.isLoanFound && (
-                    <ErrorPanel>
-                        Can't find loan #{this.state.loanId} for current account{" "}
-                        {this.props.userAccount}
-                    </ErrorPanel>
-                )}
+                    !this.state.isLoanFound && (
+                        <ErrorPanel>
+                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
+                        </ErrorPanel>
+                    )}
 
                 {this.state.isLoanFound && (
                     <Pgrid>
@@ -77,17 +72,10 @@ class LoanDetailsPage extends React.Component {
                                 </Header>
                                 <LoanDetails loan={this.state.loan} />
 
-                                {this.state.loan.isDue && (
-                                    <Button
-                                        content="Repay"
-                                        as={Link}
-                                        to={`/loan/repay/${this.state.loan
-                                            .loanId}`}
-                                        labelPosition="right"
-                                        icon="right chevron"
-                                        primary
-                                        size="large"
-                                    />
+                                <LoanRepayLink loan={this.state.loan} size="large" />
+
+                                {this.state.loan.isCollectable && (
+                                    <CollectLoanButton loansToCollect={[{ loanId: this.state.loanId }]} />
                                 )}
                             </Pgrid.Column>
                         </Pgrid.Row>

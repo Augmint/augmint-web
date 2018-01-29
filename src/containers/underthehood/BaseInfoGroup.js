@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import tokenUcdProvider from "modules/tokenUcdProvider";
+import augmintTokenProvider from "modules/augmintTokenProvider";
 import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
-import { TokenUcdInfo } from "./components/TokenUcdInfo";
+import { AugmintTokenInfo } from "./components/AugmintTokenInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
 import { ArrayDump } from "./components/ArrayDump";
 import { SignTest } from "./components/SignTest";
@@ -10,11 +10,11 @@ import { Pgrid } from "components/PageLayout";
 
 class BaseInfoGroup extends React.Component {
     componentDidMount() {
-        tokenUcdProvider();
+        augmintTokenProvider();
     }
 
     render() {
-        const { web3Connect, userBalances, tokenUcd, accounts } = this.props;
+        const { web3Connect, userBalances, augmintToken, accounts } = this.props;
         return (
             <Pgrid columns={3}>
                 <Pgrid.Column>
@@ -23,7 +23,7 @@ class BaseInfoGroup extends React.Component {
                     <SignTest web3Connect={web3Connect} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <TokenUcdInfo contract={tokenUcd} />
+                    <AugmintTokenInfo contract={augmintToken} />
                 </Pgrid.Column>
                 <Pgrid.Column>
                     <ArrayDump header="Accounts" items={accounts} />
@@ -35,7 +35,7 @@ class BaseInfoGroup extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    tokenUcd: state.tokenUcd,
+    augmintToken: state.augmintToken,
     userBalances: state.userBalances,
     accounts: state.web3Connect.accounts
 });

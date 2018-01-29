@@ -1,0 +1,17 @@
+{
+  "extends": "react-app",
+  "rules": {
+     max-len: "off",
+     radix: "off"
+  },
+  "globals": {
+        "web3": false,
+        "assert": false,
+        "artifacts": false,
+        "before": false,
+        "after": false,
+        "afterEach": false,
+        "beforeEach": false,
+        "contract": false
+    }
+}

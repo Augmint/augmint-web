@@ -14,9 +14,7 @@ class LoanSelector extends React.Component {
                 <Pgrid.Column width={10}>
                     <LoanList
                         header="Select your loan to repay"
-                        noItemMessage={
-                            <p>None of your loans is due currently.</p>
-                        }
+                        noItemMessage={<p>None of your loans is due currently.</p>}
                         loans={this.props.loans}
                         filter={item => {
                             return item.isDue;

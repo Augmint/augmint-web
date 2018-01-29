@@ -16,10 +16,7 @@ export function HowToConnect(props) {
                             Metamask Chrome plugin
                         </Link>{" "}
                         <br />or<br />
-                        <Link
-                            to="https://github.com/ethereum/mist/releases"
-                            target="_blank"
-                        >
+                        <Link to="https://github.com/ethereum/mist/releases" target="_blank">
                             Mist browser
                         </Link>
                     </p>

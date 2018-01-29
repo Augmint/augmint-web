@@ -1,0 +1,60 @@
+@startuml
+title **Augmint** - Loan flow
+skinparam ArrowColor #blue
+skinparam noteBackgroundColor #lightgrey
+actor Borrower
+control AugmintToken
+control LoanManager
+actor Anyone
+== New loan ==
+Borrower -> LoanManager : newEthBackedLoan\n(productId, {ethToEscrow})
+LoanManager -> LoanManager : calculate loanAmount from collateral, interest etc
+LoanManager -> AugmintToken : issueAndDisburse\n(borrower, loanAmount, interestAmount)
+note over AugmintToken
+issueAndDisburse is restricted to trusted LoanManager(s)
+end note
+AugmintToken -> AugmintToken : issue(repaymentAmount)\nbalances[interestPool] += interestAmount
+AugmintToken -> AugmintToken : _transfer\n(borrower, loanAmount, "loan disbursment", 0)
+AugmintToken --> Borrower : loanAmount transferred
+
+== Repay loan  ==
+Borrower -> AugmintToken : repayLoan(loanManager, loanId)
+note over AugmintToken
+    Only accepts whitelisted loanManagers
+    to avoid phising attacks
+end note
+AugmintToken -> AugmintToken : transfer\n(from: borrower, to: augmintToken, narr: "Loan repayment", fee: 0)
+Borrower --> AugmintToken : repaymentAmount transferred
+AugmintToken -> AugmintToken : burn(repaymentAmount)
+AugmintToken -> AugmintToken : transfer interestAmount from interestHoldingAcc to interestEarnedAcc
+AugmintToken -> LoanManager : releaseCollateral(loanId)
+note left LoanManager
+    releaseCollateral() is restricted to trusted AugmintTokens
+end note
+activate LoanManager
+LoanManager -> LoanManager : loan state = repaid
+LoanManager --> Borrower : borrower.send(ethInEscrow)
+deactivate LoanManager
+== Collect loan  ==
+Anyone -> LoanManager : collectMultiple(loanIds[])
+note left
+    collectMultiple() is not restricted
+    caller will be rewarded with eth
+end note
+loop as many times as fits to gas provided to tx call
+    LoanManager -> LoanManager : collect()
+    LoanManager --> AugmintToken : AugmintToken.send({loanValueInEth + defaultingFee})
+    LoanManager --> Borrower : AugmintToken.send({collaterInEscrow - loanValueInEth - defaultingFee})
+    LoanManager -> AugmintToken : moveCollectedInterest(interestAmount)
+    note over AugmintToken #yellow
+    moveCollectedInterest() is restricted to trusted loanManagers
+    end note
+    AugmintToken -> AugmintToken : move interest from interestPool to reserve
+end
+LoanManager -> AugmintToken : sendReward(msg.sender, sum collectionReward)
+note over AugmintToken #yellow
+    sendReward() is restricted to LoanManager
+    Q: how much a vulnerability risk is it? how to restrict better?
+end note
+AugmintToken --> Anyone : msg.sender.send({sum collectionReward})
+@enduml

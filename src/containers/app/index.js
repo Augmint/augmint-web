@@ -12,7 +12,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
-import TokenUcd from "containers/tokenUcd";
+import AugmintToken from "containers/augmintToken";
 import AboutUs from "containers/home/aboutUs";
 import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
@@ -21,6 +21,7 @@ import ConnectedHome from "containers/home/ConnectedHome";
 import NotConnectedHome from "containers/home/NotConnectedHome";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
+import FlashMessages from "./FlashMessages";
 //import { AppFooter } from "containers/app/AppFooter";
 
 class ScrollToTop extends React.Component {
@@ -43,37 +44,20 @@ class App extends React.Component {
         return (
             <div className="Site">
                 <ScrollToTop />
-                <AppMenu
-                    web3Connect={this.props.web3Connect}
-                    location={this.props.location}
-                />
-
+                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} />
+                <FlashMessages />
                 <div className="Site-content">
                     <Switch>
-                        <Route
-                            exact
-                            path="/"
-                            component={
-                                isConnected ? ConnectedHome : NotConnectedHome
-                            }
-                        />
+                        <Route exact path="/" component={isConnected ? ConnectedHome : NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
-                        <Route
-                            exact
-                            path="/exchange"
-                            component={ExchangeHome}
-                        />
-                        <Route exact path="/reserves" component={TokenUcd} />
+                        <Route exact path="/exchange" component={ExchangeHome} />
+                        <Route exact path="/reserves" component={AugmintToken} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
                         <Route exact path="/tryit" component={TryIt} />
                         <Route exact path="/aboutus" component={AboutUs} />
-                        <Route
-                            exact
-                            path="/under-the-hood"
-                            component={UnderTheHood}
-                        />
+                        <Route exact path="/under-the-hood" component={UnderTheHood} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

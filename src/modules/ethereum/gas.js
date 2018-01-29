@@ -1,12 +1,15 @@
 export const cost = {
-    NEW_LOAN_GAS: 1000000, // As of now it's on testRPC: first= 865435 - 892077 additional = 835435 - 847058
-    NEW_FIRST_LOAN_GAS: 1000000, // on ropsten: 892077
-    REPAY_GAS: 150000, // as of now on testRpc: 113188, 2nd from same AC: ?. on rinkeby: 126251
-    COLLECT_GAS: 130000, // as of now on testRpc: 89419
+    NEW_LOAN_GAS: 400000, // As of now it's on testRPC: first for account = 296983  additional =  287467 first for user: testrpc: 320528
+    NEW_FIRST_LOAN_GAS: 400000, // on test rpc: 347467 rinkeby: ??
+    REPAY_GAS: 200000, // AugmintToken.repayLoan, as of now on testRpc: 108373 - 108461, 2nd from same AC: ?. on rinkeby: ???
+    COLLECT_BASE_GAS: 90000, // as of now on testRpc: 1 loan = first: 72639, 2nd: 63989
+    COLLECT_ONE_GAS: 40000, // as of now: ???
 
-    TRANSFER_UCD_GAS: 100000, // on testrpc: first: 75189 - 75405, rinkeby first: 76629
+    TRANSFER_AUGMINT_TOKEN_GAS: 100000, // on testrpc: first: 75189 - 75405, rinkeby first: 76629
     //consecutive : no narr: 45405 - 60405 (higher when sent to account which never received)
     // w narrative: 46733 - 56693
 
-    PLACE_ORDER_GAS: 4000000 // tx going to be replaced
+    PLACE_ORDER_GAS: 250000,
+    MATCH_ORDERS_GAS: 200000,
+    CANCEL_ORDER_GAS: 150000
 };

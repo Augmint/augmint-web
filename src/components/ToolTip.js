@@ -16,3 +16,8 @@ export default function ToolTip(props) {
         </Popup>
     );
 }
+
+export function MoreInfoTip(props) {
+    const { trigger = <Icon color="grey" name="zoom" />, hoverable = true, ...other } = props;
+    return <ToolTip hoverable={hoverable} trigger={trigger} {...other} />;
+}

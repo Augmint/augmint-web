@@ -7,11 +7,7 @@ export function AppFooter(props) {
         <Segment inverted>
             <Container>
                 <List horizontal inverted divided link>
-                    <List.Item
-                        as={NavLink}
-                        to="/under-the-hood"
-                        content="Under the hood"
-                    />
+                    <List.Item as={NavLink} to="/under-the-hood" content="Under the hood" />
                 </List>
             </Container>
         </Segment>

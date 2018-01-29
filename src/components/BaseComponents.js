@@ -1,32 +1,24 @@
 /* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import BigNumber from "bignumber.js";
-import {
-    getTransferFee,
-    getMaxTransfer
-} from "modules/ethereum/transferTransactions";
+import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
 import { Form as SemanticForm } from "semantic-ui-react";
 import store from "modules/store";
 
 export const Validations = {
     required: value => {
-        return value || (value && value.toString().trim() === "")
-            ? undefined
-            : "Required";
+        return value || (value && value.toString().trim() === "") ? undefined : "Required";
     },
     email: value =>
-        value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-            ? "Invalid email address"
-            : undefined,
+        value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? "Invalid email address" : undefined,
 
-    ucdAmount: value => {
-        return parseFloat(value) > 0
-            ? undefined
-            : "Amount must be bigger than 0";
+    tokenAmount: value => {
+        return parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0";
     },
 
-    ethAmount: value =>
-        parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0",
+    ethAmount: value => (parseFloat(value) > 0 ? undefined : "Amount must be bigger than 0"),
+
+    price: value => (parseFloat(value) > 0 ? undefined : "Price must be bigger than 0"),
 
     address: value => {
         let web3 = store.getState().web3Connect.web3Instance;
@@ -34,89 +26,107 @@ export const Validations = {
         return web3.utils.isAddress(value) ? undefined : "Invalid address";
     },
 
-    ucdUserBalance: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
-        let userBalance = store.getState().userBalances.account.bn_ucdBalance;
-        return userBalance.lt(parseFloat(value))
-            ? "Your ACD balance is less than the amount"
-            : undefined;
+    userTokenBalance: value => {
+        // TODO: shall we look for bn_pendingTokenBalance instead?
+        let userBalance = store.getState().userBalances.account.bn_tokenBalance;
+        return userBalance.lt(parseFloat(value)) ? "Your A-EUR balance is less than the amount" : undefined;
     },
 
-    acdUserBalanceWithTransferFee: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
-        let decimalsDiv = store.getState().tokenUcd.info.bn_decimalsDiv;
-        let userBalance = store
-            .getState()
-            .userBalances.account.bn_ucdBalance.mul(decimalsDiv);
+    userTokenBalanceWithTransferFee: value => {
+        // TODO: shall we look for bn_pendingTokenBalance instead?
+        const decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
+        const userBalance = store.getState().userBalances.account.bn_tokenBalance.mul(decimalsDiv);
         let amount;
         try {
             amount = new BigNumber(value).mul(decimalsDiv);
         } catch (error) {
             return;
         }
-        let fee = getTransferFee(amount);
-        return userBalance.lt(amount.add(fee))
-            ? "Your ACD balance is less than the amount + transfer fee. \nMax amount you can transfer is " +
-                  getMaxTransfer(userBalance)
-                      .div(decimalsDiv)
-                      .toString() +
-                  " ACD"
-            : undefined;
+        const fee = getTransferFee(amount);
+        if (userBalance.gte(amount.add(fee))) {
+            return undefined;
+        }
+        const maxTransfer = getMaxTransfer(userBalance)
+            .div(decimalsDiv)
+            .toString();
+        if (maxTransfer <= 0) {
+            return "Your A-EUR balance is less than the amount + transfer fee.";
+        }
+        return `Your A-EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A-EUR`;
+    },
+
+    minOrderTokenAmount: value => {
+        const minValue = store.getState().exchange.info.minOrderAmount;
+        let amount;
+        try {
+            amount = new BigNumber(value);
+        } catch (error) {
+            return;
+        }
+
+        if (amount.gte(minValue)) {
+            return undefined;
+        } else {
+            return `Token amount is less than minimum order amount of ${minValue} A-EUR`;
+        }
     },
 
     ethUserBalance: value => {
-        // TODO: shall we look for bn_ucdPendingBalance instead?
-        let userBalance = store.getState().userBalances.account.bn_ethBalance;
-        return userBalance.lt(parseFloat(value))
-            ? "Your ETH balance is less than the amount"
-            : undefined;
+        // TODO: shall we look for bn_pendingTokenBalance instead?
+        const userBalance = store.getState().userBalances.account.bn_ethBalance;
+        return userBalance.lt(parseFloat(value)) ? "Your ETH balance is less than the amount" : undefined;
     },
 
     notOwnAddress: value => {
         let userAccount = store.getState().web3Connect.userAccount;
-        return value.toLowerCase() === userAccount.toLowerCase()
-            ? "You can't transfer to yourself"
-            : undefined;
+        return value.toLowerCase() === userAccount.toLowerCase() ? "You can't transfer to yourself" : undefined;
     },
 
-    minUcdAmount: minValue => value => {
-        return parseFloat(value) < minValue
-            ? "Amount must be at least " + minValue + " ACD"
-            : undefined;
+    minTokenAmount: minValue => value => {
+        return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A-EUR` : undefined;
     }
 };
 
 export const Parsers = {
     trim: value => value && value.trim()
 };
+function normalizeDecimals(decimalPlaces, value) {
+    if (value === null || value === "" || value === undefined) {
+        return "";
+    }
+    // TODO: interantilaistion (for different thousand separators)
+    let v = value.toString().replace(/[^\d.]/g, "");
+    let firstDot = v.indexOf(".");
+    // TODO: not yet working fix attempt for edge case when user entering a second dot.
+    // if (firstDot >= 0) {
+    //     let secondDot = v.indexOf(".", firstDot + 1);
+    //     console.log("v:", v,  "firstdot: ", firstDot, "seconddot: ",secondDot)
+    //     if (secondDot >= 0) {
+    //         v = v.slice(0, secondDot );
+    //     }
+    // }
+    v = v.slice(0, firstDot >= 0 ? firstDot + decimalPlaces + 1 : undefined);
+    return v;
+}
 export const Normalizations = {
-    ucdAmount: (value, previousValue) => {
-        if (value === null || value === "" || value === undefined) {
-            return "";
-        }
-        let v = value.toString().replace(/[^\d.]/g, "");
-        v = v.slice(0, v.indexOf(".") >= 0 ? v.indexOf(".") + 3 : undefined);
-        return v;
+    fourDecimals: (value, previousValue) => {
+        return normalizeDecimals(4, value);
     },
 
-    ethAmount: (value, previousValue) => {
-        if (value === null || value === "" || value === undefined) {
-            return "";
-        }
-        // FIXME: interantilaistion (for different thousand separators)
-        let v = value.toString().replace(/[^\d.]/g, "");
-        let firstDot = v.indexOf(".");
-        // not yet working fix attempt for edge case when user entering a second dot.
-        //  it requires text type input field
-        // if (firstDot >= 0) {
-        //     let secondDot = v.indexOf(".", firstDot + 1);
-        //     console.log("v:", v,  "firstdot: ", firstDot, "seconddot: ",secondDot)
-        //     if (secondDot >= 0) {
-        //         v = v.slice(0, secondDot );
-        //     }
-        // }
-        v = v.slice(0, firstDot >= 0 ? firstDot + 6 : undefined);
-        return v;
+    twoDecimals: (value, previousValue) => {
+        return normalizeDecimals(2, value);
+    },
+
+    fiveDecimals: (value, previousValue) => {
+        return normalizeDecimals(5, value);
+    },
+
+    sixDecimals: (value, previousValue) => {
+        return normalizeDecimals(6, value);
+    },
+
+    eightDecimals: (value, previousValue) => {
+        return normalizeDecimals(8, value);
     }
 };
 

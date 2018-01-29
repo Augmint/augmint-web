@@ -7,74 +7,58 @@ export default () => (
     <Tsegment header="Augmint Stable Tokens" subheader="Concept">
         <Tblock header="Modern money">
             <p>
-                Modern currencies are credit based. In layman's terms the amount
-                of money in circulation (supply) is automatically adjusted by
-                market participants (i.e. banks). Banks are creating money when
-                issuing loans and burning money when a loan is repaid.
+                Modern currencies are credit based. In layman's terms the amount of money in circulation (supply) is
+                automatically adjusted by market participants (i.e. banks). Banks are creating money when issuing loans
+                and burning money when a loan is repaid.
             </p>
             <p>
-                The stability is secured or fortified by central banks,
-                adjusting certain base parameters and by the market via the
-                banks adjusting their loan conditions.
+                The stability is secured or fortified by central banks, adjusting certain base parameters and by the
+                market via the banks adjusting their loan conditions.
             </p>
             <p>
-                This system has its flaws and it can be corrupted by governments
-                and banks but in general that's how the monetary system ensures
-                there is always as much money available in the economy as
-                needed.
+                This system has its flaws and it can be corrupted by governments and banks but in general that's how the
+                monetary system ensures there is always as much money available in the economy as needed.
             </p>
         </Tblock>
         <Tblock header="Augmint tokens">
             <p>
-                Augmint is built on the concept of automatically adjusting the
-                supply of each Augmint token in a similar way as modern fiat
-                money but in a transparent, decentralised and secure fashion.
+                Augmint is built on the concept of automatically adjusting the supply of each Augmint token in a similar
+                way as modern fiat money but in a transparent, decentralised and secure fashion.
             </p>
             <p>
-                Augmint tokens are only issued when a new, collateral based loan
-                is created. Tokens are burnt on repayment. In case of loan
-                default the collateral goes to Augmint stability reserves,
-                managed by smart contracts. It all happens in an automated,
-                cryptographically secure and decentralised way.{" "}
+                Augmint tokens are only issued when a new, collateral based loan is created. Tokens are burnt on
+                repayment. In case of loan default the collateral goes to Augmint stability reserves, managed by smart
+                contracts. It all happens in an automated, cryptographically secure and decentralised way.{" "}
             </p>
             <p>
-                Parameters for the new loans, the use of the reserves for market
-                interventions are decided by transparent and open governance
-                processes.
+                Parameters for the new loans, the use of the reserves for market interventions are decided by
+                transparent and open governance processes.
             </p>
-            <p>
-                ACD is the first Augmint token to be implemented. ACD will be
-                pegged to USD.
-            </p>
+            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
         </Tblock>
         <Tblock header="Price stability">
             <p>
-                There are multiple mechanisms to ensure the market expectation
-                and the actual price is around parity to the pegged currency.
+                There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
+                the pegged currency.
             </p>
             <Tblock.SubHeader header="Market mechanics" />
             <p>
-                The primary foundation of stability is the continuous supply of
-                Augmint tokens via loan originations and a corresponding demand
-                for paying back loans on maturity.
+                The primary foundation of stability is the continuous supply of Augmint tokens via loan originations and
+                a corresponding demand for paying back loans on maturity.
             </p>
             <p>
-                Further specific features of the Augmint system will work
-                towards maintaining stability by smoothing the demand & supply
-                peaks and troughs.
+                Further specific features of the Augmint system will work towards maintaining stability by smoothing the
+                demand & supply peaks and troughs.
             </p>
             <Tblock.SubHeader header="Loan parameters" />
             <p>
-                If ACD price deviating from parity then loan parameters are
-                adjusted to make it more or less compelling to get ACD loan for
-                a certain digital asset. This has an effect on ACD
-                demand/supply.
+                If A-EUR price deviating from parity then loan parameters are adjusted to make it more or less
+                compelling to get A-EUR loan for a certain digital asset. This has an effect on A-EUR demand/supply.
             </p>
             <Tblock.SubHeader header="Market intervention" />
             <p>
-                Augmint can intervene from its reserves accumulated from fees,
-                defaults and interests. Augmint reserves can be used on held
-                only for market intervention.
+                Augmint can intervene from its reserves accumulated from fees, defaults and interests. Augmint reserves
+                can be used on held only for market intervention.
             </p>
             <p>
                 Check out our{" "}
@@ -84,41 +68,35 @@ export default () => (
                 for additional tools and more scenarios.
             </p>
         </Tblock>
-        <Tblock header="Getting ACD">
+        <Tblock header="Getting A-EUR">
             <p>
-                You can always buy or sell your ACD for cryptocurrencies (ETH,
-                BTC etc.) on a decentralised exchange. Secondary exchanges will
-                offer direct fiat conversions to/from ACD as well. As the
-                Augmint ecosystem grows you will need less and less to exchange
-                Augmint tokens to fiat money.
+                You can always buy or sell your A-EUR for cryptocurrencies (ETH, BTC etc.) on a decentralised exchange.
+                Secondary exchanges will offer direct fiat conversions to/from A-EUR as well. As the Augmint ecosystem
+                grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
-            <Tblock.SubHeader>ACD loans</Tblock.SubHeader>
+            <Tblock.SubHeader>A-EUR loans</Tblock.SubHeader>
             <p>
-                You can also get ACD by putting your digital assets (ETH or BTC
-                at the beginning) into a decentralised escrow contract.
+                You can also get A-EUR by putting your digital assets (ETH or BTC at the beginning) into a decentralised
+                escrow contract.
             </p>
         </Tblock>
         <Tblock header="Governance">
             <p>
-                The fundamental rules, agreements and funds are maintained and
-                enforced by smart contracts - cryptographically immutable
-                algorithms running on the blockchain.
+                The fundamental rules, agreements and funds are maintained and enforced by smart contracts -
+                cryptographically immutable algorithms running on the blockchain.
             </p>
             <p>
-                We aim to handle as many "decisions" as possible with smart
-                contracts but it's not feasible to prepare for every case with
-                automated smart contracts, such as financial parameters, trusted
-                price oracles, new digital assets, contract releases.
+                We aim to handle as many "decisions" as possible with smart contracts but it's not feasible to prepare
+                for every case with automated smart contracts, such as financial parameters, trusted price oracles, new
+                digital assets, contract releases.
             </p>
             <p>
-                These decisions are made by stakeholders - governance token
-                (GDC) holders. Augmint's governance model ensures that all
-                decisions are democratic and transparent.
+                These decisions are made by stakeholders - governance token (GDC) holders. Augmint's governance model
+                ensures that all decisions are democratic and transparent.
             </p>
             <p>
-                Access to GDC is open to anyone who is willing to deposit ACD
-                tokens. To incentify holding and voting with GDCs the profit
-                from fees is distributed among GDC holders.
+                Access to GDC is open to anyone who is willing to deposit A-EUR tokens. To incentify holding and voting
+                with GDCs the profit from fees is distributed among GDC holders.
             </p>
         </Tblock>
 

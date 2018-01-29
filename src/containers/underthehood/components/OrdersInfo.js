@@ -10,15 +10,16 @@ export function OrdersInfo(props) {
         e.preventDefault();
         store.dispatch(refreshOrders());
     };
-
+    console.log(props);
     return (
         <Pblock header="Orders">
-            <ArrayDump items={props.orders} />
-            <Button
-                size="small"
-                onClick={handleRefreshClick}
-                disabled={!props.orders || props.orders.isLoading}
-            >
+            {props.orders
+                ? [
+                      <ArrayDump key="sellOrdersDump" items={props.orders.sellOrders} />,
+                      <ArrayDump key="buyOrdersDump" items={props.orders.buyOrders} />
+                  ]
+                : "No orders loaded"}
+            <Button size="small" onClick={handleRefreshClick} disabled={!props.orders || props.orders.isLoading}>
                 Refresh orders
             </Button>
         </Pblock>

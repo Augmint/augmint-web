@@ -1,15 +1,21 @@
-var TokenAcd = artifacts.require("./TokenAcd.sol");
-var Rates = artifacts.require("./Rates.sol");
-var SafeMath = artifacts.require("./SafeMath.sol");
-var OrdersLib = artifacts.require("./OrdersLib.sol");
-var Exchange = artifacts.require("./Exchange.sol");
+const TokenAce = artifacts.require("./TokenAce.sol");
+const Rates = artifacts.require("./Rates.sol");
+const SafeMath = artifacts.require("./SafeMath.sol");
+const Exchange = artifacts.require("./Exchange.sol");
 
-module.exports = function(deployer, network) {
+module.exports = function(deployer, network, accounts) {
     deployer.link(SafeMath, Exchange);
-    deployer.link(OrdersLib, Exchange);
-    deployer.deploy(Exchange, TokenAcd.address, Rates.address);
+    deployer.deploy(Exchange, TokenAce.address, Rates.address, 1000000);
     deployer.then(async () => {
-        tokenAcd = await TokenAcd.deployed();
-        await tokenAcd.setExchangeAddress(Exchange.address);
+        const exchange = Exchange.at(Exchange.address);
+        await exchange.grantMultiplePermissions(accounts[0], ["setMinOrderAmount"]);
+
+        const tokenAce = TokenAce.at(TokenAce.address);
+        await tokenAce.grantMultiplePermissions(Exchange.address, [
+            "Exchange",
+            "transferNoFee",
+            "transferFromNoFee",
+            "setMinOrderAmount"
+        ]);
     });
 };

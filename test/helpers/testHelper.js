@@ -1,52 +1,100 @@
 const stringifier = require("stringifier");
-const moment = require("moment");
-var gasUseLog = new Array();
+var gasUseLog = [];
 
 module.exports = {
     stringify,
+    getEvents,
+    assertEvent,
+    assertNoEvents,
     takeSnapshot,
     revertSnapshot,
     logGasUse,
     expectThrow,
-    waitForTimeStamp
+    waitForTimeStamp,
+    waitFor
 };
-var _stringify = stringifier({ maxDepth: 3, indent: "   " });
+const _stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 function stringify(values) {
     return _stringify(values);
 }
 
-/*before(function() {
-    //  TODO: this way would be nicer  but throws: ReferenceError: toIntVal is not defined
-    //        use takeSnapshot() and revertSnapshot(snapshotId) instead.
-    //        Keep an eye on: https://ethereum.stackexchange.com/questions/24899/referenceerror-tointval-is-not-defined-when-extending-web3-with-evm-snapshot
-    //
-    // web3._extend({
-    //     property: "evm",
-    //     methods: [
-    //         new web3._extend.Method({
-    //             name: "snapshot",
-    //             call: "evm_snapshot",
-    //             params: 0,
-    //             outputFormatter: toIntVal
-    //         })
-    //     ]
-    // });
-    //
-    // web3._extend({
-    //     property: "evm",
-    //     methods: [
-    //         new web3._extend.Method({
-    //             name: "revert",
-    //             call: "evm_revert",
-    //             params: 1,
-    //             inputFormatter: [toIntVal]
-    //         })
-    //     ]
-    // });
+function getEvents(contractInstance, eventName) {
+    return new Promise((resolve, reject) => {
+        contractInstance[eventName]().get((err, res) => {
+            if (err) {
+                return reject(err);
+            }
 
-});
-*/
+            resolve(res);
+        });
+    });
+}
+
+async function assertEvent(contractInstance, eventName, expectedArgs) {
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 1, `Expected ${eventName} event wasn't received from ${contractInstance.address}`); // how to get contract name?
+
+    const event = events[0];
+
+    assert(event.event === eventName, `Expected ${eventName} event but got ${event.event}`);
+
+    const eventArgs = event.args;
+
+    const expectedArgNames = Object.keys(expectedArgs);
+    const receivedArgNames = Object.keys(eventArgs);
+
+    assert(
+        expectedArgNames.length === receivedArgNames.length,
+        `Expected ${eventName} event to have ${expectedArgNames.length} arguments, but it had ${
+            receivedArgNames.length
+        }`
+    );
+
+    const ret = {}; // we return values from event (useful when  custom validator passed for an id)
+    expectedArgNames.forEach(argName => {
+        assert(
+            typeof event.args[argName] !== "undefined",
+            `${argName} expected in ${eventName} event but it's not found`
+        );
+
+        const expectedValue = expectedArgs[argName];
+        let value;
+        switch (typeof expectedValue) {
+            case "function":
+                value = expectedValue(event.args[argName]);
+                break;
+            case "number":
+                value =
+                    typeof event.args[argName].toNumber === "function"
+                        ? event.args[argName].toNumber()
+                        : event.args[argName];
+                break;
+            case "string":
+                value =
+                    typeof event.args[argName].toString === "function"
+                        ? event.args[argName].toString()
+                        : event.args[argName];
+                break;
+            default:
+                value = event.args[argName];
+        }
+
+        if (typeof expectedValue !== "function") {
+            assert(
+                value === expectedValue,
+                `Event ${eventName} has ${argName} arg with a value of ${value} but expected ${expectedValue}`
+            );
+        }
+        ret[argName] = value;
+    });
+    return ret;
+}
+
+async function assertNoEvents(contractInstance, eventName) {
+    const events = await getEvents(contractInstance, eventName);
+    assert(events.length === 0);
+}
 
 //let snapshotCount = 0;
 function takeSnapshot() {
@@ -60,9 +108,7 @@ function takeSnapshot() {
             },
             function(error, res) {
                 if (error) {
-                    reject(
-                        new Error("Can't take snapshot with web3\n" + error)
-                    );
+                    reject(new Error("Can't take snapshot with web3\n" + error));
                 } else {
                     resolve(res.result);
                 }
@@ -83,14 +129,7 @@ function revertSnapshot(snapshotId) {
             function(error, res) {
                 if (error) {
                     // TODO: this error is not bubbling up to truffle test run :/
-                    reject(
-                        new Error(
-                            "Can't revert snapshot with web3. snapshotId: " +
-                                snapshotId +
-                                "\n" +
-                                error
-                        )
-                    );
+                    reject(new Error("Can't revert snapshot with web3. snapshotId: " + snapshotId + "\n" + error));
                 } else {
                     resolve(res);
                 }
@@ -100,60 +139,36 @@ function revertSnapshot(snapshotId) {
 }
 
 function logGasUse(testObj, tx, txName) {
-    gasUseLog.push([
-        testObj.test.parent.title,
-        testObj.test.fullTitle(),
-        txName || "",
-        tx.receipt.gasUsed
-    ]);
-} //  logGasUse ()
+    gasUseLog.push([testObj.test.parent.title, testObj.test.fullTitle(), txName || "", tx.receipt.gasUsed]);
+}
 
-function waitForTimeStamp(waitForTimeStamp) {
-    var currentTimeStamp = moment()
-        .utc()
-        .unix();
-    var wait =
-        waitForTimeStamp <= currentTimeStamp
-            ? 1
-            : waitForTimeStamp - currentTimeStamp; // 0 wait caused tests to be flaky, why?
-    console.log(
-        "\x1b[2m        ... waiting ",
-        wait,
-        "seconds then sending a dummy tx for blockTimeStamp to reach time required by test ...\x1b[0m"
-    );
+function waitFor(durationInMs = 1000) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // make a transaction to force the local dev node to create a new block with
+            // new timestamp:
+            web3.eth.sendTransaction({ from: web3.eth.accounts[0] }, err => {
+                if (err) {
+                    return reject(err);
+                }
 
-    return new Promise(resolve => {
-        setTimeout(function() {
-            var blockTimeStamp = web3.eth.getBlock(web3.eth.blockNumber)
-                .timestamp;
-            if (blockTimeStamp < waitForTimeStamp) {
-                web3.eth.sendTransaction(
-                    { from: web3.eth.accounts[0] },
-                    function(error, res) {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve();
-                        }
-                    }
-                );
-            } else {
                 resolve();
-            }
-        }, wait * 1000);
+            });
+        }, durationInMs);
     });
-} // waitForTimeStamp()
+}
+
+async function waitForTimeStamp(UnixTimestamp) {
+    await waitFor(UnixTimestamp * 1000 - Date.now());
+}
 
 function expectThrow(promise) {
-    const onPrivateChain = web3.version.network == 1976 ? true : false; // set by .runprivatechain.sh (geth ...  --networkid 1976 ..)
+    const onPrivateChain = web3.version.network === 1976 ? true : false; // set by .runprivatechain.sh (geth ...  --networkid 1976 ..)
     return promise
         .then(res => {
             if (!onPrivateChain) {
-                console.log(
-                    "Received tx instead of throw: \r\n",
-                    JSON.stringify(res, null, 4)
-                );
-                assert.fail("Expected throw not received");
+                //console.log("Received solidity tx instead of throw: \r\n", JSON.stringify(res, null, 4));
+                throw new Error("Received solidity transaction when expected tx to revert");
             } // on privatechain we check gasUsed after tx sent
             return;
         })
@@ -167,23 +182,13 @@ function expectThrow(promise) {
             //       testrpc log actually show an 'invalid jump' event.)
             const outOfGas = error.message.search("out of gas") >= 0;
             const outOfGasPrivateChain =
-                error.message.search(
-                    "The contract code couldn't be stored, please check your gas amount."
-                ) >= 0;
+                error.message.search("The contract code couldn't be stored, please check your gas amount.") >= 0;
 
             const allGasUsed = error.message.search("All gas used") >= 0; // we throw this manually after tx b/c on privatechain it doesn't throw :/
             const invalidOpcode1 =
-                error.message.search(
-                    "VM Exception while processing transaction: invalid opcode"
-                ) >= 0;
-            const invalidOpcode2 =
-                error.message.search(
-                    "VM Exception while executing eth_call: invalid opcode"
-                ) >= 0; // testRpc <= v4
-            const invalidOpcode3 =
-                error.message.search(
-                    "VM Exception while processing transaction: revert"
-                ) >= 0; // testRpc > v4
+                error.message.search("VM Exception while processing transaction: invalid opcode") >= 0;
+            const invalidOpcode2 = error.message.search("VM Exception while executing eth_call: invalid opcode") >= 0; // testRpc <= v4
+            const invalidOpcode3 = error.message.search("VM Exception while processing transaction: revert") >= 0; // testRpc > v4
 
             assert(
                 invalidOpcode1 ||
@@ -192,41 +197,27 @@ function expectThrow(promise) {
                     invalidJump ||
                     outOfGas ||
                     (onPrivateChain && (outOfGasPrivateChain || allGasUsed)),
-                "Expected solidity throw, got '" +
-                    error +
-                    "' instead. onPrivateChain: " +
-                    onPrivateChain
+                "Expected solidity revert, got '" + error + "' instead. onPrivateChain: " + onPrivateChain
             );
             return;
         });
-} // expectThrow
+}
 
 after(function() {
     // runs after all tests
     if (gasUseLog.length > 0) {
         // console.log("full title:", this.parent.fullTitle()); // CHECK: why doesn't it work?
-        console.log(
-            "===================  GAS USAGE STATS " +
-                "" +
-                " ==================="
-        );
+        console.log("===================  GAS USAGE STATS  ===================");
         console.log("Test contract,", "Test,", "Tx,", "Gas used");
         //console.log(gasUseLog);
         var sum = 0;
         for (var i = 0; i < gasUseLog.length; i++) {
             console.log(
-                '"' +
-                    gasUseLog[i][0] +
-                    '", "' +
-                    gasUseLog[i][1] +
-                    '", "' +
-                    gasUseLog[i][2] +
-                    '", ' +
-                    gasUseLog[i][3]
+                '"' + gasUseLog[i][0] + '", "' + gasUseLog[i][1] + '", "' + gasUseLog[i][2] + '", ' + gasUseLog[i][3]
             );
             sum += gasUseLog[i][3];
         }
 
         console.log("=========== Total gas usage : " + sum);
     }
-}); // after()
+});
