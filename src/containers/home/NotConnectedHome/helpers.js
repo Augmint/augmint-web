@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StableIcon, DecentralizedIcon, SecureIcon, DownArrowIcon } from '../../../components/Icons';
+import { StableIcon, DecentralizedIcon, SecureIcon, DepositIcon, SpendIcon, GetDepositIcon } from '../../../components/Icons';
 
 import petrovics from 'assets/images/team/ppetrovics.jpg';
 import bdebreczeni from 'assets/images/team/bdebreczeni.jpg';
@@ -8,8 +8,8 @@ import kszabo from 'assets/images/team/kszabo.jpg';
 import bjackson from 'assets/images/team/bjackson.jpg';
 import emarton from 'assets/images/team/emarton.jpg';
 import lheves from 'assets/images/team/lheves.jpg';
-import pbanik from 'assets/images/team/pbanik.jpg';
 import vszatmahry from 'assets/images/team/vszatmahry.jpg';
+import thume from 'assets/images/team/thume.jpg';
 
 export const keyFeatures = [
     {
@@ -65,10 +65,24 @@ export const keyBenefits = [
 export const howItWorks = [
     {
         pk: 'hiw-1',
-        image: <DownArrowIcon/>,
+        image: <DepositIcon/>,
         type: 'loan',
-        title: 'DEPOSIT ETH',
-        text: 'Donec id elit non mi porta gravida at eget metus.',
+        title: 'Deposit ETH',
+        text: 'Get liquid A-EUR using your ETH as collateral.',
+    },
+    {
+        pk: 'hiw-2',
+        image: <SpendIcon/>,
+        type: 'loan',
+        title: 'Spend A-EUR',
+        text: 'Use your A-EUR or convert it to fiat. You stay in your ETH position in the meanwhile.',
+    },
+    {
+        pk: 'hiw-3',
+        image: <GetDepositIcon/>,
+        type: 'loan',
+        title: 'Get deposit back',
+        text: 'Payback your loan at maturity to get back your ETH collateral.',
     }
 ];
 
@@ -92,12 +106,6 @@ export const teamMembers = [
         title: 'Marketing, PR strategy',
     },
     {
-        pk: 'team-9',
-        name: 'Peter Banik',
-        imgSrc: pbanik,
-        title: '',
-    },
-    {
         pk: 'team-4',
         name: 'Barnabas Debreczeni',
         imgSrc: bdebreczeni,
@@ -118,7 +126,7 @@ export const teamMembers = [
     {
         pk: 'team-7',
         name: 'Tom Hume',
-        imgSrc: bjackson,
+        imgSrc: thume,
         title: 'Branding & Visual',
     },
     {

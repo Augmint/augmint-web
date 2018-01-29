@@ -9,6 +9,18 @@ import secureSVG from "assets/images/secure.svg";
 import downArrowSVG from "assets/images/down-arrow.svg";
 import interchangeSVG from "assets/images/interchange.svg";
 
+import depositPng from "assets/images/deposit-eth.png";
+import depositPng2x from "assets/images/deposit-eth@2x.png";
+import depositPng3x from "assets/images/deposit-eth@3x.png";
+
+import getDepositPng from "assets/images/get-deposit.png";
+import getDepositPng2x from "assets/images/get-deposit@2x.png";
+import getDepositPng3x from "assets/images/get-deposit@3x.png";
+
+import spendEuroPng from "assets/images/spend-euro.png";
+import spendEuroPng2x from "assets/images/spend-euro@2x.png";
+import spendEuroPng3x from "assets/images/spend-euro@3x.png";
+
 export const BalanceIcon = () => (
   <Image centered>
   <svg xmlns="http://www.w3.org/2000/svg" width="393" height="148" viewBox="0 0 393 148">
@@ -50,4 +62,16 @@ export const DownArrowIcon = () => (
 
 export const InterchangeIcon = () => (
   <Image src={interchangeSVG} />
+);
+
+export const DepositIcon = () => (
+  <Image src={depositPng} srcSet={`${depositPng2x} 2x, ${depositPng3x} 3x,`}/>
+);
+
+export const SpendIcon = () => (
+  <Image src={spendEuroPng} srcSet={`${spendEuroPng2x} 2x, ${spendEuroPng3x} 3x,`}/>
+);
+
+export const GetDepositIcon = () => (
+  <Image src={getDepositPng} srcSet={`${getDepositPng2x} 2x, ${getDepositPng3x} 3x,`}/>
 );
