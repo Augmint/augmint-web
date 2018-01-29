@@ -1,9 +1,11 @@
 import React from "react";
 import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
-import { Button, List, Segment } from "semantic-ui-react";
+import { Button, List, Segment, Image } from "semantic-ui-react";
 
 import './style.css';
+import whitePaper from "assets/images/white-paper.png";
+import manifesto from "assets/images/manifesto.png";
 
 export default () => (
     <Segment basic textAlign="center" as="article" className="concept">
@@ -142,6 +144,16 @@ export default () => (
                     </p>
                 </Tblock>
             </Tsegment>
+        </Segment>
+        <Segment basic className="whitepaper-manifesto">
+            <Segment basic as="a" href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit" target="_blank" >
+                <h5>WHITEPAPER</h5>
+                <Image basic src={whitePaper} />
+            </Segment>
+            <Segment basic as="a" href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit" target="_blank" >
+                <h5>MANIFESTO</h5>
+                <Image basic src={manifesto} />
+            </Segment>
         </Segment>
     </Segment>
 );

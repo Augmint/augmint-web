@@ -35,3 +35,16 @@ article.concept .ui.horizontal.list:first-child {
 article.concept .ui.horizontal.list:last-child {
   margin-right: 0;
 }
+
+.Site-content article.concept .whitepaper-manifesto {
+  display: flex;
+  justify-content: center;
+}
+
+.Site-content article.concept .whitepaper-manifesto a,
+.Site-content article.concept .whitepaper-manifesto a:hover {
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 2.6px;
+  margin: 0;
+}
