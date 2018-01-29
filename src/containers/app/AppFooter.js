@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Segment, Container, List, Image } from "semantic-ui-react";
 import Subscribe from "./Subscribe";
 
@@ -25,9 +24,9 @@ export function AppFooter(props) {
                 <Segment basic as='p' className='description'>
                   {description}
                 </Segment>
-                <Segment basic className='join-slack' size="tiny" as="a" href="https://decent-team.slack.com/messages/C7J38BUM6/" target="_blank">
+                <Segment basic className='join-slack' size="tiny" as="a" href="https://discord.gg/PwDmsnu" target="_blank">
                   <Image src={slackLogo} />
-                  Join our Slack chanel
+                  Talk to us on Discord
                 </Segment>
 
                 <List horizontal inverted divided link className='contact-list' style={{  marginTop: 40}}>
