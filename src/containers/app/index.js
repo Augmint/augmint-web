@@ -24,7 +24,6 @@ import { AppMenu } from "containers/app/AppMenu";
 import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
 
-
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
