@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Dropdown, Image, Segment } from "semantic-ui-react";
+import { Menu, Dropdown, Image, Segment, Button } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
 
 import augmintLogo from "assets/images/logo/logo.png";
@@ -59,18 +59,12 @@ export function AppMenu(props) {
 
                     <Menu.Menu position="right">
                         <Menu.Item>
-                            <small>
-                                <Dropdown text={connectionStatus}>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item
-                                            icon="settings"
-                                            as={NavLink}
-                                            to="/under-the-hood"
-                                            text="Under the hood"
-                                        />
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </small>
+                            <Button
+                                as={NavLink}
+                                to="/tryit"
+                                >
+                                Use A-EUro
+                            </Button>
                         </Menu.Item>
                     </Menu.Menu>
             </Menu>
