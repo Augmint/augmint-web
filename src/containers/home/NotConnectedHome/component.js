@@ -161,7 +161,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                     </Container>
-                    {<Responsive as={Rail} minWidth={768} attached internal position='left' style={{width: 'auto'}}>
+                    {<Responsive as={Rail} minWidth={768} attached internal position='left' style={{width: 'auto', top: '800px'}}>
                         <div style={styles.howItWorksRail}>
                             <div style={styles.howItWorksRailBox}>
                                 <div>1</div>
