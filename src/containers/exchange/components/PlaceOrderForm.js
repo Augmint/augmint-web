@@ -48,9 +48,9 @@ class PlaceOrderForm extends React.Component {
 
         let ethValue;
         if (this.state.orderType === TOKEN_BUY) {
-            ethValue = new BigNumber(bn_tokenAmount).div(bn_price).div(fiatRate);
-        } else {
             ethValue = new BigNumber(bn_tokenAmount).mul(bn_price).div(fiatRate);
+        } else {
+            ethValue = new BigNumber(bn_tokenAmount).div(bn_price).div(fiatRate);
         }
 
         this.props.change(
@@ -93,14 +93,14 @@ class PlaceOrderForm extends React.Component {
             if (this.state.orderType === TOKEN_BUY) {
                 const bn_ethAmount = new BigNumber(this.props.ethAmount);
 
-                const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price).mul(fiatRate);
+                const tokenValue = new BigNumber(bn_ethAmount).div(bn_price).mul(fiatRate);
                 this.props.change(
                     "tokenAmount",
                     tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
                 );
             } else {
                 const bn_tokenAmount = new BigNumber(this.props.tokenAmount);
-                const ethValue = new BigNumber(bn_tokenAmount).div(bn_price).div(fiatRate);
+                const ethValue = new BigNumber(bn_tokenAmount).mul(bn_price).div(fiatRate);
                 this.props.change(
                     "ethAmount",
                     ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
@@ -204,7 +204,11 @@ class PlaceOrderForm extends React.Component {
 
                         <Field
                             name="tokenAmount"
-                            label={orderType === TOKEN_BUY ? `Buy amount (on ${fiatRate} ETH/EUR rate): ` : "Sell: "}
+                            label={
+                                orderType === TOKEN_BUY
+                                    ? `A-EUR amount expected on ${fiatRate} ETH/EUR rate: `
+                                    : "Sell amount: "
+                            }
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
@@ -224,7 +228,9 @@ class PlaceOrderForm extends React.Component {
                             as={Form.Input}
                             type="number"
                             label={
-                                orderType === TOKEN_BUY ? "Sell amount: " : `Buy amount (on ${fiatRate} ETH/EUR rate): `
+                                orderType === TOKEN_BUY
+                                    ? "ETH amount to sell: "
+                                    : `Expected ETH amount on ${fiatRate} ETH/EUR rate: `
                             }
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}

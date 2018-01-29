@@ -10,13 +10,9 @@ module.exports = function(deployer, network, accounts) {
         const lm = LoanManager.at(LoanManager.address);
         await lm.grantMultiplePermissions(accounts[0], ["addLoanProduct", "setLoanProductActiveState"]);
         const tokenAce = TokenAce.at(TokenAce.address);
-        await tokenAce.grantMultiplePermissions(LoanManager.address, [
-            "issueAndDisburse",
-            "burnCollectedInterest",
-            "LoanManager"
-        ]);
+        await tokenAce.grantMultiplePermissions(LoanManager.address, ["issueAndDisburse", "LoanManager"]);
 
-        let onTest =
+        const onTest =
             web3.version.network == 999 ||
             web3.version.network == 4 ||
             web3.version.network == 3 ||

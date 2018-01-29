@@ -24,7 +24,6 @@ import "../Locker.sol";
 contract AugmintToken is AugmintTokenInterface {
 
     address public feeAccount;
-    address public interestPoolAccount;
     address public interestEarnedAccount;
     uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
@@ -35,10 +34,9 @@ contract AugmintToken is AugmintTokenInterface {
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
     function AugmintToken(string _name, string _symbol, bytes32 _peggedSymbol, uint8 _decimals, address _feeAccount,
-        address _interestPoolAccount, address _interestEarnedAccount, uint _transferFeePt, uint _transferFeeMin,
+        address _interestEarnedAccount, uint _transferFeePt, uint _transferFeeMin,
         uint _transferFeeMax) public {
         require(_feeAccount != address(0));
-        require(_interestPoolAccount != address(0));
         require(_interestEarnedAccount != address(0));
         require(bytes(_name).length > 0);
         name = _name;
@@ -46,7 +44,6 @@ contract AugmintToken is AugmintTokenInterface {
         peggedSymbol = _peggedSymbol;
         decimals = _decimals;
         feeAccount = _feeAccount;
-        interestPoolAccount = _interestPoolAccount;
         interestEarnedAccount = _interestEarnedAccount;
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
@@ -83,16 +80,10 @@ contract AugmintToken is AugmintTokenInterface {
 
     }
 
-    function issueAndDisburse(address borrower, uint loanAmount, uint interestAmount, string narrative)
+    function issueAndDisburse(address borrower, uint loanAmount, string narrative)
     external restrict("issueAndDisburse") {
         require(loanAmount > 0);
-        uint issuedAmount = loanAmount.add(interestAmount);
-        _issue(this, issuedAmount);
-        if (interestAmount > 0) {
-            // move interest to InterestPoolAccount
-            balances[this] = balances[this].sub(interestAmount);
-            balances[interestPoolAccount] = balances[interestPoolAccount].add(interestAmount);
-        }
+        _issue(this, loanAmount);
         _transfer(this, borrower, loanAmount, narrative, 0);
     }
 
@@ -101,20 +92,16 @@ contract AugmintToken is AugmintTokenInterface {
         require(permissions[_loanManager]["LoanManager"]); // only whitelisted loanManagers
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
         // solhint-disable-next-line space-after-comma
-        var (borrower, , ,repaymentAmount, ,interestAmount, ) = loanManager.loans(loanId);
+        var (borrower, , , repaymentAmount , loanAmount, interestAmount, ) = loanManager.loans(loanId);
         require(borrower == msg.sender);
         _transfer(msg.sender, this, repaymentAmount, "Loan repayment", 0);
-        _burn(this, repaymentAmount);
+        _burn(this, loanAmount);
         if (interestAmount > 0) {
-            // transfer interestAmount to InterestEarnedAccount
+            // transfer interestAmount to InterestEarnedAccount (internal transfer, no need for Transfer events)
+            balances[this] = balances[this].sub(interestAmount);
             balances[interestEarnedAccount] = balances[interestEarnedAccount].add(interestAmount);
-            balances[interestPoolAccount] = balances[interestPoolAccount].sub(interestAmount);
         }
         loanManager.releaseCollateral(loanId);
-    }
-
-    function burnCollectedInterest(uint interestAmount) external restrict("burnCollectedInterest") {
-        _burn(interestPoolAccount, interestAmount);
     }
 
     /* convenience function - alternative to Exchange.placeSellTokenOrder without approval required */
@@ -229,12 +216,9 @@ contract AugmintToken is AugmintTokenInterface {
         require(allowed[_from][msg.sender] >= _amount);
         require(allowed[_from][msg.sender] > 0); // don't allow 0 transferFrom if no approval
 
-        _transfer(_from, _to, _amount, _narrative, 0);
-        if (_fee > 0) {
-            /* we need to deduct fee from _to unlike normal transfer
-             TODO: better way to do this? E.g. allow transfer fee to be deducted from beneficiary? */
-            _transfer(msg.sender, feeAccount, _fee, "TransferFrom fee", 0);
-        }
+        /* NB: fee is deducted from owner. It can result that transferFrom of amount x to fail
+                when x + fee is not availale on owner balance */
+        _transfer(_from, _to, _amount, _narrative, _fee);
 
         allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
     }

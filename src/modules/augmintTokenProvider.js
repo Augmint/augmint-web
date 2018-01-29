@@ -1,12 +1,12 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectAugmintToken, refreshAugmintToken } from "modules/reducers/augmintToken";
-import { fetchTransferList, processTransfer } from "modules/reducers/userTransfers";
+import { fetchTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
     const augmintToken = store.getState().augmintToken;
-    let web3Connect = store.getState().web3Connect;
+    const web3Connect = store.getState().web3Connect;
 
     if (!augmintToken.isLoading && !augmintToken.isConnected) {
         setupWatch("web3Connect.network", onWeb3NetworkChange);
@@ -23,14 +23,15 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const augmintToken = store.getState().augmintToken.contract.instance;
-    augmintToken.AugmintTransfer({ fromBlock: "latest", toBlock: "pending" }).watch(onAugmintTransfer);
+    const augmintToken = store.getState().augmintToken.contract.ethersInstance;
+    augmintToken.onaugminttransfer = onAugmintTransfer;
 };
 
 const removeListeners = oldInstance => {
-    if (oldInstance && oldInstance.instance) {
-        oldInstance.instance.Transfer().stopWatching();
-    }
+    // TODO: test if we need this with ethers
+    // if (oldInstance && oldInstance.instance) {
+    //     oldInstance.instance.Transfer().stopWatching();
+    // }
 };
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
@@ -52,9 +53,10 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
             "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         const userAccount = store.getState().web3Connect.userAccount;
+        const augmintToken = store.getState().augmintToken;
 
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(fetchTransferList(userAccount, 0, "latest"));
+        store.dispatch(fetchTransfers(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
         setupListeners();
     }
 };
@@ -66,22 +68,21 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
             "augmintTokenProvider - web3Connect.userAccount changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         store.dispatch(fetchUserBalance(newVal));
-        store.dispatch(fetchTransferList(newVal, 0, "latest"));
+        // TODO: default fromBlock should be the blockNumber of the contract deploy (retrieve it in SolidityContract)
+        store.dispatch(fetchTransfers(newVal, augmintToken.contract.deployedAtBlock, "latest"));
     }
 };
 
-const onAugmintTransfer = (error, result) => {
+const onAugmintTransfer = function(from, to, amount, narrative, fee) {
+    // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
     console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken");
     store.dispatch(refreshAugmintToken());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (
-        result.args.from.toLowerCase() === userAccount.toLowerCase() ||
-        result.args.to.toLowerCase() === userAccount.toLowerCase()
-    ) {
+    if (from.toLowerCase() === userAccount.toLowerCase() || to.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(processTransfer(userAccount, result));
+        store.dispatch(processNewTransfer(userAccount, this));
     }
 };
