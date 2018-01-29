@@ -37,7 +37,7 @@ class AccountHome extends React.Component {
 
                             <Pgrid.Column>
                                 <LoanList
-                                    header="My A&#8209;EUR Loans"
+                                    header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}
                                     loans={this.props.loans}
                                 />

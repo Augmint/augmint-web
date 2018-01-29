@@ -14,15 +14,15 @@ export default class ExchangeSummary extends React.Component {
                 <ConnectionStatus contract={rates} />
 
                 <h4>
-                    1 ETH = {rates.info.ethFiatRate} A&#8209;EUR<br />
-                    1 A&#8209;EUR = {rates.info.fiatEthRate} ETH
+                    1 ETH = {rates.info.ethFiatRate} A-EUR<br />
+                    1 A-EUR = {rates.info.fiatEthRate} ETH
                 </h4>
 
                 {exchange.isConnected &&
                 !exchange.isLoading &&
                 exchange.info.buyOrderCount + exchange.info.sellOrderCount > 0 ? (
                     <h4>
-                        {exchange.info.buyOrderCount} buy A&#8209;EUR | {exchange.info.sellOrderCount} sell A&#8209;EUR
+                        {exchange.info.buyOrderCount} buy A-EUR | {exchange.info.sellOrderCount} sell A-EUR
                     </h4>
                 ) : (
                     <h4>

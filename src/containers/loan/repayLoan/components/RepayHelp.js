@@ -5,7 +5,7 @@ export function RepayHelp(props) {
     const { ...other } = props;
     return (
         <Message info {...other}>
-            <p>You can repay your A&#8209;EUR loan anytime before its maturity. </p>
+            <p>You can repay your A-EUR loan anytime before its maturity. </p>
             <p>All of your ETH held in escrow (collateral) will be sent back to you when you repay.</p>
             <p>If you don't repay until maturity then you can't repay anymore and your loan will be defaulted.</p>
             <p>
@@ -16,7 +16,7 @@ export function RepayHelp(props) {
             </p>
             <p>
                 TODO, Not yet implemented: If the value of the ETH collateral (at the moment of collection) is higher
-                than the A&#8209;EUR loan amount less the fees for the collection then the leftover ETH will be transfered
+                than the A-EUR loan amount less the fees for the collection then the leftover ETH will be transfered
                 back to the borrower's ETH account.
             </p>
         </Message>

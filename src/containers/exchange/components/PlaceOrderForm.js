@@ -172,10 +172,10 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <Menu size="massive" tabular>
                 <Menu.Item active={orderType === TOKEN_BUY} index={TOKEN_BUY} onClick={this.onOrderTypeChange}>
-                    Buy A&#8209;EUR
+                    Buy A-EUR
                 </Menu.Item>
                 <Menu.Item active={orderType === TOKEN_SELL} index={TOKEN_SELL} onClick={this.onOrderTypeChange}>
-                    Sell A&#8209;EUR
+                    Sell A-EUR
                 </Menu.Item>
             </Menu>
         );
@@ -206,7 +206,7 @@ class PlaceOrderForm extends React.Component {
                             name="tokenAmount"
                             label={
                                 orderType === TOKEN_BUY
-                                    ? `A&#8209;EUR amount expected on ${fiatRate} ETH/EUR rate: `
+                                    ? `A-EUR amount expected on ${fiatRate} ETH/EUR rate: `
                                     : "Sell amount: "
                             }
                             component={Form.Field}
@@ -220,7 +220,7 @@ class PlaceOrderForm extends React.Component {
                         >
                             <input />
                             <Label>
-                                A&#8209;EUR
+                                A-EUR
                             </Label>
                         </Field>
 
@@ -258,7 +258,7 @@ class PlaceOrderForm extends React.Component {
                         >
                             <input />
                             <Label>
-                                A&#8209;EUR / EUR
+                                A-EUR / EUR
                             </Label>
                         </Field>
 
@@ -270,8 +270,8 @@ class PlaceOrderForm extends React.Component {
                             {submitting && "Submitting..."}
                             {!submitting &&
                                 (orderType === TOKEN_BUY
-                                    ? "Submit buy A&#8209;EUR order"
-                                    : "Submit sell A&#8209;EUR order")}
+                                    ? "Submit buy A-EUR order"
+                                    : "Submit sell A-EUR order")}
                         </Button>
                     </Form>
                 )}

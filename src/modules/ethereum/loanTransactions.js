@@ -283,7 +283,7 @@ export async function fetchLoanDetails(_loanId) {
         solidityLoanState: solidityLoanState,
         loanStateText: loanStateText,
         collateralEth: web3.utils.fromWei(l[2].toString()),
-        repaymentAmount: l[3].toNumber() / 10000, // 4 nominal loan amount in A&#8209;EUR (non discounted amount)
+        repaymentAmount: l[3].toNumber() / 10000, // 4 nominal loan amount in A-EUR (non discounted amount)
         loanAmount: l[4].toNumber() / 10000, // 5
         interestAmount: l[5].toNumber / 10000,
         term: l[6].toNumber(), // 6 duration of loan

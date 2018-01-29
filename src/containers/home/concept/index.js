@@ -56,7 +56,7 @@ export default () => (
                                 decided by transparent and open governance processes.
                             </p>
                             <p>
-                                A&#8209;EUR is the first Augmint token to be implemented. A&#8209;EUR will
+                                A-EUR is the first Augmint token to be implemented. A-EUR will
                                 be pegged to EUR.
                             </p>
                         </Segment>

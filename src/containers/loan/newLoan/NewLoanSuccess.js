@@ -7,8 +7,8 @@ export default function NewLoanSuccess(props) {
     return (
         <EthSubmissionSuccessPanel header={<h3>You've got a loan</h3>} eth={eth} dismissable={false}>
             <p>Loan id: {loanId}</p>
-            <p>Disbursed: {loanAmount} A&#8209;EUR</p>
-            <p>To be repayed: {repaymentAmount} A&#8209;EUR</p>
+            <p>Disbursed: {loanAmount} A-EUR</p>
+            <p>To be repayed: {repaymentAmount} A-EUR</p>
             <p>Collateral in escrow: {collateralEth} ETH</p>
             <p>Don't forget to pay it back on maturity to get back your collateral.</p>
             <p>

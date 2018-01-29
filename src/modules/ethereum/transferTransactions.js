@@ -1,5 +1,5 @@
 /*
- A&#8209;EUR transfer ethereum functions
+ A-EUR transfer ethereum functions
 Use only from reducers.
 
     TODO: tune default gasPrice

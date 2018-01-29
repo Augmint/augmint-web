@@ -16,7 +16,7 @@ export default class NotConnectedHome extends React.Component {
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
-                                Augmint offers digital tokens (A&#8209;Euro) pegged to a fiat currency. Stored
+                                Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored
                                 securely in a decentralised way, stable crypto tokens are instantly transferable
                                 worldwide.
                             </Header>
@@ -88,7 +88,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                         <Header as="h2">
-                            Buy and sell A&#8209;Euro
+                            Buy and sell A-Euro
                         </Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
@@ -114,7 +114,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                         <Header as="h2">
-                            Earn more with A&#8209;Euro, get premium by locking
+                            Earn more with A-Euro, get premium by locking
                         </Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "lock").map(feature => (
@@ -146,7 +146,7 @@ export default class NotConnectedHome extends React.Component {
                                 <div style={styles.howItWorksRailBox}>
                                     <div>1</div>
                                     <div style={styles.howItWorksRailBoxSpan}>
-                                        A&#8209;Euro
+                                        A-Euro
                                     </div>
                                 </div>
                             </div>

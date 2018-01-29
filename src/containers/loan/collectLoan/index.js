@@ -44,7 +44,7 @@ class CollectLoanMain extends React.Component {
                             </p>
                             <p>
                                 If the value of the ETH collateral (at the moment of collection) is higher than the
-                                A&#8209;EUR repayment amount less the fees for the collection then the leftover
+                                A-EUR repayment amount less the fees for the collection then the leftover
                                 ETH will be transfered back to the borrower's ETH account.
                             </p>
                         </Message>

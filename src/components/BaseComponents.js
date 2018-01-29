@@ -29,7 +29,7 @@ export const Validations = {
     userTokenBalance: value => {
         // TODO: shall we look for bn_pendingTokenBalance instead?
         let userBalance = store.getState().userBalances.account.bn_tokenBalance;
-        return userBalance.lt(parseFloat(value)) ? "Your A&#8209;EUR balance is less than the amount" : undefined;
+        return userBalance.lt(parseFloat(value)) ? "Your A-EUR balance is less than the amount" : undefined;
     },
 
     userTokenBalanceWithTransferFee: value => {
@@ -50,9 +50,9 @@ export const Validations = {
             .div(decimalsDiv)
             .toString();
         if (maxTransfer <= 0) {
-            return "Your A&#8209;EUR balance is less than the amount + transfer fee.";
+            return "Your A-EUR balance is less than the amount + transfer fee.";
         }
-        return `Your A&#8209;EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A&#8209;EUR`;
+        return `Your A-EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A-EUR`;
     },
 
     minOrderTokenAmount: value => {
@@ -67,7 +67,7 @@ export const Validations = {
         if (amount.gte(minValue)) {
             return undefined;
         } else {
-            return `Token amount is less than minimum order amount of ${minValue} A&#8209;EUR`;
+            return `Token amount is less than minimum order amount of ${minValue} A-EUR`;
         }
     },
 
@@ -83,7 +83,7 @@ export const Validations = {
     },
 
     minTokenAmount: minValue => value => {
-        return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A&#8209;EUR` : undefined;
+        return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A-EUR` : undefined;
     }
 };
 
