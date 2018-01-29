@@ -32,8 +32,7 @@ export default (state = initialState, action) => {
         case PROCESS_NEW_TRANSFER_REQUESTED:
             return {
                 ...state,
-                isLoading: true,
-                transfers: action.transfers
+                isLoading: true
             };
 
         case FETCH_TRANSFERS_RECEIVED:
@@ -66,14 +65,15 @@ export function fetchTransfers(account, fromBlock, toBlock) {
             toBlock: toBlock
         });
         try {
-            const result = await fetchTransfersTx(account, fromBlock, toBlock);
-            result.sort((a, b) => {
-                return b.blockTimeStamp > a.blockTimeStamp;
+            const transfers = await fetchTransfersTx(account, fromBlock, toBlock);
+
+            transfers.sort((a, b) => {
+                return b.blockNumber - a.blockNumber;
             });
 
             return dispatch({
                 type: FETCH_TRANSFERS_RECEIVED,
-                result: result
+                result: transfers
             });
         } catch (error) {
             return dispatch({
@@ -98,10 +98,11 @@ export function processNewTransfer(account, eventLog) {
             if (!transfers) {
                 transfers = [];
             }
-            if (!transfers.find(a => a.transationHash === newTransfer.transactionHash)) {
+
+            if (!transfers.find(a => a.transactionHash === newTransfer.transactionHash)) {
                 transfers.push(newTransfer);
                 transfers.sort((a, b) => {
-                    return b.blockTimeStamp > a.blockTimeStamp;
+                    return b.blockNumber - a.blockNumber;
                 });
             }
 

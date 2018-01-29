@@ -26,6 +26,7 @@ export default class TransferList extends React.Component {
                                 <MoreInfoTip header="Transaction details">
                                     blockNumber: {tx.blockNumber}
                                     <br />blockHash: <small>{tx.blockHash}</small>
+                                    <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
                                     <br />transactionIndex: {tx.transactionIndex}
                                     <br />transaction hash: <small>{tx.transactionHash}</small>
                                 </MoreInfoTip>
@@ -37,9 +38,9 @@ export default class TransferList extends React.Component {
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 
-                        {tx.narrative && (
+                        {tx.args.narrative && (
                             <Row columns={1}>
-                                <Col>{tx.narrative}</Col>
+                                <Col>{tx.args.narrative}</Col>
                             </Row>
                         )}
                     </MyGridTable>

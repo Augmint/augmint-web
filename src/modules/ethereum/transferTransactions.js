@@ -128,7 +128,6 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
                 topics: [AugmintTransfer.topics[0], null, paddedAccount]
             })
         ]);
-
         const logs = [...logsFrom, ...logsTo];
         const transfers = [];
         for (const eventLog of logs) {
@@ -150,19 +149,20 @@ export async function processNewTransferTx(account, eventLog) {
 }
 
 async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog) {
-    const provider = store.getState().web3Connect.ethers.provider;
+    let blockData;
+    if (typeof eventLog.getBlock === "function") {
+        // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
+        blockData = await eventLog.getBlock();
+    } else {
+        // not from event, provider.getBlock should work
+        const provider = store.getState().web3Connect.ethers.provider;
+        blockData = await provider.getBlock(eventLog.blockNumber);
+    }
+
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
     const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
     const bn_senderFee = direction === -1 ? parsedData.fee.div(10000) : new BigNumber(0);
 
-    // TODO: https://github.com/ethers-io/ethers.js/issues/90#issuecomment-361158710
-    const blockData = await provider.getBlock(eventLog.blockNumber); // FIX: returns null right after the event triggered
-    eventLog.getBlock = async function(res) {
-        // FIX: never called
-        console.log("callback", res);
-        const blockData = await provider.getBlock(eventLog.blockNumber);
-        console.log("eventLog.getBlock(): ", blockData);
-    };
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
     const logData = Object.assign({ args: parsedData }, eventLog, {

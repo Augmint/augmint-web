@@ -24,7 +24,6 @@ export default () => {
 
 const setupListeners = () => {
     const exchange = store.getState().exchange.contract.ethersInstance;
-    console.debug("**** setup list: ", exchange);
     exchange.onneworder = onNewOrder;
     exchange.onorderfill = onOrderFill;
     exchange.oncancelledorder = onCancelledOrder;
