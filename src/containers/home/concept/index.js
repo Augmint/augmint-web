@@ -67,84 +67,70 @@ export default () => (
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
-            <Tsegment header="How it works" id={'how-it-works'}>
-                <Tblock header="Price stability">
-                    <p>
-                        There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
-                        the pegged currency.
-                    </p>
-                    <Tblock.SubHeader header="Market mechanics" />
-                    <p>
-                        The primary foundation of stability is the continuous supply of Augmint tokens via loan originations and
-                        a corresponding demand for paying back loans on maturity.
-                    </p>
-                    <p>
-                        Further specific features of the Augmint system will work towards maintaining stability by smoothing the
-                        demand & supply peaks and troughs.
-                    </p>
-                    <Tblock.SubHeader header="Loan parameters" />
-                    <p>
-                        If A-EUR price deviating from parity then loan parameters are adjusted to make it more or less
-                        compelling to get A-EUR loan for a certain digital asset. This has an effect on A-EUR demand/supply.
-                    </p>
-                    <Tblock.SubHeader header="Market intervention" />
-                    <p>
-                        Augmint can intervene from its reserves accumulated from fees, defaults and interests. Augmint reserves
-                        can be used on held only for market intervention.
-                    </p>
-                    <p>
-                        Check out our{" "}
-                        <Link to="http://bit.ly/augmint-wp" target="_blank">
-                            white paper
-                        </Link>{" "}
-                        for additional tools and more scenarios.
-                    </p>
-                </Tblock>
-                <Tblock header="Getting A-EUR">
-                    <p>
-                        You can always buy or sell your A-EUR for cryptocurrencies (ETH, BTC etc.) on a decentralised exchange.
-                        Secondary exchanges will offer direct fiat conversions to/from A-EUR as well. As the Augmint ecosystem
-                        grows you will need less and less to exchange Augmint tokens to fiat money.
-                    </p>
-                    <Tblock.SubHeader>A-EUR loans</Tblock.SubHeader>
-                    <p>
-                        You can also get A-EUR by putting your digital assets (ETH or BTC at the beginning) into a decentralised
-                        escrow contract.
-                    </p>
-                </Tblock>
-
-                <Tsegment.Row centered columns={1}>
-                    <Tsegment.Column textAlign="center">
-                        <Button
-                            content="TRY NOW"
-                            as={Link}
-                            to="/tryit"
-                            className="try-now"
-                        />
-                    </Tsegment.Column>
-                </Tsegment.Row>
-            </Tsegment>
-            <Tsegment header="Governance" id={'governance'}>
-                <Tblock>
-                    <p>
-                        The fundamental rules, agreements and funds are maintained and enforced by smart contracts -
-                        cryptographically immutable algorithms running on the blockchain.
-                    </p>
-                    <p>
-                        We aim to handle as many "decisions" as possible with smart contracts but it's not feasible to prepare
-                        for every case with automated smart contracts, such as financial parameters, trusted price oracles, new
-                        digital assets, contract releases.
-                    </p>
-                    <p>
-                        These decisions are made by stakeholders - governance token (GDC) holders. Augmint's governance model
-                        ensures that all decisions are democratic and transparent.
-                    </p>
-                    <p>
-                        Access to GDC is open to anyone who is willing to deposit A-EUR tokens. To incentify holding and voting
-                        with GDCs the profit from fees is distributed among GDC holders.
-                    </p>
-                </Tblock>
-            </Tsegment>
+            <Segment basic as="h2" className="header" content="How it works" id={'how-it-works'} />
+            <Segment basic as="h5" content="STABILITY" />
+            <p>
+                There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
+                the pegged currency.
+            </p>
+            <Segment basic as="h5" content="MARKET MECHANICS" />
+            <p>
+                The primary foundation of stability is the continuous supply of Augmint tokens via loan originations and
+                a corresponding demand for paying back loans on maturity.
+            </p>
+            <p>
+                Further specific features of the Augmint system will work towards maintaining stability by smoothing the
+                demand & supply peaks and troughs.
+            </p>
+            <Segment basic as="h5" content="LOAN PARAMETERS" />
+            <p>
+                If A-EUR price deviating from parity then loan parameters are adjusted to make it more or less
+                compelling to get A-EUR loan for a certain digital asset. This has an effect on A-EUR demand/supply.
+            </p>
+            <Segment basic as="h5" content="MARKET INTERVENTION" />
+            <p>
+                Augmint can intervene from its reserves accumulated from fees, defaults and interests. Augmint reserves
+                can be used on held only for market intervention.
+            </p>
+            <p>
+                Check out our{" "}
+                <Link to="http://bit.ly/augmint-wp" target="_blank">
+                    white paper
+                </Link>{" "}
+                for additional tools and more scenarios.
+            </p>
+            <Segment basic as="h5" content="GET ACE" />
+            <p>
+                You can always buy or sell your A-EUR for cryptocurrencies (ETH, BTC etc.) on a decentralised exchange.
+                Secondary exchanges will offer direct fiat conversions to/from A-EUR as well. As the Augmint ecosystem
+                grows you will need less and less to exchange Augmint tokens to fiat money.
+            </p>
+            <Segment basic textAlign="center" className="custom-button">
+                <Button
+                    content="TRY NOW"
+                    as={Link}
+                    to="/tryit"
+                    className="try-now"
+                />
+            </Segment>
+            <Segment basic as="h2" className="header" content="Governance" id={'governance'} />
+            <p>
+                The fundamental rules, agreements and funds are maintained and enforced by smart contracts -
+                cryptographically immutable algorithms running on the blockchain.
+            </p>
+            <p>
+                We aim to handle as many "decisions" as possible with smart contracts but it's not feasible to prepare
+                for every case with automated smart contracts, such as financial parameters, trusted price oracles, new
+                digital assets, contract releases.
+            </p>
+            <p>
+                These decisions are made by stakeholders - governance token (GDC) holders. Augmint's governance model
+                ensures that all decisions are democratic and transparent.
+            </p>
+            <p>
+                Access to GDC is open to anyone who is willing to deposit A-EUR tokens. To incentify holding and voting
+                with GDCs the profit from fees is distributed among GDC holders.
+            </p>
         </Segment>
         <Grid divided='vertically' basic className="whitepaper-manifesto">
             <Grid.Row columns={2}>

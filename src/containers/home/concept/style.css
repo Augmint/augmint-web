@@ -17,25 +17,38 @@
 
 .Site-content article section .ui.grid>.row,
 .Site-content article section .ui.segment.custom-column,
-.Site-content article section .ui.segment.custom-column h5 {
+.Site-content article section .ui.segment.custom-column h5,
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
   margin: 0;
   padding: 0;
   text-align: left;
 }
 
-.Site-content article section .ui.segment.custom-column h5 {
-  font-size: 14px;
+.Site-content article section .ui.segment.custom-column h5,
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
+  font-size: 13px;
   letter-spacing: 2.6px;
   margin-bottom: 10px;
 }
 
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
+  margin-bottom: 10px;
+  margin-top: 60px;
+}
+
 .Site-content article section .ui.segment.custom-column p {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 13px;
   letter-spacing: 1.5px;
   line-height: 21px;
-  /*opacity: .6;*/
   max-width: 394px;
+}
+
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .Site-content article section .ui.segment.custom-column {
+        opacity: 0.6;
+    }
 }
 
 .Site-content article h2.segment.header {
@@ -58,6 +71,16 @@ article.concept section.ui.segment.green-gradient {
   font-weight: 200;
   padding-top: 200px;
   padding-bottom: 200px;
+}
+
+.Site-content article section.ui.segment.green-gradient p {
+  text-align: left;
+  max-width: 499px;
+}
+
+.Site-content article section.ui.segment.green-gradient p a {
+  color: #fff;
+  font-weight: bold;
 }
 
 article.concept .ui.horizontal.list>.item {
@@ -101,4 +124,17 @@ article.concept .ui.horizontal.list:last-child {
   letter-spacing: 2.6px;
   padding: 17px;
   width: 142px;
+}
+
+.Site-content article section .ui.basic.center.aligned.segment {
+  margin-top: 40px;
+}
+
+.Site-content article section.ui.segment.green-gradient .ui.basic.center.aligned.segment.custom-button {
+  text-align: left;
+  padding-left: 0;
+}
+
+.Site-content article section.ui.segment.green-gradient h2.segment.header {
+  margin-top: 60px;
 }
