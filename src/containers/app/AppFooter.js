@@ -3,7 +3,7 @@ import { Segment, Container, List, Image } from "semantic-ui-react";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
-import slackLogo from "assets/images/slack-icon.svg";
+import discordLogo from "assets/images/Discord-Logo.svg";
 
 import './custom_footer_style.css';
 
@@ -24,8 +24,8 @@ export function AppFooter(props) {
                 <Segment basic as='p' className='description'>
                   {description}
                 </Segment>
-                <Segment basic className='join-slack' size="tiny" as="a" href="https://discord.gg/PwDmsnu" target="_blank">
-                  <Image src={slackLogo} />
+                <Segment basic className='join-discord' size="tiny" as="a" href="https://discord.gg/PwDmsnu" target="_blank">
+                  <Image src={discordLogo} />
                   Talk to us on Discord
                 </Segment>
 
