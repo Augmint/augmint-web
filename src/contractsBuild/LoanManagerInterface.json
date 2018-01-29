@@ -189,7 +189,7 @@
       "absolutePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/LoanManagerInterface.sol",
       "exportedSymbols": {
         "LoanManagerInterface": [
-          4371
+          3050
         ]
       }
     },
@@ -202,54 +202,54 @@
             ".18"
           ]
         },
-        "id": 4309,
+        "id": 2988,
         "name": "PragmaDirective",
-        "src": "66:23:17"
+        "src": "66:23:11"
       },
       {
         "attributes": {
-          "SourceUnit": 3388,
+          "SourceUnit": 2312,
           "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/Owned.sol",
           "file": "../generic/Owned.sol",
-          "scope": 4372,
+          "scope": 3051,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 4310,
+        "id": 2989,
         "name": "ImportDirective",
-        "src": "90:30:17"
+        "src": "90:30:11"
       },
       {
         "attributes": {
-          "SourceUnit": 3668,
+          "SourceUnit": 2592,
           "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SafeMath.sol",
           "file": "../generic/SafeMath.sol",
-          "scope": 4372,
+          "scope": 3051,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 4311,
+        "id": 2990,
         "name": "ImportDirective",
-        "src": "121:33:17"
+        "src": "121:33:11"
       },
       {
         "attributes": {
           "contractDependencies": [
-            3387
+            2311
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            4371,
-            3387
+            3050,
+            2311
           ],
           "name": "LoanManagerInterface",
-          "scope": 4372
+          "scope": 3051
         },
         "children": [
           {
@@ -263,17 +263,17 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Owned",
-                  "referencedDeclaration": 3387,
+                  "referencedDeclaration": 2311,
                   "type": "contract Owned"
                 },
-                "id": 4312,
+                "id": 2991,
                 "name": "UserDefinedTypeName",
-                "src": "190:5:17"
+                "src": "190:5:11"
               }
             ],
-            "id": 4313,
+            "id": 2992,
             "name": "InheritanceSpecifier",
-            "src": "190:5:17"
+            "src": "190:5:11"
           },
           {
             "children": [
@@ -281,26 +281,26 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SafeMath",
-                  "referencedDeclaration": 3667,
+                  "referencedDeclaration": 2591,
                   "type": "library SafeMath"
                 },
-                "id": 4314,
+                "id": 2993,
                 "name": "UserDefinedTypeName",
-                "src": "208:8:17"
+                "src": "208:8:11"
               },
               {
                 "attributes": {
                   "name": "uint256",
                   "type": "uint256"
                 },
-                "id": 4315,
+                "id": 2994,
                 "name": "ElementaryTypeName",
-                "src": "221:7:17"
+                "src": "221:7:11"
               }
             ],
-            "id": 4316,
+            "id": 2995,
             "name": "UsingForDirective",
-            "src": "202:27:17"
+            "src": "202:27:11"
           },
           {
             "attributes": {
@@ -312,36 +312,36 @@
                 "attributes": {
                   "name": "Open"
                 },
-                "id": 4317,
+                "id": 2996,
                 "name": "EnumValue",
-                "src": "252:4:17"
+                "src": "252:4:11"
               },
               {
                 "attributes": {
                   "name": "Repaid"
                 },
-                "id": 4318,
+                "id": 2997,
                 "name": "EnumValue",
-                "src": "258:6:17"
+                "src": "258:6:11"
               },
               {
                 "attributes": {
                   "name": "Defaulted"
                 },
-                "id": 4319,
+                "id": 2998,
                 "name": "EnumValue",
-                "src": "266:9:17"
+                "src": "266:9:11"
               }
             ],
-            "id": 4320,
+            "id": 2999,
             "name": "EnumDefinition",
-            "src": "235:42:17"
+            "src": "235:42:11"
           },
           {
             "attributes": {
               "canonicalName": "LoanManagerInterface.LoanProduct",
               "name": "LoanProduct",
-              "scope": 4371,
+              "scope": 3050,
               "visibility": "public"
             },
             "children": [
@@ -349,7 +349,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "term",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -362,20 +362,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4321,
+                    "id": 3000,
                     "name": "ElementaryTypeName",
-                    "src": "312:4:17"
+                    "src": "312:4:11"
                   }
                 ],
-                "id": 4322,
+                "id": 3001,
                 "name": "VariableDeclaration",
-                "src": "312:9:17"
+                "src": "312:9:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "discountRate",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -388,20 +388,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4323,
+                    "id": 3002,
                     "name": "ElementaryTypeName",
-                    "src": "336:4:17"
+                    "src": "336:4:11"
                   }
                 ],
-                "id": 4324,
+                "id": 3003,
                 "name": "VariableDeclaration",
-                "src": "336:17:17"
+                "src": "336:17:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "collateralRatio",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -414,20 +414,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4325,
+                    "id": 3004,
                     "name": "ElementaryTypeName",
-                    "src": "421:4:17"
+                    "src": "421:4:11"
                   }
                 ],
-                "id": 4326,
+                "id": 3005,
                 "name": "VariableDeclaration",
-                "src": "421:20:17"
+                "src": "421:20:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "minDisbursedAmount",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -440,20 +440,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4327,
+                    "id": 3006,
                     "name": "ElementaryTypeName",
-                    "src": "581:4:17"
+                    "src": "581:4:11"
                   }
                 ],
-                "id": 4328,
+                "id": 3007,
                 "name": "VariableDeclaration",
-                "src": "581:23:17"
+                "src": "581:23:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "defaultingFeePt",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -466,20 +466,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4329,
+                    "id": 3008,
                     "name": "ElementaryTypeName",
-                    "src": "657:4:17"
+                    "src": "657:4:11"
                   }
                 ],
-                "id": 4330,
+                "id": 3009,
                 "name": "VariableDeclaration",
-                "src": "657:20:17"
+                "src": "657:20:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "isActive",
-                  "scope": 4333,
+                  "scope": 3012,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "bool",
@@ -492,25 +492,25 @@
                       "name": "bool",
                       "type": "bool"
                     },
-                    "id": 4331,
+                    "id": 3010,
                     "name": "ElementaryTypeName",
-                    "src": "748:4:17"
+                    "src": "748:4:11"
                   }
                 ],
-                "id": 4332,
+                "id": 3011,
                 "name": "VariableDeclaration",
-                "src": "748:13:17"
+                "src": "748:13:11"
               }
             ],
-            "id": 4333,
+            "id": 3012,
             "name": "StructDefinition",
-            "src": "283:490:17"
+            "src": "283:490:11"
           },
           {
             "attributes": {
               "canonicalName": "LoanManagerInterface.LoanData",
               "name": "LoanData",
-              "scope": 4371,
+              "scope": 3050,
               "visibility": "public"
             },
             "children": [
@@ -518,7 +518,7 @@
                 "attributes": {
                   "constant": false,
                   "name": "borrower",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "address",
@@ -531,20 +531,20 @@
                       "name": "address",
                       "type": "address"
                     },
-                    "id": 4334,
+                    "id": 3013,
                     "name": "ElementaryTypeName",
-                    "src": "805:7:17"
+                    "src": "805:7:11"
                   }
                 ],
-                "id": 4335,
+                "id": 3014,
                 "name": "VariableDeclaration",
-                "src": "805:16:17"
+                "src": "805:16:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "state",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "enum LoanManagerInterface.LoanState",
@@ -556,23 +556,23 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "LoanState",
-                      "referencedDeclaration": 4320,
+                      "referencedDeclaration": 2999,
                       "type": "enum LoanManagerInterface.LoanState"
                     },
-                    "id": 4336,
+                    "id": 3015,
                     "name": "UserDefinedTypeName",
-                    "src": "836:9:17"
+                    "src": "836:9:11"
                   }
                 ],
-                "id": 4337,
+                "id": 3016,
                 "name": "VariableDeclaration",
-                "src": "836:15:17"
+                "src": "836:15:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "collateralAmount",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -585,20 +585,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4338,
+                    "id": 3017,
                     "name": "ElementaryTypeName",
-                    "src": "866:4:17"
+                    "src": "866:4:11"
                   }
                 ],
-                "id": 4339,
+                "id": 3018,
                 "name": "VariableDeclaration",
-                "src": "866:21:17"
+                "src": "866:21:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "repaymentAmount",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -611,20 +611,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4340,
+                    "id": 3019,
                     "name": "ElementaryTypeName",
-                    "src": "902:4:17"
+                    "src": "902:4:11"
                   }
                 ],
-                "id": 4341,
+                "id": 3020,
                 "name": "VariableDeclaration",
-                "src": "902:20:17"
+                "src": "902:20:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "loanAmount",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -637,20 +637,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4342,
+                    "id": 3021,
                     "name": "ElementaryTypeName",
-                    "src": "937:4:17"
+                    "src": "937:4:11"
                   }
                 ],
-                "id": 4343,
+                "id": 3022,
                 "name": "VariableDeclaration",
-                "src": "937:15:17"
+                "src": "937:15:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "interestAmount",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -663,20 +663,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4344,
+                    "id": 3023,
                     "name": "ElementaryTypeName",
-                    "src": "967:4:17"
+                    "src": "967:4:11"
                   }
                 ],
-                "id": 4345,
+                "id": 3024,
                 "name": "VariableDeclaration",
-                "src": "967:19:17"
+                "src": "967:19:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "term",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -689,20 +689,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4346,
+                    "id": 3025,
                     "name": "ElementaryTypeName",
-                    "src": "1001:4:17"
+                    "src": "1001:4:11"
                   }
                 ],
-                "id": 4347,
+                "id": 3026,
                 "name": "VariableDeclaration",
-                "src": "1001:9:17"
+                "src": "1001:9:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "disbursementDate",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -715,20 +715,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4348,
+                    "id": 3027,
                     "name": "ElementaryTypeName",
-                    "src": "1025:4:17"
+                    "src": "1025:4:11"
                   }
                 ],
-                "id": 4349,
+                "id": 3028,
                 "name": "VariableDeclaration",
-                "src": "1025:21:17"
+                "src": "1025:21:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "maturity",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -741,20 +741,20 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4350,
+                    "id": 3029,
                     "name": "ElementaryTypeName",
-                    "src": "1061:4:17"
+                    "src": "1061:4:11"
                   }
                 ],
-                "id": 4351,
+                "id": 3030,
                 "name": "VariableDeclaration",
-                "src": "1061:13:17"
+                "src": "1061:13:11"
               },
               {
                 "attributes": {
                   "constant": false,
                   "name": "defaultingFeePt",
-                  "scope": 4354,
+                  "scope": 3033,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -767,25 +767,25 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 4352,
+                    "id": 3031,
                     "name": "ElementaryTypeName",
-                    "src": "1089:4:17"
+                    "src": "1089:4:11"
                   }
                 ],
-                "id": 4353,
+                "id": 3032,
                 "name": "VariableDeclaration",
-                "src": "1089:20:17"
+                "src": "1089:20:11"
               }
             ],
-            "id": 4354,
+            "id": 3033,
             "name": "StructDefinition",
-            "src": "779:342:17"
+            "src": "779:342:11"
           },
           {
             "attributes": {
               "constant": false,
               "name": "products",
-              "scope": 4371,
+              "scope": 3050,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "struct LoanManagerInterface.LoanProduct storage ref[] storage ref",
@@ -803,28 +803,28 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "LoanProduct",
-                      "referencedDeclaration": 4333,
+                      "referencedDeclaration": 3012,
                       "type": "struct LoanManagerInterface.LoanProduct storage pointer"
                     },
-                    "id": 4355,
+                    "id": 3034,
                     "name": "UserDefinedTypeName",
-                    "src": "1127:11:17"
+                    "src": "1127:11:11"
                   }
                 ],
-                "id": 4356,
+                "id": 3035,
                 "name": "ArrayTypeName",
-                "src": "1127:13:17"
+                "src": "1127:13:11"
               }
             ],
-            "id": 4357,
+            "id": 3036,
             "name": "VariableDeclaration",
-            "src": "1127:29:17"
+            "src": "1127:29:11"
           },
           {
             "attributes": {
               "constant": false,
               "name": "loans",
-              "scope": 4371,
+              "scope": 3050,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "struct LoanManagerInterface.LoanData storage ref[] storage ref",
@@ -842,28 +842,28 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "LoanData",
-                      "referencedDeclaration": 4354,
+                      "referencedDeclaration": 3033,
                       "type": "struct LoanManagerInterface.LoanData storage pointer"
                     },
-                    "id": 4358,
+                    "id": 3037,
                     "name": "UserDefinedTypeName",
-                    "src": "1163:8:17"
+                    "src": "1163:8:11"
                   }
                 ],
-                "id": 4359,
+                "id": 3038,
                 "name": "ArrayTypeName",
-                "src": "1163:10:17"
+                "src": "1163:10:11"
               }
             ],
-            "id": 4360,
+            "id": 3039,
             "name": "VariableDeclaration",
-            "src": "1163:23:17"
+            "src": "1163:23:11"
           },
           {
             "attributes": {
               "constant": false,
               "name": "mLoans",
-              "scope": 4371,
+              "scope": 3050,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "mapping(address => uint256[] storage ref)",
@@ -881,9 +881,9 @@
                       "name": "address",
                       "type": "address"
                     },
-                    "id": 4361,
+                    "id": 3040,
                     "name": "ElementaryTypeName",
-                    "src": "1200:7:17"
+                    "src": "1200:7:11"
                   },
                   {
                     "attributes": {
@@ -896,24 +896,24 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 4362,
+                        "id": 3041,
                         "name": "ElementaryTypeName",
-                        "src": "1211:4:17"
+                        "src": "1211:4:11"
                       }
                     ],
-                    "id": 4363,
+                    "id": 3042,
                     "name": "ArrayTypeName",
-                    "src": "1211:6:17"
+                    "src": "1211:6:11"
                   }
                 ],
-                "id": 4364,
+                "id": 3043,
                 "name": "Mapping",
-                "src": "1192:26:17"
+                "src": "1192:26:11"
               }
             ],
-            "id": 4365,
+            "id": 3044,
             "name": "VariableDeclaration",
-            "src": "1192:40:17"
+            "src": "1192:40:11"
           },
           {
             "attributes": {
@@ -926,7 +926,7 @@
               ],
               "name": "releaseCollateral",
               "payable": false,
-              "scope": 4371,
+              "scope": 3050,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "external"
@@ -938,7 +938,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "loanId",
-                      "scope": 4370,
+                      "scope": 3049,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -951,19 +951,19 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 4366,
+                        "id": 3045,
                         "name": "ElementaryTypeName",
-                        "src": "1314:4:17"
+                        "src": "1314:4:11"
                       }
                     ],
-                    "id": 4367,
+                    "id": 3046,
                     "name": "VariableDeclaration",
-                    "src": "1314:11:17"
+                    "src": "1314:11:11"
                   }
                 ],
-                "id": 4368,
+                "id": 3047,
                 "name": "ParameterList",
-                "src": "1313:13:17"
+                "src": "1313:13:11"
               },
               {
                 "attributes": {
@@ -972,24 +972,24 @@
                   ]
                 },
                 "children": [],
-                "id": 4369,
+                "id": 3048,
                 "name": "ParameterList",
-                "src": "1335:0:17"
+                "src": "1335:0:11"
               }
             ],
-            "id": 4370,
+            "id": 3049,
             "name": "FunctionDefinition",
-            "src": "1287:49:17"
+            "src": "1287:49:11"
           }
         ],
-        "id": 4371,
+        "id": 3050,
         "name": "ContractDefinition",
-        "src": "157:1182:17"
+        "src": "157:1182:11"
       }
     ],
-    "id": 4372,
+    "id": 3051,
     "name": "SourceUnit",
-    "src": "66:1274:17"
+    "src": "66:1274:11"
   },
   "compiler": {
     "name": "solc",
@@ -997,5 +997,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-01-26T18:45:41.081Z"
+  "updatedAt": "2018-01-27T20:31:00.030Z"
 }
