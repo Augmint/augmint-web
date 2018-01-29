@@ -5,12 +5,14 @@ import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTab
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/ToolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
+import CancelOrderButton from "./CancelOrderButton";
+
 import { TOKEN_SELL } from "modules/reducers/orders";
 
 const OrderItem = props => {
     const { order, userAccountAddress } = props;
     const ret = [
-        <Col width={3} key={`${order.orderType}-amount`}>
+        <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
             {order.amount}
             {order.orderType === TOKEN_SELL ? ` A-EUR` : ` ETH`}
         </Col>,
@@ -23,22 +25,25 @@ const OrderItem = props => {
                 <br />Time: {order.addedTimeText}
                 <br />Order Id: {order.id} | index: {order.index}
             </MoreInfoTip>
-            {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && "Cancel"}
+            {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}
         </Col>
     ];
     return ret;
 };
 
 const DummyCols = props => {
-    const ret = [props.count];
-    return ret.map((item, i) => <Col key={i} />);
+    const ret = [];
+    for (let i = 0; i < props.count; i++) {
+        ret.push(<Col key={i} />);
+    }
+    return ret;
 };
 
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress } = props;
 
-    const totalBuyAmount = buyOrders.reduce((sum, order) => order.amount + sum, 0).toString();
-    const totalSellAmount = sellOrders.reduce((sum, order) => order.amount + sum, 0).toString();
+    const totalBuyAmount = buyOrders.reduce((sum, order) => order.bn_amountConverted.add(sum), 0).toString();
+    const totalSellAmount = sellOrders.reduce((sum, order) => order.bn_amountConverted.add(sum), 0).toString();
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 

@@ -9,13 +9,13 @@ Use only from reducers.
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
-import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
+import ethers from "ethers";
 
 export function getTransferFee(amount) {
-    let feePt = store.getState().augmintToken.info.feePt;
-    let feeMin = store.getState().augmintToken.info.feeMin;
-    let feeMax = store.getState().augmintToken.info.feeMax;
+    const feePt = store.getState().augmintToken.info.feePt;
+    const feeMin = store.getState().augmintToken.info.feeMin;
+    const feeMax = store.getState().augmintToken.info.feeMax;
 
     let fee = amount
         .mul(feePt)
@@ -30,19 +30,20 @@ export function getTransferFee(amount) {
 }
 
 export function getMaxTransfer(amount) {
-    let feePt = store.getState().augmintToken.info.feePt;
-    let feeMin = store.getState().augmintToken.info.feeMin;
-    let feeMax = store.getState().augmintToken.info.feeMax;
-    let maxAmount;
+    const feePt = store.getState().augmintToken.info.feePt;
+    const feeMin = store.getState().augmintToken.info.feeMin;
+    const feeMax = store.getState().augmintToken.info.feeMax;
 
-    let minLimit = feeMin
+    const minLimit = feeMin
         .div(feePt)
         .mul(1000000)
         .round(0, BigNumber.ROUND_DOWN);
-    let maxLimit = feeMax
+    const maxLimit = feeMax
         .div(feePt)
         .mul(1000000)
         .round(0, BigNumber.ROUND_DOWN);
+
+    let maxAmount;
     if (amount.lte(minLimit)) {
         maxAmount = amount.sub(feeMin);
     } else if (amount.gte(maxLimit)) {
@@ -61,12 +62,12 @@ export function getMaxTransfer(amount) {
 export async function transferTokenTx(payload) {
     let { payee, tokenAmount, narrative } = payload;
     try {
-        let gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
-        let userAccount = store.getState().web3Connect.userAccount;
-        let augmintToken = store.getState().augmintToken;
-        let tokencAmount = tokenAmount.times(augmintToken.info.bn_decimalsDiv);
+        const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
+        const userAccount = store.getState().web3Connect.userAccount;
+        const augmintToken = store.getState().augmintToken;
+        const tokencAmount = tokenAmount.times(augmintToken.info.bn_decimalsDiv);
         narrative = narrative == null ? "" : payload.narrative.trim();
-        let result = await augmintToken.contract.instance.transferWithNarrative(
+        const result = await augmintToken.contract.instance.transferWithNarrative(
             payee,
             tokencAmount.toString(), // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
             narrative,
@@ -87,7 +88,7 @@ export async function transferTokenTx(payload) {
             throw new Error("Transfer event wasn't received. Check tx :  " + result.tx);
         }
 
-        let bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
+        const bn_amount = result.logs[0].args.amount.div(new BigNumber(10000));
         return {
             txResult: result,
             to: result.logs[0].args.to,
@@ -106,26 +107,34 @@ export async function transferTokenTx(payload) {
     }
 }
 
-export async function fetchTransferListTx(address, fromBlock, toBlock) {
+export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
-        let augmintToken = store.getState().augmintToken.contract;
-        let filterResult = await getEventLogs(
-            augmintToken,
-            augmintToken.instance.AugmintTransfer,
-            { from: address, to: address }, // filter with OR!
-            fromBlock,
-            toBlock
-        );
-        //console.debug("fetchTransferListTx filterResult", filterResult);
-        let transfers = await Promise.all(
-            filterResult.map((tx, index) => {
-                return formatTransfer(address, tx);
-            })
-        );
+        const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+        const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
+        const provider = store.getState().web3Connect.ethers.provider;
 
-        transfers.sort((a, b) => {
-            return b.blockTimeStamp - a.blockTimeStamp;
-        });
+        const paddedAccount = ethers.utils.hexlify(ethers.utils.padZeros(account, 32));
+        const [logsFrom, logsTo] = await Promise.all([
+            provider.getLogs({
+                fromBlock: fromBlock,
+                toBlock: toBlock,
+                address: augmintTokenInstance.address,
+                topics: [AugmintTransfer.topics[0], paddedAccount]
+            }),
+            provider.getLogs({
+                fromBlock: fromBlock,
+                toBlock: toBlock,
+                address: augmintTokenInstance.address,
+                topics: [AugmintTransfer.topics[0], null, paddedAccount]
+            })
+        ]);
+        const logs = [...logsFrom, ...logsTo];
+        const transfers = [];
+        for (const eventLog of logs) {
+            // TODO: make this parallel
+            const logData = await _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
+            transfers.push(logData);
+        }
 
         return transfers;
     } catch (error) {
@@ -133,59 +142,40 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
     }
 }
 
-export async function processTransferTx(address, tx) {
-    try {
-        let transfers = store.getState().userTransfers.transfers;
-        let result = await formatTransfer(address, tx);
-        // TODO: sort and look for dupes?
-
-        if (transfers !== null) {
-            result = [result, ...transfers];
-        } else {
-            result = [result];
-        }
-        return result;
-    } catch (error) {
-        throw new Error("processTransferTx failed.\n" + error);
-    }
+export async function processNewTransferTx(account, eventLog) {
+    const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+    const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
+    return _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
 }
 
-async function formatTransfer(address, tx) {
-    //console.debug("formatTransfer args tx: ", tx);
-    let direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
-    let blockTimeStamp, bn_amount, bn_fee;
-    let feeTmp, amountTmp;
-    if (tx.timeStamp) {
-        // when we query from etherscan we get timestamp and args are not BigNumber
-        blockTimeStamp = tx.timeStamp;
-        amountTmp = new BigNumber(tx.args.amount);
-        feeTmp = new BigNumber(tx.args.fee);
+async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog) {
+    let blockData;
+    if (typeof eventLog.getBlock === "function") {
+        // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
+        blockData = await eventLog.getBlock();
     } else {
-        blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
-        amountTmp = tx.args.amount;
-        feeTmp = tx.args.fee;
+        // not from event, provider.getBlock should work
+        const provider = store.getState().web3Connect.ethers.provider;
+        blockData = await provider.getBlock(eventLog.blockNumber);
     }
-    bn_amount = amountTmp.div(new BigNumber(10000));
-    bn_fee = direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
 
-    let result = {
-        blockNumber: tx.blockNumber,
-        blockHash: tx.blockHash,
-        transactionIndex: tx.transactionIndex,
-        transactionHash: tx.transactionHash,
-        logIndex: tx.logIndex,
-        type: tx.type,
-        bn_amount: bn_amount,
-        direction: direction === -1 ? "out" : "in",
-        amount: bn_amount.times(direction).toString(),
-        from: tx.args.from,
-        to: tx.args.to,
-        bn_fee: bn_fee,
-        fee: bn_fee.toString(),
-        narrative: tx.args.narrative,
-        blockTimeStamp: blockTimeStamp,
-        blockTimeStampText: moment.unix(blockTimeStamp).format("D MMM YYYY HH:mm")
-    };
-    //console.debug("formatTransfer result", result);
-    return result;
+    const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
+    const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
+    const bn_senderFee = direction === -1 ? parsedData.fee.div(10000) : new BigNumber(0);
+
+    const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
+
+    const logData = Object.assign({ args: parsedData }, eventLog, {
+        blockData: blockData,
+        direction: direction,
+        directionText: direction === -1 ? "sent" : "received",
+        bn_senderFee: bn_senderFee,
+        senderFee: bn_senderFee.toString(),
+        blockTimeStampText: blockTimeStampText,
+        signedAmount: parsedData.amount
+            .div(10000)
+            .mul(direction)
+            .toString()
+    });
+    return logData;
 }

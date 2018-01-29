@@ -11,7 +11,6 @@ const LoanManager = artifacts.require("./LoanManager.sol");
 
 let tokenAce, loanManager, rates, peggedSymbol;
 let reserveAcc;
-let interestPoolAcc = null;
 let interestEarnedAcc = null;
 
 module.exports = {
@@ -27,11 +26,22 @@ module.exports = {
 
 async function newLoanManagerMock(_tokenAce, _rates) {
     tokenAce = _tokenAce;
-    peggedSymbol = web3.toAscii(await tokenAce.peggedSymbol());
     rates = _rates;
     reserveAcc = tokenAce.address;
     loanManager = await LoanManager.new(tokenAce.address, rates.address);
-    loanManager.grantMultiplePermissions(web3.eth.accounts[0], ["addLoanProduct", "setLoanProductActiveState"]);
+
+    [interestEarnedAcc, peggedSymbol, , ,] = await Promise.all([
+        tokenAce.interestEarnedAccount(),
+
+        tokenAce.peggedSymbol(),
+
+        tokenAce.grantMultiplePermissions(loanManager.address, ["issueAndDisburse", "LoanManager"]),
+
+        loanManager.grantMultiplePermissions(web3.eth.accounts[0], ["addLoanProduct", "setLoanProductActiveState"])
+    ]);
+
+    peggedSymbol = web3.toAscii(peggedSymbol);
+    // These neeed to be sequantial b/c ids hardcoded in tests.
     // term (in sec), discountRate, loanCoverageRatio, minDisbursedAmount (w/ 4 decimals), defaultingFeePt, isActive
     // notDue: (due in 1 day)
     await loanManager.addLoanProduct(86400, 970000, 850000, 300000, 50000, true);
@@ -40,17 +50,9 @@ async function newLoanManagerMock(_tokenAce, _rates) {
     // defaulting: due in 1 sec, repay in 1sec for testing defaults
     await loanManager.addLoanProduct(1, 990000, 600000, 100000, 50000, true);
     // defaulting no left over collateral: due in 1 sec, repay in 1sec for testing defaults without leftover
-    await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, true);
+    await loanManager.addLoanProduct(1, 900000, 900000, 100000, 100000, true);
     // disabled product
     await loanManager.addLoanProduct(1, 990000, 990000, 100000, 50000, false);
-
-    await tokenAce.grantMultiplePermissions(loanManager.address, [
-        "issueAndDisburse",
-        "burnCollectedInterest",
-        "LoanManager"
-    ]);
-    interestPoolAcc = await tokenAce.interestPoolAccount();
-    interestEarnedAcc = await tokenAce.interestEarnedAccount();
 
     return loanManager;
 }
@@ -60,223 +62,226 @@ async function createLoan(testInstance, product, borrower, collateralWei) {
     loan.state = 0;
     loan.borrower = borrower;
 
-    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestPoolAcc, interestEarnedAcc];
-
     const totalSupplyBefore = await tokenAce.totalSupply();
-    const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
+    const balBefore = await tokenAceTestHelper.getAllBalances({
+        reserve: reserveAcc,
+        borrower: loan.borrower,
+        loanManager: loanManager.address,
+        interestEarned: interestEarnedAcc
+    });
 
     const tx = await loanManager.newEthBackedLoan(loan.product.id, {
         from: loan.borrower,
         value: loan.collateral
     });
     testHelper.logGasUse(testInstance, tx, "newEthBackedLoan");
-    loan.id = newLoanEventAsserts(tx, loan);
-    await loanAsserts(loan);
+    loan.id = await newLoanEventAsserts(loan);
+
+    const [totalSupplyAfter, ,] = await Promise.all([
+        tokenAce.totalSupply(),
+
+        loanAsserts(loan),
+
+        tokenAceTestHelper.assertBalances(balBefore, {
+            reserve: {
+                ace: balBefore.reserve.ace,
+                eth: balBefore.reserve.eth
+            },
+            borrower: {
+                ace: balBefore.borrower.ace.add(loan.loanAmount),
+                eth: balBefore.borrower.eth.minus(loan.collateral),
+                gasFee: NEWLOAN_MAXFEE
+            },
+            loanManager: {
+                ace: balBefore.loanManager.ace,
+                eth: balBefore.loanManager.eth.plus(loan.collateral)
+            },
+            interestEarned: {
+                ace: balBefore.interestEarned.ace,
+                eth: balBefore.interestEarned.eth
+            }
+        })
+    ]);
 
     assert.equal(
-        (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.add(loan.repaymentAmount).toString(),
-        "total ACE supply should be increased by the loan amount"
+        totalSupplyAfter.toString(),
+        totalSupplyBefore.add(loan.loanAmount).toString(),
+        "total ACE supply should be increased by the disbursed loan amount"
     );
-
-    let expBalances = [
-        {
-            name: "reserve",
-            address: reserveAcc,
-            ace: balBefore[0].ace,
-            eth: balBefore[0].eth
-        },
-        {
-            name: "loan.borrower",
-            address: loan.borrower,
-            ace: balBefore[1].ace.add(loan.loanAmount),
-            eth: balBefore[1].eth.minus(loan.collateral),
-            gasFee: NEWLOAN_MAXFEE
-        },
-        {
-            name: "loanManager",
-            address: loanManager.address,
-            ace: balBefore[2].ace,
-            eth: balBefore[2].eth.plus(loan.collateral)
-        },
-        {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[3].ace.add(loan.interestAmount),
-            eth: balBefore[3].eth
-        },
-        {
-            name: "interestEarned Acc",
-            address: interestEarnedAcc,
-            ace: balBefore[4].ace,
-            eth: balBefore[4].eth
-        }
-    ];
-
-    await tokenAceTestHelper.balanceAsserts(expBalances);
 
     return loan;
 }
 
 async function repayLoan(testInstance, loan) {
-    const testedAccounts = [reserveAcc, loan.borrower, loanManager.address, interestPoolAcc, interestEarnedAcc];
     const totalSupplyBefore = await tokenAce.totalSupply();
-    const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
+    const balBefore = await tokenAceTestHelper.getAllBalances({
+        reserve: reserveAcc,
+        borrower: loan.borrower,
+        loanManager: loanManager.address,
+        interestEarned: interestEarnedAcc
+    });
 
     loan.state = 1; // repaid
     const tx = await tokenAce.repayLoan(loanManager.address, loan.id, { from: loan.borrower });
     testHelper.logGasUse(testInstance, tx, "AugmintToken.repayLoan");
-    // TODO: assert events (truffle is missing LoanRepayed event)
 
-    await loanAsserts(loan);
+    const [totalSupplyAfter, , , ,] = await Promise.all([
+        tokenAce.totalSupply(),
+
+        testHelper.assertEvent(loanManager, "LoanRepayed", {
+            loanId: loan.id,
+            borrower: loan.borrower
+        }),
+
+        testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+            from: loan.borrower,
+            to: tokenAce.address,
+            amount: loan.repaymentAmount.toString(),
+            fee: 0,
+            narrative: "Loan repayment"
+        }),
+
+        // TODO: it's emmited  but why not picked up by assertEvent?
+        // testHelper.assertEvent(tokenAce, "Transfer", {
+        //     from: loan.borrower,
+        //     to: tokenAce.address,
+        //     amount: loan.repaymentAmount.toString()
+        // }),
+
+        loanAsserts(loan),
+
+        tokenAceTestHelper.assertBalances(balBefore, {
+            reserve: {
+                ace: balBefore.reserve.ace,
+                eth: balBefore.reserve.eth
+            },
+            borrower: {
+                ace: balBefore.borrower.ace.sub(loan.repaymentAmount),
+                eth: balBefore.borrower.eth.add(loan.collateral),
+                gasFee: REPAY_MAXFEE
+            },
+            loanManager: {
+                ace: balBefore.loanManager.ace,
+                eth: balBefore.loanManager.eth.minus(loan.collateral)
+            },
+            interestEarned: {
+                ace: balBefore.interestEarned.ace.add(loan.interestAmount),
+                eth: balBefore.interestEarned.eth
+            }
+        })
+    ]);
 
     assert.equal(
-        (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.sub(loan.repaymentAmount).toString(),
-        "total ACE supply should be reduced by the repaid loan amount"
+        totalSupplyAfter.toString(),
+        totalSupplyBefore.sub(loan.loanAmount).toString(),
+        "total ACE supply should be reduced by the loan amount (what was disbursed)"
     );
-
-    let expBalances = [
-        {
-            name: "reserve",
-            address: reserveAcc,
-            ace: balBefore[0].ace,
-            eth: balBefore[0].eth
-        },
-        {
-            name: "loan.borrower",
-            address: loan.borrower,
-            ace: balBefore[1].ace.sub(loan.repaymentAmount),
-            eth: balBefore[1].eth.add(loan.collateral),
-            gasFee: REPAY_MAXFEE
-        },
-        {
-            name: "loanManager",
-            address: loanManager.address,
-            ace: balBefore[2].ace,
-            eth: balBefore[2].eth.minus(loan.collateral)
-        },
-        {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[3].ace.sub(loan.interestAmount),
-            eth: balBefore[3].eth
-        },
-        {
-            name: "interestEarned Acc",
-            address: interestEarnedAcc,
-            ace: balBefore[4].ace.add(loan.interestAmount),
-            eth: balBefore[4].eth
-        }
-    ];
-
-    await tokenAceTestHelper.balanceAsserts(expBalances);
 }
 
 async function collectLoan(testInstance, loan, collector) {
     loan.collector = collector;
-
-    const testedAccounts = [
-        reserveAcc,
-        loan.borrower,
-        loan.collector,
-        loanManager.address,
-        interestPoolAcc,
-        interestEarnedAcc
-    ];
-    const totalSupplyBefore = await tokenAce.totalSupply();
-    const balBefore = await tokenAceTestHelper.getBalances(testedAccounts);
-    const coveringValue = (await rates.convertToWei(peggedSymbol, loan.repaymentAmount)).add(loan.defaultingFee);
-    let releasedCollateral;
-    if (coveringValue < loan.collateral) {
-        releasedCollateral = loan.collateral.sub(coveringValue);
-    } else {
-        releasedCollateral = 0;
-    }
-    const collectedCollateral = loan.collateral.sub(releasedCollateral);
     loan.state = 2; // defaulted
+
+    const targetCollectionInToken = loan.repaymentAmount.mul(loan.product.defaultingFeePt.add(1000000)).div(1000000);
+    const targetFeeInToken = loan.repaymentAmount.mul(loan.product.defaultingFeePt).div(1000000);
+    //.round(0, BigNumber.ROUND_DOWN);
+
+    const [
+        totalSupplyBefore,
+        balBefore,
+        collateralInToken,
+        repaymentAmountInWei,
+        targetCollectionInWei,
+        targetFeeInWei
+    ] = await Promise.all([
+        tokenAce.totalSupply(),
+
+        tokenAceTestHelper.getAllBalances({
+            reserve: reserveAcc,
+            collector: loan.collector,
+            borrower: loan.borrower,
+            loanManager: loanManager.address,
+            interestEarned: interestEarnedAcc
+        }),
+        rates.convertFromWei(peggedSymbol, loan.collateral),
+        rates.convertToWei(peggedSymbol, loan.repaymentAmount),
+        rates.convertToWei(peggedSymbol, targetCollectionInToken),
+        rates.convertToWei(peggedSymbol, targetFeeInToken)
+    ]);
+
+    const releasedCollateral = BigNumber.max(loan.collateral.sub(targetCollectionInWei), 0);
+    const collectedCollateral = loan.collateral.sub(releasedCollateral);
+    const defaultingFee = BigNumber.min(targetFeeInWei, collectedCollateral);
+
+    const rate = await rates.rates("EUR");
+    // console.log(
+    //     `    *** Collection params:
+    //      A-EUR/EUR: ${rate[0] / 10000}
+    //      defaulting fee pt: ${loan.product.defaultingFeePt / 10000} %
+    //      repaymentAmount: ${loan.repaymentAmount / 10000} A-EUR = ${web3.fromWei(repaymentAmountInWei)} ETH
+    //      collateral: ${web3.fromWei(loan.collateral).toString()} ETH = ${collateralInToken / 10000} A-EUR
+    //      --------------------
+    //      targetFee: ${targetFeeInToken / 10000} A-EUR = ${web3.fromWei(targetFeeInWei).toString()} ETH
+    //      target collection : ${targetCollectionInToken / 10000} A-EUR = ${web3
+    //         .fromWei(targetCollectionInWei)
+    //         .toString()} ETH
+    //      collected: ${web3.fromWei(collectedCollateral).toString()} ETH
+    //      released: ${web3.fromWei(releasedCollateral).toString()} ETH
+    //      defaultingFee: ${web3.fromWei(defaultingFee).toString()} ETH`
+    // );
 
     const tx = await loanManager.collect([loan.id], { from: loan.collector });
     testHelper.logGasUse(testInstance, tx, "collect 1");
-    /* Truffle/web3 doesn't pick up event from other contract? (it's emmitted but not in tx.logs)
-    assert.equal(tx.logs[0].event, "Transfer", "Transfer event should be emited for burn");
-    assert.equal(tx.logs[0].args.to, "0x0", "to should be 0x0 in trasnfer event");
-    assert.equal(tx.logs[0].args.amount.toString(), loan.interestAmount, "interestAmount should be set in Transfer event");
-    */
-    let log = tx.logs[0];
-    assert.equal(log.event, "LoanCollected", "LoanCollected event should be emited");
-    assert.equal(log.args.loanId.toNumber(), loan.id, "loanId in LoanCollected event should be set");
-    assert.equal(log.args.borrower, loan.borrower, "borrower in LoanCollected event should be set");
-    assert.equal(
-        log.args.collectedCollateral.toString(),
-        collectedCollateral.toString(),
-        "collectedCollateral in LoanCollected event should be set"
-    );
-    assert.equal(
-        log.args.releasedCollateral.toString(),
-        releasedCollateral.toString(),
-        "releasedCollateral in LoanCollected event should be set"
-    );
-    assert.equal(
-        log.args.defaultingFee.toString(),
-        loan.defaultingFee.toString(),
-        "defaultingFee in LoanCollected event should be set"
-    );
 
-    await loanAsserts(loan);
+    const [totalSupplyAfter, , ,] = await Promise.all([
+        tokenAce.totalSupply(),
 
-    assert.equal(
-        (await tokenAce.totalSupply()).toString(),
-        totalSupplyBefore.sub(loan.interestAmount).toString(),
-        "interest should be deducted from total ACE supply"
-    );
+        testHelper.assertEvent(loanManager, "LoanCollected", {
+            loanId: loan.id,
+            borrower: loan.borrower,
+            collectedCollateral: collectedCollateral.toString(),
+            releasedCollateral: releasedCollateral.toString(),
+            defaultingFee: defaultingFee.toString()
+        }),
 
-    let expBalances = [
-        {
-            name: "reserve",
-            address: reserveAcc,
-            ace: balBefore[0].ace,
-            eth: balBefore[0].eth.add(collectedCollateral)
-        },
-        {
-            name: "loan.borrower",
-            address: loan.borrower,
-            ace: balBefore[1].ace,
-            eth: balBefore[1].eth.add(releasedCollateral)
-        },
-        {
-            name: "loan.collector", // collect tx calling acc
-            address: loan.collector,
-            ace: balBefore[2].ace,
-            eth: balBefore[2].eth,
-            gasFee: COLLECT_BASEFEE
-        },
-        {
-            name: "loanManager",
-            address: loanManager.address,
-            ace: balBefore[3].ace,
-            eth: balBefore[3].eth.minus(loan.collateral)
-        },
-        {
-            name: "interestPool Acc",
-            address: interestPoolAcc,
-            ace: balBefore[4].ace.sub(loan.interestAmount),
-            eth: balBefore[4].eth
-        },
-        {
-            name: "interestEarned Acc",
-            address: interestEarnedAcc,
-            ace: balBefore[5].ace,
-            eth: balBefore[5].eth
-        }
-    ];
+        loanAsserts(loan),
 
-    await tokenAceTestHelper.balanceAsserts(expBalances);
+        tokenAceTestHelper.assertBalances(balBefore, {
+            reserve: {
+                ace: balBefore.reserve.ace,
+                eth: balBefore.reserve.eth.add(collectedCollateral)
+            },
+
+            collector: {
+                ace: balBefore.collector.ace,
+                eth: balBefore.collector.eth,
+                gasFee: COLLECT_BASEFEE
+            },
+
+            borrower: {
+                ace: balBefore.borrower.ace,
+                eth: balBefore.borrower.eth.add(releasedCollateral),
+                gasFee: REPAY_MAXFEE
+            },
+
+            loanManager: {
+                ace: balBefore.loanManager.ace,
+                eth: balBefore.loanManager.eth.minus(loan.collateral)
+            },
+
+            interestEarned: {
+                ace: balBefore.interestEarned.ace,
+                eth: balBefore.interestEarned.eth
+            }
+        })
+    ]);
+
+    assert.equal(totalSupplyAfter.toString(), totalSupplyBefore.toString(), "totalSupply should be the same");
 }
 
 async function getProductInfo(productId) {
-    let prod = await loanManager.products(productId);
-    let info = {
+    const prod = await loanManager.products(productId);
+    const info = {
         id: productId,
         term: prod[0],
         discountRate: prod[1],
@@ -289,7 +294,7 @@ async function getProductInfo(productId) {
 }
 
 async function calcLoanValues(rates, product, collateralWei) {
-    let ret = {};
+    const ret = {};
 
     ret.collateral = new BigNumber(collateralWei);
 
@@ -322,55 +327,38 @@ async function calcLoanValues(rates, product, collateralWei) {
     ret.disbursementTime = moment()
         .utc()
         .unix();
-    ret.defaultingFee = ret.collateral
-        .mul(product.defaultingFeePt)
-        .div(1000000)
-        .round(0, BigNumber.ROUND_DOWN);
     ret.product = product;
     return ret;
 }
 
-function newLoanEventAsserts(tx, expLoan) {
-    assert.equal(tx.logs[0].event, "NewLoan", "NewLoan event should be emited");
-    assert.equal(
-        tx.logs[0].args.productId.toString(),
-        expLoan.product.id.toString(),
-        "productId in NewLoan event should be set"
-    );
-    assert.equal(tx.logs[0].args.productId.toNumber(), expLoan.product.id, "productId in NewLoan event should be set");
-    const loanId = tx.logs[0].args.loanId.toNumber();
-    assert.isNumber(loanId, "loanId in NewLoan event should be set");
-    assert.equal(tx.logs[0].args.borrower, expLoan.borrower, "borrower in NewLoan event should be set");
-    assert.equal(
-        tx.logs[0].args.collateralAmount.toString(),
-        expLoan.collateral.toString(),
-        "collateralAmount in NewLoan event should be set"
-    );
-    assert.equal(
-        tx.logs[0].args.loanAmount.toString(),
-        expLoan.loanAmount.toString(),
-        "loanAmount in NewLoan event should be set"
-    );
-    assert.equal(
-        tx.logs[0].args.repaymentAmount.toString(),
-        expLoan.repaymentAmount.toString(),
-        "loanAmount in NewLoan event should be set"
-    );
-    /* TODO: truffle doesn't parse other event into tx.logs[1] - depsite it's in tx.receipt.logs in raw format
-        assert.equal(
-            tx.logs[1].event,
-            "Transfer",
-            "Transfer event should be emitted"
-        );
-        assert.equal(
-            tx.logs[1].args.amount.toString(),
-            disbursedAmount.toString(),
-            "amount in Transfer event should be set"
-        );
-        // TODO: other event args
-        */
+async function newLoanEventAsserts(expLoan) {
+    const [eventResults, ,] = await Promise.all([
+        testHelper.assertEvent(loanManager, "NewLoan", {
+            loanId: x => x,
+            productId: expLoan.product.id,
+            borrower: expLoan.borrower,
+            collateralAmount: expLoan.collateral.toString(),
+            loanAmount: expLoan.loanAmount.toString(),
+            repaymentAmount: expLoan.repaymentAmount.toString()
+        }),
 
-    return loanId;
+        testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+            from: tokenAce.address,
+            to: expLoan.borrower,
+            amount: expLoan.loanAmount.toString(),
+            fee: 0,
+            narrative: "Loan disbursement"
+        })
+
+        // TODO: it's emmited  but why  not picked up by assertEvent?
+        // testHelper.assertEvent(tokenAce, "Transfer", {
+        //     from: tokenAce.address,
+        //     to: expLoan.borrower,
+        //     amount: expLoan.loanAmount.toString()
+        // })
+    ]);
+
+    return eventResults.loanId.toNumber();
 }
 
 async function loanAsserts(expLoan) {
@@ -401,5 +389,4 @@ async function loanAsserts(expLoan) {
     );
 
     assert.equal(loan[9].toString(), expLoan.product.defaultingFeePt.toString(), "defaultingFeePt should be set");
-    // TODO: test loanManager.getLoanIds and .mLoans
 }

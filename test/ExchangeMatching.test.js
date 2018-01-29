@@ -134,7 +134,7 @@ contract("Exchange tests", accounts => {
             exchange.matchOrders(buyOrder.index, buyOrder.id, sellOrder2.index, sellOrder2.id)
         );
     });
-
+    it("Should not match when rates = 0");
     it("should match multiple orders"); // ensure edge cases of passing the same order twice
     it("matchMultipleOrders should match as many orders as fits into gas provided");
     it("matchMultipleOrders should stop if one is non-matching");

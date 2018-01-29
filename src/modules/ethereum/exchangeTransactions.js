@@ -1,6 +1,6 @@
 import store from "modules/store";
 import moment from "moment";
-//import BigNumber from "bignumber.js";
+import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 
 export const TOKEN_BUY = 0;
@@ -10,8 +10,10 @@ export async function fetchOrders() {
     // TODO: handle when order changes while iterating
     try {
         const exchange = store.getState().exchange;
-        const sellCount = exchange.info.sellOrderCount;
-        const buyCount = exchange.info.buyOrderCount;
+
+        const orderCounts = await exchange.contract.instance.getOrderCounts();
+        const sellCount = orderCounts[0].toNumber();
+        const buyCount = orderCounts[1].toNumber();
         // retreive all orders
         let buyOrders = [];
         let sellOrders = [];
@@ -51,11 +53,13 @@ async function getOrders(offset) {
                 if (parsed.weiAmount.toString() !== "0") {
                     parsed.amount = parseFloat(web3.utils.fromWei(parsed.weiAmount.toString()));
                     parsed.bn_amount = parsed.weiAmount;
+                    parsed.bn_amountConverted = new BigNumber(web3.utils.fromWei(parsed.weiAmount.toString()));
                     parsed.orderType = TOKEN_BUY;
                     res.buyOrders.push(parsed);
                 } else {
                     parsed.bn_amount = parsed.tokenAmount;
                     parsed.amount = parsed.tokenAmount.div(10000).toNumber();
+                    parsed.bn_amountConverted = parsed.tokenAmount.div(10000);
                     parsed.orderType = TOKEN_SELL;
                     res.sellOrders.push(parsed);
                 }
@@ -178,5 +182,61 @@ export async function matchOrdersTx(buyIndex, buyId, sellIndex, sellId) {
     } catch (error) {
         console.error("Order matching failed.\n", error);
         throw new Error("Order matching failed.\n" + error);
+    }
+}
+
+export async function cancelOrderTx(orderType, orderIndex, orderId) {
+    try {
+        const gasEstimate = cost.CANCEL_ORDER_GAS;
+        const userAccount = store.getState().web3Connect.userAccount;
+        const exchange = store.getState().exchange.contract.instance;
+
+        // return {
+        //     txResult: "mock",
+        //     eth: {
+        //         gasProvided: gasEstimate,
+        //         gasUsed: 99999,
+        //         tx: "tx mock"
+        //     }
+        // };
+
+        let result;
+        if (orderType === TOKEN_BUY) {
+            result = await exchange.cancelBuyTokenOrder(orderIndex, orderId, {
+                from: userAccount,
+                gas: gasEstimate
+            });
+        } else if (orderType === TOKEN_SELL) {
+            result = await exchange.cancelSellTokenOrder(orderIndex, orderId, {
+                from: userAccount,
+                gas: gasEstimate
+            });
+        } else {
+            throw new Error("Cancel order failed, invalid orderType: " + orderType);
+        }
+
+        if (result.receipt.gasUsed === gasEstimate) {
+            // Neeed for testnet behaviour
+            // TODO: add more tx info
+            throw new Error("Cancel orders failed. All gas provided was used:  " + result.receipt.gasUsed);
+        }
+
+        if (!result.logs || !result.logs[0] || result.logs[0].event !== "CancelledOrder") {
+            const error = new Error("CancelledOrder event wasn't received. Check tx :  " + result.tx);
+            console.error(error, "\nResult received:", result);
+            throw error;
+        }
+
+        return {
+            txResult: result,
+            eth: {
+                gasProvided: gasEstimate,
+                gasUsed: result.receipt.gasUsed,
+                tx: result.tx
+            }
+        };
+    } catch (error) {
+        console.error("Cancel order failed.\n", error);
+        throw new Error("Cancel order failed.\n" + error);
     }
 }

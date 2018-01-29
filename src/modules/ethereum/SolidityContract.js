@@ -1,40 +1,66 @@
 import { default as Contract } from "truffle-contract";
+import ethers from "ethers";
+
+/*  connecting to both web3 and ethers contract instance is temporary fix for web3 event issues
+TODO: should we and could we get rid of web3 contract? */
 export default class SolidityContract {
-    constructor(web3, instance) {
-        this.instance = instance;
-        this.abiDecoder = require("./abi-decoder");
-        this.abiDecoder.addABI(web3, instance.abi);
+    constructor(connection, web3ContractInstance, ethersContractInstance) {
+        this.instance = web3ContractInstance;
+        this.ethersInstance = ethersContractInstance;
+        // this.deployedAtBlock is used for filters' fromBlock - no point to query from earlier
+        // FIXME: how to get the blockNumber of the contract deployment?
+
+        let startBlock;
+        switch (connection.network.name) {
+            case "Main":
+                startBlock = 4992980;
+                break;
+            case "Rinkeby":
+                startBlock = 1661751;
+                break;
+            case "Ropsten":
+                startBlock = 2544514;
+                break;
+            default:
+                startBlock = 0;
+        }
+        this.deployedAtBlock = ethers.utils.bigNumberify(startBlock).toHexString();
     }
 
-    static async connectNew(web3, artifacts) {
-        let contract = Contract(artifacts);
-        contract.setProvider(web3.currentProvider);
+    static async connectNew(connection, artifacts) {
+        const contract = Contract(artifacts);
+        contract.setProvider(connection.web3Instance.currentProvider);
         //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
         if (typeof contract.currentProvider.sendAsync !== "function") {
             contract.currentProvider.sendAsync = function() {
                 return contract.currentProvider.send.apply(contract.currentProvider, arguments);
             };
         }
-        let instance = await contract.deployed();
+        const web3ContractInstance = await contract.deployed();
         // This extra check needed because .deployed() returns an instance
         //      even when contract is not deployed
         // TODO: find out if there is a better way to do it
         //      (especially for contracts which don't have owner prop)
-        if (typeof instance.owner === "function") {
-            let owner = await instance.owner();
+        if (typeof web3ContractInstance.owner === "function") {
+            const owner = await web3ContractInstance.owner();
 
             if (owner === "0x") {
-                let contractName = artifacts.contract_name;
+                const contractName = artifacts.contract_name;
                 throw new Error("Can't connect to " + contractName + " contract. Owner is 0x. Not deployed?");
             }
         }
-        return new SolidityContract(web3, instance);
+        const provider = connection.ethers.provider;
+        const ethersContractInstance = new ethers.Contract(contract.address, contract.abi, provider);
+        return new SolidityContract(connection, web3ContractInstance, ethersContractInstance);
     }
 
-    static async connectNewAt(web3, artifacts, address) {
-        let contract = Contract(artifacts);
-        contract.setProvider(web3.currentProvider);
-        let instance = await contract.at(address);
-        return new SolidityContract(web3, instance);
+    static async connectNewAt(connection, artifacts, address) {
+        const contract = Contract(artifacts);
+        contract.setProvider(connection.currentProvider);
+        const instance = await contract.at(address);
+        const provider = connection.ethers.provider;
+
+        const ethersContractInstance = new ethers.Contract(address, contract.abi, provider);
+        return new SolidityContract(connection, instance, ethersContractInstance);
     }
 }

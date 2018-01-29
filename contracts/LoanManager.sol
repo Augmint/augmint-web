@@ -35,9 +35,10 @@ contract LoanManager is LoanManagerInterface, Restricted {
     external restrict("addLoanProduct") returns (uint newProductId) {
         newProductId = products.push(
             LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
-        );
-        return newProductId - 1;
-        LoanProductAdded(newProductId - 1);
+        ) - 1;
+
+        LoanProductAdded(newProductId);
+        return newProductId;
     }
 
     function setLoanProductActiveState(uint8 productId, bool newState) external restrict ("setLoanProductActiveState") {
@@ -76,7 +77,7 @@ contract LoanManager is LoanManagerInterface, Restricted {
         if (repaymentAmount > loanAmount) {
             interestAmount = repaymentAmount.sub(loanAmount);
         }
-        augmintToken.issueAndDisburse(msg.sender, loanAmount, interestAmount, "Loan disbursement");
+        augmintToken.issueAndDisburse(msg.sender, loanAmount, "Loan disbursement");
 
         NewLoan(productId, loanId, msg.sender, msg.value, loanAmount, repaymentAmount);
     }
@@ -96,6 +97,7 @@ contract LoanManager is LoanManagerInterface, Restricted {
         /* when there are a lots of loans to be collected then
              the client need to call it in batches to make sure tx won't exceed block gas limit.
          Anyone can call it - can't cause harm as it only allows to collect loans which they are defaulted
+         TODO: optimise these calculation
         */
         for (uint i = 0; i < loanIds.length; i++) {
             uint loanId = loanIds[i];
@@ -103,19 +105,22 @@ contract LoanManager is LoanManagerInterface, Restricted {
             require(now >= loans[loanId].maturity);
             loans[loanId].state = LoanState.Defaulted;
             // send ETH collateral to augmintToken reserve
-            uint defaultingFee = loans[loanId].collateralAmount.mul(loans[loanId].defaultingFeePt).div(1000000);
-            uint coveringValue = rates.convertToWei(augmintToken.peggedSymbol(), loans[loanId].repaymentAmount)
+            uint defaultingFeeInToken = loans[loanId].repaymentAmount.mul(loans[loanId].defaultingFeePt).div(1000000);
+            uint defaultingFee = rates.convertToWei(augmintToken.peggedSymbol(), defaultingFeeInToken);
+            uint targetCollection = rates.convertToWei(augmintToken.peggedSymbol(), loans[loanId].repaymentAmount)
                 .add(defaultingFee);
             uint releasedCollateral;
-            if (coveringValue < loans[loanId].collateralAmount) {
-                releasedCollateral = loans[loanId].collateralAmount.sub(coveringValue);
+            if (targetCollection < loans[loanId].collateralAmount) {
+                releasedCollateral = loans[loanId].collateralAmount.sub(targetCollection);
                 loans[loanId].borrower.transfer(releasedCollateral);
             }
             uint collectedCollateral = loans[loanId].collateralAmount.sub(releasedCollateral);
+            if (defaultingFee > collectedCollateral) {
+                defaultingFee = collectedCollateral;
+            }
+
             address(augmintToken).transfer(collectedCollateral);
 
-            // burn interest from InterestPoolAccount
-            augmintToken.burnCollectedInterest(loans[loanId].interestAmount);
             LoanCollected(loanId, loans[loanId].borrower, collectedCollateral, releasedCollateral, defaultingFee);
         }
 

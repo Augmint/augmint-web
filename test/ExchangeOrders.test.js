@@ -265,4 +265,6 @@ contract("Exchange tests", accounts => {
 
         // TODO: check results + test with only sell , only buy orders
     });
+
+    it("should not place orders when rate == 0");
 });

@@ -57,24 +57,26 @@ export function fetchUserBalance(address) {
         });
 
         const augmintToken = store.getState().augmintToken.contract.instance;
-        const bn_tokenBalance = (await augmintToken.balanceOf(address)).div(10000);
-        const bn_pendingTokenBalance = (await augmintToken.balanceOf(address, { defaultBlock: "pending" }))
-            .div(10000)
-            .sub(bn_tokenBalance);
-        const bn_ethBalance = await asyncGetBalance(address);
-        const bn_ethPendingBalance = (await asyncGetBalance(address, "pending")).sub(bn_ethBalance);
+
+        const [bn_tokenBalance, bn_pendingTokenBalance, bn_ethBalance, bn_ethPendingBalance] = await Promise.all([
+            augmintToken.balanceOf(address),
+            augmintToken.balanceOf(address, { defaultBlock: "pending" }),
+            asyncGetBalance(address),
+            asyncGetBalance(address, "pending")
+        ]);
+
         return dispatch({
             type: USER_BALANCE_RECEIVED,
             account: {
                 address: address,
                 bn_ethBalance: bn_ethBalance,
                 ethBalance: bn_ethBalance.toString(),
-                bn_ethPendingBalance: bn_ethPendingBalance,
-                ethPendingBalance: bn_ethPendingBalance.toNumber(),
-                bn_tokenBalance: bn_tokenBalance,
-                tokenBalance: bn_tokenBalance.toString(),
-                bn_pendingTokenBalance: bn_pendingTokenBalance,
-                pendingTokenBalance: bn_pendingTokenBalance.toNumber()
+                bn_ethPendingBalance: bn_ethPendingBalance.sub(bn_ethBalance),
+                ethPendingBalance: bn_ethPendingBalance.sub(bn_ethBalance).toNumber(),
+                bn_tokenBalance: bn_tokenBalance.div(10000),
+                tokenBalance: bn_tokenBalance.div(10000).toString(),
+                bn_pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).div(10000),
+                pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).toNumber()
             }
         });
     };

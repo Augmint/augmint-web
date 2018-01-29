@@ -12,7 +12,36 @@ contract("loanManager  tests", accounts => {
         loanManager = await loanTestHelper.newLoanManagerMock(tokenAce, rates);
     });
 
-    // it("Should add new product"); it's redundant: loans.test testing it properly.
+    it("Should add new product", async function() {
+        const prod = {
+            term: 86400,
+            discountRate: 970000,
+            collateralRatio: 850000,
+            minDisbursedAmount: 300000,
+            defaultingFeePt: 50000,
+            isActive: true
+        };
+        await loanManager.addLoanProduct(
+            prod.term,
+            prod.discountRate,
+            prod.collateralRatio,
+            prod.minDisbursedAmount,
+            prod.defaultingFeePt,
+            prod.isActive,
+            { from: accounts[0] }
+        );
+        const res = await testHelper.assertEvent(loanManager, "LoanProductAdded", {
+            productId: x => x
+        });
+        const prodActual = await loanTestHelper.getProductInfo(res.productId);
+        Object.keys(prod).forEach(argName =>
+            assert.equal(
+                prodActual[argName].toString(),
+                prod[argName].toString(),
+                `Prod arg ${argName} expected ${prod[argName]} but has value ${prodActual[argName]}`
+            )
+        );
+    });
 
     it("Only allowed should add new product", async function() {
         await testHelper.expectThrow(
@@ -43,6 +72,6 @@ contract("loanManager  tests", accounts => {
     });
 
     it("Only allowed should set loan product state", async function() {
-        await testHelper.expectThrow(loanManager.setLoanProductActiveState(5, true, { from: accounts[0] }));
+        await testHelper.expectThrow(loanManager.setLoanProductActiveState(0, true, { from: accounts[1] }));
     });
 });

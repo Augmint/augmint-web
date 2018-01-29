@@ -1,7 +1,6 @@
 const SafeMath = artifacts.require("./SafeMath.sol");
 const TokenAce = artifacts.require("./TokenAce.sol");
 const FeeAccount = artifacts.require("./FeeAccount.sol");
-const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
 
 module.exports = async function(deployer, network, accounts) {
@@ -9,7 +8,6 @@ module.exports = async function(deployer, network, accounts) {
     await deployer.deploy(
         TokenAce,
         FeeAccount.address,
-        InterestPoolAccount.address,
         InterestEarnedAccount.address,
         2000 /* transferFeePt in parts per million = 0.2% */,
         200 /* min: 0.02 ACE */,

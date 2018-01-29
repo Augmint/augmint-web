@@ -5,7 +5,7 @@
 
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import loanManager_artifacts from "contractsBuild/LoanManager.json";
+import loanManagerArtifacts from "contractsBuild/LoanManager.json";
 import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import {
     repayLoanTx,
@@ -102,13 +102,6 @@ export default (state = initialState, action) => {
                 info: action.result
             };
 
-        case LOANMANAGER_REFRESH_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                error: action.error
-            };
-
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
             return {
                 ...state,
@@ -122,13 +115,6 @@ export default (state = initialState, action) => {
                 products: action.products
             };
 
-        case LOANMANAGER_PRODUCTLIST_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                error: action.error
-            };
-
         case LOANMANAGER_NEWLOAN_REQUESTED:
             return {
                 ...state,
@@ -136,12 +122,6 @@ export default (state = initialState, action) => {
                 result: null,
                 ethAmount: action.ethAmount,
                 productId: action.productId
-            };
-
-        case LOANMANAGER_NEWLOAN_ERROR:
-            return {
-                ...state,
-                error: action.error
             };
 
         case LOANMANAGER_NEWLOAN_CREATED:
@@ -162,12 +142,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 result: action.result
-            };
-
-        case LOANMANAGER_REPAY_ERROR:
-            return {
-                ...state,
-                error: action.error
             };
 
         case LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED:
@@ -198,9 +172,14 @@ export default (state = initialState, action) => {
                 result: action.result
             };
 
+        case LOANMANAGER_REFRESH_ERROR:
+        case LOANMANAGER_PRODUCTLIST_ERROR:
+        case LOANMANAGER_NEWLOAN_ERROR:
+        case LOANMANAGER_REPAY_ERROR:
         case LOANMANAGER_COLLECT_ERROR:
             return {
                 ...state,
+                isLoading: false,
                 error: action.error
             };
 
@@ -215,10 +194,7 @@ export const connectLoanManager = () => {
             type: LOANMANAGER_CONNECT_REQUESTED
         });
         try {
-            let contract = await SolidityContract.connectNew(
-                store.getState().web3Connect.web3Instance,
-                loanManager_artifacts
-            );
+            const contract = await SolidityContract.connectNew(store.getState().web3Connect, loanManagerArtifacts);
             return dispatch({
                 type: LOANMANAGER_CONNECT_SUCCESS,
                 contract: contract
@@ -240,24 +216,34 @@ export const refreshLoanManager = () => {
         try {
             const loanManager = store.getState().loanManager.contract.instance;
             const augmintToken = store.getState().augmintToken.contract.instance;
-            // TODO: make calls paralel
-            const loanCount = await loanManager.getLoanCount();
-            const productCount = await loanManager.getProductCount();
 
-            const augmintTokenAddress = await loanManager.augmintToken();
-            const ratesAddress = await loanManager.rates();
-            const owner = await loanManager.owner();
+            const [
+                loanCount,
+                productCount,
+                augmintTokenAddress,
+                ratesAddress,
+                owner,
+                bn_ethBalance,
+                bn_tokenBalance
+            ] = await Promise.all([
+                loanManager.getLoanCount(),
+                loanManager.getProductCount(),
 
-            const bn_ethBalance = await asyncGetBalance(loanManager.address);
-            const bn_tokenBalance = (await augmintToken.balanceOf(loanManager.address)).div(10000);
+                loanManager.augmintToken(),
+                loanManager.rates(),
+                loanManager.owner(),
+
+                asyncGetBalance(loanManager.address),
+                augmintToken.balanceOf(loanManager.address)
+            ]);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {
                     owner: owner,
                     bn_ethBalance: bn_ethBalance,
                     ethBalance: bn_ethBalance.toNumber(),
-                    bn_tokenBalance: bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance.toNumber(),
+                    bn_tokenBalance: bn_tokenBalance.div(10000),
+                    tokenBalance: bn_tokenBalance.div(10000).toNumber(),
                     loanCount: loanCount.toNumber(),
                     productCount: productCount.toNumber(),
                     augmintTokenAddress: augmintTokenAddress,
@@ -280,7 +266,7 @@ export function fetchProducts() {
         });
 
         try {
-            let result = await fetchProductsTx();
+            const result = await fetchProductsTx();
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_RECEIVED,
                 products: result
@@ -296,7 +282,6 @@ export function fetchProducts() {
 
 export function newLoan(productId, ethAmount) {
     return async dispatch => {
-        // TODO: shall we emmit error if already submitting or enough as it is (submit disabled on form)
         dispatch({
             type: LOANMANAGER_NEWLOAN_REQUESTED,
             ethAmount: ethAmount,
@@ -304,7 +289,7 @@ export function newLoan(productId, ethAmount) {
         });
 
         try {
-            let result = await newEthBackedLoanTx(productId, ethAmount);
+            const result = await newEthBackedLoanTx(productId, ethAmount);
             return dispatch({
                 type: LOANMANAGER_NEWLOAN_CREATED,
                 result: result
@@ -326,7 +311,7 @@ export function repayLoan(loanId) {
         });
 
         try {
-            let result = await repayLoanTx(loanId);
+            const result = await repayLoanTx(loanId);
             return dispatch({
                 type: LOANMANAGER_REPAY_SUCCESS,
                 result: result
@@ -347,7 +332,7 @@ export function fetchLoansToCollect() {
         });
 
         try {
-            let result = await fetchLoansToCollectTx();
+            const result = await fetchLoansToCollectTx();
             return dispatch({
                 type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED,
                 result: result
@@ -369,7 +354,7 @@ export function collectLoans(loansToCollect) {
         });
 
         try {
-            let result = await collectLoansTx(loansToCollect);
+            const result = await collectLoansTx(loansToCollect);
             return dispatch({
                 type: LOANMANAGER_COLLECT_SUCCESS,
                 result: result

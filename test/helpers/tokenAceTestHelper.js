@@ -7,30 +7,27 @@ module.exports = {
     newTokenAceMock,
     transferTest,
     getTransferFee,
-    getAllBalances, // new
+    getAllBalances,
     transferEventAsserts,
-    assertBalances, // new
+    assertBalances,
     approveEventAsserts,
     transferFromTest,
-    approveTest,
-    getBalances, // legacy
-    balanceAsserts // legacy
+    approveTest
 };
 
 const FeeAccount = artifacts.require("./FeeAccount.sol");
-const InterestPoolAccount = artifacts.require("./InterestPoolAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
-let tokenAce;
+let tokenAce, feeAccount;
 
 async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
     tokenAce = await TokenAceMock.new(
         FeeAccount.address,
-        InterestPoolAccount.address,
         InterestEarnedAccount.address,
         2000 /* transferFeePt in parts per million = 0.2% */,
         200 /* min: 0.02 ACE */,
         50000 /* max fee: 5 ACE */
     );
+    feeAccount = FeeAccount.address;
 
     await tokenAce.grantMultiplePermissions(tokenOwner, [
         "setTransferFees",
@@ -49,9 +46,13 @@ async function transferTest(testInstance, expTransfer) {
     // if fee is provided than we are testing transferNoFee
     if (typeof expTransfer.fee === "undefined") expTransfer.fee = await getTransferFee(expTransfer.amount);
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
-    let feeAccount = await tokenAce.feeAccount();
 
-    let balBefore = await getBalances([expTransfer.from, expTransfer.to, feeAccount]);
+    const balBefore = await getAllBalances({
+        from: expTransfer.from,
+        to: expTransfer.to,
+        feeAccount: feeAccount
+    });
+
     let tx, txName;
     if (expTransfer.fee === 0) {
         txName = "transferNoFee";
@@ -69,40 +70,33 @@ async function transferTest(testInstance, expTransfer) {
             from: expTransfer.from
         });
     }
-    transferEventAsserts(tx, expTransfer);
+    await transferEventAsserts(expTransfer);
     testHelper.logGasUse(testInstance, tx, txName);
-    let expBalances = [
-        {
-            name: "acc from",
-            address: expTransfer.from,
-            ace: balBefore[0].ace.minus(expTransfer.amount).minus(expTransfer.fee),
-            eth: balBefore[0].eth,
+
+    await assertBalances(balBefore, {
+        from: {
+            ace: balBefore.from.ace.minus(expTransfer.amount).minus(expTransfer.fee),
+            eth: balBefore.from.eth,
             gasFee: TRANSFER_MAXFEE
         },
-        {
-            name: "acc to",
-            address: expTransfer.to,
-            ace: balBefore[1].ace.plus(expTransfer.amount),
-            eth: balBefore[1].eth
+        to: {
+            ace: balBefore.to.ace.add(expTransfer.amount),
+            eth: balBefore.to.eth
         },
-        {
-            name: "acc fee",
-            address: feeAccount,
-            ace: balBefore[2].ace.plus(expTransfer.fee),
-            eth: balBefore[2].eth
+        feeAccount: {
+            ace: balBefore.feeAccount.ace.plus(expTransfer.fee),
+            eth: balBefore.feeAccount.eth
         }
-    ];
-
-    await balanceAsserts(expBalances);
+    });
 }
 
 async function approveTest(testInstance, expApprove) {
-    let tx = await tokenAce.approve(expApprove.spender, expApprove.value, {
+    const tx = await tokenAce.approve(expApprove.spender, expApprove.value, {
         from: expApprove.owner
     });
-    approveEventAsserts(tx, expApprove);
+    await approveEventAsserts(expApprove);
     testHelper.logGasUse(testInstance, tx, "approve");
-    let newAllowance = await tokenAce.allowance(expApprove.owner, expApprove.spender);
+    const newAllowance = await tokenAce.allowance(expApprove.owner, expApprove.spender);
     assert.equal(newAllowance.toString(), expApprove.value.toString(), "allowance value should be set");
 }
 
@@ -112,23 +106,17 @@ async function transferFromTest(testInstance, expTransfer) {
     if (!expTransfer.to) {
         expTransfer.to = expTransfer.spender;
     }
-    expTransfer.fee = 0; // transferFrom deducts transfer fee from beneficiary
     if (typeof expTransfer.narrative === "undefined") expTransfer.narrative = "";
-    let feeAccount = await tokenAce.feeAccount();
-    let fee = 0;
-    let expFeeTransfer;
-    if (!isNoFeeTest) {
-        fee = (await getTransferFee(expTransfer.amount)).toNumber();
-        expFeeTransfer = {
-            from: expTransfer.spender,
-            to: feeAccount,
-            amount: fee,
-            narrative: "TransferFrom fee",
-            fee: 0
-        };
-    }
-    let allowanceBefore = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
-    let balBefore = await getBalances([expTransfer.from, expTransfer.to, expTransfer.spender, feeAccount]);
+    expTransfer.fee = isNoFeeTest ? 0 : (await getTransferFee(expTransfer.amount)).toNumber();
+
+    const allowanceBefore = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
+    const balBefore = await getAllBalances({
+        from: expTransfer.from,
+        to: expTransfer.to,
+        spender: expTransfer.spender,
+        feeAccount: feeAccount
+    });
+
     let tx, txName;
     if (isNoFeeTest) {
         txName = "transferFromNoFee";
@@ -158,48 +146,37 @@ async function transferFromTest(testInstance, expTransfer) {
             }
         );
     }
+    testHelper.logGasUse(testInstance, tx, txName);
 
-    transferEventAsserts(tx, expTransfer, 0);
-    if (!isNoFeeTest) {
-        transferEventAsserts(tx, expFeeTransfer, 2);
-    }
-    let allowanceAfter = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
+    await transferEventAsserts(expTransfer);
+
+    const allowanceAfter = await tokenAce.allowance(expTransfer.from, expTransfer.spender);
     assert.equal(
         allowanceBefore.sub(expTransfer.amount).toString(),
         allowanceAfter.toString(),
         "allowance should be reduced with transferred amount"
     );
-    testHelper.logGasUse(testInstance, tx, txName);
-    let expBalances = [
-        {
-            name: "acc from",
-            address: expTransfer.from,
-            ace: balBefore[0].ace.minus(expTransfer.amount),
-            eth: balBefore[0].eth
+
+    await assertBalances(balBefore, {
+        from: {
+            ace: balBefore.from.ace.minus(expTransfer.amount).minus(expTransfer.fee),
+            eth: balBefore.from.eth
         },
-        {
-            name: "acc to",
-            address: expTransfer.to,
-            ace: balBefore[1].ace.plus(expTransfer.amount).minus(expTransfer.to === expTransfer.spender ? fee : 0), // amount less fee
-            eth: balBefore[1].eth,
+        to: {
+            ace: balBefore.to.ace.plus(expTransfer.amount),
+            eth: balBefore.to.eth,
             gasFee: expTransfer.to === expTransfer.spender ? TRANSFER_MAXFEE : 0
         },
-        {
-            name: "acc spender",
-            address: expTransfer.spender,
-            ace: balBefore[2].ace.plus(expTransfer.to === expTransfer.spender ? expTransfer.amount : 0).minus(fee), // amount less fee
-            eth: balBefore[2].eth,
+        spender: {
+            ace: balBefore.spender.ace.plus(expTransfer.to === expTransfer.spender ? expTransfer.amount : 0),
+            eth: balBefore.spender.eth,
             gasFee: TRANSFER_MAXFEE
         },
-        {
-            name: "acc fee",
-            address: feeAccount,
-            ace: balBefore[3].ace.plus(fee),
-            eth: balBefore[3].eth
+        feeAccount: {
+            ace: balBefore.feeAccount.ace.plus(expTransfer.fee),
+            eth: balBefore.feeAccount.eth
         }
-    ];
-
-    await balanceAsserts(expBalances);
+    });
 }
 
 async function getTransferFee(_amount) {
@@ -227,7 +204,6 @@ async function getTransferFee(_amount) {
     return fee;
 }
 
-/* new func */
 async function getAllBalances(accs) {
     const ret = {};
     for (const ac of Object.keys(accs)) {
@@ -241,7 +217,6 @@ async function getAllBalances(accs) {
     return ret;
 }
 
-/* new func , replacing balanceAsserts */
 async function assertBalances(before, exp) {
     // get addresses from before arg
     for (const ac of Object.keys(exp)) {
@@ -272,72 +247,26 @@ async function assertBalances(before, exp) {
     }
 }
 
-async function transferEventAsserts(tx, expTransfer, logIndex) {
-    if (typeof logIndex === "undefined") logIndex = 0;
-    // first event should be the ERC20 Transfer event
-    assert.equal(tx.logs[logIndex].event, "Transfer", "ERC20 Transfer event should be emited");
-    assert.equal(tx.logs[logIndex].args.from, expTransfer.from, "from: in ERC20 Transfer event should be set");
-    assert.equal(tx.logs[logIndex].args.to, expTransfer.to, "to: in ERC20 Transfer event should be set");
-    assert.equal(
-        tx.logs[logIndex].args.amount.toString(),
-        expTransfer.amount.toString(),
-        "amount in ERC20 Transfer event should be set"
-    );
-    logIndex++; // next event is Augmint's extended Transfer event
-    assert.equal(tx.logs[logIndex].event, "AugmintTransfer", "Transfer event should be emited");
-    assert.equal(tx.logs[logIndex].args.from, expTransfer.from, "from: in Transfer event should be set");
-    assert.equal(tx.logs[logIndex].args.to, expTransfer.to, "to: in Transfer event should be set");
-    assert.equal(tx.logs[logIndex].args.narrative, expTransfer.narrative, "narrative in Transfer event should be set");
-    assert.equal(
-        tx.logs[logIndex].args.amount.toString(),
-        expTransfer.amount.toString(),
-        "amount in Transfer event should be set"
-    );
-    assert.equal(
-        tx.logs[logIndex].args.fee.toString(),
-        expTransfer.fee.toString(),
-        "fee in Transfer event should be set"
-    );
+async function transferEventAsserts(expTransfer) {
+    await testHelper.assertEvent(tokenAce, "AugmintTransfer", {
+        from: expTransfer.from,
+        to: expTransfer.to,
+        amount: expTransfer.amount.toString(),
+        fee: expTransfer.fee.toString(),
+        narrative: expTransfer.narrative
+    });
+
+    await testHelper.assertEvent(tokenAce, "Transfer", {
+        from: expTransfer.from,
+        to: expTransfer.to,
+        amount: expTransfer.amount.toString()
+    });
 }
 
-async function approveEventAsserts(tx, expApprove) {
-    assert.equal(tx.logs[0].event, "Approval", "Approve event should be emited");
-    assert.equal(tx.logs[0].args._owner, expApprove.owner, "_owner: in Approve event should be set");
-    assert.equal(tx.logs[0].args._spender, expApprove.spender, "_spender: in Approve event should be set");
-
-    assert.equal(
-        tx.logs[0].args._value.toString(),
-        expApprove.value.toString(),
-        "_value in Approve event should be set"
-    );
-}
-
-/* legacy func */
-async function getBalances(addresses) {
-    let balances = [];
-    for (let addr of addresses) {
-        balances.push({
-            eth: await web3.eth.getBalance(addr),
-            ace: await tokenAce.balanceOf(addr)
-        });
-    }
-    return balances;
-}
-
-/* legacy func */
-async function balanceAsserts(expBalances) {
-    for (let expBal of expBalances) {
-        let newEthBal = await web3.eth.getBalance(expBal.address);
-        let newAceBal = await tokenAce.balanceOf(expBal.address);
-        let expGasFee = expBal.gasFee == null ? 0 : expBal.gasFee;
-        assert.isAtMost(
-            newEthBal
-                .minus(expBal.eth)
-                .absoluteValue()
-                .toNumber(),
-            expGasFee,
-            expBal.name + " new and initial ETH balance diferrence is higher than expecteed "
-        );
-        assert.equal(newAceBal.toString(), expBal.ace.toString(), expBal.name + " new ACE balance is not as expected");
-    }
+async function approveEventAsserts(expApprove) {
+    await testHelper.assertEvent(tokenAce, "Approval", {
+        _owner: expApprove.owner,
+        _spender: expApprove.spender,
+        _value: expApprove.value.toString()
+    });
 }

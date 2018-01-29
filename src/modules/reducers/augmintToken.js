@@ -37,7 +37,6 @@ const initialState = {
         bn_decimalsDiv: null,
         tokenBalance: "?",
         feeAccountAceBalance: "?",
-        interestPoolAccountAceBalance: "?",
         interestEarnedAccountAceBalance: "?",
         pendingTokenBalance: "?",
         totalSupply: "?"
@@ -118,10 +117,7 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(
-                store.getState().web3Connect.web3Instance,
-                augmintToken_artifacts
-            );
+            const contract = await SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
             const info = await getAugmintTokenInfo(contract.instance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,
@@ -161,10 +157,8 @@ async function getAugmintTokenInfo(augmintToken) {
     const bn_decimals = await augmintToken.decimals();
     const bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
     const feeAccount = await augmintToken.feeAccount();
-    const interestPoolAccount = await augmintToken.interestPoolAccount();
     const interestEarnedAccount = await augmintToken.interestEarnedAccount();
     const bn_feeAccountAceBalance = (await augmintToken.balanceOf(feeAccount)).div(bn_decimalsDiv);
-    const bn_interestPoolAccountAceBalance = (await augmintToken.balanceOf(interestPoolAccount)).div(bn_decimalsDiv);
     const bn_interestEarnedAccountAceBalance = (await augmintToken.balanceOf(interestEarnedAccount)).div(
         bn_decimalsDiv
     );
@@ -184,8 +178,6 @@ async function getAugmintTokenInfo(augmintToken) {
         tokenBalance: bn_tokenBalance.toNumber(),
         bn_feeAccountAceBalance: bn_feeAccountAceBalance,
         feeAccountAceBalance: bn_feeAccountAceBalance.toString(),
-        bn_interestPoolAccountAceBalance: bn_interestPoolAccountAceBalance,
-        interestPoolAccountAceBalance: bn_interestPoolAccountAceBalance.toString(),
         bn_interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance,
         interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance.toString(),
         pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).toNumber(),
@@ -210,7 +202,7 @@ export function transferToken(payload) {
         });
 
         try {
-            let result = await transferTokenTx(payload);
+            const result = await transferTokenTx(payload);
             return dispatch({
                 type: TOKEN_TRANSFER_SUCCESS,
                 result: result

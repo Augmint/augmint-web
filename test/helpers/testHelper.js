@@ -1,4 +1,3 @@
-
 const stringifier = require("stringifier");
 var gasUseLog = [];
 
@@ -160,9 +159,7 @@ function waitFor(durationInMs = 1000) {
 }
 
 async function waitForTimeStamp(UnixTimestamp) {
-
-    await waitFor((UnixTimestamp * 1000) - Date.now());
-
+    await waitFor(UnixTimestamp * 1000 - Date.now());
 }
 
 function expectThrow(promise) {
@@ -224,4 +221,3 @@ after(function() {
         console.log("=========== Total gas usage : " + sum);
     }
 });
-
