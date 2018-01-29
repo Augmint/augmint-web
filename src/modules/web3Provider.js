@@ -32,8 +32,8 @@ const onLoad = () => {
         intervalId = setInterval(async function() {
             const web3 = store.getState().web3Connect;
             if (web3 && web3.isConnected & !web3.isLoading) {
-                let currentAccounts = await web3.web3Instance.eth.getAccounts();
-                let userAccount = store.getState().web3Connect.userAccount;
+                const currentAccounts = await web3.web3Instance.eth.getAccounts();
+                const userAccount = store.getState().web3Connect.userAccount;
                 if (currentAccounts[0] !== userAccount) {
                     console.debug(
                         "App.setInterval - web3.eth.accounts[0] change detected. dispatching accountChange()"
@@ -41,7 +41,7 @@ const onLoad = () => {
                     store.dispatch(accountChange(currentAccounts));
                 }
             }
-        }, 500);
+        }, 1000);
     }
 };
 

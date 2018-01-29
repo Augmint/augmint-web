@@ -1,7 +1,7 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectAugmintToken, refreshAugmintToken } from "modules/reducers/augmintToken";
-import { fetchTransferList } from "modules/reducers/userTransfers";
+import { fetchTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
@@ -53,9 +53,10 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
             "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         const userAccount = store.getState().web3Connect.userAccount;
+        const augmintToken = store.getState().augmintToken;
 
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(fetchTransferList(userAccount, 0, "latest"));
+        store.dispatch(fetchTransfers(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
         setupListeners();
     }
 };
@@ -67,11 +68,12 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
             "augmintTokenProvider - web3Connect.userAccount changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         store.dispatch(fetchUserBalance(newVal));
-        store.dispatch(fetchTransferList(newVal, 0, "latest"));
+        // TODO: default fromBlock should be the blockNumber of the contract deploy (retrieve it in SolidityContract)
+        store.dispatch(fetchTransfers(newVal, augmintToken.contract.deployedAtBlock, "latest"));
     }
 };
 
-const onAugmintTransfer = (from, to, amount, narrative, fee) => {
+const onAugmintTransfer = function(from, to, amount, narrative, fee) {
     // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
     console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken");
     store.dispatch(refreshAugmintToken());
@@ -81,6 +83,6 @@ const onAugmintTransfer = (from, to, amount, narrative, fee) => {
             "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(fetchTransferList(userAccount, 0, "latest")); // TODO: refresh only from last processed block
+        store.dispatch(processNewTransfer(userAccount, this));
     }
 };

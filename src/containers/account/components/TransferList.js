@@ -9,32 +9,31 @@ export default class TransferList extends React.Component {
         const { filter, header, noItemMessage, userAccountAddress } = this.props;
         const { transfers, isLoading, error } = this.props.transfers;
         const listItems =
-            transfers !== null &&
+            transfers &&
             transfers.filter(filter).map((tx, index) => (
                 <MyListGroup.Row
-                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
                 >
                     <MyGridTable
                         divided={false}
-                        key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.direction}`}
+                        key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
                     >
                         <Row columns={1}>
                             <Col>
-                                {tx.from.toLowerCase() === userAccountAddress.toLowerCase()
-                                    ? "To: " + tx.to
-                                    : "From: " + tx.from}{" "}
-                                <MoreInfoTip>
+                                {tx.args.from.toLowerCase() === userAccountAddress.toLowerCase()
+                                    ? "To: " + tx.args.to
+                                    : "From: " + tx.args.from}{" "}
+                                <MoreInfoTip header="Transaction details">
                                     blockNumber: {tx.blockNumber}
                                     <br />blockHash: <small>{tx.blockHash}</small>
                                     <br />transactionIndex: {tx.transactionIndex}
                                     <br />transaction hash: <small>{tx.transactionHash}</small>
-                                    <br />type: {tx.type}
                                 </MoreInfoTip>
                             </Col>
                         </Row>
                         <Row columns={3}>
-                            <Col>Amount: {tx.amount} A-EUR</Col>
-                            <Col>Fee: {tx.fee} A-EUR</Col>
+                            <Col>Amount: {tx.signedAmount} A-EUR</Col>
+                            <Col>Fee: {tx.senderFee} A-EUR</Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 
@@ -52,7 +51,7 @@ export default class TransferList extends React.Component {
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
-                {transfers != null && (
+                {transfers && (
                     <MyListGroup id="transferListDiv">{listItems.length === 0 ? noItemMessage : listItems}</MyListGroup>
                 )}
             </Pblock>

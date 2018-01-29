@@ -64,7 +64,7 @@ export function fetchUserBalance(address) {
             asyncGetBalance(address),
             asyncGetBalance(address, "pending")
         ]);
-        console.log(bn_tokenBalance);
+
         return dispatch({
             type: USER_BALANCE_RECEIVED,
             account: {

@@ -9,8 +9,8 @@ Use only from reducers.
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
-import { asyncGetBlock, getEventLogs } from "modules/ethereum/ethHelper";
 import { cost } from "./gas";
+import ethers from "ethers";
 
 export function getTransferFee(amount) {
     const feePt = store.getState().augmintToken.info.feePt;
@@ -107,25 +107,35 @@ export async function transferTokenTx(payload) {
     }
 }
 
-export async function fetchTransferListTx(address, fromBlock, toBlock) {
+export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
-        const augmintToken = store.getState().augmintToken.contract;
-        const filterResult = await getEventLogs(
-            augmintToken,
-            augmintToken.instance.AugmintTransfer,
-            { from: address, to: address }, // filter with OR!
-            fromBlock,
-            toBlock
-        );
-        const transfers = await Promise.all(
-            filterResult.map((tx, index) => {
-                return formatTransfer(address, tx);
-            })
-        );
+        const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+        const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
+        const provider = store.getState().web3Connect.ethers.provider;
 
-        transfers.sort((a, b) => {
-            return b.blockTimeStamp - a.blockTimeStamp;
-        });
+        const paddedAccount = ethers.utils.hexlify(ethers.utils.padZeros(account, 32));
+        const [logsFrom, logsTo] = await Promise.all([
+            provider.getLogs({
+                fromBlock: fromBlock,
+                toBlock: toBlock,
+                address: augmintTokenInstance.address,
+                topics: [AugmintTransfer.topics[0], paddedAccount]
+            }),
+            provider.getLogs({
+                fromBlock: fromBlock,
+                toBlock: toBlock,
+                address: augmintTokenInstance.address,
+                topics: [AugmintTransfer.topics[0], null, paddedAccount]
+            })
+        ]);
+
+        const logs = [...logsFrom, ...logsTo];
+        const transfers = [];
+        for (const eventLog of logs) {
+            // TODO: make this parallel
+            const logData = await _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
+            transfers.push(logData);
+        }
 
         return transfers;
     } catch (error) {
@@ -133,59 +143,39 @@ export async function fetchTransferListTx(address, fromBlock, toBlock) {
     }
 }
 
-export async function processTransferTx(address, tx) {
-    try {
-        const transfers = store.getState().userTransfers.transfers;
-        let result = await formatTransfer(address, tx);
-        // TODO: sort and look for dupes?
-
-        if (transfers !== null) {
-            result = [result, ...transfers];
-        } else {
-            result = [result];
-        }
-        return result;
-    } catch (error) {
-        throw new Error("processTransferTx failed.\n" + error);
-    }
+export async function processNewTransferTx(account, eventLog) {
+    const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+    const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
+    return _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
 }
 
-async function formatTransfer(address, tx) {
-    //console.debug("formatTransfer args tx: ", tx);
-    const direction = address.toLowerCase() === tx.args.from.toLowerCase() ? -1 : 1;
-    let blockTimeStamp, bn_amount, bn_fee;
-    let feeTmp, amountTmp;
-    if (tx.timeStamp) {
-        // when we query from etherscan we get timestamp and args are not BigNumber
-        blockTimeStamp = tx.timeStamp;
-        amountTmp = new BigNumber(tx.args.amount);
-        feeTmp = new BigNumber(tx.args.fee);
-    } else {
-        blockTimeStamp = (await asyncGetBlock(tx.blockNumber)).timestamp;
-        amountTmp = tx.args.amount;
-        feeTmp = tx.args.fee;
-    }
-    bn_amount = amountTmp.div(new BigNumber(10000));
-    bn_fee = direction === -1 ? feeTmp.div(new BigNumber(10000)) : new BigNumber(0);
+async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog) {
+    const provider = store.getState().web3Connect.ethers.provider;
+    const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
+    const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
+    const bn_senderFee = direction === -1 ? parsedData.fee.div(10000) : new BigNumber(0);
 
-    const result = {
-        blockNumber: tx.blockNumber,
-        blockHash: tx.blockHash,
-        transactionIndex: tx.transactionIndex,
-        transactionHash: tx.transactionHash,
-        logIndex: tx.logIndex,
-        type: tx.type,
-        bn_amount: bn_amount,
-        direction: direction === -1 ? "out" : "in",
-        amount: bn_amount.times(direction).toString(),
-        from: tx.args.from,
-        to: tx.args.to,
-        bn_fee: bn_fee,
-        fee: bn_fee.toString(),
-        narrative: tx.args.narrative,
-        blockTimeStamp: blockTimeStamp,
-        blockTimeStampText: moment.unix(blockTimeStamp).format("D MMM YYYY HH:mm")
+    // TODO: https://github.com/ethers-io/ethers.js/issues/90#issuecomment-361158710
+    const blockData = await provider.getBlock(eventLog.blockNumber); // FIX: returns null right after the event triggered
+    eventLog.getBlock = async function(res) {
+        // FIX: never called
+        console.log("callback", res);
+        const blockData = await provider.getBlock(eventLog.blockNumber);
+        console.log("eventLog.getBlock(): ", blockData);
     };
-    //console.debug("formatTransfer result", result);
-    return result;
+    const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
+
+    const logData = Object.assign({ args: parsedData }, eventLog, {
+        blockData: blockData,
+        direction: direction,
+        directionText: direction === -1 ? "sent" : "received",
+        bn_senderFee: bn_senderFee,
+        senderFee: bn_senderFee.toString(),
+        blockTimeStampText: blockTimeStampText,
+        signedAmount: parsedData.amount
+            .div(10000)
+            .mul(direction)
+            .toString()
+    });
+    return logData;
 }

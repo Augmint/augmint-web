@@ -89,7 +89,11 @@ export const setupWeb3 = () => {
 
                 // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
                 //provider = ethers.providers.getDefaultProvider();
-                provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+                // TODO: https://github.com/ethers-io/ethers.js/issues/108
+                provider = new ethers.providers.JsonRpcProvider("http://localhost:8545", {
+                    name: "testRpc",
+                    chainId: 999
+                });
                 signer = null;
             }
 

@@ -2,15 +2,16 @@
     TODO: make this generic? ie. to use this for any address balances?
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
-import { fetchTransferListTx, processTransferTx } from "modules/ethereum/transferTransactions";
+import store from "modules/store";
+import { fetchTransfersTx, processNewTransferTx } from "modules/ethereum/transferTransactions";
 
-export const USER_TRANSFERLIST_REQUESTED = "userTransfers/USER_TRANSFERLIST_REQUESTED";
-export const USER_TRANSFERLIST_ERROR = "userBalances/USER_TRANSFERLIST_ERROR";
-export const USER_TRANSFERLIST_RECEIVED = "userTransfers/USER_TRANSFERLIST_RECEIVED";
+export const FETCH_TRANSFERS_REQUESTED = "userTransfers/FETCH_TRANSFERS_REQUESTED";
+export const FETCH_TRANSFERS_ERROR = "userBalances/FETCH_TRANSFERS_ERROR";
+export const FETCH_TRANSFERS_RECEIVED = "userTransfers/FETCH_TRANSFERS_RECEIVED";
 
-export const USER_TRANSFERTX_FETCH_REQUESTED = "userTransfers/USER_TRANSFERTX_FETCH_REQUESTED";
-export const USER_TRANSFERTX_FETCH_ERROR = "userTransfers/USER_TRANSFERTX_FETCH_ERROR";
-export const USER_TRANSFERTX_FETCH_RECEIVED = "userTransfers/USER_TRANSFERTX_FETCH_RECEIVED";
+export const PROCESS_NEW_TRANSFER_REQUESTED = "userTransfers/PROCESS_NEW_TRANSFER_REQUESTED";
+export const PROCESS_NEW_TRANSFER_ERROR = "userTransfers/PROCESS_NEW_TRANSFER_ERROR";
+export const PROCESS_NEW_TRANSFER_DONE = "userTransfers/PROCESS_NEW_TRANSFER_DONE";
 
 const initialState = {
     transfers: null,
@@ -19,50 +20,36 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case USER_TRANSFERLIST_REQUESTED:
+        case FETCH_TRANSFERS_REQUESTED:
             return {
                 ...state,
                 isLoading: true,
-                address: action.address,
+                account: action.account,
                 fromBlock: action.fromBlock,
                 toBlock: action.toBlock
             };
 
-        case USER_TRANSFERLIST_ERROR:
+        case PROCESS_NEW_TRANSFER_REQUESTED:
             return {
                 ...state,
-                isLoading: false,
-                error: action.error
+                isLoading: true,
+                transfers: action.transfers
             };
 
-        case USER_TRANSFERLIST_RECEIVED:
+        case FETCH_TRANSFERS_RECEIVED:
+        case PROCESS_NEW_TRANSFER_DONE:
             return {
                 ...state,
                 isLoading: false,
                 transfers: action.result
             };
 
-        case USER_TRANSFERTX_FETCH_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                address: action.address,
-                fromBlock: action.fromBlock,
-                toBlock: action.toBlock
-            };
-
-        case USER_TRANSFERTX_FETCH_ERROR:
+        case FETCH_TRANSFERS_ERROR:
+        case PROCESS_NEW_TRANSFER_ERROR:
             return {
                 ...state,
                 isLoading: false,
                 error: action.error
-            };
-
-        case USER_TRANSFERTX_FETCH_RECEIVED:
-            return {
-                ...state,
-                isLoading: false,
-                transfers: action.result
             };
 
         default:
@@ -70,46 +57,61 @@ export default (state = initialState, action) => {
     }
 };
 
-export function fetchTransferList(address, fromBlock, toBlock) {
+export function fetchTransfers(account, fromBlock, toBlock) {
     return async dispatch => {
         dispatch({
-            type: USER_TRANSFERLIST_REQUESTED,
-            address: address,
+            type: FETCH_TRANSFERS_REQUESTED,
+            account: account,
             fromBlock: fromBlock,
             toBlock: toBlock
         });
         try {
-            let result = await fetchTransferListTx(address, fromBlock, toBlock);
+            const result = await fetchTransfersTx(account, fromBlock, toBlock);
+            result.sort((a, b) => {
+                return b.blockTimeStamp > a.blockTimeStamp;
+            });
+
             return dispatch({
-                type: USER_TRANSFERLIST_RECEIVED,
+                type: FETCH_TRANSFERS_RECEIVED,
                 result: result
             });
         } catch (error) {
             return dispatch({
-                type: USER_TRANSFERLIST_ERROR,
+                type: FETCH_TRANSFERS_ERROR,
                 error: error
             });
         }
     };
 }
 
-export function processTransfer(address, tx) {
+export function processNewTransfer(account, eventLog) {
     return async dispatch => {
         dispatch({
-            type: USER_TRANSFERTX_FETCH_REQUESTED,
-            address: address,
-            tx: tx
+            type: PROCESS_NEW_TRANSFER_REQUESTED,
+            eventLog: eventLog
         });
 
         try {
-            let result = await processTransferTx(address, tx);
+            const newTransfer = await processNewTransferTx(account, eventLog);
+
+            let transfers = store.getState().userTransfers.transfers;
+            if (!transfers) {
+                transfers = [];
+            }
+            if (!transfers.find(a => a.transationHash === newTransfer.transactionHash)) {
+                transfers.push(newTransfer);
+                transfers.sort((a, b) => {
+                    return b.blockTimeStamp > a.blockTimeStamp;
+                });
+            }
+
             return dispatch({
-                type: USER_TRANSFERTX_FETCH_RECEIVED,
-                result: result
+                type: PROCESS_NEW_TRANSFER_DONE,
+                result: transfers
             });
         } catch (error) {
             return dispatch({
-                type: USER_TRANSFERTX_FETCH_ERROR,
+                type: PROCESS_NEW_TRANSFER_ERROR,
                 error: error
             });
         }
