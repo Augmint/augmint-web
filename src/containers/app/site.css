@@ -69,3 +69,8 @@
 .ui.statistic>.label, .ui.statistics .statistic>.value {
     color: #fff;
 }
+
+.menu .ui.button {
+    font-weight: 200;
+    font-size: 14px!important;
+}
