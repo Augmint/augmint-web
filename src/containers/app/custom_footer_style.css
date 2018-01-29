@@ -45,6 +45,7 @@
 
 .Site-footer .footer .contact-list.list>.item {
   border: none;
+  letter-spacing: 2.4px;
   margin: 0 25px;
 }
 
@@ -101,4 +102,9 @@
 
 .Site-footer .footer .subscribe button.disabled {
   visibility: hidden;
+}
+
+.Site-footer .footer .subscribe .success.message {
+  margin: auto;
+  max-width: 397px;
 }
