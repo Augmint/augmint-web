@@ -73,15 +73,15 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x6060604052600073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561006057600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061043f806100af6000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058204e833981549ad6896ee4cce1134d1383ef2f6cc458f138078d60f2ddfa81e7f70029",
-  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058204e833981549ad6896ee4cce1134d1383ef2f6cc458f138078d60f2ddfa81e7f70029",
-  "sourceMap": "108:81:1:-;;;240:3:10;223:21;;:5;;;;;;;;;;;:21;;;215:30;;;;;;;;263:10;255:5;;:18;;;;;;;;;;;;;;;;;;108:81:1;;;;;;",
-  "deployedSourceMap": "108:81:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;48:20:10;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;367:173;;;;;;;;;;;;;;;;;;;;;;;;;;;;219:187:14;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;48:20:10;;;;;;;;;;;;;:::o;367:173::-;337:5;;;;;;;;;;;323:19;;:10;:19;;;315:28;;;;;;;;467:3;447:24;;:8;:24;;;;439:33;;;;;;;;498:8;482:25;;491:5;;;;;;;;;;;482:25;;;;;;;;;;;;525:8;517:5;;:16;;;;;;;;;;;;;;;;;;367:173;:::o;219:187:14:-;337:5:10;;;;;;;;;;;323:19;;:10;:19;;;315:28;;;;;;;;342:12:14;:34;;;377:2;381:6;389:9;;342:57;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;219:187;;;;;:::o",
+  "bytecode": "0x6060604052600073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561006057600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061043f806100af6000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058203402549b24f6e1afa6dcc7cf3850f59cc28d43bd72fc5e3f333ee1e8103e1e170029",
+  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b1461005c578063f2fde38b146100b1578063fd979672146100ea575b600080fd5b341561006757600080fd5b61006f61015f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100bc57600080fd5b6100e8600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610184565b005b34156100f557600080fd5b61015d600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190803590602001908201803590602001919091929050506102d9565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101df57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561021b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f70aea8d848e8a90fb7661b227dc522eb6395c3dac71b63cb59edd5c9899b236460405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561033457600080fd5b8473ffffffffffffffffffffffffffffffffffffffff1663ffdcf095858585856040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001848152602001806020018281038252848482818152602001925080828437820191505095505050505050600060405180830381600087803b15156103f857600080fd5b6102c65a03f1151561040957600080fd5b50505050505050505600a165627a7a723058203402549b24f6e1afa6dcc7cf3850f59cc28d43bd72fc5e3f333ee1e8103e1e170029",
+  "sourceMap": "108:81:1:-;;;240:3:9;223:21;;:5;;;;;;;;;;;:21;;;215:30;;;;;;;;263:10;255:5;;:18;;;;;;;;;;;;;;;;;;108:81:1;;;;;;",
+  "deployedSourceMap": "108:81:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;48:20:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;367:173;;;;;;;;;;;;;;;;;;;;;;;;;;;;219:187:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;48:20:9;;;;;;;;;;;;;:::o;367:173::-;337:5;;;;;;;;;;;323:19;;:10;:19;;;315:28;;;;;;;;467:3;447:24;;:8;:24;;;;439:33;;;;;;;;498:8;482:25;;491:5;;;;;;;;;;;482:25;;;;;;;;;;;;525:8;517:5;;:16;;;;;;;;;;;;;;;;;;367:173;:::o;219:187:13:-;337:5:9;;;;;;;;;;;323:19;;:10;:19;;;315:28;;;;;;;;342:12:13;:34;;;377:2;381:6;389:9;;342:57;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;219:187;;;;;:::o",
   "source": "/* Contract to collect fees from system */\n\npragma solidity 0.4.18;\nimport \"./generic/SystemAccount.sol\";\n\n\ncontract FeeAccount is SystemAccount { // solhint-disable-line no-empty-blocks\n\n}\n",
-  "sourcePath": "/Users/gyurka00/Documents/dcm-poc/contracts/FeeAccount.sol",
+  "sourcePath": "/Users/petro/ether/dcm-poc/contracts/FeeAccount.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/gyurka00/Documents/dcm-poc/contracts/FeeAccount.sol",
+      "absolutePath": "/Users/petro/ether/dcm-poc/contracts/FeeAccount.sol",
       "exportedSymbols": {
         "FeeAccount": [
           1012
@@ -103,8 +103,8 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3994,
-          "absolutePath": "/Users/gyurka00/Documents/dcm-poc/contracts/generic/SystemAccount.sol",
+          "SourceUnit": 3913,
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SystemAccount.sol",
           "file": "./generic/SystemAccount.sol",
           "scope": 1013,
           "symbolAliases": [
@@ -119,16 +119,16 @@
       {
         "attributes": {
           "contractDependencies": [
-            3468,
-            3993
+            3387,
+            3912
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             1012,
-            3993,
-            3468
+            3912,
+            3387
           ],
           "name": "FeeAccount",
           "nodes": [
@@ -148,7 +148,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3993,
+                  "referencedDeclaration": 3912,
                   "type": "contract SystemAccount"
                 },
                 "id": 1010,
@@ -175,6 +175,11 @@
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0x2e218987ad1e9dab87832d59473617302dd0d04b"
+    },
     "999": {
       "events": {},
       "links": {},
@@ -182,5 +187,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-01-29T16:51:42.572Z"
+  "updatedAt": "2018-01-29T09:22:37.482Z"
 }

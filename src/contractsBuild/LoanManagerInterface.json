@@ -183,10 +183,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "/* TODO: shall we move more functions here from LoanManager ? */\n\npragma solidity 0.4.18;\nimport \"../generic/Owned.sol\";\nimport \"../generic/SafeMath.sol\";\n\n\ncontract LoanManagerInterface is Owned {\n    using SafeMath for uint256;\n\n    enum LoanState { Open, Repaid, Defaulted }\n\n    struct LoanProduct {\n        uint term; // 0\n        uint discountRate; // 1: discountRate in parts per million , ie. 10,000 = 1%\n        uint collateralRatio;   // 2: loan token amount / colleteral pegged ccy value\n                                // in parts per million , ie. 10,000 = 1%\n        uint minDisbursedAmount; // 3: with 4 decimals, e.g. 31000 = 3.1ACE\n        uint defaultingFeePt; // 4: % of collateral in parts per million , ie. 50,000 = 5%\n        bool isActive; // 5\n    }\n\n    struct LoanData {\n        address borrower; // 0\n        LoanState state; // 1\n        uint collateralAmount; // 2\n        uint repaymentAmount; // 3\n        uint loanAmount; // 4\n        uint interestAmount; // 5\n        uint term; // 6\n        uint disbursementDate; // 7\n        uint maturity; // 8\n        uint defaultingFeePt; // 9\n    }\n\n    LoanProduct[] public products;\n\n    LoanData[] public loans;\n    mapping(address => uint[]) public mLoans;  // owner account address =>  array of loan Ids\n\n    function releaseCollateral(uint loanId) external;\n\n}\n",
-  "sourcePath": "/Users/gyurka00/Documents/dcm-poc/contracts/interfaces/LoanManagerInterface.sol",
+  "sourcePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/LoanManagerInterface.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/gyurka00/Documents/dcm-poc/contracts/interfaces/LoanManagerInterface.sol",
+      "absolutePath": "/Users/petro/ether/dcm-poc/contracts/interfaces/LoanManagerInterface.sol",
       "exportedSymbols": {
         "LoanManagerInterface": [
           3050
@@ -209,7 +209,7 @@
       {
         "attributes": {
           "SourceUnit": 2312,
-          "absolutePath": "/Users/gyurka00/Documents/dcm-poc/contracts/generic/Owned.sol",
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/Owned.sol",
           "file": "../generic/Owned.sol",
           "scope": 3051,
           "symbolAliases": [
@@ -224,7 +224,7 @@
       {
         "attributes": {
           "SourceUnit": 2592,
-          "absolutePath": "/Users/gyurka00/Documents/dcm-poc/contracts/generic/SafeMath.sol",
+          "absolutePath": "/Users/petro/ether/dcm-poc/contracts/generic/SafeMath.sol",
           "file": "../generic/SafeMath.sol",
           "scope": 3051,
           "symbolAliases": [
@@ -997,5 +997,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-01-29T16:51:41.530Z"
+  "updatedAt": "2018-01-27T20:31:00.030Z"
 }
