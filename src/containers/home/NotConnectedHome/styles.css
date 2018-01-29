@@ -74,3 +74,12 @@ p.opac {
         padding-left: 300px;
     }
 }
+
+.ui.basic.segment.how-to-use .grid {
+    margin-bottom: 100px;
+}
+
+.ui.basic.segment.how-to-use h5.ui.header {
+    margin-top: 5px;
+}
+
