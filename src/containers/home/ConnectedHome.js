@@ -17,7 +17,7 @@ class ConnectedHome extends React.Component {
         return (
             <div>
                 <Header textAlign="center" as="h2" >
-                    Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored securely in a decentralised way, stable crypto tokens are instantly transferable worldwide.
+                    Augmint offers digital tokens (<nobr>A-Euro</nobr>) pegged to a fiat currency. Stored securely in a decentralised way, stable crypto tokens are instantly transferable worldwide.
                 </Header>
                 <DcmOverview />
                 <ProjectStatus />
@@ -25,7 +25,7 @@ class ConnectedHome extends React.Component {
                     <Psegment>
                         <Container>
                             <Header textAlign="center" style={{ fontSize: "2em" }}>
-                                A-EUR status
+                                <nobr>A-EUR</nobr> status
                             </Header>
                             <AugmintStats augmintToken={augmintToken} showDetailsLink />
                         </Container>

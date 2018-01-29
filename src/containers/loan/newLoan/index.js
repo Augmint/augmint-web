@@ -6,7 +6,7 @@ import { Pheader, Psegment } from "components/PageLayout";
 
 const newLoanMain = () => (
     <Psegment>
-        <Pheader header="Get an A-EUR loan" />
+        <Pheader header="Get an <nobr>A-EUR</nobr> loan" />
 
         <Route exact path="/loan/new" component={LoanProductSelector} />
         <Route path="/loan/new/:loanProductId" component={NewLoanPage} />

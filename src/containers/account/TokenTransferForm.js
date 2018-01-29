@@ -1,6 +1,6 @@
 /*
 TODO: form client side validation. eg:
-    - A-EUR balance check
+    - <nobr>A-EUR</nobr> balance check
     - address format check
     - number  format check
     - To: can't be the same as From:
@@ -81,7 +81,7 @@ class TokenTransferForm extends React.Component {
         return (
             <Pblock
                 loading={augmintToken.isLoading || (!augmintToken.isConnected && !augmintToken.connectionError)}
-                header="Send A-EUR"
+                header="Send <nobr>A-EUR</nobr>"
             >
                 <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
@@ -91,7 +91,7 @@ class TokenTransferForm extends React.Component {
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Sent {this.state.result.amount} A-EUR to {this.state.result.to}
+                            Sent {this.state.result.amount} <nobr>A-EUR</nobr> to {this.state.result.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
@@ -122,12 +122,12 @@ class TokenTransferForm extends React.Component {
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input />
-                            <Label>A-EUR</Label>
+                            <Label><nobr>A-EUR</nobr></Label>
                         </Field>
 
                         <small>
                             Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            {this.state.feeAmount} A-EUR
+                            {this.state.feeAmount} <nobr>A-EUR</nobr>
                         </small>
 
                         <Field

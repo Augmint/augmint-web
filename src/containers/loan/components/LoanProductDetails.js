@@ -27,7 +27,7 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>Min. payout:</Col>
-                <Col>{prod.minDisbursedAmountInToken} A-EUR</Col>
+                <Col>{prod.minDisbursedAmountInToken} <nobr>A-EUR</nobr></Col>
             </Row>
             <Row>
                 <Col>

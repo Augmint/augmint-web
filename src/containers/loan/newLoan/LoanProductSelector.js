@@ -27,21 +27,21 @@ class LoanProductSelector extends React.Component {
             <Pgrid columns={2}>
                 <Pgrid.Column width={6}>
                     <Message info>
-                        <p>You can get A-EUR for placing your ETH in escrow (collateral).</p>
+                        <p>You can get <nobr>A-EUR</nobr> for placing your ETH in escrow (collateral).</p>
                         <p>
                             <strong>Repayment</strong>
                             <br />
-                            You get back all of your ETH if you repay your A-EUR loan anytime before it's due
+                            You get back all of your ETH if you repay your <nobr>A-EUR</nobr> loan anytime before it's due
                             (maturity).
                         </p>
                         <p>
                             <strong>Default (non payment)</strong>
                             <br />
-                            If you decide not to repay the A-EUR loan at maturity then your ETH will be taken to the
+                            If you decide not to repay the <nobr>A-EUR</nobr> loan at maturity then your ETH will be taken to the
                             Augmint system reserves.
                         </p>
                         <p>
-                            If the value of your ETH (at the moment of collection) is higher than the A-EUR value of
+                            If the value of your ETH (at the moment of collection) is higher than the <nobr>A-EUR</nobr> value of
                             your loan + fees for the default then the leftover ETH will be transfered back to your ETH
                             account.
                         </p>
