@@ -80,3 +80,7 @@
 .ui.modal p {
     color: #051d2d;
 }
+
+.ui.basic.button, .ui.basic.buttons .button {
+    background: #fff!important;
+}
