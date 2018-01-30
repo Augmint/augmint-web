@@ -1,0 +1,141 @@
+.Site-content article.ui.basic.concept {
+  padding-top: 73px;
+}
+
+.Site-content article.ui.basic.concept .content{
+  margin: 0 135px;
+}
+
+.Site-content article .segment .ui.text.container {
+  margin: 0 135px;
+  max-width: 100% !important;
+}
+
+.Site-content article section .second-column .ui.segment.custom-column {
+  padding-left: 98px;
+}
+
+.Site-content article section .ui.grid>.row,
+.Site-content article section .ui.segment.custom-column,
+.Site-content article section .ui.segment.custom-column h5,
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.Site-content article section .ui.segment.custom-column h5,
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
+  font-size: 13px;
+  letter-spacing: 2.6px;
+  margin-bottom: 10px;
+}
+
+.Site-content article section.ui.segment.green-gradient h5.ui.segment {
+  margin-bottom: 10px;
+  margin-top: 60px;
+}
+
+.Site-content article section .ui.segment.custom-column p,
+.Site-content article section.ui.segment.green-gradient p {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  line-height: 21px;
+  max-width: 394px;
+}
+
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .Site-content article section .ui.segment.custom-column {
+        opacity: 0.6;
+    }
+}
+
+.Site-content article h2.segment.header {
+  font-size: 34px;
+  letter-spacing: 2.4px;
+  line-height: 1.09;
+  text-align: left;
+  margin: 0;
+  margin-bottom: 77px;
+  margin-top: 104px;
+  padding:0;
+}
+
+article.concept section.ui.segment {
+  padding: 0 135px;
+}
+
+article.concept section.ui.segment.green-gradient {
+  background: linear-gradient(rgba(0, 53, 49, 0) 0%,rgba(0, 53, 49, 1) 20%, rgba(0, 53, 49, 1) 80%, rgba(0, 53, 49, 0) 100%);
+  font-weight: 200;
+  padding-top: 200px;
+  padding-bottom: 200px;
+}
+
+.Site-content article section.ui.segment.green-gradient p {
+  text-align: left;
+  max-width: 499px;
+}
+
+.Site-content article section.ui.segment.green-gradient p a {
+  color: #fff;
+  font-weight: bold;
+}
+
+article.concept .ui.horizontal.list>.item {
+  border: none;
+  color: rgba(255,255,255,.6);
+  font-weight: 200;
+  letter-spacing: 2.4px;
+  margin: 0 16px;
+}
+
+article.concept .ui.horizontal.list:first-child {
+  margin-left: 0;
+}
+
+article.concept .ui.horizontal.list:last-child {
+  margin-right: 0;
+}
+
+.Site-content article.concept .whitepaper-manifesto {
+  margin: 0 366px;
+}
+
+.Site-content article.concept .whitepaper-manifesto img {
+  margin: auto;
+  height: 341px;
+  width: 240px;
+}
+
+.Site-content article.concept .whitepaper-manifesto a,
+.Site-content article.concept .whitepaper-manifesto a:hover {
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 2.6px;
+  margin: 0;
+}
+
+.Site-content article .try-now {
+  color: #051d2d;
+  font-size: 13px;
+  height: 47px;
+  letter-spacing: 2.6px;
+  padding: 17px;
+  width: 142px;
+}
+
+.Site-content article section .ui.basic.center.aligned.segment {
+  margin-top: 40px;
+}
+
+.Site-content article section.ui.segment.green-gradient .ui.basic.center.aligned.segment.custom-button {
+  text-align: left;
+  padding-left: 0;
+}
+
+.Site-content article section.ui.segment.green-gradient h2.segment.header {
+  margin-top: 60px;
+}

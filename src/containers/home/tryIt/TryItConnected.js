@@ -41,7 +41,8 @@ export function TryItConnected(props) {
 
                 <Tblock header="Play around">
                     <p>
-                        See your loans, transactions and transfer A-EUR from your <Link to="/account">account</Link>
+                        See your loans, transactions and transfer A-EUR from your{" "}
+                        <Link to="/account">account</Link>
                     </p>
                     <p>
                         Check the <Link to="/reserves">Augmint reserves</Link>
