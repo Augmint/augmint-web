@@ -29,7 +29,7 @@
   max-width: 397px;
 }
 
-.Site-footer .footer .join-slack {
+.Site-footer .footer .join-discord {
   color: #ffad00;
   display: block;
   font-size: 17px;
@@ -38,9 +38,10 @@
   padding: 0;
 }
 
-.Site-footer .footer .join-slack img {
+.Site-footer .footer .join-discord img {
   display: inline-block;
   margin-right: 20px;
+  max-width: 38px;
 }
 
 .Site-footer .footer .contact-list.list>.item {
