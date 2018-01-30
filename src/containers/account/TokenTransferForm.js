@@ -122,7 +122,9 @@ class TokenTransferForm extends React.Component {
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input />
-                            <Label>A-EUR</Label>
+                            <Label>
+                                A-EUR
+                            </Label>
                         </Field>
 
                         <small>

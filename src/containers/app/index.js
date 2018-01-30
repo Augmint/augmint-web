@@ -8,6 +8,7 @@ import "./site.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
+import ReactGA from 'react-ga';
 
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -18,11 +19,11 @@ import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import ConnectedHome from "containers/home/ConnectedHome";
-import NotConnectedHome from "containers/home/NotConnectedHome";
+import NotConnectedHome from "containers/home/NotConnectedHome/component";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "containers/app/AppMenu";
+import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
-//import { AppFooter } from "containers/app/AppFooter";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -38,9 +39,13 @@ class ScrollToTop extends React.Component {
 
 ScrollToTop = withRouter(ScrollToTop);
 
+ReactGA.initialize('UA-113188857-1');
+if (process.env.NODE_ENV !== "development") {
+  ReactGA.pageview(window.location.pathname);
+}
+
 class App extends React.Component {
     render() {
-        const { isConnected } = this.props.web3Connect;
         return (
             <div className="Site">
                 <ScrollToTop />
@@ -48,7 +53,7 @@ class App extends React.Component {
                 <FlashMessages />
                 <div className="Site-content">
                     <Switch>
-                        <Route exact path="/" component={isConnected ? ConnectedHome : NotConnectedHome} />
+                        <Route exact path="/" component={NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/reserves" component={AugmintToken} />
@@ -61,9 +66,9 @@ class App extends React.Component {
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>
-                {/* <div className="Site-footer">
+                <div className="Site-footer">
                     <AppFooter />
-                </div>  */}
+                </div>
             </div>
         );
     }

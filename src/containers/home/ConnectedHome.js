@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Hero } from "./Hero";
 import { DcmOverview } from "./DcmOverview";
 import { ProjectStatus } from "./ProjectStatus";
 import augmintTokenProvider from "modules/augmintTokenProvider";
@@ -17,7 +16,9 @@ class ConnectedHome extends React.Component {
         const { augmintToken } = this.props;
         return (
             <div>
-                <Hero />
+                <Header textAlign="center" as="h2" >
+                    Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored securely in a decentralised way, stable crypto tokens are instantly transferable worldwide.
+                </Header>
                 <DcmOverview />
                 <ProjectStatus />
                 <EthereumState>

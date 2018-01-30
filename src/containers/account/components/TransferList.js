@@ -33,8 +33,12 @@ export default class TransferList extends React.Component {
                             </Col>
                         </Row>
                         <Row columns={3}>
-                            <Col>Amount: {tx.signedAmount} A-EUR</Col>
-                            <Col>Fee: {tx.senderFee} A-EUR</Col>
+                            <Col>
+                                Amount: {tx.signedAmount} A-EUR
+                            </Col>
+                            <Col>
+                                Fee: {tx.senderFee} A-EUR
+                            </Col>
                             <Col>on {tx.blockTimeStampText}</Col>
                         </Row>
 

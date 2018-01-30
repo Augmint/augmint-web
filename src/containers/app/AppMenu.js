@@ -1,6 +1,10 @@
 import React from "react";
-import { Segment, Container, Menu, Dropdown } from "semantic-ui-react";
+import { Menu, Image, Segment, Button, Dropdown } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
+
+import augmintLogo from "assets/images/logo/logo.png";
+import augmintLogo2x from "assets/images/logo/logo@2x.png";
+import augmintLogo3x from "assets/images/logo/logo@3x.png";
 
 export function AppMenu(props) {
     const { isConnected, network, isLoading } = props.web3Connect;
@@ -14,19 +18,22 @@ export function AppMenu(props) {
         connectionStatus = "not connected";
     }
     return (
-        <Segment inverted style={{ margin: 0 }}>
-            <Menu inverted pointing secondary stackable size="large">
-                <Container>
-                    <Menu.Item active={location.pathname === "/"} as={Link} to="/">
+        <div>
+            <Menu size="large" style={{margin: '0'}}>
+                    <Menu.Item
+                        active={location.pathname === "/"}
+                        as={Link}
+                        to="/"
+                    >
                         Home
                     </Menu.Item>
 
-                    <Menu.Item active={location.pathname === "/concept"} as={Link} to="/concept">
+                    <Menu.Item
+                        active={location.pathname === "/concept"}
+                        as={Link}
+                        to="/concept"
+                    >
                         Concept
-                    </Menu.Item>
-
-                    <Menu.Item active={location.pathname === "/tryit"} as={Link} to="/tryit">
-                        Try it
                     </Menu.Item>
 
                     {isConnected && (
@@ -36,12 +43,12 @@ export function AppMenu(props) {
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/exchange">
-                            Buy/Sell A-EUR
+                            Buy/Sell ACD
                         </Menu.Item>
                     )}
                     {isConnected && (
                         <Menu.Item as={NavLink} to="/loan/new">
-                            Get A-EUR Loan
+                            Get ACD Loan
                         </Menu.Item>
                     )}
                     {isConnected && (
@@ -51,12 +58,9 @@ export function AppMenu(props) {
                     )}
 
                     <Menu.Menu position="right">
-                        <Menu.Item as={NavLink} to="/aboutUs">
-                            About Us
-                        </Menu.Item>
-
                         <Menu.Item>
-                            <small>
+                            {isConnected ?
+                            (<small>
                                 <Dropdown text={connectionStatus}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item
@@ -67,11 +71,20 @@ export function AppMenu(props) {
                                         />
                                     </Dropdown.Menu>
                                 </Dropdown>
-                            </small>
+                            </small>) :
+                            (<Button
+                                as={NavLink}
+                                to="/tryit"
+                                >
+                                Use A-EUro
+                            </Button>)
+                        }
                         </Menu.Item>
                     </Menu.Menu>
-                </Container>
             </Menu>
-        </Segment>
+            <Segment basic textAlign="center" style={{display: 'flex', justifyContent: 'center', marginTop: '0', padding: '0', padding: '0'}}>
+                <Image src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}/>
+            </Segment>
+        </div>
     );
 }

@@ -1,0 +1,89 @@
+article.ui.basic.segment {
+    padding: 0;
+}
+
+.large-gap > * {
+    margin-bottom: 115px!important;
+    margin-top: 115px!important;
+}
+
+.key-features__header {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 620px;
+}
+
+h2,
+.key-features__header > h2.ui.header {
+    font-weight: 250;
+}
+
+h1,
+h1.ui.header,
+h2,
+h2.ui.header,
+h3,
+h3.ui.header {
+    font-weight: 200;
+}
+
+h2,
+h2.ui.header {
+    font-size: 34px;
+    margin-bottom: 50px;
+}
+
+h3,
+h3.ui.header {
+    font-size: 26px;
+    line-height: 26px;
+}
+
+h5,
+h5.ui.header {
+    font-weight: 200;
+    font-size: 12px;
+}
+
+p {
+    line-height: 22px;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+@media 
+(-webkit-min-device-pixel-ratio: 2), 
+(min-resolution: 192dpi) { 
+    p.opac {
+        opacity: 0.6;
+    }
+}
+
+.list-item {
+    padding-left: 30px;
+    background:
+    url('../../../assets/images/bullet-point.svg')
+    no-repeat
+    left 6px;
+    margin: 0 40px;
+}
+
+.ui.basic.segment.how-to-use {
+    padding-top: 200px;
+    padding-bottom: 200px;
+    background: linear-gradient(rgba(53, 0, 55, 0) 0%,rgba(53, 0, 55, 1) 20%, rgba(53, 0, 55, 1) 80%, rgba(53, 0, 55, 0) 100%);
+}
+@media (min-width: 768px) {
+    .ui.basic.segment.how-to-use {
+        padding-left: 300px;
+    }
+}
+
+.ui.basic.segment.how-to-use .grid {
+    margin-bottom: 100px;
+}
+
+.ui.basic.segment.how-to-use h5.ui.header {
+    margin-top: 5px;
+}
+
