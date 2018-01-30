@@ -8,6 +8,7 @@ import "./site.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
+import ReactGA from 'react-ga';
 
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -37,6 +38,11 @@ class ScrollToTop extends React.Component {
 }
 
 ScrollToTop = withRouter(ScrollToTop);
+
+ReactGA.initialize('UA-113188857-1');
+if (process.env.NODE_ENV !== "development") {
+  ReactGA.pageview(window.location.pathname);
+}
 
 class App extends React.Component {
     render() {
