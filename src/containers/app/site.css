@@ -73,4 +73,14 @@
 .menu .ui.button {
     font-weight: 200;
     font-size: 14px!important;
+    text-transform: uppercase;
+    background-color: #fff; 
+}
+
+.ui.modal p {
+    color: #051d2d;
+}
+
+.ui.basic.button, .ui.basic.buttons .button {
+    background: #fff!important;
 }

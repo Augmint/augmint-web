@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Dropdown, Image, Segment, Button } from "semantic-ui-react";
+import { Menu, Image, Segment, Button } from "semantic-ui-react";
 import { Link, NavLink } from "react-router-dom";
 
 import augmintLogo from "assets/images/logo/logo.png";
@@ -7,16 +7,8 @@ import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
 
 export function AppMenu(props) {
-    const { isConnected, network, isLoading } = props.web3Connect;
+    const { isConnected } = props.web3Connect;
     const { location } = props;
-    let connectionStatus;
-    if (isLoading) {
-        connectionStatus = "connecting...";
-    } else if (isConnected) {
-        connectionStatus = "on " + network.name;
-    } else {
-        connectionStatus = "not connected";
-    }
     return (
         <div>
             <Menu size="large" style={{margin: '0'}}>
