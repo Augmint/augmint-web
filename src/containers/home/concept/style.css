@@ -11,8 +11,10 @@
   max-width: 100% !important;
 }
 
-.Site-content article section .second-column .ui.segment.custom-column {
-  padding-left: 98px;
+@media (min-width: 1268px) {
+  .Site-content article section .second-column .ui.segment.custom-column {
+    padding-left: 98px;
+  }
 }
 
 .Site-content article section .ui.grid>.row,
@@ -100,14 +102,21 @@ article.concept .ui.horizontal.list:last-child {
   margin-right: 0;
 }
 
-.Site-content article.concept .whitepaper-manifesto {
-  margin: 0 366px;
+.Site-content article.concept .whitepaper-manifesto .two.column.row {
+  justify-content: center;
+}
+
+.Site-content article.concept .whitepaper-manifesto .two.column.row .column {
+  margin: 0;
+  padding: 0;
+  width: auto !important;
 }
 
 .Site-content article.concept .whitepaper-manifesto img {
   margin: auto;
   height: 341px;
   width: 240px;
+  max-width: 240px;
 }
 
 .Site-content article.concept .whitepaper-manifesto a,
@@ -138,4 +147,34 @@ article.concept .ui.horizontal.list:last-child {
 
 .Site-content article section.ui.segment.green-gradient h2.segment.header {
   margin-top: 60px;
+}
+
+@media (max-width: 768px) {
+  article.concept .ui.horizontal.list>.item {
+    margin: 0;
+  }
+
+  article.concept section.ui.segment {
+    padding: 0 28px;
+  }
+
+  .Site-content article section .ui.segment.custom-column p,
+  .Site-content article section.ui.segment.green-gradient p {
+    max-width: 100%;
+  }
+
+  .Site-content article section .two.column.row .column {
+    display: block;
+    margin: 0;
+    width: 100% !important;
+  }
+
+  .Site-content article section .second-column .ui.segment.custom-column {
+    padding-left: 0;
+    padding-top: 60px;
+  }
+
+  .Site-content article.concept .whitepaper-manifesto .two.column.row .column  {
+    width: auto !important;
+  }
 }
