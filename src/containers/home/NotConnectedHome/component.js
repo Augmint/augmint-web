@@ -16,8 +16,12 @@ export default class NotConnectedHome extends React.Component {
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
-                                Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored securely in a
-                                decentralised way, stable crypto tokens are instantly transferable worldwide.
+                                Augmint offers digital tokens, each pegged to a fiat currency.
+                                <br />
+                                The first Augmint token is <nobr>A-EUR</nobr>, pegged to Euro.
+                                <br />
+                                Stored securely in a decentralised way, stable crypto tokens are instantly transferable
+                                worldwide.
                             </Header>
                         </header>
 
