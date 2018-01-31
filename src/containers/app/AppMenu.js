@@ -75,7 +75,7 @@ export function AppMenu(props) {
             <Segment
                 basic
                 textAlign="center"
-                style={{ display: "flex", justifyContent: "center", marginTop: "0", padding: "0", padding: "0" }}
+                style={{ display: "flex", justifyContent: "center", marginTop: "0", padding: "0" }}
             >
                 <Image src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`} />
             </Segment>
