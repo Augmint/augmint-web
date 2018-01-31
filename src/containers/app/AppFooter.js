@@ -8,7 +8,9 @@ import discordLogo from "assets/images/Discord-Logo.svg";
 import "./custom_footer_style.css";
 
 const segmentStyle = {
-    background: "url(" + backgroundImg + ") no-repeat center"
+    background: "url(" + backgroundImg + ")",
+    backgroundPosition: "top",
+    backgroundSize: "cover"
 };
 
 export function AppFooter(props) {
