@@ -19,48 +19,40 @@ export function AppMenu(props) {
     }
     return (
         <div>
-            <Menu size="large" style={{margin: '0'}}>
-                    <Menu.Item
-                        active={location.pathname === "/"}
-                        as={Link}
-                        to="/"
-                    >
-                        Home
+            <Menu size="large" style={{ margin: "0" }}>
+                <Menu.Item active={location.pathname === "/"} as={Link} to="/">
+                    Home
+                </Menu.Item>
+
+                <Menu.Item active={location.pathname === "/concept"} as={Link} to="/concept">
+                    Concept
+                </Menu.Item>
+
+                {isConnected && (
+                    <Menu.Item as={NavLink} to="/account">
+                        My Account
                     </Menu.Item>
-
-                    <Menu.Item
-                        active={location.pathname === "/concept"}
-                        as={Link}
-                        to="/concept"
-                    >
-                        Concept
+                )}
+                {isConnected && (
+                    <Menu.Item as={NavLink} to="/exchange">
+                        Buy/Sell A-EUR
                     </Menu.Item>
+                )}
+                {isConnected && (
+                    <Menu.Item as={NavLink} to="/loan/new">
+                        Get A-EUR Loan
+                    </Menu.Item>
+                )}
+                {isConnected && (
+                    <Menu.Item as={NavLink} to="/reserves">
+                        Reserves
+                    </Menu.Item>
+                )}
 
-                    {isConnected && (
-                        <Menu.Item as={NavLink} to="/account">
-                            My Account
-                        </Menu.Item>
-                    )}
-                    {isConnected && (
-                        <Menu.Item as={NavLink} to="/exchange">
-                            Buy/Sell ACD
-                        </Menu.Item>
-                    )}
-                    {isConnected && (
-                        <Menu.Item as={NavLink} to="/loan/new">
-                            Get ACD Loan
-                        </Menu.Item>
-                    )}
-                    {isConnected && (
-                        <Menu.Item as={NavLink} to="/reserves">
-                            Reserves
-                        </Menu.Item>
-                    )}
-
-                    <Menu.Menu position="right">
-                        <Menu.Item>
-                            {isConnected ?
-                            (<small>
+                <Menu.Menu position="right">
+                    <Menu.Item>
+                        {isConnected ? (
+                            <small>
                                 <Dropdown text={connectionStatus}>
                                     <Dropdown.Menu>
                                         <Dropdown.Item
@@ -71,19 +63,21 @@ export function AppMenu(props) {
                                         />
                                     </Dropdown.Menu>
                                 </Dropdown>
-                            </small>) :
-                            (<Button
-                                as={NavLink}
-                                to="/tryit"
-                                >
+                            </small>
+                        ) : (
+                            <Button as={NavLink} id="useAEurButton" to="/tryit">
                                 Use A-EUro
-                            </Button>)
-                        }
-                        </Menu.Item>
-                    </Menu.Menu>
+                            </Button>
+                        )}
+                    </Menu.Item>
+                </Menu.Menu>
             </Menu>
-            <Segment basic textAlign="center" style={{display: 'flex', justifyContent: 'center', marginTop: '0', padding: '0', padding: '0'}}>
-                <Image src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}/>
+            <Segment
+                basic
+                textAlign="center"
+                style={{ display: "flex", justifyContent: "center", marginTop: "0", padding: "0", padding: "0" }}
+            >
+                <Image src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`} />
             </Segment>
         </div>
     );
