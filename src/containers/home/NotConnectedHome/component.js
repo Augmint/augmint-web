@@ -16,9 +16,8 @@ export default class NotConnectedHome extends React.Component {
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
-                                Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored
-                                securely in a decentralised way, stable crypto tokens are instantly transferable
-                                worldwide.
+                                Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored securely in a
+                                decentralised way, stable crypto tokens are instantly transferable worldwide.
                             </Header>
                         </header>
 
@@ -87,9 +86,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">
-                            Buy and sell A-Euro
-                        </Header>
+                        <Header as="h2">Buy and sell A-EUR</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
@@ -101,7 +98,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">How to use your ACE</Header>
+                        <Header as="h2">How to use your A-EUR</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
@@ -113,9 +110,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">
-                            Earn more with A-Euro, get premium by locking
-                        </Header>
+                        <Header as="h2">Earn more with A-Euro, get premium by locking</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "lock").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
@@ -145,9 +140,7 @@ export default class NotConnectedHome extends React.Component {
                                 <InterchangeIcon />
                                 <div style={styles.howItWorksRailBox}>
                                     <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>
-                                        A-Euro
-                                    </div>
+                                    <div style={styles.howItWorksRailBoxSpan}>A-Euro</div>
                                 </div>
                             </div>
                         </Responsive>

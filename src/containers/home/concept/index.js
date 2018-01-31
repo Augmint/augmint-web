@@ -55,10 +55,7 @@ export default () => (
                                 Parameters for the new loans, the use of the reserves for market interventions are
                                 decided by transparent and open governance processes.
                             </p>
-                            <p>
-                                A-EUR is the first Augmint token to be implemented. A-EUR will
-                                be pegged to EUR.
-                            </p>
+                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
                         </Segment>
                     </Grid.Column>
                 </Grid.Row>
@@ -68,7 +65,7 @@ export default () => (
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
-            <Segment basic as="h2" className="header" content="How it works" id={'how-it-works'} />
+            <Segment basic as="h2" className="header" content="How it works" id={"how-it-works"} />
             <Segment basic as="h5" content="STABILITY" />
             <p>
                 There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
@@ -100,21 +97,16 @@ export default () => (
                 </Link>{" "}
                 for additional tools and more scenarios.
             </p>
-            <Segment basic as="h5" content="GET ACE" />
+            <Segment basic as="h5" content="GET A-EUR" />
             <p>
                 You can always buy or sell your A-EUR for cryptocurrencies (ETH, BTC etc.) on a decentralised exchange.
                 Secondary exchanges will offer direct fiat conversions to/from A-EUR as well. As the Augmint ecosystem
                 grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
             <Segment basic textAlign="center" className="custom-button">
-                <Button
-                    content="TRY NOW"
-                    as={Link}
-                    to="/tryit"
-                    className="try-now"
-                />
+                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
             </Segment>
-            <Segment basic as="h2" className="header" content="Governance" id={'governance'} />
+            <Segment basic as="h2" className="header" content="Governance" id={"governance"} />
             <p>
                 The fundamental rules, agreements and funds are maintained and enforced by smart contracts -
                 cryptographically immutable algorithms running on the blockchain.
