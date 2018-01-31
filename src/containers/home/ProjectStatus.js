@@ -27,7 +27,7 @@ export function ProjectStatus(props) {
                     <Button
                         content="Check it on GitHub"
                         as={Link}
-                        to="https://github.com/DecentLabs/dcm-poc"
+                        to="https://github.com/Augmint/augmint-core"
                         icon="github"
                         labelPosition="left"
                         target="_blank"
