@@ -7,6 +7,8 @@ import { keyFeatures, keyBenefits, howItWorks, teamMembers } from "./helpers.js"
 
 import "./styles.css";
 import * as styles from "./styles.js";
+import linkedinLogo from "assets/images/linkedin.png";
+import githubLogo from "assets/images/GitHub.png";
 
 export default class NotConnectedHome extends React.Component {
     render() {
@@ -170,9 +172,15 @@ export default class NotConnectedHome extends React.Component {
                                     <Header as="h3" style={{ margin: "30px 0 0" }}>
                                         {member.name}
                                     </Header>
-                                    <Header as="h5" style={{ marginTop: "10px" }}>
+                                    <Header as="h5" style={{ margin: "10px 0 0" }}>
                                         {member.title}
                                     </Header>
+                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">
+                                        <Image basic src={linkedinLogo} style={{width: 14}}/>
+                                    </Header>}
+                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank">
+                                        <Image basic src={githubLogo} style={{width: 14}}/>
+                                    </Header>}
                                 </Grid.Column>
                             ))}
                         </Grid>
