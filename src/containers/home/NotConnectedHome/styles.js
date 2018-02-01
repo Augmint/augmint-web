@@ -5,7 +5,7 @@ export const keyFeaturesSegment = {
 };
 
 export const howItWorksRail = {
-    display: 'flex', 
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -33,7 +33,7 @@ export const howItWorksRailBoxSpan = {
 };
 
 export const howItWorksImage = {
-    minHeight: '30px',
+    minHeight: '79px',
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '0',
