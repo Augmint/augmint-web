@@ -14,7 +14,6 @@
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
 */
 pragma solidity 0.4.18;
-import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
 import "../interfaces/ExchangeInterface.sol";
