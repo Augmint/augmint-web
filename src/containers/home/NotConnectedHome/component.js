@@ -43,7 +43,7 @@ export default class NotConnectedHome extends React.Component {
                     </Segment>
                     <Segment basic textAlign="center" as="section">
                         <Header textAlign="center" as="h2">
-                            It’s great for business
+                            Great for business
                         </Header>
 
                         <Grid columns="equal">
@@ -76,7 +76,7 @@ export default class NotConnectedHome extends React.Component {
                     <Container>
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac">
-                            Augmint offers the ability to use your cryptocurrencies without<br />losing them. Get an ACD
+                            Use your cryptocurrencies without<br />losing them. Get a
                             loan and spend easily.
                         </p>
                         <Grid columns="equal">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { 
+import {
     StableIcon,
     DecentralizedIcon,
     SecureIcon,
@@ -32,7 +32,7 @@ export const keyFeatures = [
     {
         image: <StableIcon/>,
         title: 'Stable',
-        text: 'With tokens pegged to their respective fiat, Augmint has low volatility and offers the stability typical crypotcurrencies lack.',
+        text: 'With tokens pegged to their respective fiat, Augmint has low volatility and offers the stability cryptocurrencies typically lack.',
     },
     {
         image: <DecentralizedIcon/>,
@@ -42,7 +42,7 @@ export const keyFeatures = [
     {
         image: <SecureIcon/>,
         title: 'Secure',
-        text: 'Built on blockchain technology, Augmint uses Etherum smart contracts that offer sophisticated cryptographic security.',
+        text: 'Built on blockchain technology, Augmint uses Ethereum smart contracts that offer sophisticated cryptographic security.',
     }
 ];
 
@@ -75,7 +75,7 @@ export const keyBenefits = [
     {
         pk: 'benefit-6',
         type: 'individual',
-        text: 'Utilise the blockchain with secure, decentralised way of spending',
+        text: 'Utilize the blockchain with a secure, decentralised way of spending',
     },
 ];
 
@@ -92,7 +92,7 @@ export const howItWorks = [
         image: <SpendIcon/>,
         type: 'loan',
         title: 'Spend A-EUR',
-        text: 'Use your A-EUR or convert it to fiat. You stay in your ETH position in the meanwhile.',
+        text: 'Use your A-EUR or convert it to fiat. Stay in your ETH position in the meanwhile.',
     },
     {
         pk: 'hiw-3',
@@ -106,7 +106,7 @@ export const howItWorks = [
         image: <ExchangeIcon/>,
         type: 'exchange',
         title: 'Augmint Exchange',
-        text: 'Buy or sell A-EUR for ETH on Augmint’s decentralised internal exchange.',
+        text: 'Buy or sell A-EUR for ETH on Augmint’s exchange.',
     },
     {
         pk: 'hiw-5',
@@ -172,7 +172,7 @@ export const howItWorks = [
         text: 'Your locked amount including your premium is available.',
     },
 
-    
+
 ];
 
 export const teamMembers = [
