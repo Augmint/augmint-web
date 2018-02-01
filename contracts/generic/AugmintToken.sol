@@ -55,16 +55,16 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     // Issue tokens to Reserve
-    function issue(uint amount) external restrict("issue") {
+    function issue(uint amount) external restrict("MonetaryBoard") {
         _issue(this, amount);
     }
 
     // Burn tokens from Reserve
-    function burn(uint amount) external restrict("burn") {
+    function burn(uint amount) external restrict("MonetaryBoard") {
         _burn(this, amount);
     }
 
-    function setLocker(address lockerAddress) external restrict("setLocker") {
+    function setLocker(address lockerAddress) external restrict("MonetaryBoard") {
 
         locker = Locker(lockerAddress);
 
@@ -81,7 +81,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function issueAndDisburse(address borrower, uint loanAmount, string narrative)
-    external restrict("issueAndDisburse") {
+    external restrict("LoanManagerContracts") {
         require(loanAmount > 0);
         _issue(this, loanAmount);
         _transfer(this, borrower, loanAmount, narrative, 0);
@@ -89,7 +89,7 @@ contract AugmintToken is AugmintTokenInterface {
 
     /* Users must repay through AugmintToken.repayLoan()*/
     function repayLoan(address _loanManager, uint loanId) external {
-        require(permissions[_loanManager]["LoanManager"]); // only whitelisted loanManagers
+        require(permissions[_loanManager]["LoanManagerContracts"]); // only whitelisted loanManagers
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
         // solhint-disable-next-line space-after-comma
         var (borrower, , , repaymentAmount , loanAmount, interestAmount, ) = loanManager.loans(loanId);
@@ -107,7 +107,7 @@ contract AugmintToken is AugmintTokenInterface {
     /* convenience function - alternative to Exchange.placeSellTokenOrder without approval required */
     function placeSellTokenOrderOnExchange(address _exchange, uint price, uint tokenAmount)
     external returns (uint sellTokenOrderIndex, uint sellTokenOrderId) {
-        require(permissions[_exchange]["Exchange"]); // only whitelisted exchanges
+        require(permissions[_exchange]["ExchangeContracts"]); // only whitelisted exchanges
         ExchangeInterface exchange = ExchangeInterface(_exchange);
         _transfer(msg.sender, _exchange, tokenAmount, "Sell token order placed", 0);
         return exchange.placeSellTokenOrderTrusted(msg.sender, price, tokenAmount);
@@ -118,12 +118,12 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function transferNoFee(address _to, uint256 _amount, string _narrative)
-    external restrict("transferNoFee") {
+    external restrict("NoFeeTransferContracts") {
         _transfer(msg.sender, _to, _amount, _narrative, 0);
     }
 
     function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax)
-    external restrict("setTransferFees") {
+    external restrict("MonetaryBoard") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
@@ -187,7 +187,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-    public restrict("transferFromNoFee") {
+    public restrict("NoFeeTransferContracts") {
         _transferFrom(_from, _to, _amount, _narrative, 0);
     }
 

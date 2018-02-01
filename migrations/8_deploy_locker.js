@@ -1,4 +1,4 @@
-"use strict";
+
 
 const Locker = artifacts.require("./Locker.sol");
 const TokenAce = artifacts.require("./TokenAce.sol");
@@ -10,6 +10,6 @@ module.exports = function(deployer, network) {
     deployer.then(async () => {
         const tokenAce = TokenAce.at(TokenAce.address);
         await tokenAce.setLocker(Locker.address);
-        await tokenAce.grantPermission(Locker.address, "transferNoFee");
+        await tokenAce.grantPermission(Locker.address, "NoFeeTransferContracts");
     });
 };

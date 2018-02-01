@@ -32,7 +32,7 @@ contract LoanManager is LoanManagerInterface, Restricted {
 
     function addLoanProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
         uint _defaultingFee, bool _isActive)
-    external restrict("addLoanProduct") returns (uint newProductId) {
+    external restrict("MonetaryBoard") returns (uint newProductId) {
         newProductId = products.push(
             LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
         ) - 1;
@@ -41,7 +41,8 @@ contract LoanManager is LoanManagerInterface, Restricted {
         return newProductId;
     }
 
-    function setLoanProductActiveState(uint8 productId, bool newState) external restrict ("setLoanProductActiveState") {
+    function setLoanProductActiveState(uint8 productId, bool newState)
+    external restrict ("MonetaryBoard") {
         products[productId].isActive = false;
         LoanProductActiveStateChanged(productId, newState);
     }
