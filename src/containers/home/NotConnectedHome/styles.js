@@ -4,16 +4,22 @@ export const keyFeaturesSegment = {
     alignItems: 'center',
 };
 
+export const useAEurButton = {
+    backgroundColor: 'white',
+    borderTopLeftRadius: '14px',
+    borderBottomLeftRadius: '14px',
+    color: '#01385a',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '25px 20px',
+    textAlign: 'center',
+};
+
 export const howItWorksRail = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderTopRightRadius: '14px',
-    borderBottomRightRadius: '14px',
-    color: '#01385a',
-    padding: '25px 20px'
+    alignItems: 'center'
 };
 
 export const howItWorksRailBox = {

@@ -6,6 +6,8 @@ import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
 
+import "./app_menu_style.css";
+
 export function AppMenu(props) {
     const { isConnected, network, isLoading } = props.web3Connect;
     const { location } = props;
@@ -66,7 +68,7 @@ export function AppMenu(props) {
                             </small>
                         ) : (
                             <Button as={NavLink} id="useAEurButton" to="/tryit">
-                                Use A-EUro
+                                Use A-EUR
                             </Button>
                         )}
                     </Menu.Item>
