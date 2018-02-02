@@ -189,8 +189,6 @@ export const teamMembers = [
         name: 'Karoly Szabo',
         imgSrc: kszabo,
         title: 'Founder, economist',
-        linedinUrl:'',
-        githubUrl:'https://github.com/krosza',
     },
     {
         pk: 'team-3',
@@ -198,7 +196,6 @@ export const teamMembers = [
         imgSrc: emarton,
         title: 'Marketing, PR strategy',
         linedinUrl:'https://www.linkedin.com/in/marton-elek',
-        githubUrl:'',
     },
     {
         pk: 'team-4',
@@ -206,7 +203,6 @@ export const teamMembers = [
         imgSrc: bdebreczeni,
         title: 'Cryptocurrency specialist, Shinrai founder',
         linedinUrl:'https://www.linkedin.com/in/bdebreczeni',
-        githubUrl:'',
     },
     {
         pk: 'team-5',
@@ -222,7 +218,7 @@ export const teamMembers = [
         imgSrc: bjackson,
         title: 'Blockchain developer',
         linedinUrl:'https://www.linkedin.com/in/ben-jackson-0686a896',
-        githubUrl:'',
+        githubUrl:'https://github.com/BYossarian',
     },
     {
         pk: 'team-7',
@@ -230,7 +226,7 @@ export const teamMembers = [
         imgSrc: thume,
         title: 'Branding & Visual',
         linedinUrl:'https://www.linkedin.com/in/tom-hume-31b64014a',
-        githubUrl:'',
+        portfolio:'http://studiojubilee.com',
     },
     {
         pk: 'team-8',
