@@ -5,13 +5,12 @@
         * Holds reserves:
             - ETH as regular ETH balance of the contract
             - ERC20 token reserve (stored as regular Token balance under the contract address)
-            TODO: separate reserve contract ?
 
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
-    TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
+    TODO: create a LockerInterface and use that instead of Locker.sol ?
 */
 pragma solidity 0.4.18;
 import "../interfaces/AugmintTokenInterface.sol";
@@ -27,8 +26,6 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
-
-    Locker public locker;
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
@@ -63,15 +60,11 @@ contract AugmintToken is AugmintTokenInterface {
         _burn(this, amount);
     }
 
-    function setLocker(address lockerAddress) external restrict("MonetaryBoard") {
-
-        locker = Locker(lockerAddress);
-
-    }
-
-    function lockFunds(uint lockProductId, uint amountToLock) external {
+    function lockFunds(address lockerAddress, uint lockProductId, uint amountToLock) external {
+        require(permissions[lockerAddress]["LockerContracts"]); // only whitelisted LockerContracts
 
         // NB: locker.createLock will validate lockProductId and amountToLock:
+        Locker locker = Locker(lockerAddress);
         uint interestEarnedAmount = locker.createLock(lockProductId, msg.sender, amountToLock);
 
         _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
