@@ -8,6 +8,9 @@
   position: absolute;
   width: 100%;
 }
+.Site-footer .footer>div {
+  margin-top: 30px;
+}
 
 .Site-footer .footer .title {
   color: #fff;
@@ -108,4 +111,10 @@
 .Site-footer .footer .subscribe .success.message {
   margin: auto;
   max-width: 397px;
+}
+
+@media (max-width: 768px) {
+  .Site-footer .footer .contact-list.list>.item {
+    margin: 0;
+  }
 }

@@ -7,6 +7,8 @@ import { keyFeatures, keyBenefits, howItWorks, teamMembers } from "./helpers.js"
 
 import "./styles.css";
 import * as styles from "./styles.js";
+import linkedinLogo from "assets/images/linkedin.png";
+import githubLogo from "assets/images/GitHub.png";
 
 export default class NotConnectedHome extends React.Component {
     render() {
@@ -41,9 +43,9 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                     </Segment>
-                    <Segment basic textAlign="center" as="section">
+                    <Segment basic textAlign="center" as="section"  className="advantages">
                         <Header textAlign="center" as="h2">
-                            It’s great for business
+                            Great for business
                         </Header>
 
                         <Grid columns="equal">
@@ -76,7 +78,7 @@ export default class NotConnectedHome extends React.Component {
                     <Container>
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac">
-                            Augmint offers the ability to use your cryptocurrencies without<br />losing them. Get an ACD
+                            Use your cryptocurrencies without<br />losing them. Get a
                             loan and spend easily.
                         </p>
                         <Grid columns="equal">
@@ -134,7 +136,7 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", top: "800px" }}
+                            style={{ width: "auto", position: "fixed",top: 80, zIndex: "10" }}
                         >
                             <div style={styles.howItWorksRail}>
                                 <div style={styles.howItWorksRailBox}>
@@ -151,7 +153,7 @@ export default class NotConnectedHome extends React.Component {
                     }
                 </Segment>
                 <Container>
-                    <Segment basic textAlign="left" as="section">
+                    <Segment basic textAlign="left" as="section" className="team">
                         <Header as="h2">Team</Header>
                         <Grid columns="equal">
                             {teamMembers.map(member => (
@@ -170,9 +172,15 @@ export default class NotConnectedHome extends React.Component {
                                     <Header as="h3" style={{ margin: "30px 0 0" }}>
                                         {member.name}
                                     </Header>
-                                    <Header as="h5" style={{ marginTop: "10px" }}>
-                                        {member.title}
+                                    <Header as="h5" style={{ margin: "10px 0 0" }}>
+                                        {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
                                     </Header>
+                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">
+                                        <Image basic src={linkedinLogo} style={{width: 14}}/>
+                                    </Header>}
+                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank">
+                                        <Image basic src={githubLogo} style={{width: 14}}/>
+                                    </Header>}
                                 </Grid.Column>
                             ))}
                         </Grid>
