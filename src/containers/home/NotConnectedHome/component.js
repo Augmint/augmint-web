@@ -43,7 +43,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                     </Segment>
-                    <Segment basic textAlign="center" as="section">
+                    <Segment basic textAlign="center" as="section"  className="advantages">
                         <Header textAlign="center" as="h2">
                             Great for business
                         </Header>
@@ -136,7 +136,7 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", top: "800px" }}
+                            style={{ width: "auto", position: "fixed",top: 80, zIndex: "10" }}
                         >
                             <div style={styles.howItWorksRail}>
                                 <div style={styles.howItWorksRailBox}>
@@ -153,7 +153,7 @@ export default class NotConnectedHome extends React.Component {
                     }
                 </Segment>
                 <Container>
-                    <Segment basic textAlign="left" as="section">
+                    <Segment basic textAlign="left" as="section" className="team">
                         <Header as="h2">Team</Header>
                         <Grid columns="equal">
                             {teamMembers.map(member => (
@@ -173,7 +173,6 @@ export default class NotConnectedHome extends React.Component {
                                         {member.name}
                                     </Header>
                                     <Header as="h5" style={{ margin: "10px 0 0" }}>
-                                        {member.title}
                                         {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
                                     </Header>
                                     {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">

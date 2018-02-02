@@ -13,7 +13,7 @@ export const howItWorksRail = {
     borderTopRightRadius: '14px',
     borderBottomRightRadius: '14px',
     color: '#01385a',
-    padding: '40px'
+    padding: '25px 20px'
 };
 
 export const howItWorksRailBox = {
@@ -22,8 +22,8 @@ export const howItWorksRailBox = {
     justifyContent: 'center',
     alignItems: 'center',
     color: '#01385a',
-    fontSize: '50px',
-    lineHeight: '50px',
+    fontSize: '35px',
+    lineHeight: '35px',
 };
 
 export const howItWorksRailBoxSpan = {
