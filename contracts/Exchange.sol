@@ -123,7 +123,7 @@ contract Exchange is ExchangeInterface {
     }
 
     /* only allowed for Monetary Board. */
-    function setMinOrderAmount(uint _minOrderAmount) external restrict("setMinOrderAmount") {
+    function setMinOrderAmount(uint _minOrderAmount) external restrict("MonetaryBoard") {
         minOrderAmount = _minOrderAmount;
         MinOrderAmountChanged(minOrderAmount);
     }

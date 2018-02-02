@@ -11,7 +11,7 @@ contract TokenAceMock is AugmintToken {
         _interestEarnedAccount, _transferFeePt, _transferFeeMin, _transferFeeMax)
     {} // solhint-disable-line no-empty-blocks
 
-    function withdrawTokens(address _to, uint _amount) external restrict("withdrawTokens") {
+    function withdrawTokens(address _to, uint _amount) external restrict("MonetaryBoard") {
         balances[this] = balances[this].sub(_amount);
         balances[_to] = balances[_to].add(_amount);
     }

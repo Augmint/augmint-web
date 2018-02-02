@@ -37,18 +37,11 @@ export default class SolidityContract {
             };
         }
         const web3ContractInstance = await contract.deployed();
-        // This extra check needed because .deployed() returns an instance
-        //      even when contract is not deployed
-        // TODO: find out if there is a better way to do it
-        //      (especially for contracts which don't have owner prop)
-        if (typeof web3ContractInstance.owner === "function") {
-            const owner = await web3ContractInstance.owner();
 
-            if (owner === "0x") {
-                const contractName = artifacts.contract_name;
-                throw new Error("Can't connect to " + contractName + " contract. Owner is 0x. Not deployed?");
-            }
-        }
+        // TODO: add extra check  because .deployed() returns an instance even when contract is not deployed
+        // const contractName = artifacts.contract_name;
+        // throw new Error("Can't connect to " + contractName + " contract. Owner is 0x. Not deployed?");
+
         const provider = connection.ethers.provider;
         const ethersContractInstance = new ethers.Contract(contract.address, contract.abi, provider);
         return new SolidityContract(connection, web3ContractInstance, ethersContractInstance);

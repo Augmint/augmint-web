@@ -29,15 +29,7 @@ async function newTokenAceMock(tokenOwner = web3.eth.accounts[0]) {
     );
     feeAccount = FeeAccount.address;
 
-    await tokenAce.grantMultiplePermissions(tokenOwner, [
-        "setTransferFees",
-        "transferNoFee",
-        "transferFromNoFee",
-        "withdrawTokens",
-        "issue",
-        "burn",
-        "setLocker"
-    ]);
+    await tokenAce.grantMultiplePermissions(tokenOwner, ["MonetaryBoard", "NoFeeTransferContracts"]);
 
     return tokenAce;
 }
