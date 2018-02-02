@@ -10,7 +10,7 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
    _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
-1. `npm install -g truffle@4.0.5`
+1. `npm install -g truffle@4.0.6`
 1. `git clone https://github.com/Augmint/augmint-core.git`
 1. `cd augmint-core`
 1. `npm install`
@@ -28,7 +28,7 @@ in Git bash:
 
 1. `nvm install 8.5.0`
 1. `nvm use 8.5.0`
-1. `npm install -g truffle@4.0.5`
+1. `npm install -g truffle@4.0.6`
 1. `git clone https://github.com/Augmint/augmint-core.git`
 1. `cd augmint-core`
 1. `npm install`

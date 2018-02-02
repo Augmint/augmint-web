@@ -12,7 +12,7 @@
 // -> need to update token contract? probably not? a new token contract would imply a fresh deployment?
 // -> test locking small (<10) amounts - need a min lock amount in lockProducts
 
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 
 import "./generic/Owned.sol";
 import "./generic/SafeMath.sol";

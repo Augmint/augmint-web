@@ -6,7 +6,7 @@ TODO: shall we use bytes for narrative?
 TODO: shall we replace repayLoan with a generic approveAndCall ?
 TODO: shall we put protection against accidentally sending in ETH?
  */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "../generic/SafeMath.sol";
 import "../generic/Restricted.sol";
 import "./ERC20Interface.sol";

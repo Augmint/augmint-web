@@ -13,7 +13,7 @@
     TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
