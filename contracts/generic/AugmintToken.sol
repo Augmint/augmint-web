@@ -13,7 +13,7 @@
     TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "./Restricted.sol";
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
@@ -28,6 +28,8 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeePt; // in parts per million , ie. 2,000 = 0.2%
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
+
+    uint public issuedByMonetaryBoard; // supply issued manually by monetary board
 
     Locker public locker;
 
@@ -56,11 +58,13 @@ contract AugmintToken is AugmintTokenInterface {
 
     // Issue tokens to Reserve
     function issue(uint amount) external restrict("issue") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.add(amount);
         _issue(this, amount);
     }
 
     // Burn tokens from Reserve
     function burn(uint amount) external restrict("burn") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.sub(amount);
         _burn(this, amount);
     }
 

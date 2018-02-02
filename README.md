@@ -1,20 +1,23 @@
+<span style="display:block;text-align:center">![Augmint](http://www.augmint.cc/android-chrome-192x192.png)
+</span>
+
 # Augmint - Stable Digital Tokens
 
-Proof of concept implementation of a stable cryptocurrency in Ethereum
-
-_a project by_ ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
+Decentralised stable cryptocurrency on Ethereum
 
 ## Concept
 
 Augmint provides digital tokens, value of each token pegged to a fiat currency.
 
-The first Augmint token will be ACD (Aug Crypto Dollar), pegged to USD.
+The first Augmint token will be A-EUR (Augmint Crypto Euro), pegged to EUR.
 
-The value of 1 ACD is always closely around 1 USD.
+The value of 1 A-EUR is always closely around 1 EUR.
 
 Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
 
-Read more and try out the proof-of-concept implementation on **[www.augmint.cc](http://www.augmint.cc)**
+Read more and try it: **[www.augmint.cc](http://www.augmint.cc)**
+
+**[Our Trello board](https://trello.com/b/RYGAt2so/augmint-documents)** with a collection of documents about the project.
 
 **[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
@@ -55,7 +58,12 @@ See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exch
 
 ## Contribution
 
-We are seeking for great minds to extend our core team. Contribution in any area is much appreciated: development, testing, UX&UI design, legal, marketing etc.
+Augmint is an open and transparent project.
+
+We are seeking for great minds to extend our core team. Contribution in any area is much appreciated: development, testing, UX&UI design, legal, marketing spreading the word etc.
+
+Drop us an email: hello@augmint.cc
+or say hi on our [Discord server](https://discord.gg/PwDmsnu)
 
 **[Development environment setup](docs/developmentEnvironment.md)**
 
@@ -63,12 +71,14 @@ We are seeking for great minds to extend our core team. Contribution in any area
 
 ![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
 
-[DECENT Labs](http://www.decent.org) production
+The project was born at [DECENT Labs](http://www.decent.org)
 
 ### Concept, initial version
 
 * [szerintedmi](https://github.com/szerintedmi)
 * [Charlie](https://github.com/krosza)
+
+Check the whole team on [augmint.cc](http://www.augmint.cc)
 
 ## Licence
 

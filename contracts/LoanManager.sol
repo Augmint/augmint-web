@@ -1,7 +1,7 @@
 /* Contract to manage Augmint token loan contracts backed by ETH
     TODO: add loanId to disbursement, repay and collection narrative
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 
 import "./generic/Restricted.sol";
 import "./Rates.sol";

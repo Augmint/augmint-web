@@ -15,7 +15,7 @@ export default class Web3ConnectionInfo extends React.Component {
     }
 
     render() {
-        const { isLoading, isConnected, web3Instance, network, error, info } = this.props.web3Connect;
+        const { isLoading, isConnected, web3Instance, network, error, info, ethers } = this.props.web3Connect;
         const stringify = stringifier({ maxDepth: 3, indent: "   " });
         const handleRefreshClick = e => {
             e.preventDefault();
@@ -29,7 +29,13 @@ export default class Web3ConnectionInfo extends React.Component {
                 </p>
                 <p>Web3 version: {info.web3Version}</p>
                 <p>
-                    Network: {network.name} | Id: {network.id} | Type: {network.type}
+                    Network (web3): {network.name} | Id: {network.id} | Type: {network.type}
+                </p>
+                <p>
+                    {!ethers.provider && "ethers not set up"}
+                    {ethers.provider &&
+                        `Network (ethers, not accurate): ${ethers.provider.name} | ${ethers.provider.chainId} | testnet:
+                    ${ethers.provider.testnet ? "testnet" : "non testnet"}`}
                 </p>
 
                 {error ? <ErrorPanel header="Error">{error.message}</ErrorPanel> : <p>No connection error</p>}
