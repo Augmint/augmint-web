@@ -46,11 +46,8 @@ export class EthereumState extends React.Component {
             );
         } else if (
             isConnected &&
-            network.id !== 999 &&
-            network.id !== 4 &&
-            network.id !== 3 &&
-            network.id !== 1976 &&
-            network.id !== 4447
+            network.type !== "private" &&
+            network.id !== 4 // rinkeby
         ) {
             msg = (
                 <div>
@@ -78,28 +75,27 @@ export class EthereumState extends React.Component {
             msg = (
                 <ErrorPanel header={<h3>Can't connect to Augmint contracts</h3>}>
                     <p>You seem to be connected to {network.name} but can't connect to Augmint contracts.</p>
-                    {(network.id === 4 || network.id === 3) && (
+                    {network.type !== "private" && (
                         <p>
                             It's an issue with our deployement, because you are on {network.name} and Augmint contracts
                             should be deployed.
                         </p>
                     )}
-                    {network.id !== 4 &&
-                        network.id !== 3 && (
-                            <div>
-                                <p>Do you have all the contracts deployed?</p>
-                                <pre>{"truffle migrate --reset \ncp ./build/contracts/* ./src/contractsBuild"}</pre>
-                                <p>
-                                    See more on our{" "}
-                                    <Link
-                                        to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
-                                        target="_blank"
-                                    >
-                                        Github page
-                                    </Link>
-                                </p>
-                            </div>
-                        )}
+                    {network.type === "private" && (
+                        <div>
+                            <p>Do you have all the contracts deployed?</p>
+                            <pre>{"truffle migrate --reset \ncp ./build/contracts/* ./src/contractsBuild"}</pre>
+                            <p>
+                                See more on our{" "}
+                                <Link
+                                    to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
+                                    target="_blank"
+                                >
+                                    Github page
+                                </Link>
+                            </p>
+                        </div>
+                    )}
                     <p>Error(s):</p>
                     <ErrorDetails>
                         {loanManager.connectionError ? loanManager.connectionError.message + "\n" : ""}

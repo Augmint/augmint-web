@@ -3,13 +3,12 @@
 */
 pragma solidity 0.4.18;
 
-import "./generic/Restricted.sol";
 import "./Rates.sol";
 import "./interfaces/AugmintTokenInterface.sol";
 import "./interfaces/LoanManagerInterface.sol";
 
 
-contract LoanManager is LoanManagerInterface, Restricted {
+contract LoanManager is LoanManagerInterface {
     Rates public rates; // instance of ETH/pegged currency rate provider contract
     AugmintTokenInterface public augmintToken; // instance of token contract
 
@@ -25,14 +24,14 @@ contract LoanManager is LoanManagerInterface, Restricted {
     event LoanCollected(uint indexed loanId, address indexed borrower, uint collectedCollateral,
         uint releasedCollateral, uint defaultingFee);
 
-    function LoanManager(address _augmintTokenAddress, address _ratesAddress) public Owned() {
+    function LoanManager(address _augmintTokenAddress, address _ratesAddress) public {
         augmintToken = AugmintTokenInterface(_augmintTokenAddress);
         rates = Rates(_ratesAddress);
     }
 
     function addLoanProduct(uint _term, uint _discountRate, uint _collateralRatio, uint _minDisbursedAmount,
         uint _defaultingFee, bool _isActive)
-    external restrict("addLoanProduct") returns (uint newProductId) {
+    external restrict("MonetaryBoard") returns (uint newProductId) {
         newProductId = products.push(
             LoanProduct(_term, _discountRate, _collateralRatio, _minDisbursedAmount, _defaultingFee, _isActive)
         ) - 1;
@@ -41,7 +40,8 @@ contract LoanManager is LoanManagerInterface, Restricted {
         return newProductId;
     }
 
-    function setLoanProductActiveState(uint8 productId, bool newState) external restrict ("setLoanProductActiveState") {
+    function setLoanProductActiveState(uint8 productId, bool newState)
+    external restrict ("MonetaryBoard") {
         products[productId].isActive = false;
         LoanProductActiveStateChanged(productId, newState);
     }
