@@ -152,8 +152,8 @@ export default class NotConnectedHome extends React.Component {
                         </Responsive>
                     }
                 </Segment>
-                <Container>
                     <Segment basic textAlign="left" as="section" className="team">
+                      <Container>
                         <Header as="h2">Team</Header>
                         <Grid columns="equal">
                             {teamMembers.map(member => (
@@ -184,8 +184,8 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                      </Container>
                     </Segment>
-                </Container>
             </Segment>
         );
     }
