@@ -174,6 +174,7 @@ export default class NotConnectedHome extends React.Component {
                                     </Header>
                                     <Header as="h5" style={{ margin: "10px 0 0" }}>
                                         {member.title}
+                                        {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
                                     </Header>
                                     {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">
                                         <Image basic src={linkedinLogo} style={{width: 14}}/>
