@@ -11,8 +11,11 @@ contract("TokenAce tests", accounts => {
 
     it("should be possible to issue new tokens to reserve", async function() {
         const amount = 100000;
-        const totalSupplyBefore = await tokenAce.totalSupply();
-        const reserveBalBefore = await tokenAce.balanceOf(tokenAce.address);
+        const [totalSupplyBefore, reserveBalBefore, issuedByMonetaryBoardBefore] = await Promise.all([
+            tokenAce.totalSupply(),
+            tokenAce.balanceOf(tokenAce.address),
+            tokenAce.issuedByMonetaryBoard()
+        ]);
 
         const tx = await tokenAce.issue(amount);
         testHelper.logGasUse(this, tx, "issue");
@@ -22,13 +25,24 @@ contract("TokenAce tests", accounts => {
         assert.equal(tx.logs[0].args.to, tokenAce.address, "to should be tokenAcd address in transfer event event");
         assert.equal(tx.logs[0].args.amount.toString(), amount, "amount should be set in Transfer event");
 
+        const [totalSupply, issuedByMonetaryBoard, reserveBal] = await Promise.all([
+            tokenAce.totalSupply(),
+            tokenAce.balanceOf(tokenAce.address),
+            tokenAce.issuedByMonetaryBoard()
+        ]);
+
         assert.equal(
-            (await tokenAce.totalSupply()).toString(),
+            totalSupply.toString(),
             totalSupplyBefore.add(amount).toString(),
             "Totalsupply should be increased with issued amount"
         );
         assert.equal(
-            (await tokenAce.balanceOf(tokenAce.address)).toString(),
+            issuedByMonetaryBoard.toString(),
+            issuedByMonetaryBoardBefore.add(amount).toString(),
+            "issuedByMonetaryBoard should be increased with issued amount"
+        );
+        assert.equal(
+            reserveBal.toString(),
             reserveBalBefore.add(amount).toString(),
             "Reserve balance should be increased with issued amount"
         );
@@ -41,8 +55,11 @@ contract("TokenAce tests", accounts => {
     it("should be possible to burn tokens from reserve", async function() {
         const amount = 900;
         await tokenAce.issue(amount);
-        const totalSupplyBefore = await tokenAce.totalSupply();
-        const reserveBalBefore = await tokenAce.balanceOf(tokenAce.address);
+        const [totalSupplyBefore, reserveBalBefore, issuedByMonetaryBoardBefore] = await Promise.all([
+            tokenAce.totalSupply(),
+            tokenAce.balanceOf(tokenAce.address),
+            tokenAce.issuedByMonetaryBoard()
+        ]);
 
         const tx = await tokenAce.burn(amount);
         testHelper.logGasUse(this, tx, "burn");
@@ -52,15 +69,25 @@ contract("TokenAce tests", accounts => {
         assert.equal(tx.logs[0].args.to, NULL_ACC, "to should be 0x0 in transfer event event");
         assert.equal(tx.logs[0].args.amount.toString(), amount, "amount should be set in Transfer event");
 
+        const [totalSupply, issuedByMonetaryBoard, reserveBal] = await Promise.all([
+            tokenAce.totalSupply(),
+            tokenAce.balanceOf(tokenAce.address),
+            tokenAce.issuedByMonetaryBoard()
+        ]);
         assert.equal(
-            (await tokenAce.totalSupply()).toString(),
+            totalSupply.toString(),
             totalSupplyBefore.sub(amount).toString(),
-            "Totalsupply should be decreased with issued amount"
+            "Totalsupply should be decreased with burnt amount"
         );
         assert.equal(
-            (await tokenAce.balanceOf(tokenAce.address)).toString(),
+            issuedByMonetaryBoard.toString(),
+            issuedByMonetaryBoardBefore.sub(amount).toString(),
+            "issuedByMonetaryBoard should be decreased with burnt amount"
+        );
+        assert.equal(
+            reserveBal.toString(),
             reserveBalBefore.sub(amount).toString(),
-            "Reserve balance should be decreased with issued amount"
+            "Reserve balance should be decreased with burnt amount"
         );
     });
 
@@ -70,5 +97,5 @@ contract("TokenAce tests", accounts => {
     });
 
     it("should be possible to set transfer fees ");
-    it("only owner should set transfer fees ");
+    it("only allowed should set transfer fees ");
 });

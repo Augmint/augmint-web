@@ -29,6 +29,8 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
 
+    uint public issuedByMonetaryBoard; // supply issued manually by monetary board
+
     Locker public locker;
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
@@ -56,11 +58,13 @@ contract AugmintToken is AugmintTokenInterface {
 
     // Issue tokens to Reserve
     function issue(uint amount) external restrict("issue") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.add(amount);
         _issue(this, amount);
     }
 
     // Burn tokens from Reserve
     function burn(uint amount) external restrict("burn") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.sub(amount);
         _burn(this, amount);
     }
 
