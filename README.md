@@ -27,11 +27,8 @@ See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exch
 
 ### Solidity Contracts
 
-* [Owned.sol](./contracts/generic/Owned.sol)  
-  Standard onlyOwner implementation. Going to be replaced to support more elaborate TokenUcd & LoanManager governance rules.
 * [Restricted.sol](./contracts/generic/Owned.sol)  
    Stores which address can access which function call.
-  Grant/revoke permissions only by owner currently but it's to be replaced with more elaborate multisig mechanism.
 * [ERC20.sol](./contracts/generic/ERC20.sol)  
   Standard [ERC20](https://theethereum.wiki/w/index.php/ERC20_Token_Standard) token interface.
 * [SystemAccount.sol](./contracts/generic/ERC20.sol)
@@ -43,7 +40,7 @@ See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exch
     * Holds ETH and Augmint Token reserves
     * Send reserve for auction (not implemented yet) when intervening
 * [AugmintToken.sol](./contracts/TokenAcd.sol)
-    * AugmintToken contract for pegged Augmint tokens (A-EUR aka Augmint Crypto EURO the first, [contract instance](./contracts/TokenAce.sol))
+    * AugmintToken contract for pegged Augmint tokens (A-EUR aka Augmint Crypto Euro is the first: [TokenAEur.sol](./contracts/TokenAEur.sol) )
     * Sets standard token parameters (name, symbol, decimals, etc.)
 * [Rates.sol](./contracts/Rates.sol)  
   A contract to return fiat/ETH exchange rates
@@ -54,7 +51,7 @@ See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exch
     * Maintains all loans: new loans, repayment, collection
 * [Locker.sol](./contracts/Lock.sol)
     * Lock products and parameters
-    * Token fund locking and releaseing
+    * Token fund locking and releasing
 
 ## Contribution
 
