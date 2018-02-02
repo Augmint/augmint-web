@@ -15,5 +15,13 @@ module.exports = async function(deployer, network, accounts) {
     );
 
     const tokenAce = TokenAce.at(TokenAce.address);
-    await tokenAce.grantMultiplePermissions(accounts[0], ["MonetaryBoard"]);
+    await tokenAce.grantMultiplePermissions(accounts[0], [
+        "setTransferFees",
+        "transferNoFee",
+        "transferFromNoFee",
+        "withdrawTokens",
+        "issue",
+        "burn",
+        "setLocker"
+    ]);
 };

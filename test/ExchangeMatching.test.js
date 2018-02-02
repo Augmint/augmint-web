@@ -12,7 +12,7 @@ const marketEurEth = 5000000;
 const maker = web3.eth.accounts[1];
 const taker = web3.eth.accounts[2];
 
-contract("Exchange matching tests", accounts => {
+contract("Exchange tests", accounts => {
     before(async function() {
         rates = await ratesTestHelper.newRatesMock("EUR", marketEurEth);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();

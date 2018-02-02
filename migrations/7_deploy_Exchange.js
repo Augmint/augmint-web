@@ -8,9 +8,14 @@ module.exports = function(deployer, network, accounts) {
     deployer.deploy(Exchange, TokenAce.address, Rates.address, 1000000);
     deployer.then(async () => {
         const exchange = Exchange.at(Exchange.address);
-        await exchange.grantMultiplePermissions(accounts[0], ["MonetaryBoard"]);
+        await exchange.grantMultiplePermissions(accounts[0], ["setMinOrderAmount"]);
 
         const tokenAce = TokenAce.at(TokenAce.address);
-        await tokenAce.grantMultiplePermissions(Exchange.address, ["ExchangeContracts", "NoFeeTransferContracts"]);
+        await tokenAce.grantMultiplePermissions(Exchange.address, [
+            "Exchange",
+            "transferNoFee",
+            "transferFromNoFee",
+            "setMinOrderAmount"
+        ]);
     });
 };

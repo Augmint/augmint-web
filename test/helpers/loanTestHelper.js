@@ -35,9 +35,9 @@ async function newLoanManagerMock(_tokenAce, _rates) {
 
         tokenAce.peggedSymbol(),
 
-        tokenAce.grantMultiplePermissions(loanManager.address, ["NoFeeTransferContracts", "LoanManagerContracts"]),
+        tokenAce.grantMultiplePermissions(loanManager.address, ["issueAndDisburse", "LoanManager"]),
 
-        loanManager.grantMultiplePermissions(web3.eth.accounts[0], ["MonetaryBoard"])
+        loanManager.grantMultiplePermissions(web3.eth.accounts[0], ["addLoanProduct", "setLoanProductActiveState"])
     ]);
 
     peggedSymbol = web3.toAscii(peggedSymbol);

@@ -54,6 +54,7 @@ const initialState = {
     info: {
         tokenBalance: "?",
         ethBalance: "?",
+        owner: "?",
         ratesAddress: "?",
         augmintTokenAddress: "?",
         loanCount: "?",
@@ -221,6 +222,7 @@ export const refreshLoanManager = () => {
                 productCount,
                 augmintTokenAddress,
                 ratesAddress,
+                owner,
                 bn_ethBalance,
                 bn_tokenBalance
             ] = await Promise.all([
@@ -229,6 +231,7 @@ export const refreshLoanManager = () => {
 
                 loanManager.augmintToken(),
                 loanManager.rates(),
+                loanManager.owner(),
 
                 asyncGetBalance(loanManager.address),
                 augmintToken.balanceOf(loanManager.address)
@@ -236,6 +239,7 @@ export const refreshLoanManager = () => {
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {
+                    owner: owner,
                     bn_ethBalance: bn_ethBalance,
                     ethBalance: bn_ethBalance.toNumber(),
                     bn_tokenBalance: bn_tokenBalance.div(10000),

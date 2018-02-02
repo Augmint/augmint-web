@@ -24,7 +24,8 @@ const initialState = {
         bn_tokenBalance: null,
         tokenBalance: "?",
         sellOrderCount: "?",
-        buyOrderCount: "?"
+        buyOrderCount: "?",
+        owner: "?"
     }
 };
 
@@ -130,7 +131,8 @@ export const refreshExchange = () => {
 async function getAugmintTokenInfo(exchange) {
     const augmintToken = store.getState().augmintToken.contract.instance;
 
-    const [bn_ethBalance, bn_tokenBalance, orderCount, bn_minOrderAmount] = await Promise.all([
+    const [owner, bn_ethBalance, bn_tokenBalance, orderCount, bn_minOrderAmount] = await Promise.all([
+        exchange.owner(),
         asyncGetBalance(exchange.address),
         augmintToken.balanceOf(exchange.address),
         exchange.getOrderCounts(),
@@ -144,6 +146,7 @@ async function getAugmintTokenInfo(exchange) {
         tokenBalance: bn_tokenBalance.div(10000).toString(),
         buyOrderCount: orderCount[0].toNumber(),
         sellOrderCount: orderCount[1].toNumber(),
+        owner: owner,
         bn_minOrderAmount: bn_minOrderAmount,
         minOrderAmount: bn_minOrderAmount.div(10000).toNumber()
     };

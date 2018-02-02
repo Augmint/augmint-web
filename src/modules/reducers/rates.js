@@ -32,6 +32,7 @@ const initialState = {
         fiatEthRate: "?",
         bn_fiatEthRate: null,
         ethFiatRate: "?",
+        owner: "?",
         fiatScale: null
     }
 };
@@ -114,6 +115,7 @@ export const refreshRates = () => {
             const bn_ethFiatcRate = await rates.convertFromWei(augmintToken.info.peggedSymbol, 1000000000000000000);
             const bn_ethFiatRate = bn_ethFiatcRate.div(fiatScale);
             const bn_fiatEthRate = BN_1.div(bn_ethFiatcRate).times(fiatScale);
+            const owner = await rates.owner();
             const bn_ethBalance = await asyncGetBalance(rates.address);
             const bn_tokenBalance = (await augmintToken.contract.instance.balanceOf(rates.address)).div(10000);
             return dispatch({
@@ -129,7 +131,8 @@ export const refreshRates = () => {
                     ethFiatRate: bn_ethFiatRate.toNumber(),
                     bn_fiatEthRate: bn_fiatEthRate,
                     fiatEthRate: bn_fiatEthRate.toNumber(),
-                    fiatScale: fiatScale
+                    fiatScale: fiatScale,
+                    owner: owner
                 }
             });
         } catch (error) {

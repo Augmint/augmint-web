@@ -1,11 +1,11 @@
 /* TODO: shall we move more functions here from LoanManager ? */
 
 pragma solidity 0.4.18;
-import "../generic/Restricted.sol";
+import "../generic/Owned.sol";
 import "../generic/SafeMath.sol";
 
 
-contract LoanManagerInterface is Restricted {
+contract LoanManagerInterface is Owned {
     using SafeMath for uint256;
 
     enum LoanState { Open, Repaid, Defaulted }
