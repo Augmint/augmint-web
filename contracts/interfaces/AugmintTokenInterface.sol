@@ -36,12 +36,12 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external;
 
     function transferNoFee(address _to, uint256 _amount, string _narrative)
-    external restrict("NoFeeTransferContracts");
+    external restrict("transferNoFee");
 
     function repayLoan(address loanManager, uint loanId) external;
 
     function issueAndDisburse(address borrower, uint loanAmount, string narrative)
-    external restrict("LoanManagerContracts");
+    external restrict("issueAndDisburse");
 
     function placeSellTokenOrderOnExchange(address exchange, uint price, uint tokenAmount)
     external returns (uint sellTokenOrderIndex, uint sellTokenOrderId);
@@ -56,7 +56,7 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function transfer(address to, uint value) public returns (bool); // solhint-disable-line no-simple-event-func-name
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-        public restrict("NoFeeTransferContracts");
+        public restrict("transferFromNoFee");
 
     function transferFromWithNarrative(address _from, address _to, uint256 _amount, string _narrative) public;
 

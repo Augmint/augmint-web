@@ -29,8 +29,8 @@ async function newExchangeMock(_tokenAce, _rates, minOrderAmount) {
     tokenAce = _tokenAce;
     rates = _rates;
     exchange = await Exchange.new(tokenAce.address, rates.address, minOrderAmount);
-    await exchange.grantMultiplePermissions(web3.eth.accounts[0], ["MonetaryBoard"]);
-    await tokenAce.grantMultiplePermissions(exchange.address, ["ExchangeContracts", "NoFeeTransferContracts"]);
+    await exchange.grantMultiplePermissions(web3.eth.accounts[0], ["setMinOrderAmount"]);
+    await tokenAce.grantMultiplePermissions(exchange.address, ["Exchange", "transferNoFee", "transferFromNoFee"]);
     return exchange;
 }
 

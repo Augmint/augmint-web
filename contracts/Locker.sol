@@ -14,24 +14,21 @@
 
 pragma solidity 0.4.18;
 
-import "./generic/Restricted.sol";
+import "./generic/Owned.sol";
 import "./generic/SafeMath.sol";
 import "./interfaces/AugmintTokenInterface.sol";
 
 
-contract Locker is Restricted {
+contract Locker is Owned {
 
     using SafeMath for uint256;
 
-    event NewLockProduct(uint indexed lockProductId, uint perTermInterest, uint durationInSecs,
+    event NewLockProduct(uint indexed lockProductId, uint perTermInterest, uint durationInSecs, 
                             uint minimumLockAmount, bool isActive);
-
     event LockProductActiveChange(uint indexed lockProductId, bool newActiveState);
-
-    // NB: amountLocked includes the original amount, plus interest
-    event NewLock(address indexed lockOwner, uint indexed lockIndex, uint amountLocked, uint interestEarned,
+    // NB: totalAmountLocked includes the original amount, plus interested
+    event NewLock(address indexed lockOwner, uint indexed lockIndex, uint amountLocked, uint interestEarned, 
                     uint lockedUntil, uint perTermInterest, uint durationInSecs, bool isActive);
-
     event LockReleased(address indexed lockOwner, uint indexed lockIndex);
 
     struct LockProduct {
@@ -63,16 +60,14 @@ contract Locker is Restricted {
 
     }
 
-    function addLockProduct(uint perTermInterest, uint durationInSecs, uint minimumLockAmount, bool isActive)
-    external restrict("MonetaryBoard") {
+    function addLockProduct(uint perTermInterest, uint durationInSecs, uint minimumLockAmount, bool isActive) external onlyOwner {
 
-        uint newLockProductId = lockProducts.push(
-                                    LockProduct(perTermInterest, durationInSecs, minimumLockAmount, isActive)) - 1;
+        uint newLockProductId = lockProducts.push(LockProduct(perTermInterest, durationInSecs, minimumLockAmount, isActive)) - 1;
         NewLockProduct(newLockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive);
 
     }
 
-    function setLockProductActiveState(uint lockProductId, bool isActive) external restrict("MonetaryBoard") {
+    function setLockProductActiveState(uint lockProductId, bool isActive) external onlyOwner {
 
         require(lockProductId < lockProducts.length);
         lockProducts[lockProductId].isActive = isActive;
@@ -135,10 +130,10 @@ contract Locker is Restricted {
         LockProduct storage lockProduct = lockProducts[lockProductId];
 
         uint lockedUntil = now.add(lockProduct.durationInSecs);
-        uint lockIndex = locks[lockOwner].push(Lock(amountToLock, interestEarned, lockedUntil,
-                                                    lockProduct.perTermInterest, lockProduct.durationInSecs, true)) - 1;
+        uint lockIndex = locks[lockOwner].push(Lock(amountToLock, interestEarned, lockedUntil, lockProduct.perTermInterest, 
+                                    lockProduct.durationInSecs, true)) - 1;
 
-        NewLock(lockOwner, lockIndex, amountToLock, interestEarned, lockedUntil, lockProduct.perTermInterest,
+        NewLock(lockOwner, lockIndex, amountToLock, interestEarned, lockedUntil, lockProduct.perTermInterest, 
                     lockProduct.durationInSecs, true);
 
         return interestEarned;
@@ -146,14 +141,14 @@ contract Locker is Restricted {
     }
 
     function releaseFunds(address lockOwner, uint lockIndex) external {
-
+        
         Lock storage lock = locks[lockOwner][lockIndex];
-
+        
         require(lock.isActive && now >= lock.lockedUntil);
-
+        
         lock.isActive = false;
         augmintToken.transferNoFee(lockOwner, lock.amountLocked.add(lock.interestEarned), "Releasing funds from lock");
-
+        
         LockReleased(lockOwner, lockIndex);
     }
 
@@ -164,8 +159,7 @@ contract Locker is Restricted {
     }
 
     // returns 20 locks starting from some offset
-    // lock products are encoded as
-    //              [amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ]
+    // lock products are encoded as [ amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs, isActive ]
     // NB: perTermInterest is in millionths (i.e. 1,000,000 = 100%):
     function getLocksForAddress(address lockOwner, uint offset) external view returns (uint[6][20]) {
 
@@ -178,7 +172,7 @@ contract Locker is Restricted {
 
             Lock storage lock = locksForAddress[offset + i];
 
-            response[i] = [ lock.amountLocked, lock.interestEarned, lock.lockedUntil, lock.perTermInterest,
+            response[i] = [ lock.amountLocked, lock.interestEarned, lock.lockedUntil, lock.perTermInterest, 
                                         lock.durationInSecs, lock.isActive ? 1 : 0 ];
 
         }

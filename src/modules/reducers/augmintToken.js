@@ -26,6 +26,7 @@ const initialState = {
     error: null,
     connectionError: null,
     info: {
+        owner: "?",
         peggedSymbol: "?",
         symbol: "?",
         ethBalance: "?",
@@ -149,6 +150,7 @@ export const refreshAugmintToken = () => {
 async function getAugmintTokenInfo(augmintToken) {
     const web3 = store.getState().web3Connect.web3Instance;
     // TODO: make these paralel
+    const owner = await augmintToken.owner();
     const symbol = await augmintToken.symbol();
     const peggedSymbol = web3.utils.toAscii(await augmintToken.peggedSymbol());
     const bn_totalSupply = await augmintToken.totalSupply();
@@ -167,6 +169,7 @@ async function getAugmintTokenInfo(augmintToken) {
         defaultBlock: "pending"
     })).div(bn_decimalsDiv);
     return {
+        owner: owner,
         symbol: symbol,
         peggedSymbol: peggedSymbol,
         decimals: bn_decimals.toNumber(),
