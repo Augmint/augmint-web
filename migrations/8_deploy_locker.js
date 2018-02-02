@@ -1,12 +1,12 @@
 const Locker = artifacts.require("./Locker.sol");
-const TokenAce = artifacts.require("./TokenAce.sol");
+const TokenAEur = artifacts.require("./TokenAEur.sol");
 const SafeMath = artifacts.require("./SafeMath.sol");
 
 module.exports = function(deployer, network) {
     deployer.link(SafeMath, Locker);
-    deployer.deploy(Locker, TokenAce.address);
+    deployer.deploy(Locker, TokenAEur.address);
     deployer.then(async () => {
-        const tokenAce = TokenAce.at(TokenAce.address);
-        await tokenAce.grantMultiplePermissions(Locker.address, ["LockerContracts", "NoFeeTransferContracts"]);
+        const tokenAEur = TokenAEur.at(TokenAEur.address);
+        await tokenAEur.grantMultiplePermissions(Locker.address, ["LockerContracts", "NoFeeTransferContracts"]);
     });
 };

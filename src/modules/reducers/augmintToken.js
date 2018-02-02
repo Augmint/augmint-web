@@ -3,7 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import augmintToken_artifacts from "contractsBuild/TokenAce.json";
+import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
 import BigNumber from "bignumber.js";
 import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";

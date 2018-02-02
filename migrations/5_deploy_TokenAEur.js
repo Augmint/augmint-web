@@ -1,12 +1,12 @@
 const SafeMath = artifacts.require("./SafeMath.sol");
-const TokenAce = artifacts.require("./TokenAce.sol");
+const TokenAEur = artifacts.require("./TokenAEur.sol");
 const FeeAccount = artifacts.require("./FeeAccount.sol");
 const InterestEarnedAccount = artifacts.require("./InterestEarnedAccount.sol");
 
 module.exports = async function(deployer, network, accounts) {
-    deployer.link(SafeMath, TokenAce);
+    deployer.link(SafeMath, TokenAEur);
     await deployer.deploy(
-        TokenAce,
+        TokenAEur,
         FeeAccount.address,
         InterestEarnedAccount.address,
         2000 /* transferFeePt in parts per million = 0.2% */,
@@ -14,6 +14,6 @@ module.exports = async function(deployer, network, accounts) {
         50000 /* max fee: 5 ACE */
     );
 
-    const tokenAce = TokenAce.at(TokenAce.address);
-    await tokenAce.grantMultiplePermissions(accounts[0], ["MonetaryBoard"]);
+    const tokenAEur = TokenAEur.at(TokenAEur.address);
+    await tokenAEur.grantMultiplePermissions(accounts[0], ["MonetaryBoard"]);
 };
