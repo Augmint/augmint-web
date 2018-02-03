@@ -33,7 +33,7 @@ class AugmintToken extends React.Component {
 
                     <Pgrid columns={1}>
                         <Pgrid.Column>
-                            <AugmintStats size="small" showInFiat augmintToken={augmintToken} rates={rates} />
+                            <AugmintStats size="small" showDetails augmintToken={augmintToken} rates={rates} />
                         </Pgrid.Column>
                         <Pgrid.Column>
                             <Button
