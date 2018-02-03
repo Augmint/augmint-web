@@ -2,7 +2,7 @@
 
 ## Install
 
-<span style="color:red">We recently split the codebase into augmint-web and augmint-contracts. Please raise an issue if these instructions don't work for you.</span>
+<span style="color:red">We recently split the codebase into [`augmint-web`](https://github.com/Augmint/augmint-web) and [`augmint-contracts`](https://github.com/Augmint/augmint-contracts). Please raise an issue if these instructions shouldn't work for you.</span>
 
 ### OSX
 
@@ -52,18 +52,19 @@ in Git bash:
 
 ### 3. Launch
 
-#### start ganache-cli (formerly testrpc)
+#### 3.1 Start ganache-cli (formerly testrpc)
 
-1. `npm run ganache:runmigrate`  
-    or
-   _ `npm run ganache:run`)
-   _ in separate console:  
-    `npm run truffle:migrate` or  
-    `$(npm bin)/truffle migrate --reset` to overwrite existing migration
-   NB: if you have connection error then likely src/contractsBuild is not up to date. Run `npm run truffle:migratecopy`
-   but make sure you don't check in changes in that folder (rather raise an issue so we can fix it)
+`npm run ganache:runmigrate`  
+or  
+`npm run ganache:run` and in separate console:  
+`npm run truffle:migrate`  
+or  
+`$(npm bin)/truffle migrate --reset` to overwrite existing migration
 
-#### 4. Launch local dev server
+NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `npm run truffle:migratecopy`
+but make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
+
+#### 3.2. Launch local dev server
 
 `yarn start`
 
@@ -91,7 +92,7 @@ You can also use `gulp watch`
 
 ### FrontEnd - E2E
 
-_Note: Frontend tests are experimental and unfinished yet. Also ganache crashes time-to-time_
+_Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
 * Start interactive: `npm run cypress:open`
 * Start command line: `npm run cypress:run`
