@@ -2,8 +2,6 @@ language: node_js
 cache:
   directories:
     - "node_modules"
-before_install:
-    - npm install -g truffle@4.0.6
 install:
     - npm install
     - cd augmint-contracts && npm install && cd ..
@@ -12,7 +10,13 @@ before_script:
     - yarn start > yarn_start.out &
 script:
     # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
-    - npm run cypress:runrecord
-notifications:
-  slack:
-    secure: Ce8ahbSo8Pn/PUG5ECfYYOJEHM5DacvwDrbLMF5XlgIOWXlnd4hm9VIdFvIBpHhw0P1ytrIeMUe7Tjvy8axWq9QhXfrY+02e4CVCP6jkjfXRDhWofc0hURInP8zllVF9b5kkvQXXGGcdUigI0//yRHm+5JBNh0cHEw1AJmYCOJAUk9hNJ3TPavlFSU6jR9Fk9kNe02g6DRsmIqSD4cXTRJZWLLUkzeArWsx4WJJ+CxLTL12K/Hux5TDC8QNa9sYVmYlCNx6uTGcR03VYDqHBXQ9WErdjHFgU+XDU0HbTbccbZMM1cwtY9BV363y8ApG629yLoFzU67TzrcdEjSTjpqB45GVwb4gfH3l+h4QddQ2uOCJoz3kmvzmPZHBkGEe8P5IBO9LIXQ7bY9xyoAkByN5HyQw1ycJ6xY46D0oRHwZrBdNsK7xURr6oovqlXyOojL53XNqvWBTCpisQJtbxE+3Z+pFZsl11dFDjF7QDBbnqEuYpkFc7TTJRNa1VHNJJjfksX4fBVX2ffp/iGCwQ+fHXY2SYQKaR8T8NdWLjvtjKZ5aa1EwJCoJ0i4ZvLCbM7tg2BfaFQaadT59NQSlbD3FnBkI1LCa/o07+xySO4T50htTBIDHCWnzh5Zo1pIEKLfnxN9EitvONz/kfcXCq0OZimJFta3LgVTpYYdkdnrI=
+    #- npm run cypress:runrecord
+# discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
+after_success:
+  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success https://discordapp.com/api/webhooks/409413234337251328/lCt9WUG15qc8s0PjqijUplpVjVx1MS_8wFkcMiVxA4ZWAZdUzdY3frnKRiVZC0iY0YC5
+after_failure:
+  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure https://discordapp.com/api/webhooks/409413234337251328/lCt9WUG15qc8s0PjqijUplpVjVx1MS_8wFkcMiVxA4ZWAZdUzdY3frnKRiVZC0iY0YC5
