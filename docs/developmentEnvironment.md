@@ -57,6 +57,8 @@ in Git bash:
 
 `yarn start`
 
+_NB: If you are using Metamask on local chain and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
+
 ## UI development
 
 UI is built with [semantic-ui](https://www.semantic-ui.com) and [semantic-ui-react](https://react.semantic-ui.com).
@@ -127,6 +129,8 @@ cp ./build/contracts/* ./src/contractsBuild
 truffle migrate --network rinkeby
 cp ./build/contracts/* ./src/contractsBuild
 ```
+
+_NB: truffle migrate works with geth stable 1.7.2 only. Follow [this issue](https://github.com/trufflesuite/truffle/issues/721)._
 
 ### WIP (ignore it) alternative ganache launches
 
