@@ -17,7 +17,7 @@ class ConnectedHome extends React.Component {
         return (
             <div>
                 <Header textAlign="center" as="h2" >
-                    Augmint offers digital tokens (A-Euro) pegged to a fiat currency. Stored securely in a decentralised way, stable crypto tokens are instantly transferable worldwide.
+                    Augmint offers digital tokens pegged to a fiat currency. Stored securely, and decentralised, stable crypto tokens are instantly transferable worldwide.
                 </Header>
                 <DcmOverview />
                 <ProjectStatus />

@@ -5,7 +5,7 @@
     TODO: check against ds-math: https://blog.dapphub.com/ds-math/
     TODO: move roundedDiv to a sep lib? (eg. Math.sol)
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 
 
 library SafeMath {

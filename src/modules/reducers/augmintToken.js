@@ -3,7 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import augmintToken_artifacts from "contractsBuild/TokenAce.json";
+import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
 import BigNumber from "bignumber.js";
 import { asyncGetBalance } from "modules/ethereum/ethHelper";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
@@ -26,7 +26,6 @@ const initialState = {
     error: null,
     connectionError: null,
     info: {
-        owner: "?",
         peggedSymbol: "?",
         symbol: "?",
         ethBalance: "?",
@@ -39,7 +38,8 @@ const initialState = {
         feeAccountAceBalance: "?",
         interestEarnedAccountAceBalance: "?",
         pendingTokenBalance: "?",
-        totalSupply: "?"
+        totalSupply: "?",
+        issuedByMonetaryBoard: "?"
     }
 };
 
@@ -149,27 +149,59 @@ export const refreshAugmintToken = () => {
 
 async function getAugmintTokenInfo(augmintToken) {
     const web3 = store.getState().web3Connect.web3Instance;
-    // TODO: make these paralel
-    const owner = await augmintToken.owner();
-    const symbol = await augmintToken.symbol();
-    const peggedSymbol = web3.utils.toAscii(await augmintToken.peggedSymbol());
-    const bn_totalSupply = await augmintToken.totalSupply();
-    const bn_decimals = await augmintToken.decimals();
+
+    let [
+        symbol,
+        peggedSymbol,
+        bn_totalSupply,
+        bn_issuedByMonetaryBoard,
+        bn_decimals,
+        feeAccount,
+        interestEarnedAccount,
+        bn_ethBalance,
+        bn_ethPendingBalance,
+        bn_tokenBalance,
+        bn_pendingTokenBalance,
+        feePt,
+        feeMin,
+        feeMax
+    ] = await Promise.all([
+        augmintToken.symbol(),
+        augmintToken.peggedSymbol(),
+        augmintToken.totalSupply(),
+        augmintToken.issuedByMonetaryBoard(),
+        augmintToken.decimals(),
+        augmintToken.feeAccount(),
+        augmintToken.interestEarnedAccount(),
+        asyncGetBalance(augmintToken.address),
+        asyncGetBalance(augmintToken.address, "pending"),
+        augmintToken.balanceOf(augmintToken.address),
+        augmintToken.balanceOf(augmintToken.address, {
+            defaultBlock: "pending"
+        }),
+        augmintToken.transferFeePt(),
+        augmintToken.transferFeeMin(),
+        augmintToken.transferFeeMax()
+    ]);
+
+    peggedSymbol = web3.utils.toAscii(peggedSymbol);
     const bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
-    const feeAccount = await augmintToken.feeAccount();
-    const interestEarnedAccount = await augmintToken.interestEarnedAccount();
-    const bn_feeAccountAceBalance = (await augmintToken.balanceOf(feeAccount)).div(bn_decimalsDiv);
-    const bn_interestEarnedAccountAceBalance = (await augmintToken.balanceOf(interestEarnedAccount)).div(
-        bn_decimalsDiv
-    );
-    const bn_ethBalance = await asyncGetBalance(augmintToken.address);
-    const bn_ethPendingBalance = (await asyncGetBalance(augmintToken.address, "pending")).sub(bn_ethBalance);
-    const bn_tokenBalance = (await augmintToken.balanceOf(augmintToken.address)).div(bn_decimalsDiv);
-    const bn_pendingTokenBalance = (await augmintToken.balanceOf(augmintToken.address, {
-        defaultBlock: "pending"
-    })).div(bn_decimalsDiv);
+
+    let [bn_feeAccountAceBalance, bn_interestEarnedAccountAceBalance] = await Promise.all([
+        augmintToken.balanceOf(feeAccount),
+        augmintToken.balanceOf(interestEarnedAccount)
+    ]);
+
+    bn_feeAccountAceBalance = bn_feeAccountAceBalance.div(bn_decimalsDiv);
+    bn_interestEarnedAccountAceBalance = bn_interestEarnedAccountAceBalance.div(bn_decimalsDiv);
+    bn_ethPendingBalance = bn_ethPendingBalance.sub(bn_ethBalance);
+    bn_tokenBalance = bn_tokenBalance.div(bn_decimalsDiv);
+    bn_pendingTokenBalance = bn_pendingTokenBalance.div(bn_decimalsDiv);
+    const pendingTokenBalance = bn_pendingTokenBalance.sub(bn_tokenBalance);
+    const totalSupply = bn_totalSupply.div(bn_decimalsDiv);
+    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard.div(bn_decimalsDiv);
+
     return {
-        owner: owner,
         symbol: symbol,
         peggedSymbol: peggedSymbol,
         decimals: bn_decimals.toNumber(),
@@ -180,16 +212,17 @@ async function getAugmintTokenInfo(augmintToken) {
         feeAccountAceBalance: bn_feeAccountAceBalance.toString(),
         bn_interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance,
         interestEarnedAccountAceBalance: bn_interestEarnedAccountAceBalance.toString(),
-        pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).toNumber(),
+        pendingTokenBalance: pendingTokenBalance.toNumber(),
         ethBalance: bn_ethBalance.toNumber(),
         bn_ethBalance: bn_ethBalance,
         bn_ethPendingBalance: bn_ethPendingBalance,
         ethPendingBalance: bn_ethPendingBalance.toNumber(),
-        totalSupply: bn_totalSupply.div(bn_decimalsDiv).toNumber(),
+        totalSupply: totalSupply.toNumber(),
+        issuedByMonetaryBoard: issuedByMonetaryBoard.toNumber(),
         feeAccount: feeAccount,
-        feePt: await augmintToken.transferFeePt(),
-        feeMin: await augmintToken.transferFeeMin(),
-        feeMax: await augmintToken.transferFeeMax()
+        feePt: feePt,
+        feeMin: feeMin,
+        feeMax: feeMax
     };
 }
 

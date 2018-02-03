@@ -1,12 +1,14 @@
 /* Contract to collect fees from system */
-pragma solidity 0.4.18;
-import "./Owned.sol";
+pragma solidity 0.4.19;
+import "./Restricted.sol";
 import "./AugmintToken.sol";
 
 
-contract SystemAccount is Owned {
-    // FIXME: this is only for testing, remove this function
-    function withdrawTokens(AugmintToken tokenAddress, address to, uint amount, string narrative) external onlyOwner {
+contract SystemAccount is Restricted {
+    /* FIXME: this is only for first pilots to avoid funds stuck in contract due to bugs.
+      remove this function for higher volume pilots */
+    function withdrawTokens(AugmintToken tokenAddress, address to, uint amount, string narrative)
+    external restrict("MonetaryBoard") {
         tokenAddress.transferWithNarrative(to, amount, narrative);
     }
 }

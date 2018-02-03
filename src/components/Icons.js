@@ -101,7 +101,7 @@ export const DownArrowIcon = () => (
 );
 
 export const InterchangeIcon = () => (
-  <Image src={interchangeSVG} />
+  <Image src={interchangeSVG} className="interchange-icon" />
 );
 
 export const DepositIcon = () => (

@@ -7,7 +7,7 @@
     TODO: consider if we need storing rates with variable decimals instead of fixed 4
     TODO: could we emit 1 RateChanged event from setMultipleRates (symbols and newrates arrays)?
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 
 import "./generic/SafeMath.sol";
 import "./generic/Restricted.sol";

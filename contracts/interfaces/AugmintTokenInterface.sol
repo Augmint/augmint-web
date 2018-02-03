@@ -6,7 +6,7 @@ TODO: shall we use bytes for narrative?
 TODO: shall we replace repayLoan with a generic approveAndCall ?
 TODO: shall we put protection against accidentally sending in ETH?
  */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "../generic/SafeMath.sol";
 import "../generic/Restricted.sol";
 import "./ERC20Interface.sol";
@@ -36,12 +36,12 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function transferWithNarrative(address _to, uint256 _amount, string _narrative) external;
 
     function transferNoFee(address _to, uint256 _amount, string _narrative)
-    external restrict("transferNoFee");
+    external restrict("NoFeeTransferContracts");
 
     function repayLoan(address loanManager, uint loanId) external;
 
     function issueAndDisburse(address borrower, uint loanAmount, string narrative)
-    external restrict("issueAndDisburse");
+    external restrict("LoanManagerContracts");
 
     function placeSellTokenOrderOnExchange(address exchange, uint price, uint tokenAmount)
     external returns (uint sellTokenOrderIndex, uint sellTokenOrderId);
@@ -56,7 +56,7 @@ contract AugmintTokenInterface is Restricted, ERC20Interface {
     function transfer(address to, uint value) public returns (bool); // solhint-disable-line no-simple-event-func-name
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-        public restrict("transferFromNoFee");
+        public restrict("NoFeeTransferContracts");
 
     function transferFromWithNarrative(address _from, address _to, uint256 _amount, string _narrative) public;
 

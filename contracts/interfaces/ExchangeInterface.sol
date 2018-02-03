@@ -4,7 +4,7 @@
     TODO: uint32 for now?
     TODO: do we need all funcs or just orders + placeSellTokenOrderTrusted  here?
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "../generic/SafeMath.sol";
 import "../generic/Restricted.sol";
 import "./AugmintTokenInterface.sol";

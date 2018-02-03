@@ -1,16 +1,19 @@
-const TokenAce = artifacts.require("./TokenAce.sol");
+const TokenAEur = artifacts.require("./TokenAEur.sol");
 const Rates = artifacts.require("./Rates.sol");
 const SafeMath = artifacts.require("./SafeMath.sol");
 const LoanManager = artifacts.require("./LoanManager.sol");
 
 module.exports = function(deployer, network, accounts) {
     deployer.link(SafeMath, LoanManager);
-    deployer.deploy(LoanManager, TokenAce.address, Rates.address);
+    deployer.deploy(LoanManager, TokenAEur.address, Rates.address);
     deployer.then(async () => {
         const lm = LoanManager.at(LoanManager.address);
-        await lm.grantMultiplePermissions(accounts[0], ["addLoanProduct", "setLoanProductActiveState"]);
-        const tokenAce = TokenAce.at(TokenAce.address);
-        await tokenAce.grantMultiplePermissions(LoanManager.address, ["issueAndDisburse", "LoanManager"]);
+        await lm.grantMultiplePermissions(accounts[0], ["MonetaryBoard"]);
+        const tokenAEur = TokenAEur.at(TokenAEur.address);
+        await tokenAEur.grantMultiplePermissions(LoanManager.address, [
+            "LoanManagerContracts",
+            "NoFeeTransferContracts"
+        ]);
 
         const onTest =
             web3.version.network == 999 ||

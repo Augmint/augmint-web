@@ -4,7 +4,7 @@
     TODO: deduct fee
     TODO: consider take funcs (frequent rate changes with takeBuyToken? send more and send back remainder?)
 */
-pragma solidity 0.4.18;
+pragma solidity 0.4.19;
 import "./interfaces/ExchangeInterface.sol";
 
 
@@ -123,7 +123,7 @@ contract Exchange is ExchangeInterface {
     }
 
     /* only allowed for Monetary Board. */
-    function setMinOrderAmount(uint _minOrderAmount) external restrict("setMinOrderAmount") {
+    function setMinOrderAmount(uint _minOrderAmount) external restrict("MonetaryBoard") {
         minOrderAmount = _minOrderAmount;
         MinOrderAmountChanged(minOrderAmount);
     }

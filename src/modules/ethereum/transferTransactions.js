@@ -129,12 +129,9 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
             })
         ]);
         const logs = [...logsFrom, ...logsTo];
-        const transfers = [];
-        for (const eventLog of logs) {
-            // TODO: make this parallel
-            const logData = await _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
-            transfers.push(logData);
-        }
+        const transfers = await Promise.all(
+            logs.map(eventLog => _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog))
+        );
 
         return transfers;
     } catch (error) {
@@ -161,7 +158,7 @@ async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account
 
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
     const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
-    const bn_senderFee = direction === -1 ? parsedData.fee.div(10000) : new BigNumber(0);
+    const bn_senderFee = direction === -1 ? parsedData.fee / 10000 : new BigNumber(0);
 
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 

@@ -5,16 +5,14 @@
         * Holds reserves:
             - ETH as regular ETH balance of the contract
             - ERC20 token reserve (stored as regular Token balance under the contract address)
-            TODO: separate reserve contract ?
 
         Note that all reserves are held under the contract address,
           therefore any transaction on the reserve is limited to the tx-s defined here
           (ie. transfer of reserve is not possible by the contract owner)
-    TODO: issue Transfer(0x, ) instead (or together?) of Issue event (comply with ERC20 standard)
     TODO: ERC20 short address attack protection? https://github.com/DecentLabs/dcm-poc/issues/62
+    TODO: create a LockerInterface and use that instead of Locker.sol ?
 */
-pragma solidity 0.4.18;
-import "./Restricted.sol";
+pragma solidity 0.4.19;
 import "../interfaces/AugmintTokenInterface.sol";
 import "../interfaces/LoanManagerInterface.sol";
 import "../interfaces/ExchangeInterface.sol";
@@ -29,7 +27,7 @@ contract AugmintToken is AugmintTokenInterface {
     uint public transferFeeMin; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
     uint public transferFeeMax; // with base unit of augmint token, eg. 4 decimals for token, eg. 31000 = 3.1 ACE
 
-    Locker public locker;
+    uint public issuedByMonetaryBoard; // supply issued manually by monetary board
 
     event TransferFeesChanged(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax);
 
@@ -55,24 +53,22 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     // Issue tokens to Reserve
-    function issue(uint amount) external restrict("issue") {
+    function issue(uint amount) external restrict("MonetaryBoard") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.add(amount);
         _issue(this, amount);
     }
 
     // Burn tokens from Reserve
-    function burn(uint amount) external restrict("burn") {
+    function burn(uint amount) external restrict("MonetaryBoard") {
+        issuedByMonetaryBoard = issuedByMonetaryBoard.sub(amount);
         _burn(this, amount);
     }
 
-    function setLocker(address lockerAddress) external restrict("setLocker") {
-
-        locker = Locker(lockerAddress);
-
-    }
-
-    function lockFunds(uint lockProductId, uint amountToLock) external {
+    function lockFunds(address lockerAddress, uint lockProductId, uint amountToLock) external {
+        require(permissions[lockerAddress]["LockerContracts"]); // only whitelisted LockerContracts
 
         // NB: locker.createLock will validate lockProductId and amountToLock:
+        Locker locker = Locker(lockerAddress);
         uint interestEarnedAmount = locker.createLock(lockProductId, msg.sender, amountToLock);
 
         _transfer(msg.sender, address(locker), amountToLock, "Locking funds", 0);
@@ -81,7 +77,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function issueAndDisburse(address borrower, uint loanAmount, string narrative)
-    external restrict("issueAndDisburse") {
+    external restrict("LoanManagerContracts") {
         require(loanAmount > 0);
         _issue(this, loanAmount);
         _transfer(this, borrower, loanAmount, narrative, 0);
@@ -89,7 +85,7 @@ contract AugmintToken is AugmintTokenInterface {
 
     /* Users must repay through AugmintToken.repayLoan()*/
     function repayLoan(address _loanManager, uint loanId) external {
-        require(permissions[_loanManager]["LoanManager"]); // only whitelisted loanManagers
+        require(permissions[_loanManager]["LoanManagerContracts"]); // only whitelisted loanManagers
         LoanManagerInterface loanManager = LoanManagerInterface(_loanManager);
         // solhint-disable-next-line space-after-comma
         var (borrower, , , repaymentAmount , loanAmount, interestAmount, ) = loanManager.loans(loanId);
@@ -107,7 +103,7 @@ contract AugmintToken is AugmintTokenInterface {
     /* convenience function - alternative to Exchange.placeSellTokenOrder without approval required */
     function placeSellTokenOrderOnExchange(address _exchange, uint price, uint tokenAmount)
     external returns (uint sellTokenOrderIndex, uint sellTokenOrderId) {
-        require(permissions[_exchange]["Exchange"]); // only whitelisted exchanges
+        require(permissions[_exchange]["ExchangeContracts"]); // only whitelisted exchanges
         ExchangeInterface exchange = ExchangeInterface(_exchange);
         _transfer(msg.sender, _exchange, tokenAmount, "Sell token order placed", 0);
         return exchange.placeSellTokenOrderTrusted(msg.sender, price, tokenAmount);
@@ -118,12 +114,12 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function transferNoFee(address _to, uint256 _amount, string _narrative)
-    external restrict("transferNoFee") {
+    external restrict("NoFeeTransferContracts") {
         _transfer(msg.sender, _to, _amount, _narrative, 0);
     }
 
     function setTransferFees(uint _transferFeePt, uint _transferFeeMin, uint _transferFeeMax)
-    external restrict("setTransferFees") {
+    external restrict("MonetaryBoard") {
         transferFeePt = _transferFeePt;
         transferFeeMin = _transferFeeMin;
         transferFeeMax = _transferFeeMax;
@@ -187,7 +183,7 @@ contract AugmintToken is AugmintTokenInterface {
     }
 
     function transferFromNoFee(address _from, address _to, uint256 _amount, string _narrative)
-    public restrict("transferFromNoFee") {
+    public restrict("NoFeeTransferContracts") {
         _transferFrom(_from, _to, _amount, _narrative, 0);
     }
 

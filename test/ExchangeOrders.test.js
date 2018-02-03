@@ -10,7 +10,7 @@ let snapshotId;
 let rates, tokenAce, exchange, minOrderAmount;
 const makers = [web3.eth.accounts[1], web3.eth.accounts[2]];
 
-contract("Exchange tests", accounts => {
+contract("Exchange orders tests", accounts => {
     before(async function() {
         rates = await ratesTestHelper.newRatesMock("EUR", 9980000);
         tokenAce = await tokenAceTestHelper.newTokenAceMock();

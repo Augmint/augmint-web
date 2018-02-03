@@ -10,9 +10,9 @@ Note: these steps are likely to work on linux too but it's not tested yet
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
    _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
-1. `npm install -g truffle@4.0.5`
-1. `git clone https://github.com/DecentLabs/dcm-poc.git`
-1. `cd dcm-poc`
+1. `npm install -g truffle@4.0.6`
+1. `git clone https://github.com/Augmint/augmint-core.git`
+1. `cd augmint-core`
 1. `npm install`
 
 ### Windows
@@ -28,16 +28,16 @@ in Git bash:
 
 1. `nvm install 8.5.0`
 1. `nvm use 8.5.0`
-1. `npm install -g truffle@4.0.5`
-1. `git clone https://github.com/DecentLabs/dcm-poc.git`
-1. `cd dcm-poc`
+1. `npm install -g truffle@4.0.6`
+1. `git clone https://github.com/Augmint/augmint-core.git`
+1. `cd augmint-core`
 1. `npm install`
 
 ## Launch
 
-### 1. Update to latest dcm-poc
+### 1. Update to latest augmint-core
 
-1. `git pull` for latest dcm-poc version
+1. `git pull` for latest augmint-core version
 1. `npm install` if there were any node package changes in packages.json
 
 ### 2. Deploy to network
@@ -57,9 +57,13 @@ in Git bash:
 
 `yarn start`
 
+_NB: If you are using Metamask on local chain and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
+
 ## UI development
 
 UI is built with [semantic-ui](https://www.semantic-ui.com) and [semantic-ui-react](https://react.semantic-ui.com).
+
+_NB: we are getting transitioning from semantic-ui_
 
 To customize it you need to edit dcm theme in [src/semantic/themes/dcm](src/semantic/themes/dcm) folder.
 
@@ -125,6 +129,8 @@ cp ./build/contracts/* ./src/contractsBuild
 truffle migrate --network rinkeby
 cp ./build/contracts/* ./src/contractsBuild
 ```
+
+_NB: truffle migrate works with geth stable 1.7.2 only. Follow [this issue](https://github.com/trufflesuite/truffle/issues/721)._
 
 ### WIP (ignore it) alternative ganache launches
 

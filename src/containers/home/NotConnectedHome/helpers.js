@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { 
+import {
     StableIcon,
     DecentralizedIcon,
     SecureIcon,
@@ -32,7 +32,7 @@ export const keyFeatures = [
     {
         image: <StableIcon/>,
         title: 'Stable',
-        text: 'With tokens pegged to their respective fiat, Augmint has low volatility and offers the stability typical crypotcurrencies lack.',
+        text: 'With tokens pegged to their respective fiat, Augmint has low volatility and offers the stability cryptocurrencies typically lack.',
     },
     {
         image: <DecentralizedIcon/>,
@@ -42,7 +42,7 @@ export const keyFeatures = [
     {
         image: <SecureIcon/>,
         title: 'Secure',
-        text: 'Built on blockchain technology, Augmint uses Etherum smart contracts that offer sophisticated cryptographic security.',
+        text: 'Built on blockchain technology, Augmint uses Ethereum smart contracts that offer sophisticated cryptographic security.',
     }
 ];
 
@@ -75,7 +75,7 @@ export const keyBenefits = [
     {
         pk: 'benefit-6',
         type: 'individual',
-        text: 'Utilise the blockchain with secure, decentralised way of spending',
+        text: 'Utilize the blockchain with a secure, decentralised way of spending',
     },
 ];
 
@@ -92,7 +92,7 @@ export const howItWorks = [
         image: <SpendIcon/>,
         type: 'loan',
         title: 'Spend A-EUR',
-        text: 'Use your A-EUR or convert it to fiat. You stay in your ETH position in the meanwhile.',
+        text: 'Use your A-EUR or convert it to fiat. Stay in your ETH position in the meanwhile.',
     },
     {
         pk: 'hiw-3',
@@ -106,7 +106,7 @@ export const howItWorks = [
         image: <ExchangeIcon/>,
         type: 'exchange',
         title: 'Augmint Exchange',
-        text: 'Buy or sell A-EUR for ETH on Augmint’s decentralised internal exchange.',
+        text: 'Buy or sell A-EUR for ETH on Augmint’s exchange.',
     },
     {
         pk: 'hiw-5',
@@ -172,7 +172,7 @@ export const howItWorks = [
         text: 'Your locked amount including your premium is available.',
     },
 
-    
+
 ];
 
 export const teamMembers = [
@@ -181,6 +181,8 @@ export const teamMembers = [
         name: 'Peter Petrovics',
         imgSrc: petrovics,
         title: 'Founder, technologist',
+        linedinUrl:'https://www.linkedin.com/in/petrovics',
+        githubUrl:'https://github.com/szerintedmi',
     },
     {
         pk: 'team-2',
@@ -193,35 +195,45 @@ export const teamMembers = [
         name: 'Marton Elek',
         imgSrc: emarton,
         title: 'Marketing, PR strategy',
+        linedinUrl:'https://www.linkedin.com/in/marton-elek',
     },
     {
         pk: 'team-4',
         name: 'Barnabas Debreczeni',
         imgSrc: bdebreczeni,
         title: 'Cryptocurrency specialist, Shinrai founder',
+        linedinUrl:'https://www.linkedin.com/in/bdebreczeni',
     },
     {
         pk: 'team-5',
         name: 'Viktor Szathmáry',
         imgSrc: vszatmahry,
         title: 'Blockchain expert / development',
+        linedinUrl:'https://www.linkedin.com/in/phraktle',
+        githubUrl:'https://github.com/phraktle',
     },
     {
         pk: 'team-6',
         name: 'Ben Jackson',
         imgSrc: bjackson,
         title: 'Blockchain developer',
+        linedinUrl:'https://www.linkedin.com/in/ben-jackson-0686a896',
+        githubUrl:'https://github.com/BYossarian',
     },
     {
         pk: 'team-7',
         name: 'Tom Hume',
         imgSrc: thume,
         title: 'Branding & Visual',
+        linedinUrl:'https://www.linkedin.com/in/tom-hume-31b64014a',
+        portfolio:'http://studiojubilee.com',
     },
     {
         pk: 'team-8',
         name: 'Laszlo Heves',
         imgSrc: lheves,
         title: 'Frontend, UX developer',
+        linedinUrl:'https://www.linkedin.com/in/lheves',
+        githubUrl:'https://github.com/reyrodrigez',
     }
 ];
