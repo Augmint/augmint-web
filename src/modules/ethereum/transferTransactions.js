@@ -161,7 +161,7 @@ async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account
 
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
     const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
-    const bn_senderFee = direction === -1 ? parsedData.fee.div(10000) : new BigNumber(0);
+    const bn_senderFee = direction === -1 ? parsedData.fee / 10000 : new BigNumber(0);
 
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
