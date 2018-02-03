@@ -47,7 +47,7 @@ export function getMaxTransfer(amount) {
     if (amount.lte(minLimit)) {
         maxAmount = amount.sub(feeMin);
     } else if (amount.gte(maxLimit)) {
-        // TODO: fix this on edge cases, https://github.com/Augmint/augmint-core/issues/60
+        // TODO: fix this on edge cases, https://github.com/Augmint/augmint-web/issues/60
         maxAmount = amount.sub(feeMax);
     } else {
         maxAmount = amount
