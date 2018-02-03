@@ -1,0 +1,20 @@
+{
+    "name": "augmint-contracts",
+    "version": "0.1.0",
+    "description": "Augmint Stable Tokens - Solidity contracts",
+    "homepage": ".",
+    "private": true,
+    "scripts": {
+        "start": "./runganache.sh & truffle migrate & wait",
+        "build": "truffle compile",
+        "test": "truffle test",
+        "truffle:migrate": "truffle migrate",
+        "ganache:run": "./runganache.sh",
+        "ganache:runmigrate":
+            "./runganache.sh & truffle migrate && echo 'Migration done. Contracts deployed to ganache. Contract artifacts are in build/contracts folder.' & wait"
+    },
+    "devDependencies": {
+        "ganache-cli": "6.0.3",
+        "random-seed": "0.3.0"
+    }
+}
