@@ -15230,6 +15230,164 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x724e82de9e81c8a3a2070a76f1725eae61d722a42c0edd94b09e7b79d7b0e6f2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "orderIndex",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "orderId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "maker",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "tokenAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "weiAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "NewOrder",
+          "type": "event"
+        },
+        "0xf800bd56a5db2764620505d2880a4bff9e4406107f48f8913c07b3626b7720d4": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "tokenBuyer",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "tokenSeller",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "buyTokenOrderId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "sellTokenOrderId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "weiAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "tokenAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "OrderFill",
+          "type": "event"
+        },
+        "0x61a4c3ec95de122096d654ab66ccf22fc8dc74fab994e098df193c7b7d79ebe9": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "orderId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "maker",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "tokenAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "weiAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "CancelledOrder",
+          "type": "event"
+        },
+        "0xd47f797ef16d066fe9af8c5e52ca02dcd115792897ba09baaddbc728fe48bfd2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "newMinOrderAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "MinOrderAmountChanged",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xb5ab0ff704e11583215004d01f194428fc47d7c9"
+    },
     "999": {
       "events": {
         "0x724e82de9e81c8a3a2070a76f1725eae61d722a42c0edd94b09e7b79d7b0e6f2": {
@@ -15390,5 +15548,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-02T20:45:24.987Z"
+  "updatedAt": "2018-02-03T08:14:43.873Z"
 }

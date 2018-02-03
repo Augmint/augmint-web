@@ -2463,6 +2463,63 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x9de72aa82d2cf62928e15749581b4bb9120a74b0de039e0908d84c73a28c82d7": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "symbol",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "newRate",
+              "type": "uint256"
+            }
+          ],
+          "name": "RateChanged",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x77be53e04790cac947e2f58fd82687b8c577ccb1"
+    },
     "999": {
       "events": {
         "0x9de72aa82d2cf62928e15749581b4bb9120a74b0de039e0908d84c73a28c82d7": {
@@ -2522,5 +2579,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-02T20:45:24.981Z"
+  "updatedAt": "2018-02-03T08:14:43.844Z"
 }
