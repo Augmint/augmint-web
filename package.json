@@ -1,7 +1,7 @@
 {
-    "name": "dcm-poc",
-    "version": "0.0.1",
-    "description": "Augmint Stable Tokens - Proof of Concept",
+    "name": "augmint-web",
+    "version": "0.1.0",
+    "description": "Augmint Stable Tokens",
     "homepage": ".",
     "private": true,
     "dependencies": {
