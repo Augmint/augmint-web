@@ -37,6 +37,8 @@
         "eject": "react-scripts eject",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
+        "cypress:runrecord":
+            "$(npm bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
         "truffle:migrate": "cd augmint-contracts && npm run truffle:migrate",
         "truffle:migratecopy":
             "cd augmint-contracts && npm run truffle:migrate && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
