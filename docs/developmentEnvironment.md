@@ -1,22 +1,27 @@
-# Augmint PoC development environment
+# Augmint Web Frontend - development environment
 
 ## Install
 
-<span style="color:red">We recently split the codebase into [`augmint-web`](https://github.com/Augmint/augmint-web) and [`augmint-contracts`](https://github.com/Augmint/augmint-contracts). Please raise an issue if these instructions shouldn't work for you.</span>
+_We recently split the codebase into [`augmint-web`](https://github.com/Augmint/augmint-web) and [`augmint-contracts`](https://github.com/Augmint/augmint-contracts). Please raise an issue if these instructions shouldn't work for you._
+
+These instructions are about the dev environment for frontebd development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
 ### OSX
 
-Note: these steps are likely to work on linux too but it's not tested yet
+_NB: these steps are likely to work on linux too but it's not tested yet_
 
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
    _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
-1. `git clone https://github.com/Augmint/augmint-web.git`
-1. `cd augmint-web`
-1. `npm install`
-1. `cd augmint-contracts`
-1. `npm install`
+1. then:
+    ```
+    git clone https://github.com/Augmint/augmint-web.git`
+    cd augmint-web`
+    npm install`
+    cd augmint-contracts`
+    npm install
+    ```
 
 ### Windows
 
@@ -26,29 +31,34 @@ _Note: windows install was not tested since a while, update on it is welcome_
 1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
 1. [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
-
-in Git bash:
-
-1. `nvm install 8.5.0`
-1. `nvm use 8.5.0`
-1. `git clone https://github.com/Augmint/augmint-web.git`
-1. `cd augmint-core`
-1. `npm install`
-1. `cd augmint-contracts`
-1. `npm install`
+1. in Git bash:
+    ```
+    nvm install 8.5.0
+    nvm use 8.5.0
+    git clone https://github.com/Augmint/augmint-web.git
+    cd augmint-core
+    npm install
+    cd augmint-contracts
+    npm install
+    ```
 
 ## Launch
 
 ### 1. Update to latest augmint-web
 
-1. `git pull` for latest augmint-web version
-1. `npm install` if there were any node package changes in packages.json
+```
+git pull
+npm install # if there were any node package changes in packages.json
+```
 
 ### 2. Update to latest augmint contract
 
-1. `cd augmint-contracts`
-1. `git checkout master`
-1. `git pull`
+```
+cd augmint-contracts
+git checkout master
+git pull
+npm install # if there were any node package changes in packages.json
+```
 
 ### 3. Launch
 
@@ -100,25 +110,3 @@ _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes
 ## Non ganache launches/deploys
 
 See [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
-
-### WIP (ignore it) - alternative ganache launches
-
-#### Alternatively: Ganache UI
-
-If you use [ganache UI](http://truffleframework.com/ganache/) then
-
-* set the port to 8545
-* For running UI tests set mnemonic:  
-  `hello build tongue rack parade express shine salute glare rate spice stock`
-
-#### Alternatively: truffle develop
-
-_note: truffle runs local chain on localhost:9545_
-
-1. `truffle develop`
-1. in truffle console:  
-   `migrate` or  
-   `migrate --reset` to overwrite existing migration
-1. `cp ./build/contracts/* ./src/contractsBuild` (TODO: this step is needed b/c of a [truffle-migrate issue #10](https://github.com/trufflesuite/truffle-migrate/issues/10) )
-
-_TODO: use same mnemonic & port as `runganache.sh`_
