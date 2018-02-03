@@ -5,6 +5,7 @@ cache:
 before_install:
     - npm install -g truffle@4.0.6
 install:
+    - npm install
     - cd augmint-contracts && npm install
 before_script:
     - npm run ganache:runmigrate > ganache.out &
