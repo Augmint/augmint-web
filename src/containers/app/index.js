@@ -20,7 +20,7 @@ import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import NotConnectedHome from "containers/home/NotConnectedHome/component";
 import { PageNotFound } from "containers/PageNotFound";
-import { AppMenu } from "containers/app/AppMenu";
+import { AppMenu } from "components/navigation";
 import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
 
