@@ -59,6 +59,11 @@ export function AppFooter(props) {
                         target="_blank"
                         content="WHITEPAPER"
                     />
+                    <List.Item
+                        as="a"
+                        href="/contact"
+                        content="CONTACT"
+                    />
                 </List>
                 <Subscribe />
             </Container>
