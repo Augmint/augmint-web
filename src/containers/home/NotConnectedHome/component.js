@@ -162,28 +162,23 @@ export default class NotConnectedHome extends React.Component {
                             {teamMembers.map(member => (
                                 <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
                                     <Image
-                                        style={{
-                                            filter: "grayscale(100%)",
-                                            width: "120px",
-                                            height: "120px",
-                                            marginRight: "36px"
-                                        }}
                                         src={member.imgSrc}
                                         avatar
                                         floated="left"
                                     />
-                                    <Header as="h3" style={{ margin: "30px 0 0" }}>
+                                    <Header as="h3">
                                         {member.name}
                                     </Header>
                                     <Header as="h5" style={{ margin: "10px 0 0" }}>
                                         {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
+                                        {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
+                                          <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
+                                        </Header>}
+                                        {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
+                                          <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
+                                        </Header>}
                                     </Header>
-                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">
-                                        <Image basic src={linkedinLogo} style={{width: 14}}/>
-                                    </Header>}
-                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank">
-                                        <Image basic src={githubLogo} style={{width: 14}}/>
-                                    </Header>}
+                                    {member.description && <p className="description"> {member.description} </p>}
                                 </Grid.Column>
                             ))}
                         </Grid>

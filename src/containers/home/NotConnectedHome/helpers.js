@@ -184,12 +184,14 @@ export const teamMembers = [
         title: 'Founder, technologist',
         linedinUrl:'https://www.linkedin.com/in/petrovics',
         githubUrl:'https://github.com/szerintedmi',
+        description: "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook.",
     },
     {
         pk: 'team-2',
         name: 'Karoly Szabo',
         imgSrc: kszabo,
         title: 'Founder, economist',
+        description: "Károly is an entrepreneur with 30+ years’ management and financial experience. Managed small companies and medium sized organizations and companies. Having set up governmental agencies and business companies, supervised IT development projects. Worked a decade in the management of one of the of the largest Hungarian bank."
     },
     {
         pk: 'team-3',
@@ -197,6 +199,7 @@ export const teamMembers = [
         imgSrc: emarton,
         title: 'Marketing, PR strategy',
         linedinUrl:'https://www.linkedin.com/in/marton-elek',
+        description: "Network building specialist with creative marketing and PR strategy skills. 25 years startup building experience with focus on UX  and conscious branding"
     },
     {
         pk: 'team-4',
@@ -204,6 +207,7 @@ export const teamMembers = [
         imgSrc: bdebreczeni,
         title: 'Cryptocurrency specialist, Shinrai founder',
         linedinUrl:'https://www.linkedin.com/in/bdebreczeni',
+        description: "Pioneer of decentralised cryptocurrencies, active member of blockchain community, officer of the Hungarian Blockchain Society and organizer of blockchain meetups."
     },
     {
         pk: 'team-5',
@@ -212,6 +216,7 @@ export const teamMembers = [
         title: 'Blockchain expert / development',
         linedinUrl:'https://www.linkedin.com/in/phraktle',
         githubUrl:'https://github.com/phraktle',
+        description: "Software developer, entrepreneur, angel investor. Founder of decent.org, a non-profit organization researching and promoting decentralized technologies. 20 years of experience in building startups."
     },
     {
         pk: 'team-6',
@@ -243,5 +248,6 @@ export const teamMembers = [
         imgSrc: vkontra,
         title: 'Financial expert',
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
+        description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis. ",
     }
 ];
