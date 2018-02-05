@@ -27,6 +27,7 @@ import emarton from 'assets/images/team/emarton.jpg';
 import lheves from 'assets/images/team/lheves.jpg';
 import vszatmahry from 'assets/images/team/vszatmahry.jpg';
 import thume from 'assets/images/team/thume.jpg';
+import vkontra from 'assets/images/team/vkontra.jpg';
 
 export const keyFeatures = [
     {
@@ -235,5 +236,12 @@ export const teamMembers = [
         title: 'Frontend, UX developer',
         linedinUrl:'https://www.linkedin.com/in/lheves',
         githubUrl:'https://github.com/reyrodrigez',
+    },
+    {
+        pk: 'team-9',
+        name: 'Verka Kontra',
+        imgSrc: vkontra,
+        title: 'Financial expert',
+        linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
     }
 ];
