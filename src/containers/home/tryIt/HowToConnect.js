@@ -29,7 +29,7 @@ export function HowToConnect(props) {
                     <p>
                         If you feel geeky you can{" "}
                         <Link
-                            to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
+                            to="https://github.com/Augmint/augmint-web/blob/master/docs/developmentEnvironment.md"
                             target="_blank"
                         >
                             install it locally

@@ -27,7 +27,7 @@ export function ProjectStatus(props) {
                     <Button
                         content="Check it on GitHub"
                         as={Link}
-                        to="https://github.com/Augmint/augmint-core"
+                        to="https://github.com/Augmint"
                         icon="github"
                         labelPosition="left"
                         target="_blank"

@@ -40,7 +40,7 @@ export function AppFooter(props) {
                 </Segment>
 
                 <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
-                    <List.Item as="a" href="https://github.com/Augmint/augmint-core" target="_blank" content="GITHUB" />
+                    <List.Item as="a" href="https://github.com/Augmint" target="_blank" content="GITHUB" />
                     <List.Item
                         as="a"
                         href="https://gitter.im/digital-credit-money/Lobby?utm_source=ProjectStatus&utm_medium=web&utm_campaign=init"

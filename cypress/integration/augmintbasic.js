@@ -44,7 +44,7 @@ describe("Augmint basic e2e", function() {
 
     before(function() {
         cy.visit("/");
-        cy.get("#useAEurButton").click();
+        cy.get("#useAEurButton > .center").click(); // TODO: fix duplicate id on UI
         cy.contains("You are connected");
     });
 

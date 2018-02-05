@@ -1,7 +1,7 @@
 <span style="display:block;text-align:center">![Augmint](http://www.augmint.cc/android-chrome-192x192.png)
 </span>
 
-# Augmint - Stable Digital Tokens
+# Augmint - Stable Digital Tokens - Web Frontend
 
 Decentralised stable cryptocurrency on Ethereum
 
@@ -21,40 +21,9 @@ Read more and try it: **[www.augmint.cc](http://www.augmint.cc)**
 
 **[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
 
-## Components
-
-See sequence diagrams about the planned [Loan flow](docs/loanFlow.png) and [Exchange flow](docs/exchangeFlow.png). (additional sequence diagrams are coming)
-
 ### Solidity Contracts
 
-* [Owned.sol](./contracts/generic/Owned.sol)  
-  Standard onlyOwner implementation. Going to be replaced to support more elaborate TokenUcd & LoanManager governance rules.
-* [Restricted.sol](./contracts/generic/Owned.sol)  
-   Stores which address can access which function call.
-  Grant/revoke permissions only by owner currently but it's to be replaced with more elaborate multisig mechanism.
-* [ERC20.sol](./contracts/generic/ERC20.sol)  
-  Standard [ERC20](https://theethereum.wiki/w/index.php/ERC20_Token_Standard) token interface.
-* [SystemAccount.sol](./contracts/generic/ERC20.sol)
-  Generic contract to maintain balances of Augmint system accounts (InterestPoolAccount, InterestEarnedAccount, FeeAccount)
-* [AugmintToken.sol](./contracts/generic/AugmintToken.sol)  
-  Base contract for all Augmint tokens. ERC20.
-    * Issue and burn ACD for new loans and on loan repayment
-    * Convenience functions: getLoan, placeSellOrder (see [Loan flow](docs/loanFlow.png) and [Exchange flow](docs/exchangeFlow.png).)
-    * Holds ETH and Augmint Token reserves
-    * Send reserve for auction (not implemented yet) when intervening
-* [AugmintToken.sol](./contracts/TokenAcd.sol)
-    * AugmintToken contract for pegged Augmint tokens (A-EUR aka Augmint Crypto EURO the first, [contract instance](./contracts/TokenAce.sol))
-    * Sets standard token parameters (name, symbol, decimals, etc.)
-* [Rates.sol](./contracts/Rates.sol)  
-  A contract to return fiat/ETH exchange rates
-* [Exchange.sol](./contracts/Exchange.sol)  
-  A-EUR / ETH exchange contract. Sell or buy A-EUR for ETH on A-EUR/ETH market rates.
-* [LoanManager.sol](./contracts/LoanManager.sol)
-    * Loan products and their parameters
-    * Maintains all loans: new loans, repayment, collection
-* [Locker.sol](./contracts/Lock.sol)
-    * Lock products and parameters
-    * Token fund locking and releaseing
+See [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
 ## Contribution
 

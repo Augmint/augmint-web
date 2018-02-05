@@ -39,8 +39,8 @@ class ScrollToTop extends React.Component {
 
 ScrollToTop = withRouter(ScrollToTop);
 
-ReactGA.initialize("UA-113188857-1");
-if (process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV === "production") {
+    ReactGA.initialize("UA-113188857-1");
     ReactGA.pageview(window.location.pathname);
 }
 

@@ -5,9 +5,9 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AugmintStats extends React.Component {
     render() {
-        const { showDetailsLink, augmintToken, rates, size, showInFiat } = this.props;
+        const { showDetailsLink, augmintToken, rates, size, showDetails } = this.props;
 
-        const bn_ethFiatRate = showInFiat ? rates.info.bn_ethFiatRate : null;
+        const bn_ethFiatRate = showDetails ? rates.info.bn_ethFiatRate : null;
         const { isConnected, isLoading, connectionError } = this.props.augmintToken;
 
         const {
@@ -16,7 +16,8 @@ export class AugmintStats extends React.Component {
             feeAccountAceBalance,
             interestEarnedAccountAceBalance,
             ethBalance,
-            bn_ethBalance
+            bn_ethBalance,
+            issuedByMonetaryBoard
         } = augmintToken.info;
 
         const ethBalanceInFiat =
@@ -30,11 +31,16 @@ export class AugmintStats extends React.Component {
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
                         <Statistic.Value>{totalSupply} A-EUR</Statistic.Value>
+                        {showDetails && (
+                            <p style={{ textAlign: "center" }}>
+                                {issuedByMonetaryBoard} A-EUR issued by Monetary Board
+                            </p>
+                        )}
                     </Statistic>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
                         <Statistic.Value>{ethBalance} ETH</Statistic.Value>
-                        {showInFiat && <p style={{ textAlign: "center" }}>({ethBalanceInFiat} EUR)</p>}
+                        {showDetails && <p style={{ textAlign: "center" }}>({ethBalanceInFiat} EUR)</p>}
                     </Statistic>
 
                     <Statistic style={{ padding: "1em" }}>

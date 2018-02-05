@@ -1,0 +1,3 @@
+[submodule "augmint-contracts"]
+	path = augmint-contracts
+	url = https://github.com/Augmint/augmint-contracts.git
