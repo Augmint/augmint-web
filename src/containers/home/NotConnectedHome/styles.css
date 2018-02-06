@@ -132,7 +132,8 @@ p {
     .ui.basic.segment.how-to-use,
     .ui.basic.segment.team,
     .ui.basic.segment.partner {
-        padding-right: 170px;
+        padding-left: 85px;
+        padding-right: 160px;
     }
 }
 
