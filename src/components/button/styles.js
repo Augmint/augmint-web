@@ -20,6 +20,7 @@ const BaseButton = `
     letter-spacing: 2.6px;
 
     :hover {
+        color: ${theme.colors.primary};
         box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);        
     }
 `;

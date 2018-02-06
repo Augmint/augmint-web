@@ -12,6 +12,7 @@ export const StyleNavList = styled.ul`
 
 export const StyleNavLink = styled(NavLink)`
     font-size: 13px;
+    letter-spacing: 2.6px;
     text-transform: uppercase;
     white-space: nowrap;
     color: ${ifProp('active', theme.colors.white, theme.colors.opacWhite)};
