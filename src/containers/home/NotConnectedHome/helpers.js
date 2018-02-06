@@ -193,6 +193,7 @@ export const teamMembers = [
         name: 'Karoly Szabo',
         imgSrc: kszabo,
         title: 'Founder, economist',
+        githubUrl:'https://github.com/krosza',
         description: "Károly is an entrepreneur with 30+ years’ management and financial experience. Managed small companies and medium sized organizations and companies. Having set up governmental agencies and business companies, supervised IT development projects. Worked a decade in the management of one of the of the largest Hungarian bank."
     },
     {
