@@ -5,6 +5,8 @@ Wrapper for the whole App
 import "semantic/dist/semantic.min.css";
 import "./site.css";
 
+import '../../styles/global';
+
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
