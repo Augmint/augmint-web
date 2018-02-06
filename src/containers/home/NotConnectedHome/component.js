@@ -136,10 +136,9 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", position: "fixed", top: 80 ,right: 0 , left: "unset", zIndex: "10" }}
+                            style={{ width: "auto", position: "fixed", top: 250 ,right: 0 , left: "unset", zIndex: "10" }}
                         >
                             <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
-                                <Header as="h5" content="USE A-EUR" textAlign="center" style={{ color: "#01385a", fontSize: 14 }}/>
                                 <div style={styles.howItWorksRail}>
                                   <div style={styles.howItWorksRailBox}>
                                     <div>1</div>
