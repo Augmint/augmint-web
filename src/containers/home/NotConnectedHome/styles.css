@@ -74,7 +74,9 @@ p {
     background: linear-gradient(rgba(53, 0, 55, 0) 0%,rgba(53, 0, 55, 1) 20%, rgba(53, 0, 55, 1) 80%, rgba(53, 0, 55, 0) 100%);
 }
 
-.team .grid .column>img {
+.team .grid .column>img,
+.partner .grid .column>img  {
+  background-color: #fff;
   filter: grayscale(100%);
   width: 120px;
   height: 120px;
@@ -92,15 +94,22 @@ p {
   margin-left: 10px;
 }
 
-.team .grid .column p.description {
+.team .grid .column p.description,
+.partner .grid .column p.description {
   font-size: 14px;
   font-weight: 200;
   letter-spacing: 1.1px;
   margin: 5px 0 0;
 }
 
+.partner .grid .column a {
+  color: #fff;
+  font-weight: 400;
+}
+
 @media (max-width: 767px) and (min-width: 320px) {
-  .team .grid .column>img {
+  .team .grid .column>img,
+  .partner .grid .column>img {
     margin-bottom: 15px;
   }
 
@@ -108,7 +117,8 @@ p {
     margin-top: 35px;
   }
 
-  .team .grid .column p.description {
+  .team .grid .column p.description,
+  .partner .grid .column p.description {
     margin-top: 25px;
   }
 }
@@ -120,7 +130,8 @@ p {
     }
 
     .ui.basic.segment.how-to-use,
-    .ui.basic.segment.team {
+    .ui.basic.segment.team,
+    .ui.basic.segment.partner {
         padding-right: 170px;
     }
 }

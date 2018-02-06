@@ -3,12 +3,13 @@ import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "seman
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, teamMembers } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, teamMembers, partners } from "./helpers.js";
 
 import "./styles.css";
 import * as styles from "./styles.js";
 import linkedinLogo from "assets/images/linkedin.png";
 import githubLogo from "assets/images/GitHub.png";
+import slackIcon from 'assets/images/slack-icon.svg';
 
 export default class NotConnectedHome extends React.Component {
     render() {
@@ -155,35 +156,55 @@ export default class NotConnectedHome extends React.Component {
                         </Responsive>
                     }
                 </Segment>
-                    <Segment basic textAlign="left" as="section" className="team">
-                      <Container>
-                        <Header as="h2">Team</Header>
-                        <Grid columns="equal">
-                            {teamMembers.map(member => (
-                                <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
-                                    <Image
-                                        src={member.imgSrc}
-                                        avatar
-                                        floated="left"
-                                    />
-                                    <Header as="h3">
-                                        {member.name}
-                                    </Header>
-                                    <Header as="h5" style={{ margin: "10px 0 0" }}>
-                                        {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
-                                        {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
-                                          <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
-                                        </Header>}
-                                        {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
-                                          <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
-                                        </Header>}
-                                    </Header>
-                                    {member.description && <p className="description"> {member.description} </p>}
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                      </Container>
-                    </Segment>
+                <Segment basic textAlign="left" as="section" className="team">
+                  <Container>
+                    <Header as="h2">Team</Header>
+                    <Grid columns="equal">
+                        {teamMembers.map(member => (
+                            <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
+                                <Image
+                                    src={member.imgSrc}
+                                    avatar
+                                    floated="left"
+                                />
+                                <Header as="h3">
+                                    {member.name}
+                                </Header>
+                                <Header as="h5" style={{ margin: "10px 0 0" }}>
+                                    {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
+                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
+                                      <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
+                                    </Header>}
+                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
+                                      <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
+                                    </Header>}
+                                </Header>
+                                {member.description && <p className="description"> {member.description} </p>}
+                            </Grid.Column>
+                        ))}
+                    </Grid>
+                  </Container>
+                </Segment>
+                <Segment basic textAlign="left" as="section" className="partner" style={{ marginTop: 50 }}>
+                  <Container>
+                    <Grid columns="equal">
+                        {partners.map(partner => (
+                            <Grid.Column mobile="16" computer="8" textAlign="left" key={partner.pk}>
+                                <Image
+                                    src={partner.imgSrc}
+                                    avatar
+                                    floated="left"
+                                />
+                                <Header as="h3">
+                                    {partner.name}
+                                </Header>
+                                {partner.description && <p className="description" dangerouslySetInnerHTML={{__html: partner.description}} style={{ marginBottom: 3 }} />}
+                                {partner.slackUrl && <a href={partner.slackUrl} target="_blank"><img alt="slack icon" src={slackIcon} style={{ height: 14, marginRight: 10, width: 14 }}/>{partner.slackText || "Join our slack."}</a>}
+                            </Grid.Column>
+                        ))}
+                    </Grid>
+                  </Container>
+                </Segment>
             </Segment>
         );
     }

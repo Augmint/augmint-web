@@ -29,6 +29,8 @@ import vszatmahry from 'assets/images/team/vszatmahry.jpg';
 import thume from 'assets/images/team/thume.jpg';
 import vkontra from 'assets/images/team/vkontra.jpg';
 
+import decent from 'assets/images/decent.png';
+
 export const keyFeatures = [
     {
         image: <StableIcon/>,
@@ -250,4 +252,15 @@ export const teamMembers = [
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
         description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis. ",
     }
+];
+
+export const partners = [
+    {
+        pk: 'partner-1',
+        name: 'Decent',
+        imgSrc: decent,
+        description: "Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.",
+        slackText: "Join Decent's slack.",
+        slackUrl: 'https://decent-slack-autoinvite.herokuapp.com'
+      }
 ];
