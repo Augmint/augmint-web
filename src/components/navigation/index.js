@@ -39,7 +39,7 @@ export function AppMenu(props) {
 
                     <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
                     {isConnected && (
-                        <AppMenuItem isActive={currentLocation === "/account"} to="/account">My Account</AppMenuItem>
+                        <AppMenuItem isActive={() => currentLocation === "/account"} to="/account">My Account</AppMenuItem>
                     )}
                     {isConnected && (
                         <AppMenuItem isActive={() => currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
