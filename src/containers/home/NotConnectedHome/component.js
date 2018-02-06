@@ -1,4 +1,6 @@
 import React from "react";
+
+import { throttle } from 'lodash';
 import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
@@ -14,14 +16,26 @@ import githubLogo from "assets/images/GitHub.png";
 export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
+        
+        this.scrollHandler = throttle(this.handleScroll.bind(this), 300);
         this.state = {
             transform: 0
         };
       }
     
     handleScroll(e) {
-        let scrollTop = document.documentElement.scrollTop,
-        itemTranslate = Math.ceil(scrollTop/ document.body.scrollHeight * window.innerHeight);
+        const howItWorksSectionRect = document.querySelector('.how-to-use').getBoundingClientRect();
+        const minPos = 200;
+        const maxPos = howItWorksSectionRect.height - 200;
+
+        const itemTranslate = 
+        Math.min(
+            maxPos,
+            Math.max(
+                minPos,
+                Math.ceil(-howItWorksSectionRect.y) + 200
+            )
+        );
     
         this.setState({
             transform: itemTranslate
@@ -29,11 +43,11 @@ export default class NotConnectedHome extends React.Component {
         
     }
     componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll.bind(this));
+        window.addEventListener('scroll', this.scrollHandler);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll.bind(this));
+        window.removeEventListener('scroll', this.scrollHandler);
     }
 
     render() {
@@ -161,7 +175,7 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", position: "fixed", top: this.state.transform, right: 0, left: "unset", zIndex: "10" }}
+                            style={{ width: "auto", position: "absolute", transform: `translateY(${this.state.transform}px)`, zIndex: "2", transition: 'transform 0.3s linear', }}
                         >
                             <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
                                 <div style={styles.howItWorksRail}>
