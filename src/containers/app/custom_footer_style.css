@@ -53,6 +53,20 @@
   margin: 0 25px;
 }
 
+.Site-footer .footer .contact-list.list .item a.content {
+  color: rgba(255, 255, 255, .5) !important;
+  padding-left: 3px;
+}
+
+.Site-footer .footer .contact-list.list .item:hover a.content,
+.Site-footer .footer .contact-list.list .item:hover i {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+.Site-footer .footer .contact-list.list .item i {
+  padding-right: 0;
+}
+
 .Site-footer .footer .contact-list.list:first-child {
   margin-left: 0;
 }
@@ -68,7 +82,7 @@
 }
 
 .Site-footer .footer .subscribe {
-  margin: 35px 0;
+  margin: 35px 0 0;
 }
 
 .Site-footer .footer .subscribe label {
@@ -111,6 +125,34 @@
 .Site-footer .footer .subscribe .success.message {
   margin: auto;
   max-width: 397px;
+}
+
+.Site-footer .footer .partner {
+  display: inline-block;
+  margin: 15px 0;
+}
+.Site-footer .footer .partner img {
+  background-color: #fff;
+  border-radius: 500rem;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin: 0 10px 0 0;
+}
+
+.Site-footer .footer .partner h5 {
+  display: inline-block;
+  font-size: 14px;
+  height: 30px;
+  line-height: 30px;
+  margin: 0;
+}
+
+.Site-footer .footer .partner a {
+  color: #fff;
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {

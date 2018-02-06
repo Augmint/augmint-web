@@ -21,6 +21,7 @@ import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import NotConnectedHome from "containers/home/NotConnectedHome/component";
+import Contact from "containers/contact/contact";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "components/navigation";
 import { AppFooter } from "containers/app/AppFooter";
@@ -64,6 +65,7 @@ class App extends React.Component {
                         <Route exact path="/tryit" component={TryIt} />
                         <Route exact path="/aboutus" component={AboutUs} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
+                        <Route exact path="/contact" component={Contact} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>
