@@ -10,7 +10,32 @@ import * as styles from "./styles.js";
 import linkedinLogo from "assets/images/linkedin.png";
 import githubLogo from "assets/images/GitHub.png";
 
+
 export default class NotConnectedHome extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            transform: 0
+        };
+      }
+    
+    handleScroll(e) {
+        let scrollTop = document.documentElement.scrollTop,
+        itemTranslate = Math.ceil(scrollTop/ document.body.scrollHeight * window.innerHeight);
+    
+        this.setState({
+            transform: itemTranslate
+        });
+        
+    }
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll.bind(this));
+    }
+
     render() {
         return (
             <Segment basic as="article">
@@ -136,7 +161,7 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", position: "fixed", top: 250 ,right: 0 , left: "unset", zIndex: "10" }}
+                            style={{ width: "auto", position: "fixed", top: this.state.transform, right: 0, left: "unset", zIndex: "10" }}
                         >
                             <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
                                 <div style={styles.howItWorksRail}>
