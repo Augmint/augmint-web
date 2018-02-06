@@ -19,10 +19,12 @@ export default class NotConnectedHome extends React.Component {
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
                                 Augmint offers digital tokens, each pegged to a fiat currency.
+                                Augmint offers digital tokens pegged to a fiat currency.
                                 <br />
                                 The first Augmint token is <nobr>A-EUR</nobr>, pegged to Euro.
                                 <br />
                                 Stored securely in a decentralised way, stable crypto tokens are instantly transferable
+                                Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
                             </Header>
                         </header>
