@@ -53,6 +53,20 @@
   margin: 0 25px;
 }
 
+.Site-footer .footer .contact-list.list .item a.content {
+  color: rgba(255, 255, 255, .5) !important;
+  padding-left: 3px;
+}
+
+.Site-footer .footer .contact-list.list .item:hover a.content,
+.Site-footer .footer .contact-list.list .item:hover i {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+.Site-footer .footer .contact-list.list .item i {
+  padding-right: 0;
+}
+
 .Site-footer .footer .contact-list.list:first-child {
   margin-left: 0;
 }
