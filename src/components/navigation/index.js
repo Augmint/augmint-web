@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
+import Button from "../button";
 
 import {StyleNavLink, StyleNavItem, StyleNavList, StyledLogoContainer, StyledNavContainer, StyledLogo} from './styles';
 
@@ -47,7 +47,7 @@ export function AppMenu(props) {
                     )
                     }
                 </StyleNavList>
-                <Button id="useAEurButton" to="/tryit">
+                <Button type="a" id="useAEurButton" to="/tryit" color="primary">
                     Use A-EUR
                 </Button>
             </StyledNavContainer>

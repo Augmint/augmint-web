@@ -7,6 +7,7 @@ import theme from '../../styles/theme';
 
 export const StyleNavList = styled.ul`
     display: flex;
+    padding: 0;
 `;
 
 export const StyleNavLink = styled(NavLink)`
@@ -39,9 +40,10 @@ export const StyleNavItem = styled.li`
     export const StyledNavContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     position: fixed;
-    width: 98%;
-    margin: 0 1%;
+    width: 100%;
+    padding: 0 15px;
     z-index: 3;
     background-color: ${theme.colors.primary};
 `
