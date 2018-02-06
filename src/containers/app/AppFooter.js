@@ -4,6 +4,7 @@ import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
+import decent from 'assets/images/decent.png';
 
 import "./custom_footer_style.css";
 
@@ -66,6 +67,10 @@ export function AppFooter(props) {
                     />
                 </List>
                 <Subscribe />
+                <div class="partner">
+                  <img src={decent} alt="Decent logo" />
+                  <h5>Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.</h5>
+                </div>
             </Container>
         </Segment>
     );
