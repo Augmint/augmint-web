@@ -3,6 +3,8 @@ import { ifProp } from 'styled-tools';
 
 import { NavLink } from "react-router-dom";
 
+import theme from '../../styles/theme';
+
 export const StyleNavList = styled.ul`
     display: flex;
 `;
@@ -11,20 +13,39 @@ export const StyleNavLink = styled(NavLink)`
     font-size: 13px;
     text-transform: uppercase;
     white-space: nowrap;
-    color: ${ifProp('active', 'white', 'grey')};
+    color: ${ifProp('active', theme.colors.white, theme.colors.opacWhite)};
+
+    transition: color ${theme.transitions.standard};
 
     &:hover {
-        color: white;
+        color: ${theme.colors.white};
     }
 `;
 
 export const StyleNavItem = styled.li`
     display: flex;
     padding: 15px 5px;
-    margin: 0 5px;
-`;
-
-export const StyledLogoContainer = styled.div`
+    
+    & + li {
+        margin-left: 8px;
+    }
+    `;
+    
+    export const StyledLogoContainer = styled.div`
     display: flex;
     justify-content: center;
+    `;
+    
+    export const StyledNavContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    width: 98%;
+    margin: 0 1%;
+    z-index: 3;
+    background-color: ${theme.colors.primary};
+`
+
+export const StyledLogo = styled.img`
+    margin-top: 80px;
 `;
