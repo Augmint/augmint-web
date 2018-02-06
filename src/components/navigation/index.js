@@ -1,7 +1,14 @@
 import React from "react";
 import Button from "../button";
 
-import {StyleNavLink, StyleNavItem, StyleNavList, StyledLogoContainer, StyledNavContainer, StyledLogo} from './styles';
+import {
+    StyleNavLink,
+    StyleNavItem,
+    StyleNavList,
+    StyledLogoContainer,
+    StyledNavContainer,
+    StyledLogo
+} from './styles';
 
 
 import augmintLogo from "assets/images/logo/logo.png";
@@ -28,22 +35,22 @@ export function AppMenu(props) {
         <div>
             <StyledNavContainer>
                 <StyleNavList>
-                    <AppMenuItem active={currentLocation === "/"} to="/">Home</AppMenuItem>
+                    <AppMenuItem isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
 
-                    <AppMenuItem active={currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
+                    <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
                     {isConnected && (
-                        <AppMenuItem active={currentLocation === "/account"} to="/account">My Account</AppMenuItem>
+                        <AppMenuItem isActive={currentLocation === "/account"} to="/account">My Account</AppMenuItem>
                     )}
                     {isConnected && (
-                        <AppMenuItem active={currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
+                        <AppMenuItem isActive={() => currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
                     )
                     }
                     {isConnected && (
-                        <AppMenuItem active={currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
+                        <AppMenuItem isActive={() => currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
                     )
                     }
                     {isConnected && (
-                        <AppMenuItem active={currentLocation === "/reserves"} to="/reserves">Reserves</AppMenuItem>
+                        <AppMenuItem isActive={() => currentLocation === "/reserves"} to="/reserves">Reserves</AppMenuItem>
                     )
                     }
                 </StyleNavList>

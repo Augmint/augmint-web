@@ -19,7 +19,8 @@ export const StyleNavLink = styled(NavLink)`
 
     transition: color ${theme.transitions.standard};
 
-    &:hover {
+    &:hover,
+    &.active {
         color: ${theme.colors.white};
     }
 `;
