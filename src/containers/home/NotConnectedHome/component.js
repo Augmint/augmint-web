@@ -18,12 +18,10 @@ export default class NotConnectedHome extends React.Component {
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
-                                Augmint offers digital tokens, each pegged to a fiat currency.
                                 Augmint offers digital tokens pegged to a fiat currency.
                                 <br />
-                                The first Augmint token is <nobr>A-EUR</nobr>, pegged to Euro.
+                                The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
                                 <br />
-                                Stored securely in a decentralised way, stable crypto tokens are instantly transferable
                                 Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
                             </Header>
@@ -94,7 +92,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">Buy and sell A-EUR</Header>
+                        <Header as="h2">Buy and sell A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
@@ -106,7 +104,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">How to use your A-EUR</Header>
+                        <Header as="h2">How to use your A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
