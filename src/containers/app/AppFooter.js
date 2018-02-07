@@ -17,7 +17,7 @@ const segmentStyle = {
 export function AppFooter(props) {
     let community = "WE'RE AN ACTIVE COMUNITY",
         description =
-            "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance stucture - anyone can join at any time.";
+            "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance structure - anyone can join at any time.";
 
     return (
         <Segment basic textAlign="center" className="footer" style={segmentStyle}>
