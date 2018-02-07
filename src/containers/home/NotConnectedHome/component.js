@@ -77,7 +77,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.keyFeaturesSegment} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h3" style={styles.keyFeaturesHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -127,7 +127,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h3" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -139,7 +139,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -151,7 +151,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -163,7 +163,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
