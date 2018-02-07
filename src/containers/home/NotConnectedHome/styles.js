@@ -6,8 +6,8 @@ export const keyFeaturesSegment = {
 
 export const useAEurButton = {
     backgroundColor: 'white',
-    borderTopLeftRadius: '14px',
-    borderBottomLeftRadius: '14px',
+    borderTopRightRadius: '14px',
+    borderBottomRightRadius: '14px',
     color: '#01385a',
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +19,7 @@ export const howItWorksRail = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
 };
 
 export const howItWorksRailBox = {

@@ -5,6 +5,8 @@ Wrapper for the whole App
 import "semantic/dist/semantic.min.css";
 import "./site.css";
 
+import '../../styles/global';
+
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
@@ -21,7 +23,7 @@ import UnderTheHood from "containers/underthehood";
 import NotConnectedHome from "containers/home/NotConnectedHome/component";
 import Contact from "containers/contact/contact";
 import { PageNotFound } from "containers/PageNotFound";
-import { AppMenu } from "containers/app/AppMenu";
+import { AppMenu } from "components/navigation";
 import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
 
