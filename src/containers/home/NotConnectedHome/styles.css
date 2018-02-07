@@ -10,7 +10,7 @@ article.ui.basic.segment {
 .key-features__header {
     margin-left: auto;
     margin-right: auto;
-    max-width: 620px;
+    max-width: 650px;
 }
 
 h2,
@@ -37,6 +37,12 @@ h3,
 h3.ui.header {
     font-size: 26px;
     line-height: 26px;
+}
+
+h4,
+h4.ui.header {
+    font-weight: 200;
+    font-size: 18px;
 }
 
 h5,
@@ -69,10 +75,61 @@ p {
 }
 
 .ui.basic.segment.how-to-use {
+    position: relative;
     padding-top: 200px;
     padding-bottom: 200px;
     background: linear-gradient(rgba(53, 0, 55, 0) 0%,rgba(53, 0, 55, 1) 20%, rgba(53, 0, 55, 1) 80%, rgba(53, 0, 55, 0) 100%);
 }
+
+.team .grid .column>img,
+.partner .grid .column>img  {
+  background-color: #fff;
+  filter: grayscale(100%);
+  width: 120px;
+  height: 120px;
+  margin-bottom: 70px;
+  margin-right: 30px;
+}
+
+.team .grid .column h3 {
+  margin: 0;
+}
+
+.team .grid .column h5 a.social {
+  height: 20px;
+  line-height: 20px;
+  margin-left: 10px;
+}
+
+.team .grid .column p.description,
+.partner .grid .column p.description {
+  font-size: 14px;
+  font-weight: 200;
+  letter-spacing: 1.1px;
+  margin: 5px 0 0;
+}
+
+.partner .grid .column a {
+  color: #fff;
+  font-weight: 400;
+}
+
+@media (max-width: 767px) and (min-width: 320px) {
+  .team .grid .column>img,
+  .partner .grid .column>img {
+    margin-bottom: 15px;
+  }
+
+  .team .grid .column h3 {
+    margin-top: 35px;
+  }
+
+  .team .grid .column p.description,
+  .partner .grid .column p.description {
+    margin-top: 25px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1455px) {
     .key-features .ui.equal.width.grid,
     section.advantages.ui.segment {
@@ -81,7 +138,11 @@ p {
 
     .ui.basic.segment.how-to-use,
     .ui.basic.segment.team {
-        padding-right: 170px;
+        padding-left: 190px;
+    }
+    .ui.basic.segment.team,
+    .ui.basic.segment.partner {
+        padding-left: 85px;
     }
 }
 
@@ -89,7 +150,8 @@ p {
     margin-bottom: 100px;
 }
 
-.ui.basic.segment.how-to-use h5.ui.header {
+.ui.basic.segment.how-to-use h5.ui.header,
+.ui.basic.segment.how-to-use h2.ui.header {
     margin-top: 5px;
 }
 

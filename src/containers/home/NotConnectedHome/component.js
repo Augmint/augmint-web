@@ -1,16 +1,56 @@
 import React from "react";
+
+import { throttle } from 'lodash';
 import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, teamMembers } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, teamMembers, partners } from "./helpers.js";
 
 import "./styles.css";
 import * as styles from "./styles.js";
 import linkedinLogo from "assets/images/linkedin.png";
 import githubLogo from "assets/images/GitHub.png";
+import slackIcon from 'assets/images/slack-icon.svg';
+
 
 export default class NotConnectedHome extends React.Component {
+    constructor() {
+        super();
+        
+        this.scrollHandler = throttle(this.handleScroll.bind(this), 300);
+        this.state = {
+            transform: 0
+        };
+      }
+    
+    handleScroll(e) {
+        const howItWorksSectionRect = document.querySelector('.how-to-use').getBoundingClientRect();
+        const minPos = 200;
+        const maxPos = howItWorksSectionRect.height - 200;
+
+        const itemTranslate = 
+        Math.min(
+            maxPos,
+            Math.max(
+                minPos,
+                Math.ceil(-howItWorksSectionRect.y) + 200
+            )
+        );
+    
+        this.setState({
+            transform: itemTranslate
+        });
+        
+    }
+    componentDidMount() {
+        window.addEventListener('scroll', this.scrollHandler);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.scrollHandler);
+    }
+
     render() {
         return (
             <Segment basic as="article">
@@ -18,11 +58,11 @@ export default class NotConnectedHome extends React.Component {
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h1" size="large">
-                                Augmint offers digital tokens, each pegged to a fiat currency.
+                                Augmint offers digital tokens pegged to a fiat currency.
                                 <br />
-                                The first Augmint token is <nobr>A-EUR</nobr>, pegged to Euro.
+                                The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
                                 <br />
-                                Stored securely in a decentralised way, stable crypto tokens are instantly transferable
+                                Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
                             </Header>
                         </header>
@@ -37,7 +77,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.keyFeaturesSegment} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h3" style={styles.keyFeaturesHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -87,31 +127,31 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h3" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">Buy and sell A-EUR</Header>
+                        <Header as="h2">Buy and sell A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Header as="h2">How to use your A-EUR</Header>
+                        <Header as="h2">How to use your A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -123,7 +163,7 @@ export default class NotConnectedHome extends React.Component {
                                     <Segment style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h5">{feature.title}</Header>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
                                     <p className="opac">{feature.text}</p>
                                 </Grid.Column>
                             ))}
@@ -136,10 +176,9 @@ export default class NotConnectedHome extends React.Component {
                             attached
                             internal
                             position="left"
-                            style={{ width: "auto", position: "fixed", top: 80 ,right: 0 , left: "unset", zIndex: "10" }}
+                            style={{ width: "auto", position: "absolute", transform: `translateY(${this.state.transform}px)`, zIndex: "2", transition: 'transform 0.3s linear', }}
                         >
                             <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
-                                <Header as="h5" content="USE A-EUR" textAlign="center" style={{ color: "#01385a", fontSize: 14 }}/>
                                 <div style={styles.howItWorksRail}>
                                   <div style={styles.howItWorksRailBox}>
                                     <div>1</div>
@@ -155,40 +194,55 @@ export default class NotConnectedHome extends React.Component {
                         </Responsive>
                     }
                 </Segment>
-                    <Segment basic textAlign="left" as="section" className="team">
-                      <Container>
-                        <Header as="h2">Team</Header>
-                        <Grid columns="equal">
-                            {teamMembers.map(member => (
-                                <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
-                                    <Image
-                                        style={{
-                                            filter: "grayscale(100%)",
-                                            width: "120px",
-                                            height: "120px",
-                                            marginRight: "36px"
-                                        }}
-                                        src={member.imgSrc}
-                                        avatar
-                                        floated="left"
-                                    />
-                                    <Header as="h3" style={{ margin: "30px 0 0" }}>
-                                        {member.name}
-                                    </Header>
-                                    <Header as="h5" style={{ margin: "10px 0 0" }}>
-                                        {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
-                                    </Header>
-                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank">
-                                        <Image basic src={linkedinLogo} style={{width: 14}}/>
+                <Segment basic textAlign="left" as="section" className="team">
+                  <Container>
+                    <Header as="h2">Team</Header>
+                    <Grid columns="equal">
+                        {teamMembers.map(member => (
+                            <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
+                                <Image
+                                    src={member.imgSrc}
+                                    avatar
+                                    floated="left"
+                                />
+                                <Header as="h3">
+                                    {member.name}
+                                </Header>
+                                <Header as="h5" style={{ margin: "10px 0 0" }}>
+                                    {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
+                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
+                                      <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
                                     </Header>}
-                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank">
-                                        <Image basic src={githubLogo} style={{width: 14}}/>
+                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
+                                      <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
                                     </Header>}
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                      </Container>
-                    </Segment>
+                                </Header>
+                                {member.description && <p className="description"> {member.description} </p>}
+                            </Grid.Column>
+                        ))}
+                    </Grid>
+                  </Container>
+                </Segment>
+                <Segment basic textAlign="left" as="section" className="partner" style={{ marginTop: 50 }}>
+                  <Container>
+                    <Grid columns="equal">
+                        {partners.map(partner => (
+                            <Grid.Column mobile="16" computer="8" textAlign="left" key={partner.pk}>
+                                <Image
+                                    src={partner.imgSrc}
+                                    avatar
+                                    floated="left"
+                                />
+                                <Header as="h3">
+                                    {partner.name}
+                                </Header>
+                                {partner.description && <p className="description" dangerouslySetInnerHTML={{__html: partner.description}} style={{ marginBottom: 3 }} />}
+                                {partner.slackUrl && <a href={partner.slackUrl} target="_blank"><img alt="slack icon" src={slackIcon} style={{ height: 14, marginRight: 10, width: 14 }}/>{partner.slackText || "Join our slack."}</a>}
+                            </Grid.Column>
+                        ))}
+                    </Grid>
+                  </Container>
+                </Segment>
             </Segment>
         );
     }

@@ -13,7 +13,7 @@ export default () => (
             <List.Item as="a" href={"#how-it-works"} content="HOW IT WORKS" />
             <List.Item as="a" href={"#governance"} content="GOVERNANCE" />
         </List>
-        <Segment basiv basic as="section">
+        <Segment basic as="section">
             <Segment basic as="h2" className="header" content="Overview" id={"overview"} />
             <Grid divided="vertically" basic>
                 <Grid.Row columns={2}>
