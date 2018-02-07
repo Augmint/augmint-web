@@ -4,6 +4,17 @@ export const keyFeaturesSegment = {
     alignItems: 'center',
 };
 
+export const keyFeaturesHeader = {
+    marginBottom: '14px',
+    textTransform: 'uppercase',
+};
+
+export const howToUseHeader = {
+    marginBottom: '14px',
+    marginTop: '5px',
+    textTransform: 'uppercase',
+};
+
 export const useAEurButton = {
     backgroundColor: 'white',
     borderTopRightRadius: '14px',
