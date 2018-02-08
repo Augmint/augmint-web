@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, List, Segment, Image, Grid } from "semantic-ui-react";
+import Scrollchor from 'react-scrollchor';
 
 import "./style.css";
 import whitePaper from "assets/images/white-paper.png";
@@ -9,9 +10,15 @@ import manifesto from "assets/images/manifesto.png";
 export default () => (
     <Segment basic textAlign="center" as="article" className="concept">
         <List horizontal inverted divided link>
-            <List.Item as="a" href={"#overview"} content="OVERVIEW" />
-            <List.Item as="a" href={"#how-it-works"} content="HOW IT WORKS" />
-            <List.Item as="a" href={"#governance"} content="GOVERNANCE" />
+            <List.Item>
+                <Scrollchor to="#overview">OVERVIEW</Scrollchor>
+            </List.Item>
+            <List.Item>
+                <Scrollchor to="#how-it-works">HOW IT WORKS</Scrollchor>
+            </List.Item>
+            <List.Item>
+                <Scrollchor to="#governance">GOVERNANCE</Scrollchor>
+            </List.Item>
         </List>
         <Segment basic as="section">
             <Segment basic as="h2" className="header" content="Overview" id={"overview"} />

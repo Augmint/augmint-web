@@ -81,14 +81,18 @@ article.concept section.ui.segment.green-gradient {
   max-width: 499px;
 }
 
-.Site-content article section.ui.segment.green-gradient p a {
-  color: #fff;
+.Site-content article section.ui.segment.green-gradient p a,
+article.concept .ui.horizontal.link.list>.item a:hover {
+  color: #fff !important;
   font-weight: bold;
+}
+
+article.concept .ui.horizontal.link.list>.item a {
+  color: rgba(255,255,255,.6) !important;
 }
 
 article.concept .ui.horizontal.list>.item {
   border: none;
-  color: rgba(255,255,255,.6);
   font-weight: 200;
   letter-spacing: 2.4px;
   margin: 0 16px;
