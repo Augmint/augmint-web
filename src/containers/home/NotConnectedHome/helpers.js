@@ -228,6 +228,7 @@ export const teamMembers = [
         title: 'Blockchain developer',
         linedinUrl:'https://www.linkedin.com/in/ben-jackson-0686a896',
         githubUrl:'https://github.com/BYossarian',
+        description: 'Software developer, and former mathematician, who loves the wild west of decentralised technologies.',
     },
     {
         pk: 'team-7',
