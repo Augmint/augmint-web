@@ -1,0 +1,32 @@
+.manifesto {
+  margin: auto;
+  margin-top: 20px;
+  text-align: center;
+  width: auto;
+  max-width: 1127px;
+}
+
+.manifesto h3,
+.manifesto h4 {
+  color: #ffab40;
+  font-weight: 400;
+}
+
+.manifesto p,
+.manifesto h4,
+.manifesto ol {
+  margin: auto;
+  margin-bottom: 14px;
+  text-align: justify;
+  max-width: 735px;
+}
+
+.manifesto li {
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  .manifesto {
+    margin: auto 14px;
+  }
+}

@@ -141,8 +141,7 @@ export default () => (
                     <Segment
                         basic
                         as="a"
-                        href="https://docs.google.com/document/d/1snkS-vp-IJyRBoUvi2FC4q-652PO2eVprnv2tbICZBk/edit"
-                        target="_blank"
+                        href="/manifesto"
                     >
                         <h5>MANIFESTO</h5>
                         <Image basic src={manifesto} />
