@@ -179,7 +179,7 @@ article.concept .ui.horizontal.list:last-child {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1801px) {
   article.concept section.ui.segment {
     padding: 0 390px;
   }
