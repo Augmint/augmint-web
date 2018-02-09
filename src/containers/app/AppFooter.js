@@ -11,7 +11,9 @@ import "./custom_footer_style.css";
 const segmentStyle = {
     background: "url(" + backgroundImg + ")",
     backgroundPosition: "top",
-    backgroundSize: "cover"
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    minHeight: 500,
 };
 
 export function AppFooter(props) {
