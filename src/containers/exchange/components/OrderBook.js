@@ -23,7 +23,7 @@ const OrderItem = props => {
             <MoreInfoTip>
                 Maker: {order.maker}
                 <br />Time: {order.addedTimeText}
-                <br />Order Id: {order.id} | index: {order.index}
+                <br />Order Id: {order.id}
             </MoreInfoTip>
             {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}
         </Col>
@@ -70,13 +70,7 @@ const OrderList = props => {
         <MyListGroup>
             <Row textAlign="center" columns={2}>
                 <Col header="Buy A-EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
-                <Col header="Sell A-EUR">
-                    {totalSellAmount > 0 && (
-                        <p>
-                            Total: {totalSellAmount} A-EUR
-                        </p>
-                    )}
-                </Col>
+                <Col header="Sell A-EUR">{totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}</Col>
             </Row>
             <Row columns={7} textAlign="center">
                 <Col width={3}>

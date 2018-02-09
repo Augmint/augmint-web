@@ -11,41 +11,54 @@ export async function fetchOrders() {
     try {
         const exchange = store.getState().exchange;
 
-        const orderCounts = await exchange.contract.instance.getOrderCounts();
-        const sellCount = orderCounts[0].toNumber();
-        const buyCount = orderCounts[1].toNumber();
+        const orderCounts = await exchange.contract.instance.getActiveOrderCounts();
+        const buyCount = orderCounts[0].toNumber();
+        const sellCount = orderCounts[1].toNumber();
         // retreive all orders
         let buyOrders = [];
-        let sellOrders = [];
-        const queryCount = Math.ceil((sellCount + buyCount) / 50);
+        let queryCount = Math.ceil(buyCount / exchange.info.chunkSize);
         for (let i = 0; i < queryCount; i++) {
-            const fetchedOrders = await getOrders(i * 50);
+            const fetchedOrders = await getOrders(TOKEN_BUY, i * exchange.info.chunkSize);
             buyOrders = buyOrders.concat(fetchedOrders.buyOrders);
+        }
+
+        let sellOrders = [];
+        queryCount = Math.ceil(sellCount / exchange.info.chunkSize);
+        for (let i = 0; i < queryCount; i++) {
+            const fetchedOrders = await getOrders(TOKEN_SELL, i * exchange.info.chunkSize);
             sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
         }
+
         return { buyOrders: buyOrders, sellOrders: sellOrders };
     } catch (error) {
         throw new Error("fetchOrders failed.\n" + error);
     }
 }
 
-async function getOrders(offset) {
+async function getOrders(orderType, offset) {
     const exchange = store.getState().exchange.contract.instance;
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
-    const result = await exchange.getOrders(offset, { gas: blockGasLimit });
+
+    let result;
+    if (orderType === TOKEN_BUY) {
+        result = await exchange.getActiveBuyOrders(offset, { gas: blockGasLimit });
+    } else {
+        result = await exchange.getActiveSellOrders(offset, { gas: blockGasLimit });
+    }
+
     const web3 = store.getState().web3Connect.web3Instance;
-    // result format: [maker] [id, addedTime, price, tokenAmount, weiAmount]
-    const orders = result[0].reduce(
+    // result format: [id, maker, addedTime, price, amount]
+
+    const orders = result.reduce(
         (res, order, idx) => {
-            if (order[2].toString() !== "0") {
+            if (!order[3].eq(0)) {
                 const parsed = {
-                    index: order[0].toNumber(),
-                    id: order[1].toNumber(),
+                    id: order[0].toNumber(),
+                    maker: "0x" + order[1].toString(16), // ethers.utils.hexlify(order[1].toString(16)),
                     addedTime: order[2].toNumber(),
                     bn_price: order[3],
-                    tokenAmount: order[4],
-                    weiAmount: order[5],
-                    maker: result[1][idx]
+                    tokenAmount: orderType === TOKEN_BUY ? new BigNumber(0) : order[4],
+                    weiAmount: orderType === TOKEN_SELL ? new BigNumber(0) : order[4]
                 };
                 parsed.addedTimeText = moment.unix(parsed.addedTime).format("D MMM YYYY HH:mm:ss");
                 parsed.price = parsed.bn_price.div(10000).toNumber();
@@ -64,7 +77,6 @@ async function getOrders(offset) {
                     res.sellOrders.push(parsed);
                 }
             }
-
             return res;
         },
         { buyOrders: [], sellOrders: [] }
