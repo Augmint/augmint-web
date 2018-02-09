@@ -178,7 +178,7 @@ export default class NotConnectedHome extends React.Component {
                             position="left"
                             style={{ width: "auto", position: "absolute", transform: `translateY(${this.state.transform}px)`, zIndex: "2", transition: 'transform 0.3s linear', }}
                         >
-                            <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
+                            <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
                                 <div style={styles.howItWorksRail}>
                                   <div style={styles.howItWorksRailBox}>
                                     <div>1</div>

@@ -54,7 +54,7 @@ export function AppMenu(props) {
                     )
                     }
                 </StyleNavList>
-                <Button type="a" id="useAEurButton" to="/tryit" color="primary">
+                <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
                     Use A-EUR
                 </Button>
             </StyledNavContainer>
