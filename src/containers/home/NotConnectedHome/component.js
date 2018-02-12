@@ -71,7 +71,7 @@ export default class NotConnectedHome extends React.Component {
                             <BalanceIcon />
                         </div>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyFeatures.map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="center" key={feature.title}>
                                     <Segment style={styles.keyFeaturesSegment} basic>
@@ -88,7 +88,7 @@ export default class NotConnectedHome extends React.Component {
                             Great for business
                         </Header>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyBenefits.filter(item => item.type === "business").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">
@@ -102,7 +102,7 @@ export default class NotConnectedHome extends React.Component {
                             And for individuals
                         </Header>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyBenefits.filter(item => item.type === "individual").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">

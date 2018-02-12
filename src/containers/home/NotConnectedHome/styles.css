@@ -131,11 +131,6 @@ p {
 }
 
 @media (min-width: 768px) and (max-width: 1455px) {
-    .key-features .ui.equal.width.grid,
-    section.advantages.ui.segment {
-      padding-right: 96px;
-    }
-
     .ui.basic.segment.how-to-use,
     .ui.basic.segment.team {
         padding-left: 190px;
