@@ -5,8 +5,9 @@
   position: absolute;
   width: 100%;
 }
+
 .Site-footer .footer>div {
-  margin-top: 150px;
+  margin-top: 15%;
 }
 
 .Site-footer .footer .title {
@@ -152,8 +153,17 @@
   font-weight: 400;
 }
 
+@media (max-width: 1200px) {
+  .Site-footer .footer>div {
+    margin-top: 200px;
+  }
+}
+
 @media (max-width: 768px) {
   .Site-footer .footer .contact-list.list>.item {
     margin: 0;
+  }
+  .Site-footer .footer>div {
+    margin-top: 150px;
   }
 }
