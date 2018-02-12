@@ -55,6 +55,11 @@ export function AppFooter(props) {
                     />
                     <List.Item
                         as="a"
+                        href="/manifesto"
+                        content="MANIFESTO"
+                    />
+                    <List.Item
+                        as="a"
                         href="/contact"
                         content="CONTACT"
                     />
