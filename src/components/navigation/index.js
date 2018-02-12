@@ -30,6 +30,8 @@ export function AppMenu(props) {
     const { location } = props;
 
     const currentLocation = location.pathname;
+    const isNotTryItPage = currentLocation !== "/tryit";
+    const showConnection = !(currentLocation === "/" || currentLocation === "/concept");
 
     return (
         <div>
@@ -54,9 +56,21 @@ export function AppMenu(props) {
                     )
                     }
                 </StyleNavList>
-                <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
-                    Use A-EUR
-                </Button>
+                {(isNotTryItPage && !isConnected ) && (
+                    <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
+                        Use A-EUR
+                    </Button>
+                )}
+                {isConnected && (
+                  <div>
+                      Connected on {network.name}
+                  </div>
+                )}
+                {( showConnection && !isConnected ) && (
+                    <div>
+                        Not connected
+                    </div>
+                )}
             </StyledNavContainer>
             <StyledLogoContainer>
 
