@@ -31,7 +31,7 @@ export function AppMenu(props) {
 
     const currentLocation = location.pathname;
     const isNotTryItPage = currentLocation !== "/tryit";
-    const showConnection = !(currentLocation === "/" || currentLocation === "/concept");
+    const showConnection = (["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
 
     return (
         <div>
@@ -56,7 +56,7 @@ export function AppMenu(props) {
                     )
                     }
                 </StyleNavList>
-                {(isNotTryItPage && !isConnected ) && (
+                {(!showConnection && !isConnected ) && (
                     <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
                         Use A-EUR
                     </Button>
