@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { throttle } from 'lodash';
-import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
+import { Header, Container, Grid, Segment, Rail, Responsive, Image, Button } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
@@ -17,19 +18,19 @@ import slackIcon from 'assets/images/slack-icon.svg';
 export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
-        
+
         this.scrollHandler = throttle(this.handleScroll.bind(this), 300);
         this.state = {
             transform: 0
         };
       }
-    
+
     handleScroll(e) {
         const howItWorksSectionRect = document.querySelector('.how-to-use').getBoundingClientRect();
         const minPos = 200;
         const maxPos = howItWorksSectionRect.height - 200;
 
-        const itemTranslate = 
+        const itemTranslate =
         Math.min(
             maxPos,
             Math.max(
@@ -37,11 +38,11 @@ export default class NotConnectedHome extends React.Component {
                 Math.ceil(-howItWorksSectionRect.y) + 200
             )
         );
-    
+
         this.setState({
             transform: itemTranslate
         });
-        
+
     }
     componentDidMount() {
         window.addEventListener('scroll', this.scrollHandler);
@@ -132,6 +133,9 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                         <Header as="h2">Buy and sell A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
@@ -144,8 +148,11 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                         <Header as="h2">How to use your A-Euro</Header>
-                        <Grid columns="equal">
+                        <Grid columns="equal" className="margin">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
                                     <Segment style={styles.howItWorksImage} basic>
@@ -168,6 +175,9 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                     </Container>
                     {
                         <Responsive
