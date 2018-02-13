@@ -172,7 +172,7 @@ export const howItWorks = [
         image: <PremiumIcon/>,
         type: 'lock',
         title: 'Get premium',
-        text: 'Your locked amount including your premium is available.',
+        text: 'Your unlocked amount including your premium is available.',
     },
 
 
