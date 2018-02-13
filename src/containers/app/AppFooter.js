@@ -60,6 +60,11 @@ export function AppFooter(props) {
                     />
                     <List.Item
                         as="a"
+                        href="/disclaimer"
+                        content="DISCLAIMER"
+                    />
+                    <List.Item
+                        as="a"
                         href="/contact"
                         content="CONTACT"
                     />
