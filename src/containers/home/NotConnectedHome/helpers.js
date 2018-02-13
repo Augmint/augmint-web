@@ -178,27 +178,33 @@ export const howItWorks = [
 
 ];
 
+export const founders = [
+  {
+    pk: 'team-1',
+    firstName: 'Peter',
+    lastName: 'Petrovics',
+    imgSrc: petrovics,
+    title: 'Founder, technologist',
+    linedinUrl:'https://www.linkedin.com/in/petrovics',
+    githubUrl:'https://github.com/szerintedmi',
+    description: "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook.",
+  },
+  {
+    pk: 'team-2',
+    firstName: 'Karoly',
+    lastName: 'Szabo',
+    imgSrc: kszabo,
+    title: 'Founder, economist',
+    githubUrl:'https://github.com/krosza',
+    description: "Károly is an entrepreneur with 30+ years management and financial experience. He managed small and medium sized organizations. He set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian bank."
+  }
+]
+
 export const teamMembers = [
     {
-        pk: 'team-1',
-        name: 'Peter Petrovics',
-        imgSrc: petrovics,
-        title: 'Founder, technologist',
-        linedinUrl:'https://www.linkedin.com/in/petrovics',
-        githubUrl:'https://github.com/szerintedmi',
-        description: "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook.",
-    },
-    {
-        pk: 'team-2',
-        name: 'Karoly Szabo',
-        imgSrc: kszabo,
-        title: 'Founder, economist',
-        githubUrl:'https://github.com/krosza',
-        description: "Károly is an entrepreneur with 30+ years management and financial experience. He managed small and medium sized organizations. He set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian bank."
-    },
-    {
         pk: 'team-3',
-        name: 'Marton Elek',
+        firstName: 'Marton',
+        lastName: 'Elek',
         imgSrc: emarton,
         title: 'Marketing, PR strategy',
         linedinUrl:'https://www.linkedin.com/in/marton-elek',
@@ -206,7 +212,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-4',
-        name: 'Barnabas Debreczeni',
+        firstName: 'Barnabas',
+        lastName: 'Debreczeni',
         imgSrc: bdebreczeni,
         title: 'Cryptocurrency specialist, Shinrai founder',
         linedinUrl:'https://www.linkedin.com/in/bdebreczeni',
@@ -214,7 +221,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-5',
-        name: 'Viktor Szathmáry',
+        firstName: 'Viktor',
+        lastName: 'Szathmáry',
         imgSrc: vszatmahry,
         title: 'Blockchain expert / development',
         linedinUrl:'https://www.linkedin.com/in/phraktle',
@@ -223,7 +231,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-6',
-        name: 'Ben Jackson',
+        firstName: 'Ben',
+        lastName: 'Jackson',
         imgSrc: bjackson,
         title: 'Blockchain developer',
         linedinUrl:'https://www.linkedin.com/in/ben-jackson-0686a896',
@@ -232,7 +241,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-7',
-        name: 'Tom Hume',
+        firstName: 'Tom',
+        lastName: 'Hume',
         imgSrc: thume,
         title: 'Branding & Visual',
         linedinUrl:'https://www.linkedin.com/in/tom-hume-31b64014a',
@@ -240,7 +250,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-8',
-        name: 'Laszlo Heves',
+        firstName: 'Laszlo',
+        lastName: 'Heves',
         imgSrc: lheves,
         title: 'Frontend, UX developer',
         linedinUrl:'https://www.linkedin.com/in/lheves',
@@ -248,7 +259,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-9',
-        name: 'Verka Kontra',
+        firstName: 'Verka',
+        lastName: 'Kontra',
         imgSrc: vkontra,
         title: 'Financial expert',
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',

@@ -6,12 +6,11 @@ import { Header, Container, Grid, Segment, Rail, Responsive, Image, Button } fro
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, teamMembers, partners } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
+import { Member } from "./member.js";
 
 import "./styles.css";
 import * as styles from "./styles.js";
-import linkedinLogo from "assets/images/linkedin.png";
-import githubLogo from "assets/images/GitHub.png";
 import slackIcon from 'assets/images/slack-icon.svg';
 
 
@@ -23,6 +22,19 @@ export default class NotConnectedHome extends React.Component {
         this.state = {
             transform: 0
         };
+
+        teamMembers.sort(function(a, b) {
+            var nameA = a.lastName.toUpperCase();
+            var nameB = b.lastName.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            // names must be equal
+            return 0;
+        });
       }
 
     handleScroll(e) {
@@ -207,28 +219,14 @@ export default class NotConnectedHome extends React.Component {
                 <Segment basic textAlign="left" as="section" className="team">
                   <Container>
                     <Header as="h2">Team</Header>
+                    <Grid columns="equal" style={{ marginBottom: 75 }}>
+                        {founders.map(member => (
+                            <Member member={member} />
+                        ))}
+                    </Grid>
                     <Grid columns="equal">
                         {teamMembers.map(member => (
-                            <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
-                                <Image
-                                    src={member.imgSrc}
-                                    avatar
-                                    floated="left"
-                                />
-                                <Header as="h3">
-                                    {member.name}
-                                </Header>
-                                <Header as="h5" style={{ margin: "10px 0 0" }}>
-                                    {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
-                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
-                                      <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
-                                    </Header>}
-                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
-                                      <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
-                                    </Header>}
-                                </Header>
-                                {member.description && <p className="description"> {member.description} </p>}
-                            </Grid.Column>
+                            <Member member={member} />
                         ))}
                     </Grid>
                   </Container>
