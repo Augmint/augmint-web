@@ -1,0 +1,19 @@
+.disclaimer {
+  margin: auto;
+  margin-top: 20px;
+  text-align: left;
+  width: auto;
+  max-width: 1127px;
+}
+
+.disclaimer p {
+  margin: auto;
+  margin-bottom: 14px;
+  max-width: 735px;
+}
+
+@media (max-width: 767px) {
+  .disclaimer {
+    margin: auto 14px;
+  }
+}
