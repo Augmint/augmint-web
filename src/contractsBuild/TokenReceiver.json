@@ -29,10 +29,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "/*\n *  receiver contract interface\n * see https://github.com/ethereum/EIPs/issues/677\n */\npragma solidity 0.4.19;\n\n\ninterface TokenReceiver {\n    function transferNotification(address from, uint256 amount, uint data) public;\n}\n",
-  "sourcePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+  "sourcePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+      "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
       "exportedSymbols": {
         "TokenReceiver": [
           4167
@@ -204,5 +204,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T22:03:18.672Z"
+  "updatedAt": "2018-02-14T23:11:41.617Z"
 }
