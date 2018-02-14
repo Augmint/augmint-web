@@ -57,6 +57,11 @@ describe("Augmint basic e2e", function() {
     });
 
     it("Click through main functions", function() {
+        cy.visit("/under-the-hood");
+        cy.contains("Augmint base info").click();
+        cy.screenshot();
+        cy.contains("Loans").click();
+        cy.screenshot();
         cy.contains("My Account").click();
         cy.contains("Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3");
         cy.get("#transferListDiv");

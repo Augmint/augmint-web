@@ -6,7 +6,7 @@ install:
     - npm install
     - cd augmint-contracts && npm install && cd ..
 before_script:
-    - npm run ganache:run &
+    - npm run ganache:run > ganache.out &
     - npm run truffle:migrate
     - yarn start > yarn_start.out &
 script:
