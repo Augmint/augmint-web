@@ -13,14 +13,14 @@ export function AugmintTokenInfo(props) {
     };
 
     return (
-        <Pblock header="AugmintToken contract">
+        <Pblock header="AugmintToken">
             <p>Total token supply: {contract.info.totalSupply} A-EUR</p>
             <p>Total token supply: {contract.info.total} A-EUR</p>
             <p>
                 Fee account: <small>{contract.info.feeAccount}</small>
             </p>
             <p>Fee account balance: {contract.info.feeAccountTokenBalance} A-EUR</p>
-            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo contractName="AugmintToken" contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

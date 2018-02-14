@@ -20,7 +20,7 @@ export class AugmintStats extends React.Component {
             interestEarnedAccountTokenBalance
         } = monetarySupervisor.info;
 
-        const ethBalanceInFiat =
+        const reserveEthBalanceInFiat =
             bn_ethFiatRate == null || bn_reserveEthBalance == null
                 ? "?"
                 : bn_ethFiatRate.mul(bn_reserveEthBalance).toString();
@@ -32,30 +32,34 @@ export class AugmintStats extends React.Component {
                 <Statistic.Group widths="3" size={size}>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
-                        <Statistic.Value>{totalSupply} A-EUR</Statistic.Value>
+                        <Statistic.Value testId="totalSupply">{totalSupply} A-EUR</Statistic.Value>
                         {showDetails && (
-                            <p style={{ textAlign: "center" }}>
+                            <p testId="issuedByMonetaryBoard" style={{ textAlign: "center" }}>
                                 {issuedByMonetaryBoard} A-EUR issued by Monetary Board
                             </p>
                         )}
                     </Statistic>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
-                        <Statistic.Value>{reserveEthBalance} ETH</Statistic.Value>
-                        {showDetails && <p style={{ textAlign: "center" }}>({ethBalanceInFiat} EUR)</p>}
+                        <Statistic.Value testId="reserveEthBalance">{reserveEthBalance} ETH</Statistic.Value>
+                        {showDetails && (
+                            <p testId="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>
+                                ({reserveEthBalanceInFiat} EUR)
+                            </p>
+                        )}
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testId="reserveTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR reserve</Statistic.Label>
                         <Statistic.Value>{reserveTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testId="feeAccountTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR fee account</Statistic.Label>
                         <Statistic.Value>{feeAccountTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testId="interestEarnedAccountTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR earned interest account</Statistic.Label>
                         <Statistic.Value>{interestEarnedAccountTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>

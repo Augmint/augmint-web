@@ -106,10 +106,10 @@ EthSubmissionErrorPanel.defaultProps = {
 
 export class EthSubmissionSuccessPanel extends React.Component {
     render() {
-        var { children, eth, ...other } = this.props;
+        var { children, eth, testId = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel {...other}>
+            <MsgPanel testId={testId} {...other}>
                 {children}
                 <small>
                     <p>Tx hash: {eth.tx}</p>

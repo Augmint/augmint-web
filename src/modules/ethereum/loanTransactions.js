@@ -103,6 +103,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         const loanManager = store.getState().loanManager.contract.instance;
         const augmintToken = store.getState().augmintToken.contract.instance;
         const gasEstimate = cost.REPAY_GAS;
+        console.log("REP", repaymentAmount, loanId);
         let result = await augmintToken.transferAndNotify(loanManager.address, repaymentAmount, loanId, {
             from: userAccount,
             gas: gasEstimate

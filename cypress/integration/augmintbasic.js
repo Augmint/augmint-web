@@ -1,6 +1,7 @@
 /*
-TODO: testprc crashes sometime from these tests (and with normal use too).
-        Follow this bug: https://github.com/trufflesuite/ganache-cli/issues/453
+    TODO:
+        - use testId everywhere
+        - split into multiple
 */
 
 describe("Augmint basic e2e", function() {
@@ -12,9 +13,11 @@ describe("Augmint basic e2e", function() {
 
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.contains("Get A-EUR Loan").click();
-        cy.contains("Select type of loan");
+
         cy.get("#selectLoanProduct-" + prodId).click();
-        cy.contains("Selected: loan product " + (prodId + 1));
+        cy
+            .get("[testId='selectedLoanProductBlock']")
+            .should("contain", "Selected: loan product " + (prodId + 1));
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("#disbursedTokenAmount")
@@ -29,7 +32,9 @@ describe("Augmint basic e2e", function() {
                 Math.round((aEurBalanceBefore + disbursedAmount) * 10000) /
                 10000;
             cy.get("#submitBtn").click();
-            cy.contains("You've got a loan");
+            cy
+                .get("[testId='EthSubmissionSuccessPanel']")
+                .contains("You've got a loan");
             cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
             cy.contains("To be repayed: " + repaymentAmount + " A-EUR");
             cy.contains("Collateral in escrow: " + ethAmount + " ETH");
@@ -45,7 +50,9 @@ describe("Augmint basic e2e", function() {
     before(function() {
         cy.visit("/");
         cy.get("[tid='useAEurButton']").click();
-        cy.contains("You are connected");
+        cy
+            .get("[testId='TryItConnectedPanel']")
+            .should("contain", "You are connected");
     });
 
     beforeEach(function() {
@@ -58,23 +65,47 @@ describe("Augmint basic e2e", function() {
 
     it("Click through main functions", function() {
         cy.visit("/under-the-hood");
-        cy.contains("Augmint base info").click();
-        cy.screenshot();
-        cy.contains("Loans").click();
-        cy.screenshot();
+
+        cy.get("[testId='baseInfoLink']").click();
+        cy.get("[testId='web3ConnectionInfo']").contains("connected");
+        cy.get("[testId='userAccountTokenBalance']").should("not.contain", "?");
+
+        cy.screenshot("underthehood_baseinfo");
+
+        cy.get("[testId='augmintInfoLink']").click();
+        cy
+            .get("[testId='MonetarySupervisor-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy
+            .get("[testId='AugmintToken-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy.screenshot("underthehood_augmint_baseinfo");
+
+        cy.get("[testId='loansInfoLink']").click();
+        cy
+            .get("[testId='LoanManager-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy.screenshot("underthehood_loans");
+
         cy.contains("My Account").click();
-        cy.contains("Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3");
+        cy
+            .get("[testId='accountInfoBlock']")
+            .should(
+                "contain",
+                "Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3"
+            );
         cy.get("#transferListDiv");
+
         cy.contains("Get A-EUR Loan").click();
-        cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
 
         cy.contains("Reserves").click();
-        cy.contains("Augmint Reserves");
-        cy.contains("0 A-EUR");
+        cy.get("[testId='totalSupply']").should("contain", "0 A-EUR");
 
         cy.get("#loansToCollectBtn").click();
-        cy.contains("No defaulted and uncollected loan.");
+        cy
+            .get("[testId='loansToCollectBlock']")
+            .should("contain", "No defaulted and uncollected loan.");
     });
 
     it("Should get and collect a loan", function() {
@@ -88,7 +119,9 @@ describe("Augmint basic e2e", function() {
                 // // TODO: check reserves
                 cy.get(".loansToCollectButton").click();
                 cy.get(".collectLoanButton").click();
-                cy.contains("Successful collection of 1 loans");
+                cy
+                    .get("[testId='EthSubmissionSuccessPanel']")
+                    .should("contain", "Successful collection of 1 loans");
             });
     });
 
@@ -111,7 +144,9 @@ describe("Augmint basic e2e", function() {
                 cy.get(".repayEarlyButton").click();
                 cy.get(".confirmRepayButton").click();
 
-                cy.contains("Successful repayment");
+                cy
+                    .get("[testId='EthSubmissionSuccessPanel']")
+                    .should("contain", "Successful repayment");
                 cy
                     .get("#userAEurBalance")
                     .contains(expBal.toString())

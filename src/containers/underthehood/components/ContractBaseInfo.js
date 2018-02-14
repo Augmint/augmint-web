@@ -6,18 +6,17 @@ import { Button } from "semantic-ui-react";
 const stringify = stringifier({ maxDepth: 3, indent: "   " });
 
 export function ContractBaseInfo(props) {
-    let { isConnected, isLoading, error, contract, info, connectionError } = props.contract;
+    const { isConnected, isLoading, error, contract, info, connectionError } = props.contract;
     return (
         <div>
             <p>
                 <small>
-                    Contract:<br />
+                    {props.contractName} contract:<br />
                     {contract == null ? "No contract" : contract.instance.address}
                 </small>
             </p>
-            <p>
-                {isConnected ? "connected" : "not connected"} |
-                {isLoading ? "Loading..." : "not loading"}
+            <p testId={`${props.contractName}-connectionStatus`}>
+                {isConnected ? "connected" : "not connected"} | {isLoading ? "Loading..." : "not loading"}
             </p>
 
             {connectionError ? (

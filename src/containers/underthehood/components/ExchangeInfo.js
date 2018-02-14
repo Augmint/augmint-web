@@ -13,11 +13,11 @@ export function ExchangeInfo(props) {
     };
 
     return (
-        <Pblock header="Exchange contract">
+        <Pblock header="Exchange">
             <p>
                 Order Count: Buy: {contract.info.buyOrderCount} | Sell: {contract.info.sellOrderCount}
             </p>
-            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo contractName="Exchange" contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

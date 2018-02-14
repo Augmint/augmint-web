@@ -9,6 +9,7 @@ export class AccountInfo extends React.Component {
         const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading } = this.props;
         return (
             <Pblock
+                testId="accountInfoBlock"
                 className="accountInfo"
                 loading={
                     augmintToken.isLoading ||

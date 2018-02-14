@@ -13,10 +13,10 @@ export function MonetarySupervisorInfo(props) {
     };
 
     return (
-        <Pblock header="MonetarySupervisor contract">
+        <Pblock header="MonetarySupervisor">
             <p>ETH Reserve: {contract.info.reserveEthBalance} ETH</p>
             <p>A-EUR Reserve: {contract.info.reserveTokenBalance} A-EUR </p>
-            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo contractName="MonetarySupervisor" contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }
