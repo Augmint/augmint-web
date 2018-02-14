@@ -561,11 +561,46 @@
   },
   "networks": {
     "999": {
-      "events": {},
+      "events": {
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
       "links": {},
       "address": "0xb0a2a8e846b66c7384f52635cecef5280f766c8b"
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T01:20:13.864Z"
+  "updatedAt": "2018-02-14T18:14:28.502Z"
 }
