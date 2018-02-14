@@ -303,7 +303,8 @@ export function repayLoan(repaymentAmount, loanId) {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_REPAY_REQUESTED,
-            loanId: loanId
+            loanId,
+            repaymentAmount
         });
 
         try {

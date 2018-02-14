@@ -27,6 +27,7 @@ describe("Augmint basic e2e", function() {
             .get("#repaymentAmount")
             .should("have.value", repaymentAmount.toString());
         cy.get("#ethAmount").should("have.value", ethAmount.toString());
+
         return getUserAEurBalance().then(aEurBalanceBefore => {
             const expBal =
                 Math.round((aEurBalanceBefore + disbursedAmount) * 10000) /
@@ -137,9 +138,8 @@ describe("Augmint basic e2e", function() {
             })
             .then(aEurBalanceBefore => {
                 const expBal =
-                    Math.round(
-                        (aEurBalanceBefore - aEurBalanceBefore) * 10000
-                    ) / 10000;
+                    Math.round((aEurBalanceBefore - 250) * 10000) / 10000;
+
                 cy.contains("this loan's page").click();
                 cy.get(".repayEarlyButton").click();
                 cy.get(".confirmRepayButton").click();
@@ -147,13 +147,11 @@ describe("Augmint basic e2e", function() {
                 cy
                     .get("[testid='EthSubmissionSuccessPanel']")
                     .should("contain", "Successful repayment");
-                cy
-                    .get("#userAEurBalance")
-                    .contains(expBal.toString())
-                    .then(res => {
-                        cy.get(".accountInfo");
-                        cy.should("not.have.class", "loading");
-                    });
+                cy.get("#userAEurBalance").should("contain", expBal);
+
+                cy.get(".accountInfo");
+                cy.should("not.have.class", "loading");
+
                 cy.contains("My Account").click();
                 // TODO loan removed, status etc.
             });

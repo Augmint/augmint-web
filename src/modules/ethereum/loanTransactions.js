@@ -25,6 +25,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         }
         const userAccount = store.getState().web3Connect.userAccount;
         const weiAmount = web3.utils.toWei(ethAmount);
+
         const result = await loanManager.newEthBackedLoan(productId, {
             value: weiAmount,
             from: userAccount,
@@ -101,13 +102,22 @@ export async function repayLoanTx(repaymentAmount, loanId) {
     try {
         const userAccount = store.getState().web3Connect.userAccount;
         const loanManager = store.getState().loanManager.contract.instance;
-        const augmintToken = store.getState().augmintToken.contract.instance;
+
+        const augmintToken = store.getState().augmintToken;
+        const augmintTokenInstance = augmintToken.contract.instance;
+        const decimalsDiv = augmintToken.info.decimalsDiv;
         const gasEstimate = cost.REPAY_GAS;
-        console.log("REP", repaymentAmount, loanId);
-        let result = await augmintToken.transferAndNotify(loanManager.address, repaymentAmount, loanId, {
-            from: userAccount,
-            gas: gasEstimate
-        });
+
+        let result = await augmintTokenInstance.transferAndNotify(
+            loanManager.address,
+            repaymentAmount * decimalsDiv,
+            loanId,
+            {
+                from: userAccount,
+                gas: gasEstimate
+            }
+        );
+
         if (result.receipt.gasUsed === gasEstimate) {
             // Neeed for testnet behaviour (TODO: test it!)
             // TODO: add more tx info
@@ -115,13 +125,13 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         }
         if (
             !result.logs ||
-            !result.logs[2] ||
-            result.logs[2].event !== "Transfer" ||
-            result.logs[2].args.to !== "0x0000000000000000000000000000000000000000"
+            !result.logs[5] ||
+            result.logs[5].event !== "AugmintTransfer" ||
+            result.logs[5].args.to !== "0x0000000000000000000000000000000000000000"
         ) {
-            // TODO: web3 doesn't return last event (LoanRepayed) on testrpc, so we test only for TokenBurned
+            // TODO: web3 doesn't return LoanRepayed on testrpc, so we test only for TokenBurned
             throw new Error(
-                "Transfer to 0x0 (burn) event wasn't received. Check tx :  " +
+                "AugmintTransfer to 0x0 (burn) event wasn't received. Check tx :  " +
                     result.tx +
                     "\nResult:\n" +
                     stringify(result)
