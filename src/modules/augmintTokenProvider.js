@@ -1,6 +1,8 @@
+/* TODO: this is now not only augmintToken but monetarySupervisor too. shall we rename or split? */
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectAugmintToken, refreshAugmintToken } from "modules/reducers/augmintToken";
+import { connectMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
@@ -37,7 +39,9 @@ const removeListeners = oldInstance => {
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal !== null) {
-        console.debug("augmintTokenProvider - web3Connect.network changed. Dispatching connectAugmintToken()");
+        console.debug(
+            "augmintTokenProvider - web3Connect.network changed. Dispatching connectAugmintToken() & connectMonetarySupervisor()"
+        );
         store.dispatch(connectAugmintToken());
     }
 };
@@ -45,13 +49,11 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
-        if (oldVal) {
-            console.debug("augmintTokenProvider - augmintToken.contract changed. Dispatching refreshAugmintToken()");
-            store.dispatch(refreshAugmintToken());
-        }
         console.debug(
-            "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance() and fetchTransferList()"
+            "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance(), fetchTransferList() and connectMonetarySupervisor()"
         );
+        store.dispatch(connectMonetarySupervisor());
+
         const userAccount = store.getState().web3Connect.userAccount;
         const augmintToken = store.getState().augmintToken;
 

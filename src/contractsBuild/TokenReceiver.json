@@ -1,0 +1,208 @@
+{
+  "contractName": "TokenReceiver",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "data",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferNotification",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "/*\n *  receiver contract interface\n * see https://github.com/ethereum/EIPs/issues/677\n */\npragma solidity 0.4.19;\n\n\ninterface TokenReceiver {\n    function transferNotification(address from, uint256 amount, uint data) public;\n}\n",
+  "sourcePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+      "exportedSymbols": {
+        "TokenReceiver": [
+          4160
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.4",
+            ".19"
+          ]
+        },
+        "id": 4150,
+        "name": "PragmaDirective",
+        "src": "90:23:17"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            4160
+          ],
+          "name": "TokenReceiver",
+          "scope": 4161
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "transferNotification",
+              "payable": false,
+              "scope": 4160,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "from",
+                      "scope": 4159,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 4151,
+                        "name": "ElementaryTypeName",
+                        "src": "176:7:17"
+                      }
+                    ],
+                    "id": 4152,
+                    "name": "VariableDeclaration",
+                    "src": "176:12:17"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "amount",
+                      "scope": 4159,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 4153,
+                        "name": "ElementaryTypeName",
+                        "src": "190:7:17"
+                      }
+                    ],
+                    "id": 4154,
+                    "name": "VariableDeclaration",
+                    "src": "190:14:17"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "data",
+                      "scope": 4159,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 4155,
+                        "name": "ElementaryTypeName",
+                        "src": "206:4:17"
+                      }
+                    ],
+                    "id": 4156,
+                    "name": "VariableDeclaration",
+                    "src": "206:9:17"
+                  }
+                ],
+                "id": 4157,
+                "name": "ParameterList",
+                "src": "175:41:17"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 4158,
+                "name": "ParameterList",
+                "src": "223:0:17"
+              }
+            ],
+            "id": 4159,
+            "name": "FunctionDefinition",
+            "src": "146:78:17"
+          }
+        ],
+        "id": 4160,
+        "name": "ContractDefinition",
+        "src": "116:110:17"
+      }
+    ],
+    "id": 4161,
+    "name": "SourceUnit",
+    "src": "90:137:17"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-02-14T01:19:22.478Z"
+}

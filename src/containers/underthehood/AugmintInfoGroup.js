@@ -1,10 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
-import { UserAccountInfo } from "./components/UserAccountInfo";
-import { ArrayDump } from "./components/ArrayDump";
-import { SignTest } from "./components/SignTest";
+
+import { AugmintTokenInfo } from "./components/AugmintTokenInfo";
+import { MonetarySupervisorInfo } from "./components/MonetarySupervisorInfo";
 import { Pgrid } from "components/PageLayout";
 
 class BaseInfoGroup extends React.Component {
@@ -14,17 +13,12 @@ class BaseInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
+            <Pgrid columns={2}>
                 <Pgrid.Column>
-                    <Web3ConnectionInfo web3Connect={this.props.web3Connect} />
-
-                    <SignTest web3Connect={this.props.web3Connect} />
+                    <AugmintTokenInfo contract={this.props.augmintToken} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <UserAccountInfo userBalances={this.props.userBalances} />
-                </Pgrid.Column>
-                <Pgrid.Column>
-                    <ArrayDump header="Accounts" items={this.props.accounts} />
+                    <MonetarySupervisorInfo contract={this.props.monetarySupervisor} />
                 </Pgrid.Column>
             </Pgrid>
         );

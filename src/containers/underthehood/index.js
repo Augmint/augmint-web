@@ -1,6 +1,7 @@
 import React from "react";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
+import AugmintInfoGroup from "./AugmintInfoGroup";
 import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
@@ -39,7 +40,14 @@ export default class underTheHood extends React.Component {
                                     name="baseinfo"
                                     onClick={this.handleSelectGroup}
                                 >
-                                    Base info
+                                    Account Base info
+                                </Menu.Item>
+                                <Menu.Item
+                                    active={selectedGroup === "augmintInfo"}
+                                    name="augmintInfo"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Augmint base info
                                 </Menu.Item>
                                 <Menu.Item
                                     active={selectedGroup === "loans"}
@@ -58,6 +66,7 @@ export default class underTheHood extends React.Component {
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
+                            {selectedGroup === "augmintInfo" && <AugmintInfoGroup />}
                             {selectedGroup === "loans" && <LoansInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                         </Pgrid.Column>
