@@ -10,7 +10,7 @@ export function TryItConnected(props) {
     return (
         <EthereumState>
             <Tsegment>
-                <SuccessPanel testId="TryItConnectedPanel" header="Great! You are connected" />
+                <SuccessPanel testid="TryItConnectedPanel" header="Great! You are connected" />
 
                 <Tblock header="Get some test ETH">
                     <p>

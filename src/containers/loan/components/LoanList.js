@@ -25,7 +25,7 @@ export default function LoanList(props) {
         );
 
     return (
-        <Pblock testId={props.testId} loading={props.loans == null || props.loans.isLoading} header={props.header}>
+        <Pblock testid={props.testid} loading={props.loans == null || props.loans.isLoading} header={props.header}>
             {props.loans != null && listItems.length === 0 ? (
                 props.noItemMessage
             ) : (

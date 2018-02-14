@@ -36,7 +36,7 @@ export default class underTheHood extends React.Component {
                         <Pgrid.Column>
                             <Menu size="massive" tabular>
                                 <Menu.Item
-                                    testId="baseInfoLink"
+                                    testid="baseInfoLink"
                                     active={selectedGroup === "baseinfo"}
                                     name="baseinfo"
                                     onClick={this.handleSelectGroup}
@@ -44,7 +44,7 @@ export default class underTheHood extends React.Component {
                                     Account Base info
                                 </Menu.Item>
                                 <Menu.Item
-                                    testId="augmintInfoLink"
+                                    testid="augmintInfoLink"
                                     active={selectedGroup === "augmintInfo"}
                                     name="augmintInfo"
                                     onClick={this.handleSelectGroup}
@@ -52,7 +52,7 @@ export default class underTheHood extends React.Component {
                                     Augmint base info
                                 </Menu.Item>
                                 <Menu.Item
-                                    testId="loansInfoLink"
+                                    testid="loansInfoLink"
                                     active={selectedGroup === "loans"}
                                     name="loans"
                                     onClick={this.handleSelectGroup}
@@ -60,7 +60,7 @@ export default class underTheHood extends React.Component {
                                     Loans
                                 </Menu.Item>
                                 <Menu.Item
-                                    testId="exchangeInfoLink"
+                                    testid="exchangeInfoLink"
                                     active={selectedGroup === "exchange"}
                                     name="exchange"
                                     onClick={this.handleSelectGroup}

@@ -23,7 +23,7 @@ export default class Web3ConnectionInfo extends React.Component {
         };
         return (
             <Pblock header="Web3 connection">
-                <p testId="web3ConnectionInfo">
+                <p testid="web3ConnectionInfo">
                     {isConnected ? "connected - " + web3Instance.currentProvider.constructor.name : "not connected"} |{" "}
                     {isLoading ? "Loading..." : "not loading"}
                 </p>

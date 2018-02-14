@@ -55,7 +55,7 @@ class CollectLoanMain extends React.Component {
                             onSuccess={() => store.dispatch(fetchLoansToCollect())}
                         />
                         <LoanList
-                            testId="loansToCollectBlock"
+                            testid="loansToCollectBlock"
                             header="Loans to collect"
                             noItemMessage={<p>No defaulted and uncollected loan.</p>}
                             loans={loansToCollect}
