@@ -6,7 +6,8 @@ install:
     - npm install
     - cd augmint-contracts && npm install && cd ..
 before_script:
-    - npm run ganache:runmigrate > ganache.out &
+    - npm run ganache:run &
+    - npm run truffle:migrate
     - yarn start > yarn_start.out &
 script:
     # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
