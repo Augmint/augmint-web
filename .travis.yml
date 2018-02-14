@@ -9,7 +9,7 @@ install:
 before_script:
     - npm run ganache:run > ganache.out &
     - npm run truffle:migrate
-    - yarn start > yarn_start.out &
+    - yarn start  &
 script:
     # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
     - npm run cypress:runrecord
