@@ -5,7 +5,7 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import { Menu, Button, Label } from "semantic-ui-react";
 import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus, InfoPanel } from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
@@ -44,14 +44,9 @@ class PlaceOrderForm extends React.Component {
             return;
         }
         const bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const fiatRate = this.props.rates.info.bn_ethFiatRate;
+        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
-        let ethValue;
-        if (this.state.orderType === TOKEN_BUY) {
-            ethValue = new BigNumber(bn_tokenAmount).mul(bn_price).div(fiatRate);
-        } else {
-            ethValue = new BigNumber(bn_tokenAmount).div(bn_price).div(fiatRate);
-        }
+        const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
 
         this.props.change(
             "ethAmount",
@@ -69,13 +64,9 @@ class PlaceOrderForm extends React.Component {
         }
 
         bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const fiatRate = this.props.rates.info.bn_ethFiatRate;
-        let tokenValue;
-        if (this.state.orderType === TOKEN_BUY) {
-            tokenValue = new BigNumber(bn_ethAmount).mul(fiatRate).div(bn_price);
-        } else {
-            tokenValue = new BigNumber(bn_ethAmount).mul(fiatRate).mul(bn_price);
-        }
+        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
+
+        const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
 
         this.props.change(
             "tokenAmount",
@@ -89,18 +80,18 @@ class PlaceOrderForm extends React.Component {
         try {
             bn_price = new BigNumber(e.target.value); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
 
-            const fiatRate = this.props.rates.info.bn_ethFiatRate;
+            //const fiatRate = this.props.rates.info.bn_ethFiatRate;
             if (this.state.orderType === TOKEN_BUY) {
                 const bn_ethAmount = new BigNumber(this.props.ethAmount);
 
-                const tokenValue = new BigNumber(bn_ethAmount).div(bn_price).mul(fiatRate);
+                const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
                 this.props.change(
                     "tokenAmount",
                     tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
                 );
             } else {
                 const bn_tokenAmount = new BigNumber(this.props.tokenAmount);
-                const ethValue = new BigNumber(bn_tokenAmount).mul(bn_price).div(fiatRate);
+                const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
                 this.props.change(
                     "ethAmount",
                     ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
@@ -157,7 +148,7 @@ class PlaceOrderForm extends React.Component {
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
         const { isLoading } = this.props.exchange;
         const { orderType } = this.state;
-        const fiatRate = this.props.rates.info.bn_ethFiatRate;
+        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
         const ethAmountValidations = [Validations.required, Validations.ethAmount];
         if (orderType === TOKEN_BUY) {
@@ -204,11 +195,7 @@ class PlaceOrderForm extends React.Component {
 
                         <Field
                             name="tokenAmount"
-                            label={
-                                orderType === TOKEN_BUY
-                                    ? `A-EUR amount expected on ${fiatRate} ETH/EUR rate: `
-                                    : "Sell amount: "
-                            }
+                            label={orderType === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
@@ -219,9 +206,7 @@ class PlaceOrderForm extends React.Component {
                             labelPosition="right"
                         >
                             <input />
-                            <Label>
-                                A-EUR
-                            </Label>
+                            <Label>A-EUR</Label>
                         </Field>
 
                         <Field
@@ -229,11 +214,7 @@ class PlaceOrderForm extends React.Component {
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
-                            label={
-                                orderType === TOKEN_BUY
-                                    ? "ETH amount to sell: "
-                                    : `Expected ETH amount on ${fiatRate} ETH/EUR rate: `
-                            }
+                            label={orderType === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
                             validate={ethAmountValidations}
@@ -257,21 +238,13 @@ class PlaceOrderForm extends React.Component {
                             labelPosition="right"
                         >
                             <input />
-                            <Label>
-                                A-EUR / EUR
-                            </Label>
+                            <Label>A-EUR / ETH</Label>
                         </Field>
-
-                        <InfoPanel size="tiny" info>
-                            TODO: explain ...
-                        </InfoPanel>
 
                         <Button size="big" primary loading={submitting} disabled={pristine}>
                             {submitting && "Submitting..."}
                             {!submitting &&
-                                (orderType === TOKEN_BUY
-                                    ? "Submit buy A-EUR order"
-                                    : "Submit sell A-EUR order")}
+                                (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
                     </Form>
                 )}
@@ -281,15 +254,26 @@ class PlaceOrderForm extends React.Component {
 }
 
 const selector = formValueSelector("PlaceOrderForm");
+function mapStateToProps(state) {
+    return { initialValues: { price: 1 } }; //state.rates.info.bn_ethFiatRate.toNumber() } };
+}
+
+// function mapStateToProps(state, ownProps) {
+//   return {
+//     initialValues: {
+//       first_name: ownProps.propThatHasFirstName
+//     }
+// }
 
 PlaceOrderForm = connect(state => {
     const { ethAmount, tokenAmount, price } = selector(state, "ethAmount", "tokenAmount", "price");
     return { ethAmount, tokenAmount, price }; // to get amounts for orderHelpText in render
 })(PlaceOrderForm);
 
+PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);
+
 export default reduxForm({
     form: "PlaceOrderForm",
-    initialValues: { price: 1 },
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderType in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check

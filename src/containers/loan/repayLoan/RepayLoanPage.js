@@ -97,7 +97,7 @@ class RepayLoanPage extends React.Component {
 
     async handleSubmit(values) {
         //values.preventDefault();
-        let res = await store.dispatch(repayLoan(this.state.loanId));
+        let res = await store.dispatch(repayLoan(this.state.loan.repaymentAmount, this.state.loanId));
         if (res.type !== LOANMANAGER_REPAY_SUCCESS) {
             throw new SubmissionError({
                 _error: {

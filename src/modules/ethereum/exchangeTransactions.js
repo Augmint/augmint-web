@@ -116,10 +116,10 @@ export async function placeOrderTx(orderType, amount, price) {
             case TOKEN_SELL:
                 const augmintToken = store.getState().augmintToken;
                 submitAmount = amount.times(augmintToken.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-                result = await augmintToken.contract.instance.placeSellTokenOrderOnExchange(
+                result = await augmintToken.contract.instance.transferAndNotify(
                     exchange.address,
-                    price * 10000,
                     submitAmount,
+                    price * 10000,
                     {
                         from: userAccount,
                         gas: gasEstimate

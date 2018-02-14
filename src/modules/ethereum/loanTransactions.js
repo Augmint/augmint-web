@@ -97,13 +97,13 @@ export async function fetchProductsTx() {
     }
 }
 
-export async function repayLoanTx(loanId) {
+export async function repayLoanTx(repaymentAmount, loanId) {
     try {
         const userAccount = store.getState().web3Connect.userAccount;
         const loanManager = store.getState().loanManager.contract.instance;
         const augmintToken = store.getState().augmintToken.contract.instance;
         const gasEstimate = cost.REPAY_GAS;
-        let result = await augmintToken.repayLoan(loanManager.address, loanId, {
+        let result = await augmintToken.transferAndNotify(loanManager.address, repaymentAmount, loanId, {
             from: userAccount,
             gas: gasEstimate
         });
