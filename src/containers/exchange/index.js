@@ -30,7 +30,16 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
-                                <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
+                                {rates.info.bn_ethFiatRate && (
+                                    <PlaceOrderForm //rates.info &&
+                                        initialValues={{
+                                            price: rates.info.ethFiatRate
+                                        }}
+                                        orders={orders}
+                                        exchange={exchange}
+                                        rates={rates}
+                                    />
+                                )}
 
                                 <OrderBook
                                     orders={orders}

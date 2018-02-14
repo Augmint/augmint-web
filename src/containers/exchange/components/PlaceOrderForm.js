@@ -256,6 +256,7 @@ function mapStateToProps(state) {
     return { initialValues: { price: 1 } }; //state.rates.info.bn_ethFiatRate.toNumber() } };
 }
 
+// couldn't make this work here, it has been added to the PlaceOrderForm component embed in index.js
 // function mapStateToProps(state, ownProps) {
 //   return {
 //     initialValues: {
