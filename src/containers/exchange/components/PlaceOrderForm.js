@@ -36,15 +36,14 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
-        let bn_tokenAmount;
+        let bn_tokenAmount, bn_price;
         try {
             bn_tokenAmount = new BigNumber(e.target.value);
+            bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
         } catch (error) {
             this.props.change("ethAmount", "");
             return;
         }
-        const bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
         const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
 
@@ -58,13 +57,11 @@ class PlaceOrderForm extends React.Component {
         let bn_price, bn_ethAmount;
         try {
             bn_ethAmount = new BigNumber(e.target.value);
+            bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
         } catch (error) {
             this.props.change("tokenAmount", "");
             return;
         }
-
-        bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
         const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
 
@@ -80,7 +77,6 @@ class PlaceOrderForm extends React.Component {
         try {
             bn_price = new BigNumber(e.target.value); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
 
-            //const fiatRate = this.props.rates.info.bn_ethFiatRate;
             if (this.state.orderType === TOKEN_BUY) {
                 const bn_ethAmount = new BigNumber(this.props.ethAmount);
 
@@ -98,12 +94,14 @@ class PlaceOrderForm extends React.Component {
                 );
             }
         } catch (error) {
+            console.debug(error);
             // tokenAmount or ethAmount is not entered yet
-            if (this.state.orderType === TOKEN_BUY) {
-                this.props.change("tokenAmount", "");
-            } else {
+            if (!isNaN(parseFloat(this.props.tokenAmount)) && isFinite(this.props.tokenAmount)) {
                 this.props.change("ethAmount", "");
+            } else {
+                this.props.change("tokenAmount", "");
             }
+
             return;
         }
     }
