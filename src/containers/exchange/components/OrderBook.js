@@ -32,7 +32,6 @@ const OrderItem = props => {
                     </p>
                 )}
                 Maker: {order.maker}
-                <br />Time: {order.addedTimeText}
                 <br />Order Id: {order.id}
             </MoreInfoTip>
             {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}

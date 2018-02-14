@@ -210,7 +210,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3900,
+          "SourceUnit": 3907,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
           "file": "./generic/SystemAccount.sol",
           "scope": 28,
@@ -225,7 +225,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 4085,
+          "SourceUnit": 4092,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
           "file": "./interfaces/AugmintTokenInterface.sol",
           "scope": 28,
@@ -241,16 +241,16 @@
       {
         "attributes": {
           "contractDependencies": [
-            3528,
-            3899
+            3535,
+            3906
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             27,
-            3899,
-            3528
+            3906,
+            3535
           ],
           "name": "AugmintReserves",
           "scope": 28
@@ -267,7 +267,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3899,
+                  "referencedDeclaration": 3906,
                   "type": "contract SystemAccount"
                 },
                 "id": 4,
@@ -364,7 +364,7 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "AugmintTokenInterface",
-                          "referencedDeclaration": 4084,
+                          "referencedDeclaration": 4091,
                           "type": "contract AugmintTokenInterface"
                         },
                         "id": 10,
@@ -426,7 +426,7 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 3382,
+                      "referencedDeclaration": 3389,
                       "type": "modifier (bytes32)",
                       "value": "restrict"
                     },
@@ -488,7 +488,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "burn",
-                              "referencedDeclaration": 3991,
+                              "referencedDeclaration": 3998,
                               "type": "function (uint256) external"
                             },
                             "children": [
@@ -602,5 +602,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T18:14:28.502Z"
+  "updatedAt": "2018-02-14T22:04:12.216Z"
 }

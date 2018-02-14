@@ -168,7 +168,7 @@
       "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
       "exportedSymbols": {
         "SystemAccount": [
-          3899
+          3906
         ]
       }
     },
@@ -181,54 +181,54 @@
             ".19"
           ]
         },
-        "id": 3871,
+        "id": 3878,
         "name": "PragmaDirective",
         "src": "43:23:14"
       },
       {
         "attributes": {
-          "SourceUnit": 3529,
+          "SourceUnit": 3536,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/Restricted.sol",
           "file": "./Restricted.sol",
-          "scope": 3900,
+          "scope": 3907,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 3872,
+        "id": 3879,
         "name": "ImportDirective",
         "src": "67:26:14"
       },
       {
         "attributes": {
-          "SourceUnit": 3348,
+          "SourceUnit": 3355,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
           "file": "./AugmintToken.sol",
-          "scope": 3900,
+          "scope": 3907,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 3873,
+        "id": 3880,
         "name": "ImportDirective",
         "src": "94:28:14"
       },
       {
         "attributes": {
           "contractDependencies": [
-            3528
+            3535
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            3899,
-            3528
+            3906,
+            3535
           ],
           "name": "SystemAccount",
-          "scope": 3900
+          "scope": 3907
         },
         "children": [
           {
@@ -242,15 +242,15 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Restricted",
-                  "referencedDeclaration": 3528,
+                  "referencedDeclaration": 3535,
                   "type": "contract Restricted"
                 },
-                "id": 3874,
+                "id": 3881,
                 "name": "UserDefinedTypeName",
                 "src": "151:10:14"
               }
             ],
-            "id": 3875,
+            "id": 3882,
             "name": "InheritanceSpecifier",
             "src": "151:10:14"
           },
@@ -261,7 +261,7 @@
               "isConstructor": false,
               "name": "withdrawTokens",
               "payable": false,
-              "scope": 3899,
+              "scope": 3906,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "external"
@@ -273,7 +273,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "tokenAddress",
-                      "scope": 3898,
+                      "scope": 3905,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract AugmintToken",
@@ -285,15 +285,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "AugmintToken",
-                          "referencedDeclaration": 3347,
+                          "referencedDeclaration": 3354,
                           "type": "contract AugmintToken"
                         },
-                        "id": 3876,
+                        "id": 3883,
                         "name": "UserDefinedTypeName",
                         "src": "337:12:14"
                       }
                     ],
-                    "id": 3877,
+                    "id": 3884,
                     "name": "VariableDeclaration",
                     "src": "337:25:14"
                   },
@@ -301,7 +301,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "to",
-                      "scope": 3898,
+                      "scope": 3905,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -314,12 +314,12 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 3878,
+                        "id": 3885,
                         "name": "ElementaryTypeName",
                         "src": "364:7:14"
                       }
                     ],
-                    "id": 3879,
+                    "id": 3886,
                     "name": "VariableDeclaration",
                     "src": "364:10:14"
                   },
@@ -327,7 +327,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "amount",
-                      "scope": 3898,
+                      "scope": 3905,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -340,12 +340,12 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 3880,
+                        "id": 3887,
                         "name": "ElementaryTypeName",
                         "src": "376:4:14"
                       }
                     ],
-                    "id": 3881,
+                    "id": 3888,
                     "name": "VariableDeclaration",
                     "src": "376:11:14"
                   },
@@ -353,7 +353,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "narrative",
-                      "scope": 3898,
+                      "scope": 3905,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "string calldata",
@@ -366,17 +366,17 @@
                           "name": "string",
                           "type": "string storage pointer"
                         },
-                        "id": 3882,
+                        "id": 3889,
                         "name": "ElementaryTypeName",
                         "src": "389:6:14"
                       }
                     ],
-                    "id": 3883,
+                    "id": 3890,
                     "name": "VariableDeclaration",
                     "src": "389:16:14"
                   }
                 ],
-                "id": 3884,
+                "id": 3891,
                 "name": "ParameterList",
                 "src": "336:70:14"
               },
@@ -387,7 +387,7 @@
                   ]
                 },
                 "children": [],
-                "id": 3888,
+                "id": 3895,
                 "name": "ParameterList",
                 "src": "446:0:14"
               },
@@ -399,11 +399,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 3382,
+                      "referencedDeclaration": 3389,
                       "type": "modifier (bytes32)",
                       "value": "restrict"
                     },
-                    "id": 3885,
+                    "id": 3892,
                     "name": "Identifier",
                     "src": "420:8:14"
                   },
@@ -420,12 +420,12 @@
                       "type": "literal_string \"MonetaryBoard\"",
                       "value": "MonetaryBoard"
                     },
-                    "id": 3886,
+                    "id": 3893,
                     "name": "Literal",
                     "src": "429:15:14"
                   }
                 ],
-                "id": 3887,
+                "id": 3894,
                 "name": "ModifierInvocation",
                 "src": "420:25:14"
               },
@@ -469,7 +469,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "transferWithNarrative",
-                              "referencedDeclaration": 2824,
+                              "referencedDeclaration": 2831,
                               "type": "function (address,uint256,string memory) external"
                             },
                             "children": [
@@ -479,16 +479,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3877,
+                                  "referencedDeclaration": 3884,
                                   "type": "contract AugmintToken",
                                   "value": "tokenAddress"
                                 },
-                                "id": 3889,
+                                "id": 3896,
                                 "name": "Identifier",
                                 "src": "456:12:14"
                               }
                             ],
-                            "id": 3891,
+                            "id": 3898,
                             "name": "MemberAccess",
                             "src": "456:34:14"
                           },
@@ -498,11 +498,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3879,
+                              "referencedDeclaration": 3886,
                               "type": "address",
                               "value": "to"
                             },
-                            "id": 3892,
+                            "id": 3899,
                             "name": "Identifier",
                             "src": "491:2:14"
                           },
@@ -512,11 +512,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3881,
+                              "referencedDeclaration": 3888,
                               "type": "uint256",
                               "value": "amount"
                             },
-                            "id": 3893,
+                            "id": 3900,
                             "name": "Identifier",
                             "src": "495:6:14"
                           },
@@ -526,41 +526,41 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3883,
+                              "referencedDeclaration": 3890,
                               "type": "string calldata",
                               "value": "narrative"
                             },
-                            "id": 3894,
+                            "id": 3901,
                             "name": "Identifier",
                             "src": "503:9:14"
                           }
                         ],
-                        "id": 3895,
+                        "id": 3902,
                         "name": "FunctionCall",
                         "src": "456:57:14"
                       }
                     ],
-                    "id": 3896,
+                    "id": 3903,
                     "name": "ExpressionStatement",
                     "src": "456:57:14"
                   }
                 ],
-                "id": 3897,
+                "id": 3904,
                 "name": "Block",
                 "src": "446:74:14"
               }
             ],
-            "id": 3898,
+            "id": 3905,
             "name": "FunctionDefinition",
             "src": "313:207:14"
           }
         ],
-        "id": 3899,
+        "id": 3906,
         "name": "ContractDefinition",
         "src": "125:397:14"
       }
     ],
-    "id": 3900,
+    "id": 3907,
     "name": "SourceUnit",
     "src": "43:480:14"
   },
@@ -570,5 +570,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T01:19:22.478Z"
+  "updatedAt": "2018-02-14T22:03:18.672Z"
 }

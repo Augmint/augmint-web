@@ -754,7 +754,7 @@
       "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/TokenAEur.sol",
       "exportedSymbols": {
         "TokenAEur": [
-          2604
+          2611
         ]
       }
     },
@@ -767,45 +767,45 @@
             ".19"
           ]
         },
-        "id": 2578,
+        "id": 2585,
         "name": "PragmaDirective",
         "src": "53:23:9"
       },
       {
         "attributes": {
-          "SourceUnit": 3348,
+          "SourceUnit": 3355,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
           "file": "./generic/AugmintToken.sol",
-          "scope": 2605,
+          "scope": 2612,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 2579,
+        "id": 2586,
         "name": "ImportDirective",
         "src": "77:36:9"
       },
       {
         "attributes": {
           "contractDependencies": [
-            3347,
-            3528,
-            4084,
-            4148
+            3354,
+            3535,
+            4091,
+            4155
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            2604,
-            3347,
-            4084,
-            4148,
-            3528
+            2611,
+            3354,
+            4091,
+            4155,
+            3535
           ],
           "name": "TokenAEur",
-          "scope": 2605
+          "scope": 2612
         },
         "children": [
           {
@@ -819,15 +819,15 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "AugmintToken",
-                  "referencedDeclaration": 3347,
+                  "referencedDeclaration": 3354,
                   "type": "contract AugmintToken"
                 },
-                "id": 2580,
+                "id": 2587,
                 "name": "UserDefinedTypeName",
                 "src": "138:12:9"
               }
             ],
-            "id": 2581,
+            "id": 2588,
             "name": "InheritanceSpecifier",
             "src": "138:12:9"
           },
@@ -838,7 +838,7 @@
               "isConstructor": true,
               "name": "TokenAEur",
               "payable": false,
-              "scope": 2604,
+              "scope": 2611,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -850,7 +850,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_feeAccount",
-                      "scope": 2603,
+                      "scope": 2610,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -863,12 +863,12 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 2582,
+                        "id": 2589,
                         "name": "ElementaryTypeName",
                         "src": "176:7:9"
                       }
                     ],
-                    "id": 2583,
+                    "id": 2590,
                     "name": "VariableDeclaration",
                     "src": "176:19:9"
                   },
@@ -876,7 +876,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_transferFeePt",
-                      "scope": 2603,
+                      "scope": 2610,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -889,12 +889,12 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 2584,
+                        "id": 2591,
                         "name": "ElementaryTypeName",
                         "src": "197:4:9"
                       }
                     ],
-                    "id": 2585,
+                    "id": 2592,
                     "name": "VariableDeclaration",
                     "src": "197:19:9"
                   },
@@ -902,7 +902,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_transferFeeMin",
-                      "scope": 2603,
+                      "scope": 2610,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -915,12 +915,12 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 2586,
+                        "id": 2593,
                         "name": "ElementaryTypeName",
                         "src": "218:4:9"
                       }
                     ],
-                    "id": 2587,
+                    "id": 2594,
                     "name": "VariableDeclaration",
                     "src": "218:20:9"
                   },
@@ -928,7 +928,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_transferFeeMax",
-                      "scope": 2603,
+                      "scope": 2610,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -941,17 +941,17 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 2588,
+                        "id": 2595,
                         "name": "ElementaryTypeName",
                         "src": "240:4:9"
                       }
                     ],
-                    "id": 2589,
+                    "id": 2596,
                     "name": "VariableDeclaration",
                     "src": "240:20:9"
                   }
                 ],
-                "id": 2590,
+                "id": 2597,
                 "name": "ParameterList",
                 "src": "175:86:9"
               },
@@ -962,7 +962,7 @@
                   ]
                 },
                 "children": [],
-                "id": 2601,
+                "id": 2608,
                 "name": "ParameterList",
                 "src": "440:0:9"
               },
@@ -974,11 +974,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 3347,
+                      "referencedDeclaration": 3354,
                       "type": "type(contract AugmintToken)",
                       "value": "AugmintToken"
                     },
-                    "id": 2591,
+                    "id": 2598,
                     "name": "Identifier",
                     "src": "273:12:9"
                   },
@@ -995,7 +995,7 @@
                       "type": "literal_string \"Augmint Crypto Euro\"",
                       "value": "Augmint Crypto Euro"
                     },
-                    "id": 2592,
+                    "id": 2599,
                     "name": "Literal",
                     "src": "286:21:9"
                   },
@@ -1012,7 +1012,7 @@
                       "type": "literal_string \"A-EUR\"",
                       "value": "A-EUR"
                     },
-                    "id": 2593,
+                    "id": 2600,
                     "name": "Literal",
                     "src": "309:7:9"
                   },
@@ -1029,7 +1029,7 @@
                       "type": "literal_string \"EUR\"",
                       "value": "EUR"
                     },
-                    "id": 2594,
+                    "id": 2601,
                     "name": "Literal",
                     "src": "318:5:9"
                   },
@@ -1046,7 +1046,7 @@
                       "type": "int_const 4",
                       "value": "4"
                     },
-                    "id": 2595,
+                    "id": 2602,
                     "name": "Literal",
                     "src": "325:1:9"
                   },
@@ -1056,11 +1056,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 2583,
+                      "referencedDeclaration": 2590,
                       "type": "address",
                       "value": "_feeAccount"
                     },
-                    "id": 2596,
+                    "id": 2603,
                     "name": "Identifier",
                     "src": "328:11:9"
                   },
@@ -1070,11 +1070,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 2585,
+                      "referencedDeclaration": 2592,
                       "type": "uint256",
                       "value": "_transferFeePt"
                     },
-                    "id": 2597,
+                    "id": 2604,
                     "name": "Identifier",
                     "src": "385:14:9"
                   },
@@ -1084,11 +1084,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 2587,
+                      "referencedDeclaration": 2594,
                       "type": "uint256",
                       "value": "_transferFeeMin"
                     },
-                    "id": 2598,
+                    "id": 2605,
                     "name": "Identifier",
                     "src": "401:15:9"
                   },
@@ -1098,16 +1098,16 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 2589,
+                      "referencedDeclaration": 2596,
                       "type": "uint256",
                       "value": "_transferFeeMax"
                     },
-                    "id": 2599,
+                    "id": 2606,
                     "name": "Identifier",
                     "src": "418:15:9"
                   }
                 ],
-                "id": 2600,
+                "id": 2607,
                 "name": "ModifierInvocation",
                 "src": "273:162:9"
               },
@@ -1118,22 +1118,22 @@
                   ]
                 },
                 "children": [],
-                "id": 2602,
+                "id": 2609,
                 "name": "Block",
                 "src": "440:2:9"
               }
             ],
-            "id": 2603,
+            "id": 2610,
             "name": "FunctionDefinition",
             "src": "157:285:9"
           }
         ],
-        "id": 2604,
+        "id": 2611,
         "name": "ContractDefinition",
         "src": "116:369:9"
       }
     ],
-    "id": 2605,
+    "id": 2612,
     "name": "SourceUnit",
     "src": "53:433:9"
   },
@@ -1306,5 +1306,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T18:14:31.562Z"
+  "updatedAt": "2018-02-14T22:04:14.846Z"
 }

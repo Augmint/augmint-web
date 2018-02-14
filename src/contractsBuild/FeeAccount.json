@@ -168,7 +168,7 @@
       "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/FeeAccount.sol",
       "exportedSymbols": {
         "FeeAccount": [
-          805
+          812
         ]
       }
     },
@@ -181,44 +181,44 @@
             ".19"
           ]
         },
-        "id": 801,
+        "id": 808,
         "name": "PragmaDirective",
         "src": "44:23:2"
       },
       {
         "attributes": {
-          "SourceUnit": 3900,
+          "SourceUnit": 3907,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
           "file": "./generic/SystemAccount.sol",
-          "scope": 806,
+          "scope": 813,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 802,
+        "id": 809,
         "name": "ImportDirective",
         "src": "68:37:2"
       },
       {
         "attributes": {
           "contractDependencies": [
-            3528,
-            3899
+            3535,
+            3906
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            805,
-            3899,
-            3528
+            812,
+            3906,
+            3535
           ],
           "name": "FeeAccount",
           "nodes": [
             null
           ],
-          "scope": 806
+          "scope": 813
         },
         "children": [
           {
@@ -232,25 +232,25 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3899,
+                  "referencedDeclaration": 3906,
                   "type": "contract SystemAccount"
                 },
-                "id": 803,
+                "id": 810,
                 "name": "UserDefinedTypeName",
                 "src": "131:13:2"
               }
             ],
-            "id": 804,
+            "id": 811,
             "name": "InheritanceSpecifier",
             "src": "131:13:2"
           }
         ],
-        "id": 805,
+        "id": 812,
         "name": "ContractDefinition",
         "src": "108:81:2"
       }
     ],
-    "id": 806,
+    "id": 813,
     "name": "SourceUnit",
     "src": "44:146:2"
   },
@@ -266,5 +266,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T18:14:27.515Z"
+  "updatedAt": "2018-02-14T22:04:11.237Z"
 }

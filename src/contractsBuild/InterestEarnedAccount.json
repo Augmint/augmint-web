@@ -190,7 +190,7 @@
       "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/InterestEarnedAccount.sol",
       "exportedSymbols": {
         "InterestEarnedAccount": [
-          832
+          839
         ]
       }
     },
@@ -203,56 +203,56 @@
             ".19"
           ]
         },
-        "id": 807,
+        "id": 814,
         "name": "PragmaDirective",
         "src": "127:23:3"
       },
       {
         "attributes": {
-          "SourceUnit": 3900,
+          "SourceUnit": 3907,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
           "file": "./generic/SystemAccount.sol",
-          "scope": 833,
+          "scope": 840,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 808,
+        "id": 815,
         "name": "ImportDirective",
         "src": "151:37:3"
       },
       {
         "attributes": {
-          "SourceUnit": 4085,
+          "SourceUnit": 4092,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
           "file": "./interfaces/AugmintTokenInterface.sol",
-          "scope": 833,
+          "scope": 840,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 809,
+        "id": 816,
         "name": "ImportDirective",
         "src": "189:48:3"
       },
       {
         "attributes": {
           "contractDependencies": [
-            3528,
-            3899
+            3535,
+            3906
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            832,
-            3899,
-            3528
+            839,
+            3906,
+            3535
           ],
           "name": "InterestEarnedAccount",
-          "scope": 833
+          "scope": 840
         },
         "children": [
           {
@@ -266,15 +266,15 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3899,
+                  "referencedDeclaration": 3906,
                   "type": "contract SystemAccount"
                 },
-                "id": 810,
+                "id": 817,
                 "name": "UserDefinedTypeName",
                 "src": "274:13:3"
               }
             ],
-            "id": 811,
+            "id": 818,
             "name": "InheritanceSpecifier",
             "src": "274:13:3"
           },
@@ -285,7 +285,7 @@
               "isConstructor": false,
               "name": "transferInterest",
               "payable": false,
-              "scope": 832,
+              "scope": 839,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "external"
@@ -297,7 +297,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "augmintToken",
-                      "scope": 831,
+                      "scope": 838,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract AugmintTokenInterface",
@@ -309,15 +309,15 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "AugmintTokenInterface",
-                          "referencedDeclaration": 4084,
+                          "referencedDeclaration": 4091,
                           "type": "contract AugmintTokenInterface"
                         },
-                        "id": 812,
+                        "id": 819,
                         "name": "UserDefinedTypeName",
                         "src": "321:21:3"
                       }
                     ],
-                    "id": 813,
+                    "id": 820,
                     "name": "VariableDeclaration",
                     "src": "321:34:3"
                   },
@@ -325,7 +325,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "locker",
-                      "scope": 831,
+                      "scope": 838,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -338,12 +338,12 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 814,
+                        "id": 821,
                         "name": "ElementaryTypeName",
                         "src": "357:7:3"
                       }
                     ],
-                    "id": 815,
+                    "id": 822,
                     "name": "VariableDeclaration",
                     "src": "357:14:3"
                   },
@@ -351,7 +351,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "interestAmount",
-                      "scope": 831,
+                      "scope": 838,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -364,17 +364,17 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 816,
+                        "id": 823,
                         "name": "ElementaryTypeName",
                         "src": "373:4:3"
                       }
                     ],
-                    "id": 817,
+                    "id": 824,
                     "name": "VariableDeclaration",
                     "src": "373:19:3"
                   }
                 ],
-                "id": 818,
+                "id": 825,
                 "name": "ParameterList",
                 "src": "320:73:3"
               },
@@ -385,7 +385,7 @@
                   ]
                 },
                 "children": [],
-                "id": 822,
+                "id": 829,
                 "name": "ParameterList",
                 "src": "446:0:3"
               },
@@ -397,11 +397,11 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 3382,
+                      "referencedDeclaration": 3389,
                       "type": "modifier (bytes32)",
                       "value": "restrict"
                     },
-                    "id": 819,
+                    "id": 826,
                     "name": "Identifier",
                     "src": "407:8:3"
                   },
@@ -418,12 +418,12 @@
                       "type": "literal_string \"MonetarySupervisorContract\"",
                       "value": "MonetarySupervisorContract"
                     },
-                    "id": 820,
+                    "id": 827,
                     "name": "Literal",
                     "src": "416:28:3"
                   }
                 ],
-                "id": 821,
+                "id": 828,
                 "name": "ModifierInvocation",
                 "src": "407:38:3"
               },
@@ -463,7 +463,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "transfer",
-                              "referencedDeclaration": 4083,
+                              "referencedDeclaration": 4090,
                               "type": "function (address,uint256) external returns (bool)"
                             },
                             "children": [
@@ -473,16 +473,16 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 813,
+                                  "referencedDeclaration": 820,
                                   "type": "contract AugmintTokenInterface",
                                   "value": "augmintToken"
                                 },
-                                "id": 823,
+                                "id": 830,
                                 "name": "Identifier",
                                 "src": "456:12:3"
                               }
                             ],
-                            "id": 825,
+                            "id": 832,
                             "name": "MemberAccess",
                             "src": "456:21:3"
                           },
@@ -492,11 +492,11 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 815,
+                              "referencedDeclaration": 822,
                               "type": "address",
                               "value": "locker"
                             },
-                            "id": 826,
+                            "id": 833,
                             "name": "Identifier",
                             "src": "478:6:3"
                           },
@@ -506,41 +506,41 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 817,
+                              "referencedDeclaration": 824,
                               "type": "uint256",
                               "value": "interestAmount"
                             },
-                            "id": 827,
+                            "id": 834,
                             "name": "Identifier",
                             "src": "486:14:3"
                           }
                         ],
-                        "id": 828,
+                        "id": 835,
                         "name": "FunctionCall",
                         "src": "456:45:3"
                       }
                     ],
-                    "id": 829,
+                    "id": 836,
                     "name": "ExpressionStatement",
                     "src": "456:45:3"
                   }
                 ],
-                "id": 830,
+                "id": 837,
                 "name": "Block",
                 "src": "446:62:3"
               }
             ],
-            "id": 831,
+            "id": 838,
             "name": "FunctionDefinition",
             "src": "295:213:3"
           }
         ],
-        "id": 832,
+        "id": 839,
         "name": "ContractDefinition",
         "src": "240:271:3"
       }
     ],
-    "id": 833,
+    "id": 840,
     "name": "SourceUnit",
     "src": "127:385:3"
   },
@@ -591,5 +591,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T18:14:30.391Z"
+  "updatedAt": "2018-02-14T22:04:13.805Z"
 }

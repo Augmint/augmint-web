@@ -35,7 +35,7 @@
       "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
       "exportedSymbols": {
         "TokenReceiver": [
-          1335
+          4167
         ]
       }
     },
@@ -48,9 +48,9 @@
             ".19"
           ]
         },
-        "id": 1325,
+        "id": 4157,
         "name": "PragmaDirective",
-        "src": "90:23:5"
+        "src": "90:23:17"
       },
       {
         "attributes": {
@@ -64,10 +64,10 @@
           "documentation": null,
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            1335
+            4167
           ],
           "name": "TokenReceiver",
-          "scope": 1336
+          "scope": 4168
         },
         "children": [
           {
@@ -81,7 +81,7 @@
               ],
               "name": "transferNotification",
               "payable": false,
-              "scope": 1335,
+              "scope": 4167,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -93,7 +93,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "from",
-                      "scope": 1334,
+                      "scope": 4166,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -106,20 +106,20 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 1326,
+                        "id": 4158,
                         "name": "ElementaryTypeName",
-                        "src": "176:7:5"
+                        "src": "176:7:17"
                       }
                     ],
-                    "id": 1327,
+                    "id": 4159,
                     "name": "VariableDeclaration",
-                    "src": "176:12:5"
+                    "src": "176:12:17"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "amount",
-                      "scope": 1334,
+                      "scope": 4166,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -132,20 +132,20 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1328,
+                        "id": 4160,
                         "name": "ElementaryTypeName",
-                        "src": "190:7:5"
+                        "src": "190:7:17"
                       }
                     ],
-                    "id": 1329,
+                    "id": 4161,
                     "name": "VariableDeclaration",
-                    "src": "190:14:5"
+                    "src": "190:14:17"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "data",
-                      "scope": 1334,
+                      "scope": 4166,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -158,19 +158,19 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 1330,
+                        "id": 4162,
                         "name": "ElementaryTypeName",
-                        "src": "206:4:5"
+                        "src": "206:4:17"
                       }
                     ],
-                    "id": 1331,
+                    "id": 4163,
                     "name": "VariableDeclaration",
-                    "src": "206:9:5"
+                    "src": "206:9:17"
                   }
                 ],
-                "id": 1332,
+                "id": 4164,
                 "name": "ParameterList",
-                "src": "175:41:5"
+                "src": "175:41:17"
               },
               {
                 "attributes": {
@@ -179,24 +179,24 @@
                   ]
                 },
                 "children": [],
-                "id": 1333,
+                "id": 4165,
                 "name": "ParameterList",
-                "src": "223:0:5"
+                "src": "223:0:17"
               }
             ],
-            "id": 1334,
+            "id": 4166,
             "name": "FunctionDefinition",
-            "src": "146:78:5"
+            "src": "146:78:17"
           }
         ],
-        "id": 1335,
+        "id": 4167,
         "name": "ContractDefinition",
-        "src": "116:110:5"
+        "src": "116:110:17"
       }
     ],
-    "id": 1336,
+    "id": 4168,
     "name": "SourceUnit",
-    "src": "90:137:5"
+    "src": "90:137:17"
   },
   "compiler": {
     "name": "solc",
@@ -204,5 +204,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-14T18:11:29.070Z"
+  "updatedAt": "2018-02-14T22:03:18.672Z"
 }
