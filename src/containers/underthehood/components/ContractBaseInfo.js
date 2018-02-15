@@ -2,22 +2,24 @@ import React from "react";
 import { ErrorPanel } from "components/MsgPanels";
 import stringifier from "stringifier";
 import { Button } from "semantic-ui-react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const stringify = stringifier({ maxDepth: 3, indent: "   " });
+const stringifyInfo = stringifier({ maxDepth: 3, indent: "   " });
+const stringifyAbi = stringifier({ maxDepth: 10, indent: "   " });
 
 export function ContractBaseInfo(props) {
-    let { isConnected, isLoading, error, contract, info, connectionError } = props.contract;
+    const { isConnected, isLoading, error, contract, info, connectionError } = props.contract;
+
     return (
         <div>
             <p>
                 <small>
-                    Contract:<br />
+                    {props.contractName} contract:<br />
                     {contract == null ? "No contract" : contract.instance.address}
                 </small>
             </p>
-            <p>
-                {isConnected ? "connected" : "not connected"} |
-                {isLoading ? "Loading..." : "not loading"}
+            <p testid={`${props.contractName}-connectionStatus`}>
+                {isConnected ? "connected" : "not connected"} | {isLoading ? "Loading..." : "not loading"}
             </p>
 
             {connectionError ? (
@@ -28,8 +30,17 @@ export function ContractBaseInfo(props) {
 
             {error ? <ErrorPanel header="Tx error">{error.message}</ErrorPanel> : <p>No tx error</p>}
 
+            <CopyToClipboard
+                text={contract ? stringifyAbi(contract.abi) : ""}
+                onCopy={() => alert(`${props.contractName} 's ABI copied to clipboard`)}
+            >
+                <Button size="small" disabled={isLoading}>
+                    Copy contract ABI to clipboard
+                </Button>
+            </CopyToClipboard>
+
             <p>Info:</p>
-            <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringify(info)}</pre>
+            <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(info)}</pre>
 
             <Button size="small" onClick={props.refreshCb} disabled={isLoading}>
                 Refresh contract

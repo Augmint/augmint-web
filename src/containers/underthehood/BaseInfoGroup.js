@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
-import { AugmintTokenInfo } from "./components/AugmintTokenInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
+import { SystemInfo } from "./components/SystemInfo";
 import { ArrayDump } from "./components/ArrayDump";
 import { SignTest } from "./components/SignTest";
 import { Pgrid } from "components/PageLayout";
@@ -14,19 +14,19 @@ class BaseInfoGroup extends React.Component {
     }
 
     render() {
-        const { web3Connect, userBalances, augmintToken, accounts } = this.props;
         return (
             <Pgrid columns={3}>
                 <Pgrid.Column>
-                    <Web3ConnectionInfo web3Connect={web3Connect} />
-                    <UserAccountInfo userBalances={userBalances} />
-                    <SignTest web3Connect={web3Connect} />
+                    <Web3ConnectionInfo web3Connect={this.props.web3Connect} />
+
+                    <SignTest web3Connect={this.props.web3Connect} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <AugmintTokenInfo contract={augmintToken} />
+                    <UserAccountInfo userBalances={this.props.userBalances} />
+                    <SystemInfo />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <ArrayDump header="Accounts" items={accounts} />
+                    <ArrayDump header="Accounts" items={this.props.accounts} />
                 </Pgrid.Column>
             </Pgrid>
         );
@@ -36,6 +36,7 @@ class BaseInfoGroup extends React.Component {
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
     augmintToken: state.augmintToken,
+    monetarySupervisor: state.monetarySupervisor,
     userBalances: state.userBalances,
     accounts: state.web3Connect.accounts
 });

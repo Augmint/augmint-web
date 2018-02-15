@@ -56,7 +56,7 @@ export const Validations = {
     },
 
     minOrderTokenAmount: value => {
-        const minValue = store.getState().exchange.info.minOrderAmount;
+        const minValue = 1;
         let amount;
         try {
             amount = new BigNumber(value);

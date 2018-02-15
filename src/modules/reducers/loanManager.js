@@ -299,15 +299,16 @@ export function newLoan(productId, ethAmount) {
     };
 }
 
-export function repayLoan(loanId) {
+export function repayLoan(repaymentAmount, loanId) {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_REPAY_REQUESTED,
-            loanId: loanId
+            loanId,
+            repaymentAmount
         });
 
         try {
-            const result = await repayLoanTx(loanId);
+            const result = await repayLoanTx(repaymentAmount, loanId);
             return dispatch({
                 type: LOANMANAGER_REPAY_SUCCESS,
                 result: result

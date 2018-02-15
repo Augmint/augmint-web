@@ -1,35 +1,48 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { throttle } from 'lodash';
-import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
+import { Header, Container, Grid, Segment, Rail, Responsive, Image, Button } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, teamMembers, partners } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
+import { Member } from "./member.js";
 
 import "./styles.css";
 import * as styles from "./styles.js";
-import linkedinLogo from "assets/images/linkedin.png";
-import githubLogo from "assets/images/GitHub.png";
 import slackIcon from 'assets/images/slack-icon.svg';
 
 
 export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
-        
+
         this.scrollHandler = throttle(this.handleScroll.bind(this), 300);
         this.state = {
             transform: 0
         };
+
+        teamMembers.sort(function(a, b) {
+            var nameA = a.lastName.toUpperCase();
+            var nameB = b.lastName.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            // names must be equal
+            return 0;
+        });
       }
-    
+
     handleScroll(e) {
         const howItWorksSectionRect = document.querySelector('.how-to-use').getBoundingClientRect();
         const minPos = 200;
         const maxPos = howItWorksSectionRect.height - 200;
 
-        const itemTranslate = 
+        const itemTranslate =
         Math.min(
             maxPos,
             Math.max(
@@ -37,11 +50,11 @@ export default class NotConnectedHome extends React.Component {
                 Math.ceil(-howItWorksSectionRect.y) + 200
             )
         );
-    
+
         this.setState({
             transform: itemTranslate
         });
-        
+
     }
     componentDidMount() {
         window.addEventListener('scroll', this.scrollHandler);
@@ -71,7 +84,7 @@ export default class NotConnectedHome extends React.Component {
                             <BalanceIcon />
                         </div>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyFeatures.map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="center" key={feature.title}>
                                     <Segment style={styles.keyFeaturesSegment} basic>
@@ -88,7 +101,7 @@ export default class NotConnectedHome extends React.Component {
                             Great for business
                         </Header>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyBenefits.filter(item => item.type === "business").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">
@@ -102,7 +115,7 @@ export default class NotConnectedHome extends React.Component {
                             And for individuals
                         </Header>
 
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{ justifyContent: 'space-evenly'}}>
                             {keyBenefits.filter(item => item.type === "individual").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">
@@ -132,6 +145,9 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                         <Header as="h2">Buy and sell A-Euro</Header>
                         <Grid columns="equal">
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
@@ -144,8 +160,11 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                         <Header as="h2">How to use your A-Euro</Header>
-                        <Grid columns="equal">
+                        <Grid columns="equal" className="margin">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
                                     <Segment style={styles.howItWorksImage} basic>
@@ -168,6 +187,9 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
+                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                        </Segment>
                     </Container>
                     {
                         <Responsive
@@ -178,7 +200,7 @@ export default class NotConnectedHome extends React.Component {
                             position="left"
                             style={{ width: "auto", position: "absolute", transform: `translateY(${this.state.transform}px)`, zIndex: "2", transition: 'transform 0.3s linear', }}
                         >
-                            <a href="/tryit" id="useAEurButton" style={styles.useAEurButton}>
+                            <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
                                 <div style={styles.howItWorksRail}>
                                   <div style={styles.howItWorksRailBox}>
                                     <div>1</div>
@@ -197,28 +219,14 @@ export default class NotConnectedHome extends React.Component {
                 <Segment basic textAlign="left" as="section" className="team">
                   <Container>
                     <Header as="h2">Team</Header>
+                    <Grid columns="equal" style={{ marginBottom: 75 }}>
+                        {founders.map(member => (
+                            <Member member={member} key={member.pk} />
+                        ))}
+                    </Grid>
                     <Grid columns="equal">
                         {teamMembers.map(member => (
-                            <Grid.Column mobile="16" computer="8" textAlign="left" key={member.pk}>
-                                <Image
-                                    src={member.imgSrc}
-                                    avatar
-                                    floated="left"
-                                />
-                                <Header as="h3">
-                                    {member.name}
-                                </Header>
-                                <Header as="h5" style={{ margin: "10px 0 0" }}>
-                                    {member.title}{member.portfolio && <Header as="a" href={member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
-                                    {member.linedinUrl && <Header as="a" href={member.linedinUrl} target="_blank" className="social" >
-                                      <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
-                                    </Header>}
-                                    {member.githubUrl && <Header as="a" href={member.githubUrl} target="_blank" className="social" >
-                                      <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
-                                    </Header>}
-                                </Header>
-                                {member.description && <p className="description"> {member.description} </p>}
-                            </Grid.Column>
+                            <Member member={member} key={member.pk} />
                         ))}
                     </Grid>
                   </Container>

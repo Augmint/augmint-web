@@ -30,6 +30,7 @@ export function AppMenu(props) {
     const { location } = props;
 
     const currentLocation = location.pathname;
+    const showConnection = (["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
 
     return (
         <div>
@@ -54,9 +55,21 @@ export function AppMenu(props) {
                     )
                     }
                 </StyleNavList>
-                <Button type="a" id="useAEurButton" to="/tryit" color="primary">
-                    Use A-EUR
-                </Button>
+                {(!showConnection && !isConnected ) && (
+                    <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
+                        Use A-EUR
+                    </Button>
+                )}
+                {isConnected && (
+                  <div>
+                      Connected on {network.name}
+                  </div>
+                )}
+                {( showConnection && !isConnected ) && (
+                    <div>
+                        Not connected
+                    </div>
+                )}
             </StyledNavContainer>
             <StyledLogoContainer>
 

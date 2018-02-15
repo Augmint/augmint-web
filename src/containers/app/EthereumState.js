@@ -7,7 +7,7 @@ import { Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
-import { GitterButton } from "components/LinkButtons";
+import { DiscordButton } from "components/LinkButtons";
 
 export class EthereumState extends React.Component {
     render() {
@@ -62,7 +62,7 @@ export class EthereumState extends React.Component {
                     </p>
 
                     <p>Make sure you are connected to Rinkeby </p>
-                    <GitterButton />
+                    <DiscordButton />
                     <p>
                         If you feel geeky you can{" "}
                         <Link

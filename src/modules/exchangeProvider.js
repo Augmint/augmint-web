@@ -64,8 +64,8 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-// NewOrder(uint orderIndex, uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = (orderIndex, orderId, maker, price, tokenAmount, weiAmount) => {
+// event NewOrder(uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
+const onNewOrder = (orderId, maker, price, tokenAmount, weiAmount) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());

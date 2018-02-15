@@ -2,15 +2,17 @@ language: node_js
 cache:
   directories:
     - "node_modules"
+    - "augmint-contracts/node_modules"
 install:
     - npm install
     - cd augmint-contracts && npm install && cd ..
 before_script:
-    - npm run ganache:runmigrate > ganache.out &
-    - yarn start > yarn_start.out &
+    - npm run ganache:run > ganache.out &
+    - npm run truffle:migrate
+    - yarn start  &
 script:
     # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
-    #- npm run cypress:runrecord
+    - npm run cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_success:
   - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh

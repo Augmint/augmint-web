@@ -24,8 +24,6 @@ class AugmintToken extends React.Component {
     };
 
     render() {
-        const { augmintToken, rates } = this.props;
-
         return (
             <EthereumState>
                 <Psegment>
@@ -33,7 +31,13 @@ class AugmintToken extends React.Component {
 
                     <Pgrid columns={1}>
                         <Pgrid.Column>
-                            <AugmintStats size="small" showDetails augmintToken={augmintToken} rates={rates} />
+                            <AugmintStats
+                                size="small"
+                                showDetails
+                                augmintToken={this.props.augmintToken}
+                                monetarySupervisor={this.props.monetarySupervisor}
+                                rates={this.props.rates}
+                            />
                         </Pgrid.Column>
                         <Pgrid.Column>
                             <Button
@@ -64,6 +68,7 @@ const mapStateToProps = state => ({
     web3Instance: state.web3Connect.web3Instance,
 
     augmintToken: state.augmintToken,
+    monetarySupervisor: state.monetarySupervisor,
     rates: state.rates
 });
 

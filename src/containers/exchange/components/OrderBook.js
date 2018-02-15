@@ -7,23 +7,32 @@ import { MoreInfoTip } from "components/ToolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
 import CancelOrderButton from "./CancelOrderButton";
 
-import { TOKEN_SELL } from "modules/reducers/orders";
+import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 
 const OrderItem = props => {
     const { order, userAccountAddress } = props;
     const ret = [
         <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
-            {order.amount}
-            {order.orderType === TOKEN_SELL ? " A-EUR" : " ETH"}
+            {order.orderType === TOKEN_SELL && <span>{order.amount} A-EUR </span>}
+            {order.orderType === TOKEN_BUY && <span>{Math.round(order.amount * 100000) / 100000} ETH</span>}
         </Col>,
         <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
             {order.price}
         </Col>,
         <Col textAlign="right" key={`${order.orderType}-action`}>
             <MoreInfoTip>
+                {order.orderType === TOKEN_SELL && (
+                    <p>
+                        Sell {order.amount} A-EUR @{order.price} A-EUR/ETH= {order.amount / order.price} ETH
+                    </p>
+                )}
+                {order.orderType === TOKEN_BUY && (
+                    <p>
+                        Buy {order.amount} ETH @{order.price} A-EUR/ETH = {order.amount * order.price} A-EUR
+                    </p>
+                )}
                 Maker: {order.maker}
-                <br />Time: {order.addedTimeText}
-                <br />Order Id: {order.id} | index: {order.index}
+                <br />Order Id: {order.id}
             </MoreInfoTip>
             {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}
         </Col>
@@ -70,13 +79,7 @@ const OrderList = props => {
         <MyListGroup>
             <Row textAlign="center" columns={2}>
                 <Col header="Buy A-EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
-                <Col header="Sell A-EUR">
-                    {totalSellAmount > 0 && (
-                        <p>
-                            Total: {totalSellAmount} A-EUR
-                        </p>
-                    )}
-                </Col>
+                <Col header="Sell A-EUR">{totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}</Col>
             </Row>
             <Row columns={7} textAlign="center">
                 <Col width={3}>

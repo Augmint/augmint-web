@@ -109,7 +109,8 @@ p {
   margin: 5px 0 0;
 }
 
-.partner .grid .column a {
+.partner .grid .column a,
+.team .grid .column a {
   color: #fff;
   font-weight: 400;
 }
@@ -131,11 +132,6 @@ p {
 }
 
 @media (min-width: 768px) and (max-width: 1455px) {
-    .key-features .ui.equal.width.grid,
-    section.advantages.ui.segment {
-      padding-right: 96px;
-    }
-
     .ui.basic.segment.how-to-use,
     .ui.basic.segment.team {
         padding-left: 190px;
@@ -146,7 +142,7 @@ p {
     }
 }
 
-.ui.basic.segment.how-to-use .grid {
+.ui.basic.segment.how-to-use .grid.margin {
     margin-bottom: 100px;
 }
 

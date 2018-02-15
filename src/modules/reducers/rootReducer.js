@@ -3,6 +3,7 @@ import { routerReducer } from "react-router-redux";
 import web3Connect from "modules/reducers/web3Connect";
 import rates from "modules/reducers/rates";
 import augmintToken from "modules/reducers/augmintToken";
+import monetarySupervisor from "modules/reducers/monetarySupervisor";
 import loanManager from "modules/reducers/loanManager";
 import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
@@ -18,6 +19,7 @@ export default combineReducers({
     web3Connect,
     rates,
     augmintToken,
+    monetarySupervisor,
     loanManager,
     userBalances,
     userTransfers,

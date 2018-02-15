@@ -18,7 +18,7 @@ const initialState = {
     isLoading: false,
     isConnected: false,
     info: {
-        minOrderAmount: null,
+        chunkSize: null,
         bn_ethBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
@@ -89,7 +89,7 @@ export const connectExchange = () => {
         try {
             const contract = await SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
 
-            const info = await getAugmintTokenInfo(contract.instance);
+            const info = await getExchangeInfo(contract.instance);
 
             return dispatch({
                 type: EXCHANGE_CONNECT_SUCCESS,
@@ -112,7 +112,7 @@ export const refreshExchange = () => {
         });
         try {
             const exchange = store.getState().exchange.contract.instance;
-            const info = await getAugmintTokenInfo(exchange);
+            const info = await getExchangeInfo(exchange);
 
             return dispatch({
                 type: EXCHANGE_REFRESH_SUCCESS,
@@ -127,14 +127,14 @@ export const refreshExchange = () => {
     };
 };
 
-async function getAugmintTokenInfo(exchange) {
+async function getExchangeInfo(exchange) {
     const augmintToken = store.getState().augmintToken.contract.instance;
 
-    const [bn_ethBalance, bn_tokenBalance, orderCount, bn_minOrderAmount] = await Promise.all([
+    const [bn_ethBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
         asyncGetBalance(exchange.address),
         augmintToken.balanceOf(exchange.address),
-        exchange.getOrderCounts(),
-        exchange.minOrderAmount()
+        exchange.getActiveOrderCounts(),
+        exchange.CHUNK_SIZE()
     ]);
 
     return {
@@ -144,7 +144,6 @@ async function getAugmintTokenInfo(exchange) {
         tokenBalance: bn_tokenBalance.div(10000).toString(),
         buyOrderCount: orderCount[0].toNumber(),
         sellOrderCount: orderCount[1].toNumber(),
-        bn_minOrderAmount: bn_minOrderAmount,
-        minOrderAmount: bn_minOrderAmount.div(10000).toNumber()
+        chunkSize: chunkSize.toNumber()
     };
 }

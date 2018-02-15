@@ -81,14 +81,18 @@ article.concept section.ui.segment.green-gradient {
   max-width: 499px;
 }
 
-.Site-content article section.ui.segment.green-gradient p a {
-  color: #fff;
+.Site-content article section.ui.segment.green-gradient p a,
+article.concept .ui.horizontal.link.list>.item a:hover {
+  color: #fff !important;
   font-weight: bold;
+}
+
+article.concept .ui.horizontal.link.list>.item a {
+  color: rgba(255,255,255,.6) !important;
 }
 
 article.concept .ui.horizontal.list>.item {
   border: none;
-  color: rgba(255,255,255,.6);
   font-weight: 200;
   letter-spacing: 2.4px;
   margin: 0 16px;
@@ -176,5 +180,17 @@ article.concept .ui.horizontal.list:last-child {
 
   .Site-content article.concept .whitepaper-manifesto .two.column.row .column  {
     width: auto !important;
+  }
+}
+
+@media (max-width: 1800px) and (min-width: 1481px) {
+  article.concept section.ui.segment {
+    padding: 0 230px;
+  }
+}
+
+@media (min-width: 1801px) {
+  article.concept section.ui.segment {
+    padding: 0 390px;
   }
 }

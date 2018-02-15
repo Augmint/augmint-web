@@ -4,13 +4,13 @@ import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { EthereumState } from "containers/app/EthereumState";
 import { SuccessPanel } from "components/MsgPanels";
-import { GitterButton } from "components/LinkButtons";
+import { DiscordButton } from "components/LinkButtons";
 
 export function TryItConnected(props) {
     return (
         <EthereumState>
             <Tsegment>
-                <SuccessPanel header="Great! You are connected" />
+                <SuccessPanel testid="TryItConnectedPanel" header="Great! You are connected" />
 
                 <Tblock header="Get some test ETH">
                     <p>
@@ -41,8 +41,7 @@ export function TryItConnected(props) {
 
                 <Tblock header="Play around">
                     <p>
-                        See your loans, transactions and transfer A-EUR from your{" "}
-                        <Link to="/account">account</Link>
+                        See your loans, transactions and transfer A-EUR from your <Link to="/account">account</Link>
                     </p>
                     <p>
                         Check the <Link to="/reserves">Augmint reserves</Link>
@@ -50,7 +49,7 @@ export function TryItConnected(props) {
                 </Tblock>
                 <Tsegment.Row centered columns={1}>
                     <Tsegment.Column textAlign="center">
-                        <GitterButton />
+                        <DiscordButton />
                     </Tsegment.Column>
                 </Tsegment.Row>
             </Tsegment>

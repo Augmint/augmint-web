@@ -11,7 +11,9 @@ import "./custom_footer_style.css";
 const segmentStyle = {
     background: "url(" + backgroundImg + ")",
     backgroundPosition: "top",
-    backgroundSize: "cover"
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    minHeight: 500,
 };
 
 export function AppFooter(props) {
@@ -53,14 +55,24 @@ export function AppFooter(props) {
                     />
                     <List.Item
                         as="a"
+                        href="/manifesto"
+                        content="MANIFESTO"
+                    />
+                    <List.Item
+                        as="a"
+                        href="/disclaimer"
+                        content="DISCLAIMER"
+                    />
+                    <List.Item
+                        as="a"
                         href="/contact"
                         content="CONTACT"
                     />
                 </List>
                 <Subscribe />
-                <div class="partner">
+                <div className="partner">
                   <img src={decent} alt="Decent logo" />
-                  <h5>Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.</h5>
+                  <h5>Augmint was born at <a href="http://www.decent.org/" target="_blank" rel="noopener noreferrer">Decent</a>.</h5>
                 </div>
             </Container>
         </Segment>

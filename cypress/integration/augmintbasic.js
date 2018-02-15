@@ -1,6 +1,7 @@
 /*
-TODO: testprc crashes sometime from these tests (and with normal use too).
-        Follow this bug: https://github.com/trufflesuite/ganache-cli/issues/453
+    TODO:
+        - use testid everywhere
+        - split into multiple
 */
 
 describe("Augmint basic e2e", function() {
@@ -12,9 +13,11 @@ describe("Augmint basic e2e", function() {
 
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.contains("Get A-EUR Loan").click();
-        cy.contains("Select type of loan");
+
         cy.get("#selectLoanProduct-" + prodId).click();
-        cy.contains("Selected: loan product " + (prodId + 1));
+        cy
+            .get("[testid='selectedLoanProductBlock']")
+            .should("contain", "Selected: loan product " + (prodId + 1));
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("#disbursedTokenAmount")
@@ -24,14 +27,17 @@ describe("Augmint basic e2e", function() {
             .get("#repaymentAmount")
             .should("have.value", repaymentAmount.toString());
         cy.get("#ethAmount").should("have.value", ethAmount.toString());
+
         return getUserAEurBalance().then(aEurBalanceBefore => {
             const expBal =
                 Math.round((aEurBalanceBefore + disbursedAmount) * 10000) /
                 10000;
             cy.get("#submitBtn").click();
-            cy.contains("You've got a loan");
+            cy
+                .get("[testid='EthSubmissionSuccessPanel']")
+                .contains("You've got a loan");
             cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
-            cy.contains("To be repayed: " + repaymentAmount + " A-EUR");
+            cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
             cy.contains("Collateral in escrow: " + ethAmount + " ETH");
             cy
                 .get("#userAEurBalance")
@@ -44,8 +50,10 @@ describe("Augmint basic e2e", function() {
 
     before(function() {
         cy.visit("/");
-        cy.get("#useAEurButton > .center").click(); // TODO: fix duplicate id on UI
-        cy.contains("You are connected");
+        cy.get("[tid='useAEurButton']").click();
+        cy
+            .get("[testid='TryItConnectedPanel']")
+            .should("contain", "You are connected");
     });
 
     beforeEach(function() {
@@ -57,19 +65,48 @@ describe("Augmint basic e2e", function() {
     });
 
     it("Click through main functions", function() {
+        cy.visit("/under-the-hood");
+
+        cy.get("[testid='baseInfoLink']").click();
+        cy.get("[testid='web3ConnectionInfo']").contains("connected");
+        cy.get("[testid='userAccountTokenBalance']").should("not.contain", "?");
+
+        cy.screenshot("underthehood_baseinfo");
+
+        cy.get("[testid='augmintInfoLink']").click();
+        cy
+            .get("[testid='MonetarySupervisor-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy
+            .get("[testid='AugmintToken-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy.screenshot("underthehood_augmint_baseinfo");
+
+        cy.get("[testid='loansInfoLink']").click();
+        cy
+            .get("[testid='LoanManager-connectionStatus']")
+            .should("contain", "connected | not loading");
+        cy.screenshot("underthehood_loans");
+
         cy.contains("My Account").click();
-        cy.contains("Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3");
+        cy
+            .get("[testid='accountInfoBlock']")
+            .should(
+                "contain",
+                "Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3"
+            );
         cy.get("#transferListDiv");
+
         cy.contains("Get A-EUR Loan").click();
-        cy.contains("Select type of loan");
         cy.get("#selectLoanProduct-0").click();
 
         cy.contains("Reserves").click();
-        cy.contains("Augmint Reserves");
-        cy.contains("0 A-EUR");
+        cy.get("[testid='totalSupply']").should("contain", "0 A-EUR");
 
         cy.get("#loansToCollectBtn").click();
-        cy.contains("No defaulted and uncollected loan.");
+        cy
+            .get("[testid='loansToCollectBlock']")
+            .should("contain", "No defaulted and uncollected loan.");
     });
 
     it("Should get and collect a loan", function() {
@@ -83,7 +120,9 @@ describe("Augmint basic e2e", function() {
                 // // TODO: check reserves
                 cy.get(".loansToCollectButton").click();
                 cy.get(".collectLoanButton").click();
-                cy.contains("Successful collection of 1 loans");
+                cy
+                    .get("[testid='EthSubmissionSuccessPanel']")
+                    .should("contain", "Successful collection of 1 loans");
             });
     });
 
@@ -99,21 +138,20 @@ describe("Augmint basic e2e", function() {
             })
             .then(aEurBalanceBefore => {
                 const expBal =
-                    Math.round(
-                        (aEurBalanceBefore - aEurBalanceBefore) * 10000
-                    ) / 10000;
+                    Math.round((aEurBalanceBefore - 250) * 10000) / 10000;
+
                 cy.contains("this loan's page").click();
                 cy.get(".repayEarlyButton").click();
                 cy.get(".confirmRepayButton").click();
 
-                cy.contains("Successful repayment");
                 cy
-                    .get("#userAEurBalance")
-                    .contains(expBal.toString())
-                    .then(res => {
-                        cy.get(".accountInfo");
-                        cy.should("not.have.class", "loading");
-                    });
+                    .get("[testid='EthSubmissionSuccessPanel']")
+                    .should("contain", "Successful repayment");
+                cy.get("#userAEurBalance").should("contain", expBal);
+
+                cy.get(".accountInfo");
+                cy.should("not.have.class", "loading");
+
                 cy.contains("My Account").click();
                 // TODO loan removed, status etc.
             });

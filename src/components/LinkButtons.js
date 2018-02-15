@@ -1,28 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { Segment, Image } from "semantic-ui-react";
 
-export function GitterButton(props) {
-    const {
-        content = "Ask for help on our gitter channel",
-        icon = "chat",
-        labelPosition = "left",
-        size = "large",
-        target = "_blank",
-        primary = true,
-        ...other
-    } = props;
+import discordSVG from "assets/images/Discord-Logo.svg";
+
+export function DiscordButton(props) {
     return (
-        <Button
-            as={Link}
-            to="https://gitter.im/digital-credit-money/Lobby?utm_source=GitterButton&utm_medium=web&utm_campaign=init"
-            icon={icon}
-            labelPosition={labelPosition}
-            content={content}
-            target={target}
-            size={size}
-            primary={primary}
-            {...other}
-        />
+        <Segment
+            basic
+            className="discord"
+            size="small"
+            as="a"
+            href="https://discord.gg/PwDmsnu"
+            target="_blank"
+            style={{ color: "#ffad00", display: "block", fontSize: 18, lineHeight: 1.29, margin: 0, padding: 0 }}
+        >
+            <Image src={discordSVG} style={{ display: "inline-block", marginRight: 20, maxWidth: 40 }}/>
+            Ask for help on our Discord
+        </Segment>
     );
 }

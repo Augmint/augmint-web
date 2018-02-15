@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
+import { Disclaimer } from "./Disclaimer";
 
 class TryIt extends React.Component {
     componentDidMount() {
@@ -17,6 +18,7 @@ class TryIt extends React.Component {
         const { isLoading, isConnected } = this.props.web3Connect;
         return (
             <Tsegment header="Try Augmint">
+                <Disclaimer />
                 {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
                 {!isLoading && !isConnected && <HowToConnect />}
                 {!isLoading && isConnected && <TryItConnected />}

@@ -1,6 +1,7 @@
 import React from "react";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
+import AugmintInfoGroup from "./AugmintInfoGroup";
 import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
@@ -35,6 +36,7 @@ export default class underTheHood extends React.Component {
                         <Pgrid.Column>
                             <Menu size="massive" tabular>
                                 <Menu.Item
+                                    testid="baseInfoLink"
                                     active={selectedGroup === "baseinfo"}
                                     name="baseinfo"
                                     onClick={this.handleSelectGroup}
@@ -42,6 +44,15 @@ export default class underTheHood extends React.Component {
                                     Base info
                                 </Menu.Item>
                                 <Menu.Item
+                                    testid="augmintInfoLink"
+                                    active={selectedGroup === "augmintInfo"}
+                                    name="augmintInfo"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Augmint info
+                                </Menu.Item>
+                                <Menu.Item
+                                    testid="loansInfoLink"
                                     active={selectedGroup === "loans"}
                                     name="loans"
                                     onClick={this.handleSelectGroup}
@@ -49,6 +60,7 @@ export default class underTheHood extends React.Component {
                                     Loans
                                 </Menu.Item>
                                 <Menu.Item
+                                    testid="exchangeInfoLink"
                                     active={selectedGroup === "exchange"}
                                     name="exchange"
                                     onClick={this.handleSelectGroup}
@@ -58,6 +70,7 @@ export default class underTheHood extends React.Component {
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
+                            {selectedGroup === "augmintInfo" && <AugmintInfoGroup />}
                             {selectedGroup === "loans" && <LoansInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                         </Pgrid.Column>

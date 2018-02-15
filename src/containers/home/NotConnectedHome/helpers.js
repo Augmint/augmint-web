@@ -28,6 +28,8 @@ import lheves from 'assets/images/team/lheves.jpg';
 import vszatmahry from 'assets/images/team/vszatmahry.jpg';
 import thume from 'assets/images/team/thume.jpg';
 import vkontra from 'assets/images/team/vkontra.jpg';
+import gycsado from 'assets/images/team/gycsado.jpg';
+import aszabo from 'assets/images/team/aszabo.jpg';
 
 import decent from 'assets/images/decent.png';
 
@@ -172,33 +174,39 @@ export const howItWorks = [
         image: <PremiumIcon/>,
         type: 'lock',
         title: 'Get premium',
-        text: 'Your locked amount including your premium is available.',
+        text: 'Your unlocked amount including your premium is available.',
     },
 
 
 ];
 
+export const founders = [
+  {
+    pk: 'team-1',
+    firstName: 'Peter',
+    lastName: 'Petrovics',
+    imgSrc: petrovics,
+    title: 'Founder, technologist',
+    linedinUrl:'https://www.linkedin.com/in/petrovics',
+    githubUrl:'https://github.com/szerintedmi',
+    description: "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook.",
+  },
+  {
+    pk: 'team-2',
+    firstName: 'Karoly',
+    lastName: 'Szabo',
+    imgSrc: kszabo,
+    title: 'Founder, economist',
+    githubUrl:'https://github.com/krosza',
+    description: "Károly is an entrepreneur with 30+ years management and financial experience. He managed and set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian banks."
+  }
+]
+
 export const teamMembers = [
     {
-        pk: 'team-1',
-        name: 'Peter Petrovics',
-        imgSrc: petrovics,
-        title: 'Founder, technologist',
-        linedinUrl:'https://www.linkedin.com/in/petrovics',
-        githubUrl:'https://github.com/szerintedmi',
-        description: "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook.",
-    },
-    {
-        pk: 'team-2',
-        name: 'Karoly Szabo',
-        imgSrc: kszabo,
-        title: 'Founder, economist',
-        githubUrl:'https://github.com/krosza',
-        description: "Károly is an entrepreneur with 30+ years’ management and financial experience. Managed small companies and medium sized organizations and companies. Having set up governmental agencies and business companies, supervised IT development projects. Worked a decade in the management of one of the of the largest Hungarian bank."
-    },
-    {
         pk: 'team-3',
-        name: 'Marton Elek',
+        firstName: 'Marton',
+        lastName: 'Elek',
         imgSrc: emarton,
         title: 'Marketing, PR strategy',
         linedinUrl:'https://www.linkedin.com/in/marton-elek',
@@ -206,7 +214,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-4',
-        name: 'Barnabas Debreczeni',
+        firstName: 'Barnabas',
+        lastName: 'Debreczeni',
         imgSrc: bdebreczeni,
         title: 'Cryptocurrency specialist, Shinrai founder',
         linedinUrl:'https://www.linkedin.com/in/bdebreczeni',
@@ -214,7 +223,8 @@ export const teamMembers = [
     },
     {
         pk: 'team-5',
-        name: 'Viktor Szathmáry',
+        firstName: 'Viktor',
+        lastName: 'Szathmáry',
         imgSrc: vszatmahry,
         title: 'Blockchain expert / development',
         linedinUrl:'https://www.linkedin.com/in/phraktle',
@@ -223,15 +233,18 @@ export const teamMembers = [
     },
     {
         pk: 'team-6',
-        name: 'Ben Jackson',
+        firstName: 'Ben',
+        lastName: 'Jackson',
         imgSrc: bjackson,
         title: 'Blockchain developer',
         linedinUrl:'https://www.linkedin.com/in/ben-jackson-0686a896',
         githubUrl:'https://github.com/BYossarian',
+        description: 'Software developer, and former mathematician, who loves the wild west of decentralised technologies.',
     },
     {
         pk: 'team-7',
-        name: 'Tom Hume',
+        firstName: 'Tom',
+        lastName: 'Hume',
         imgSrc: thume,
         title: 'Branding & Visual',
         linedinUrl:'https://www.linkedin.com/in/tom-hume-31b64014a',
@@ -239,19 +252,41 @@ export const teamMembers = [
     },
     {
         pk: 'team-8',
-        name: 'Laszlo Heves',
+        firstName: 'Laszlo',
+        lastName: 'Heves',
         imgSrc: lheves,
         title: 'Frontend, UX developer',
         linedinUrl:'https://www.linkedin.com/in/lheves',
         githubUrl:'https://github.com/reyrodrigez',
+        description: "Laci has 8+ years of experience building medium and large sized websites and applications . He helps in building the frontend but also  making sure users have a great experience using Augmint.",
     },
     {
         pk: 'team-9',
-        name: 'Verka Kontra',
+        firstName: 'Verka',
+        lastName: 'Kontra',
         imgSrc: vkontra,
         title: 'Financial expert',
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
-        description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis. ",
+        description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis.",
+    },
+    {
+        pk: 'team-10',
+        firstName: 'Gyorgy',
+        lastName: 'Csado',
+        imgSrc: gycsado,
+        title: 'Frontend developer',
+        linedinUrl:'https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb',
+        githubUrl:'https://github.com/gyurka00',
+        description: "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from eudge.</a>"
+    },
+    {
+        pk: 'team-11',
+        firstName: 'Andras',
+        lastName: 'Szabo',
+        imgSrc: aszabo,
+        title: 'Technical project manager',
+        linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
+        description: "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from eudge.</a>"
     }
 ];
 
@@ -260,7 +295,7 @@ export const partners = [
         pk: 'partner-1',
         name: 'Decent',
         imgSrc: decent,
-        description: "Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.",
+        description: "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a>",
         slackText: "Join Decent's slack.",
         slackUrl: 'https://decent-slack-autoinvite.herokuapp.com'
       }
