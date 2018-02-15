@@ -221,12 +221,12 @@ export default class NotConnectedHome extends React.Component {
                     <Header as="h2">Team</Header>
                     <Grid columns="equal" style={{ marginBottom: 75 }}>
                         {founders.map(member => (
-                            <Member member={member} />
+                            <Member member={member} key={member.pk} />
                         ))}
                     </Grid>
                     <Grid columns="equal">
                         {teamMembers.map(member => (
-                            <Member member={member} />
+                            <Member member={member} key={member.pk} />
                         ))}
                     </Grid>
                   </Container>

@@ -109,7 +109,8 @@ p {
   margin: 5px 0 0;
 }
 
-.partner .grid .column a {
+.partner .grid .column a,
+.team .grid .column a {
   color: #fff;
   font-weight: 400;
 }

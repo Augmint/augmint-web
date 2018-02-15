@@ -21,13 +21,13 @@ export class Member extends React.Component {
               <Header as="h5" style={{ margin: "10px 0 0" }}>
                   {this.props.member.title}{this.props.member.portfolio && <Header as="a" href={this.props.member.portfolio} target="_blank" content=', PORTFOLIO' style={{ fontSize: 12 }} />}
                   {this.props.member.linedinUrl && <Header as="a" href={this.props.member.linedinUrl} target="_blank" className="social" >
-                    <Image basic src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
+                    <Image basic="true" src={linkedinLogo} style={{ margin: 0, width: 14 }}/>
                   </Header>}
                   {this.props.member.githubUrl && <Header as="a" href={this.props.member.githubUrl} target="_blank" className="social" >
-                    <Image basic src={githubLogo} style={{ margin: 0, width: 14 }}/>
+                    <Image basic="true" src={githubLogo} style={{ margin: 0, width: 14 }}/>
                   </Header>}
               </Header>
-              {this.props.member.description && <p className="description"> {this.props.member.description} </p>}
+              {this.props.member.description && <p className="description" dangerouslySetInnerHTML={{__html: this.props.member.description}} />}
           </Grid.Column>
         );
     }

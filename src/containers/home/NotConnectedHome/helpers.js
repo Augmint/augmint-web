@@ -28,6 +28,8 @@ import lheves from 'assets/images/team/lheves.jpg';
 import vszatmahry from 'assets/images/team/vszatmahry.jpg';
 import thume from 'assets/images/team/thume.jpg';
 import vkontra from 'assets/images/team/vkontra.jpg';
+import gycsado from 'assets/images/team/gycsado.jpg';
+import aszabo from 'assets/images/team/aszabo.jpg';
 
 import decent from 'assets/images/decent.png';
 
@@ -265,6 +267,25 @@ export const teamMembers = [
         title: 'Financial expert',
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
         description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis. ",
+    },
+    {
+        pk: 'team-10',
+        firstName: 'Gyorgy',
+        lastName: 'Csado',
+        imgSrc: gycsado,
+        title: 'Frontend developer',
+        linedinUrl:'https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb',
+        githubUrl:'https://github.com/gyurka00',
+        description: "Works at <a href='https://euedge.com' target='_blank'>euedge</a>. ",
+    },
+    {
+        pk: 'team-11',
+        firstName: 'Andras',
+        lastName: 'Szabo',
+        imgSrc: aszabo,
+        title: 'Technical project manager',
+        linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
+        description: "Works at <a href='https://euedge.com' target='_blank'>euedge</a>. ",
     }
 ];
 
