@@ -258,7 +258,7 @@ export const teamMembers = [
         title: 'Frontend, UX developer',
         linedinUrl:'https://www.linkedin.com/in/lheves',
         githubUrl:'https://github.com/reyrodrigez',
-        description: "Laci has eight+ years of experience building medium and large sized websites and applications . He helps in building the frontend but also  making sure users have a great experience using Augmint.",
+        description: "Laci has 8+ years of experience building medium and large sized websites and applications . He helps in building the frontend but also  making sure users have a great experience using Augmint.",
     },
     {
         pk: 'team-9',
