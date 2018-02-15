@@ -276,7 +276,7 @@ export const teamMembers = [
         title: 'Frontend developer',
         linedinUrl:'https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb',
         githubUrl:'https://github.com/gyurka00',
-        description: "Works at <a href='https://euedge.com' target='_blank'>euedge</a>. ",
+        description: "<a href='https://euedge.com' target='_blank'>Works at euedge.</a> "
     },
     {
         pk: 'team-11',
@@ -285,7 +285,7 @@ export const teamMembers = [
         imgSrc: aszabo,
         title: 'Technical project manager',
         linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
-        description: "Works at <a href='https://euedge.com' target='_blank'>euedge</a>. ",
+        description: "<a href='https://euedge.com' target='_blank'>Works at euedge.</a> "
     }
 ];
 
@@ -294,7 +294,7 @@ export const partners = [
         pk: 'partner-1',
         name: 'Decent',
         imgSrc: decent,
-        description: "Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.",
+        description: "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a>",
         slackText: "Join Decent's slack.",
         slackUrl: 'https://decent-slack-autoinvite.herokuapp.com'
       }
