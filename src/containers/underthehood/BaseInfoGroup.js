@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
+import { SystemInfo } from "./components/SystemInfo";
 import { ArrayDump } from "./components/ArrayDump";
 import { SignTest } from "./components/SignTest";
 import { Pgrid } from "components/PageLayout";
@@ -22,6 +23,7 @@ class BaseInfoGroup extends React.Component {
                 </Pgrid.Column>
                 <Pgrid.Column>
                     <UserAccountInfo userBalances={this.props.userBalances} />
+                    <SystemInfo />
                 </Pgrid.Column>
                 <Pgrid.Column>
                     <ArrayDump header="Accounts" items={this.props.accounts} />
