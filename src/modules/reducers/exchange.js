@@ -19,7 +19,6 @@ const initialState = {
     isConnected: false,
     info: {
         chunkSize: null,
-        minOrderAmount: null,
         bn_ethBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
@@ -131,11 +130,10 @@ export const refreshExchange = () => {
 async function getExchangeInfo(exchange) {
     const augmintToken = store.getState().augmintToken.contract.instance;
 
-    const [bn_ethBalance, bn_tokenBalance, orderCount, bn_minOrderAmount, chunkSize] = await Promise.all([
+    const [bn_ethBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
         asyncGetBalance(exchange.address),
         augmintToken.balanceOf(exchange.address),
         exchange.getActiveOrderCounts(),
-        exchange.minOrderAmount(),
         exchange.CHUNK_SIZE()
     ]);
 
@@ -146,8 +144,6 @@ async function getExchangeInfo(exchange) {
         tokenBalance: bn_tokenBalance.div(10000).toString(),
         buyOrderCount: orderCount[0].toNumber(),
         sellOrderCount: orderCount[1].toNumber(),
-        bn_minOrderAmount: bn_minOrderAmount,
-        minOrderAmount: bn_minOrderAmount.div(10000).toNumber(),
         chunkSize: chunkSize.toNumber()
     };
 }

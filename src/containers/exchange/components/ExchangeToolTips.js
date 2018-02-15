@@ -11,5 +11,5 @@ export function NoOrdersToolTip(props) {
 }
 
 export function PriceToolTip(props) {
-    return <ToolTip header="A-EUR / EUR price">TODO: explanation</ToolTip>;
+    return <ToolTip header="A-EUR / ETH price">TODO: explanation</ToolTip>;
 }

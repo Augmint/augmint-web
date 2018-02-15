@@ -13,9 +13,9 @@ export function LoanManagerInfo(props) {
     };
 
     return (
-        <Pblock header="LoanManager contract">
+        <Pblock header="LoanManager">
             <p>LoanCount: {contract.info.loanCount} </p>
-            <ContractBaseInfo contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo contractName="LoanManager" contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
 }

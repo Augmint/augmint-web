@@ -1,5 +1,4 @@
 import store from "modules/store";
-import moment from "moment";
 import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 
@@ -47,7 +46,7 @@ async function getOrders(orderType, offset) {
     }
 
     const web3 = store.getState().web3Connect.web3Instance;
-    // result format: [id, maker, addedTime, price, amount]
+    // result format: [id, maker,  price, amount]
 
     const orders = result.reduce(
         (res, order, idx) => {
@@ -55,12 +54,11 @@ async function getOrders(orderType, offset) {
                 const parsed = {
                     id: order[0].toNumber(),
                     maker: "0x" + order[1].toString(16), // ethers.utils.hexlify(order[1].toString(16)),
-                    addedTime: order[2].toNumber(),
-                    bn_price: order[3],
-                    tokenAmount: orderType === TOKEN_BUY ? new BigNumber(0) : order[4],
-                    weiAmount: orderType === TOKEN_SELL ? new BigNumber(0) : order[4]
+                    bn_price: order[2],
+                    tokenAmount: orderType === TOKEN_BUY ? new BigNumber(0) : order[3],
+                    weiAmount: orderType === TOKEN_SELL ? new BigNumber(0) : order[3]
                 };
-                parsed.addedTimeText = moment.unix(parsed.addedTime).format("D MMM YYYY HH:mm:ss");
+
                 parsed.price = parsed.bn_price.div(10000).toNumber();
 
                 if (parsed.weiAmount.toString() !== "0") {
@@ -93,7 +91,7 @@ export function isOrderBetter(o1, o2) {
     }
 
     const dir = o1.orderType === TOKEN_SELL ? 1 : -1;
-    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.addedTime > o2.addedTime);
+    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id);
 }
 
 export async function placeOrderTx(orderType, amount, price) {
@@ -116,10 +114,10 @@ export async function placeOrderTx(orderType, amount, price) {
             case TOKEN_SELL:
                 const augmintToken = store.getState().augmintToken;
                 submitAmount = amount.times(augmintToken.info.bn_decimalsDiv).toString(); // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-                result = await augmintToken.contract.instance.placeSellTokenOrderOnExchange(
+                result = await augmintToken.contract.instance.transferAndNotify(
                     exchange.address,
-                    price * 10000,
                     submitAmount,
+                    price * 10000,
                     {
                         from: userAccount,
                         gas: gasEstimate

@@ -5,23 +5,25 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AugmintStats extends React.Component {
     render() {
-        const { showDetailsLink, augmintToken, rates, size, showDetails } = this.props;
+        const { showDetailsLink, augmintToken, monetarySupervisor, rates, size, showDetails } = this.props;
 
         const bn_ethFiatRate = showDetails ? rates.info.bn_ethFiatRate : null;
         const { isConnected, isLoading, connectionError } = this.props.augmintToken;
 
-        const {
-            totalSupply,
-            tokenBalance,
-            feeAccountAceBalance,
-            interestEarnedAccountAceBalance,
-            ethBalance,
-            bn_ethBalance,
-            issuedByMonetaryBoard
-        } = augmintToken.info;
+        const { totalSupply, feeAccountTokenBalance } = augmintToken.info;
 
-        const ethBalanceInFiat =
-            bn_ethFiatRate == null || bn_ethBalance == null ? "?" : bn_ethFiatRate.mul(bn_ethBalance).toString();
+        const {
+            reserveTokenBalance,
+            issuedByMonetaryBoard,
+            bn_reserveEthBalance,
+            reserveEthBalance,
+            interestEarnedAccountTokenBalance
+        } = monetarySupervisor.info;
+
+        const reserveEthBalanceInFiat =
+            bn_ethFiatRate == null || bn_reserveEthBalance == null
+                ? "?"
+                : bn_ethFiatRate.mul(bn_reserveEthBalance).toString();
 
         return (
             <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
@@ -30,32 +32,36 @@ export class AugmintStats extends React.Component {
                 <Statistic.Group widths="3" size={size}>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>Total supply</Statistic.Label>
-                        <Statistic.Value>{totalSupply} A-EUR</Statistic.Value>
+                        <Statistic.Value testid="totalSupply">{totalSupply} A-EUR</Statistic.Value>
                         {showDetails && (
-                            <p style={{ textAlign: "center" }}>
+                            <p testid="issuedByMonetaryBoard" style={{ textAlign: "center" }}>
                                 {issuedByMonetaryBoard} A-EUR issued by Monetary Board
                             </p>
                         )}
                     </Statistic>
                     <Statistic style={{ padding: "1em" }}>
                         <Statistic.Label>ETH reserve</Statistic.Label>
-                        <Statistic.Value>{ethBalance} ETH</Statistic.Value>
-                        {showDetails && <p style={{ textAlign: "center" }}>({ethBalanceInFiat} EUR)</p>}
+                        <Statistic.Value testid="reserveEthBalance">{reserveEthBalance} ETH</Statistic.Value>
+                        {showDetails && (
+                            <p testid="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>
+                                ({reserveEthBalanceInFiat} EUR)
+                            </p>
+                        )}
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testid="reserveTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR reserve</Statistic.Label>
-                        <Statistic.Value>{tokenBalance} A-EUR</Statistic.Value>
+                        <Statistic.Value>{reserveTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testid="feeAccountTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR fee account</Statistic.Label>
-                        <Statistic.Value>{feeAccountAceBalance} A-EUR</Statistic.Value>
+                        <Statistic.Value>{feeAccountTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>
 
-                    <Statistic style={{ padding: "1em" }}>
+                    <Statistic testid="interestEarnedAccountTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR earned interest account</Statistic.Label>
-                        <Statistic.Value>{interestEarnedAccountAceBalance} A-EUR</Statistic.Value>
+                        <Statistic.Value>{interestEarnedAccountTokenBalance} A-EUR</Statistic.Value>
                     </Statistic>
                 </Statistic.Group>
 

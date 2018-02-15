@@ -11,6 +11,7 @@
         "moment": "2.20.1",
         "parse": "1.11.0",
         "react": "16.2.0",
+        "react-copy-to-clipboard": "5.0.1",
         "react-dom": "16.2.0",
         "react-ga": "2.4.1",
         "react-redux": "5.0.6",
@@ -28,12 +29,10 @@
         "styled-components": "3.1.6",
         "styled-tools": "0.4.0",
         "truffle-contract": "3.0.3",
-        "web3": "1.0.0-beta.29"
+        "web3": "1.0.0-beta.30"
     },
     "scripts": {
-        "//": "simple 'cross_env NODE_PATH' doesn't work for some reason",
-        "start":
-            "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
+        "start": "$(npm bin)/cross-env NODE_PATH=./src react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",

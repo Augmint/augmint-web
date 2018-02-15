@@ -44,8 +44,8 @@ class CollectLoanMain extends React.Component {
                             </p>
                             <p>
                                 If the value of the ETH collateral (at the moment of collection) is higher than the
-                                A-EUR repayment amount less the fees for the collection then the leftover
-                                ETH will be transfered back to the borrower's ETH account.
+                                A-EUR repayment amount less the fees for the collection then the leftover ETH will be
+                                transfered back to the borrower's ETH account.
                             </p>
                         </Message>
                     </Pgrid.Column>
@@ -55,6 +55,7 @@ class CollectLoanMain extends React.Component {
                             onSuccess={() => store.dispatch(fetchLoansToCollect())}
                         />
                         <LoanList
+                            testid="loansToCollectBlock"
                             header="Loans to collect"
                             noItemMessage={<p>No defaulted and uncollected loan.</p>}
                             loans={loansToCollect}
