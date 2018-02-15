@@ -4,7 +4,7 @@ import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { EthereumState } from "containers/app/EthereumState";
 import { SuccessPanel } from "components/MsgPanels";
-import { GitterButton } from "components/LinkButtons";
+import { DiscordButton } from "components/LinkButtons";
 
 export function TryItConnected(props) {
     return (
@@ -49,7 +49,7 @@ export function TryItConnected(props) {
                 </Tblock>
                 <Tsegment.Row centered columns={1}>
                     <Tsegment.Column textAlign="center">
-                        <GitterButton />
+                        <DiscordButton />
                     </Tsegment.Column>
                 </Tsegment.Row>
             </Tsegment>
