@@ -41,7 +41,7 @@ export default class underTheHood extends React.Component {
                                     name="baseinfo"
                                     onClick={this.handleSelectGroup}
                                 >
-                                    Account Base info
+                                    Base info
                                 </Menu.Item>
                                 <Menu.Item
                                     testid="augmintInfoLink"
@@ -49,7 +49,7 @@ export default class underTheHood extends React.Component {
                                     name="augmintInfo"
                                     onClick={this.handleSelectGroup}
                                 >
-                                    Augmint base info
+                                    Augmint info
                                 </Menu.Item>
                                 <Menu.Item
                                     testid="loansInfoLink"
