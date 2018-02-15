@@ -198,7 +198,7 @@ export const founders = [
     imgSrc: kszabo,
     title: 'Founder, economist',
     githubUrl:'https://github.com/krosza',
-    description: "Károly is an entrepreneur with 30+ years management and financial experience. He managed small and medium sized organizations. He set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian bank."
+    description: "Károly is an entrepreneur with 30+ years management and financial experience. He managed and set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian banks."
   }
 ]
 
@@ -258,6 +258,7 @@ export const teamMembers = [
         title: 'Frontend, UX developer',
         linedinUrl:'https://www.linkedin.com/in/lheves',
         githubUrl:'https://github.com/reyrodrigez',
+        description: "Laci has eight+ years of experience building medium and large sized websites and applications . He helps in building the frontend but also  making sure users have a great experience using Augmint.",
     },
     {
         pk: 'team-9',
@@ -266,7 +267,7 @@ export const teamMembers = [
         imgSrc: vkontra,
         title: 'Financial expert',
         linedinUrl:'https://www.linkedin.com/in/veronika-kontra-321328143',
-        description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis. ",
+        description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis.",
     },
     {
         pk: 'team-10',
@@ -276,7 +277,7 @@ export const teamMembers = [
         title: 'Frontend developer',
         linedinUrl:'https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb',
         githubUrl:'https://github.com/gyurka00',
-        description: "<a href='https://euedge.com' target='_blank'>Works at euedge.</a> "
+        description: "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from eudge.</a>"
     },
     {
         pk: 'team-11',
@@ -285,7 +286,7 @@ export const teamMembers = [
         imgSrc: aszabo,
         title: 'Technical project manager',
         linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
-        description: "<a href='https://euedge.com' target='_blank'>Works at euedge.</a> "
+        description: "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from eudge.</a>"
     }
 ];
 
