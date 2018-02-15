@@ -39,6 +39,9 @@ export function SystemInfo(props) {
                     <br />the ID of the pull request and deploy preview (e.g. 1211). These two numbers will always match
                     (deploy-preview-12 is for PR # 12 in your repository)
                 </li>
+                <li>URL: {process.env.REACT_APP_URL}</li>
+                <li>DEPLOY_URL: {process.env.REACT_APP_DEPLOY_URL}</li>
+                <li>DEPLOY_PRIME_URL: {process.env.REACT_APP_DEPLOY_PRIME_URL}</li>
             </ul>
         </Pblock>
     );
