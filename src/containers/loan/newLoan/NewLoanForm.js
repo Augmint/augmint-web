@@ -127,9 +127,7 @@ class NewLoanForm extends React.Component {
                     >
                         <Label basic>
                             Loan amount{": "}
-                            <ToolTip>
-                                Disbursed loan amount (payed out) = Repayable loan amount x Discount Rate{" "}
-                            </ToolTip>
+                            <ToolTip>Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate </ToolTip>
                         </Label>
 
                         <input />
@@ -151,7 +149,7 @@ class NewLoanForm extends React.Component {
                         <Label basic>
                             Repayment amount{": "}
                             <ToolTip>
-                                Loan A-EUR amount to be payed back = Disbursed amount x ( 1 / Discount Rate )
+                                Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
                         <input />
