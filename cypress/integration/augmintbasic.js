@@ -37,7 +37,7 @@ describe("Augmint basic e2e", function() {
                 .get("[testid='EthSubmissionSuccessPanel']")
                 .contains("You've got a loan");
             cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
-            cy.contains("To be repayed: " + repaymentAmount + " A-EUR");
+            cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
             cy.contains("Collateral in escrow: " + ethAmount + " ETH");
             cy
                 .get("#userAEurBalance")
