@@ -145,7 +145,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
                             <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
                         </Segment>
                         <Header as="h2">Buy and sell A-Euro</Header>
@@ -160,7 +160,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
                             <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
                         </Segment>
                         <Header as="h2">How to use your A-Euro</Header>
@@ -187,7 +187,7 @@ export default class NotConnectedHome extends React.Component {
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "25px 0", textAlign: "left"}}>
+                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
                             <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
                         </Segment>
                     </Container>
