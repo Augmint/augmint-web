@@ -31,6 +31,26 @@
   margin-top: 0;
 }
 
-#roadmap p {
+#roadmap h4 {
   margin: 0;
+}
+
+#roadmap h4.state {
+  margin-bottom: 14px;
+}
+
+#roadmap p {
+  font-size: 15px;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  #roadmap h4:not(.state),
+  #roadmap h5,
+  #roadmap p {
+        opacity: 0.6;
+    }
 }

@@ -12,7 +12,7 @@ export default () => (
         {states.map((state, index) => (
           <div key={state.state}>
               <div className="state">
-                  <h4>{state.state}</h4>
+                  <h4 className="state">{state.state}</h4>
                   <h4>{state.title}</h4>
                   <h5>{state.date}</h5>
                   {state.descriptions.map((description, index) => (
