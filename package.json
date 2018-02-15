@@ -11,6 +11,7 @@
         "moment": "2.20.1",
         "parse": "1.11.0",
         "react": "16.2.0",
+        "react-copy-to-clipboard": "5.0.1",
         "react-dom": "16.2.0",
         "react-ga": "2.4.1",
         "react-redux": "5.0.6",

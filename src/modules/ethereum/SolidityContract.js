@@ -4,9 +4,11 @@ import ethers from "ethers";
 /*  connecting to both web3 and ethers contract instance is temporary fix for web3 event issues
 TODO: should we and could we get rid of web3 contract? */
 export default class SolidityContract {
-    constructor(connection, web3ContractInstance, ethersContractInstance) {
+    constructor(connection, web3ContractInstance, ethersContractInstance, abi) {
         this.instance = web3ContractInstance;
         this.ethersInstance = ethersContractInstance;
+        this.abi = abi; // storing this to be ethereum js lib independent
+
         // this.deployedAtBlock is used for filters' fromBlock - no point to query from earlier
         // FIXME: how to get the blockNumber of the contract deployment?
 
@@ -44,7 +46,7 @@ export default class SolidityContract {
 
         const provider = connection.ethers.provider;
         const ethersContractInstance = new ethers.Contract(contract.address, contract.abi, provider);
-        return new SolidityContract(connection, web3ContractInstance, ethersContractInstance);
+        return new SolidityContract(connection, web3ContractInstance, ethersContractInstance, contract.abi);
     }
 
     static async connectNewAt(connection, artifacts, address) {
