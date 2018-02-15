@@ -32,9 +32,7 @@
         "web3": "1.0.0-beta.30"
     },
     "scripts": {
-        "//": "simple 'cross_env NODE_PATH' doesn't work for some reason",
-        "start":
-            "node node_modules/cross-env/dist/bin/cross-env.js NODE_PATH=./src react-scripts start",
+        "start": "$(npm bin)/cross-env NODE_PATH=./src react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
