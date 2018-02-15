@@ -26,6 +26,7 @@ export function SystemInfo(props) {
             DEPLOY_URL: {process.env.REACT_APP_DEPLOY_URL}
             <br />
             DEPLOY_PRIME_URL: {process.env.REACT_APP_DEPLOY_PRIME_URL}
+            <br />
             NODE_VERSION: {process.env.REACT_APP_NODE_VERSION}
             <br />
             YARN_VERSION: {process.env.REACT_APP_YARN_VERSION}
