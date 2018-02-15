@@ -30,7 +30,6 @@ export function AppMenu(props) {
     const { location } = props;
 
     const currentLocation = location.pathname;
-    const isNotTryItPage = currentLocation !== "/tryit";
     const showConnection = (["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
 
     return (

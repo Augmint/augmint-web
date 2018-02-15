@@ -72,7 +72,7 @@ export function AppFooter(props) {
                 <Subscribe />
                 <div className="partner">
                   <img src={decent} alt="Decent logo" />
-                  <h5>Augmint was born at <a href='http://www.decent.org/' target='_blank'>Decent</a>.</h5>
+                  <h5>Augmint was born at <a href="http://www.decent.org/" target="_blank" rel="noopener noreferrer">Decent</a>.</h5>
                 </div>
             </Container>
         </Segment>
