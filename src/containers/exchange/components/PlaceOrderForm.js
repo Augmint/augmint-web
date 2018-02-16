@@ -26,10 +26,6 @@ class PlaceOrderForm extends React.Component {
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
     }
-    //
-    // componentDidMount() {
-    //     this.props.change("price", "1");
-    // }
 
     onOrderTypeChange(e, { name, index }) {
         this.setState({ orderType: index });
@@ -39,25 +35,22 @@ class PlaceOrderForm extends React.Component {
         let bn_tokenAmount, bn_price;
         try {
             bn_tokenAmount = new BigNumber(e.target.value);
-            bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
+            bn_price = new BigNumber(this.props.price);
         } catch (error) {
             this.props.change("ethAmount", "");
             return;
         }
 
-        const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
+        const ethValue = bn_tokenAmount.div(bn_price);
 
-        this.props.change(
-            "ethAmount",
-            ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        this.props.change("ethAmount", ethValue.round(ETH_DECIMALS, BigNumber.ROUND_UP).toString());
     }
 
     onEthAmountChange(e) {
         let bn_price, bn_ethAmount;
         try {
             bn_ethAmount = new BigNumber(e.target.value);
-            bn_price = new BigNumber(this.props.price); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
+            bn_price = new BigNumber(this.props.price);
         } catch (error) {
             this.props.change("tokenAmount", "");
             return;
@@ -65,33 +58,25 @@ class PlaceOrderForm extends React.Component {
 
         const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
 
-        this.props.change(
-            "tokenAmount",
-            tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        this.props.change("tokenAmount", tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_DOWN).toString());
     }
 
     onPriceChange(e) {
         // TODO
         let bn_price;
         try {
-            bn_price = new BigNumber(e.target.value); //.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
+            bn_price = new BigNumber(e.target.value);
 
             if (this.state.orderType === TOKEN_BUY) {
                 const bn_ethAmount = new BigNumber(this.props.ethAmount);
 
                 const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
-                this.props.change(
-                    "tokenAmount",
-                    tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-                );
+                this.props.change("tokenAmount", tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
             } else {
                 const bn_tokenAmount = new BigNumber(this.props.tokenAmount);
                 const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
-                this.props.change(
-                    "ethAmount",
-                    ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-                );
+
+                this.props.change("ethAmount", ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
             }
         } catch (error) {
             console.debug(error);
@@ -107,10 +92,11 @@ class PlaceOrderForm extends React.Component {
     }
 
     async handleSubmit(values) {
-        let amount;
+        let amount, price;
         const orderType = this.state.orderType;
-        const price = values.price;
+
         try {
+            price = new BigNumber(values.price);
             if (orderType === TOKEN_BUY) {
                 amount = new BigNumber(values.ethAmount);
             } else {
