@@ -131,15 +131,6 @@ article.concept .ui.horizontal.list:last-child {
   margin: 0;
 }
 
-.Site-content article .try-now {
-  color: #051d2d;
-  font-size: 13px;
-  height: 47px;
-  letter-spacing: 2.6px;
-  padding: 17px;
-  width: 142px;
-}
-
 .Site-content article section .ui.basic.center.aligned.segment {
   margin-top: 40px;
 }

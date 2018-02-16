@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-import { Header, Container, Grid, Segment, Rail, Responsive, Image, Button } from "semantic-ui-react";
+import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
+
+import Button from "components/button";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
@@ -134,7 +135,9 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                         <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                            <Button type="a" to="/tryit" color="primary">
+                                Try now
+                            </Button>
                         </Segment>
                         <Header as="h2">Buy and sell A-Euro</Header>
                         <Grid columns="equal">
@@ -149,7 +152,9 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                         <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                            <Button type="a" to="/tryit" color="primary">
+                                Try now
+                            </Button>
                         </Segment>
                         <Header as="h2">How to use your A-Euro</Header>
                         <Grid columns="equal" className="margin">
@@ -176,7 +181,9 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
                         <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                            <Button type="a" to="/tryit" color="primary">
+                                Try now
+                            </Button>
                         </Segment>
                     </Container>
                 </Segment>
