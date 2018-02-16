@@ -2,7 +2,7 @@ import React from "react";
 
 import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
-import { GitterButton } from "components/LinkButtons";
+import { DiscordButton } from "components/LinkButtons";
 
 export function HowToConnect(props) {
     return (
@@ -25,7 +25,7 @@ export function HowToConnect(props) {
             </Tsegment.Row>
             <Tsegment.Row centered columns={1}>
                 <Tsegment.Column textAlign="center">
-                    <GitterButton />
+                    <DiscordButton />
                     <p>
                         If you feel geeky you can{" "}
                         <Link
