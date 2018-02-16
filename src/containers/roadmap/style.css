@@ -1,32 +1,3 @@
-#roadmap {
-  margin: auto;
-  margin-top: 75px;
-  padding: 0 20px;
-  max-width: 1167px;
-}
-
-#roadmap>div img {
-  padding: 0px 135px;
-  max-width: 100%;
-}
-
-#roadmap>div:nth-child(odd) .state {
-  float: right;
-}
-
-#roadmap>div:nth-child(odd) img {
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  filter: FlipH;
-  -ms-filter: "FlipH";
-}
-
-#roadmap .state {
-  width:270px;
-}
-
 #roadmap h4,
 #roadmap h5,
 #roadmap p {
