@@ -4,8 +4,8 @@ import stringifier from "stringifier";
 import { Button } from "semantic-ui-react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
+// used instead of JSON.stringify to display any arbitary JSON in contracts.info (eg. handle circular dependencies )
 const stringifyInfo = stringifier({ maxDepth: 3, indent: "   " });
-const stringifyAbi = stringifier({ maxDepth: 10, indent: "   " });
 
 export function ContractBaseInfo(props) {
     const { isConnected, isLoading, error, contract, info, connectionError } = props.contract;
@@ -31,7 +31,7 @@ export function ContractBaseInfo(props) {
             {error ? <ErrorPanel header="Tx error">{error.message}</ErrorPanel> : <p>No tx error</p>}
 
             <CopyToClipboard
-                text={contract ? stringifyAbi(contract.abi) : ""}
+                text={contract ? JSON.stringify(contract.abi, null, 2) : ""}
                 onCopy={() => alert(`${props.contractName} 's ABI copied to clipboard`)}
             >
                 <Button size="small" disabled={isLoading}>
