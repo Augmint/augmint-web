@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { throttle } from 'lodash';
 import { Header, Container, Grid, Segment, Rail, Responsive, Image, Button } from "semantic-ui-react";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
@@ -18,11 +17,6 @@ export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
 
-        this.scrollHandler = throttle(this.handleScroll.bind(this), 300);
-        this.state = {
-            transform: 0
-        };
-
         teamMembers.sort(function(a, b) {
             var nameA = a.lastName.toUpperCase();
             var nameB = b.lastName.toUpperCase();
@@ -36,33 +30,6 @@ export default class NotConnectedHome extends React.Component {
             return 0;
         });
       }
-
-    handleScroll(e) {
-        const howItWorksSectionRect = document.querySelector('.how-to-use').getBoundingClientRect();
-        const minPos = 200;
-        const maxPos = howItWorksSectionRect.height - 200;
-
-        const itemTranslate =
-        Math.min(
-            maxPos,
-            Math.max(
-                minPos,
-                Math.ceil(-howItWorksSectionRect.y) + 200
-            )
-        );
-
-        this.setState({
-            transform: itemTranslate
-        });
-
-    }
-    componentDidMount() {
-        window.addEventListener('scroll', this.scrollHandler);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.scrollHandler);
-    }
 
     render() {
         return (
@@ -126,8 +93,29 @@ export default class NotConnectedHome extends React.Component {
                         </Grid>
                     </Segment>
                 </Container>
-
                 <Segment basic as="section" className="how-to-use">
+                    <Responsive
+                        as={Rail}
+                        minWidth={768}
+                        attached
+                        internal
+                        position="left"
+                        style={{ width: "160px", position: "sticky", zIndex: "2", top: "200px", marginLeft: "-300px" }}
+                    >
+                        <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
+                            <div style={styles.howItWorksRail}>
+                                <div style={styles.howItWorksRailBox}>
+                                <div>1</div>
+                                <div style={styles.howItWorksRailBoxSpan}>Euro</div>
+                                </div>
+                                <InterchangeIcon />
+                                <div style={styles.howItWorksRailBox}>
+                                <div>1</div>
+                                <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
+                                </div>
+                            </div>
+                        </a>
+                    </Responsive>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac">
@@ -191,30 +179,6 @@ export default class NotConnectedHome extends React.Component {
                             <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
                         </Segment>
                     </Container>
-                    {
-                        <Responsive
-                            as={Rail}
-                            minWidth={768}
-                            attached
-                            internal
-                            position="left"
-                            style={{ width: "auto", position: "absolute", transform: `translateY(${this.state.transform}px)`, zIndex: "2", transition: 'transform 0.3s linear', }}
-                        >
-                            <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
-                                <div style={styles.howItWorksRail}>
-                                  <div style={styles.howItWorksRailBox}>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>Euro</div>
-                                  </div>
-                                  <InterchangeIcon />
-                                  <div style={styles.howItWorksRailBox}>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
-                                  </div>
-                                </div>
-                            </a>
-                        </Responsive>
-                    }
                 </Segment>
                 <Segment basic textAlign="left" as="section" className="team">
                   <Container>
