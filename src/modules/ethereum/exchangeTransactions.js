@@ -129,7 +129,7 @@ export async function placeOrderTx(orderType, amount, price) {
                 result = await augmintToken.contract.instance.transferAndNotify(
                     exchange.address,
                     submitAmount,
-                    price.mul(augmintToken.info.bn_decimalsDiv),
+                    price.mul(augmintToken.info.bn_decimalsDiv).toString(),
                     {
                         from: userAccount,
                         gas: gasEstimate
