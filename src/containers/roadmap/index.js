@@ -1,7 +1,6 @@
 import React from "react";
 
 import { states } from "./helpers.js";
-import "./style.css";
 
 import {
     StyleRoadmap,
