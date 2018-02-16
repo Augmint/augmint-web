@@ -1,7 +1,8 @@
 #roadmap {
   margin: auto;
   margin-top: 75px;
-  max-width: 1127px;
+  padding: 0 20px;
+  max-width: 1167px;
 }
 
 #roadmap>div img {
