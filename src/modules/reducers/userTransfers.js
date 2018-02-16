@@ -76,6 +76,9 @@ export function fetchTransfers(account, fromBlock, toBlock) {
                 result: transfers
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: FETCH_TRANSFERS_ERROR,
                 error: error
@@ -111,6 +114,9 @@ export function processNewTransfer(account, eventLog) {
                 result: transfers
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: PROCESS_NEW_TRANSFER_ERROR,
                 error: error

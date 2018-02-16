@@ -199,6 +199,9 @@ export const connectLoanManager = () => {
                 contract: contract
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: LOANMANAGER_CONNECT_ERROR,
                 error: error
@@ -247,6 +250,9 @@ export const refreshLoanManager = () => {
                 }
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: LOANMANAGER_REFRESH_ERROR,
                 error: error
@@ -268,6 +274,9 @@ export function fetchProducts() {
                 products: result
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_ERROR,
                 error: error
@@ -335,6 +344,9 @@ export function fetchLoansToCollect() {
                 result: result
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR,
                 error: error

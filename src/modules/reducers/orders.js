@@ -109,7 +109,7 @@ export const refreshOrders = () => {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                throw new Error("ORDERS_REFRESH_ERROR", error);
+                return Promise.reject(error);
             }
             return dispatch({
                 type: ORDERS_REFRESH_ERROR,
