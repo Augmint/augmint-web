@@ -1,5 +1,6 @@
 #roadmap {
   margin: auto;
+  margin-top: 75px;
   max-width: 1127px;
 }
 
@@ -53,4 +54,22 @@
   #roadmap p {
         opacity: 0.6;
     }
+}
+
+@media (max-width: 767px) {
+  #roadmap>div {
+    margin: auto;
+  }
+
+  #roadmap>div .state {
+    margin: auto;
+  }
+
+  #roadmap>div:nth-child(odd) .state {
+    float: none;
+  }
+
+  #roadmap>div img {
+    visibility: hidden;
+  }
 }
