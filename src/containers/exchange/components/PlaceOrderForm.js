@@ -62,7 +62,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     onPriceChange(e) {
-        // TODO
         let bn_price;
         try {
             bn_price = new BigNumber(e.target.value);
