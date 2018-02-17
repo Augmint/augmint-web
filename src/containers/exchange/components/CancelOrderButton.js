@@ -1,15 +1,20 @@
+/* TODO:
+ -  make confirmation through flash notification (so we don't need to keep it open while tx processing)
+ - confirmation modal closes if there is an order / ordefill / cancel event in the background. We need to  handle
+        it's b/c we reload the whole order book on newOrder / orderfill events. It's planned to maintan orderbook
+        state on client which will resolve this issue.
+*/
 import React from "react";
 import { connect } from "react-redux";
-//import { Pblock } from "components/PageLayout";
 import { Button, Modal, Header, Icon } from "semantic-ui-react";
-import { cancelOrder, CANCEL_ORDER_SUCCESS } from "modules/reducers/orders";
+import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { flashSuccessMessage } from "redux-flash";
 
 class CancelOrderButton extends React.Component {
     async submitCancel(values) {
         //values.preventDefault();
-        this.setState({ confirmOpen: false, error: null, result: null });
+        this.setState({ submitting: true, error: null, result: null });
         const { order } = this.props;
         const res = await this.props.cancelOrder(order);
         if (res.type !== CANCEL_ORDER_SUCCESS) {
@@ -69,9 +74,10 @@ class CancelOrderButton extends React.Component {
                 {label}
             </a>
         );
-        return !order ? null : (
+        return (
             <Modal size="small" open={confirmOpen} onClose={this.handleClose} trigger={CancelButton}>
                 <Header icon="question" content="Cancel your order" />
+
                 <Modal.Content>
                     {error && (
                         <EthSubmissionErrorPanel dismissable error={error} header="Order cancel failed.">
@@ -79,12 +85,22 @@ class CancelOrderButton extends React.Component {
                         </EthSubmissionErrorPanel>
                     )}
                     <p>Order id: {order.id}</p>
-                    <p>Amount: {order.amount}</p>
+                    {order.orderType === TOKEN_SELL && (
+                        <p>
+                            Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
+                        </p>
+                    )}
+                    {order.orderType === TOKEN_BUY && (
+                        <p>
+                            Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
+                        </p>
+                    )}
                     <p>Are you sure you want to cancel your order?</p>
                 </Modal.Content>
+
                 <Modal.Actions>
                     <Button onClick={this.handleClose}>
-                        <Icon name="cancel" />Cancel
+                        <Icon name="cancel" />Close
                     </Button>
 
                     <Button
@@ -94,7 +110,7 @@ class CancelOrderButton extends React.Component {
                         disabled={submitting}
                         onClick={this.submitCancel}
                         icon="trash"
-                        content={submitting ? "Submitting..." : "Confirm Cancel"}
+                        content={submitting ? "Submitting..." : "Submit order cancellation"}
                     />
                 </Modal.Actions>
             </Modal>

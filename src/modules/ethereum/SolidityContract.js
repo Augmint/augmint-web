@@ -7,6 +7,7 @@ export default class SolidityContract {
     constructor(connection, web3ContractInstance, ethersContractInstance, abi) {
         this.instance = web3ContractInstance;
         this.ethersInstance = ethersContractInstance;
+        this.address = ethers.utils.getAddress(ethersContractInstance.address); // format it checksummed
         this.abi = abi; // storing this to be ethereum js lib independent
 
         // this.deployedAtBlock is used for filters' fromBlock - no point to query from earlier

@@ -59,6 +59,9 @@ export function fetchLoans(userAccount) {
                 loans: loans
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: LOANS_LOANLIST_ERROR,
                 error: error
