@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import theme from '../../styles/theme';
 
 const BaseButton = `
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     background-color: ${theme.colors.white};
