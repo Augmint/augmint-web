@@ -20,7 +20,7 @@ import AboutUs from "containers/home/aboutUs";
 import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
-import NotConnectedHome from "containers/home/NotConnectedHome/component";
+import NotConnectedHome from "containers/home/NotConnectedHome";
 import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
