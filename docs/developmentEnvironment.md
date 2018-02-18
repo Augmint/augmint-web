@@ -17,9 +17,9 @@ _NB: these steps are likely to work on linux too but it's not tested yet_
 1. then:
     ```
     git clone https://github.com/Augmint/augmint-web.git`
-    cd augmint-web`
-    npm install`
-    cd augmint-contracts`
+    cd augmint-web
+    yarn install
+    cd augmint-contracts
     npm install
     ```
 
@@ -36,8 +36,8 @@ _Note: windows install was not tested since a while, update on it is welcome_
     nvm install 8.5.0
     nvm use 8.5.0
     git clone https://github.com/Augmint/augmint-web.git
-    cd augmint-core
-    npm install
+    cd augmint-web
+    yarn install
     cd augmint-contracts
     npm install
     ```
@@ -48,7 +48,7 @@ _Note: windows install was not tested since a while, update on it is welcome_
 
 ```
 git pull
-npm install # if there were any node package changes in packages.json
+yarn install # if there were any node package changes in packages.json
 ```
 
 ### 2. Update to latest augmint contract
@@ -64,14 +64,14 @@ npm install # if there were any node package changes in packages.json
 
 #### 3.1 Start ganache-cli (formerly testrpc)
 
-`npm run ganache:runmigrate`  
+`yarn run ganache:runmigrate`  
 or  
-`npm run ganache:run` and in separate console:  
-`npm run truffle:migrate`  
+`yarn run ganache:run` and in separate console:  
+`yarn run truffle:migrate`  
 or  
-`$(npm bin)/truffle migrate --reset` to overwrite existing migration
+`$(yarn bin)/truffle migrate --reset` to overwrite existing migration
 
-NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `npm run truffle:migratecopy`
+NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `yarn run truffle:migratecopy`
 but make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
 
 #### 3.2. Launch local dev server
@@ -104,8 +104,8 @@ You can also use `gulp watch`
 
 _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
-* Start interactive: `npm run cypress:open`
-* Start command line: `npm run cypress:run`
+* Start interactive: `yarn run cypress:open`
+* Start command line: `yarn run cypress:run`
 
 ## Non ganache launches/deploys
 
