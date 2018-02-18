@@ -11,7 +11,6 @@ before_script:
     - yarn run truffle:migrate
     - yarn start  &
 script:
-    # park it until ganache crashing often, follow this: https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713
     - yarn run cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_success:
