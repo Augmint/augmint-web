@@ -14,13 +14,14 @@ _NB: these steps are likely to work on linux too but it's not tested yet_
 1. [Ethereum CLI](https://www.ethereum.org/cli)
 1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
    _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
+1. Install yarn if you don't have it: `npm install -g yarn`
 1. then:
     ```
-    git clone https://github.com/Augmint/augmint-web.git`
+    git clone https://github.com/Augmint/augmint-web.git
     cd augmint-web
     yarn install
     cd augmint-contracts
-    npm install
+    yarn install
     ```
 
 ### Windows
@@ -33,13 +34,14 @@ _Note: windows install was not tested since a while, update on it is welcome_
 1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
 1. in Git bash:
     ```
+    npm install -g yarn
     nvm install 8.5.0
     nvm use 8.5.0
     git clone https://github.com/Augmint/augmint-web.git
     cd augmint-web
     yarn install
     cd augmint-contracts
-    npm install
+    yarn install
     ```
 
 ## Launch
