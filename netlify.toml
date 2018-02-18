@@ -1,6 +1,6 @@
-[production]
+[context.production.environment]
     NODE_ENV = "production"
-[deploy-preview]
+[context.deploy-preview.environment]
     NODE_ENV = "production"
-[branch-deploy]
+[context.branch-deploy.environment]
     NODE_ENV = "development"
