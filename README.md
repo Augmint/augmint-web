@@ -3,6 +3,8 @@
 
 # Augmint - Stable Digital Tokens - Web Frontend
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Augmint/augmint-web.svg)](https://greenkeeper.io/)
+
 Decentralised stable cryptocurrency on Ethereum
 
 ## Concept
