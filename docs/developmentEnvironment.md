@@ -42,9 +42,9 @@ _Note: windows install was not tested since a while, update on it is welcome_
     nvm use 8.9.4
     ```
 
+1. Install yarn if you don't have it: `npm install -g yarn`
 1. in Git bash:
     ```
-    npm install -g yarn
     git clone https://github.com/Augmint/augmint-web.git
     cd augmint-web
     yarn install
