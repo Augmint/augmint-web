@@ -6,6 +6,7 @@
     "private": true,
     "dependencies": {
         "bignumber.js": "5.0.0",
+        "cross-env": "5.1.3",
         "del": "3.0.0",
         "ethers": "2.2.6",
         "moment": "2.20.1",
@@ -14,16 +15,17 @@
         "react-copy-to-clipboard": "5.0.1",
         "react-dom": "16.2.0",
         "react-ga": "2.4.1",
-        "react-redux": "5.0.6",
+        "react-redux": "5.0.7",
         "react-router-dom": "4.2.2",
         "react-router-redux": "5.0.0-alpha.9",
+        "react-scripts": "1.1.1",
         "react-scrollchor": "4.2.1",
         "redux": "3.7.2",
         "redux-flash": "1.1.3",
         "redux-form": "7.2.3",
+        "redux-logger": "3.0.6",
         "redux-thunk": "2.2.0",
         "redux-watch": "1.1.1",
-        "semantic-ui": "2.2.14",
         "semantic-ui-react": "0.77.2",
         "stringifier": "1.3.0",
         "styled-components": "3.1.6",
@@ -32,14 +34,14 @@
         "web3": "1.0.0-beta.30"
     },
     "scripts": {
-        "start": "$(npm bin)/cross-env NODE_PATH=./src react-scripts start",
+        "start": "$(yarn bin)/cross-env NODE_PATH=./src react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "cypress:runrecord":
-            "$(npm bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
+            "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
         "truffle:migrate": "cd augmint-contracts && npm run truffle:migrate",
         "truffle:migratecopy":
             "cd augmint-contracts && npm run truffle:migrate && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
@@ -48,11 +50,8 @@
             "cd augmint-contracts && npm run ganache:runmigrate"
     },
     "devDependencies": {
-        "cross-env": "5.1.3",
-        "cypress": "1.4.2",
+        "cypress": "2.0.1",
         "eslint-plugin-cypress": "2.0.1",
-        "lodash": "4.17.5",
-        "react-scripts": "1.1.1",
-        "redux-logger": "3.0.6"
+        "semantic-ui": "2.2.14"
     }
 }

@@ -97,6 +97,9 @@ export const connectExchange = () => {
                 info: info
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: EXCHANGE_CONNECT_ERROR,
                 error: error

@@ -91,6 +91,9 @@ export const connectRates = () => {
                 contract: await SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: RATES_ERROR,
                 error: error
@@ -133,6 +136,9 @@ export const refreshRates = () => {
                 }
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: RATES_ERROR,
                 error: error

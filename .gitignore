@@ -1,8 +1,7 @@
 .node-xmlhttprequest-sync-*
 
-# TODO: check how handle this best way... having package-lock in repo causing constant issues on other deployments
+# we are using yarn.lock
 package-lock.json
-yarn.lock
 
 build
 .DS_Store

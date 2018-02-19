@@ -121,6 +121,9 @@ export const connectAugmintToken = () => {
                 info: info
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_ERROR,
                 error: error

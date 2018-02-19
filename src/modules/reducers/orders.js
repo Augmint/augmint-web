@@ -108,6 +108,9 @@ export const refreshOrders = () => {
                 result: orders
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: ORDERS_REFRESH_ERROR,
                 error: error
@@ -126,7 +129,7 @@ export function placeOrder(orderType, amount, price) {
         });
 
         try {
-            let result = await placeOrderTx(orderType, amount, price);
+            const result = await placeOrderTx(orderType, amount, price);
             return dispatch({
                 type: PLACE_ORDER_SUCCESS,
                 result: result

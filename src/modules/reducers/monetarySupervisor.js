@@ -109,6 +109,9 @@ export const connectMonetarySupervisor = () => {
                 info: info
             });
         } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
             return dispatch({
                 type: MONETARY_SUPERVISOR_CONNECT_ERROR,
                 error: error
