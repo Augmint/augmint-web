@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Segment, Image } from "semantic-ui-react";
 
 import discordSVG from "assets/images/Discord-Logo.svg";
