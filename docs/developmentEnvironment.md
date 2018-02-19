@@ -2,26 +2,29 @@
 
 ## Install
 
-_We recently split the codebase into [`augmint-web`](https://github.com/Augmint/augmint-web) and [`augmint-contracts`](https://github.com/Augmint/augmint-contracts). Please raise an issue if these instructions shouldn't work for you._
+These instructions are about the dev environment for frontend development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
-These instructions are about the dev environment for frontebd development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
-
-### OSX
-
-_NB: these steps are likely to work on linux too but it's not tested yet_
+### OSX / Linux
 
 1. [Git](https://git-scm.com/download)
 1. [Ethereum CLI](https://www.ethereum.org/cli)
-1. [nodejs](https://nodejs.org/en/download/) v8.5.0  
-   _use version 8.5.0, ganache regularly crashes with newer version (FE also works with 8.9.4)_
-1. then:
+1. Install [nodejs](https://nodejs.org/en/download/) - _tested with v8.9.4 LTS_
+
+    or install nodejs with [n node version manager](https://github.com/tj/n):
+
     ```
-    git clone https://github.com/Augmint/augmint-web.git`
-    cd augmint-web`
-    npm install`
-    cd augmint-contracts`
-    npm install
+    npm install -g n
+    n 8.9.4
     ```
+
+1. Install yarn if you don't have it: `npm install -g yarn`
+1. ```
+   git clone https://github.com/Augmint/augmint-web.git
+   cd augmint-web
+   yarn install
+   cd augmint-contracts
+   yarn install
+   ```
 
 ### Windows
 
@@ -30,16 +33,23 @@ _Note: windows install was not tested since a while, update on it is welcome_
 1. [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
 1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
 1. [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
-1. [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases)
+1. [nodejs](https://nodejs.org/en/download/) - _tested with v8.9.4 LTS_
+
+    or install nodejs with [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases):
+
+    ```
+    nvm install 8.9.4
+    nvm use 8.9.4
+    ```
+
+1. Install yarn if you don't have it: `npm install -g yarn`
 1. in Git bash:
     ```
-    nvm install 8.5.0
-    nvm use 8.5.0
     git clone https://github.com/Augmint/augmint-web.git
-    cd augmint-core
-    npm install
+    cd augmint-web
+    yarn install
     cd augmint-contracts
-    npm install
+    yarn install
     ```
 
 ## Launch
@@ -48,7 +58,7 @@ _Note: windows install was not tested since a while, update on it is welcome_
 
 ```
 git pull
-npm install # if there were any node package changes in packages.json
+yarn install # if there were any node package changes in packages.json
 ```
 
 ### 2. Update to latest augmint contract
@@ -57,21 +67,21 @@ npm install # if there were any node package changes in packages.json
 cd augmint-contracts
 git checkout master
 git pull
-npm install # if there were any node package changes in packages.json
+yarn install # if there were any node package changes in packages.json
 ```
 
 ### 3. Launch
 
 #### 3.1 Start ganache-cli (formerly testrpc)
 
-`npm run ganache:runmigrate`  
+`yarn run ganache:runmigrate`  
 or  
-`npm run ganache:run` and in separate console:  
-`npm run truffle:migrate`  
+`yarn run ganache:run` and in separate console:  
+`yarn run truffle:migrate`  
 or  
-`$(npm bin)/truffle migrate --reset` to overwrite existing migration
+`$(yarn bin)/truffle migrate --reset` to overwrite existing migration
 
-NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `npm run truffle:migratecopy`
+NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `yarn run truffle:migratecopy`
 but make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
 
 #### 3.2. Launch local dev server
@@ -104,8 +114,8 @@ You can also use `gulp watch`
 
 _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
-* Start interactive: `npm run cypress:open`
-* Start command line: `npm run cypress:run`
+* Start interactive: `yarn run cypress:open`
+* Start command line: `yarn run cypress:run`
 
 ## Non ganache launches/deploys
 

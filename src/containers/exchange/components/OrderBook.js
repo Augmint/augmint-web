@@ -1,5 +1,5 @@
 import React from "react";
-//import { Button } from "semantic-ui-react";
+
 import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTable } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
@@ -14,7 +14,7 @@ const OrderItem = props => {
     const ret = [
         <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
             {order.orderType === TOKEN_SELL && <span>{order.amount} A-EUR </span>}
-            {order.orderType === TOKEN_BUY && <span>{Math.round(order.amount * 100000) / 100000} ETH</span>}
+            {order.orderType === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
         </Col>,
         <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
             {order.price}
@@ -23,12 +23,12 @@ const OrderItem = props => {
             <MoreInfoTip>
                 {order.orderType === TOKEN_SELL && (
                     <p>
-                        Sell {order.amount} A-EUR @{order.price} A-EUR/ETH= {order.amount / order.price} ETH
+                        Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
                     </p>
                 )}
                 {order.orderType === TOKEN_BUY && (
                     <p>
-                        Buy {order.amount} ETH @{order.price} A-EUR/ETH = {order.amount * order.price} A-EUR
+                        Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
                     </p>
                 )}
                 Maker: {order.maker}
@@ -51,8 +51,8 @@ const DummyCols = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress } = props;
 
-    const totalBuyAmount = buyOrders.reduce((sum, order) => order.bn_amountConverted.add(sum), 0).toString();
-    const totalSellAmount = sellOrders.reduce((sum, order) => order.bn_amountConverted.add(sum), 0).toString();
+    const totalBuyAmount = buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toString();
+    const totalSellAmount = sellOrders.reduce((sum, order) => order.bn_tokenValue.add(sum), 0).toString();
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 
