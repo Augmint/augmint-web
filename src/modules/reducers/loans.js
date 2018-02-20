@@ -60,7 +60,7 @@ export function fetchLoans(userAccount) {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
+                throw new Error(error);
             }
             return dispatch({
                 type: LOANS_LOANLIST_ERROR,
