@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39.5 48"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;stroke-width:2px;}.cls-1,.cls-3{stroke-miterlimit:10;}.cls-1{stroke:url(#linear-gradient);}.cls-2{stroke:#fff;stroke-linecap:round;stroke-linejoin:round;}.cls-3{stroke:url(#linear-gradient-2);}.cls-4{fill:#fff;}</style><linearGradient id="linear-gradient" x1="9.53" y1="19.24" x2="9.53" y2="5.67" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.6" stop-color="#fff"/></linearGradient><linearGradient id="linear-gradient-2" x1="31.47" y1="28.76" x2="31.47" y2="42.33" xlink:href="#linear-gradient"/></defs><title>invest</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M2.5,19.24V6.67H17.55"/><path class="cls-2" d="M12.42,12.34l6-5.67L12.42,1"/><path class="cls-3" d="M38.5,28.76V41.33h-15"/><path class="cls-2" d="M28.58,35.66l-6,5.67,6,5.67"/><circle class="cls-4" cx="34" cy="10.5" r="5"/><path class="cls-4" d="M0,34.5H8v8H0Z"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="50" viewBox="0 0 48 50">
+    <g fill="none" fill-rule="evenodd">
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M7.5 19.738V7.172h15.052"/>
+            <path stroke="#FFF" d="M17.417 12.844l6.02-5.672-6.02-5.672"/>
+        </g>
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M43.5 29.262v12.566H28.448"/>
+            <path stroke="#FFF" d="M33.583 36.156l-6.02 5.672 6.02 5.672"/>
+        </g>
+        <circle cx="39" cy="11" r="5" fill="#FFF"/>
+        <path fill="#FFF" d="M5 35h8v8H5z"/>
+    </g>
+</svg>

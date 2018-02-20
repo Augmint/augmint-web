@@ -1,1 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 44"><defs><style>.cls-1{fill:none;stroke-miterlimit:10;stroke-width:2px;stroke:url(#linear-gradient);}.cls-2{fill:#fff;}.cls-3{fill:#350037;}</style><linearGradient id="linear-gradient" x1="2" y1="22" x2="46" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0.1" stop-color="#fff"/><stop offset="0.5" stop-color="#fff" stop-opacity="0"/><stop offset="0.9" stop-color="#fff"/></linearGradient></defs><title>transfer</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><circle class="cls-1" cx="24" cy="22" r="21"/><circle class="cls-2" cx="11" cy="32" r="11"/><circle class="cls-2" cx="37" cy="12" r="11"/><path class="cls-3" d="M14.43,29.87c-.15-1.32-1.31-1.74-2.75-1.85l0-1.83-1.12,0,0,1.79-.9,0,0-1.8-1.12,0,0,1.84-.72,0h0l-1.54,0,0,1.2.81,0a.59.59,0,0,1,.66.48l0,2.1h0l.05,2.94a.39.39,0,0,1-.41.38s-.81,0-.81,0l-.2,1.34,1.45,0h.8l0,1.86,1.11,0,0-1.84h.9l0,1.83,1.12,0,0-1.85c1.88-.14,3.19-.64,3.32-2.41a1.9,1.9,0,0,0-1.64-2.29,1.74,1.74,0,0,0,.93-1.9Zm-1.5,4c0,1.39-2.36,1.27-3.12,1.28l0-2.46C10.53,32.69,12.91,32.43,12.93,33.88Zm-.58-3.47c0,1.26-2,1.15-2.6,1.16l0-2.23C10.35,29.33,12.33,29.09,12.35,30.41Z"/><path class="cls-3" d="M37,5l4,6.64L37,14l-4-2.36Z"/><path class="cls-3" d="M37,15.52,41,13l-4,6-4-6Z"/><path class="cls-3" d="M37,14V10l4,1.74Zm-4-2.26L37,10v4Z"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="50" viewBox="0 0 48 50">
+    <defs>
+        <circle id="a" cx="5" cy="32" r="7"/>
+        <circle id="b" cx="43" cy="17" r="7"/>
+        <linearGradient id="c" x1="50%" x2="50%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M5 22.238V9.672h25.052"/>
+            <path stroke="#FFF" d="M24.917 15.344l6.02-5.672L24.918 4"/>
+            <g>
+                <path d="M43 26.762v12.566H17.948"/>
+                <path stroke="#FFF" d="M23.083 33.656l-6.02 5.672L23.082 45"/>
+            </g>
+        </g>
+        <use fill="#FFF" xlink:href="#a"/>
+        <circle cx="5" cy="32" r="6" stroke="#FFF" stroke-width="2"/>
+        <use fill="#FFF" xlink:href="#b"/>
+        <circle cx="43" cy="17" r="6" stroke="#FFF" stroke-width="2"/>
+        <circle cx="5" cy="37" r="7" fill="url(#c)" opacity=".4" transform="matrix(1 0 0 -1 0 74)"/>
+        <circle cx="5" cy="41" r="7" fill="url(#c)" opacity=".2" transform="matrix(1 0 0 -1 0 82)"/>
+        <circle cx="43" cy="12" r="7" fill="url(#c)" opacity=".4"/>
+        <circle cx="43" cy="7" r="7" fill="url(#c)" opacity=".2"/>
+    </g>
+</svg>

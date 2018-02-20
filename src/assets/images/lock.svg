@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 33 45"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:url(#linear-gradient);}.cls-2{stroke:url(#linear-gradient-2);}.cls-3{stroke:url(#linear-gradient-3);}</style><linearGradient id="linear-gradient" x1="-644.02" y1="395.81" x2="-644.02" y2="394.81" gradientTransform="matrix(31, 0, 0, -32, 19981, 12678)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="linear-gradient-2" x1="-621.1" y1="381.06" x2="-621.1" y2="380.57" gradientTransform="matrix(15, 0, 0, -14, 9333, 5341)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="linear-gradient-3" x1="-598.9" y1="383.13" x2="-598.9" y2="381.87" gradientTransform="matrix(10, 0, 0, -15, 6005.01, 5767)" xlink:href="#linear-gradient"/></defs><title>lock</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><rect class="cls-1" x="1" y="12" width="31" height="32" rx="4" ry="4"/><path class="cls-2" d="M24,15V8.6a7.5,7.5,0,1,0-15,0v5.3"/><path class="cls-3" d="M13.56,29.43a5,5,0,1,1,4.88,0V35H13.56Z"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="33" height="50" viewBox="0 0 33 50">
+    <defs>
+        <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="b" x1="50%" x2="50%" y1="36.412%" y2="86.327%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="99.558%" stop-color="#FFF" stop-opacity=".004"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="c" x1="50%" x2="50%" y1="0%" y2="125.938%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <rect width="31" height="32" x="1" y="15" stroke="url(#a)" rx="4"/>
+        <path stroke="url(#b)" d="M24 18v-6.395C24 7.405 20.642 4 16.5 4 12.358 4 9 7.405 9 11.605v5.3"/>
+        <path stroke="url(#c)" d="M13.556 32.433A5.042 5.042 0 0 1 11 28.037C11 25.255 13.239 23 16 23s5 2.255 5 5.037a5.042 5.042 0 0 1-2.556 4.396V38h-4.888v-5.567z"/>
+    </g>
+</svg>

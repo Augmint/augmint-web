@@ -1,21 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32.5 19" style="enable-background:new 0 0 32.5 19;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-	.st1{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-</style>
-<title>spend-euro</title>
-<g id="Layer_2_1_">
-	<g id="Layer_1-2">
-		
-			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-599.63" y1="45.012" x2="-599.63" y2="45.622" gradientTransform="matrix(6.123234e-17 1 28.64 -1.753694e-15 -1290.0201 609.13)">
-			<stop  offset="0" style="stop-color:#FFFFFF;stop-opacity:0"/>
-			<stop  offset="1" style="stop-color:#FFFFFF"/>
-		</linearGradient>
-		<path class="st0" d="M0.9,9.5h28.6"/>
-		<path class="st1" d="M21.5,18l10-8.5L21.5,1"/>
-	</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="33" height="50" viewBox="0 0 33 50">
+    <defs>
+        <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="61.629%">
+            <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#FFF"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <path stroke="url(#a)" d="M15.127 9.5v28.635" transform="matrix(0 1 1 0 -8.5 8.5)"/>
+        <path stroke="#FFF" d="M21.5 32.5l10-8.5-10-8.5"/>
+    </g>
 </svg>
