@@ -24,8 +24,14 @@ class CollectLoanMain extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.loanManager.contract && prevProps.loanManager.contract !== this.props.loanManager.contract) {
+        // when landing directly on this page - augmintToken loads later than loanManager
+        if (
+            (this.props.loanManager.contract && prevProps.loanManager.contract !== this.props.loanManager.contract) ||
+            (this.props.augmintToken.contract !== prevProps.augmintToken.contract &&
+                this.props.augmintToken.isConnected)
+        ) {
             // loanManager mounted
+            console.debug("fetch2");
             store.dispatch(fetchLoansToCollect());
         }
     }
@@ -64,7 +70,8 @@ class CollectLoanMain extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    loanManager: state.loanManager
+    loanManager: state.loanManager,
+    augmintToken: state.augmintToken
 });
 
 export default (CollectLoanMain = connect(mapStateToProps)(CollectLoanMain));
