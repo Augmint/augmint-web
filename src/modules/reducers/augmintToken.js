@@ -196,8 +196,7 @@ export function transferToken(payload) {
     return async dispatch => {
         dispatch({
             type: AUGMINT_TOKEN_TRANSFER_REQUESTED,
-            tokencAmount: payload.tokencAmount,
-            payee: payload.payee
+            payload
         });
 
         try {

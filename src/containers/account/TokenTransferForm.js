@@ -41,10 +41,10 @@ class TokenTransferForm extends React.Component {
     }
 
     async handleSubmit(values) {
-        let res = await store.dispatch(
+        const res = await store.dispatch(
             transferToken({
                 payee: values.payee,
-                tokenAmount: new BigNumber(values.tokenAmount),
+                tokenAmount: parseFloat(values.tokenAmount),
                 narrative: values.narrative
             })
         );

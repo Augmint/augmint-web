@@ -50,22 +50,28 @@ export function getMaxTransfer(amount) {
 }
 
 export async function transferTokenTx(payload) {
-    const { payee, tokenAmount, _narrative } = payload;
+    const { payee, tokenAmount, narrative } = payload;
 
     const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().augmintToken;
-    const decimalsDiv = augmintToken.info.decimalsDiv;
-    const narrative = _narrative == null ? "" : payload.narrative.trim();
-    const result = await augmintToken.contract.instance.transferWithNarrative(
-        payee,
-        tokenAmount * decimalsDiv, // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-        narrative,
-        {
+    const augmintToken = store.getState().augmintToken.contract.instance;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
+
+    let result;
+    if (_narrative) {
+        result = await augmintToken.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative, {
             from: userAccount,
             gas: gasEstimate
-        }
-    );
+        });
+    } else {
+        result = await augmintToken.transfer(payee, tokenAmount * decimalsDiv, {
+            from: userAccount,
+            gas: gasEstimate
+        });
+    }
+
     if (result.receipt.gasUsed === gasEstimate) {
         // Neeed for testnet behaviour
         throw new EthereumTransactionError(
