@@ -19,7 +19,6 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
-import { BigNumber } from "bignumber.js";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
