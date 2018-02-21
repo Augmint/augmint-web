@@ -1,15 +1,6 @@
 /*
  TODO: clean up thrown errors
  */
-import store from "modules/store";
-import BigNumber from "bignumber.js";
-
-export async function asyncGetBalance(address, defaultBlock = "latest") {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const bal = await web3.eth.getBalance(address, defaultBlock);
-    const ret = new BigNumber(web3.utils.fromWei(bal));
-    return ret;
-}
 
 export function asyncGetAccounts(web3) {
     return new Promise(function(resolve, reject) {

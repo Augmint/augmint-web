@@ -25,7 +25,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const augmintToken = store.getState().augmintToken.contract.ethersInstance;
+    const augmintToken = store.getState().augmintToken.contract.instance;
     augmintToken.onaugminttransfer = onAugmintTransfer;
 };
 

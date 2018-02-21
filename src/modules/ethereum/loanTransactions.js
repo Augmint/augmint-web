@@ -64,31 +64,23 @@ export async function fetchProductsTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
         const productCount = await loanManager.getProductCount();
-        // TODO: get this from store.augmintToken (timing issues on first load..)
-        const decimalsDiv = new BigNumber(10).pow(await store.getState().augmintToken.contract.instance.decimals());
+        const ppmDiv = 1000000;
+        const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
+        // TODO: create a helper in LoanManager to get products in chunks
         let products = [];
         for (let i = 0; i < productCount; i++) {
             const p = await loanManager.products(i);
-            const term = p[0].toNumber();
-            // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            const bn_discountRate = p[1].div(new BigNumber(1000000));
-            const bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
-            const bn_minDisbursedAmountInToken = p[3];
-            const bn_defaultingFeePt = p[4].div(new BigNumber(1000000));
+            const term = p.term.toNumber();
             const prod = {
                 id: i,
-                term: term,
-                termText: moment.duration(term, "seconds").humanize(),
-                bn_discountRate: bn_discountRate,
-                discountRate: bn_discountRate.toNumber(),
-                bn_loanCollateralRatio: bn_loanCollateralRatio,
-                loanCollateralRatio: bn_loanCollateralRatio.toNumber(),
-                bn_minDisbursedAmountInToken: bn_minDisbursedAmountInToken,
-                minDisbursedAmountInToken: bn_minDisbursedAmountInToken.div(decimalsDiv).toNumber(),
-                bn_defaultingFeePt: bn_defaultingFeePt,
-                defaultingFeePt: bn_defaultingFeePt.toNumber(),
-                isActive: p[5]
+                term,
+                termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                discountRate: p.discountRate / ppmDiv,
+                loanCollateralRatio: p.collateralRatio / ppmDiv,
+                minDisbursedAmountInToken: p.minDisbursedAmount / decimalsDiv,
+                defaultingFeePt: p.defaultingFeePt / ppmDiv,
+                isActive: p.isActive
             };
             products.push(prod);
         }
@@ -156,7 +148,8 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 export async function fetchLoansToCollectTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
-        const loanCount = (await loanManager.getLoanCount()).toNumber();
+        const loanCount = (await loanManager.getLoanCount()).ct;
+
         let loansToCollect = [];
         for (let i = 0; i < loanCount; i++) {
             const loan = await fetchLoanDetails(i);
@@ -239,13 +232,15 @@ export async function collectLoansTx(loansToCollect) {
 }
 
 export async function fetchLoanDetails(_loanId) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const loanManager = store.getState().loanManager.contract.instance;
     const loanId = _loanId.toString(); // we call with number or w/ BigNumber
+    const ONE_ETH = 1000000000000000000;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const loanManager = store.getState().loanManager.contract.instance;
+
     const l = await loanManager.loans(loanId);
-    const solidityLoanState = l[1].toNumber();
+    const solidityLoanState = l.state;
     let loanStateText;
-    const maturity = l[8].toNumber();
+    const maturity = l.maturity.toNumber();
     const maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
     const currentTime = moment()
         .utc()
@@ -285,27 +280,27 @@ export async function fetchLoanDetails(_loanId) {
     }
     // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
-    const disbursementDate = l[7].toNumber();
+    const disbursementDate = l.disbursementDate.toNumber();
     const disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
     const loan = {
-        loanId: loanId,
-        borrower: l[0], // 0 the borrower
+        loanId: Number(loanId),
+        borrower: l.borrower, // 0 the borrower
         loanState: loanState,
         solidityLoanState: solidityLoanState,
         loanStateText: loanStateText,
-        collateralEth: web3.utils.fromWei(l[2].toString()),
-        repaymentAmount: l[3].toNumber() / 10000, // 4 nominal loan amount in A-EUR (non discounted amount)
-        loanAmount: l[4].toNumber() / 10000, // 5
-        interestAmount: l[5].toNumber / 10000,
-        term: l[6].toNumber(), // 6 duration of loan
-        termText: moment.duration(l[6].toNumber(), "seconds").humanize(),
-        disbursementDate: disbursementDate,
-        disbursementDateText: disbursementDateText,
-        maturity: maturity,
-        maturityText: maturityText,
-        isDue: isDue,
-        isRepayable: isRepayable,
-        isCollectable: isCollectable
+        collateralEth: l.collateralAmount / ONE_ETH,
+        repaymentAmount: l.repaymentAmount / decimalsDiv, // 4 nominal loan amount in A-EUR (non discounted amount)
+        loanAmount: l.loanAmount / decimalsDiv, // 4
+        interestAmount: l.interestAmount / decimalsDiv, // 5
+        term: l.term.toNumber(), // 6 duration of loan
+        termText: moment.duration(l.term.toNumber(), "seconds").humanize(),
+        disbursementDate,
+        disbursementDateText,
+        maturity,
+        maturityText,
+        isDue,
+        isRepayable,
+        isCollectable
     };
     return loan;
 }

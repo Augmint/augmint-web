@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
@@ -44,11 +43,12 @@ class CollectLoanButton extends React.Component {
             submitSucceeded,
             handleSubmit,
             clearSubmitErrors,
-            isLoading,
             submitting,
             reset,
+            loanManager,
             loansToCollect
         } = this.props;
+        const { isLoading } = loanManager;
         return (
             <Pblock>
                 {error && (
@@ -69,16 +69,14 @@ class CollectLoanButton extends React.Component {
                                 size="large"
                                 className="collectLoanButton"
                                 primary
-                                disabled={submitting || this.props.loansToCollect.length === 0}
+                                disabled={submitting || isLoading || loansToCollect.length === 0}
                             >
                                 {submitting ? "Submitting..." : "Collect"}
                             </Button>
                         </Form>
                     )}
 
-                {(isLoading || loansToCollect == null) && (
-                    <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>
-                )}
+                {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
@@ -91,13 +89,6 @@ class CollectLoanButton extends React.Component {
         );
     }
 }
-
-const mapStateToProps = state => ({
-    loanManager: state.loanManager.contract,
-    isLoading: state.loanManager.isLoading
-});
-
-CollectLoanButton = connect(mapStateToProps)(CollectLoanButton);
 
 export default reduxForm({
     form: "CollectLoanButton" // a unique identifier for this form

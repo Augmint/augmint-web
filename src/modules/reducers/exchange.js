@@ -1,7 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import exchangeArtifacts from "contractsBuild/Exchange.json";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
 export const EXCHANGE_CONNECT_SUCCESS = "exchange/EXCHANGE_CONNECT_SUCCESS";
@@ -132,12 +131,13 @@ export const refreshExchange = () => {
 
 async function getExchangeInfo(exchange) {
     const augmintToken = store.getState().augmintToken.contract.instance;
+    const provider = store.getState().web3Connect.ethers.provider;
 
     const [bn_ethBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
-        asyncGetBalance(exchange.address),
-        augmintToken.balanceOf(exchange.address),
+        provider.getBalance(exchange.address),
+        augmintToken.balanceOf(exchange.address).then(res => res[0]),
         exchange.getActiveOrderCounts(),
-        exchange.CHUNK_SIZE()
+        exchange.CHUNK_SIZE().then(res => res[0])
     ]);
 
     return {

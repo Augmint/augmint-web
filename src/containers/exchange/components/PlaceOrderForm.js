@@ -9,7 +9,6 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } 
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
-import BigNumber from "bignumber.js";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 
@@ -32,53 +31,51 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
-        let bn_tokenAmount, bn_price;
+        let tokenAmount, price;
         try {
-            bn_tokenAmount = new BigNumber(e.target.value);
-            bn_price = new BigNumber(this.props.price);
+            tokenAmount = parseFloat(e.target.value);
+            price = parseFloat(this.props.price);
         } catch (error) {
             this.props.change("ethAmount", "");
             return;
         }
 
-        const ethValue = bn_tokenAmount.div(bn_price);
+        const ethValue = tokenAmount / price;
 
-        this.props.change("ethAmount", ethValue.round(ETH_DECIMALS, BigNumber.ROUND_UP).toString());
+        this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
     }
 
     onEthAmountChange(e) {
-        let bn_price, bn_ethAmount;
+        let price, ethAmount;
         try {
-            bn_ethAmount = new BigNumber(e.target.value);
-            bn_price = new BigNumber(this.props.price);
+            ethAmount = parseFloat(e.target.value);
+            price = parseFloat(this.props.price);
         } catch (error) {
             this.props.change("tokenAmount", "");
             return;
         }
 
-        const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
+        const tokenValue = ethAmount * price;
 
-        this.props.change("tokenAmount", tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_DOWN).toString());
+        this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
     }
 
     onPriceChange(e) {
-        let bn_price;
+        let price;
         try {
-            bn_price = new BigNumber(e.target.value);
+            price = parseFloat(e.target.value);
 
             if (this.state.orderType === TOKEN_BUY) {
-                const bn_ethAmount = new BigNumber(this.props.ethAmount);
-
-                const tokenValue = new BigNumber(bn_ethAmount).mul(bn_price);
-                this.props.change("tokenAmount", tokenValue.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
+                const ethAmount = parseFloat(this.props.ethAmount);
+                const tokenValue = ethAmount * price;
+                this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
             } else {
-                const bn_tokenAmount = new BigNumber(this.props.tokenAmount);
-                const ethValue = new BigNumber(bn_tokenAmount).div(bn_price);
+                const tokenAmount = parseFloat(this.props.tokenAmount);
+                const ethValue = tokenAmount / price;
 
-                this.props.change("ethAmount", ethValue.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString());
+                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
             }
         } catch (error) {
-            console.debug(error);
             // tokenAmount or ethAmount is not entered yet
             if (!isNaN(parseFloat(this.props.tokenAmount)) && isFinite(this.props.tokenAmount)) {
                 this.props.change("ethAmount", "");
@@ -95,11 +92,11 @@ class PlaceOrderForm extends React.Component {
         const orderType = this.state.orderType;
 
         try {
-            price = new BigNumber(values.price);
+            price = parseFloat(values.price);
             if (orderType === TOKEN_BUY) {
-                amount = new BigNumber(values.ethAmount);
+                amount = parseFloat(values.ethAmount);
             } else {
-                amount = new BigNumber(values.tokenAmount);
+                amount = parseFloat(values.tokenAmount);
             }
         } catch (error) {
             throw new SubmissionError({

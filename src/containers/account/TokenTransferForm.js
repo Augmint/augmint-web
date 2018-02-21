@@ -26,19 +26,18 @@ class TokenTransferForm extends React.Component {
         super(props);
         this.state = { result: null, feeAmount: "0" };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onAceAmountChange = this.onAceAmountChange.bind(this);
+        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
-    onAceAmountChange(e) {
-        let val;
-        let decimalsDiv = this.props.augmintToken.info.bn_decimalsDiv;
+    onTokenAmountChange(e) {
+        let amount;
         try {
-            val = new BigNumber(e.target.value).mul(decimalsDiv);
+            amount = parseFloat(e.target.value);
         } catch (error) {
             return;
         }
-        let fee = getTransferFee(val);
-        this.setState({ feeAmount: fee.div(decimalsDiv).toString() });
+        const fee = getTransferFee(amount);
+        this.setState({ feeAmount: fee });
     }
 
     async handleSubmit(values) {
@@ -112,7 +111,7 @@ class TokenTransferForm extends React.Component {
                             name="tokenAmount"
                             placeholder="Amount"
                             labelPosition="right"
-                            onChange={this.onAceAmountChange}
+                            onChange={this.onTokenAmountChange}
                             validate={[
                                 Validations.required,
                                 Validations.tokenAmount,
@@ -122,9 +121,7 @@ class TokenTransferForm extends React.Component {
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input />
-                            <Label>
-                                A-EUR
-                            </Label>
+                            <Label>A-EUR</Label>
                         </Field>
 
                         <small>

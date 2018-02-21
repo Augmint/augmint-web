@@ -6,7 +6,7 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import loanManagerArtifacts from "contractsBuild/LoanManager.json";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
+
 import {
     repayLoanTx,
     newEthBackedLoanTx,
@@ -52,13 +52,17 @@ const initialState = {
     error: null,
     products: null,
     info: {
-        tokenBalance: "?",
+        bn_weiBalance: null,
         ethBalance: "?",
+        bn_tokenBalance: null,
+        tokenBalance: "?",
+        loanCount: null,
+        productCount: null,
+
         ratesAddress: "?",
-        augmintTokenAddress: "?",
-        loanCount: "?",
-        productCount: "?"
-    }
+        augmintTokenAddress: "?"
+    },
+    loansToCollect: null
 };
 
 export default (state = initialState, action) => {
@@ -146,6 +150,7 @@ export default (state = initialState, action) => {
         case LOANMANAGER_FETCH_LOANS_TO_COLLECT_REQUESTED:
             return {
                 ...state,
+                error: null,
                 isLoading: true
             };
 
@@ -216,37 +221,41 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
+            const ONE_ETH = 1000000000000000000;
+            const provider = store.getState().web3Connect.ethers.provider;
             const loanManager = store.getState().loanManager.contract.instance;
             const augmintToken = store.getState().augmintToken.contract.instance;
+            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
             const [
                 loanCount,
                 productCount,
                 augmintTokenAddress,
                 ratesAddress,
-                bn_ethBalance,
+                bn_weiBalance,
                 bn_tokenBalance
             ] = await Promise.all([
-                loanManager.getLoanCount(),
-                loanManager.getProductCount(),
+                loanManager.getLoanCount().then(res => res[0]),
+                loanManager.getProductCount().then(res => res[0]),
 
-                loanManager.augmintToken(),
-                loanManager.rates(),
+                loanManager.augmintToken().then(res => res[0]),
+                loanManager.rates().then(res => res[0]),
 
-                asyncGetBalance(loanManager.address),
-                augmintToken.balanceOf(loanManager.address)
+                provider.getBalance(loanManager.address),
+                augmintToken.balanceOf(loanManager.address).then(res => res[0])
             ]);
+
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 result: {
-                    bn_ethBalance: bn_ethBalance,
-                    ethBalance: bn_ethBalance.toNumber(),
-                    bn_tokenBalance: bn_tokenBalance.div(10000),
-                    tokenBalance: bn_tokenBalance.div(10000).toNumber(),
+                    bn_weiBalance,
+                    ethBalance: bn_weiBalance / ONE_ETH,
+                    bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance / decimalsDiv,
                     loanCount: loanCount.toNumber(),
                     productCount: productCount.toNumber(),
-                    augmintTokenAddress: augmintTokenAddress,
-                    ratesAddress: ratesAddress
+                    augmintTokenAddress,
+                    ratesAddress
                 }
             });
         } catch (error) {

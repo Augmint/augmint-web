@@ -1,5 +1,4 @@
 import store from "modules/store";
-import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 
 export const TOKEN_BUY = 0;
@@ -33,14 +32,14 @@ export async function fetchOrders() {
 
 async function getOrders(orderType, offset) {
     const exchange = store.getState().exchange.contract.instance;
-    const bn_decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
-    const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const decimals = store.getState().augmintToken.info.decimals;
 
     let result;
     if (orderType === TOKEN_BUY) {
-        result = await exchange.getActiveBuyOrders(offset, { gas: blockGasLimit });
+        result = (await exchange.getActiveBuyOrders(offset)).response; // not needed for ethers: { gas: blockGasLimit });
     } else {
-        result = await exchange.getActiveSellOrders(offset, { gas: blockGasLimit });
+        result = (await exchange.getActiveSellOrders(offset)).response; // not needed for ethers:  { gas: blockGasLimit });
     }
 
     // result format: [id, maker,  price, amount]
@@ -56,31 +55,23 @@ async function getOrders(orderType, offset) {
 
                 if (orderType === TOKEN_BUY) {
                     parsed.orderType = TOKEN_BUY;
-                    parsed.bn_tokenValue = parsed.bn_amount
-                        .mul(parsed.bn_price)
-                        .div(ONE_ETH)
-                        .round(0, BigNumber.ROUND_DOWN);
-                    parsed.bn_weiValue = parsed.bn_amount;
+                    parsed.tokenValue = (parsed.bn_amount.mul(parsed.bn_price) / ONE_ETH / decimalsDiv).toFixed(
+                        decimals
+                    );
+                    parsed.weiValue = parsed.bn_amount;
                 } else {
                     parsed.orderType = TOKEN_SELL;
-                    parsed.bn_tokenValue = parsed.bn_amount;
-                    parsed.bn_weiValue = parsed.bn_amount
-                        .mul(ONE_ETH)
-                        .div(parsed.bn_price)
-                        .round(0, BigNumber.ROUND_FLOOR);
+                    parsed.tokenValue = parsed.bn_amount / decimalsDiv;
+                    parsed.weiValue = (parsed.bn_amount * ONE_ETH / parsed.bn_price).toFixed(0);
                 }
 
-                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH);
-                parsed.price = parsed.bn_price.div(bn_decimalsDiv).toString(); // price in tokens/ETH
-
-                parsed.tokenValue = parsed.bn_tokenValue.div(bn_decimalsDiv).toString();
-                parsed.ethValue = parsed.bn_ethValue.toString();
-
-                parsed.ethValueRounded = parsed.bn_ethValue.round(6, BigNumber.ROUND_HALF_UP).toString();
+                parsed.price = parsed.bn_price / decimalsDiv; // price in tokens/ETH
+                parsed.ethValue = parsed.weiValue / ONE_ETH;
+                parsed.ethValueRounded = parsed.ethValue.toFixed(6);
 
                 if (orderType === TOKEN_BUY) {
-                    parsed.amount = parsed.bn_ethValue.toString();
-                    parsed.amountRounded = parsed.bn_ethValue.round(6, BigNumber.ROUND_HALF_UP).toString();
+                    parsed.amount = parsed.ethValue;
+                    parsed.amountRounded = parsed.ethValueRounded;
                     res.buyOrders.push(parsed);
                 } else {
                     parsed.amount = parsed.tokenValue;
@@ -125,11 +116,12 @@ export async function placeOrderTx(orderType, amount, price) {
                 break;
             case TOKEN_SELL:
                 const augmintToken = store.getState().augmintToken;
-                submitAmount = amount.mul(augmintToken.info.bn_decimalsDiv).toString();
+                const decimalsDiv = augmintToken.info.decimalsDiv;
+                submitAmount = amount.mul(decimalsDiv).toString();
                 result = await augmintToken.contract.instance.transferAndNotify(
                     exchange.address,
                     submitAmount,
-                    price.mul(augmintToken.info.bn_decimalsDiv).toString(),
+                    price.mul(decimalsDiv).toString(),
                     {
                         from: userAccount,
                         gas: gasEstimate
@@ -212,15 +204,6 @@ export async function cancelOrderTx(orderType, orderIndex, orderId) {
         const gasEstimate = cost.CANCEL_ORDER_GAS;
         const userAccount = store.getState().web3Connect.userAccount;
         const exchange = store.getState().exchange.contract.instance;
-
-        // return {
-        //     txResult: "mock",
-        //     eth: {
-        //         gasProvided: gasEstimate,
-        //         gasUsed: 99999,
-        //         tx: "tx mock"
-        //     }
-        // };
 
         let result;
         if (orderType === TOKEN_BUY) {

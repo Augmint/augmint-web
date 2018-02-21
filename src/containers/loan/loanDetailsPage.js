@@ -1,5 +1,5 @@
 /*
-    TODO: make loan loading and error handling to a common component (use here and on repay loan page)
+    TODO: clean up this 
 */
 import React from "react";
 import { connect } from "react-redux";
@@ -37,7 +37,7 @@ class LoanDetailsPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         const loan = this.props.loans.find(item => {
-            return item.loanId === this.state.loanId;
+            return item.loanId.toString() === this.state.loanId;
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;
@@ -75,7 +75,10 @@ class LoanDetailsPage extends React.Component {
                                 <LoanRepayLink loan={this.state.loan} size="large" />
 
                                 {this.state.loan.isCollectable && (
-                                    <CollectLoanButton loansToCollect={[{ loanId: this.state.loanId }]} />
+                                    <CollectLoanButton
+                                        loanManager={this.props.loanManager}
+                                        loansToCollect={[this.state.loanId]}
+                                    />
                                 )}
                             </Pgrid.Column>
                         </Pgrid.Row>
@@ -88,6 +91,7 @@ class LoanDetailsPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
+    loanManager: state.loanManager,
     userAccount: state.web3Connect.userAccount
 });
 

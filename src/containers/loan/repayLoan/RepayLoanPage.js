@@ -81,7 +81,7 @@ class RepayLoanPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         let loan = this.props.loans.find(item => {
-            return item.loanId === this.state.loanId;
+            return item.loanId.toString() === this.state.loanId;
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;

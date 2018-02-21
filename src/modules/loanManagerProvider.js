@@ -25,7 +25,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const loanManager = store.getState().loanManager.contract.ethersInstance;
+    const loanManager = store.getState().loanManager.contract.instance;
     loanManager.onnewloan = onNewLoan;
     loanManager.onloanrepayed = onLoanRepayed;
     loanManager.onloancollected = onLoanCollected;

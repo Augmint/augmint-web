@@ -50,7 +50,8 @@ export function fetchLoans(userAccount) {
 
         try {
             const loanManager = store.getState().loanManager.contract.instance;
-            const loanIds = await loanManager.getLoanIds(userAccount);
+            const loanIds = (await loanManager.getLoanIds(userAccount))._loans;
+
             const actions = loanIds.map(fetchLoanDetails);
             const loans = await Promise.all(actions); // queries in paralel...
 
@@ -60,7 +61,7 @@ export function fetchLoans(userAccount) {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                throw new Error(error);
+                return Promise.reject(error);
             }
             return dispatch({
                 type: LOANS_LOANLIST_ERROR,
