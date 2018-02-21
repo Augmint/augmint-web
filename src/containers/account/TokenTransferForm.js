@@ -50,11 +50,7 @@ class TokenTransferForm extends React.Component {
         );
         if (res.type !== TOKEN_TRANSFER_SUCCESS) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction Failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                _error: res.error
             });
         } else {
             this.setState({
@@ -86,7 +82,7 @@ class TokenTransferForm extends React.Component {
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful transfer</h3>}
-                        eth={this.state.result.eth}
+                        result={this.state.result}
                         onDismiss={() => reset()}
                     >
                         <p>

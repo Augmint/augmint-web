@@ -3,7 +3,7 @@ import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
 import { SubmissionError, reduxForm } from "redux-form";
-import { collectLoans, LOANMANAGER_COLLECT_SUCCESS } from "modules/reducers/loanManager";
+import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
@@ -11,15 +11,11 @@ import { Form } from "components/BaseComponents";
 class CollectLoanButton extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
-        let res = await store.dispatch(collectLoans(this.props.loansToCollect));
+        const res = await store.dispatch(collectLoans(this.props.loansToCollect));
 
-        if (res.type !== LOANMANAGER_COLLECT_SUCCESS) {
+        if (res.type !== LOANTRANSACTIONS_COLLECT_SUCCESS) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                _error: res.error
             });
         } else {
             this.setState({
@@ -57,7 +53,7 @@ class CollectLoanButton extends React.Component {
                         header="Failed to collect all loans."
                         onDismiss={() => clearSubmitErrors()}
                     >
-                        <p>One or more loan collection has failed.</p>{" "}
+                        <p>One or more loan collection has failed.</p>
                     </EthSubmissionErrorPanel>
                 )}
 
@@ -82,7 +78,7 @@ class CollectLoanButton extends React.Component {
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful collection of {this.state.result.loansCollected} loans</h3>}
                         onDismiss={() => reset()}
-                        eth={this.state.result.eth}
+                        result={this.state.result}
                     />
                 )}
             </Pblock>

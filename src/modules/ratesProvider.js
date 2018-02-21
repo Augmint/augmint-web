@@ -22,7 +22,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const rates = store.getState().rates.contract.instance;
+    const rates = store.getState().rates.contract.ethersInstance;
     rates.onratechanged = onRateChange;
 };
 

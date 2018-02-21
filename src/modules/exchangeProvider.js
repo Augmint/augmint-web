@@ -23,7 +23,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const exchange = store.getState().exchange.contract.instance;
+    const exchange = store.getState().exchange.contract.ethersInstance;
     exchange.onneworder = onNewOrder;
     exchange.onorderfill = onOrderFill;
     exchange.oncancelledorder = onCancelledOrder;

@@ -4,7 +4,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import ratesArtifacts from "contractsBuild/Rates.json";
-import ethers from "ethers";
 
 export const RATES_CONNECT_REQUESTED = "rates/RATES_CONNECT_REQUESTED";
 export const RATES_CONNECT_SUCCESS = "rates/RATES_CONNECT_SUCCESS";
@@ -105,19 +104,19 @@ export const refreshRates = () => {
             type: RATES_REFRESH_REQUESTED
         });
         try {
+            const web3 = store.getState().web3Connect.web3Instance;
             const augmintToken = store.getState().augmintToken.contract.instance;
             const bytes32_peggedSymbol = store.getState().augmintToken.info.bytes32_peggedSymbol;
             const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-            const ONE_ETH = ethers.utils.bigNumberify("1000000000000000000");
+            const ONE_ETH = 1000000000000000000;
             const rates = store.getState().rates.contract.instance;
             const fiatScale = 10000; // all fiat rates are stored with 4 decimals
-            const provider = store.getState().web3Connect.ethers.provider;
 
             const [bn_ethFiatcRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
-                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH).then(res => res[0]),
-                augmintToken.balanceOf(rates.address).then(res => res[0]),
-                provider.getBalance(rates.address)
+                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH),
+                augmintToken.balanceOf(rates.address),
+                web3.eth.getBalance(rates.address)
             ]);
 
             return dispatch({
@@ -135,7 +134,7 @@ export const refreshRates = () => {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
+                throw new Error(error);
             }
             return dispatch({
                 type: RATES_ERROR,

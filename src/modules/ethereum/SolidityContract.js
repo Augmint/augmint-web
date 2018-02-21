@@ -4,8 +4,9 @@ import ethers from "ethers";
 /*  connecting to both web3 and ethers contract instance is temporary fix for web3 event issues
 TODO: should we and could we get rid of web3 contract? */
 export default class SolidityContract {
-    constructor(connection, ethersContractInstance, abi) {
-        this.instance = ethersContractInstance;
+    constructor(connection, web3ContractInstance, ethersContractInstance, abi) {
+        this.instance = web3ContractInstance;
+        this.ethersInstance = ethersContractInstance;
         this.address = ethers.utils.getAddress(ethersContractInstance.address); // format it checksummed
         this.abi = abi; // storing this to be ethereum js lib independent
 
@@ -31,12 +32,21 @@ export default class SolidityContract {
 
     static async connectNew(connection, artifacts) {
         const contract = Contract(artifacts);
+        contract.setProvider(connection.web3Instance.currentProvider);
+        //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
+        if (typeof contract.currentProvider.sendAsync !== "function") {
+            contract.currentProvider.sendAsync = function() {
+                return contract.currentProvider.send.apply(contract.currentProvider, arguments);
+            };
+        }
+        const web3ContractInstance = await contract.deployed();
+
+        // TODO: add extra check  because .deployed() returns an instance even when contract is not deployed
+        // const contractName = artifacts.contract_name;
+        // throw new Error("Can't connect to " + contractName + " contract. Owner is 0x. Not deployed?");
+
         const provider = connection.ethers.provider;
-
-        contract.setProvider(provider);
-        contract.setNetwork(connection.network.id);
-
         const ethersContractInstance = new ethers.Contract(contract.address, contract.abi, provider);
-        return new SolidityContract(connection, ethersContractInstance, contract.abi);
+        return new SolidityContract(connection, web3ContractInstance, ethersContractInstance, contract.abi);
     }
 }

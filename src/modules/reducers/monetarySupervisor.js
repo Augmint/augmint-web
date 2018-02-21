@@ -131,7 +131,11 @@ export const refreshMonetarySupervisor = () => {
 };
 
 async function getMonetarySupervisorInfo(monetarySupervisor) {
+    const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const ONE_ETH = 1000000000000000000;
+
     const [
         augmintTokenAddress,
         interestEarnedAccountAddress,
@@ -145,34 +149,31 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         bn_ltdDifferenceLimit,
         bn_allowedLtdDifferenceAmount
     ] = await Promise.all([
-        monetarySupervisor.augmintToken().then(res => res[0]),
-        monetarySupervisor.interestEarnedAccount().then(res => res[0]),
-        monetarySupervisor.augmintReserves().then(res => res[0]),
+        monetarySupervisor.augmintToken(),
+        monetarySupervisor.interestEarnedAccount(),
+        monetarySupervisor.augmintReserves(),
 
-        monetarySupervisor.issuedByMonetaryBoard().then(res => res[0]),
+        monetarySupervisor.issuedByMonetaryBoard(),
 
-        monetarySupervisor.totalLoanAmount().then(res => res[0]),
-        monetarySupervisor.totalLockedAmount().then(res => res[0]),
+        monetarySupervisor.totalLoanAmount(),
+        monetarySupervisor.totalLockedAmount(),
 
-        monetarySupervisor.ltdDifferenceLimit().then(res => res[0]), // TODO: use monetarySupervisor.getParams() to reduce calls
-        monetarySupervisor.allowedLtdDifferenceAmount().then(res => res[0])
+        monetarySupervisor.ltdDifferenceLimit(), // TODO: use monetarySupervisor.getParams() to reduce calls
+        monetarySupervisor.allowedLtdDifferenceAmount()
     ]);
 
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
     const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
     const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
     const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
     const ltdDifferenceLimit = bn_ltdDifferenceLimit / 1000000;
     const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount / decimalsDiv;
 
-    const provider = store.getState().web3Connect.ethers.provider;
-
     const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
-        provider.getBalance(augmintReservesAddress),
-        augmintToken.balanceOf(augmintReservesAddress).then(res => res[0]),
-        augmintToken.balanceOf(interestEarnedAccountAddress).then(res => res[0])
+        web3.eth.getBalance(augmintReservesAddress),
+        augmintToken.balanceOf(augmintReservesAddress),
+        augmintToken.balanceOf(interestEarnedAccountAddress)
     ]);
-    const ONE_ETH = 1000000000000000000;
+
     const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH;
     const reserveTokenBalance = bn_reserveTokenBalance / decimalsDiv;
     const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / decimalsDiv;

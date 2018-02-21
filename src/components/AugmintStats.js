@@ -18,9 +18,9 @@ export class AugmintStats extends React.Component {
         } = monetarySupervisor.info;
 
         const reserveEthBalanceInFiat =
-            ethFiatRate == null || reserveEthBalance == null
+            ethFiatRate === "?" || reserveEthBalance === "?"
                 ? "?"
-                : (ethFiatRate * reserveEthBalance).toFixed(decimals);
+                : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
             <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>

@@ -2,6 +2,29 @@
  TODO: clean up thrown errors
  */
 
+class ExtendableError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        if (typeof Error.captureStackTrace === "function") {
+            Error.captureStackTrace(this, this.constructor);
+        } else {
+            this.stack = new Error(message).stack;
+        }
+    }
+}
+
+export class EthereumTransactionError extends ExtendableError {
+    constructor(message, details, txResult, gasEstimate, ...args) {
+        console.debug("message:", message, "details:", details);
+        super(message, ...args);
+
+        this.details = details;
+        this.txResult = txResult;
+        this.gasEstimate = gasEstimate;
+    }
+}
+
 export function asyncGetAccounts(web3) {
     return new Promise(function(resolve, reject) {
         web3.eth.getAccounts((error, accounts) => {

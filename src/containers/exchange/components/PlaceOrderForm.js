@@ -108,13 +108,10 @@ class PlaceOrderForm extends React.Component {
         }
 
         const res = await store.dispatch(placeOrder(orderType, amount, price));
+
         if (res.type !== PLACE_ORDER_SUCCESS) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction Failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                _error: res.error
             });
         } else {
             this.setState({
@@ -158,18 +155,16 @@ class PlaceOrderForm extends React.Component {
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful order</h3>}
-                        eth={this.state.result.eth}
+                        result={this.state.result}
                         onDismiss={() => reset()}
-                    >
-                        <p>Order id: {this.state.result.orderId}</p>
-                    </EthSubmissionSuccessPanel>
+                    />
                 )}
 
                 {!submitSucceeded && (
                     <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
                         <EthSubmissionErrorPanel
                             error={error}
-                            header={<h3>Transfer failed</h3>}
+                            header="Place Order failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
 

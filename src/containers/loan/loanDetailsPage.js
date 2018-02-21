@@ -1,5 +1,5 @@
 /*
-    TODO: clean up this 
+    TODO: clean up this
 */
 import React from "react";
 import { connect } from "react-redux";
@@ -37,7 +37,7 @@ class LoanDetailsPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         const loan = this.props.loans.find(item => {
-            return item.loanId.toString() === this.state.loanId;
+            return item.loanId === Number(this.state.loanId);
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;
@@ -77,7 +77,7 @@ class LoanDetailsPage extends React.Component {
                                 {this.state.loan.isCollectable && (
                                     <CollectLoanButton
                                         loanManager={this.props.loanManager}
-                                        loansToCollect={[this.state.loanId]}
+                                        loansToCollect={[{ loanId: this.state.loan.loanId }]}
                                     />
                                 )}
                             </Pgrid.Column>

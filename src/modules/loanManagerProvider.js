@@ -1,6 +1,11 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectLoanManager, refreshLoanManager, fetchProducts } from "modules/reducers/loanManager";
+import {
+    connectLoanManager,
+    refreshLoanManager,
+    fetchProducts,
+    fetchLoansToCollect
+} from "modules/reducers/loanManager";
 import { fetchLoans } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -25,7 +30,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.ethersInstance;
     loanManager.onnewloan = onNewLoan;
     loanManager.onloanrepayed = onLoanRepayed;
     loanManager.onloancollected = onLoanCollected;
@@ -126,5 +131,14 @@ const onLoanCollected = (loanId, borrower) => {
         // TODO: it can be expensive, should create a separate single fetchLoan action
         store.dispatch(fetchLoans(userAccount));
         store.dispatch(fetchUserBalance(userAccount));
+    }
+
+    const loansToCollect = store.getState().loanManager.loansToCollect;
+    if (loansToCollect && loansToCollect.length > 0) {
+        console.debug(
+            "loanManagerProvider.onCollected: loan collected and we already had loans to collect fetched . Dispatching fetchLoansToCollect"
+        );
+
+        store.dispatch(fetchLoansToCollect());
     }
 };

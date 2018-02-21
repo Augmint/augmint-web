@@ -7,10 +7,10 @@ Use only from reducers.
     TODO: set gasEstimates when it gas consumption has settled.
  */
 import store from "modules/store";
-import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import ethers from "ethers";
+import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 
 export function getTransferFee(amount) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
@@ -50,56 +50,57 @@ export function getMaxTransfer(amount) {
 }
 
 export async function transferTokenTx(payload) {
-    let { payee, tokenAmount, narrative } = payload;
-    try {
-        const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
-        const userAccount = store.getState().web3Connect.userAccount;
-        const augmintToken = store.getState().augmintToken;
-        const decimalsDiv = augmintToken.info.decimalsDiv;
-        narrative = narrative == null ? "" : payload.narrative.trim();
-        const result = await augmintToken.contract.instance.transferWithNarrative(
-            payee,
-            tokenAmount * decimalsDiv, // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
-            narrative,
-            {
-                from: userAccount,
-                gas: gasEstimate
-            }
+    const { payee, tokenAmount, _narrative } = payload;
+
+    const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const augmintToken = store.getState().augmintToken;
+    const decimalsDiv = augmintToken.info.decimalsDiv;
+    const narrative = _narrative == null ? "" : payload.narrative.trim();
+    const result = await augmintToken.contract.instance.transferWithNarrative(
+        payee,
+        tokenAmount * decimalsDiv, // from truffle-contract 3.0.0 passing bignumber.js BN throws "Invalid number of arguments to Solidity function". should migrate to web3's BigNumber....
+        narrative,
+        {
+            from: userAccount,
+            gas: gasEstimate
+        }
+    );
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour
+        throw new EthereumTransactionError(
+            "Transfer transaction failed.",
+            "All gas provided was used. Check tx.".result,
+            gasEstimate
         );
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("A-EUR transfer failed. All gas provided was used:  " + result.receipt.gasUsed);
-        }
-
-        /* TODO:  display result in confirmation */
-
-        if (!result.logs || !result.logs[0] || result.logs[0].event !== "Transfer") {
-            throw new Error("Transfer event wasn't received. Check tx :  " + result.tx);
-        }
-
-        const bn_amount = result.logs[0].args.amount;
-        return {
-            txResult: result,
-            to: result.logs[0].args.to,
-            from: result.logs[0].args.from,
-            bn_amount: bn_amount,
-            amount: bn_amount / decimalsDiv,
-            narrative: result.logs[0].args.narrative,
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        throw new Error("A-EUR transfer failed.\n" + error);
     }
+
+    if (!result.logs || !result.logs[0] || result.logs[0].event !== "Transfer") {
+        throw new EthereumTransactionError(
+            "Transfer transaction error.",
+            "Transfer event wasn't received. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    const bn_amount = result.logs[0].args.amount;
+    return {
+        to: result.logs[0].args.to,
+        from: result.logs[0].args.from,
+        bn_amount: bn_amount,
+        amount: bn_amount / decimalsDiv,
+        narrative: result.logs[0].args.narrative,
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
-        const augmintTokenInstance = store.getState().augmintToken.contract.instance;
+        const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
         const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
         const provider = store.getState().web3Connect.ethers.provider;
 
@@ -120,7 +121,7 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
         ]);
         const logs = [...logsFrom, ...logsTo];
         const transfers = await Promise.all(
-            logs.map(eventLog => _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog))
+            logs.map(eventLog => _formatTransferLog(AugmintTransfer, account, eventLog))
         );
 
         return transfers;
@@ -130,12 +131,12 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
 }
 
 export async function processNewTransferTx(account, eventLog) {
-    const augmintTokenInstance = store.getState().augmintToken.contract.instance;
+    const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
     const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
-    return _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog);
+    return _formatTransferLog(AugmintTransfer, account, eventLog);
 }
 
-async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account, eventLog) {
+async function _formatTransferLog(AugmintTransfer, account, eventLog) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     let blockData;
@@ -149,19 +150,19 @@ async function _formatTransferLog(AugmintTransfer, augmintTokenInstance, account
     }
 
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
-    const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
-    const bn_senderFee = direction === -1 ? parsedData.fee / 10000 : new BigNumber(0);
 
+    const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
+    const senderFee = direction === -1 ? parsedData.fee / 10000 : 0;
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
         blockData: blockData,
         direction: direction,
         directionText: direction === -1 ? "sent" : "received",
-        bn_senderFee: bn_senderFee,
-        senderFee: bn_senderFee.toString(),
+        senderFee: senderFee,
         blockTimeStampText: blockTimeStampText,
         signedAmount: parsedData.amount / decimalsDiv * direction
     });
+
     return logData;
 }

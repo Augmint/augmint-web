@@ -77,23 +77,21 @@ export function LoadingPanel(props) {
 
 export class EthSubmissionErrorPanel extends React.Component {
     render() {
-        let { children, error, ...other } = this.props;
+        const { children, error, ...other } = this.props;
+        const txResult = error && error.txResult ? error.txResult : null;
         return (
             <MsgPanel error {...other}>
                 {children}
-                {error && error.title}
-                {error != null &&
-                    error.eth && (
-                        <div>
-                            <p>Tx hash: {error.eth.tx}</p>
-                            <p>
-                                Gas used: {error.eth.gasUsed} (from {error.eth.gasProvided} provided)
-                            </p>
-                        </div>
-                    )}
-                {error != null &&
-                    error.details != null &&
-                    error.details.message && <ErrorDetails>{error.details.message}</ErrorDetails>}
+                {error && error.message}
+                {txResult && (
+                    <div>
+                        <p>Tx hash: {txResult.receipt.transactionHash}</p>
+                        <p>
+                            Gas used: {txResult.receipt.gasUsed} (from {error.gasEstimate} provided)
+                        </p>
+                    </div>
+                )}
+                {error && <ErrorDetails details={error.details} />}
             </MsgPanel>
         );
     }
@@ -106,15 +104,18 @@ EthSubmissionErrorPanel.defaultProps = {
 
 export class EthSubmissionSuccessPanel extends React.Component {
     render() {
-        var { children, eth, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
+        const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
             <MsgPanel testid={testid} {...other}>
                 {children}
                 <small>
-                    <p>Tx hash: {eth.tx}</p>
                     <p>
-                        Gas used: {eth.gasUsed} (from {eth.gasProvided} provided)
+                        Tx hash: <small>{result.eth.result.receipt.transactionHash}</small>
+                    </p>
+                    <p>
+                        Gas used: {result.eth.result.receipt.gasUsed.toString()} (from {result.eth.gasEstimate}{" "}
+                        provided)
                     </p>
                 </small>
             </MsgPanel>
@@ -140,11 +141,20 @@ export function ConnectionStatus(props) {
 }
 
 export function ErrorDetails(props) {
-    const { header = "Error details:", style = { fontSize: "0.8em", overflow: "auto" } } = props;
-    return (
+    const { header = "Error details:", style = { fontSize: "0.8em", overflow: "auto" }, details } = props;
+
+    return !details ? null : (
         <div>
             <p>{header}</p>
-            <pre style={style}>{props.children}</pre>
+
+            {details && <pre style={style}>{details.message ? details.message : details}</pre>}
+
+            {/* {details.stack (
+                        <div>
+                            <p>Stack:</p>
+                            <pre style={style}>{details.stack}</pre>
+                        </div>
+                    )} */}
         </div>
     );
 }

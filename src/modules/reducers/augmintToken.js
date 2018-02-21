@@ -4,7 +4,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
-import ethers from "ethers";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
@@ -146,6 +145,7 @@ export const refreshAugmintToken = () => {
 };
 
 async function getAugmintTokenInfo(augmintToken) {
+    const web3 = store.getState().web3Connect.web3Instance;
     const [
         symbol,
         bytes32_peggedSymbol,
@@ -157,21 +157,21 @@ async function getAugmintTokenInfo(augmintToken) {
         bn_feeMax
     ] = await Promise.all([
         augmintToken.symbol(),
-        augmintToken.peggedSymbol().then(res => res[0]),
-        augmintToken.totalSupply().then(res => res[0]),
-        augmintToken.decimals().then(res => res[0]),
-        augmintToken.feeAccount().then(res => res[0]),
+        augmintToken.peggedSymbol(),
+        augmintToken.totalSupply(),
+        augmintToken.decimals(),
+        augmintToken.feeAccount(),
 
-        augmintToken.transferFeePt().then(res => res[0]),
-        augmintToken.transferFeeMin().then(res => res[0]),
-        augmintToken.transferFeeMax().then(res => res[0])
+        augmintToken.transferFeePt(),
+        augmintToken.transferFeeMin(),
+        augmintToken.transferFeeMax()
     ]);
 
-    const peggedSymbol = ethers.utils.toUtf8String(bytes32_peggedSymbol);
+    const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
     const decimalsDiv = 10 ** decimals;
 
-    const bn_feeAccountTokenBalance = (await augmintToken.balanceOf(feeAccount))[0];
+    const bn_feeAccountTokenBalance = await augmintToken.balanceOf(feeAccount);
 
     const totalSupply = bn_totalSupply / decimalsDiv;
 
