@@ -1,7 +1,3 @@
-/*
- TODO: clean up thrown errors
- */
-
 class ExtendableError extends Error {
     constructor(message) {
         super(message);
@@ -23,26 +19,6 @@ export class EthereumTransactionError extends ExtendableError {
         this.txResult = txResult;
         this.gasEstimate = gasEstimate;
     }
-}
-
-export function asyncGetAccounts(web3) {
-    return new Promise(function(resolve, reject) {
-        web3.eth.getAccounts((error, accounts) => {
-            if (error) {
-                reject(new Error("Can't get account list from web3 (asyncGetAccounts).\n " + error));
-            } else {
-                if (!web3.utils.isAddress(accounts[0])) {
-                    reject(
-                        new Error(
-                            "Can't get default account from web3 (asyncGetAccounts)." +
-                                "\nIf you are using Metamask make sure it's unlocked with your password."
-                        )
-                    );
-                }
-                resolve(accounts);
-            }
-        });
-    });
 }
 
 export async function getNetworkDetails(web3) {

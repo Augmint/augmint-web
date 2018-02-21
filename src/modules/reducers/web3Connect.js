@@ -1,5 +1,5 @@
 import { default as Web3 } from "web3";
-import { getNetworkDetails, asyncGetAccounts } from "modules/ethereum/ethHelper";
+import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import ethers from "ethers";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
@@ -101,7 +101,7 @@ export const setupWeb3 = () => {
             const [lastBlock, network, accounts] = await Promise.all([
                 web3.eth.getBlock("latest"),
                 getNetworkDetails(web3),
-                asyncGetAccounts(web3)
+                web3.eth.getAccounts()
             ]);
 
             const web3Version = web3.version.api ? web3.version.api : web3.version; // web3 0.x: web3.version.api, 1.0.0: web3.version
