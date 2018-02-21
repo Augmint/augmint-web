@@ -96,6 +96,12 @@ export const setupWeb3 = () => {
                     chainId: 999
                 });
                 signer = null;
+
+            //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
+            if (typeof web3.currentProvider.sendAsync !== "function") {
+                web3.currentProvider.sendAsync = function() {
+                    return web3.currentProvider.send.apply(web3.currentProvider, arguments);
+                };
             }
 
             const [lastBlock, network, accounts] = await Promise.all([
