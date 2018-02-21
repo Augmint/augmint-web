@@ -37,8 +37,8 @@ export function AppMenu(props) {
             <StyledNavContainer>
                 <StyleNavList>
                     <AppMenuItem isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
-
                     <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
+                    <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">Roadmap</AppMenuItem>
                     {isConnected && (
                         <AppMenuItem isActive={() => currentLocation === "/account"} to="/account">My Account</AppMenuItem>
                     )}
