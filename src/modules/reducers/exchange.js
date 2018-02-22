@@ -86,7 +86,7 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
-            const contract = await SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
 
             const info = await getExchangeInfo(contract.instance);
 

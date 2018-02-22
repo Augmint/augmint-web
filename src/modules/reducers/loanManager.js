@@ -131,7 +131,7 @@ export const connectLoanManager = () => {
             type: LOANMANAGER_CONNECT_REQUESTED
         });
         try {
-            const contract = await SolidityContract.connectNew(store.getState().web3Connect, loanManagerArtifacts);
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, loanManagerArtifacts);
             return dispatch({
                 type: LOANMANAGER_CONNECT_SUCCESS,
                 contract: contract

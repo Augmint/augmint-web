@@ -111,7 +111,7 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
             const info = await getAugmintTokenInfo(contract.instance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,

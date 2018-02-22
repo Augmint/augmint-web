@@ -30,16 +30,12 @@ export default class SolidityContract {
         this.deployedAtBlock = ethers.utils.bigNumberify(startBlock).toHexString();
     }
 
-    static async connectNew(connection, artifacts) {
+    static connectNew(connection, artifacts) {
         const contract = Contract(artifacts);
         contract.setProvider(connection.web3Instance.currentProvider);
-        //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-        if (typeof contract.currentProvider.sendAsync !== "function") {
-            contract.currentProvider.sendAsync = function() {
-                return contract.currentProvider.send.apply(contract.currentProvider, arguments);
-            };
-        }
-        const web3ContractInstance = await contract.deployed();
+        contract.setNetwork(connection.network.id);
+
+        const web3ContractInstance = contract.at(contract.address);
 
         // TODO: add extra check  because .deployed() returns an instance even when contract is not deployed
         // const contractName = artifacts.contract_name;
