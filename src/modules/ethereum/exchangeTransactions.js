@@ -1,6 +1,6 @@
 import store from "modules/store";
-import BigNumber from "bignumber.js";
 import { cost } from "./gas";
+import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -33,7 +33,8 @@ export async function fetchOrders() {
 
 async function getOrders(orderType, offset) {
     const exchange = store.getState().exchange.contract.instance;
-    const bn_decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const decimals = store.getState().augmintToken.info.decimals;
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
 
     let result;
@@ -56,31 +57,23 @@ async function getOrders(orderType, offset) {
 
                 if (orderType === TOKEN_BUY) {
                     parsed.orderType = TOKEN_BUY;
-                    parsed.bn_tokenValue = parsed.bn_amount
-                        .mul(parsed.bn_price)
-                        .div(ONE_ETH)
-                        .round(0, BigNumber.ROUND_DOWN);
-                    parsed.bn_weiValue = parsed.bn_amount;
+                    parsed.tokenValue = parseFloat(
+                        (parsed.bn_amount.mul(parsed.bn_price) / ONE_ETH / decimalsDiv).toFixed(decimals)
+                    );
+                    parsed.weiValue = parsed.bn_amount;
                 } else {
                     parsed.orderType = TOKEN_SELL;
-                    parsed.bn_tokenValue = parsed.bn_amount;
-                    parsed.bn_weiValue = parsed.bn_amount
-                        .mul(ONE_ETH)
-                        .div(parsed.bn_price)
-                        .round(0, BigNumber.ROUND_FLOOR);
+                    parsed.tokenValue = parseFloat(parsed.bn_amount / decimalsDiv);
+                    parsed.weiValue = (parsed.bn_amount * ONE_ETH / parsed.bn_price).toFixed(0);
                 }
 
-                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH);
-                parsed.price = parsed.bn_price.div(bn_decimalsDiv).toString(); // price in tokens/ETH
-
-                parsed.tokenValue = parsed.bn_tokenValue.div(bn_decimalsDiv).toString();
-                parsed.ethValue = parsed.bn_ethValue.toString();
-
-                parsed.ethValueRounded = parsed.bn_ethValue.round(6, BigNumber.ROUND_HALF_UP).toString();
+                parsed.price = parsed.bn_price / decimalsDiv; // price in tokens/ETH
+                parsed.ethValue = parsed.weiValue / ONE_ETH;
+                parsed.ethValueRounded = parseFloat(parsed.ethValue.toFixed(6));
 
                 if (orderType === TOKEN_BUY) {
-                    parsed.amount = parsed.bn_ethValue.toString();
-                    parsed.amountRounded = parsed.bn_ethValue.round(6, BigNumber.ROUND_HALF_UP).toString();
+                    parsed.amount = parsed.ethValue;
+                    parsed.amountRounded = parsed.ethValueRounded;
                     res.buyOrders.push(parsed);
                 } else {
                     parsed.amount = parsed.tokenValue;
@@ -108,157 +101,162 @@ export function isOrderBetter(o1, o2) {
 }
 
 export async function placeOrderTx(orderType, amount, price) {
-    try {
-        const gasEstimate = cost.PLACE_ORDER_GAS;
-        const userAccount = store.getState().web3Connect.userAccount;
-        const exchange = store.getState().exchange.contract.instance;
-        let submitAmount, result;
+    const gasEstimate = cost.PLACE_ORDER_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const exchange = store.getState().exchange.contract.instance;
+    const priceDecimalsDiv = store.getState().augmintToken.info.decimalsDiv; // Is it the same?
 
-        switch (orderType) {
-            case TOKEN_BUY:
-                submitAmount = amount.mul(ONE_ETH).toString();
-                result = await exchange.placeBuyTokenOrder(price * 10000, {
-                    value: submitAmount,
+    let submitAmount;
+    let result;
+
+    switch (orderType) {
+        case TOKEN_BUY:
+            submitAmount = amount * ONE_ETH;
+            result = await exchange.placeBuyTokenOrder(price * priceDecimalsDiv, {
+                value: submitAmount,
+                from: userAccount,
+                gas: gasEstimate
+            });
+            break;
+        case TOKEN_SELL:
+            const augmintToken = store.getState().augmintToken;
+            const decimalsDiv = augmintToken.info.decimalsDiv;
+            submitAmount = amount * decimalsDiv;
+            result = await augmintToken.contract.instance.transferAndNotify(
+                exchange.address,
+                submitAmount,
+                price * priceDecimalsDiv,
+                {
                     from: userAccount,
                     gas: gasEstimate
-                });
-                break;
-            case TOKEN_SELL:
-                const augmintToken = store.getState().augmintToken;
-                submitAmount = amount.mul(augmintToken.info.bn_decimalsDiv).toString();
-                result = await augmintToken.contract.instance.transferAndNotify(
-                    exchange.address,
-                    submitAmount,
-                    price.mul(augmintToken.info.bn_decimalsDiv).toString(),
-                    {
-                        from: userAccount,
-                        gas: gasEstimate
-                    }
-                );
-                break;
-            default:
-                throw new Error("Unknown orderType: " + orderType);
-        }
-
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("Place order failed. All gas provided was used:  " + result.receipt.gasUsed);
-        }
-
-        if (
-            !result.logs ||
-            !result.logs[0] ||
-            (result.logs[0].event !== "NewOrder" && result.logs[1].event !== "AugmintTransfer")
-        ) {
-            const error = new Error("NewOrder or Augmint transfer event wasn't received. Check tx :  " + result.tx);
-            console.error(error, "\nResult received:", result);
-            throw error;
-        }
-
-        return {
-            txResult: result,
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        console.error("Place order failed.\n", error);
-        throw new Error("Place order failed.\n" + error);
+                }
+            );
+            break;
+        default:
+            throw new EthereumTransactionError(
+                "Place order failed.",
+                "Unknown orderType: " + orderType,
+                result,
+                gasEstimate
+            );
     }
+
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour (TODO: test it!)
+        throw new EthereumTransactionError(
+            "Place order failed.",
+            "All gas provided was used. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    if (
+        !result.logs ||
+        !result.logs[0] ||
+        (result.logs[0].event !== "NewOrder" && result.logs[1].event !== "AugmintTransfer")
+    ) {
+        throw new EthereumTransactionError(
+            "Place order failed.",
+            "NewOrder or Augmint transfer event wasn't received. Check tx. ",
+            result,
+            gasEstimate
+        );
+    }
+
+    return {
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function matchOrdersTx(buyIndex, buyId, sellIndex, sellId) {
-    try {
-        const gasEstimate = cost.MATCH_ORDERS_GAS;
-        const userAccount = store.getState().web3Connect.userAccount;
-        const exchange = store.getState().exchange.contract.instance;
+    const gasEstimate = cost.MATCH_ORDERS_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const exchange = store.getState().exchange.contract.instance;
 
-        const result = await exchange.matchOrders(buyIndex, buyId, sellIndex, sellId, {
-            from: userAccount,
-            gas: gasEstimate
-        });
+    const result = await exchange.matchOrders(buyIndex, buyId, sellIndex, sellId, {
+        from: userAccount,
+        gas: gasEstimate
+    });
 
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("Match orders failed. All gas provided was used:  " + result.receipt.gasUsed);
-        }
-
-        if (!result.logs || !result.logs[0] || result.logs[0].event !== "OrderFill") {
-            const error = new Error("OrderFill event wasn't received. Check tx :  " + result.tx);
-            console.error(error, "\nResult received:", result);
-            throw error;
-        }
-
-        return {
-            txResult: result,
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        console.error("Order matching failed.\n", error);
-        throw new Error("Order matching failed.\n" + error);
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour (TODO: test it!)
+        throw new EthereumTransactionError(
+            "Order matching failed.",
+            "All gas provided was used. Check tx",
+            result,
+            gasEstimate
+        );
     }
+
+    if (!result.logs || !result.logs[0] || result.logs[0].event !== "OrderFill") {
+        throw new EthereumTransactionError(
+            "Order matching failed.",
+            "OrderFill event wasn't received. Check tx",
+            result,
+            gasEstimate
+        );
+    }
+
+    return {
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function cancelOrderTx(orderType, orderIndex, orderId) {
-    try {
-        const gasEstimate = cost.CANCEL_ORDER_GAS;
-        const userAccount = store.getState().web3Connect.userAccount;
-        const exchange = store.getState().exchange.contract.instance;
+    const gasEstimate = cost.CANCEL_ORDER_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const exchange = store.getState().exchange.contract.instance;
 
-        // return {
-        //     txResult: "mock",
-        //     eth: {
-        //         gasProvided: gasEstimate,
-        //         gasUsed: 99999,
-        //         tx: "tx mock"
-        //     }
-        // };
-
-        let result;
-        if (orderType === TOKEN_BUY) {
-            result = await exchange.cancelBuyTokenOrder(orderIndex, orderId, {
-                from: userAccount,
-                gas: gasEstimate
-            });
-        } else if (orderType === TOKEN_SELL) {
-            result = await exchange.cancelSellTokenOrder(orderIndex, orderId, {
-                from: userAccount,
-                gas: gasEstimate
-            });
-        } else {
-            throw new Error("Cancel order failed, invalid orderType: " + orderType);
-        }
-
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour
-            // TODO: add more tx info
-            throw new Error("Cancel orders failed. All gas provided was used:  " + result.receipt.gasUsed);
-        }
-
-        if (!result.logs || !result.logs[0] || result.logs[0].event !== "CancelledOrder") {
-            const error = new Error("CancelledOrder event wasn't received. Check tx :  " + result.tx);
-            console.error(error, "\nResult received:", result);
-            throw error;
-        }
-
-        return {
-            txResult: result,
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        console.error("Cancel order failed.\n", error);
-        throw new Error("Cancel order failed.\n" + error);
+    let result;
+    if (orderType === TOKEN_BUY) {
+        result = await exchange.cancelBuyTokenOrder(orderIndex, orderId, {
+            from: userAccount,
+            gas: gasEstimate
+        });
+    } else if (orderType === TOKEN_SELL) {
+        result = await exchange.cancelSellTokenOrder(orderIndex, orderId, {
+            from: userAccount,
+            gas: gasEstimate
+        });
+    } else {
+        throw new EthereumTransactionError(
+            "Order cancel error.",
+            "invalid orderType: " + orderType,
+            result,
+            gasEstimate
+        );
     }
+
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour
+        throw new EthereumTransactionError(
+            "Order cancel error.",
+            "All gas provided was used. Check tx. ",
+            result,
+            gasEstimate
+        );
+    }
+
+    if (!result.logs || !result.logs[0] || result.logs[0].event !== "CancelledOrder") {
+        throw new EthereumTransactionError(
+            "Order cancel error.",
+            "CancelledOrder event wasn't received. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    return {
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }

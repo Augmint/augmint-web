@@ -1,10 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
 import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
 import { SubmissionError, reduxForm } from "redux-form";
-import { collectLoans, LOANMANAGER_COLLECT_SUCCESS } from "modules/reducers/loanManager";
+import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
@@ -12,15 +11,11 @@ import { Form } from "components/BaseComponents";
 class CollectLoanButton extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
-        let res = await store.dispatch(collectLoans(this.props.loansToCollect));
+        const res = await store.dispatch(collectLoans(this.props.loansToCollect));
 
-        if (res.type !== LOANMANAGER_COLLECT_SUCCESS) {
+        if (res.type !== LOANTRANSACTIONS_COLLECT_SUCCESS) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                _error: res.error
             });
         } else {
             this.setState({
@@ -44,11 +39,12 @@ class CollectLoanButton extends React.Component {
             submitSucceeded,
             handleSubmit,
             clearSubmitErrors,
-            isLoading,
             submitting,
             reset,
+            loanManager,
             loansToCollect
         } = this.props;
+        const { isLoading } = loanManager;
         return (
             <Pblock>
                 {error && (
@@ -57,7 +53,7 @@ class CollectLoanButton extends React.Component {
                         header="Failed to collect all loans."
                         onDismiss={() => clearSubmitErrors()}
                     >
-                        <p>One or more loan collection has failed.</p>{" "}
+                        <p>One or more loan collection has failed.</p>
                     </EthSubmissionErrorPanel>
                 )}
 
@@ -69,35 +65,26 @@ class CollectLoanButton extends React.Component {
                                 size="large"
                                 className="collectLoanButton"
                                 primary
-                                disabled={submitting || this.props.loansToCollect.length === 0}
+                                disabled={submitting || isLoading || loansToCollect.length === 0}
                             >
                                 {submitting ? "Submitting..." : "Collect"}
                             </Button>
                         </Form>
                     )}
 
-                {(isLoading || loansToCollect == null) && (
-                    <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>
-                )}
+                {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful collection of {this.state.result.loansCollected} loans</h3>}
                         onDismiss={() => reset()}
-                        eth={this.state.result.eth}
+                        result={this.state.result}
                     />
                 )}
             </Pblock>
         );
     }
 }
-
-const mapStateToProps = state => ({
-    loanManager: state.loanManager.contract,
-    isLoading: state.loanManager.isLoading
-});
-
-CollectLoanButton = connect(mapStateToProps)(CollectLoanButton);
 
 export default reduxForm({
     form: "CollectLoanButton" // a unique identifier for this form
