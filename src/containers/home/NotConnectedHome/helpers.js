@@ -32,6 +32,7 @@ import gycsado from 'assets/images/team/gycsado.jpg';
 import aszabo from 'assets/images/team/aszabo.jpg';
 
 import decent from 'assets/images/decent.png';
+import euedge from 'assets/images/euedge.png';
 
 export const keyFeatures = [
     {
@@ -277,7 +278,7 @@ export const teamMembers = [
         title: 'Frontend developer',
         linedinUrl:'https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb',
         githubUrl:'https://github.com/gyurka00',
-        description: "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from eudge.</a>"
+        description: "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from EU Edge.</a>"
     },
     {
         pk: 'team-11',
@@ -286,7 +287,7 @@ export const teamMembers = [
         imgSrc: aszabo,
         title: 'Technical project manager',
         linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
-        description: "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from eudge.</a>"
+        description: "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from EU Edge.</a>"
     }
 ];
 
@@ -298,5 +299,11 @@ export const partners = [
         description: "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a>",
         slackText: "Join Decent's slack.",
         slackUrl: 'https://decent-slack-autoinvite.herokuapp.com'
-      }
+    },
+    {
+        pk: 'partner-2',
+        name: 'EU Edge',
+        imgSrc: euedge,
+        description: "<a href='https://euedge.com/' target='_blank'>EU Edge</a> is supporting Augmint as a technical partner."
+    }
 ];
