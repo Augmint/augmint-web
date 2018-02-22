@@ -22,7 +22,7 @@ export default () => (
         </List>
         <Segment basic as="section">
             <Segment basic as="h2" className="header" content="Overview" id={"overview"} />
-            <Grid divided="vertically" basic>
+            <Grid divided="vertically">
                 <Grid.Row columns={2}>
                     <Grid.Column>
                         <Segment basic className="custom-column">
@@ -131,7 +131,7 @@ export default () => (
                 with GDCs the profit from fees is distributed among GDC holders.
             </p>
         </Segment>
-        <Grid divided="vertically" basic className="whitepaper-manifesto">
+        <Grid divided="vertically" className="whitepaper-manifesto">
             <Grid.Row columns={2}>
                 <Grid.Column>
                     <Segment
@@ -141,7 +141,7 @@ export default () => (
                         target="_blank"
                     >
                         <h5>WHITEPAPER</h5>
-                        <Image basic src={whitePaper} />
+                        <Image src={whitePaper} />
                     </Segment>
                 </Grid.Column>
                 <Grid.Column>
@@ -151,7 +151,7 @@ export default () => (
                         href="/manifesto"
                     >
                         <h5>MANIFESTO</h5>
-                        <Image basic src={manifesto} />
+                        <Image src={manifesto} />
                     </Segment>
                 </Grid.Column>
             </Grid.Row>
