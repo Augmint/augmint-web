@@ -146,15 +146,7 @@ export function ErrorDetails(props) {
     return !details ? null : (
         <div>
             <p>{header}</p>
-
             {details && <pre style={style}>{details.message ? details.message : details}</pre>}
-
-            {/* {details.stack (
-                        <div>
-                            <p>Stack:</p>
-                            <pre style={style}>{details.stack}</pre>
-                        </div>
-                    )} */}
         </div>
     );
 }
