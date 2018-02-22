@@ -49,14 +49,4 @@ export default class SolidityContract {
         const ethersContractInstance = new ethers.Contract(contract.address, contract.abi, provider);
         return new SolidityContract(connection, web3ContractInstance, ethersContractInstance, contract.abi);
     }
-
-    static async connectNewAt(connection, artifacts, address) {
-        const contract = Contract(artifacts);
-        contract.setProvider(connection.currentProvider);
-        const instance = await contract.at(address);
-        const provider = connection.ethers.provider;
-
-        const ethersContractInstance = new ethers.Contract(address, contract.abi, provider);
-        return new SolidityContract(connection, instance, ethersContractInstance);
-    }
 }

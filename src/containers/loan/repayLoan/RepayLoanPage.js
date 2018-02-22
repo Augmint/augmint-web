@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
 import { Button } from "semantic-ui-react";
 import store from "modules/store";
-import { repayLoan, LOANMANAGER_REPAY_SUCCESS } from "modules/reducers/loanManager";
+import { repayLoan, LOANTRANSACTIONS_REPAY_SUCCESS } from "modules/reducers/loanTransactions";
 import LoanDetails from "containers/loan/components/LoanDetails";
 import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";
@@ -81,7 +81,7 @@ class RepayLoanPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         let loan = this.props.loans.find(item => {
-            return item.loanId === this.state.loanId;
+            return item.loanId.toString() === this.state.loanId;
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;
@@ -98,13 +98,9 @@ class RepayLoanPage extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
         let res = await store.dispatch(repayLoan(this.state.loan.repaymentAmount, this.state.loanId));
-        if (res.type !== LOANMANAGER_REPAY_SUCCESS) {
+        if (res.type !== LOANTRANSACTIONS_REPAY_SUCCESS) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction Failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                _error: res.error
             });
         } else {
             this.setState({
@@ -179,7 +175,7 @@ class RepayLoanPage extends React.Component {
                     {submitSucceeded && (
                         <EthSubmissionSuccessPanel
                             header={<h3>Successful repayment</h3>}
-                            eth={this.state.result.eth}
+                            result={this.state.result}
                             dismissable={false}
                         />
                     )}

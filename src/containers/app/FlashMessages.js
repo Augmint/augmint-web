@@ -22,8 +22,8 @@ class FlashMessages extends React.Component {
                 >
                 <Header icon="checkmark" content="Successful Ethereum transaction" onClose={this.handleClose} />
                 <Modal.Content>
-                    {flash.props.result ? (
-                        <EthSubmissionSuccessPanel header={<h3>{flash.message}</h3>} eth={flash.props.result.eth} />
+                    {flash.props.result && flash.props.result.eth ? (
+                        <EthSubmissionSuccessPanel header={<h3>{flash.message}</h3>} result={flash.props.result} />
                     ) : (
                         flash.message
                     )}
