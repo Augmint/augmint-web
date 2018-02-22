@@ -30,11 +30,12 @@ export default class SolidityContract {
         this.deployedAtBlock = ethers.utils.bigNumberify(startBlock).toHexString();
     }
 
-    static async connectNew(connection, artifacts) {
+    static connectNew(connection, artifacts) {
         const contract = Contract(artifacts);
         contract.setProvider(connection.web3Instance.currentProvider);
+        contract.setNetwork(connection.network.id);
 
-        const web3ContractInstance = await contract.deployed();
+        const web3ContractInstance = contract.at(contract.address);
 
         // TODO: add extra check  because .deployed() returns an instance even when contract is not deployed
         // const contractName = artifacts.contract_name;

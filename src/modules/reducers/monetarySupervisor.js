@@ -94,10 +94,7 @@ export const connectMonetarySupervisor = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(
-                store.getState().web3Connect,
-                monetarySupervisor_artifacts
-            );
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, monetarySupervisor_artifacts);
             const info = await getMonetarySupervisorInfo(contract.instance);
             return dispatch({
                 type: MONETARY_SUPERVISOR_CONNECT_SUCCESS,
