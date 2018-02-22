@@ -21,17 +21,9 @@ export class AccountInfo extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
 
                 <p>Account: {account.address}</p>
-                <p>
-                    ETH: {account.ethBalance}
-                    {account.ethPendingBalance !== "?" &&
-                        account.ethPendingBalance !== 0 && <span> (Pending: {account.ethPendingBalance} )</span>}
-                </p>
+                <p>ETH: {account.ethBalance}</p>
                 <p>
                     A-EUR: <span id="userAEurBalance">{account.tokenBalance}</span>
-                    {account.pendingTokenBalance !== "?" &&
-                        account.pendingTokenBalance !== 0 && (
-                            <span> (Pending: {typeof account.pendingTokenBalance} )</span>
-                        )}
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Pblock>

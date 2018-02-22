@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { EthSubmissionSuccessPanel } from "components/MsgPanels";
 
 export default function NewLoanSuccess(props) {
-    const { loanAmount, repaymentAmount, collateralEth, loanId, borrower, productId, eth } = props.result;
+    const { loanAmount, repaymentAmount, collateralEth, loanId, borrower, productId } = props.result;
     return (
-        <EthSubmissionSuccessPanel header={<h3>You've got a loan</h3>} eth={eth} dismissable={false}>
+        <EthSubmissionSuccessPanel header={<h3>You've got a loan</h3>} result={props.result} dismissable={false}>
             <p>Loan id: {loanId}</p>
             <p>Disbursed: {loanAmount} A-EUR</p>
             <p>To be repaid: {repaymentAmount} A-EUR</p>

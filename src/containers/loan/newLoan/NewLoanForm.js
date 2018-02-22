@@ -8,7 +8,6 @@ import { Button, Label } from "semantic-ui-react";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import BigNumber from "bignumber.js";
 import { Pblock } from "components/PageLayout";
 import ToolTip from "components/ToolTip";
 
@@ -29,75 +28,53 @@ class NewLoanForm extends React.Component {
     onDisbursedTokenAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = parseFloat(e.target.value);
         } catch (error) {
             this.props.change("repaymentAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        const bn_repaymentAmountAmount = val
-            .div(this.props.product.bn_discountRate)
-            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const fiatcValue = bn_repaymentAmountAmount.div(this.props.product.bn_loanCollateralRatio);
+        const repaymentAmount = (val / this.props.product.discountRate).toFixed(TOKEN_DECIMALS);
+        const fiatcValue = repaymentAmount / this.props.product.loanCollateralRatio;
 
-        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
+        const ethAmount = (fiatcValue / this.props.rates.info.ethFiatRate).toFixed(ETH_DECIMALS);
 
-        this.props.change(
-            "repaymentAmount",
-            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        this.props.change("repaymentAmount", Number(repaymentAmount));
+        this.props.change("ethAmount", Number(ethAmount));
     }
 
     onRepaymentAmountAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = parseFloat(e.target.value);
         } catch (error) {
             this.props.change("disbursedTokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        const fiatcValue = val.div(this.props.product.bn_loanCollateralRatio);
+        const fiatcValue = val / this.props.product.loanCollateralRatio;
 
-        const bn_disbursedTokenAmount = val
-            .times(this.props.product.bn_discountRate)
-            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
-        this.props.change(
-            "disbursedTokenAmount",
-            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        const disbursedTokenAmount = (val * this.props.product.discountRate).toFixed(TOKEN_DECIMALS);
+        const ethAmount = (fiatcValue / this.props.rates.info.ethFiatRate).toFixed(ETH_DECIMALS);
+        this.props.change("disbursedTokenAmount", Number(disbursedTokenAmount));
+        this.props.change("ethAmount", Number(ethAmount));
     }
 
     onEthAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = parseFloat(e.target.value);
         } catch (error) {
             this.props.change("disbursedTokenAmount", "");
             this.props.change("repaymentAmount", "");
             return;
         }
-        const fiatcValue = val.times(this.props.rates.info.bn_ethFiatRate);
+        const fiatcValue = val * this.props.rates.info.ethFiatRate;
 
-        const bn_repaymentAmountAmount = this.props.product.bn_loanCollateralRatio.times(fiatcValue);
-        const bn_disbursedTokenAmount = bn_repaymentAmountAmount.times(this.props.product.bn_discountRate);
-        this.props.change(
-            "disbursedTokenAmount",
-            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "repaymentAmount",
-            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
+        const repaymentAmount = this.props.product.loanCollateralRatio * fiatcValue;
+        const disbursedTokenAmount = repaymentAmount * this.props.product.discountRate;
+        this.props.change("disbursedTokenAmount", Number(disbursedTokenAmount.toFixed(TOKEN_DECIMALS)));
+        this.props.change("repaymentAmount", Number(repaymentAmount.toFixed(TOKEN_DECIMALS)));
     }
 
     render() {

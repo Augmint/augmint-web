@@ -85,6 +85,7 @@ export const setupWeb3 = () => {
                 console.debug(
                     "No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask"
                 );
+                //const web3Provider = new Web3.providers.WebsocketProvider("ws://localhost:8545");
                 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
                 // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
@@ -109,8 +110,8 @@ export const setupWeb3 = () => {
                 type: WEB3_SETUP_SUCCESS,
                 web3Instance: web3,
                 userAccount: accounts[0], // TODO: could we use web3.eth.defaultAccount?
-                accounts: accounts,
-                network: network,
+                accounts,
+                network,
                 ethers: { signer: signer, provider: provider },
                 info: { web3Version: web3Version, gasLimit: lastBlock.gasLimit }
             });

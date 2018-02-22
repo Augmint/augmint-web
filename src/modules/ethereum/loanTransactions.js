@@ -6,89 +6,99 @@ Use only from reducers.
     TODO: set gasEstimates when it gas consumption has settled.
  */
 import store from "modules/store";
-import BigNumber from "bignumber.js";
 import moment from "moment";
-import stringifier from "stringifier";
 import { cost } from "./gas";
+import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 
-const stringify = stringifier({ maxDepth: 5, indent: "   " });
+const ONE_ETH = 1000000000000000000;
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
-    try {
-        const web3 = store.getState().web3Connect.web3Instance;
-        const loanManager = store.getState().loanManager.contract.instance;
-        let gasEstimate;
-        if (store.getState().loanManager.info.loanCount === 0) {
-            gasEstimate = cost.NEW_FIRST_LOAN_GAS;
-        } else {
-            gasEstimate = cost.NEW_LOAN_GAS;
-        }
-        const userAccount = store.getState().web3Connect.userAccount;
-        const weiAmount = web3.utils.toWei(ethAmount);
+    const web3 = store.getState().web3Connect.web3Instance;
+    const loanManager = store.getState().loanManager.contract.instance;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-        const result = await loanManager.newEthBackedLoan(productId, {
-            value: weiAmount,
-            from: userAccount,
-            gas: gasEstimate
-        });
-
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
-        }
-
-        if (!result.logs || !result.logs[0] || result.logs[0].event !== "NewLoan") {
-            throw new Error("NewLoan event wasn't received. Check tx :  " + result.tx);
-        }
-        return {
-            txResult: result,
-            loanId: result.logs[0].args.loanId.toString(),
-            productId: result.logs[0].args.productId.toNumber(),
-            borrower: result.logs[0].args.borrower,
-            loanAmount: result.logs[0].args.loanAmount.div(new BigNumber(10000)).toNumber(),
-            repaymentAmount: result.logs[0].args.repaymentAmount.div(new BigNumber(10000)).toNumber(),
-            collateralEth: web3.utils.fromWei(result.logs[0].args.collateralAmount.toString()),
-            eth: {
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        throw new Error("Create loan failed.\n" + error);
+    let gasEstimate;
+    if (store.getState().loanManager.info.loanCount === 0) {
+        gasEstimate = cost.NEW_FIRST_LOAN_GAS;
+    } else {
+        gasEstimate = cost.NEW_LOAN_GAS;
     }
+
+    const userAccount = store.getState().web3Connect.userAccount;
+    const weiAmount = ethAmount * ONE_ETH;
+
+    const result = await loanManager.newEthBackedLoan(productId, {
+        value: weiAmount,
+        from: userAccount,
+        gas: gasEstimate
+    });
+
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour (TODO: test it!)
+        throw new EthereumTransactionError(
+            "Create loan transaction failed.",
+            "All gas provided was used. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    // should we get byzantium tx status? if so then how?
+    // if (result.status !== 1) {
+    //     throw new Error(...);
+    // }
+
+    if (!result.logs || !result.logs[0] || result.logs[0].event !== "NewLoan") {
+        throw new EthereumTransactionError(
+            "Create loan transaction failed.",
+            "NewLoan event wasn't received. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    return {
+        loanId: result.logs[0].args.loanId.toString(),
+        productId: result.logs[0].args.productId.toNumber(),
+        borrower: result.logs[0].args.borrower,
+        loanAmount: result.logs[0].args.loanAmount.div(decimalsDiv).toNumber(),
+        repaymentAmount: result.logs[0].args.repaymentAmount.div(decimalsDiv).toNumber(),
+        collateralEth: web3.utils.fromWei(result.logs[0].args.collateralAmount.toString()),
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function fetchProductsTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
         const productCount = await loanManager.getProductCount();
-        // TODO: get this from store.augmintToken (timing issues on first load..)
-        const decimalsDiv = new BigNumber(10).pow(await store.getState().augmintToken.contract.instance.decimals());
+        const ppmDiv = 1000000;
+        const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
+        // TODO: create a helper in LoanManager to get products in chunks
         let products = [];
         for (let i = 0; i < productCount; i++) {
             const p = await loanManager.products(i);
             const term = p[0].toNumber();
             // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            const bn_discountRate = p[1].div(new BigNumber(1000000));
-            const bn_loanCollateralRatio = p[2].div(new BigNumber(1000000));
+            const bn_discountRate = p[1];
+            const bn_loanCollateralRatio = p[2];
             const bn_minDisbursedAmountInToken = p[3];
-            const bn_defaultingFeePt = p[4].div(new BigNumber(1000000));
+            const bn_defaultingFeePt = p[4];
+            const isActive = [5];
+
             const prod = {
                 id: i,
-                term: term,
-                termText: moment.duration(term, "seconds").humanize(),
-                bn_discountRate: bn_discountRate,
-                discountRate: bn_discountRate.toNumber(),
-                bn_loanCollateralRatio: bn_loanCollateralRatio,
-                loanCollateralRatio: bn_loanCollateralRatio.toNumber(),
-                bn_minDisbursedAmountInToken: bn_minDisbursedAmountInToken,
-                minDisbursedAmountInToken: bn_minDisbursedAmountInToken.div(decimalsDiv).toNumber(),
-                bn_defaultingFeePt: bn_defaultingFeePt,
-                defaultingFeePt: bn_defaultingFeePt.toNumber(),
-                isActive: p[5]
+                term,
+                termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                discountRate: bn_discountRate / ppmDiv,
+                loanCollateralRatio: bn_loanCollateralRatio / ppmDiv,
+                minDisbursedAmountInToken: bn_minDisbursedAmountInToken / decimalsDiv,
+                defaultingFeePt: bn_defaultingFeePt / ppmDiv,
+                isActive
             };
             products.push(prod);
         }
@@ -99,64 +109,62 @@ export async function fetchProductsTx() {
 }
 
 export async function repayLoanTx(repaymentAmount, loanId) {
-    try {
-        const userAccount = store.getState().web3Connect.userAccount;
-        const loanManager = store.getState().loanManager.contract.instance;
+    const gasEstimate = cost.REPAY_GAS;
 
-        const augmintToken = store.getState().augmintToken;
-        const augmintTokenInstance = augmintToken.contract.instance;
-        const decimalsDiv = augmintToken.info.decimalsDiv;
-        const gasEstimate = cost.REPAY_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const loanManager = store.getState().loanManager.contract.instance;
 
-        let result = await augmintTokenInstance.transferAndNotify(
-            loanManager.address,
-            repaymentAmount * decimalsDiv,
-            loanId,
-            {
-                from: userAccount,
-                gas: gasEstimate
-            }
+    const augmintToken = store.getState().augmintToken;
+    const augmintTokenInstance = augmintToken.contract.instance;
+    const decimalsDiv = augmintToken.info.decimalsDiv;
+
+    const result = await augmintTokenInstance.transferAndNotify(
+        loanManager.address,
+        repaymentAmount * decimalsDiv,
+        loanId,
+        {
+            from: userAccount,
+            gas: gasEstimate
+        }
+    );
+
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour (TODO: test it!)
+        throw new EthereumTransactionError(
+            "Repay loan failed.",
+            "All gas provided was used. Check tx.",
+            result,
+            gasEstimate
         );
-
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
-        }
-        if (
-            !result.logs ||
-            !result.logs[5] ||
-            result.logs[5].event !== "AugmintTransfer" ||
-            result.logs[5].args.to !== "0x0000000000000000000000000000000000000000"
-        ) {
-            // TODO: web3 doesn't return LoanRepayed on testrpc, so we test only for TokenBurned
-            throw new Error(
-                "AugmintTransfer to 0x0 (burn) event wasn't received. Check tx :  " +
-                    result.tx +
-                    "\nResult:\n" +
-                    stringify(result)
-            );
-        }
-
-        return {
-            txResult: result,
-            eth: {
-                // TODO:  make it mre generic for all txs
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
-        throw new Error("Repay loan failed.\n" + error);
     }
+    if (
+        !result.logs ||
+        !result.logs[5] ||
+        result.logs[5].event !== "AugmintTransfer" ||
+        result.logs[5].args.to !== "0x0000000000000000000000000000000000000000"
+    ) {
+        // TODO: web3 doesn't return LoanRepayed on testrpc, so we test only for TokenBurned
+        throw new EthereumTransactionError(
+            "Repay loan failed.",
+            "AugmintTransfer to 0x0 (burn) event wasn't received. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+
+    return {
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function fetchLoansToCollectTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
         const loanCount = (await loanManager.getLoanCount()).toNumber();
+
         let loansToCollect = [];
         for (let i = 0; i < loanCount; i++) {
             const loan = await fetchLoanDetails(i);
@@ -170,83 +178,93 @@ export async function fetchLoansToCollectTx() {
     }
 }
 
+// loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loansToCollect) {
-    try {
-        const userAccount = store.getState().web3Connect.userAccount;
-        const loanManager = store.getState().loanManager.contract.instance;
-        const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
-        const converted = loansToCollect.map(item => {
-            return new BigNumber(item.loanId);
-        });
-        const result = await loanManager.collect(converted, {
-            from: userAccount,
-            gas: gasEstimate
-        });
-        if (result.receipt.gasUsed === gasEstimate) {
-            // Neeed for testnet behaviour (TODO: test it!)
-            // TODO: add more tx info
-            throw new Error("All gas provided was used:  " + result.receipt.gasUsed);
-        }
-        if (!result.logs || result.logs.length === 0) {
-            throw new Error("no LoanCollected events received. Check tx :  " + result.tx);
-        }
+    const userAccount = store.getState().web3Connect.userAccount;
+    const loanManager = store.getState().loanManager.contract.instance;
+    const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
-        result.logs.map((logItem, index) => {
-            if (!logItem.event || logItem.event !== "LoanCollected") {
-                throw new Error(
-                    "Likely not all loans has been collected.\n" +
-                        "One of the events received is not LoanCollected.\n" +
-                        "logs[" +
-                        index +
-                        "] received: " +
-                        logItem.event +
-                        "\n" +
-                        "Check tx :  " +
-                        result.tx
-                );
-            }
-            return true;
-        });
+    const loanIdsToCollect = loansToCollect.map(item => item.loanId);
 
-        if (result.logs.length !== loansToCollect.length) {
-            throw new Error(
-                "Likely not all loans has been collected.\n" +
-                    "Number of LoanCollected events != loansToCollect passed.\n" +
-                    "Received: " +
-                    result.logs.length +
-                    " events. Expected: " +
-                    loansToCollect.length +
-                    "\n" +
-                    "Check tx :  " +
-                    result.tx
+    const result = await loanManager.collect(loanIdsToCollect, {
+        from: userAccount,
+        gas: gasEstimate
+    });
+    if (result.receipt.gasUsed === gasEstimate) {
+        // Neeed for testnet behaviour (TODO: test it!)
+        throw new EthereumTransactionError(
+            "Loan collection error.",
+            "All gas provided was used. Check tx.",
+            result,
+            gasEstimate
+        );
+    }
+    if (!result.logs || result.logs.length === 0) {
+        throw new EthereumTransactionError(
+            "Loan collection error.",
+            "No LoanCollected events received. Check tx",
+            result,
+            gasEstimate
+        );
+    }
+
+    result.logs.map((logItem, index) => {
+        if (!logItem.event || logItem.event !== "LoanCollected") {
+            throw new EthereumTransactionError(
+                "Likely not all loans has been collected",
+                "One of the events received is not LoanCollected. Check tx.\n" +
+                    `logs[${index}] received: ${logItem.event}.`,
+                result,
+                gasEstimate
             );
         }
+        return true;
+    });
 
-        return {
-            loansCollected: loansToCollect.length,
-            txResult: result,
-            eth: {
-                // TODO:  make it mre generic for all txs
-                gasProvided: gasEstimate,
-                gasUsed: result.receipt.gasUsed,
-                tx: result.tx
-            }
-        };
-    } catch (error) {
-        // TODO: return eth { tx: ...} so that EthSubmissionErrorPanel can display it
-        throw new Error("Collect loan failed.\n" + error);
+    if (result.logs.length !== loansToCollect.length) {
+        throw new EthereumTransactionError(
+            "Likely not all loans has been collected.",
+            "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
+                `Received: ${result.logs.length} events. Expected: ${loansToCollect.length}`,
+            result,
+            gasEstimate
+        );
     }
+
+    return {
+        loansCollected: loansToCollect.length,
+        eth: {
+            gasEstimate,
+            result
+        }
+    };
 }
 
 export async function fetchLoanDetails(_loanId) {
-    const web3 = store.getState().web3Connect.web3Instance;
+    // we call with number or BigNumber loanId
+    const loanId = parseFloat(_loanId);
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
     const loanManager = store.getState().loanManager.contract.instance;
-    const loanId = _loanId.toString(); // we call with number or w/ BigNumber
+
     const l = await loanManager.loans(loanId);
-    const solidityLoanState = l[1].toNumber();
+    const [
+        borrower,
+        bn_solidityLoanState,
+        bn_collateralAmount,
+        bn_repaymentAmount,
+        bn_loanAmount,
+        bn_interestAmount,
+        bn_term,
+        bn_disbursementDate,
+        bn_maturity
+    ] = l;
+
+    const solidityLoanState = bn_solidityLoanState.toNumber();
+    const maturity = bn_maturity.toNumber();
+    const term = bn_term.toNumber();
+    const disbursementDate = bn_disbursementDate.toNumber();
+
     let loanStateText;
-    const maturity = l[8].toNumber();
-    const maturityText = moment.unix(maturity).format("D MMM YYYY HH:mm");
     const currentTime = moment()
         .utc()
         .unix();
@@ -285,27 +303,25 @@ export async function fetchLoanDetails(_loanId) {
     }
     // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
-    const disbursementDate = l[7].toNumber();
-    const disbursementDateText = moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss");
     const loan = {
-        loanId: loanId,
-        borrower: l[0], // 0 the borrower
-        loanState: loanState,
-        solidityLoanState: solidityLoanState,
-        loanStateText: loanStateText,
-        collateralEth: web3.utils.fromWei(l[2].toString()),
-        repaymentAmount: l[3].toNumber() / 10000, // 4 nominal loan amount in A-EUR (non discounted amount)
-        loanAmount: l[4].toNumber() / 10000, // 5
-        interestAmount: l[5].toNumber / 10000,
-        term: l[6].toNumber(), // 6 duration of loan
-        termText: moment.duration(l[6].toNumber(), "seconds").humanize(),
-        disbursementDate: disbursementDate,
-        disbursementDateText: disbursementDateText,
-        maturity: maturity,
-        maturityText: maturityText,
-        isDue: isDue,
-        isRepayable: isRepayable,
-        isCollectable: isCollectable
+        loanId,
+        borrower,
+        loanState,
+        solidityLoanState,
+        loanStateText,
+        collateralEth: bn_collateralAmount / ONE_ETH,
+        repaymentAmount: bn_repaymentAmount / decimalsDiv,
+        loanAmount: bn_loanAmount / decimalsDiv,
+        interestAmount: bn_interestAmount / decimalsDiv,
+        term,
+        termText: moment.duration(term, "seconds").humanize(),
+        disbursementDate,
+        disbursementDateText: moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss"),
+        maturity,
+        maturityText: moment.unix(maturity).format("D MMM YYYY HH:mm"),
+        isDue,
+        isRepayable,
+        isCollectable
     };
     return loan;
 }
