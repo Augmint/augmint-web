@@ -250,6 +250,7 @@ export const teamMembers = [
         title: 'Branding & Visual',
         linedinUrl:'https://www.linkedin.com/in/tom-hume-31b64014a',
         portfolio:'http://studiojubilee.com',
+        description: 'Partner of Studio Jubilee, a design practice focused on branding, digital design, and strategy. Studio Jubilee works with innovative startups and global brands.',
     },
     {
         pk: 'team-8',
