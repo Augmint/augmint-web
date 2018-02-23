@@ -94,9 +94,12 @@ export async function fetchProductsTx() {
                 id: i,
                 term,
                 termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                bn_discountRate,
                 discountRate: bn_discountRate / ppmDiv,
+                bn_loanCollateralRatio,
                 loanCollateralRatio: bn_loanCollateralRatio / ppmDiv,
                 minDisbursedAmountInToken: bn_minDisbursedAmountInToken / decimalsDiv,
+                bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / ppmDiv,
                 isActive
             };
