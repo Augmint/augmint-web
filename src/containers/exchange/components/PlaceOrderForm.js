@@ -12,8 +12,8 @@ import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 
-const ETH_DECIMALS = 8;
-const TOKEN_DECIMALS = 4;
+const ETH_DECIMALS = 5;
+const TOKEN_DECIMALS = 2;
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -177,7 +177,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || isLoading}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
-                            normalize={Normalizations.fourDecimals}
+                            normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
                             <input />
@@ -193,7 +193,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || isLoading}
                             onChange={this.onEthAmountChange}
                             validate={ethAmountValidations}
-                            normalize={Normalizations.eightDecimals}
+                            normalize={Normalizations.fiveDecimals}
                             labelPosition="right"
                         >
                             <input />
