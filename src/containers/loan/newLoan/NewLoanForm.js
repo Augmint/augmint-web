@@ -42,17 +42,15 @@ class NewLoanForm extends React.Component {
         const repaymentAmount = val
             .div(this.props.product.bn_discountRate)
             .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
+            .round(0, BigNumber.ROUND_HALF_DOWN);
 
-        const weiAmount = val
+        const weiAmount = repaymentAmount
             .div(this.props.rates.info.bn_ethFiatRate)
             .mul(ONE_ETH)
-            .div(this.props.product.bn_discountRate)
-            .mul(PPM_DIV)
             .div(this.props.product.bn_loanCollateralRatio)
             .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_DOWN);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_DOWN);
+            .round(0, BigNumber.ROUND_HALF_UP);
+        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_HALF_DOWN);
 
         this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -130,7 +128,6 @@ class NewLoanForm extends React.Component {
                         component={Form.Field}
                         as={Form.Input}
                         name="loanTokenAmount"
-                        id="loanTokenAmount"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
                         validate={[Validations.required, Validations.tokenAmount, this.minToken]}
@@ -144,14 +141,13 @@ class NewLoanForm extends React.Component {
                             <ToolTip>Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate </ToolTip>
                         </Label>
 
-                        <input />
+                        <input testid="loanTokenAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
                         as={Form.Input}
                         name="repaymentAmount"
-                        id="repaymentAmount"
                         placeholder="to pay back"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
@@ -166,14 +162,13 @@ class NewLoanForm extends React.Component {
                                 Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
-                        <input />
+                        <input testid="repaymentAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
                         as={Form.Input}
                         name="ethAmount"
-                        id="ethAmount"
                         type="number"
                         placeholder="amount taken to escrow"
                         disabled={submitting || !loanManager.isConnected}
@@ -189,7 +184,7 @@ class NewLoanForm extends React.Component {
                                 <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>
-                        <input />
+                        <input testid="ethAmountField" />
                         <Label>ETH</Label>
                     </Field>
                     <Button primary size="big" id="submitBtn" loading={submitting} disabled={pristine}>
