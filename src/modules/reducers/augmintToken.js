@@ -4,7 +4,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
-import BigNumber from "bignumber.js";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
@@ -27,14 +26,13 @@ const initialState = {
     info: {
         symbol: "?",
         peggedSymbol: "?",
-        decimals: "?",
-        bn_decimalsDiv: null,
-        decimalsDiv: "?",
+        bytes32_peggedSymbol: null,
+        decimals: null,
+        decimalsDiv: null,
 
         totalSupply: "?",
 
         feeAccount: null,
-        bn_feeAccountTokenBalance: null,
         feeAccountTokenBalance: "?"
     }
 };
@@ -113,7 +111,7 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
             const info = await getAugmintTokenInfo(contract.instance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,
@@ -148,8 +146,16 @@ export const refreshAugmintToken = () => {
 
 async function getAugmintTokenInfo(augmintToken) {
     const web3 = store.getState().web3Connect.web3Instance;
-
-    let [symbol, peggedSymbol, bn_totalSupply, bn_decimals, feeAccount, feePt, feeMin, feeMax] = await Promise.all([
+    const [
+        symbol,
+        bytes32_peggedSymbol,
+        bn_totalSupply,
+        decimals,
+        feeAccount,
+        bn_feePt,
+        bn_feeMin,
+        bn_feeMax
+    ] = await Promise.all([
         augmintToken.symbol(),
         augmintToken.peggedSymbol(),
         augmintToken.totalSupply(),
@@ -161,28 +167,28 @@ async function getAugmintTokenInfo(augmintToken) {
         augmintToken.transferFeeMax()
     ]);
 
-    peggedSymbol = web3.utils.toAscii(peggedSymbol);
-    const bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
+    const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
-    const bn_feeAccountTokenBalance = (await augmintToken.balanceOf(feeAccount)).div(bn_decimalsDiv);
+    const decimalsDiv = 10 ** decimals;
 
-    const totalSupply = bn_totalSupply.div(bn_decimalsDiv);
+    const bn_feeAccountTokenBalance = await augmintToken.balanceOf(feeAccount);
+
+    const totalSupply = bn_totalSupply / decimalsDiv;
 
     return {
         symbol,
         peggedSymbol,
-        decimals: bn_decimals.toNumber(),
-        bn_decimalsDiv,
-        decimalsDiv: bn_decimalsDiv.toNumber(),
-        totalSupply: totalSupply.toNumber(),
+        bytes32_peggedSymbol,
+        decimals,
+        decimalsDiv,
+        totalSupply,
 
-        feePt,
-        feeMin,
-        feeMax,
+        feePt: bn_feePt / 100000,
+        feeMin: bn_feeMin / decimalsDiv,
+        feeMax: bn_feeMax / decimalsDiv,
 
         feeAccount,
-        bn_feeAccountTokenBalance,
-        feeAccountTokenBalance: bn_feeAccountTokenBalance.toString()
+        feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv
     };
 }
 
@@ -190,8 +196,7 @@ export function transferToken(payload) {
     return async dispatch => {
         dispatch({
             type: AUGMINT_TOKEN_TRANSFER_REQUESTED,
-            tokencAmount: payload.tokencAmount,
-            payee: payload.payee
+            payload
         });
 
         try {

@@ -27,28 +27,23 @@ export const Validations = {
     },
 
     userTokenBalance: value => {
-        // TODO: shall we look for bn_pendingTokenBalance instead?
-        let userBalance = store.getState().userBalances.account.bn_tokenBalance;
-        return userBalance.lt(parseFloat(value)) ? "Your A-EUR balance is less than the amount" : undefined;
+        let userBalance = store.getState().userBalances.account.tokenBalance;
+        return userBalance < parseFloat(value) ? "Your A-EUR balance is less than the amount" : undefined;
     },
 
     userTokenBalanceWithTransferFee: value => {
-        // TODO: shall we look for bn_pendingTokenBalance instead?
-        const decimalsDiv = store.getState().augmintToken.info.bn_decimalsDiv;
-        const userBalance = store.getState().userBalances.account.bn_tokenBalance.mul(decimalsDiv);
+        const userBalance = store.getState().userBalances.account.tokenBalance;
         let amount;
         try {
-            amount = new BigNumber(value).mul(decimalsDiv);
+            amount = parseFloat(value);
         } catch (error) {
             return;
         }
         const fee = getTransferFee(amount);
-        if (userBalance.gte(amount.add(fee))) {
+        if (userBalance > amount + fee) {
             return undefined;
         }
-        const maxTransfer = getMaxTransfer(userBalance)
-            .div(decimalsDiv)
-            .toString();
+        const maxTransfer = getMaxTransfer(userBalance);
         if (maxTransfer <= 0) {
             return "Your A-EUR balance is less than the amount + transfer fee.";
         }
@@ -72,9 +67,8 @@ export const Validations = {
     },
 
     ethUserBalance: value => {
-        // TODO: shall we look for bn_pendingTokenBalance instead?
-        const userBalance = store.getState().userBalances.account.bn_ethBalance;
-        return userBalance.lt(parseFloat(value)) ? "Your ETH balance is less than the amount" : undefined;
+        const userBalance = store.getState().userBalances.account.ethBalance;
+        return userBalance < parseFloat(value) ? "Your ETH balance is less than the amount" : undefined;
     },
 
     notOwnAddress: value => {

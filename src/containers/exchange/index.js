@@ -30,7 +30,7 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
-                                {rates.info.bn_ethFiatRate && (
+                                {rates.info.ethFiatRate && (
                                     <PlaceOrderForm //rates.info &&
                                         initialValues={{
                                             price: rates.info.ethFiatRate

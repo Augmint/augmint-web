@@ -5,7 +5,6 @@ ETH and A-EUR balance for the active userAccount
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
 import store from "modules/store";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const USER_BALANCE_REQUESTED = "userBalances/BALANCE_REQUESTED";
 export const USER_BALANCE_RECEIVED = "userBalances/BALANCE_RECEIVED";
@@ -16,14 +15,12 @@ const initialState = {
     error: null,
     account: {
         address: "?",
+
         ethBalance: "?",
         bn_ethBalance: null,
-        ethPendingBalance: "?",
-        bn_ethPendingBalance: null,
+
         tokenBalance: "?",
-        bn_tokenBalance: null,
-        pendingTokenBalance: "?",
-        bn_pendingTokenBalance: null
+        bn_tokenBalance: null
     }
 };
 
@@ -62,27 +59,24 @@ export function fetchUserBalance(address) {
         });
 
         try {
+            const ONE_ETH = 1000000000000000000;
+            const web3 = store.getState().web3Connect.web3Instance;
             const augmintToken = store.getState().augmintToken.contract.instance;
+            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-            const [bn_tokenBalance, bn_pendingTokenBalance, bn_ethBalance, bn_ethPendingBalance] = await Promise.all([
+            const [bn_tokenBalance, bn_ethBalance] = await Promise.all([
                 augmintToken.balanceOf(address),
-                augmintToken.balanceOf(address, { defaultBlock: "pending" }),
-                asyncGetBalance(address),
-                asyncGetBalance(address, "pending")
+                web3.eth.getBalance(address)
             ]);
 
             return dispatch({
                 type: USER_BALANCE_RECEIVED,
                 account: {
-                    address: address,
-                    bn_ethBalance: bn_ethBalance,
-                    ethBalance: bn_ethBalance.toString(),
-                    bn_ethPendingBalance: bn_ethPendingBalance.sub(bn_ethBalance),
-                    ethPendingBalance: bn_ethPendingBalance.sub(bn_ethBalance).toNumber(),
-                    bn_tokenBalance: bn_tokenBalance.div(10000),
-                    tokenBalance: bn_tokenBalance.div(10000).toString(),
-                    bn_pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).div(10000),
-                    pendingTokenBalance: bn_pendingTokenBalance.sub(bn_tokenBalance).toNumber()
+                    address,
+                    bn_ethBalance,
+                    ethBalance: bn_ethBalance / ONE_ETH,
+                    bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance / decimalsDiv
                 }
             });
         } catch (error) {

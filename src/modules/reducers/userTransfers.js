@@ -77,7 +77,7 @@ export function fetchTransfers(account, fromBlock, toBlock) {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
+                throw new Error(error);
             }
             return dispatch({
                 type: FETCH_TRANSFERS_ERROR,
@@ -96,7 +96,6 @@ export function processNewTransfer(account, eventLog) {
 
         try {
             const newTransfer = await processNewTransferTx(account, eventLog);
-
             let transfers = store.getState().userTransfers.transfers;
             if (!transfers) {
                 transfers = [];
@@ -115,7 +114,7 @@ export function processNewTransfer(account, eventLog) {
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
+                throw new Error(error);
             }
             return dispatch({
                 type: PROCESS_NEW_TRANSFER_ERROR,

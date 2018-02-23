@@ -4,9 +4,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import monetarySupervisor_artifacts from "contractsBuild/MonetarySupervisor.json";
-import BigNumber from "bignumber.js";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
-//import BigNumber from "bignumber.js";
 
 export const MONETARY_SUPERVISOR_CONNECT_REQUESTED = "augmintToken/MONETARY_SUPERVISOR_CONNECT_REQUESTED";
 export const MONETARY_SUPERVISOR_CONNECT_SUCCESS = "augmintToken/MONETARY_SUPERVISOR_CONNECT_SUCCESS";
@@ -35,10 +32,9 @@ const initialState = {
         allowedLtdDifferenceAmount: "?",
 
         reserveEthBalance: "?",
-        bn_reserveEthBalance: null,
-        reserveEthPendingBalance: "?",
+        bn_reserveWeiBalance: null,
+
         reserveTokenBalance: "?",
-        reserveTokenPendingBalance: "?",
 
         interestEarnedAccountTokenBalance: "?"
     }
@@ -98,10 +94,7 @@ export const connectMonetarySupervisor = () => {
         });
 
         try {
-            const contract = await SolidityContract.connectNew(
-                store.getState().web3Connect,
-                monetarySupervisor_artifacts
-            );
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, monetarySupervisor_artifacts);
             const info = await getMonetarySupervisorInfo(contract.instance);
             return dispatch({
                 type: MONETARY_SUPERVISOR_CONNECT_SUCCESS,
@@ -135,10 +128,12 @@ export const refreshMonetarySupervisor = () => {
 };
 
 async function getMonetarySupervisorInfo(monetarySupervisor) {
+    const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
-    const [
-        bn_decimals,
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const ONE_ETH = 1000000000000000000;
 
+    const [
         augmintTokenAddress,
         interestEarnedAccountAddress,
         augmintReservesAddress,
@@ -151,8 +146,6 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         bn_ltdDifferenceLimit,
         bn_allowedLtdDifferenceAmount
     ] = await Promise.all([
-        augmintToken.decimals(),
-
         monetarySupervisor.augmintToken(),
         monetarySupervisor.interestEarnedAccount(),
         monetarySupervisor.augmintReserves(),
@@ -166,34 +159,21 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         monetarySupervisor.allowedLtdDifferenceAmount()
     ]);
 
-    const bn_decimalsDiv = new BigNumber(10).pow(bn_decimals);
-    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard.div(bn_decimalsDiv).toNumber();
-    const totalLoanAmount = bn_totalLoanAmount.div(bn_decimalsDiv).toNumber();
-    const totalLockedAmount = bn_totalLockedAmount.div(bn_decimalsDiv).toNumber();
-    const ltdDifferenceLimit = bn_ltdDifferenceLimit.div(1000000).toNumber();
-    const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount.div(bn_decimalsDiv).toNumber();
+    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
+    const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
+    const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
+    const ltdDifferenceLimit = bn_ltdDifferenceLimit / 1000000;
+    const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount / decimalsDiv;
 
-    const [
-        bn_reserveEthBalance,
-        bn_reserveEthPendingBalance,
-        bn_reserveTokenBalance,
-        bn_reserveTokenPendingBalance,
-        bn_interestEarnedAccountTokenBalance
-    ] = await Promise.all([
-        asyncGetBalance(augmintReservesAddress),
-        asyncGetBalance(augmintReservesAddress, "pending"),
+    const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
+        web3.eth.getBalance(augmintReservesAddress),
         augmintToken.balanceOf(augmintReservesAddress),
-        augmintToken.balanceOf(augmintReservesAddress, {
-            defaultBlock: "pending"
-        }),
         augmintToken.balanceOf(interestEarnedAccountAddress)
     ]);
 
-    const reserveEthBalance = bn_reserveEthBalance.toNumber();
-    const reserveEthPendingBalance = bn_reserveEthPendingBalance.sub(bn_reserveEthBalance).toNumber();
-    const reserveTokenBalance = bn_reserveTokenBalance.div(bn_decimalsDiv).toNumber();
-    const reserveTokenPendingBalance = bn_reserveTokenPendingBalance.div(bn_decimalsDiv).toNumber();
-    const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance.div(bn_decimalsDiv).toNumber();
+    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH;
+    const reserveTokenBalance = bn_reserveTokenBalance / decimalsDiv;
+    const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / decimalsDiv;
 
     return {
         augmintToken: augmintTokenAddress,
@@ -208,10 +188,9 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         allowedLtdDifferenceAmount,
 
         reserveEthBalance,
-        bn_reserveEthBalance,
-        reserveEthPendingBalance,
+        bn_reserveWeiBalance,
+
         reserveTokenBalance,
-        reserveTokenPendingBalance,
 
         interestEarnedAccountTokenBalance
     };

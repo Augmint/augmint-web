@@ -51,6 +51,7 @@ export function fetchLoans(userAccount) {
         try {
             const loanManager = store.getState().loanManager.contract.instance;
             const loanIds = await loanManager.getLoanIds(userAccount);
+
             const actions = loanIds.map(fetchLoanDetails);
             const loans = await Promise.all(actions); // queries in paralel...
 

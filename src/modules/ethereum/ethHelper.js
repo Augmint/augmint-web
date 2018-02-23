@@ -1,34 +1,24 @@
-/*
- TODO: clean up thrown errors
- */
-import store from "modules/store";
-import BigNumber from "bignumber.js";
-
-export async function asyncGetBalance(address, defaultBlock = "latest") {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const bal = await web3.eth.getBalance(address, defaultBlock);
-    const ret = new BigNumber(web3.utils.fromWei(bal));
-    return ret;
+class ExtendableError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        if (typeof Error.captureStackTrace === "function") {
+            Error.captureStackTrace(this, this.constructor);
+        } else {
+            this.stack = new Error(message).stack;
+        }
+    }
 }
 
-export function asyncGetAccounts(web3) {
-    return new Promise(function(resolve, reject) {
-        web3.eth.getAccounts((error, accounts) => {
-            if (error) {
-                reject(new Error("Can't get account list from web3 (asyncGetAccounts).\n " + error));
-            } else {
-                if (!web3.utils.isAddress(accounts[0])) {
-                    reject(
-                        new Error(
-                            "Can't get default account from web3 (asyncGetAccounts)." +
-                                "\nIf you are using Metamask make sure it's unlocked with your password."
-                        )
-                    );
-                }
-                resolve(accounts);
-            }
-        });
-    });
+export class EthereumTransactionError extends ExtendableError {
+    constructor(message, details, txResult, gasEstimate, ...args) {
+        console.debug("message:", message, "details:", details);
+        super(message, ...args);
+
+        this.details = details;
+        this.txResult = txResult;
+        this.gasEstimate = gasEstimate;
+    }
 }
 
 export async function getNetworkDetails(web3) {
