@@ -44,6 +44,7 @@ export function getMaxTransfer(amount) {
         maxAmount = amount - feeMax;
     } else {
         maxAmount = Math.round(amount / (feePt + 1) * decimalsDiv) / decimalsDiv;
+        console.debug(amount, feePt, decimalsDiv, maxAmount);
     }
 
     return maxAmount;
@@ -158,7 +159,7 @@ async function _formatTransferLog(AugmintTransfer, account, eventLog) {
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
 
     const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
-    const senderFee = direction === -1 ? parsedData.fee / 10000 : 0;
+    const senderFee = direction === -1 ? parsedData.fee / decimalsDiv : 0;
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
