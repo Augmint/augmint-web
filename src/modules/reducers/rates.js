@@ -25,6 +25,7 @@ const initialState = {
         bn_tokenBalance: null,
         tokenBalance: "?",
 
+        bn_ethFiatRate: null,
         ethFiatRate: null,
         fiatEthRate: null
     }
@@ -110,7 +111,7 @@ export const refreshRates = () => {
             const ONE_ETH = 1000000000000000000;
             const rates = store.getState().rates.contract.instance;
 
-            const [bn_ethFiatcRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
+            const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
                 rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH),
                 augmintToken.balanceOf(rates.address),
                 web3.eth.getBalance(rates.address)
@@ -123,9 +124,10 @@ export const refreshRates = () => {
                     ethBalance: bn_weiBalance / ONE_ETH,
                     bn_tokenBalance,
                     tokenBalance: bn_tokenBalance / decimalsDiv,
-                    bn_ethFiatcRate,
-                    ethFiatRate: bn_ethFiatcRate / decimalsDiv,
-                    fiatEthRate: 1 / bn_ethFiatcRate * decimalsDiv
+
+                    bn_ethFiatRate,
+                    ethFiatRate: bn_ethFiatRate / decimalsDiv,
+                    fiatEthRate: 1 / bn_ethFiatRate * decimalsDiv
                 }
             });
         } catch (error) {
