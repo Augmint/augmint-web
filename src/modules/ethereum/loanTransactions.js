@@ -88,7 +88,7 @@ export async function fetchProductsTx() {
             const bn_loanCollateralRatio = p[2];
             const bn_minDisbursedAmountInToken = p[3];
             const bn_defaultingFeePt = p[4];
-            const isActive = [5];
+            const isActive = p[5];
 
             const prod = {
                 id: i,
