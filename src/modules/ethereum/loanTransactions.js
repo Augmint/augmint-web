@@ -88,15 +88,18 @@ export async function fetchProductsTx() {
             const bn_loanCollateralRatio = p[2];
             const bn_minDisbursedAmountInToken = p[3];
             const bn_defaultingFeePt = p[4];
-            const isActive = [5];
+            const isActive = p[5];
 
             const prod = {
                 id: i,
                 term,
                 termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                bn_discountRate,
                 discountRate: bn_discountRate / ppmDiv,
+                bn_loanCollateralRatio,
                 loanCollateralRatio: bn_loanCollateralRatio / ppmDiv,
                 minDisbursedAmountInToken: bn_minDisbursedAmountInToken / decimalsDiv,
+                bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / ppmDiv,
                 isActive
             };

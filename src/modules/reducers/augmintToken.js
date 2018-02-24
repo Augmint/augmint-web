@@ -174,7 +174,7 @@ async function getAugmintTokenInfo(augmintToken) {
         decimalsDiv,
         totalSupply,
 
-        feePt: bn_feePt / 100000,
+        feePt: bn_feePt / 1000000,
         feeMin: bn_feeMin / decimalsDiv,
         feeMax: bn_feeMax / decimalsDiv,
 
