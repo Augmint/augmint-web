@@ -209,7 +209,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || isLoading}
                             onChange={this.onPriceChange}
                             validate={Validations.price}
-                            normalize={Normalizations.fourDecimals}
+                            normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
                             <input />
