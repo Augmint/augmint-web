@@ -74,15 +74,13 @@ yarn install # if there were any node package changes in packages.json
 
 #### 3.1 Start ganache-cli (formerly testrpc)
 
-`yarn ganache:runmigrate`  
+`yarn contracts:runmigrate`  
 or  
 `yarn ganache:run` and in separate console:  
-`yarn truffle:migrate`  
-or  
-`$(yarn bin)/truffle migrate --reset` to overwrite existing migration
+`yarn contracts:migrate`
 
-NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `yarn truffle:migratecopy`
-but make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
+NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: restart ganache and run `yarn contracts:migratecopy`  
+Make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
 
 #### 3.2. Launch local dev server
 

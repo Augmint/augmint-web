@@ -43,11 +43,11 @@
         "cypress:run": "cypress run",
         "cypress:runrecord":
             "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
-        "truffle:migrate": "cd augmint-contracts && yarn truffle:migrate",
-        "truffle:migratecopy":
-            "cd augmint-contracts && yarn clean && yarn truffle:migrate && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
+        "contracts:migrate": "cd augmint-contracts && yarn migrate",
+        "contracts:migratecopy":
+            "cd augmint-contracts && yarn migrate --reset && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
         "ganache:run": "cd augmint-contracts && yarn ganache:run",
-        "ganache:runmigrate": "cd augmint-contracts && yarn ganache:runmigrate"
+        "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
     },
     "devDependencies": {
         "eslint-plugin-cypress": "2.0.1",
