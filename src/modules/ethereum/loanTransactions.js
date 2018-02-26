@@ -1,6 +1,7 @@
 /* Loan ethereum functions
     Use only from reducers.  */
 import store from "modules/store";
+import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError } from "modules/ethereum/ethHelper";
@@ -20,7 +21,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     }
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const weiAmount = ethAmount * ONE_ETH;
+    const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH);
 
     const result = await loanManager.newEthBackedLoan(productId, {
         value: weiAmount,
@@ -139,7 +140,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 
     const result = await augmintTokenInstance.transferAndNotify(
         loanManager.address,
-        repaymentAmount * decimalsDiv,
+        new BigNumber(repaymentAmount).mul(decimalsDiv),
         loanId,
         {
             from: userAccount,

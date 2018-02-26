@@ -1,4 +1,5 @@
 import store from "modules/store";
+import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 
@@ -58,18 +59,27 @@ async function getOrders(orderType, offset) {
                 if (orderType === TOKEN_BUY) {
                     parsed.orderType = TOKEN_BUY;
                     parsed.tokenValue = parseFloat(
-                        (parsed.bn_amount.mul(parsed.bn_price) / ONE_ETH / decimalsDiv).toFixed(decimals)
+                        parsed.bn_amount
+                            .mul(parsed.bn_price)
+                            .div(ONE_ETH)
+                            .round(0, BigNumber.ROUND_HALF_DOWN)
+                            .div(decimalsDiv)
+                            .toFixed(decimals)
                     );
-                    parsed.weiValue = parsed.bn_amount;
+                    parsed.bn_weiValue = parsed.bn_amount;
                 } else {
                     parsed.orderType = TOKEN_SELL;
                     parsed.tokenValue = parseFloat(parsed.bn_amount / decimalsDiv);
-                    parsed.weiValue = (parsed.bn_amount * ONE_ETH / parsed.bn_price).toFixed(0);
+                    parsed.bn_weiValue = parsed.bn_amount
+                        .mul(ONE_ETH)
+                        .div(parsed.bn_price)
+                        .round(0, BigNumber.ROUND_HALF_UP);
                 }
 
                 parsed.price = parsed.bn_price / decimalsDiv; // price in tokens/ETH
-                parsed.ethValue = parsed.weiValue / ONE_ETH;
-                parsed.ethValueRounded = parseFloat(parsed.ethValue.toFixed(6));
+                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH);
+                parsed.ethValue = parsed.bn_ethValue.toString();
+                parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
 
                 if (orderType === TOKEN_BUY) {
                     parsed.amount = parsed.ethValue;
@@ -104,15 +114,16 @@ export async function placeOrderTx(orderType, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().exchange.contract.instance;
-    const priceDecimalsDiv = store.getState().augmintToken.info.decimalsDiv; // Is it the same?
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
+    const submitPrice = new BigNumber(price).mul(decimalsDiv);
     let submitAmount;
     let result;
 
     switch (orderType) {
         case TOKEN_BUY:
-            submitAmount = amount * ONE_ETH;
-            result = await exchange.placeBuyTokenOrder(price * priceDecimalsDiv, {
+            submitAmount = new BigNumber(amount).mul(ONE_ETH);
+            result = await exchange.placeBuyTokenOrder(submitPrice, {
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
@@ -120,12 +131,11 @@ export async function placeOrderTx(orderType, amount, price) {
             break;
         case TOKEN_SELL:
             const augmintToken = store.getState().augmintToken;
-            const decimalsDiv = augmintToken.info.decimalsDiv;
-            submitAmount = amount * decimalsDiv;
+            submitAmount = new BigNumber(amount).mul(decimalsDiv);
             result = await augmintToken.contract.instance.transferAndNotify(
                 exchange.address,
                 submitAmount,
-                price * priceDecimalsDiv,
+                submitPrice,
                 {
                     from: userAccount,
                     gas: gasEstimate
