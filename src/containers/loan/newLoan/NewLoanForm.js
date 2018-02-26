@@ -47,10 +47,10 @@ class NewLoanForm extends React.Component {
         const weiAmount = repaymentAmount
             .div(this.props.rates.info.bn_ethFiatRate)
             .mul(ONE_ETH)
-            .div(this.props.product.bn_loanCollateralRatio)
+            .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_HALF_DOWN);
+            .round(0, BigNumber.ROUND_DOWN);
+        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -69,15 +69,15 @@ class NewLoanForm extends React.Component {
         const loanTokenAmount = val
             .mul(this.props.product.bn_discountRate)
             .div(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
+            .round(0, BigNumber.ROUND_DOWN);
 
         const weiAmount = val
             .div(this.props.rates.info.bn_ethFiatRate)
             .mul(ONE_ETH)
-            .div(this.props.product.bn_loanCollateralRatio)
+            .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_DOWN);
+            .round(0, BigNumber.ROUND_DOWN);
+        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -98,15 +98,15 @@ class NewLoanForm extends React.Component {
             .round(0, BigNumber.ROUND_HALF_UP);
 
         const repaymentAmount = fiatValue
-            .mul(this.props.product.bn_loanCollateralRatio)
+            .mul(this.props.product.bn_collateralRatio)
             .div(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
+            .round(0, BigNumber.ROUND_DOWN);
 
         const loanTokenAmount = fiatValue
-            .mul(this.props.product.bn_loanCollateralRatio)
+            .mul(this.props.product.bn_collateralRatio)
             .mul(this.props.product.bn_discountRate)
             .div(PPM_DIV * PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_UP);
+            .round(0, BigNumber.ROUND_DOWN);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
         this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);

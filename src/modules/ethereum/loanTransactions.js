@@ -1,10 +1,5 @@
-/*
-Loan ethereum functions
-Use only from reducers.
-    TODO: tune default gasPrice
-    TODO: clean up thrown errors
-    TODO: set gasEstimates when it gas consumption has settled.
- */
+/* Loan ethereum functions
+    Use only from reducers.  */
 import store from "modules/store";
 import moment from "moment";
 import { cost } from "./gas";
@@ -74,41 +69,66 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 export async function fetchProductsTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
-        const productCount = await loanManager.getProductCount();
-        const ppmDiv = 1000000;
-        const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-        // TODO: create a helper in LoanManager to get products in chunks
+        // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
+        const [chunkSize, productCount] = await Promise.all([
+            loanManager.CHUNK_SIZE().then(res => res.toNumber()),
+            loanManager.getProductCount().then(res => res.toNumber())
+        ]);
+        // const chunkSize = store.getState().loanManager.info.chunkSize;
+        // const productCount = store.getState().loanManager.info.productCount;
+
         let products = [];
-        for (let i = 0; i < productCount; i++) {
-            const p = await loanManager.products(i);
-            const term = p[0].toNumber();
-            // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-            const bn_discountRate = p[1];
-            const bn_loanCollateralRatio = p[2];
-            const bn_minDisbursedAmountInToken = p[3];
-            const bn_defaultingFeePt = p[4];
-            const isActive = p[5];
 
-            const prod = {
-                id: i,
-                term,
-                termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-                bn_discountRate,
-                discountRate: bn_discountRate / ppmDiv,
-                bn_loanCollateralRatio,
-                loanCollateralRatio: bn_loanCollateralRatio / ppmDiv,
-                minDisbursedAmountInToken: bn_minDisbursedAmountInToken / decimalsDiv,
-                bn_defaultingFeePt,
-                defaultingFeePt: bn_defaultingFeePt / ppmDiv,
-                isActive
-            };
-            products.push(prod);
+        const queryCount = Math.ceil(productCount / chunkSize);
+
+        for (let i = 0; i < queryCount; i++) {
+            const productsArray = await loanManager.getProducts(i * chunkSize);
+            const parsedProducts = parseProducts(productsArray);
+            products = products.concat(parsedProducts);
         }
+
         return products;
     } catch (error) {
         throw new Error("fetchProductsTx failed.\n" + error);
     }
+}
+
+function parseProducts(productsArray) {
+    const ppmDiv = 1000000;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const products = productsArray.reduce((parsed, product) => {
+        const [
+            bn_id,
+            bn_minDisbursedAmount,
+            bn_term,
+            bn_discountRate,
+            bn_collateralRatio,
+            bn_defaultingFeePt,
+            bn_isActive
+        ] = product;
+
+        if (bn_term.gt(0)) {
+            const term = bn_term.toNumber();
+            parsed.push({
+                id: bn_id.toNumber(),
+                term,
+                termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                bn_discountRate,
+                discountRate: bn_discountRate / ppmDiv,
+                bn_collateralRatio,
+                collateralRatio: bn_collateralRatio / ppmDiv,
+                minDisbursedAmountInToken: bn_minDisbursedAmount / decimalsDiv,
+                bn_defaultingFeePt,
+                defaultingFeePt: bn_defaultingFeePt / ppmDiv,
+                isActive: bn_isActive.eq(1) ? true : false
+            });
+        }
+        return parsed;
+    }, []);
+
+    return products;
 }
 
 export async function repayLoanTx(repaymentAmount, loanId) {
@@ -166,15 +186,23 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 export async function fetchLoansToCollectTx() {
     try {
         const loanManager = store.getState().loanManager.contract.instance;
-        const loanCount = (await loanManager.getLoanCount()).toNumber();
+        // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
+        const [chunkSize, loanCount] = await Promise.all([
+            loanManager.CHUNK_SIZE().then(res => res.toNumber()),
+            loanManager.getLoanCount().then(res => res.toNumber())
+        ]);
+        // const chunkSize = store.getState().loanManager.info.chunkSize;
+        // const loanCount = await loanManager.getLoanCount();
 
         let loansToCollect = [];
-        for (let i = 0; i < loanCount; i++) {
-            const loan = await fetchLoanDetails(i);
-            if (loan.loanState === 21) {
-                loansToCollect.push(loan);
-            }
+
+        const queryCount = Math.ceil(loanCount / chunkSize);
+        for (let i = 0; i < queryCount; i++) {
+            const loansArray = await loanManager.getLoans(i * chunkSize);
+            const defaultedLoans = parseLoans(loansArray).filter(loan => loan.status === 2);
+            loansToCollect = loansToCollect.concat(defaultedLoans);
         }
+
         return loansToCollect;
     } catch (error) {
         throw new Error("fetchLoansToCollectTx failed.\n" + error);
@@ -187,7 +215,7 @@ export async function collectLoansTx(loansToCollect) {
     const loanManager = store.getState().loanManager.contract.instance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
-    const loanIdsToCollect = loansToCollect.map(item => item.loanId);
+    const loanIdsToCollect = loansToCollect.map(loan => loan.id);
 
     const result = await loanManager.collect(loanIdsToCollect, {
         from: userAccount,
@@ -243,88 +271,110 @@ export async function collectLoansTx(loansToCollect) {
     };
 }
 
-export async function fetchLoanDetails(_loanId) {
-    // we call with number or BigNumber loanId
-    const loanId = parseFloat(_loanId);
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+export async function fetchLoansForAddressTx(account) {
     const loanManager = store.getState().loanManager.contract.instance;
 
-    const l = await loanManager.loans(loanId);
-    const [
-        borrower,
-        bn_solidityLoanState,
-        bn_collateralAmount,
-        bn_repaymentAmount,
-        bn_loanAmount,
-        bn_interestAmount,
-        bn_term,
-        bn_disbursementDate,
-        bn_maturity
-    ] = l;
+    // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
+    const [chunkSize, loanCount] = await Promise.all([
+        loanManager.CHUNK_SIZE().then(res => res.toNumber()),
+        loanManager.getLoanCountForAddress(account).then(res => res.toNumber())
+    ]);
+    // const chunkSize = store.getState().loanManager.info.chunkSize;
+    // const loanCount = await loanManager.getLoanCountForAddress(account);
 
-    const solidityLoanState = bn_solidityLoanState.toNumber();
-    const maturity = bn_maturity.toNumber();
-    const term = bn_term.toNumber();
-    const disbursementDate = bn_disbursementDate.toNumber();
+    let loans = [];
 
-    let loanStateText;
-    const currentTime = moment()
-        .utc()
-        .unix();
-    let loanState = null;
-    let isDue = false;
-    let isRepayable = false;
-    let isCollectable = false;
-    switch (solidityLoanState) {
-        case 0:
-            if (maturity < currentTime) {
-                loanState = 21;
-                isCollectable = true;
-                loanStateText = "Defaulted (not yet collected)";
-            } else if (maturity - currentTime < 24 * 60 * 60 * 2) {
-                /* consider it due 2 days before */
-                isDue = true;
-                isRepayable = true;
-                loanStateText = "Payment Due";
-                loanState = 5;
-            } else {
-                isRepayable = true;
-                loanState = 0;
-                loanStateText = "Open";
-            }
-            break;
-        case 1:
-            loanState = 10;
-            loanStateText = "Repaid";
-            break;
-        case 2:
-            loanState = 20;
-            loanStateText = "Defaulted";
-            break;
-        default:
-            loanStateText = "Invalid state";
+    const queryCount = Math.ceil(loanCount / chunkSize);
+
+    for (let i = 0; i < queryCount; i++) {
+        const loansArray = await loanManager.getLoansForAddress(account, i * chunkSize);
+        loans = loans.concat(parseLoans(loansArray));
     }
-    // TODO: refresh this reguraly? maybe move this to a state and add a timer?
 
-    const loan = {
-        loanId,
-        borrower,
-        loanState,
-        solidityLoanState,
-        loanStateText,
-        collateralEth: bn_collateralAmount / ONE_ETH,
-        repaymentAmount: bn_repaymentAmount / decimalsDiv,
-        loanAmount: bn_loanAmount / decimalsDiv,
-        interestAmount: bn_interestAmount / decimalsDiv,
-        term,
-        termText: moment.duration(term, "seconds").humanize(),
-        disbursementDate,
-        disbursementDateText: moment.unix(disbursementDate).format("D MMM YYYY HH:mm:ss"),
-        maturity,
-        maturityText: moment.unix(maturity).format("D MMM YYYY HH:mm"),
-        isDue,
-        isRepayable,
-        isCollectable
-    };
-    return loan;
+    return loans;
+}
+
+function parseLoans(loansArray) {
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const loans = loansArray.reduce((parsed, loan) => {
+        // [loanId, collateralAmount, repaymentAmount, borrower, productId, state, maturity, disbursementTime, loanAmount, interestAmount ]
+        const [
+            bn_id,
+            bn_collateralAmount,
+            bn_repaymentAmount,
+            borrower,
+            bn_productId,
+            bn_state,
+            bn_maturity,
+            bn_disbursementTime,
+            bn_loanAmount,
+            bn_interestAmount
+        ] = loan;
+
+        if (bn_maturity.gt(0)) {
+            const currentTime = moment()
+                .utc()
+                .unix();
+            const disbursementTime = bn_disbursementTime.toNumber();
+            const term = bn_maturity.sub(bn_disbursementTime).toNumber();
+            const maturity = bn_maturity.toNumber();
+            let loanStateText = null;
+            let isDue = false;
+            let isRepayable = false;
+            let isCollectable = false;
+
+            const state = bn_state.toNumber();
+            switch (state) {
+                case 0:
+                    if (maturity - currentTime < 24 * 60 * 60 * 2) {
+                        /* consider it due 2 days before */
+                        isDue = true;
+                        isRepayable = true;
+                        loanStateText = "Payment Due";
+                    } else {
+                        isRepayable = true;
+                        loanStateText = "Open";
+                    }
+                    break;
+                case 1:
+                    loanStateText = "Repaid";
+                    break;
+                case 2:
+                    isCollectable = true;
+                    loanStateText = "Defaulted (not yet collected)";
+                    break;
+                case 3:
+                    loanStateText = "Defaulted and collected";
+                    break;
+                default:
+                    loanStateText = "Invalid state";
+            }
+
+            parsed.push({
+                id: bn_id.toNumber(),
+                borrower: "0x" + borrower.toString(16),
+                productId: bn_productId.toNumber(),
+                state,
+                loanStateText,
+                collateralEth: bn_collateralAmount / ONE_ETH,
+                repaymentAmount: bn_repaymentAmount / decimalsDiv,
+                loanAmount: bn_loanAmount / decimalsDiv,
+                interestAmount: bn_interestAmount / decimalsDiv,
+                term,
+                termText: moment.duration(term, "seconds").humanize(),
+                disbursementTime,
+                disbursementTimeText: moment.unix(disbursementTime).format("D MMM YYYY HH:mm:ss"),
+                maturity,
+                maturityText: moment.unix(maturity).format("D MMM YYYY HH:mm"),
+                isDue,
+                isRepayable,
+                isCollectable
+            });
+        }
+
+        return parsed;
+    }, []);
+
+    return loans;
 }

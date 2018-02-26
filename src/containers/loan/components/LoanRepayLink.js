@@ -5,8 +5,8 @@ import { Button } from "semantic-ui-react";
 export function LoanRepayLink(props) {
     const {
         as = Link,
-        to = "/loan/repay/" + props.loan.loanId,
-        key = "repaybtn-" + props.loan.loanId,
+        to = "/loan/repay/" + props.loan.id,
+        key = "repaybtn-" + props.loan.id,
         className = props.loan.isDue ? "repayButton" : "repayEarlyButton",
         content = props.loan.isDue ? "Repay" : "Repay Early",
         icon = "right chevron",
