@@ -42,7 +42,7 @@ class NewLoanForm extends React.Component {
         const repaymentAmount = val
             .div(this.props.product.bn_discountRate)
             .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_HALF_DOWN);
+            .round(0, BigNumber.ROUND_UP);
 
         const weiAmount = repaymentAmount
             .div(this.props.rates.info.bn_ethFiatRate)
@@ -102,10 +102,9 @@ class NewLoanForm extends React.Component {
             .div(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
 
-        const loanTokenAmount = fiatValue
-            .mul(this.props.product.bn_collateralRatio)
+        const loanTokenAmount = repaymentAmount
             .mul(this.props.product.bn_discountRate)
-            .div(PPM_DIV * PPM_DIV)
+            .div(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
