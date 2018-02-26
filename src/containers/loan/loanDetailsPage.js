@@ -77,7 +77,7 @@ class LoanDetailsPage extends React.Component {
                                 {this.state.loan.isCollectable && (
                                     <CollectLoanButton
                                         loanManager={this.props.loanManager}
-                                        loansToCollect={[{ id: this.state.loan.loanId }]}
+                                        loansToCollect={[{ id: this.state.loan.id }]}
                                     />
                                 )}
                             </Pgrid.Column>

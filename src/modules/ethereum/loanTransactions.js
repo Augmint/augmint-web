@@ -196,7 +196,7 @@ export async function fetchLoansToCollectTx() {
         const queryCount = Math.ceil(loanCount / chunkSize);
         for (let i = 0; i < queryCount; i++) {
             const loansArray = await loanManager.getLoans(i * chunkSize);
-            const defaultedLoans = parseLoans(loansArray).filter(loan => loan.status === 2);
+            const defaultedLoans = parseLoans(loansArray).filter(loan => loan.isCollectable);
             loansToCollect = loansToCollect.concat(defaultedLoans);
         }
 
