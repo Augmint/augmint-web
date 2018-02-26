@@ -25,8 +25,8 @@ import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
 import Roadmap from "containers/roadmap";
+import AppMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
-import { AppMenu } from "components/navigation";
 import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
 
@@ -50,11 +50,24 @@ if (process.env.NODE_ENV === "production") {
 }
 
 class App extends React.Component {
+    constructor(props) {
+      super(props);
+      this.openMenu = this.openMenu.bind(this);
+      this.state = {
+        showMobileMenu: false,
+      };
+    }
+    openMenu() {
+        this.setState({
+          showMobileMenu: !this.state.showMobileMenu
+        });
+    }
+
     render() {
         return (
             <div className="Site">
                 <ScrollToTop />
-                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} />
+                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} showMenu={this.state.showMobileMenu} openMenu={this.openMenu} />
                 <FlashMessages />
                 <div className="Site-content">
                     <Switch>
