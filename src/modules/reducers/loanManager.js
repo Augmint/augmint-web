@@ -156,7 +156,7 @@ export const refreshLoanManager = () => {
         });
         try {
             const loanManagerInstance = store.getState().loanManager.contract.instance;
-            const info = getLoanManagerInfo(loanManagerInstance);
+            const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
                 info
