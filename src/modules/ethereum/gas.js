@@ -1,5 +1,5 @@
 export const cost = {
-    NEW_LOAN_GAS: 180000, // As of now it's on ganache: 167,196-167390
+    NEW_LOAN_GAS: 200000, // As of now it's on ganache: 167,196-167390 - 182,000???
     NEW_FIRST_LOAN_GAS: 240000, // 227390
     REPAY_GAS: 120000, // AugmintToken.transferAndNotify, as of now on testRpc: first: 105,354
     COLLECT_BASE_GAS: 90000, // as of now on testRpc: 1 loan = first: 73,333, consecutive:  64,683
