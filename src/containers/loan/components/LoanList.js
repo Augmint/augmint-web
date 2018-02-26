@@ -17,9 +17,9 @@ export default function LoanList(props) {
                       }
             )
             .map((loan, index) => (
-                <MyListGroup.Row key={`loanToCollect-${loan.loanId}`}>
+                <MyListGroup.Row key={`loan-${loan.id}`}>
                     <LoanListDetails loan={loan} />
-                    {props.selectComponent && <props.selectComponent loanId={loan.loanId} />}
+                    {props.selectComponent && <props.selectComponent loanId={loan.id} />}
                 </MyListGroup.Row>
             ));
 

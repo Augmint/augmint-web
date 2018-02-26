@@ -113,7 +113,7 @@ describe("Augmint basic e2e", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(6, 1000, 1010.1, 1.06539)
+        getLoan(6, 1000, 1010.11, 1.06541)
             .then(res => {
                 return getUserAEurBalance();
             })

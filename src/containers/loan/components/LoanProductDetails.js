@@ -23,7 +23,7 @@ export default function LoanProductDetails(props) {
                 <Col>
                     Loan/collateral ratio: <LoanCollateralRatioToolTip loanCollateralRatio={prod.loanCollateralRatio} />
                 </Col>
-                <Col>{prod.loanCollateralRatio * 100}%</Col>
+                <Col>{prod.collateralRatio * 100}%</Col>
             </Row>
             <Row>
                 <Col>Min. payout:</Col>

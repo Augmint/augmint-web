@@ -209,7 +209,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3986,
+          "SourceUnit": 4295,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
           "file": "./generic/SystemAccount.sol",
           "scope": 840,
@@ -224,7 +224,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 4171,
+          "SourceUnit": 4480,
           "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
           "file": "./interfaces/AugmintTokenInterface.sol",
           "scope": 840,
@@ -240,16 +240,16 @@
       {
         "attributes": {
           "contractDependencies": [
-            3614,
-            3985
+            3923,
+            4294
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             839,
-            3985,
-            3614
+            4294,
+            3923
           ],
           "name": "InterestEarnedAccount",
           "scope": 840
@@ -266,7 +266,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SystemAccount",
-                  "referencedDeclaration": 3985,
+                  "referencedDeclaration": 4294,
                   "type": "contract SystemAccount"
                 },
                 "id": 817,
@@ -309,7 +309,7 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "AugmintTokenInterface",
-                          "referencedDeclaration": 4170,
+                          "referencedDeclaration": 4479,
                           "type": "contract AugmintTokenInterface"
                         },
                         "id": 819,
@@ -397,7 +397,7 @@
                       "overloadedDeclarations": [
                         null
                       ],
-                      "referencedDeclaration": 3468,
+                      "referencedDeclaration": 3777,
                       "type": "modifier (bytes32)",
                       "value": "restrict"
                     },
@@ -463,7 +463,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "transfer",
-                              "referencedDeclaration": 4169,
+                              "referencedDeclaration": 4478,
                               "type": "function (address,uint256) external returns (bool)"
                             },
                             "children": [
@@ -591,5 +591,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-24T08:26:55.598Z"
+  "updatedAt": "2018-02-26T15:34:34.564Z"
 }

@@ -32,7 +32,7 @@ function LoanDetailsWithStatusCheck(props) {
         msg = (
             <WarningPanel header="Can't repay">
                 This loan is not yet due
-                <br />(loan id: {loan.loanId}){" "}
+                <br />(loan id: {loan.id}){" "}
             </WarningPanel>
         );
     } else if (loan.loanState !== 5) {
@@ -81,7 +81,7 @@ class RepayLoanPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         let loan = this.props.loans.find(item => {
-            return item.loanId.toString() === this.state.loanId;
+            return item.id.toString() === this.state.loanId;
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;
