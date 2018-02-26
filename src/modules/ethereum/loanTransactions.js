@@ -67,31 +67,27 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 }
 
 export async function fetchProductsTx() {
-    try {
-        const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.instance;
 
-        // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
-        const [chunkSize, productCount] = await Promise.all([
-            loanManager.CHUNK_SIZE().then(res => res.toNumber()),
-            loanManager.getProductCount().then(res => res.toNumber())
-        ]);
-        // const chunkSize = store.getState().loanManager.info.chunkSize;
-        // const productCount = store.getState().loanManager.info.productCount;
+    // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
+    const [chunkSize, productCount] = await Promise.all([
+        loanManager.CHUNK_SIZE().then(res => res.toNumber()),
+        loanManager.getProductCount().then(res => res.toNumber())
+    ]);
+    // const chunkSize = store.getState().loanManager.info.chunkSize;
+    // const productCount = store.getState().loanManager.info.productCount;
 
-        let products = [];
+    let products = [];
 
-        const queryCount = Math.ceil(productCount / chunkSize);
+    const queryCount = Math.ceil(productCount / chunkSize);
 
-        for (let i = 0; i < queryCount; i++) {
-            const productsArray = await loanManager.getProducts(i * chunkSize);
-            const parsedProducts = parseProducts(productsArray);
-            products = products.concat(parsedProducts);
-        }
-
-        return products;
-    } catch (error) {
-        throw new Error("fetchProductsTx failed.\n" + error);
+    for (let i = 0; i < queryCount; i++) {
+        const productsArray = await loanManager.getProducts(i * chunkSize);
+        const parsedProducts = parseProducts(productsArray);
+        products = products.concat(parsedProducts);
     }
+
+    return products;
 }
 
 function parseProducts(productsArray) {

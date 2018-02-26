@@ -45,21 +45,21 @@ export function fetchLoansForAddress(userAccount) {
             type: LOANS_LOANLIST_REQUESTED
         });
 
-        // try {
-        const loans = await fetchLoansForAddressTx(userAccount);
+        try {
+            const loans = await fetchLoansForAddressTx(userAccount);
 
-        return dispatch({
-            type: LOANS_LOANLIST_RECEIVED,
-            loans: loans
-        });
-        // } catch (error) {
-        //     if (process.env.NODE_ENV !== "production") {
-        //         throw new Error(error);
-        //     }
-        //     return dispatch({
-        //         type: LOANS_LOANLIST_ERROR,
-        //         error: error
-        //     });
-        // }
+            return dispatch({
+                type: LOANS_LOANLIST_RECEIVED,
+                loans: loans
+            });
+        } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                throw new Error(error);
+            }
+            return dispatch({
+                type: LOANS_LOANLIST_ERROR,
+                error: error
+            });
+        }
     };
 }
