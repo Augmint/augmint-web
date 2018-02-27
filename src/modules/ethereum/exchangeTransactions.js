@@ -134,8 +134,8 @@ export async function placeOrderTx(orderType, amount, price) {
             submitAmount = new BigNumber(amount).mul(decimalsDiv);
             result = await augmintToken.contract.instance.transferAndNotify(
                 exchange.address,
-                submitAmount,
-                submitPrice,
+                submitAmount.toString(),
+                submitPrice.toString(),
                 {
                     from: userAccount,
                     gas: gasEstimate
