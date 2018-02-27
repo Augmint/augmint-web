@@ -3,6 +3,8 @@
 
 # Augmint - Stable Digital Tokens - Web Frontend
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Augmint/augmint-web.svg)](https://greenkeeper.io/)
+
 Decentralised stable cryptocurrency on Ethereum
 
 master: [![Build Status](https://travis-ci.org/Augmint/augmint-web.svg?branch=master)](https://travis-ci.org/Augmint/augmint-web) staging: [![Build Status](https://travis-ci.org/Augmint/augmint-web.svg?branch=staging)](https://travis-ci.org/Augmint/augmint-web)
