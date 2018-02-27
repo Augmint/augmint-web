@@ -14701,6 +14701,166 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x1f9972ec35a86b6ea1c3884c02fda9d8d0c5c14089a133610fed51c481b7e208": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "loanId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "collateralAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "loanAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "repaymentAmount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "maturity",
+              "type": "uint40"
+            }
+          ],
+          "name": "NewLoan",
+          "type": "event"
+        },
+        "0xf686833114a6119b006ebfaf64ed31277c71b76a9855945de8d58f849bff6890": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "productId",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "newState",
+              "type": "bool"
+            }
+          ],
+          "name": "LoanProductActiveStateChanged",
+          "type": "event"
+        },
+        "0xccadd8a27b8a91830a26f7dd76f3acec14cd6bc7bfb79e91113ec547150d95f0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "productId",
+              "type": "uint32"
+            }
+          ],
+          "name": "LoanProductAdded",
+          "type": "event"
+        },
+        "0x0bc2fda5eb321ed5f7471e814a5c00752523b3ba8fbfeb905e1b8707eefa16c5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "loanId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "borrower",
+              "type": "address"
+            }
+          ],
+          "name": "LoanRepayed",
+          "type": "event"
+        },
+        "0x328dba6669445381058bdb02ebe2ec93eb6f203f283073dee9b206720390f10b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "loanId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "collectedCollateral",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "releasedCollateral",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "defaultingFee",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanCollected",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xec5e35d8941386c3e08019b0ad1d4a8c40c7bcbc"
+    },
     "999": {
       "events": {
         "0x1f9972ec35a86b6ea1c3884c02fda9d8d0c5c14089a133610fed51c481b7e208": {
@@ -14863,5 +15023,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-26T15:34:35.907Z"
+  "updatedAt": "2018-02-27T07:36:28.169Z"
 }

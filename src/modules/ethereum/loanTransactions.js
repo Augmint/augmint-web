@@ -295,7 +295,6 @@ function parseLoans(loansArray) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const loans = loansArray.reduce((parsed, loan) => {
-        // [loanId, collateralAmount, repaymentAmount, borrower, productId, state, maturity, disbursementTime, loanAmount, interestAmount ]
         const [
             bn_id,
             bn_collateralAmount,

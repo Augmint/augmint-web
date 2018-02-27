@@ -4278,6 +4278,63 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x7402265d37fc9b13e36e199e69d811676e05f51ab84ed748b69b3f9a65af162d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "ltdDifferenceLimit",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "allowedLtdDifferenceAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "ParamsChanged",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x02a3b0f6ab5998a0c5d756ed01ea2200ea68d763"
+    },
     "999": {
       "events": {
         "0x7402265d37fc9b13e36e199e69d811676e05f51ab84ed748b69b3f9a65af162d": {
@@ -4337,5 +4394,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-26T15:34:35.895Z"
+  "updatedAt": "2018-02-27T07:36:28.104Z"
 }

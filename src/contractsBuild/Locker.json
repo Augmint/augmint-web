@@ -10350,6 +10350,159 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0x1f8c90040d4429f522e53fbe964004b66d66b4fd7a31d87359d1813adc33568e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "lockProductId",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "perTermInterest",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "durationInSecs",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "minimumLockAmount",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "isActive",
+              "type": "bool"
+            }
+          ],
+          "name": "NewLockProduct",
+          "type": "event"
+        },
+        "0x8b86e3e2da15c800fc123a7c2555729cf7819f68bdf7d98a97a80c43d051bc9f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "lockProductId",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "newActiveState",
+              "type": "bool"
+            }
+          ],
+          "name": "LockProductActiveChange",
+          "type": "event"
+        },
+        "0x74b80e2c905c5f457a2c0be97fb8fa4b72bcfbb7e9fc1b4544f49931a807ef78": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "lockOwner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "lockId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "amountLocked",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "interestEarned",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "lockedUntil",
+              "type": "uint40"
+            },
+            {
+              "indexed": false,
+              "name": "perTermInterest",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "durationInSecs",
+              "type": "uint32"
+            },
+            {
+              "indexed": false,
+              "name": "isActive",
+              "type": "bool"
+            }
+          ],
+          "name": "NewLock",
+          "type": "event"
+        },
+        "0x622ca42598ab680a7def4a7346e1963a82207cf42a5ddb8056ad62cfbda19b88": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "lockOwner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "lockId",
+              "type": "uint256"
+            }
+          ],
+          "name": "LockReleased",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xfb6b4803c590e564a3e6810289ab638b353a1367"
+    },
     "999": {
       "events": {
         "0x1f8c90040d4429f522e53fbe964004b66d66b4fd7a31d87359d1813adc33568e": {
@@ -10505,5 +10658,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-26T15:34:35.901Z"
+  "updatedAt": "2018-02-27T07:36:28.125Z"
 }
