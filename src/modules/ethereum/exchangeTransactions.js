@@ -123,7 +123,7 @@ export async function placeOrderTx(orderType, amount, price) {
     switch (orderType) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH);
-            result = await exchange.placeBuyTokenOrder(submitPrice, {
+            result = await exchange.placeBuyTokenOrder(submitPrice.toString(), {
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
@@ -134,8 +134,8 @@ export async function placeOrderTx(orderType, amount, price) {
             submitAmount = new BigNumber(amount).mul(decimalsDiv);
             result = await augmintToken.contract.instance.transferAndNotify(
                 exchange.address,
-                submitAmount,
-                submitPrice,
+                submitAmount.toString(),
+                submitPrice.toString(),
                 {
                     from: userAccount,
                     gas: gasEstimate
