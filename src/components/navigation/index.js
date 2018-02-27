@@ -31,6 +31,7 @@ export default class AppMenu extends React.Component {
     constructor(props) {
       super(props);
       this.openMenu = this.openMenu.bind(this);
+      this.closeMenu = this.closeMenu.bind(this);
     }
     openMenu() {
       if(!this.props.showMenu) {
@@ -45,8 +46,8 @@ export default class AppMenu extends React.Component {
       if(this.props.showMenu) {
         document.body.style.overflow = 'auto';
         document.body.style = {'overflow-x': 'hidden'};
+        this.props.openMenu();
       }
-      this.props.openMenu();
     }
     render() {
         const { isConnected, network } = this.props.web3Connect;
@@ -82,7 +83,7 @@ export default class AppMenu extends React.Component {
                         </StyleNavList>
                     </div>
                     {(!showConnection && !isConnected ) && (
-                        <Button type="a" tid="useAEurButton" to="/tryit" color="primary" onClick={this.openMenu}>
+                        <Button type="a" tid="useAEurButton" to="/tryit" color="primary" onClick={this.closeMenu}>
                             Use A-EUR
                         </Button>
                     )}
