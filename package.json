@@ -52,5 +52,8 @@
     "devDependencies": {
         "eslint-plugin-cypress": "2.0.1",
         "semantic-ui": "2.2.14"
+    },
+    "greenkeeper": {
+        "ignore": ["bignumber.js", "semantic-ui", "semantic-ui-react"]
     }
 }
