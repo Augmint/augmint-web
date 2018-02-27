@@ -8,6 +8,10 @@ export const StyleRoadmapTitle = styled.h1`
     margin-bottom: 80px;
 `;
 
+export const StyleStateTitle = styled.h2`
+    margin-bottom: 25px;
+`;
+
 export const StyleRoadmapLine = styled.img`
     padding: 0px;
     height: 325px;
@@ -36,11 +40,12 @@ export const StyleRoadmapState = styled.div`
     & .list-item {
         padding-left: 30px;
         background: url(${bulletPoint}) no-repeat left 6px;
+        background-size: 10px;
         margin: 0;
     }
 
     &:not(:first-child) ${StyleStateHeader} {
-      margin-top: 50px;
+      margin-top: 25px;
     }
 `;
 
@@ -83,7 +88,6 @@ export const StyleRoadmap = styled.div`
     }
 
     & p {
-      font-size: 18px;
       margin: 0;
       margin-bottom: 10px;
     }

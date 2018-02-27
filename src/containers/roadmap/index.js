@@ -8,6 +8,7 @@ import {
     StyleRoadmapLine,
     StyleRoadmapState,
     StyleStateHeader,
+    StyleStateTitle,
     StyleStateList
 } from './style';
 
@@ -22,8 +23,8 @@ export default () => (
           <StyleRoadmapState key={state.state}>
               <div className="state">
                 <StyleStateHeader>
-                  <h2 className="state">{state.state}</h2>
-                  <h3>{state.title}</h3>
+                  <StyleStateTitle className="state">{state.state}</StyleStateTitle>
+                  <h4>{state.title}</h4>
                   <h4>{state.date}</h4>
                 </StyleStateHeader>
                 <StyleStateList className="list">
