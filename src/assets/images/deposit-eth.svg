@@ -1,12 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="50" viewBox="0 0 20 50">
-    <defs>
-        <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="61.629%">
-            <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#FFF"/>
-        </linearGradient>
-    </defs>
-    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path stroke="url(#a)" d="M8.508.995v25.14" transform="matrix(-1 0 0 1 18 8)"/>
-        <path stroke="#FFF" d="M.984 26.583l8.508 8.855L18 26.582"/>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 150 150" style="enable-background:new 0 0 150 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.2;fill:#FFFFFF;enable-background:new    ;}
+	.st1{opacity:0.25;fill:#FFFFFF;enable-background:new    ;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:none;stroke:url(#SVGID_1_);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st4{fill:none;stroke:#350037;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st5{opacity:0.4;}
+</style>
+<title>deposit-eth</title>
+<g id="Layer_2_1_">
+	<g id="Layer_1-2">
+		<circle class="st0" cx="35.5" cy="105.5" r="21.9"/>
+		<circle class="st1" cx="35.5" cy="116" r="21.9"/>
+		<path class="st2" d="M3,104.7h64.9c1.7,0,3,1.4,3,3V147c0,1.7-1.4,3-3,3H3c-1.7,0-3-1.4-3-3v-39.3C0,106.1,1.4,104.7,3,104.7z"/>
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-2512.1335" y1="111.4273" x2="-2512.1335" y2="112.5036" gradientTransform="matrix(-1 0 0 13.28 -2476.2 -1361.7101)">
+			<stop  offset="0" style="stop-color:#350037;stop-opacity:0"/>
+			<stop  offset="1" style="stop-color:#350037"/>
+		</linearGradient>
+		<path class="st3" d="M35.9,115.3v20.1"/>
+		<path class="st4" d="M28.1,128.5l7.9,8l7.9-8"/>
+		<g class="st5">
+			<path class="st2" d="M94.4,107.7l11.3,17.8l-11.3,6.3L83,125.5L94.4,107.7z M93.8,135.2l11.9-6.3L93.8,144l-0.2-0.4v-8.2
+				L93.8,135.2z M93.6,144L83,128.9l10.6,6.3V144z"/>
+		</g>
+	</g>
+</g>
 </svg>
