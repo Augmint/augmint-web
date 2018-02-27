@@ -560,6 +560,46 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xf1ea22d0d75f0d247a0b43a45423392ee9b1ae86"
+    },
     "999": {
       "events": {
         "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
@@ -602,5 +642,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-26T15:34:33.453Z"
+  "updatedAt": "2018-02-27T07:25:57.853Z"
 }

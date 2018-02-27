@@ -1108,6 +1108,168 @@
     "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0xd987a3acde40f231f760d7c3d2907c83d26bca5aededafbeefba5619b5955d71": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "transferFeePt",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "transferFeeMin",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "transferFeeMax",
+              "type": "uint256"
+            }
+          ],
+          "name": "TransferFeesChanged",
+          "type": "event"
+        },
+        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        },
+        "0x3c37a37469220e9bdcb1e8083efdcac8373f1448f59b5c4b23ebe3a0723642b2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "narrative",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "fee",
+              "type": "uint256"
+            }
+          ],
+          "name": "AugmintTransfer",
+          "type": "event"
+        },
+        "0x22e0481cfeefc9defe3dece414137b4b644284658facef6d9734c16204cca3f0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenIssued",
+          "type": "event"
+        },
+        "0x0c526103b8f47af5516191d0c89a598755bd00faa211a3cb52e4c2cc782f7fe2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenBurned",
+          "type": "event"
+        },
+        "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_owner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        "0xc65937e3dbcb9fb30f646815dd67a3dbd09ba17718cbcb54efbe3635f8e0a6fe": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "grantedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionGranted",
+          "type": "event"
+        },
+        "0x789770131846de4d1f28418f0f957cdf4fcabe5eccf70067083e20ecece69a34": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "revokedPermission",
+              "type": "bytes32"
+            }
+          ],
+          "name": "PermissionRevoked",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xa35d9de06895a3a2e7ecae26654b88fe71c179ea"
+    },
     "999": {
       "events": {
         "0xd987a3acde40f231f760d7c3d2907c83d26bca5aededafbeefba5619b5955d71": {
@@ -1272,5 +1434,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-26T15:34:35.892Z"
+  "updatedAt": "2018-02-27T07:36:28.112Z"
 }
