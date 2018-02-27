@@ -29,6 +29,7 @@ import { PageNotFound } from "containers/PageNotFound";
 import { AppMenu } from "components/navigation";
 import { AppFooter } from "containers/app/AppFooter";
 import FlashMessages from "./FlashMessages";
+import LockContainer from "containers/lock";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -72,6 +73,7 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

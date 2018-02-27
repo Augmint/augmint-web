@@ -30,7 +30,7 @@ export function AppMenu(props) {
     const { location } = props;
 
     const currentLocation = location.pathname;
-    const showConnection = (["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
+    const showConnection = (["/account", "/exchange", "/loan/new", "/lock", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
 
     return (
         <div>
@@ -48,6 +48,10 @@ export function AppMenu(props) {
                     }
                     {isConnected && (
                         <AppMenuItem isActive={() => currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
+                    )
+                    }
+                    {isConnected && (
+                        <AppMenuItem isActive={() => currentLocation === "/lock"} to="/lock">Lock A-EUR</AppMenuItem>
                     )
                     }
                     {isConnected && (
