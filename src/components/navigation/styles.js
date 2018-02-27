@@ -10,7 +10,13 @@ export const StyleNavList = styled.ul`
     display: flex;
     padding: 0;
     margin: 0;
-    ${media.tablet`display: none;`}
+    ${media.tablet`
+      margin-top: 25px;
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+    `}
 `;
 
 export const StyleNavLink = styled(NavLink)`
@@ -29,11 +35,23 @@ export const StyleNavLink = styled(NavLink)`
 
 export const StyleNavItem = styled.li`
     display: flex;
-    padding: 15px 5px;
-    ${media.tablet`margin-left: 8px;`}
+    ${media.tablet`
+      text-align: center;
+    `}
 
     & + li {
         margin-left: 8px;
+        ${media.tablet`
+          margin-left: 0px;
+        `}
+    }
+
+    & a {
+      padding: 15px 5px;
+      width: 100%;
+      ${media.tablet`
+        font-size: 18px;
+      `}
     }
 `;
 
