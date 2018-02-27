@@ -34,18 +34,18 @@ export default class AppMenu extends React.Component {
       this.closeMenu = this.closeMenu.bind(this);
     }
     openMenu() {
+      const fakebody = document.getElementById("fakebody");
       if(!this.props.showMenu) {
-        document.body.style.overflow = 'hidden';
+        fakebody.style.overflow = 'hidden';
       } else {
-        document.body.style.overflow = 'auto';
-        document.body.style = {'overflow-x': 'hidden'};
+        fakebody.style.overflow = 'initial';
       }
       this.props.openMenu();
     }
     closeMenu() {
+      const fakebody = document.getElementById("fakebody");
       if(this.props.showMenu) {
-        document.body.style.overflow = 'auto';
-        document.body.style = {'overflow-x': 'hidden'};
+        fakebody.style.overflow = 'initial';
         this.props.openMenu();
       }
     }
