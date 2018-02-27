@@ -18,7 +18,6 @@ export default class Web3ConnectionInfo extends React.Component {
 
     render() {
         const { isLoading, isConnected, web3Instance, error, info } = this.props.web3Connect;
-        const stringify = stringifier({ maxDepth: 3, indent: "   " });
         const handleRefreshClick = e => {
             e.preventDefault();
             store.dispatch(setupWeb3());
@@ -48,7 +47,7 @@ export default class Web3ConnectionInfo extends React.Component {
                 {this.state.providerInfoOpen && (
                     <Pblock>
                         <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
-                            {web3Instance ? stringify(web3Instance.currentProvider) : "No web3 Instance"}
+                            {web3Instance ? stringifyInfo(web3Instance.currentProvider) : "No web3 Instance"}
                         </pre>
                     </Pblock>
                 )}
