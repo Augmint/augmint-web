@@ -14,7 +14,7 @@ export const StyleStateTitle = styled.h2`
 
 export const StyleRoadmapLine = styled.img`
     padding: 0px;
-    height: 325px;
+    height: 250px;
     width: 150px;
     ${media.tablet`display: none;`}
 `;
