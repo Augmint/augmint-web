@@ -3,9 +3,16 @@ cache:
   directories:
     - "node_modules"
     - "augmint-contracts/node_modules"
-before_install: yarn global add greenkeeper-lockfile@1
+before_install:
+    - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+    - yarn global add greenkeeper-lockfile@1
 install:
-    - yarn install
+    - |
+      if [[ $BRANCH == "greenkeeper/"* ]]; then
+        echo Greenkeeper build using .yarnrc.greenkeeper; cp .yarnrc.greenkeeper .yarnrc; yarn install;
+      else
+        echo Normal build using .yarnrc and --frozen-lockfile option; yarn install --frozen-lockfile;
+      fi
     - cd augmint-contracts && yarn install && cd ..
 before_script:
     - greenkeeper-lockfile-update

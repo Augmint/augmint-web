@@ -51,7 +51,6 @@
     },
     "devDependencies": {
         "eslint-plugin-cypress": "2.0.1",
-        "greenkeeper-lockfile": "^1.13.2",
         "semantic-ui": "2.2.14"
     },
     "greenkeeper": {
