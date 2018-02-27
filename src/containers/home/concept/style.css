@@ -106,6 +106,10 @@ article.concept .ui.horizontal.list:last-child {
   margin-right: 0;
 }
 
+.Site-content article.concept .whitepaper-manifesto {
+  margin: auto;
+}
+
 .Site-content article.concept .whitepaper-manifesto .two.column.row {
   justify-content: center;
 }
