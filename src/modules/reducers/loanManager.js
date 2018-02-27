@@ -33,6 +33,7 @@ const initialState = {
     error: null,
     products: null,
     info: {
+        chunkSize: null,
         bn_weiBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
@@ -82,7 +83,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                info: action.result
+                info: action.info
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
@@ -134,7 +135,7 @@ export const connectLoanManager = () => {
             const contract = SolidityContract.connectNew(store.getState().web3Connect, loanManagerArtifacts);
             return dispatch({
                 type: LOANMANAGER_CONNECT_SUCCESS,
-                contract: contract
+                contract
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -154,42 +155,11 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            const ONE_ETH = 1000000000000000000;
-            const web3 = store.getState().web3Connect.web3Instance;
-            const loanManager = store.getState().loanManager.contract.instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
-            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
-            const [
-                loanCount,
-                productCount,
-                augmintTokenAddress,
-                ratesAddress,
-                bn_weiBalance,
-                bn_tokenBalance
-            ] = await Promise.all([
-                loanManager.getLoanCount(),
-                loanManager.getProductCount(),
-
-                loanManager.augmintToken(),
-                loanManager.rates(),
-
-                web3.eth.getBalance(loanManager.address),
-                augmintToken.balanceOf(loanManager.address)
-            ]);
-
+            const loanManagerInstance = store.getState().loanManager.contract.instance;
+            const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
-                result: {
-                    bn_weiBalance,
-                    ethBalance: bn_weiBalance / ONE_ETH,
-                    bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance / decimalsDiv,
-                    loanCount: loanCount.toNumber(),
-                    productCount: productCount.toNumber(),
-                    augmintTokenAddress,
-                    ratesAddress
-                }
+                info
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -202,6 +172,45 @@ export const refreshLoanManager = () => {
         }
     };
 };
+
+async function getLoanManagerInfo(loanManager) {
+    const ONE_ETH = 1000000000000000000;
+    const web3 = store.getState().web3Connect.web3Instance;
+    const augmintToken = store.getState().augmintToken.contract.instance;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const [
+        chunkSize,
+        loanCount,
+        productCount,
+        augmintTokenAddress,
+        ratesAddress,
+        bn_weiBalance,
+        bn_tokenBalance
+    ] = await Promise.all([
+        loanManager.CHUNK_SIZE(),
+        loanManager.getLoanCount(),
+        loanManager.getProductCount(),
+
+        loanManager.augmintToken(),
+        loanManager.rates(),
+
+        web3.eth.getBalance(loanManager.address),
+        augmintToken.balanceOf(loanManager.address)
+    ]);
+
+    return {
+        chunkSize: chunkSize.toNumber(),
+        bn_weiBalance,
+        ethBalance: bn_weiBalance / ONE_ETH,
+        bn_tokenBalance,
+        tokenBalance: bn_tokenBalance / decimalsDiv,
+        loanCount: loanCount.toNumber(),
+        productCount: productCount.toNumber(),
+        augmintTokenAddress,
+        ratesAddress
+    };
+}
 
 export function fetchProducts() {
     return async dispatch => {

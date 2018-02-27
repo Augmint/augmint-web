@@ -112,7 +112,7 @@ class TokenTransferForm extends React.Component {
                                 Validations.tokenAmount,
                                 Validations.userTokenBalanceWithTransferFee
                             ]}
-                            normalize={Normalizations.fourDecimals}
+                            normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input />
@@ -121,7 +121,7 @@ class TokenTransferForm extends React.Component {
 
                         <small>
                             Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            {this.state.feeAmount} A-EUR
+                            {this.state.feeAmount} A€
                         </small>
 
                         <Field

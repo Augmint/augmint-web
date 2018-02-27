@@ -5,13 +5,13 @@ cache:
     - "augmint-contracts/node_modules"
 install:
     - yarn install
-    - cd augmint-contracts && npm install && cd ..
+    - cd augmint-contracts && yarn install && cd ..
 before_script:
-    - yarn run ganache:run > ganache.out &
-    - yarn run truffle:migrate
+    - yarn ganache:run > ganache.out &
+    - yarn contracts:migrate
     - yarn start  &
 script:
-    - yarn run cypress:runrecord
+    - yarn cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_success:
   - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
