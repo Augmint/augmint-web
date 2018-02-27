@@ -123,7 +123,7 @@ export async function placeOrderTx(orderType, amount, price) {
     switch (orderType) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH);
-            result = await exchange.placeBuyTokenOrder(submitPrice, {
+            result = await exchange.placeBuyTokenOrder(submitPrice.toString(), {
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
