@@ -57,6 +57,7 @@ export const StyleStateList = styled.div`
     max-width: 275px;
     min-width: 275px;
     ${media.tablet`
+      margin: auto;
       margin-top: 15px;
     `}
 `;
