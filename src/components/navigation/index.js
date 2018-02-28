@@ -16,6 +16,7 @@ import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
 import hamburgerMenu from "assets/images/menu.png";
+import close from "assets/images/close.png";
 
 function AppMenuItem(props) {
     return (
@@ -60,7 +61,7 @@ export default class AppMenu extends React.Component {
             <div>
                 <StyledNavContainer className={this.props.showMenu ? 'opened' : ''}>
                     <div>
-                        <HamburgerMenu src={hamburgerMenu} onClick={this.openMenu} id="hamburgerMenu" className={this.props.showMenu ? 'opened' : ''} />
+                        <HamburgerMenu src={this.props.showMenu? close : hamburgerMenu} onClick={this.openMenu} id="hamburgerMenu" className={this.props.showMenu ? 'opened' : ''} />
                         <StyleNavList className={this.props.showMenu ? 'show' : 'hidden'}>
                             <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
                             <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>

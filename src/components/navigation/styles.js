@@ -69,7 +69,7 @@ export const HamburgerMenu = styled.img`
     height: 32px;
     width: 32px;
     visibility: hidden;
-    ${mediaopacity.handheld`opacity: .6`}
+    ${mediaopacity.handheld`opacity: .8`}
     ${media.tablet`
       display: block;
       visibility: visible;
@@ -89,10 +89,6 @@ export const StyledNavContainer = styled.div`
     &.opened {
         ${mediaopacity.handheld`opacity: .95`}
         height: 100%;
-    }
-
-    & ${HamburgerMenu}.opened {
-        ${mediaopacity.handheld`opacity: 1`}
     }
 
     & ${StyleNavList}.show {
