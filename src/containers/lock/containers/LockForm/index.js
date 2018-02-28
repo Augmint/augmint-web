@@ -8,11 +8,32 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 
 import { Form } from "components/BaseComponents";
 
-const Radio = (props) => (
-    <Checkbox radio {...props}>
+const Radio = (props) => {
+    const { label } = props;
+
+    return (<Checkbox label={label} radio>
         {props.children}
-    </Checkbox>
-)
+    </Checkbox>)
+}
+
+const LockMaturities = [
+    {
+        label: '3 months',
+        value: 3,
+    },
+    {
+        label: '6 months',
+        value: 6,
+    },
+    {
+        label: '1 year',
+        value: 12,
+    },
+    {
+        label: '2 years',
+        value: 24,
+    }
+];
 
 class LockContainer extends React.Component {
     componentDidMount() {
@@ -42,18 +63,18 @@ class LockContainer extends React.Component {
                     <Label>A-EUR</Label>
                 </Field>
 
-                <Field label="3 months" name="maturity" value="3" component={Radio}>
-                    <input />
-                </Field>
-                <Field label="6 months" name="maturity" value="6" component={Radio}>
-                    <input />
-                </Field>
-                <Field label="1 year" name="maturity" value="12" radio component={Radio}>
-                    <input />
-                </Field>
-                <Field label="2 years" name="maturity" value="24" radio component={Radio}>
-                    <input />
-                </Field>
+                {LockMaturities.map(maturity => (
+                    <Field
+                        key={`lock-maturity-${maturity.value}`}
+                        label={maturity.label}
+                        name="maturity"
+                        value={maturity.value}
+                        component={Radio}
+                    >
+                        <input />
+                    </Field>
+                ))}
+
             </Form>
         );
     }
