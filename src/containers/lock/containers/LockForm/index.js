@@ -8,11 +8,35 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 
 import { Form } from "components/BaseComponents";
 
-const Radio = (props) => (
-    <Checkbox radio {...props}>
-        {props.children}
-    </Checkbox>
-)
+import Button from "components/button";
+
+import {
+    TermTable,
+    TermTableBody,
+    TermTableRow,
+    TermTableCell,
+    TermTableHeadCell,
+    TermTableHeader,
+} from "./styles";
+
+const LockTerms = [
+    {
+        label: '3 months',
+        value: 3,
+    },
+    {
+        label: '6 months',
+        value: 6,
+    },
+    {
+        label: '1 year',
+        value: 12,
+    },
+    {
+        label: '2 years',
+        value: 24,
+    }
+];
 
 class LockContainer extends React.Component {
     componentDidMount() {
@@ -25,10 +49,10 @@ class LockContainer extends React.Component {
             <Form>
                 <Field
                     name="lockAmount"
-                    label='A-EUR to lock'
                     component={Form.Field}
                     as={Form.Input}
                     type="number"
+                    label="Amount to lock:"
                     // disabled={submitting || isLoading}
                     disabled={false}
                     // onChange={this.onTokenAmountChange}
@@ -41,19 +65,45 @@ class LockContainer extends React.Component {
                     <input />
                     <Label>A-EUR</Label>
                 </Field>
+                <label>Select term:</label>
+                <TermTable fixed>
+                    <TermTableHeader>
+                        <TermTableRow>
+                            <TermTableHeadCell></TermTableHeadCell>
+                            <TermTableHeadCell></TermTableHeadCell>
+                            <TermTableHeadCell>Interest rates</TermTableHeadCell>
+                            <TermTableHeadCell textAlign="right" singleLine>You earn</TermTableHeadCell>
+                        </TermTableRow>
+                    </TermTableHeader>
+                    <TermTableBody>
+                        {LockTerms.map(term => (
+                            <TermTableRow key={`lock-term-${term.value}`}>
+                                <TermTableCell>
+                                    <Field
+                                        name="term"
+                                        value={term.value}
+                                        component={Checkbox}
+                                        onChange={this.termChange}
+                                        >
+                                        <input />
+                                    </Field>
+                                </TermTableCell>
+                                <TermTableCell>
+                                    <label>{term.label}</label>
+                                </TermTableCell>
+                                <TermTableCell>
+                                        3.2% p.a.
+                                </TermTableCell>
+                                <TermTableCell textAlign="right">
+                                        14.55 A£
+                                </TermTableCell>
+                            </TermTableRow>
+                        ))}
+                    </TermTableBody>
+                </TermTable>
 
-                <Field label="3 months" name="maturity" value="3" component={Radio}>
-                    <input />
-                </Field>
-                <Field label="6 months" name="maturity" value="6" component={Radio}>
-                    <input />
-                </Field>
-                <Field label="1 year" name="maturity" value="12" radio component={Radio}>
-                    <input />
-                </Field>
-                <Field label="2 years" name="maturity" value="24" radio component={Radio}>
-                    <input />
-                </Field>
+                <Button type="submit">Lock 50 AE for 1 year</Button>
+
             </Form>
         );
     }
