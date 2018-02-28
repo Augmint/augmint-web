@@ -13,6 +13,7 @@ export const StyleStateTitle = styled.h2`
 `;
 
 export const StyleRoadmapLine = styled.img`
+    margin: 20px 0;
     padding: 0px;
     height: 250px;
     width: 150px;
@@ -20,7 +21,6 @@ export const StyleRoadmapLine = styled.img`
 `;
 
 export const StyleStateHeader = styled.div`
-    margin-bottom: 25px;
     max-width: 275px;
     min-width: 275px;
     ${media.tablet`
@@ -33,9 +33,17 @@ export const StyleRoadmapState = styled.div`
     padding: 0  110px;
     ${media.tablet`
       margin: auto;
-      margin-bottom: 65px;
       padding:0;
     `}
+
+    &>div.state {
+      align-items: stretch;
+      display: flex;
+      justify-content: space-around;
+      ${media.tablet`
+        flex-direction: column;
+      `}
+    }
 
     & .list-item {
         padding-left: 30px;
@@ -43,21 +51,13 @@ export const StyleRoadmapState = styled.div`
         background-size: 10px;
         margin: 0;
     }
-
-    &:not(:first-child) ${StyleStateHeader} {
-      margin-top: 25px;
-    }
 `;
 
 export const StyleStateList = styled.div`
-    position: absolute;
-    right: 15%;
-    top: 0;
     max-width: 275px;
     min-width: 275px;
     ${media.tablet`
-      margin: auto;
-      position: unset;
+      margin-top: 15px;
     `}
 `;
 
@@ -67,9 +67,14 @@ export const StyleRoadmap = styled.div`
     margin-bottom: 50px;
     padding: 0 20px;
     max-width: 1167px;
+    ${media.tablet`
+      margin-bottom: 0;
+    `}
 
-    &>div {
-      ${media.tablet`margin: auto;`}
+    &>div + div {
+      ${media.tablet`
+        margin-top: 65px;
+      `}
     }
 
     & h4:not(.state),

@@ -26,6 +26,9 @@ export default () => (
                   <StyleStateTitle className="state">{state.state}</StyleStateTitle>
                   <h4>{state.title}</h4>
                   <h4>{state.date}</h4>
+                  {(index < statestLength-1) &&
+                    <StyleRoadmapLine alt="separator" src={roadmapLine} />
+                  }
                 </StyleStateHeader>
                 <StyleStateList className="list">
                   {state.descriptions.map((description, index) => (
@@ -35,9 +38,6 @@ export default () => (
                   ))}
                 </StyleStateList>
               </div>
-              {(index < statestLength-1) &&
-                <StyleRoadmapLine alt="separator" src={roadmapLine} />
-              }
           </StyleRoadmapState>
         ))}
     </StyleRoadmap>
