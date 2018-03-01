@@ -140,7 +140,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 
     const result = await augmintTokenInstance.transferAndNotify(
         loanManager.address,
-        new BigNumber(repaymentAmount).mul(decimalsDiv),
+        new BigNumber(repaymentAmount).mul(decimalsDiv).toString(),
         loanId,
         {
             from: userAccount,
