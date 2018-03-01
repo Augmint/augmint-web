@@ -40,7 +40,7 @@ export const Validations = {
             return;
         }
         const fee = getTransferFee(amount);
-        if (userBalance > amount + fee) {
+        if (userBalance >= amount + fee) {
             return undefined;
         }
         const maxTransfer = getMaxTransfer(userBalance);

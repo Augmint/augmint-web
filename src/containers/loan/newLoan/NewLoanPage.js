@@ -60,7 +60,6 @@ class NewLoanPage extends React.Component {
         // TODO: add productId to Form and change state ref here to values.prodcutId ?
         let res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
         if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
-            console.debug("RES:", res);
             throw new SubmissionError({
                 _error: res.error
             });

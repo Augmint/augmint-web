@@ -108,7 +108,7 @@ export const setupWeb3 = () => {
             // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
             //  provider = ethers.providers.getDefaultProvider(); // TODO: https://github.com/ethers-io/ethers.js/issues/108
             const signer = network.id === 999 ? null : provider.getSigner(); // only null signer works on local ganache
-
+            const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 web3Instance: web3,
@@ -116,7 +116,7 @@ export const setupWeb3 = () => {
                 accounts,
                 network,
                 ethers: { signer, provider },
-                info: { web3Version, gasLimit: lastBlock.gasLimit }
+                info: { web3Version, gasLimit: lastBlock.gasLimit, gasPrice }
             });
         } catch (error) {
             return dispatch({

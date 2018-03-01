@@ -27,7 +27,7 @@ export default function LoanDetails(props) {
             <Row>
                 <Col>Loan id:</Col>
                 <Col>
-                    <small>{loan.loanId}</small>
+                    <small>{loan.id}</small>
                 </Col>
             </Row>
 
