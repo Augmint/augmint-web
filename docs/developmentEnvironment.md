@@ -4,6 +4,8 @@
 
 These instructions are about the dev environment for frontend development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
+[![Osx setup video](./devenvvideo_thumbnail.png)](https://www.youtube.com/watch?v=agu5LxOcy1c)
+
 ### OSX / Linux
 
 1. [Git](https://git-scm.com/download)
