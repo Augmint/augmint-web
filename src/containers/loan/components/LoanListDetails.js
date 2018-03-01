@@ -7,7 +7,7 @@ import { LoanRepayLink } from "./LoanRepayLink";
 export default function LoanListDetails(props) {
     let loan = props.loan;
     return (
-        <MyGridTable header={loan.loanStateText + " loan #" + loan.loanId}>
+        <MyGridTable header={loan.loanStateText + " loan #" + loan.id}>
             <Row>
                 <Col>Repayment amount:</Col>
                 <Col>{loan.repaymentAmount} A-EUR</Col>
@@ -22,8 +22,8 @@ export default function LoanListDetails(props) {
                     <Button
                         content="Details"
                         as={Link}
-                        key={"selectlink-" + loan.loanId}
-                        to={`/loan/${loan.loanId}`}
+                        key={"selectlink-" + loan.id}
+                        to={`/loan/${loan.id}`}
                         labelPosition="right"
                         icon="right chevron"
                         basic

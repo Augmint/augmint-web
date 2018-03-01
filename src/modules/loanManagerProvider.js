@@ -1,3 +1,5 @@
+/* TODO: maintain loan state instead of full refresh on loan repay, newloan, loancollected events */
+
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import {
@@ -6,7 +8,7 @@ import {
     fetchProducts,
     fetchLoansToCollect
 } from "modules/reducers/loanManager";
-import { fetchLoans } from "modules/reducers/loans";
+import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
@@ -74,7 +76,7 @@ const refreshLoanManagerIfNeeded = (newVal, oldVal) => {
         const userAccount = store.getState().web3Connect.userAccount;
         store.dispatch(refreshLoanManager());
         store.dispatch(fetchProducts());
-        store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchLoansForAddress(userAccount));
         setupListeners();
     }
 };
@@ -84,7 +86,7 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     if (loanManager.isConnected && newVal !== "?") {
         console.debug("loanManagerProvider - web3Connect.userAccount changed. Dispatching fetchLoans()");
         const userAccount = store.getState().web3Connect.userAccount;
-        store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchLoansForAddress(userAccount));
     }
 };
 
@@ -99,7 +101,7 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
             "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
         );
         // TODO: it can be expensive, should create a separate single fetchLoan action
-        store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchLoansForAddress(userAccount));
         store.dispatch(fetchUserBalance(userAccount));
     }
 };
@@ -114,7 +116,7 @@ const onLoanRepayed = (loanId, borrower) => {
             "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans & fetchUserBalance"
         );
         // TODO: it can be expensive, should create a separate single fetchLoan action
-        store.dispatch(fetchLoans(userAccount));
+        store.dispatch(fetchLoansForAddress(userAccount));
         store.dispatch(fetchUserBalance(userAccount));
     }
 };
@@ -128,8 +130,8 @@ const onLoanCollected = (loanId, borrower) => {
         console.debug(
             "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans & fetchUserBalance"
         );
-        // TODO: it can be expensive, should create a separate single fetchLoan action
-        store.dispatch(fetchLoans(userAccount));
+
+        store.dispatch(fetchLoansForAddress(userAccount));
         store.dispatch(fetchUserBalance(userAccount));
     }
 

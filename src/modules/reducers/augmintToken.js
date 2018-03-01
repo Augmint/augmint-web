@@ -146,25 +146,14 @@ export const refreshAugmintToken = () => {
 
 async function getAugmintTokenInfo(augmintToken) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const [
-        symbol,
-        bytes32_peggedSymbol,
-        bn_totalSupply,
-        decimals,
-        feeAccount,
-        bn_feePt,
-        bn_feeMin,
-        bn_feeMax
-    ] = await Promise.all([
+    const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals, feeAccount, transferFeeStruct] = await Promise.all([
         augmintToken.symbol(),
         augmintToken.peggedSymbol(),
         augmintToken.totalSupply(),
         augmintToken.decimals(),
         augmintToken.feeAccount(),
 
-        augmintToken.transferFeePt(),
-        augmintToken.transferFeeMin(),
-        augmintToken.transferFeeMax()
+        augmintToken.transferFee()
     ]);
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
@@ -175,6 +164,8 @@ async function getAugmintTokenInfo(augmintToken) {
 
     const totalSupply = bn_totalSupply / decimalsDiv;
 
+    const [bn_feePt, bn_feeMin, bn_feeMax] = transferFeeStruct;
+
     return {
         symbol,
         peggedSymbol,
@@ -183,7 +174,7 @@ async function getAugmintTokenInfo(augmintToken) {
         decimalsDiv,
         totalSupply,
 
-        feePt: bn_feePt / 100000,
+        feePt: bn_feePt / 1000000,
         feeMin: bn_feeMin / decimalsDiv,
         feeMax: bn_feeMax / decimalsDiv,
 

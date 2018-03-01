@@ -3,16 +3,26 @@ cache:
   directories:
     - "node_modules"
     - "augmint-contracts/node_modules"
+before_install:
+    - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+    - yarn global add greenkeeper-lockfile@1
 install:
-    - yarn install
-    - cd augmint-contracts && npm install && cd ..
+    - |
+      if [[ $BRANCH == "greenkeeper/"* ]]; then
+        echo Greenkeeper build using .yarnrc.greenkeeper; cp .yarnrc.greenkeeper .yarnrc; yarn install;
+      else
+        echo Normal build using .yarnrc and --frozen-lockfile option; yarn install --frozen-lockfile;
+      fi
+    - cd augmint-contracts && yarn install && cd ..
 before_script:
-    - yarn run ganache:run > ganache.out &
-    - yarn run truffle:migrate
+    - greenkeeper-lockfile-update
+    - yarn ganache:run > ganache.out &
+    - yarn contracts:migrate
     - yarn start  &
 script:
-    - yarn run cypress:runrecord
+    - yarn cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
+after_script: greenkeeper-lockfile-upload
 after_success:
   - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
@@ -21,3 +31,6 @@ after_failure:
   - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure https://discordapp.com/api/webhooks/409413234337251328/lCt9WUG15qc8s0PjqijUplpVjVx1MS_8wFkcMiVxA4ZWAZdUzdY3frnKRiVZC0iY0YC5
+env:
+  global:
+    secure: CEe2RntKnyZa89E0cx3thLcTU0AJ5TyWayO4y+4FYJ1d3nEv8IS3y5F6fZcaqO/GYCtr7xUIOoqYOPWcWIeLDo2QMBWntJU26LXezrVP90idYkv9PRpBKMDVmZaSh4kzUJMdJhenq+KVBEtn8yLRU5nwLYnFZroZuHN5KV0iHLYuqVB2zc8cX6vOOoL9fJbI9z/HfdNqMugBoNURMLmlW69AxYAOWYP78NnsljLyCc7jV/xaIRQsVAV8WkD9TQ6ejnx31kigcgXWvjE6TP7ki3P7RicP6LxPv33053hjduaqz+0nd87v3LLEV9ZOGL3JGkc3slA79MzymUphU/Mqz9dsjcR9unHynyINW13jUVrnGpWHsBxeNaTX9hiCyvIaGUQLIp6KO++QVVOSra+9J+euzzUcKrYFa/L0lxR6lrxoFAxbzcwVQE1g8WAb3t2esOFe2yNuoIZz5UMiCnS3u6TE3Tm7Vt9OFEDu5TLlc16Nw7QUFOHNr+q+gzBSDGeypfVIQIwIhL5DdKdfN+TLZIuuSISgocs1dql+xSRjXSQN04AjaSX0GyWZDgETb491UVoLaFtHb3UIHBTAfmF4npDUjl0Z0FpBk4AXZADCWxRvmYiRTi2xvviTtAqr3hnww96DJe5uP92bWtD/3g0M//jzMWSvhPxdEfWxmsjC+iY=
