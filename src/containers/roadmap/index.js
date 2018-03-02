@@ -13,8 +13,6 @@ import {
     StyleStateListItem
 } from './style';
 
-import roadmapLine from "assets/images/roadmap-line.svg";
-
 const statestLength = states.length;
 
 export default () => (
