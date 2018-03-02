@@ -4,8 +4,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import ratesArtifacts from "contractsBuild/Rates.json";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
-import BigNumber from "bignumber.js";
 
 export const RATES_CONNECT_REQUESTED = "rates/RATES_CONNECT_REQUESTED";
 export const RATES_CONNECT_SUCCESS = "rates/RATES_CONNECT_SUCCESS";
@@ -22,17 +20,14 @@ const initialState = {
     isLoading: false,
     isConnected: false,
     info: {
-        bn_ethBalance: null,
-        ethBalance: "?",
+        bn_weiBalance: null,
+        ethBalance: null,
         bn_tokenBalance: null,
         tokenBalance: "?",
-        bn_ethFiatcRate: null,
-        ethFiatcRate: "?",
+
         bn_ethFiatRate: null,
-        fiatEthRate: "?",
-        bn_fiatEthRate: null,
-        ethFiatRate: "?",
-        fiatScale: null
+        ethFiatRate: null,
+        fiatEthRate: null
     }
 };
 
@@ -88,7 +83,7 @@ export const connectRates = () => {
         try {
             return dispatch({
                 type: RATES_CONNECT_SUCCESS,
-                contract: await SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
+                contract: SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -108,36 +103,36 @@ export const refreshRates = () => {
             type: RATES_REFRESH_REQUESTED
         });
         try {
-            //let web3 = store.getState().web3Connect.web3Instance;
-            // TODO: make these parallel
-            const augmintToken = store.getState().augmintToken;
-            const BN_1 = new BigNumber(1);
+            const web3 = store.getState().web3Connect.web3Instance;
+            const augmintToken = store.getState().augmintToken.contract.instance;
+            const bytes32_peggedSymbol = store.getState().augmintToken.info.bytes32_peggedSymbol;
+            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+            const ONE_ETH = 1000000000000000000;
             const rates = store.getState().rates.contract.instance;
-            const fiatScale = 10000; // 4 decimals
-            const bn_ethFiatcRate = await rates.convertFromWei(augmintToken.info.peggedSymbol, 1000000000000000000);
-            const bn_ethFiatRate = bn_ethFiatcRate.div(fiatScale);
-            const bn_fiatEthRate = BN_1.div(bn_ethFiatcRate).times(fiatScale);
-            const bn_ethBalance = await asyncGetBalance(rates.address);
-            const bn_tokenBalance = (await augmintToken.contract.instance.balanceOf(rates.address)).div(10000);
+
+            const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
+                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH),
+                augmintToken.balanceOf(rates.address),
+                web3.eth.getBalance(rates.address)
+            ]);
+
             return dispatch({
                 type: RATES_REFRESHED,
                 result: {
-                    bn_ethBalance: bn_ethBalance,
-                    ethBalance: bn_ethBalance.toNumber(),
-                    bn_tokenBalance: bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance.toNumber(),
-                    bn_ethFiatcRate: bn_ethFiatcRate,
-                    ethFiatcRate: bn_ethFiatcRate.toNumber(),
-                    bn_ethFiatRate: bn_ethFiatRate,
-                    ethFiatRate: bn_ethFiatRate.toNumber(),
-                    bn_fiatEthRate: bn_fiatEthRate,
-                    fiatEthRate: bn_fiatEthRate.toNumber(),
-                    fiatScale: fiatScale
+                    bn_weiBalance,
+                    ethBalance: bn_weiBalance / ONE_ETH,
+                    bn_tokenBalance,
+                    tokenBalance: bn_tokenBalance / decimalsDiv,
+
+                    bn_ethFiatRate,
+                    ethFiatRate: bn_ethFiatRate / decimalsDiv,
+                    fiatEthRate: 1 / bn_ethFiatRate * decimalsDiv
                 }
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
+                throw new Error(error);
             }
             return dispatch({
                 type: RATES_ERROR,

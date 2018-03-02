@@ -13,7 +13,7 @@ const OrderItem = props => {
     const { order, userAccountAddress } = props;
     const ret = [
         <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
-            {order.orderType === TOKEN_SELL && <span>{order.amount} A-EUR </span>}
+            {order.orderType === TOKEN_SELL && <span>{order.amount} A€ </span>}
             {order.orderType === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
         </Col>,
         <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
@@ -51,8 +51,8 @@ const DummyCols = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress } = props;
 
-    const totalBuyAmount = buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toString();
-    const totalSellAmount = sellOrders.reduce((sum, order) => order.bn_tokenValue.add(sum), 0).toString();
+    const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
+    const totalSellAmount = sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString();
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 

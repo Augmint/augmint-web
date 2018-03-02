@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
-import LoanList from "containers/loan/components/LoanList";
+import LoansToCollectList from "containers/loan/components/LoansToCollectList";
 import { Psegment, Pheader, Pgrid } from "components/PageLayout";
 import { Message } from "semantic-ui-react";
 
@@ -18,20 +18,26 @@ class CollectLoanMain extends React.Component {
 
     componentDidMount() {
         // needed when landing from Link within App
-        if (this.props.loanManager) {
+        if (this.props.loanManager.contract) {
             store.dispatch(fetchLoansToCollect());
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.loanManager && prevProps.loanManager !== this.props.loanManager) {
+        // when landing directly on this page - augmintToken loads later than loanManager
+        if (
+            (this.props.loanManager.contract && prevProps.loanManager.contract !== this.props.loanManager.contract) ||
+            (this.props.augmintToken.contract !== prevProps.augmintToken.contract &&
+                this.props.augmintToken.isConnected)
+        ) {
             // loanManager mounted
+            console.debug("fetch2");
             store.dispatch(fetchLoansToCollect());
         }
     }
 
     render() {
-        const { loansToCollect } = this.props;
+        const { loanManager } = this.props;
         return (
             <Psegment>
                 <Pheader header="Collect loans" />
@@ -50,15 +56,11 @@ class CollectLoanMain extends React.Component {
                         </Message>
                     </Pgrid.Column>
                     <Pgrid.Column width={10}>
-                        <CollectLoanButton
-                            loansToCollect={loansToCollect}
-                            onSuccess={() => store.dispatch(fetchLoansToCollect())}
-                        />
-                        <LoanList
-                            testid="loansToCollectBlock"
+                        <CollectLoanButton loanManager={loanManager} loansToCollect={loanManager.loansToCollect} />
+                        <LoansToCollectList
                             header="Loans to collect"
                             noItemMessage={<p>No defaulted and uncollected loan.</p>}
-                            loans={loansToCollect}
+                            loanManager={loanManager}
                         />
                     </Pgrid.Column>
                 </Pgrid>
@@ -68,9 +70,8 @@ class CollectLoanMain extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    loansToCollect: state.loanManager.loansToCollect,
-    loanManager: state.loanManager.contract,
-    isLoading: state.loanManager.isLoading
+    loanManager: state.loanManager,
+    augmintToken: state.augmintToken
 });
 
 export default (CollectLoanMain = connect(mapStateToProps)(CollectLoanMain));

@@ -4,7 +4,7 @@ import { Pgrid, Pblock } from "components/PageLayout";
 import store from "modules/store";
 import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
-import { newLoan, LOANMANAGER_NEWLOAN_CREATED } from "modules/reducers/loanManager";
+import { newLoan, LOANTRANSACTIONS_NEWLOAN_CREATED } from "modules/reducers/loanTransactions";
 import LoanProductDetails from "containers/loan/components/LoanProductDetails";
 import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";
@@ -17,7 +17,7 @@ import NewLoanSuccess from "./NewLoanSuccess";
 class NewLoanPage extends React.Component {
     constructor(props) {
         super(props);
-        let productId = this.props.match.params.loanProductId;
+        const productId = this.props.match.params.loanProductId;
         this.state = {
             product: null,
             productId: productId,
@@ -59,12 +59,9 @@ class NewLoanPage extends React.Component {
         // e.preventDefault(); // not needed with redux-form?
         // TODO: add productId to Form and change state ref here to values.prodcutId ?
         let res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
-        if (res.type !== LOANMANAGER_NEWLOAN_CREATED) {
+        if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
             throw new SubmissionError({
-                _error: {
-                    title: "Ethereum transaction Failed",
-                    details: res.error
-                }
+                _error: res.error
             });
         } else {
             this.setState({

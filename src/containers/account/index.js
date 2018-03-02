@@ -52,7 +52,7 @@ class AccountHome extends React.Component {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
-    loans: state.loans.loans,
+    loans: state.loans,
     userTransfers: state.userTransfers
 });
 

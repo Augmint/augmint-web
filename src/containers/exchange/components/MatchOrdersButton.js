@@ -16,11 +16,7 @@ class MatchOrdersButton extends React.Component {
         if (res.type !== MATCH_ORDERS_SUCCESS) {
             this.setState({
                 submitting: false,
-                error: {
-                    title: "Ethereum transaction failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                error: res.error
             });
         } else {
             this.setState({
@@ -79,7 +75,7 @@ class MatchOrdersButton extends React.Component {
                     <EthSubmissionSuccessPanel
                         header={<h3>Successful match </h3>}
                         onDismiss={this.onDismiss}
-                        eth={result.eth}
+                        result={result}
                     />
                 )}
             </Pblock>

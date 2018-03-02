@@ -4,21 +4,24 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+import BigNumber from "bignumber.js";
 import { Button, Label } from "semantic-ui-react";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import BigNumber from "bignumber.js";
 import { Pblock } from "components/PageLayout";
 import ToolTip from "components/ToolTip";
 
+const ONE_ETH = 1000000000000000000;
+const PPM_DIV = 1000000;
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
+const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
 
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
-        this.onDisbursedTokenAmountChange = this.onDisbursedTokenAmountChange.bind(this);
+        this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onRepaymentAmountAmountChange = this.onRepaymentAmountAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         // this a a workaround for validations with parameters causing issues,
@@ -26,78 +29,86 @@ class NewLoanForm extends React.Component {
         this.minToken = Validations.minTokenAmount(this.props.product.minDisbursedAmountInToken);
     }
 
-    onDisbursedTokenAmountChange(e) {
+    onLoanTokenAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = new BigNumber(e.target.value).mul(DECIMALS_DIV);
         } catch (error) {
             this.props.change("repaymentAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        const bn_repaymentAmountAmount = val
+
+        const repaymentAmount = val
             .div(this.props.product.bn_discountRate)
-            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const fiatcValue = bn_repaymentAmountAmount.div(this.props.product.bn_loanCollateralRatio);
+            .mul(PPM_DIV)
+            .round(0, BigNumber.ROUND_UP);
 
-        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
+        const weiAmount = repaymentAmount
+            .div(this.props.rates.info.bn_ethFiatRate)
+            .mul(ONE_ETH)
+            .div(this.props.product.bn_collateralRatio)
+            .mul(PPM_DIV)
+            .round(0, BigNumber.ROUND_DOWN);
+        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
-        this.props.change(
-            "repaymentAmount",
-            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
+        this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
     }
 
     onRepaymentAmountAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = new BigNumber(e.target.value).mul(DECIMALS_DIV);
         } catch (error) {
-            this.props.change("disbursedTokenAmount", "");
+            this.props.change("loanTokenAmount", "");
             this.props.change("ethAmount", "");
             return;
         }
-        const fiatcValue = val.div(this.props.product.bn_loanCollateralRatio);
 
-        const bn_disbursedTokenAmount = val
-            .times(this.props.product.bn_discountRate)
-            .round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP);
-        const bn_ethAmount = fiatcValue.div(this.props.rates.info.bn_ethFiatRate);
-        this.props.change(
-            "disbursedTokenAmount",
-            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "ethAmount",
-            bn_ethAmount.round(ETH_DECIMALS, BigNumber.ROUND_HALF_UP).toString() //.toFixed(18)
-        );
+        const loanTokenAmount = val
+            .mul(this.props.product.bn_discountRate)
+            .div(PPM_DIV)
+            .round(0, BigNumber.ROUND_DOWN);
+
+        const weiAmount = val
+            .div(this.props.rates.info.bn_ethFiatRate)
+            .mul(ONE_ETH)
+            .div(this.props.product.bn_collateralRatio)
+            .mul(PPM_DIV)
+            .round(0, BigNumber.ROUND_DOWN);
+        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+
+        this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
+        this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
     }
 
     onEthAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value);
+            val = new BigNumber(e.target.value).mul(ONE_ETH);
         } catch (error) {
-            this.props.change("disbursedTokenAmount", "");
+            this.props.change("loanTokenAmount", "");
             this.props.change("repaymentAmount", "");
             return;
         }
-        const fiatcValue = val.times(this.props.rates.info.bn_ethFiatRate);
+        const fiatValue = val
+            .mul(this.props.rates.info.bn_ethFiatRate)
+            .div(ONE_ETH)
+            .round(0, BigNumber.ROUND_HALF_UP);
 
-        const bn_repaymentAmountAmount = this.props.product.bn_loanCollateralRatio.times(fiatcValue);
-        const bn_disbursedTokenAmount = bn_repaymentAmountAmount.times(this.props.product.bn_discountRate);
-        this.props.change(
-            "disbursedTokenAmount",
-            bn_disbursedTokenAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
-        this.props.change(
-            "repaymentAmount",
-            bn_repaymentAmountAmount.round(TOKEN_DECIMALS, BigNumber.ROUND_HALF_UP).toString()
-        );
+        const repaymentAmount = fiatValue
+            .mul(this.props.product.bn_collateralRatio)
+            .div(PPM_DIV)
+            .round(0, BigNumber.ROUND_DOWN);
+
+        const loanTokenAmount = repaymentAmount
+            .mul(this.props.product.bn_discountRate)
+            .div(PPM_DIV)
+            .round(0, BigNumber.ROUND_DOWN);
+
+        this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
+        this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
     }
 
     render() {
@@ -115,13 +126,12 @@ class NewLoanForm extends React.Component {
                     <Field
                         component={Form.Field}
                         as={Form.Input}
-                        name="disbursedTokenAmount"
-                        id="disbursedTokenAmount"
+                        name="loanTokenAmount"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
                         validate={[Validations.required, Validations.tokenAmount, this.minToken]}
                         normalize={Normalizations.twoDecimals}
-                        onChange={this.onDisbursedTokenAmountChange}
+                        onChange={this.onLoanTokenAmountChange}
                         labelPosition="right"
                         placeholder="pay out"
                     >
@@ -130,14 +140,13 @@ class NewLoanForm extends React.Component {
                             <ToolTip>Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate </ToolTip>
                         </Label>
 
-                        <input />
+                        <input testid="loanTokenAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
                         as={Form.Input}
                         name="repaymentAmount"
-                        id="repaymentAmount"
                         placeholder="to pay back"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
@@ -152,14 +161,13 @@ class NewLoanForm extends React.Component {
                                 Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
-                        <input />
+                        <input testid="repaymentAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
                         component={Form.Field}
                         as={Form.Input}
                         name="ethAmount"
-                        id="ethAmount"
                         type="number"
                         placeholder="amount taken to escrow"
                         disabled={submitting || !loanManager.isConnected}
@@ -175,7 +183,7 @@ class NewLoanForm extends React.Component {
                                 <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>
-                        <input />
+                        <input testid="ethAmountField" />
                         <Label>ETH</Label>
                     </Field>
                     <Button primary size="big" id="submitBtn" loading={submitting} disabled={pristine}>

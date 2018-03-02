@@ -20,11 +20,7 @@ class CancelOrderButton extends React.Component {
         if (res.type !== CANCEL_ORDER_SUCCESS) {
             this.setState({
                 submitting: false,
-                error: {
-                    title: "Ethereum transaction failed",
-                    details: res.error,
-                    eth: res.eth
-                }
+                error: res.error
             });
         } else {
             this.setState({

@@ -1,7 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import exchangeArtifacts from "contractsBuild/Exchange.json";
-import { asyncGetBalance } from "modules/ethereum/ethHelper";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
 export const EXCHANGE_CONNECT_SUCCESS = "exchange/EXCHANGE_CONNECT_SUCCESS";
@@ -87,7 +86,7 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
-            const contract = await SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
+            const contract = SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
 
             const info = await getExchangeInfo(contract.instance);
 
@@ -131,10 +130,12 @@ export const refreshExchange = () => {
 };
 
 async function getExchangeInfo(exchange) {
+    const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const [bn_ethBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
-        asyncGetBalance(exchange.address),
+        web3.eth.getBalance(exchange.address),
         augmintToken.balanceOf(exchange.address),
         exchange.getActiveOrderCounts(),
         exchange.CHUNK_SIZE()
@@ -144,7 +145,7 @@ async function getExchangeInfo(exchange) {
         bn_ethBalance: bn_ethBalance,
         ethBalance: bn_ethBalance.toString(),
         bn_tokenBalance: bn_tokenBalance,
-        tokenBalance: bn_tokenBalance.div(10000).toString(),
+        tokenBalance: bn_tokenBalance / decimalsDiv,
         buyOrderCount: orderCount[0].toNumber(),
         sellOrderCount: orderCount[1].toNumber(),
         chunkSize: chunkSize.toNumber()

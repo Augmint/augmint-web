@@ -5,25 +5,22 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class AugmintStats extends React.Component {
     render() {
-        const { showDetailsLink, augmintToken, monetarySupervisor, rates, size, showDetails } = this.props;
-
-        const bn_ethFiatRate = showDetails ? rates.info.bn_ethFiatRate : null;
+        const { showDetailsLink, augmintToken, monetarySupervisor, size, showDetails } = this.props;
+        const { ethFiatRate } = this.props.rates.info;
         const { isConnected, isLoading, connectionError } = this.props.augmintToken;
-
-        const { totalSupply, feeAccountTokenBalance } = augmintToken.info;
+        const { totalSupply, feeAccountTokenBalance, decimals } = augmintToken.info;
 
         const {
             reserveTokenBalance,
             issuedByMonetaryBoard,
-            bn_reserveEthBalance,
             reserveEthBalance,
             interestEarnedAccountTokenBalance
         } = monetarySupervisor.info;
 
         const reserveEthBalanceInFiat =
-            bn_ethFiatRate == null || bn_reserveEthBalance == null
+            ethFiatRate === "?" || reserveEthBalance === "?"
                 ? "?"
-                : bn_ethFiatRate.mul(bn_reserveEthBalance).toString();
+                : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
             <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
