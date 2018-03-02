@@ -9,22 +9,28 @@ export const StyleRoadmapTitle = styled.h1`
 `;
 
 export const StyleStateTitle = styled.h2`
+    font-size: 26px;
     margin-bottom: 25px;
 `;
 
-export const StyleRoadmapLine = styled.img`
-    margin: 20px 0;
-    padding: 0px;
-    height: 250px;
-    width: 150px;
+export const StyleRoadmapLine = styled.div`
+    background-image: linear-gradient(to top, transparent 0%, #346262 15%, #346262 85%, transparent 100%);
+    height: 100%;
+    margin: 10px 0;
+    margin-left: 75px;
+    width: 2px;
     ${media.tablet`display: none;`}
 `;
 
 export const StyleStateHeader = styled.div`
-    max-width: 275px;
-    min-width: 275px;
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    min-width: 250px;
     ${media.tablet`
       margin: auto;
+      max-width: 275px;
+      min-width: 275px;
     `}
 `;
 
@@ -48,18 +54,28 @@ export const StyleRoadmapState = styled.div`
     & .list-item {
         padding-left: 30px;
         background: url(${bulletPoint}) no-repeat left 6px;
-        background-size: 10px;
+        background-size: 7px;
         margin: 0;
     }
 `;
 
 export const StyleStateList = styled.div`
+    padding-top: 58px;
+    padding-bottom: 45px;
     max-width: 275px;
     min-width: 275px;
     ${media.tablet`
       margin: auto;
       margin-top: 15px;
+      padding-top: 0;
+      padding-bottom: 0;
     `}
+`;
+
+export const StyleStateListItem = styled.p`
+    letter-spacing: 1px;
+    margin: 0;
+    margin-bottom: 5px;
 `;
 
 export const StyleRoadmap = styled.div`
@@ -80,7 +96,7 @@ export const StyleRoadmap = styled.div`
 
     & h4:not(.state),
     h5,
-    p {
+    ${StyleStateListItem} {
       margin-top: 0;
       ${mediaopacity.handheld`opacity: .6`}
     }
@@ -91,10 +107,5 @@ export const StyleRoadmap = styled.div`
 
     & h4.state {
       margin-bottom: 14px;
-    }
-
-    & p {
-      margin: 0;
-      margin-bottom: 10px;
     }
 `;
