@@ -167,7 +167,7 @@ export const howItWorks = [
         image: <WaitIcon/>,
         type: 'lock',
         title: 'Wait',
-        text: '',
+        text: 'Earn while sleeping.',
     },
     {
         pk: 'hiw-13',
