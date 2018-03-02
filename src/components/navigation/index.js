@@ -15,8 +15,8 @@ import {
 import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
-import hamburgerMenu from "assets/images/menu.png";
-import close from "assets/images/close.png";
+import hamburgerMenu from "assets/images/menu.svg";
+import close from "assets/images/close.svg";
 
 function AppMenuItem(props) {
     return (
