@@ -58,8 +58,8 @@ p {
 }
 
 .equal .home-image img {
-  max-height: 150px;
-  min-height: 150px;
+  max-height: 120px;
+  min-height: 120px;
 }
 
 @media
