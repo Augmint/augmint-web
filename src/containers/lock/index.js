@@ -15,9 +15,17 @@ import { StyledButtonContainer } from "./styles";
 
 
 class LockContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
+    }
+
+    handleSubmit(values) {
+        debugger;
     }
 
     render() {
@@ -45,7 +53,9 @@ class LockContainer extends React.Component {
                         header="Lock"
                         style={{maxWidth: '500px'}}
                     >
-                        <LockForm />
+                        <LockForm 
+                            onSubmit={this.handleSubmit}
+                        />
                     </Pblock>
                 </EthereumState>
             </Pcontainer>
