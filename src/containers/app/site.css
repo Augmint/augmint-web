@@ -6,6 +6,14 @@
  * 3. Use `%` instead of `vh` since `vh` is buggy in older mobile Safari.
  */
 
+#fakebody {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
 .Site {
     display: flex;
     flex-direction: column;
