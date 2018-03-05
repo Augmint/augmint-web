@@ -6,7 +6,7 @@
 describe("Augmint basic e2e", function() {
     const getUserAEurBalance = () => {
         return cy.get("[data-testid=userAEurBalance]").then(bal => {
-            return Number(Cypress.$("[data-testid=userAEurBalance]").text());
+            return Number(bal.text());
         });
     };
 
