@@ -60,13 +60,10 @@ describe("Augmint basic e2e", function() {
         cy
             .get("[data-testid=TryItConnectedPanel]")
             .should("contain", "You are connected");
-    });
-
-    beforeEach(function() {
         cy.ganacheTakeSnapshot();
     });
 
-    afterEach(function() {
+    after(function() {
         cy.ganacheRevertSnapshot();
     });
 
@@ -140,8 +137,7 @@ describe("Augmint basic e2e", function() {
     });
 
     it("Should repay a loan", function() {
-        cy.reload(); // required because ganache RevertSnapshot doesn't trigger events which messes up UI state
-        // take 2 loans to have enough aEur to repay one of them loan
+        // take 2 loans to have enough aEur to repay one of them
         getLoan(0, 200, 250, 0.31313)
             .then(res => {
                 return getLoan(0, 200, 250, 0.31313);
@@ -173,7 +169,6 @@ describe("Augmint basic e2e", function() {
     });
 
     it("Should transfer A-EUR", function() {
-        cy.reload(); // required because ganache RevertSnapshot doesn't trigger events which messes up UI state
         cy
             .get("[data-testid=myAccountMenuLink]")
             .click()
