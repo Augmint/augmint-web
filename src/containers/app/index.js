@@ -52,14 +52,23 @@ if (process.env.NODE_ENV === "production") {
 class App extends React.Component {
     constructor(props) {
       super(props);
-      this.openMenu = this.openMenu.bind(this);
+      this.toggleMenu = this.toggleMenu.bind(this);
       this.state = {
         showMobileMenu: false,
       };
     }
-    openMenu() {
+    toggleMenu() {
         this.setState({
           showMobileMenu: !this.state.showMobileMenu
+        });
+    }
+    componentDidMount() {
+        this.props.history.listen((location, action) => {
+            this.setState((state) => {
+                return {
+                    showMobileMenu: false
+                }
+            })
         });
     }
 
@@ -67,7 +76,7 @@ class App extends React.Component {
         return (
             <div className="Site">
                 <ScrollToTop />
-                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} showMenu={this.state.showMobileMenu} openMenu={this.openMenu} />
+                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />
                 <FlashMessages />
                 <div className="Site-content">
                     <Switch>

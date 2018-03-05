@@ -31,25 +31,12 @@ function AppMenuItem(props) {
 export default class AppMenu extends React.Component {
     constructor(props) {
       super(props);
-      this.openMenu = this.openMenu.bind(this);
-      this.closeMenu = this.closeMenu.bind(this);
+      this.toggleMenu = this.toggleMenu.bind(this);
     }
-    openMenu() {
-      const fakebody = document.getElementById("fakebody");
-      if(!this.props.showMenu) {
-        fakebody.style.overflow = 'hidden';
-      } else {
-        fakebody.style.overflow = 'initial';
-      }
-      this.props.openMenu();
+    toggleMenu() {
+      this.props.toggleMenu();
     }
-    closeMenu() {
-      const fakebody = document.getElementById("fakebody");
-      if(this.props.showMenu) {
-        fakebody.style.overflow = 'initial';
-        this.props.openMenu();
-      }
-    }
+
     render() {
         const { isConnected, network } = this.props.web3Connect;
         const { location } = this.props;
@@ -61,30 +48,30 @@ export default class AppMenu extends React.Component {
             <div>
                 <StyledNavContainer className={this.props.showMenu ? 'opened' : ''}>
                     <div>
-                        <HamburgerMenu src={this.props.showMenu? close : hamburgerMenu} onClick={this.openMenu} id="hamburgerMenu" className={this.props.showMenu ? 'opened' : ''} />
+                        <HamburgerMenu src={this.props.showMenu? close : hamburgerMenu} onClick={this.toggleMenu} id="hamburgerMenu" className={this.props.showMenu ? 'opened' : ''} />
                         <StyleNavList className={this.props.showMenu ? 'show' : 'hidden'}>
-                            <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
-                            <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
-                            <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/roadmap"} to="/roadmap">Roadmap</AppMenuItem>
+                            <AppMenuItem isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
+                            <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
+                            <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">Roadmap</AppMenuItem>
                             {isConnected && (
-                                <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/account"} to="/account">My Account</AppMenuItem>
+                                <AppMenuItem isActive={() => currentLocation === "/account"} to="/account">My Account</AppMenuItem>
                             )}
                             {isConnected && (
-                                <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
+                                <AppMenuItem isActive={() => currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
                             )
                             }
                             {isConnected && (
-                                <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
+                                <AppMenuItem isActive={() => currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
                             )
                             }
                             {isConnected && (
-                                <AppMenuItem onClick={this.closeMenu} isActive={() => currentLocation === "/reserves"} to="/reserves">Reserves</AppMenuItem>
+                                <AppMenuItem isActive={() => currentLocation === "/reserves"} to="/reserves">Reserves</AppMenuItem>
                             )
                             }
                         </StyleNavList>
                     </div>
                     {(!showConnection && !isConnected ) && (
-                        <Button type="a" tid="useAEurButton" to="/tryit" color="primary" onClick={this.closeMenu}>
+                        <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
                             Use A-EUR
                         </Button>
                     )}
