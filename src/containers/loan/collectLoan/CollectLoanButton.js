@@ -63,7 +63,7 @@ class CollectLoanButton extends React.Component {
                         <Form onSubmit={handleSubmit(this.handleSubmit)}>
                             <Button
                                 size="large"
-                                className="collectLoanButton"
+                                data-testid="collectLoanButton"
                                 primary
                                 disabled={submitting || isLoading || loansToCollect.length === 0}
                             >
