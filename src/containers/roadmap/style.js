@@ -5,6 +5,7 @@ import bulletPoint from '../../assets/images/bullet-point.svg';
 export const StyleRoadmapTitle = styled.h1`
     font-size: 42px;
     text-align: center;
+    text-transform: uppercase;
     margin-bottom: 80px;
 `;
 

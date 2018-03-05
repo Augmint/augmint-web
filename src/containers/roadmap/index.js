@@ -17,7 +17,7 @@ const statestLength = states.length;
 
 export default () => (
     <StyleRoadmap id="roadmap">
-        <StyleRoadmapTitle>ROADMAP</StyleRoadmapTitle>
+        <StyleRoadmapTitle>Roadmap</StyleRoadmapTitle>
         {states.map((state, index) => (
           <StyleRoadmapState key={state.state}>
               <div className="state">
