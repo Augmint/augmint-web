@@ -111,7 +111,8 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 {children}
                 <small>
                     <p>
-                        Tx hash: <small>{result.eth.result.receipt.transactionHash}</small>
+                        Tx hash:{" "}
+                        <small data-testid="transactionHash">{result.eth.result.receipt.transactionHash}</small>
                     </p>
                     <p>
                         Gas used: {result.eth.result.receipt.gasUsed.toString()} (from {result.eth.gasEstimate}{" "}

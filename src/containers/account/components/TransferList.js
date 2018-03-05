@@ -16,6 +16,7 @@ export default class TransferList extends React.Component {
                 >
                     <MyGridTable
                         divided={false}
+                        data-testid={`transferListItem-${tx.transactionHash}`}
                         key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
                     >
                         <Row columns={1}>

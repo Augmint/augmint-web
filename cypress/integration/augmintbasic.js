@@ -5,6 +5,9 @@
 
 describe("Augmint basic e2e", function() {
     const getUserAEurBalance = () => {
+        cy
+            .get("[data-testid=accountInfoBlock]")
+            .should("not.have.class", "loading");
         return cy.get("[data-testid=userAEurBalance]").then(bal => {
             return Number(bal.text());
         });
@@ -164,8 +167,79 @@ describe("Augmint basic e2e", function() {
             });
     });
 
-    it("Should transfer A-EUR");
+    it("Should transfer A-EUR", function() {
+        cy.reload(); // required because ganache RevertSnapshot doesn't trigger events which messes up UI state
+        cy
+            .get("[data-testid=myAccountMenuLink]")
+            .click()
+            .then(() => {
+                return getUserAEurBalance();
+            })
+            .then(aEurBalanceBefore => {
+                const amount = 100;
+                const fee = 0.2;
+                const toAddress = "0x5e09B21cCF42c1c30ca9C1C8D993d922E7c0d036";
+                const narrative = "cypress test transfer";
+                const expBal =
+                    Math.round((aEurBalanceBefore - amount - fee) * 100) / 100; // Js floating <3
+
+                cy
+                    .get("[data-testid=transferAmountInput]")
+                    .type(amount)
+                    .should("have.value", amount.toString());
+
+                cy
+                    .get("[data-testid=transferNarrativeField] > input")
+                    .type(narrative)
+                    .should("have.value", narrative);
+
+                cy.get("[data-testid=transferFeeAmount]").then(feeEl => {
+                    assert.equal(feeEl.text(), fee.toString());
+                });
+
+                cy
+                    .get("[data-testid=transferToAddressField] > input")
+                    .type(toAddress)
+                    .should("have.value", toAddress);
+
+                cy.get("[data-testid=submitTransferButton]").click();
+
+                cy
+                    .get("[data-testid=EthSubmissionSuccessPanel]")
+                    .within(() => {
+                        cy.contains("Successful transfer");
+                        cy.contains(
+                            "Sent " +
+                                amount +
+                                " A-EUR to " +
+                                toAddress.toLowerCase()
+                        );
+                        return cy.get("[data-testid=transactionHash]");
+                    })
+                    .then(hashEl => {
+                        const txHash = hashEl.text();
+                        cy
+                            .get("[data-testid=userAEurBalance]")
+                            .contains(expBal.toString())
+                            .then(res => {
+                                cy
+                                    .get("[data-testid=accountInfoBlock]")
+                                    .should("not.have.class", "loading");
+                            });
+                        cy
+                            .get(`[data-testid=transferListItem-${txHash}]`)
+                            .within(() => {
+                                cy.contains("To: " + toAddress);
+                                cy.contains("Amount: -" + amount);
+                                cy.contains("Fee: " + fee);
+                                cy.contains(narrative);
+                            });
+                    });
+            });
+    });
 
     it("Should buy/sell A-EUR on exchange");
+
+    it("Should lock and release A-EUR");
     it("Should buy A-EUR from reserve");
 });
