@@ -9,9 +9,9 @@ export default function LoansToCollectList(props) {
     const listItems =
         loansToCollect &&
         loansToCollect.map((loan, index) => (
-            <MyListGroup.Row key={`loanToCollect-${loan.loanId}`}>
+            <MyListGroup.Row key={`loanToCollect-${loan.id}`}>
                 <LoanListDetails loan={loan} />
-                {props.selectComponent && <props.selectComponent loanId={loan.loanId} />}
+                {props.selectComponent && <props.selectComponent loanId={loan.id} />}
             </MyListGroup.Row>
         ));
 

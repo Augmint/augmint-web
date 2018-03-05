@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="33" height="50" viewBox="0 0 33 50">
+    <defs>
+        <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="b" x1="50%" x2="50%" y1="36.412%" y2="86.327%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="99.558%" stop-color="#FFF" stop-opacity=".004"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="c" x1="50%" x2="50%" y1="0%" y2="125.938%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <rect width="31" height="32" x="1" y="15" stroke="url(#a)" rx="4"/>
+        <path stroke="url(#b)" d="M24 18v-6.395C24 7.405 20.642 4 16.5 4 12.358 4 9 7.405 9 11.605v5.3"/>
+        <path stroke="url(#c)" d="M13.556 32.433A5.042 5.042 0 0 1 11 28.037C11 25.255 13.239 23 16 23s5 2.255 5 5.037a5.042 5.042 0 0 1-2.556 4.396V38h-4.888v-5.567z"/>
+    </g>
+</svg>

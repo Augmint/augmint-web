@@ -13,6 +13,11 @@ export const howToUseHeader = {
     marginBottom: '14px',
     marginTop: '5px',
     textTransform: 'uppercase',
+    textAlign: 'center',
+};
+
+export const howToUseText = {
+    textAlign: 'justify',
 };
 
 export const useAEurButton = {
@@ -53,5 +58,5 @@ export const howItWorksImage = {
     minHeight: '79px',
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: '0',
+    justifyContent: 'center',
 };

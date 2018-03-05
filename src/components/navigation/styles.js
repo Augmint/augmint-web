@@ -4,10 +4,19 @@ import { ifProp } from 'styled-tools';
 import { NavLink } from "react-router-dom";
 
 import theme from '../../styles/theme';
+import { media, mediaopacity } from '../../styles/media';
 
 export const StyleNavList = styled.ul`
     display: flex;
     padding: 0;
+    margin: 0;
+    ${media.tablet`
+      margin-top: 25px;
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+    `}
 `;
 
 export const StyleNavLink = styled(NavLink)`
@@ -16,7 +25,6 @@ export const StyleNavLink = styled(NavLink)`
     text-transform: uppercase;
     white-space: nowrap;
     color: ${ifProp('active', theme.colors.white, theme.colors.opacWhite)};
-
     transition: color ${theme.transitions.standard};
 
     &:hover,
@@ -27,29 +35,64 @@ export const StyleNavLink = styled(NavLink)`
 
 export const StyleNavItem = styled.li`
     display: flex;
-    padding: 15px 5px;
-    
+    ${media.tablet`
+      text-align: center;
+    `}
+
     & + li {
         margin-left: 8px;
+        ${media.tablet`
+          margin-left: 0px;
+        `}
     }
-    `;
-    
-    export const StyledLogoContainer = styled.div`
+
+    & a {
+      padding: 15px 5px;
+      width: 100%;
+      ${media.tablet`
+        font-size: 18px;
+      `}
+    }
+`;
+
+export const StyledLogoContainer = styled.div`
     display: flex;
     justify-content: center;
-    `;
-    
-    export const StyledNavContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    padding: 0 15px;
-    z-index: 3;
-    background-color: ${theme.colors.primary};
-`
+`;
 
 export const StyledLogo = styled.img`
     margin-top: 80px;
+`;
+
+export const HamburgerMenu = styled.img`
+    display: none;
+    height: 32px;
+    width: 32px;
+    visibility: hidden;
+    ${mediaopacity.handheld`opacity: .8`}
+    ${media.tablet`
+      display: block;
+      visibility: visible;
+    `}
+`;
+
+export const StyledNavContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: fixed;
+    width: 100%;
+    padding: 15px;
+    z-index: 3;
+    background-color: ${theme.colors.primary};
+
+    &.opened {
+        ${mediaopacity.handheld`opacity: .95`}
+        height: 100%;
+    }
+
+    & ${StyleNavList}.show {
+        display: flex;
+        flex-direction: column;
+    }
 `;

@@ -2,5 +2,6 @@
   "baseUrl": "http://localhost:3000",
   "chromeWebSecurity": false,
   "defaultCommandTimeout": 10000,
-  "projectId": "jvuuf8"
+  "projectId": "jvuuf8",
+  "viewport": "macbook-13"
 }

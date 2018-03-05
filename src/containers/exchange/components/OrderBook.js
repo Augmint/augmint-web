@@ -51,7 +51,7 @@ const DummyCols = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress } = props;
 
-    const totalBuyAmount = buyOrders.reduce((sum, order) => order.ethValue + sum, 0).toFixed(6);
+    const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
     const totalSellAmount = sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString();
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];

@@ -4,6 +4,8 @@
 
 These instructions are about the dev environment for frontend development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
+[![Osx setup video](./devenvvideo_thumbnail.png)](https://www.youtube.com/watch?v=agu5LxOcy1c)
+
 ### OSX / Linux
 
 1. [Git](https://git-scm.com/download)
@@ -19,10 +21,11 @@ These instructions are about the dev environment for frontend development. For c
 
 1. Install yarn if you don't have it: `npm install -g yarn`
 1. ```
-   git clone https://github.com/Augmint/augmint-web.git
+   git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
    cd augmint-web
    yarn install
    cd augmint-contracts
+   git checkout master
    yarn install
    ```
 
@@ -45,10 +48,11 @@ _Note: windows install was not tested since a while, update on it is welcome_
 1. Install yarn if you don't have it: `npm install -g yarn`
 1. in Git bash:
     ```
-    git clone https://github.com/Augmint/augmint-web.git
+    git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
     cd augmint-web
     yarn install
     cd augmint-contracts
+    git checkout master
     yarn install
     ```
 
@@ -74,15 +78,13 @@ yarn install # if there were any node package changes in packages.json
 
 #### 3.1 Start ganache-cli (formerly testrpc)
 
-`yarn run ganache:runmigrate`  
+`yarn contracts:runmigrate`  
 or  
-`yarn run ganache:run` and in separate console:  
-`yarn run truffle:migrate`  
-or  
-`$(yarn bin)/truffle migrate --reset` to overwrite existing migration
+`yarn ganache:run` and in separate console:  
+`yarn contracts:migrate`
 
-NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: run `yarn run truffle:migratecopy`
-but make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
+NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: restart ganache and run `yarn contracts:migratecopy`  
+Make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
 
 #### 3.2. Launch local dev server
 
@@ -114,8 +116,8 @@ You can also use `gulp watch`
 
 _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
-* Start interactive: `yarn run cypress:open`
-* Start command line: `yarn run cypress:run`
+* Start interactive: `yarn cypress:open`
+* Start command line: `yarn cypress:run`
 
 ## Non ganache launches/deploys
 

@@ -1,47 +1,103 @@
 import styled from 'styled-components';
 import { media, mediaopacity } from '../../styles/media';
+import bulletPoint from '../../assets/images/bullet-point.svg';
 
-export const StyleRoadmapLine = styled.img`
-    padding: 0px 135px;
-    max-width: 100%;
+export const StyleRoadmapTitle = styled.h1`
+    font-size: 42px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 80px;
+`;
+
+export const StyleStateTitle = styled.h2`
+    font-size: 26px;
+    margin-bottom: 25px;
+`;
+
+export const StyleRoadmapLine = styled.div`
+    background-image: linear-gradient(to top, transparent 0%, #346262 15%, #346262 85%, transparent 100%);
+    height: 100%;
+    margin: 10px 0;
+    margin-left: 75px;
+    width: 2px;
     ${media.tablet`display: none;`}
 `;
 
-export const StyleRoadmapState = styled.div`
-    width:270px;
+export const StyleStateHeader = styled.div`
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    min-width: 250px;
     ${media.tablet`
       margin: auto;
-      margin-bottom: 65px;
+      max-width: 275px;
+      min-width: 275px;
     `}
+`;
+
+export const StyleRoadmapState = styled.div`
+    position: relative;
+    padding: 0  110px;
+    ${media.tablet`
+      margin: auto;
+      padding:0;
+    `}
+
+    &>div.state {
+      align-items: stretch;
+      display: flex;
+      justify-content: space-around;
+      ${media.tablet`
+        flex-direction: column;
+      `}
+    }
+
+    & .list-item {
+        padding-left: 30px;
+        background: url(${bulletPoint}) no-repeat left 6px;
+        background-size: 7px;
+        margin: 0;
+    }
+`;
+
+export const StyleStateList = styled.div`
+    padding-top: 58px;
+    padding-bottom: 45px;
+    max-width: 275px;
+    min-width: 275px;
+    ${media.tablet`
+      margin: auto;
+      margin-top: 15px;
+      padding-top: 0;
+      padding-bottom: 0;
+    `}
+`;
+
+export const StyleStateListItem = styled.p`
+    letter-spacing: 1px;
+    margin: 0;
+    margin-bottom: 5px;
 `;
 
 export const StyleRoadmap = styled.div`
     margin: auto;
     margin-top: 75px;
+    margin-bottom: 50px;
     padding: 0 20px;
     max-width: 1167px;
+    ${media.tablet`
+      margin-bottom: 0;
+    `}
 
-    &>div {
-      ${media.tablet`margin: auto;`}
-    }
-
-    &>div:nth-child(odd) ${StyleRoadmapLine} {
-      -moz-transform: scaleX(-1);
-      -o-transform: scaleX(-1);
-      -webkit-transform: scaleX(-1);
-      transform: scaleX(-1);
-      filter: FlipH;
-      -ms-filter: "FlipH";
-    }
-
-    &>div:nth-child(odd) ${StyleRoadmapState} {
-      float: right;
-      ${media.tablet`float: none;`}
+    &>div + div {
+      ${media.tablet`
+        margin-top: 65px;
+      `}
     }
 
     & h4:not(.state),
     h5,
-    p {
+    ${StyleStateListItem} {
       margin-top: 0;
       ${mediaopacity.handheld`opacity: .6`}
     }
@@ -52,11 +108,5 @@ export const StyleRoadmap = styled.div`
 
     & h4.state {
       margin-bottom: 14px;
-    }
-
-    & p {
-      font-size: 15px;
-      margin: 0;
-      margin-bottom: 5px;
     }
 `;
