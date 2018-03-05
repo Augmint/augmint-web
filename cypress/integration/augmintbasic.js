@@ -70,7 +70,7 @@ describe("Augmint basic e2e", function() {
         cy.ganacheRevertSnapshot();
     });
 
-    it("Click through main functions", function() {
+    it("Under the hood", function() {
         cy.visit("/under-the-hood");
 
         cy.get("[data-testid=baseInfoLink]").click();
@@ -95,21 +95,26 @@ describe("Augmint basic e2e", function() {
             .get("[data-testid=LoanManager-connectionStatus]")
             .should("contain", "connected | not loading");
         cy.screenshot("underthehood_loans");
+    });
 
-        cy.get("[data-testid=myAccountMenuLink]").click();
-        cy
-            .get("[data-testid=accountInfoBlock]")
-            .should(
-                "contain",
-                "Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3"
-            );
-        cy.get("[data-testid=transferListDiv]");
-
-        cy.get("[data-testid=getLoanMenuLink]").click();
-        cy.get("[data-testid=selectLoanProduct-0]").click();
-
+    it("Should display reserves", function() {
         cy.get("[data-testid=reservesMenuLink").click();
-        cy.get("[data-testid=totalSupply]").should("contain", "0 A-EUR");
+
+        cy.get("[data-testid=totalSupply]").should("not.contain", "?");
+        cy
+            .get("[data-testid=issuedByMonetaryBoard]")
+            .should("not.contain", "?");
+        cy
+            .get("[data-testid=reserveEthBalanceInFiat]")
+            .should("not.contain", "?");
+        cy.get("[data-testid=reserveTokenBalance]").should("not.contain", "?");
+
+        cy
+            .get("[data-testid=feeAccountTokenBalance]")
+            .should("not.contain", "?");
+        cy
+            .get("[data-testid=interestEarnedAccountTokenBalance]")
+            .should("not.contain", "?");
 
         cy.get("[data-testid=loansToCollectButton]").click();
         cy
