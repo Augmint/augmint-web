@@ -107,7 +107,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel testid={testid} {...other}>
+            <MsgPanel data-testid={testid} {...other}>
                 {children}
                 <small>
                     <p>

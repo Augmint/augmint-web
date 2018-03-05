@@ -1,6 +1,5 @@
 /*
     TODO:
-        - use testid everywhere
         - split into multiple
 */
 
@@ -16,18 +15,18 @@ describe("Augmint basic e2e", function() {
 
         cy.get("#selectLoanProduct-" + prodId).click();
         cy
-            .get("[testid='selectedLoanProductBlock']")
+            .get("[data-testid='selectedLoanProductBlock']")
             .should("contain", "Selected: loan product " + (prodId + 1));
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
-            .get("[testid='loanTokenAmountField']")
+            .get("[data-testid='loanTokenAmountField']")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy
-            .get("[testid='repaymentAmountField']")
+            .get("[data-testid='repaymentAmountField']")
             .should("have.value", repaymentAmount.toString());
         cy
-            .get("[testid='ethAmountField']")
+            .get("[data-testid='ethAmountField']")
             .should("have.value", ethAmount.toString());
 
         return getUserAEurBalance().then(aEurBalanceBefore => {
@@ -36,7 +35,7 @@ describe("Augmint basic e2e", function() {
                 10000;
             cy.get("#submitBtn").click();
             cy
-                .get("[testid='EthSubmissionSuccessPanel']")
+                .get("[data-testid='EthSubmissionSuccessPanel']")
                 .contains("You've got a loan");
             cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
             cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
@@ -54,7 +53,7 @@ describe("Augmint basic e2e", function() {
         cy.visit("/");
         cy.get("[tid='useAEurButton']").click();
         cy
-            .get("[testid='TryItConnectedPanel']")
+            .get("[data-testid='TryItConnectedPanel']")
             .should("contain", "You are connected");
     });
 
@@ -69,30 +68,32 @@ describe("Augmint basic e2e", function() {
     it("Click through main functions", function() {
         cy.visit("/under-the-hood");
 
-        cy.get("[testid='baseInfoLink']").click();
-        cy.get("[testid='web3ConnectionInfo']").contains("connected");
-        cy.get("[testid='userAccountTokenBalance']").should("not.contain", "?");
+        cy.get("[data-testid='baseInfoLink']").click();
+        cy.get("[data-testid='web3ConnectionInfo']").contains("connected");
+        cy
+            .get("[data-testid='userAccountTokenBalance']")
+            .should("not.contain", "?");
 
         cy.screenshot("underthehood_baseinfo");
 
-        cy.get("[testid='augmintInfoLink']").click();
+        cy.get("[data-testid='augmintInfoLink']").click();
         cy
-            .get("[testid='MonetarySupervisor-connectionStatus']")
+            .get("[data-testid='MonetarySupervisor-connectionStatus']")
             .should("contain", "connected | not loading");
         cy
-            .get("[testid='AugmintToken-connectionStatus']")
+            .get("[data-testid='AugmintToken-connectionStatus']")
             .should("contain", "connected | not loading");
         cy.screenshot("underthehood_augmint_baseinfo");
 
-        cy.get("[testid='loansInfoLink']").click();
+        cy.get("[data-testid='loansInfoLink']").click();
         cy
-            .get("[testid='LoanManager-connectionStatus']")
+            .get("[data-testid='LoanManager-connectionStatus']")
             .should("contain", "connected | not loading");
         cy.screenshot("underthehood_loans");
 
         cy.contains("My Account").click();
         cy
-            .get("[testid='accountInfoBlock']")
+            .get("[data-testid='accountInfoBlock']")
             .should(
                 "contain",
                 "Account: 0x76E7a0aEc3E43211395bBBB6Fa059bD6750F83c3"
@@ -103,11 +104,11 @@ describe("Augmint basic e2e", function() {
         cy.get("#selectLoanProduct-0").click();
 
         cy.contains("Reserves").click();
-        cy.get("[testid='totalSupply']").should("contain", "0 A-EUR");
+        cy.get("[data-testid='totalSupply']").should("contain", "0 A-EUR");
 
         cy.get("#loansToCollectBtn").click();
         cy
-            .get("[testid='loansToCollectBlock']")
+            .get("[data-testid='loansToCollectBlock']")
             .should("contain", "No defaulted and uncollected loan.");
     });
 
@@ -123,7 +124,7 @@ describe("Augmint basic e2e", function() {
                 cy.get(".loansToCollectButton").click();
                 cy.get(".collectLoanButton").click();
                 cy
-                    .get("[testid='EthSubmissionSuccessPanel']")
+                    .get("[data-testid='EthSubmissionSuccessPanel']")
                     .should("contain", "Successful collection of 1 loans");
             });
     });
@@ -147,7 +148,7 @@ describe("Augmint basic e2e", function() {
                 cy.get(".confirmRepayButton").click();
 
                 cy
-                    .get("[testid='EthSubmissionSuccessPanel']")
+                    .get("[data-testid='EthSubmissionSuccessPanel']")
                     .should("contain", "Successful repayment");
                 cy.get("#userAEurBalance").should("contain", expBal);
 

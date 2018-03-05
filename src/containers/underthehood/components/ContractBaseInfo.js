@@ -18,7 +18,7 @@ export function ContractBaseInfo(props) {
                     {contract == null ? "No contract" : contract.address}
                 </small>
             </p>
-            <p testid={`${props.contractName}-connectionStatus`}>
+            <p data-testid={`${props.contractName}-connectionStatus`}>
                 {isConnected ? "connected" : "not connected"} | {isLoading ? "Loading..." : "not loading"}
             </p>
 

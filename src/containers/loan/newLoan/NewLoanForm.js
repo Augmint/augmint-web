@@ -140,7 +140,7 @@ class NewLoanForm extends React.Component {
                             <ToolTip>Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate </ToolTip>
                         </Label>
 
-                        <input testid="loanTokenAmountField" />
+                        <input data-testid="loanTokenAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
@@ -161,7 +161,7 @@ class NewLoanForm extends React.Component {
                                 Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
-                        <input testid="repaymentAmountField" />
+                        <input data-testid="repaymentAmountField" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
@@ -183,7 +183,7 @@ class NewLoanForm extends React.Component {
                                 <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>
-                        <input testid="ethAmountField" />
+                        <input data-testid="ethAmountField" />
                         <Label>ETH</Label>
                     </Field>
                     <Button primary size="big" id="submitBtn" loading={submitting} disabled={pristine}>
