@@ -13,7 +13,7 @@ export function SelectLoanButton(props) {
             content="Select"
             icon="right chevron"
             key={props.productId}
-            id={`selectLoanProduct-${props.productId}`}
+            data-testid={`selectLoanProduct-${props.productId}`}
             as={Link}
             primary
             to={`/loan/new/${props.productId}`}

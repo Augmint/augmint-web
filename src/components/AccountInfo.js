@@ -23,7 +23,7 @@ export class AccountInfo extends React.Component {
                 <p>Account: {account.address}</p>
                 <p>ETH: {account.ethBalance}</p>
                 <p>
-                    A-EUR: <span id="userAEurBalance">{account.tokenBalance}</span>
+                    A-EUR: <span data-testid="userAEurBalance">{account.tokenBalance}</span>
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Pblock>

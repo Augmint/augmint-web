@@ -53,7 +53,9 @@ export default class TransferList extends React.Component {
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
                 {transfers && (
-                    <MyListGroup id="transferListDiv">{listItems.length === 0 ? noItemMessage : listItems}</MyListGroup>
+                    <MyListGroup data-testid="transferListDiv">
+                        {listItems.length === 0 ? noItemMessage : listItems}
+                    </MyListGroup>
                 )}
             </Pblock>
         );
