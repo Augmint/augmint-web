@@ -139,7 +139,7 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
 
 export async function processNewTransferTx(account, eventLog) {
     const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
-    const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer();
+    const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer;
     return _formatTransferLog(AugmintTransfer, account, eventLog);
 }
 
