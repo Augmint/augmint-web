@@ -22,14 +22,14 @@ describe("Augmint basic e2e", function() {
             .should("contain", "Selected: loan product " + (prodId + 1));
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
-            .get("[data-testid=loanTokenAmountField]")
+            .get("[data-testid=loanTokenAmountInput]")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy
-            .get("[data-testid=repaymentAmountField]")
+            .get("[data-testid=repaymentAmountInput]")
             .should("have.value", repaymentAmount.toString());
         cy
-            .get("[data-testid=ethAmountField]")
+            .get("[data-testid=ethAmountInput]")
             .should("have.value", ethAmount.toString());
 
         return getUserAEurBalance().then(aEurBalanceBefore => {
