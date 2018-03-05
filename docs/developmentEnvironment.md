@@ -25,6 +25,7 @@ These instructions are about the dev environment for frontend development. For c
    cd augmint-web
    yarn install
    cd augmint-contracts
+   git checkout master
    yarn install
    ```
 
@@ -51,6 +52,7 @@ _Note: windows install was not tested since a while, update on it is welcome_
     cd augmint-web
     yarn install
     cd augmint-contracts
+    git checkout master
     yarn install
     ```
 
