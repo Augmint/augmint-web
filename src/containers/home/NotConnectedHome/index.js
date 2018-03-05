@@ -59,13 +59,13 @@ export default class NotConnectedHome extends React.Component {
                                         {feature.image}
                                     </Segment>
                                     <Header as="h3" style={styles.keyFeaturesHeader}>{feature.title}</Header>
-                                    <p className="opac">{feature.text}</p>
+                                    <p className="opac" style={styles.howToUseText}>{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
                     </Segment>
                     <Segment basic textAlign="center" as="section"  className="advantages">
-                        <Header textAlign="center" as="h2">
+                        <Header textAlign="left" as="h2">
                             Great for business
                         </Header>
 
@@ -73,13 +73,13 @@ export default class NotConnectedHome extends React.Component {
                             {keyBenefits.filter(item => item.type === "business").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">
-                                        <p className="opac">{item.text}</p>
+                                        <p className="opac" style={styles.howToUseText}>{item.text}</p>
                                     </div>
                                 </Grid.Column>
                             ))}
                         </Grid>
 
-                        <Header textAlign="center" as="h2" style={{ marginTop: "100px" }}>
+                        <Header textAlign="left" as="h2" style={{ marginTop: "100px" }}>
                             And for individuals
                         </Header>
 
@@ -87,7 +87,7 @@ export default class NotConnectedHome extends React.Component {
                             {keyBenefits.filter(item => item.type === "individual").map(item => (
                                 <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
                                     <div className="list-item">
-                                        <p className="opac">{item.text}</p>
+                                        <p className="opac" style={styles.howToUseText}>{item.text}</p>
                                     </div>
                                 </Grid.Column>
                             ))}
@@ -119,69 +119,69 @@ export default class NotConnectedHome extends React.Component {
                     </Responsive>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
-                        <p className="opac">
+                        <p className="opac loans" style={styles.howToUseText}>
                             Use your cryptocurrencies without<br />losing them. Get a
                             loan and spend easily.
                         </p>
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{justifyContent: 'space-around'}}>
                             {howItWorks.filter(feature => feature.type === "loan").map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                    <Segment style={styles.howItWorksImage} basic>
+                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk} style={{ padding: 50, paddingBottom: 0 }}>
+                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
-                                    <Header as="h3" style={styles.howToUseHeader}>{feature.title}</Header>
-                                    <p className="opac">{feature.text}</p>
+                                    <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
+                                    <p className="opac" style={styles.howToUseText}>{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button type="a" to="/tryit" color="primary">
+                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center"}}>
+                            <Button type="a" to="/tryit" color="primary" className="try-now" >
                                 Try now
                             </Button>
                         </Segment>
                         <Header as="h2">Buy and sell A-Euro</Header>
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{justifyContent: 'space-around'}}>
                             {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                    <Segment style={styles.howItWorksImage} basic>
+                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk} style={{ padding: 50, paddingBottom: 0 }}>
+                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
                                     <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
-                                    <p className="opac">{feature.text}</p>
+                                    <p className="opac" style={styles.howToUseText}>{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button type="a" to="/tryit" color="primary">
+                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center"}}>
+                            <Button type="a" to="/tryit" color="primary" className="try-now" >
                                 Try now
                             </Button>
                         </Segment>
                         <Header as="h2">How to use your A-Euro</Header>
                         <Grid columns="equal" className="margin">
                             {howItWorks.filter(feature => feature.type === "use").map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                    <Segment style={styles.howItWorksImage} basic>
+                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk} style={{ padding: 50, paddingBottom: 0 }}>
+                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
                                     <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
-                                    <p className="opac">{feature.text}</p>
+                                    <p className="opac" style={styles.howToUseText}>{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
                         <Header as="h2">Earn more with A-Euro, get premium by locking</Header>
-                        <Grid columns="equal">
+                        <Grid columns="equal" style={{justifyContent: 'space-around'}}>
                             {howItWorks.filter(feature => feature.type === "lock").map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk}>
-                                    <Segment style={styles.howItWorksImage} basic>
+                                <Grid.Column mobile="16" computer="5" textAlign="left" key={feature.pk} style={{ padding: 50, paddingBottom: 0 }}>
+                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
                                         {feature.image}
                                     </Segment>
                                     <Header as="h4" style={styles.howToUseHeader}>{feature.title}</Header>
-                                    <p className="opac">{feature.text}</p>
+                                    <p className="opac" style={styles.howToUseText}>{feature.text}</p>
                                 </Grid.Column>
                             ))}
                         </Grid>
-                        <Segment basic style={{ margin: "50px 0", textAlign: "center"}}>
-                            <Button type="a" to="/tryit" color="primary">
+                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center"}}>
+                            <Button type="a" to="/tryit" color="primary" className="try-now" >
                                 Try now
                             </Button>
                         </Segment>
