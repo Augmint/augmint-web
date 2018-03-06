@@ -24,16 +24,64 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import { default as Web3 } from "web3";
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+import { default as Contract } from "truffle-contract";
+import augmintToken_artifacts from "../../src/contractsBuild/TokenAEur.json";
+import monetarySupervisor_artifacts from "../../src/contractsBuild/MonetarySupervisor.json";
+import augmintReserves_artifacts from "../../src/contractsBuild/AugmintReserves.json";
+
+let augmintTokenInstance = null;
+let monetarySupervisorInstance = null;
+let augmintReservesInstance = null;
+
+let accounts = null;
 let snapshotId;
 
-if (typeof web3.currentProvider.sendAsync !== "function") {
-    web3.currentProvider.sendAsync = function() {
-        return web3.currentProvider.send.apply(web3.currentProvider, arguments);
-    };
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+try {
+    const augmintTokenContract = Contract(augmintToken_artifacts);
+    augmintTokenContract.setProvider(web3.currentProvider);
+
+    const monetarySupervisorContract = Contract(monetarySupervisor_artifacts);
+    monetarySupervisorContract.setProvider(web3.currentProvider);
+
+    const augmintReservesContract = Contract(augmintReserves_artifacts);
+    augmintReservesContract.setProvider(web3.currentProvider);
+
+    web3.eth.net.getId().then(networkId => {
+        augmintTokenContract.setNetwork(networkId);
+        augmintTokenInstance = augmintTokenContract.at(
+            augmintTokenContract.address
+        );
+
+        monetarySupervisorContract.setNetwork(networkId);
+        monetarySupervisorInstance = monetarySupervisorContract.at(
+            monetarySupervisorContract.address
+        );
+
+        augmintReservesContract.setNetwork(networkId);
+        augmintReservesInstance = augmintReservesContract.at(
+            augmintReservesContract.address
+        );
+    });
+
+    web3.eth.getAccounts().then(_accounts => {
+        accounts = _accounts;
+    });
+
+    if (typeof web3.currentProvider.sendAsync !== "function") {
+        web3.currentProvider.sendAsync = function() {
+            return web3.currentProvider.send.apply(
+                web3.currentProvider,
+                arguments
+            );
+        };
+    }
+    const web3Version = web3.version.api ? web3.version.api : web3.version;
+    console["log"]("web3 connected", web3Version);
+} catch (error) {
+    throw new Error(`Error while connecting to Augmint contracts\n${error}`);
 }
-const web3Version = web3.version.api ? web3.version.api : web3.version;
-console["log"]("web3 connected", web3Version);
 
 Cypress.Commands.add("ganacheTakeSnapshot", (options = {}) => {
     const startTime = new Date().getTime();
@@ -98,4 +146,49 @@ Cypress.Commands.add("ganacheRevertSnapshot", (options = {}) => {
             }
         );
     });
+});
+
+// get user balance from ganache. Usage: cy.getUserAEurBalance or this.startingAeurBalance (set in before each)
+Cypress.Commands.add("getUserAEurBalance", (account, options = {}) => {
+    if (typeof account === "undefined") {
+        account = accounts[0];
+    }
+
+    return augmintTokenInstance.balanceOf(account).then(bal => {
+        return Number(bal) / 100;
+    });
+});
+
+// get user balance from UI.
+Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
+    cy
+        .get("[data-testid=accountInfoBlock]")
+        .should("not.have.class", "loading");
+
+    cy
+        .get("[data-testid=userAEurBalance]")
+        .invoke("text")
+        .should("equal", balance.toString());
+});
+
+// issue AEUR to account
+Cypress.Commands.add("issueTo", (amount, to, options = {}) => {
+    if (typeof to === "undefined") {
+        to = accounts[0];
+    }
+
+    return monetarySupervisorInstance
+        .issueToReserve(amount, {
+            from: accounts[0],
+            gas: 400000
+        })
+        .then(res => {
+            return augmintReservesInstance.withdrawTokens(
+                augmintTokenInstance.address,
+                to,
+                amount,
+                "withdrawal for tests",
+                { from: accounts[0] }
+            );
+        });
 });
