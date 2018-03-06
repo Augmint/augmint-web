@@ -2,7 +2,7 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { Label } from "semantic-ui-react";
 
-import { Form } from "components/BaseComponents";
+import { Form, Validations } from "components/BaseComponents";
 
 import Button from "components/button";
 
@@ -34,13 +34,25 @@ const LockTerms = [
     }
 ];
 
-const RadioInput = (props) => (<input 
-    type="radio"
-    name={props.input.name}
-    value={props.val}
-/>);
+const RadioInput = (props) => (
+    <input
+        type="radio"
+        name={props.input.name}
+        value={props.val}
+        onChange={props.input.onChange}
+    />
+);
 
 class LockContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onTermChange = this.onTermChange.bind(this);
+    }
+
+    
+    onTermChange(input, nextVal) {
+        debugger;
+    }
 
     render() {
         const { onSubmit, handleSubmit } = this.props;
@@ -54,13 +66,9 @@ class LockContainer extends React.Component {
                     as={Form.Input}
                     type="number"
                     label="Amount to lock:"
-                    // disabled={submitting || isLoading}
                     disabled={false}
-                    // onChange={this.onTokenAmountChange}
-                    onChange={() =>{}}
-                    // validate={tokenAmountValidations}
-                    validate={()=>{}}
-                    // normalize={Normalizations.twoDecimals}
+                    onChange={() => { }}
+                    validate={[Validations.required]}
                     labelPosition="right"
                 >
                     <input />
@@ -77,16 +85,17 @@ class LockContainer extends React.Component {
                         </TermTableRow>
                     </TermTableHeader>
                     <TermTableBody>
-                        {LockTerms.map(term => {
-                            console.log(term.value);
+                        {LockTerms.map((term, i) => {
                             return (<TermTableRow key={`lock-term-${term.value}`}>
                                 <TermTableCell>
                                     <Field
                                         name="term"
                                         val={term.value}
                                         component={RadioInput}
-                                        onChange={this.termChange}
-                                        >
+                                        onChange={this.onTermChange}
+                                        validate={[Validations.required]}
+                                        checked={i === 0} // first item is selected by default
+                                    >
                                         <input />
                                     </Field>
                                 </TermTableCell>
@@ -94,17 +103,17 @@ class LockContainer extends React.Component {
                                     <label>{term.label}</label>
                                 </TermTableCell>
                                 <TermTableCell>
-                                        3.2% p.a.
+                                    3.2% p.a.
                                 </TermTableCell>
                                 <TermTableCell textAlign="right">
-                                        14.55 A£
+                                    14.55 A£
                                 </TermTableCell>
                             </TermTableRow>
-                        )})}
+                            )
+                        })}
                     </TermTableBody>
                 </TermTable>
-
-                <Button type="submit">Lock 50 AE for 1 year</Button>
+                <Button type="submit">Lock</Button>
 
             </Form>
         );

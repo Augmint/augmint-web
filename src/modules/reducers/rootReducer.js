@@ -6,6 +6,7 @@ import augmintToken from "modules/reducers/augmintToken";
 import monetarySupervisor from "modules/reducers/monetarySupervisor";
 import loanManager from "modules/reducers/loanManager";
 import loanTransactions from "modules/reducers/loanTransactions";
+import lockManager from "modules/reducers/lockManager";
 import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
@@ -23,6 +24,7 @@ export default combineReducers({
     monetarySupervisor,
     loanManager,
     loanTransactions,
+    lockManager,
     userBalances,
     userTransfers,
     exchange,
