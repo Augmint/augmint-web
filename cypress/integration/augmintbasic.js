@@ -4,15 +4,6 @@
 */
 
 describe("Augmint basic e2e", function() {
-    const getUserAEurBalance = () => {
-        cy
-            .get("[data-testid=accountInfoBlock]")
-            .should("not.have.class", "loading");
-        return cy.get("[data-testid=userAEurBalance]").then(bal => {
-            return Number(bal.text());
-        });
-    };
-
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.get("[data-testid=getLoanMenuLink]").click();
 
@@ -32,35 +23,31 @@ describe("Augmint basic e2e", function() {
             .get("[data-testid=ethAmountInput]")
             .should("have.value", ethAmount.toString());
 
-        return getUserAEurBalance().then(aEurBalanceBefore => {
-            const expBal =
-                Math.round((aEurBalanceBefore + disbursedAmount) * 10000) /
-                10000;
-            cy.get("[data-testid=submitBtn]").click();
-            cy
-                .get("[data-testid=EthSubmissionSuccessPanel]")
-                .contains("You've got a loan");
-            cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
-            cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
-            cy.contains("Collateral in escrow: " + ethAmount + " ETH");
-            cy
-                .get("[data-testid=userAEurBalance]")
-                .contains(expBal.toString())
-                .then(res => {
-                    cy
-                        .get("[data-testid=accountInfoBlock]")
-                        .should("not.have.class", "loading");
-                });
-        });
+        cy.get("[data-testid=submitBtn]").click();
+
+        return cy
+            .get("[data-testid=EthSubmissionSuccessPanel]")
+            .within(() => {
+                cy.contains("You've got a loan");
+                cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
+                cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
+                cy.contains("Collateral in escrow: " + ethAmount + " ETH");
+            })
+            .as("@submissionSuccess");
     };
 
     before(function() {
+        cy.ganacheTakeSnapshot();
+        cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)
         cy.visit("/");
         cy.get("[data-testid=useAEurButton]").click();
         cy
             .get("[data-testid=TryItConnectedPanel]")
             .should("contain", "You are connected");
-        cy.ganacheTakeSnapshot();
+    });
+
+    beforeEach(function() {
+        cy.getUserAEurBalance().as("startingAeurBalance");
     });
 
     after(function() {
@@ -121,121 +108,94 @@ describe("Augmint basic e2e", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(6, 1000, 1010.11, 1.06541)
-            .then(res => {
-                return getUserAEurBalance();
-            })
-            .then(aEurBalanceBefore => {
-                cy.get("[data-testid=reservesMenuLink").click();
-                // // TODO: check reserves
-                cy.get("[data-testid=loansToCollectButton]").click();
-                cy.get("[data-testid=collectLoanButton]").click();
-                cy
-                    .get("[data-testid=EthSubmissionSuccessPanel]")
-                    .should("contain", "Successful collection of 1 loans");
-            });
+        getLoan(6, 1000, 1010.11, 1.06541).then(res => {
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 1000);
+            cy.get("[data-testid=reservesMenuLink").click();
+            // // TODO: check reserves
+            cy.get("[data-testid=loansToCollectButton]").click();
+            cy.get("[data-testid=collectLoanButton]").click();
+            cy
+                .get("[data-testid=EthSubmissionSuccessPanel]")
+                .should("contain", "Successful collection of 1 loans");
+            cy
+                .get("[data-testid=loansToCollectBlock]")
+                .should("contain", "No defaulted and uncollected loan.");
+        });
     });
 
     it("Should repay a loan", function() {
-        // take 2 loans to have enough aEur to repay one of them
-        getLoan(0, 200, 250, 0.31313)
-            .then(res => {
-                return getLoan(0, 200, 250, 0.31313);
-            })
-            .then(res => {
-                return getUserAEurBalance();
-            })
-            .then(aEurBalanceBefore => {
-                const expBal =
-                    Math.round((aEurBalanceBefore - 250) * 10000) / 10000;
+        getLoan(0, 200, 250, 0.31313).then(() => {
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 200);
 
-                cy.contains("this loan's page").click();
-                cy.get("[data-testid=repayLoanButton]").click();
-                cy.get("[data-testid=confirmRepayButton]").click();
+            cy.contains("this loan's page").click();
+            cy.get("[data-testid=repayLoanButton]").click();
+            cy.get("[data-testid=confirmRepayButton]").click();
 
-                cy
-                    .get("[data-testid=EthSubmissionSuccessPanel]")
-                    .should("contain", "Successful repayment");
-                cy
-                    .get("[data-testid=userAEurBalance]")
-                    .should("contain", expBal);
+            cy
+                .get("[data-testid=EthSubmissionSuccessPanel]")
+                .should("contain", "Successful repayment");
 
-                cy.get("[data-testid=accountInfoBlock]");
-                cy.should("not.have.class", "loading");
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 50); // interest
 
-                cy.get("[data-testid=myAccountMenuLink]").click();
-                // TODO loan removed, status etc.
-            });
+            // TODO loan removed, status etc.
+            //cy.get("[data-testid=myAccountMenuLink]").click();
+        });
     });
 
     it("Should transfer A-EUR", function() {
+        const amount = 100;
+        const fee = 0.2;
+        const toAddress = "0x5e09B21cCF42c1c30ca9C1C8D993d922E7c0d036";
+        const narrative = "cypress test transfer";
+        const expBal = this.startingAeurBalance - amount - fee;
+
+        cy.get("[data-testid=myAccountMenuLink]").click();
+
         cy
-            .get("[data-testid=myAccountMenuLink]")
-            .click()
+            .get("[data-testid=transferAmountInput]")
+            .type(amount)
+            .should("have.value", amount.toString());
+
+        cy
+            .get("[data-testid=transferNarrativeField] > input")
+            .type(narrative)
+            .should("have.value", narrative);
+
+        cy
+            .get("[data-testid=transferFeeAmount]")
+            .invoke("text")
+            .should("equal", fee.toString());
+
+        cy
+            .get("[data-testid=transferToAddressField] > input")
+            .type(toAddress)
+            .should("have.value", toAddress);
+
+        cy.get("[data-testid=submitTransferButton]").click();
+
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").within(() => {
+            cy.contains("Successful transfer");
+            cy.contains(
+                "Sent " + amount + " A-EUR to " + toAddress.toLowerCase()
+            );
+        });
+
+        cy
+            .get("[data-testid=transactionHash]")
+            .invoke("text")
+            .as("txHash")
             .then(() => {
-                return getUserAEurBalance();
-            })
-            .then(aEurBalanceBefore => {
-                const amount = 100;
-                const fee = 0.2;
-                const toAddress = "0x5e09B21cCF42c1c30ca9C1C8D993d922E7c0d036";
-                const narrative = "cypress test transfer";
-                const expBal =
-                    Math.round((aEurBalanceBefore - amount - fee) * 100) / 100; // Js floating <3
-
                 cy
-                    .get("[data-testid=transferAmountInput]")
-                    .type(amount)
-                    .should("have.value", amount.toString());
-
-                cy
-                    .get("[data-testid=transferNarrativeField] > input")
-                    .type(narrative)
-                    .should("have.value", narrative);
-
-                cy.get("[data-testid=transferFeeAmount]").then(feeEl => {
-                    assert.equal(feeEl.text(), fee.toString());
-                });
-
-                cy
-                    .get("[data-testid=transferToAddressField] > input")
-                    .type(toAddress)
-                    .should("have.value", toAddress);
-
-                cy.get("[data-testid=submitTransferButton]").click();
-
-                cy
-                    .get("[data-testid=EthSubmissionSuccessPanel]")
+                    .get(`[data-testid=transferListItem-${this.txHash}]`)
                     .within(() => {
-                        cy.contains("Successful transfer");
-                        cy.contains(
-                            "Sent " +
-                                amount +
-                                " A-EUR to " +
-                                toAddress.toLowerCase()
-                        );
-                        return cy.get("[data-testid=transactionHash]");
-                    })
-                    .then(hashEl => {
-                        const txHash = hashEl.text();
-                        cy
-                            .get("[data-testid=userAEurBalance]")
-                            .contains(expBal.toString())
-                            .then(res => {
-                                cy
-                                    .get("[data-testid=accountInfoBlock]")
-                                    .should("not.have.class", "loading");
-                            });
-                        cy
-                            .get(`[data-testid=transferListItem-${txHash}]`)
-                            .within(() => {
-                                cy.contains("To: " + toAddress);
-                                cy.contains("Amount: -" + amount);
-                                cy.contains("Fee: " + fee);
-                                cy.contains(narrative);
-                            });
+                        cy.contains("To: " + toAddress);
+                        cy.contains("Amount: -" + amount);
+                        cy.contains("Fee: " + fee);
+                        cy.contains(narrative);
                     });
             });
+
+        cy.assertUserAEurBalanceOnUI(expBal);
     });
 
     it("Should buy/sell A-EUR on exchange");
