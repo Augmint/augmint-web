@@ -8,20 +8,14 @@ describe("Augmint basic e2e", function() {
         cy.get("[data-testid=getLoanMenuLink]").click();
 
         cy.get(`[data-testid=selectLoanProduct-${prodId}]`).click();
-        cy
-            .get("[data-testid=selectedLoanProductBlock]")
-            .should("contain", "Selected: loan product " + (prodId + 1));
+        cy.get("[data-testid=selectedLoanProductBlock]").should("contain", "Selected: loan product " + (prodId + 1));
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("[data-testid=loanTokenAmountInput]")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
-        cy
-            .get("[data-testid=repaymentAmountInput]")
-            .should("have.value", repaymentAmount.toString());
-        cy
-            .get("[data-testid=ethAmountInput]")
-            .should("have.value", ethAmount.toString());
+        cy.get("[data-testid=repaymentAmountInput]").should("have.value", repaymentAmount.toString());
+        cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=submitBtn]").click();
 
@@ -41,9 +35,7 @@ describe("Augmint basic e2e", function() {
         cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)
         cy.visit("/");
         cy.get("[data-testid=useAEurButton]").click();
-        cy
-            .get("[data-testid=TryItConnectedPanel]")
-            .should("contain", "You are connected");
+        cy.get("[data-testid=TryItConnectedPanel]").should("contain", "You are connected");
     });
 
     beforeEach(function() {
@@ -59,25 +51,17 @@ describe("Augmint basic e2e", function() {
 
         cy.get("[data-testid=baseInfoLink]").click();
         cy.get("[data-testid=web3ConnectionInfo]").contains("connected");
-        cy
-            .get("[data-testid=userAccountTokenBalance]")
-            .should("not.contain", "?");
+        cy.get("[data-testid=userAccountTokenBalance]").should("not.contain", "?");
 
         cy.screenshot("underthehood_baseinfo");
 
         cy.get("[data-testid=augmintInfoLink]").click();
-        cy
-            .get("[data-testid=MonetarySupervisor-connectionStatus]")
-            .should("contain", "connected | not loading");
-        cy
-            .get("[data-testid=AugmintToken-connectionStatus]")
-            .should("contain", "connected | not loading");
+        cy.get("[data-testid=MonetarySupervisor-connectionStatus]").should("contain", "connected | not loading");
+        cy.get("[data-testid=AugmintToken-connectionStatus]").should("contain", "connected | not loading");
         cy.screenshot("underthehood_augmint_baseinfo");
 
         cy.get("[data-testid=loansInfoLink]").click();
-        cy
-            .get("[data-testid=LoanManager-connectionStatus]")
-            .should("contain", "connected | not loading");
+        cy.get("[data-testid=LoanManager-connectionStatus]").should("contain", "connected | not loading");
         cy.screenshot("underthehood_loans");
     });
 
@@ -85,25 +69,15 @@ describe("Augmint basic e2e", function() {
         cy.get("[data-testid=reservesMenuLink").click();
 
         cy.get("[data-testid=totalSupply]").should("not.contain", "?");
-        cy
-            .get("[data-testid=issuedByMonetaryBoard]")
-            .should("not.contain", "?");
-        cy
-            .get("[data-testid=reserveEthBalanceInFiat]")
-            .should("not.contain", "?");
+        cy.get("[data-testid=issuedByMonetaryBoard]").should("not.contain", "?");
+        cy.get("[data-testid=reserveEthBalanceInFiat]").should("not.contain", "?");
         cy.get("[data-testid=reserveTokenBalance]").should("not.contain", "?");
 
-        cy
-            .get("[data-testid=feeAccountTokenBalance]")
-            .should("not.contain", "?");
-        cy
-            .get("[data-testid=interestEarnedAccountTokenBalance]")
-            .should("not.contain", "?");
+        cy.get("[data-testid=feeAccountTokenBalance]").should("not.contain", "?");
+        cy.get("[data-testid=interestEarnedAccountTokenBalance]").should("not.contain", "?");
 
         cy.get("[data-testid=loansToCollectButton]").click();
-        cy
-            .get("[data-testid=loansToCollectBlock]")
-            .should("contain", "No defaulted and uncollected loan.");
+        cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
     });
 
     it("Should get and collect a loan", function() {
@@ -114,12 +88,8 @@ describe("Augmint basic e2e", function() {
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
             cy.get("[data-testid=collectLoanButton]").click();
-            cy
-                .get("[data-testid=EthSubmissionSuccessPanel]")
-                .should("contain", "Successful collection of 1 loans");
-            cy
-                .get("[data-testid=loansToCollectBlock]")
-                .should("contain", "No defaulted and uncollected loan.");
+            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Successful collection of 1 loans");
+            cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
         });
     });
 
@@ -131,9 +101,7 @@ describe("Augmint basic e2e", function() {
             cy.get("[data-testid=repayLoanButton]").click();
             cy.get("[data-testid=confirmRepayButton]").click();
 
-            cy
-                .get("[data-testid=EthSubmissionSuccessPanel]")
-                .should("contain", "Successful repayment");
+            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Successful repayment");
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 50); // interest
 
@@ -175,9 +143,7 @@ describe("Augmint basic e2e", function() {
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").within(() => {
             cy.contains("Successful transfer");
-            cy.contains(
-                "Sent " + amount + " A-EUR to " + toAddress.toLowerCase()
-            );
+            cy.contains("Sent " + amount + " A-EUR to " + toAddress.toLowerCase());
         });
 
         cy
@@ -185,14 +151,12 @@ describe("Augmint basic e2e", function() {
             .invoke("text")
             .as("txHash")
             .then(() => {
-                cy
-                    .get(`[data-testid=transferListItem-${this.txHash}]`)
-                    .within(() => {
-                        cy.contains("To: " + toAddress);
-                        cy.contains("Amount: -" + amount);
-                        cy.contains("Fee: " + fee);
-                        cy.contains(narrative);
-                    });
+                cy.get(`[data-testid=transferListItem-${this.txHash}]`).within(() => {
+                    cy.contains("To: " + toAddress);
+                    cy.contains("Amount: -" + amount);
+                    cy.contains("Fee: " + fee);
+                    cy.contains(narrative);
+                });
             });
 
         cy.assertUserAEurBalanceOnUI(expBal);

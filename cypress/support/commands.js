@@ -1,28 +1,3 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import { default as Web3 } from "web3";
 import { default as Contract } from "truffle-contract";
 import augmintToken_artifacts from "../../src/contractsBuild/TokenAEur.json";
@@ -50,19 +25,13 @@ try {
 
     web3.eth.net.getId().then(networkId => {
         augmintTokenContract.setNetwork(networkId);
-        augmintTokenInstance = augmintTokenContract.at(
-            augmintTokenContract.address
-        );
+        augmintTokenInstance = augmintTokenContract.at(augmintTokenContract.address);
 
         monetarySupervisorContract.setNetwork(networkId);
-        monetarySupervisorInstance = monetarySupervisorContract.at(
-            monetarySupervisorContract.address
-        );
+        monetarySupervisorInstance = monetarySupervisorContract.at(monetarySupervisorContract.address);
 
         augmintReservesContract.setNetwork(networkId);
-        augmintReservesInstance = augmintReservesContract.at(
-            augmintReservesContract.address
-        );
+        augmintReservesInstance = augmintReservesContract.at(augmintReservesContract.address);
     });
 
     web3.eth.getAccounts().then(_accounts => {
@@ -71,10 +40,7 @@ try {
 
     if (typeof web3.currentProvider.sendAsync !== "function") {
         web3.currentProvider.sendAsync = function() {
-            return web3.currentProvider.send.apply(
-                web3.currentProvider,
-                arguments
-            );
+            return web3.currentProvider.send.apply(web3.currentProvider, arguments);
         };
     }
     const web3Version = web3.version.api ? web3.version.api : web3.version;
@@ -96,9 +62,7 @@ Cypress.Commands.add("ganacheTakeSnapshot", (options = {}) => {
             },
             function(error, res) {
                 if (error) {
-                    reject(
-                        new Error("Can't take snapshot with web3\n" + error)
-                    );
+                    reject(new Error("Can't take snapshot with web3\n" + error));
                 } else {
                     const t = new Date().getTime();
                     snapshotId = res.result;
@@ -127,14 +91,7 @@ Cypress.Commands.add("ganacheRevertSnapshot", (options = {}) => {
             function(error, res) {
                 if (error) {
                     // TODO: this error is not bubbling up to truffle test run :/
-                    reject(
-                        new Error(
-                            "Can't revert snapshot with web3. snapshotId: " +
-                                snapshotId +
-                                "\n" +
-                                error
-                        )
-                    );
+                    reject(new Error("Can't revert snapshot with web3. snapshotId: " + snapshotId + "\n" + error));
                 } else {
                     const t = new Date().getTime();
                     console["log"](
@@ -161,9 +118,7 @@ Cypress.Commands.add("getUserAEurBalance", (account, options = {}) => {
 
 // get user balance from UI.
 Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
-    cy
-        .get("[data-testid=accountInfoBlock]")
-        .should("not.have.class", "loading");
+    cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
     cy
         .get("[data-testid=userAEurBalance]")
