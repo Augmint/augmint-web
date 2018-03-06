@@ -1,10 +1,6 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
-import { connect } from "react-redux";
-import { Label, Checkbox } from "semantic-ui-react";
-
-import { connectWeb3 } from "modules/web3Provider";
-import augmintTokenProvider from "modules/augmintTokenProvider";
+import { Label } from "semantic-ui-react";
 
 import { Form } from "components/BaseComponents";
 
@@ -38,15 +34,20 @@ const LockTerms = [
     }
 ];
 
+const RadioInput = (props) => (<input 
+    type="radio"
+    name={props.input.name}
+    value={props.val}
+/>);
+
 class LockContainer extends React.Component {
-    componentDidMount() {
-        connectWeb3();
-        augmintTokenProvider();
-    }
 
     render() {
+        const { onSubmit, handleSubmit } = this.props;
         return (
-            <Form>
+            <Form
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <Field
                     name="lockAmount"
                     component={Form.Field}
@@ -76,13 +77,14 @@ class LockContainer extends React.Component {
                         </TermTableRow>
                     </TermTableHeader>
                     <TermTableBody>
-                        {LockTerms.map(term => (
-                            <TermTableRow key={`lock-term-${term.value}`}>
+                        {LockTerms.map(term => {
+                            console.log(term.value);
+                            return (<TermTableRow key={`lock-term-${term.value}`}>
                                 <TermTableCell>
                                     <Field
                                         name="term"
-                                        value={term.value}
-                                        component={Checkbox}
+                                        val={term.value}
+                                        component={RadioInput}
                                         onChange={this.termChange}
                                         >
                                         <input />
@@ -98,7 +100,7 @@ class LockContainer extends React.Component {
                                         14.55 A£
                                 </TermTableCell>
                             </TermTableRow>
-                        ))}
+                        )})}
                     </TermTableBody>
                 </TermTable>
 
@@ -109,8 +111,6 @@ class LockContainer extends React.Component {
     }
 }
 
-const connectedLockForm = connect(()=>{})(LockContainer);
-
 export default reduxForm({
     form: "LockForm",
-})(connectedLockForm);
+})(LockContainer);
