@@ -155,7 +155,7 @@ class RepayLoanPage extends React.Component {
                                 {this.state.loan.isRepayable && (
                                     <Button
                                         primary
-                                        className="confirmRepayButton"
+                                        data-testid="confirmRepayButton"
                                         size="big"
                                         disabled={
                                             this.props.submitting ||

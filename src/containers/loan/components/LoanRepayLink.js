@@ -22,6 +22,7 @@ export function LoanRepayLink(props) {
             className={className}
             key={key}
             to={to}
+            data-testid="repayLoanButton"
             icon={icon}
             labelPosition={labelPosition}
             content={content}

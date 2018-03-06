@@ -1,11 +1,7 @@
 /*
 TODO: form client side validation. eg:
-    - A-EUR balance check
-    - address format check
-    - number  format check
-    - To: can't be the same as From:
+    - address checksum and format check
 TODO: input formatting: decimals, thousand separators
-TODO: make this a pure component
   */
 
 import React from "react";
@@ -115,13 +111,13 @@ class TokenTransferForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isConnected}
                         >
-                            <input />
+                            <input data-testid="transferAmountInput" />
                             <Label>A-EUR</Label>
                         </Field>
 
                         <small>
                             Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            {this.state.feeAmount} A€
+                            <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€
                         </small>
 
                         <Field
@@ -129,6 +125,7 @@ class TokenTransferForm extends React.Component {
                             as={Form.Input}
                             label="To:"
                             size="small"
+                            data-testid="transferToAddressField"
                             name="payee"
                             type="text"
                             parse={Parsers.trim}
@@ -140,13 +137,14 @@ class TokenTransferForm extends React.Component {
                         <Field
                             component={Form.Field}
                             as={Form.Input}
+                            data-testid="transferNarrativeField"
                             label="Reference:"
                             name="narrative"
                             type="text"
                             placeholder="short narrative (optional)"
                             disabled={submitting || !augmintToken.isConnected}
                         />
-                        <Button loading={submitting} primary disabled={pristine}>
+                        <Button loading={submitting} primary disabled={pristine} data-testid="submitTransferButton">
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
                     </Form>
