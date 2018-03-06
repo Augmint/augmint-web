@@ -42,9 +42,8 @@ class AugmintToken extends React.Component {
                         <Pgrid.Column>
                             <Button
                                 content="Loans to Collect"
-                                className="loansToCollectButton"
                                 as={Link}
-                                id="loansToCollectBtn"
+                                data-testid="loansToCollectButton"
                                 to="/loan/collect"
                                 icon="right chevron"
                                 labelPosition="right"
