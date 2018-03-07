@@ -99,7 +99,7 @@ export default (state = initialState, action) => {
         case TRADE_REFRESH_SUCCESS:
             return {
                 ...state,
-                transfers: action.result,
+                trades: action.result,
                 isLoading: false,
                 isConnected: true,
                 connectionError: false,
@@ -175,7 +175,7 @@ export const refreshTrades = (account, fromBlock, toBlock) => {
 
             return dispatch({
                 type: TRADE_REFRESH_SUCCESS,
-                trades: trades,
+                result: trades,
                 info: info
             });
         } catch (error) {

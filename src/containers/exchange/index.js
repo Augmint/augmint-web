@@ -7,6 +7,7 @@ import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderBook from "./components/OrderBook";
+import TradeBook from "./components/TradeBook";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
@@ -69,6 +70,11 @@ class ExchangeHome extends React.Component {
                         </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
+                <TradeBook
+                    exchange={exchange}
+                    userAccountAddress={userAccount.address}
+                    header="All trades"
+                />
             </EthereumState>
         );
     }
