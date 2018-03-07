@@ -2,10 +2,15 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import lockManagerArtifacts from "contractsBuild/Locker.json";
 
+import { fetchLockProductsTx } from "modules/ethereum/lockTransactions";
 
-export const LOCKMANAGER_CONNECT_REQUESTED = "lockManager/LOCKMANAGER_CONNECT_REQUESTED";
-export const LOCKMANAGER_CONNECT_SUCCESS = "lockManager/LOCKMANAGER_CONNECT_SUCCESS";
-export const LOCKMANAGER_CONNECT_ERROR = "lockManager/LOCKMANAGER_CONNECT_ERROR";
+const LOCKMANAGER_CONNECT_REQUESTED = "lockManager/LOCKMANAGER_CONNECT_REQUESTED";
+const LOCKMANAGER_CONNECT_SUCCESS = "lockManager/LOCKMANAGER_CONNECT_SUCCESS";
+const LOCKMANAGER_CONNECT_ERROR = "lockManager/LOCKMANAGER_CONNECT_ERROR";
+
+const LOCKMANAGER_PRODUCTLIST_REQUESTED = "lockManager/LOCKMANAGER_PRODUCTLIST_REQUESTED";
+const LOCKMANAGER_PRODUCTLIST_RECEIVED = "lockManager/LOCKMANAGER_PRODUCTLIST_RECEIVED";
+const LOCKMANAGER_PRODUCTLIST_ERROR = "lockManager/LOCKMANAGER_PRODUCTLIST_ERROR";
 
 const initialState = {
     contract: null,
@@ -81,3 +86,27 @@ export const connectLockManager = () => {
         }
     };
 };
+
+export function fetchProducts() {
+    return async dispatch => {
+        dispatch({
+            type: LOCKMANAGER_PRODUCTLIST_REQUESTED
+        });
+
+        try {
+            const result = await fetchLockProductsTx();
+            return dispatch({
+                type: LOCKMANAGER_PRODUCTLIST_RECEIVED,
+                products: result
+            });
+        } catch (error) {
+            if (process.env.NODE_ENV !== "production") {
+                return Promise.reject(error);
+            }
+            return dispatch({
+                type: LOCKMANAGER_PRODUCTLIST_ERROR,
+                error: error
+            });
+        }
+    };
+}
