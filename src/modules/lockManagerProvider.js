@@ -1,5 +1,5 @@
 import store from "modules/store";
-// import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./web3Provider";
 import {
     connectLockManager
 } from "modules/reducers/lockManager";
@@ -12,6 +12,7 @@ export default () => {
     const web3Connect = store.getState().web3Connect;
 
     if (!lockManager.isLoading && !lockManager.isConnected) {
+        setupWatch("web3Connect.network", onWeb3NetworkChange);
         if (web3Connect.isConnected) {
             console.debug(
                 "lockManagerProvider - lockManager not connected or loading and web3 already loaded, dispatching connectLockManager() "
@@ -20,4 +21,11 @@ export default () => {
         }
     }
     return;
+};
+
+const onWeb3NetworkChange = (newVal) => {
+    if (newVal !== null) {
+        console.debug("lockManagerProvider - web3Connect.network changed. Dispatching connectLockManager()");
+        store.dispatch(connectLockManager());
+    }
 };
