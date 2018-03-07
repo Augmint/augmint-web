@@ -2,7 +2,7 @@
     "name": "augmint-web",
     "version": "0.1.0",
     "description": "Augmint Stable Tokens",
-    "homepage": ".",
+    "homepage": "https://github.com/Augmint/augmint-web",
     "private": true,
     "dependencies": {
         "bignumber.js": "5.0.0",

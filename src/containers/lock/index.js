@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
+import lockManagerProvider from "modules/lockManagerProvider";
 import { EthereumState } from "containers/app/EthereumState";
 
 import { Pcontainer, Pblock, Pgrid } from "components/PageLayout";
@@ -22,6 +23,7 @@ class LockContainer extends React.Component {
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
+        lockManagerProvider();
     }
 
     handleSubmit(values) {
