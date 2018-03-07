@@ -1,6 +1,6 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectExchange, refreshExchange } from "modules/reducers/exchange";
+import { connectExchange, refreshExchange, refreshTrades } from "modules/reducers/exchange";
 import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
@@ -60,6 +60,11 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
     if (newVal && store.getState().augmintToken.isConnected) {
         console.debug("exchangeProvider - new Exchange contract. Dispatching refreshOrders()");
         store.dispatch(refreshOrders());
+
+        const userAccount = store.getState().web3Connect.userAccount;
+        const augmintToken = store.getState().augmintToken;
+
+        store.dispatch(refreshTrades(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
         setupListeners();
     }
 };
@@ -69,6 +74,7 @@ const onNewOrder = (orderId, maker, price, tokenAmount, weiAmount) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    // store.dispatch(refreshExchangeTrade());
     const userAccount = store.getState().web3Connect.userAccount;
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
@@ -84,6 +90,7 @@ const onCancelledOrder = (orderId, maker, tokenAmount, weiAmount) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    // store.dispatch(refreshExchangeTrade());
     const userAccount = store.getState().web3Connect.userAccount;
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -100,6 +107,7 @@ const onOrderFill = (tokenBuyer, tokenSeller, buyTokenOrderId, sellTokenOrderId,
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+    // store.dispatch(processNewTrade());
     const userAccount = store.getState().web3Connect.userAccount;
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
