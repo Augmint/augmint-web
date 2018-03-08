@@ -6,12 +6,12 @@ import { ErrorPanel } from "components/MsgPanels";
 export default class TradeBook extends React.Component {
     render() {
         const { header, userAccountAddress } = this.props;
-        const { trades, refreshError, isLoading } = this.props.exchange;
+        const { trades, error, isLoading } = this.props.trades;
 
         return (
             <Pblock loading={isLoading} header={header}>
-                {refreshError && (
-                    <ErrorPanel header="Error while fetching order list">{refreshError.message}</ErrorPanel>
+                {error && (
+                    <ErrorPanel header="Error while fetching order list">{error.message}</ErrorPanel>
                 )}
                 {trades == null && !isLoading && <p>Connecting...</p>}
                 {isLoading ? (

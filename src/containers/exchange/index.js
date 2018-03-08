@@ -21,7 +21,7 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { orders, userAccount, exchange, rates } = this.props;
+        const { orders, userAccount, exchange, rates, trades } = this.props;
         return (
             <EthereumState>
                 <Psegment>
@@ -71,9 +71,9 @@ class ExchangeHome extends React.Component {
                     </Pgrid>
                 </Psegment>
                 <TradeBook
-                    exchange={exchange}
+                    trades={trades}
                     userAccountAddress={userAccount.address}
-                    header="All trades"
+                    header="Trades history"
                 />
             </EthereumState>
         );
@@ -84,7 +84,8 @@ const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,
-    rates: state.rates
+    rates: state.rates,
+    trades: state.trades
 });
 
 export default connect(mapStateToProps)(ExchangeHome);

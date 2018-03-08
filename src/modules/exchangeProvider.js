@@ -1,6 +1,7 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectExchange, refreshExchange, refreshTrades } from "modules/reducers/exchange";
+import { connectExchange, refreshExchange } from "modules/reducers/exchange";
+import { refreshTrades } from "modules/reducers/trades";
 import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
