@@ -16,6 +16,7 @@ export default class TransferList extends React.Component {
                 >
                     <MyGridTable
                         divided={false}
+                        data-testid={`transferListItem-${tx.transactionHash}`}
                         key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
                     >
                         <Row columns={1}>
@@ -53,7 +54,9 @@ export default class TransferList extends React.Component {
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
                 {transfers && (
-                    <MyListGroup id="transferListDiv">{listItems.length === 0 ? noItemMessage : listItems}</MyListGroup>
+                    <MyListGroup data-testid="transferListDiv">
+                        {listItems.length === 0 ? noItemMessage : listItems}
+                    </MyListGroup>
                 )}
             </Pblock>
         );

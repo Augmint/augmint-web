@@ -42,7 +42,7 @@ h3.ui.header {
 h4,
 h4.ui.header {
     font-weight: 200;
-    font-size: 18px;
+    font-size: 24px;
 }
 
 h5,
@@ -55,6 +55,15 @@ p {
     line-height: 22px;
     font-size: 16px;
     font-weight: 300;
+}
+
+.ui.header+p.loans {
+    margin-top: 20px;
+}
+
+.equal .home-image img {
+  max-height: 120px;
+  min-height: 120px;
 }
 
 @media
@@ -148,9 +157,13 @@ p {
 
 .ui.basic.segment.how-to-use h5.ui.header,
 .ui.basic.segment.how-to-use h2.ui.header {
-    margin-top: 5px;
+    margin: 0;
 }
 
 .interchange-icon {
   width: 50px;
+}
+
+a.try-now {
+  padding: 0 50px;
 }

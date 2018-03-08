@@ -16,7 +16,7 @@ export default function LoansToCollectList(props) {
         ));
 
     return (
-        <Pblock testid="loansToCollectBlock" loading={isLoading} header={props.header}>
+        <Pblock data-testid="loansToCollectBlock" loading={isLoading} header={props.header}>
             {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
             {loansToCollect && listItems.length === 0 ? props.noItemMessage : <MyListGroup>{listItems}</MyListGroup>}
         </Pblock>
