@@ -14,7 +14,6 @@ import LockForm from "./containers/LockForm";
 
 import { StyledButtonContainer } from "./styles";
 
-
 class LockContainer extends React.Component {
     constructor(props) {
         super(props);
