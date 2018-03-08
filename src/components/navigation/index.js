@@ -7,75 +7,117 @@ import {
     StyleNavList,
     StyledLogoContainer,
     StyledNavContainer,
-    StyledLogo
-} from './styles';
-
+    StyledLogo,
+    HamburgerMenu
+} from "./styles";
 
 import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
+import hamburgerMenu from "assets/images/menu.svg";
+import close from "assets/images/close.svg";
 
 function AppMenuItem(props) {
     return (
         <StyleNavItem>
-            <StyleNavLink {...props}>
-                {props.children}
-            </StyleNavLink>
+            <StyleNavLink {...props}>{props.children}</StyleNavLink>
         </StyleNavItem>
-    )
+    );
 }
 
-export function AppMenu(props) {
-    const { isConnected, network } = props.web3Connect;
-    const { location } = props;
+export default class AppMenu extends React.Component {
+    constructor(props) {
+        super(props);
+        this.toggleMenu = this.toggleMenu.bind(this);
+    }
+    toggleMenu() {
+        this.props.toggleMenu();
+    }
 
-    const currentLocation = location.pathname;
-    const showConnection = (["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1);
+    render() {
+        const { isConnected, network } = this.props.web3Connect;
+        const { location } = this.props;
 
-    return (
-        <div>
-            <StyledNavContainer>
-                <StyleNavList>
-                    <AppMenuItem isActive={() => currentLocation === "/"} to="/">Home</AppMenuItem>
-                    <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">Concept</AppMenuItem>
-                    <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">Roadmap</AppMenuItem>
-                    {isConnected && (
-                        <AppMenuItem isActive={() => currentLocation === "/account"} to="/account">My Account</AppMenuItem>
-                    )}
-                    {isConnected && (
-                        <AppMenuItem isActive={() => currentLocation === "/exchange"} to="/exchange">Buy/Sell A-EUR</AppMenuItem>
-                    )
-                    }
-                    {isConnected && (
-                        <AppMenuItem isActive={() => currentLocation === "/loan/new"} to="/loan/new">Get A-EUR Loan</AppMenuItem>
-                    )
-                    }
-                    {isConnected && (
-                        <AppMenuItem isActive={() => currentLocation === "/reserves"} to="/reserves">Reserves</AppMenuItem>
-                    )
-                    }
-                </StyleNavList>
-                {(!showConnection && !isConnected ) && (
-                    <Button type="a" tid="useAEurButton" to="/tryit" color="primary">
-                        Use A-EUR
-                    </Button>
-                )}
-                {isConnected && (
-                  <div>
-                      Connected on {network.name}
-                  </div>
-                )}
-                {( showConnection && !isConnected ) && (
+        const currentLocation = location.pathname;
+        const showConnection =
+            ["/account", "/exchange", "/loan/new", "/reserves", "/tryit"].indexOf(currentLocation) > -1;
+
+        return (
+            <div>
+                <StyledNavContainer className={this.props.showMenu ? "opened" : ""}>
                     <div>
-                        Not connected
+                        <HamburgerMenu
+                            src={this.props.showMenu ? close : hamburgerMenu}
+                            onClick={this.toggleMenu}
+                            id="hamburgerMenu"
+                            className={this.props.showMenu ? "opened" : ""}
+                        />
+                        <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
+                            <AppMenuItem isActive={() => currentLocation === "/"} to="/">
+                                Home
+                            </AppMenuItem>
+                            <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
+                                Concept
+                            </AppMenuItem>
+                            <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
+                                Roadmap
+                            </AppMenuItem>
+                            {isConnected && (
+                                <AppMenuItem
+                                    isActive={() => currentLocation === "/account"}
+                                    to="/account"
+                                    data-testid="myAccountMenuLink"
+                                >
+                                    My Account
+                                </AppMenuItem>
+                            )}
+                            {isConnected && (
+                                <AppMenuItem
+                                    isActive={() => currentLocation === "/exchange"}
+                                    to="/exchange"
+                                    data-testid="exchangeMenuLink"
+                                >
+                                    Buy/Sell A-EUR
+                                </AppMenuItem>
+                            )}
+                            {isConnected && (
+                                <AppMenuItem
+                                    isActive={() => currentLocation === "/loan/new"}
+                                    to="/loan/new"
+                                    data-testid="getLoanMenuLink"
+                                >
+                                    Get A-EUR Loan
+                                </AppMenuItem>
+                            )}
+                            {isConnected && (
+                                <AppMenuItem
+                                    isActive={() => currentLocation === "/reserves"}
+                                    to="/reserves"
+                                    data-testid="reservesMenuLink"
+                                >
+                                    Reserves
+                                </AppMenuItem>
+                            )}
+                        </StyleNavList>
                     </div>
-                )}
-            </StyledNavContainer>
-            <StyledLogoContainer>
-
-                <StyledLogo src={augmintLogo} srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`} alt="Augmint logo" />
-            </StyledLogoContainer>
-            {/* to="/under-the-hood" */}
-        </div>
-    );
+                    {!showConnection &&
+                        !isConnected && (
+                            <Button type="a" data-testid="useAEurButton" to="/tryit" color="primary">
+                                Use A-EUR
+                            </Button>
+                        )}
+                    {isConnected && <div>Connected on {network.name}</div>}
+                    {showConnection && !isConnected && <div>Not connected</div>}
+                </StyledNavContainer>
+                <StyledLogoContainer>
+                    <StyledLogo
+                        src={augmintLogo}
+                        srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
+                        alt="Augmint logo"
+                    />
+                </StyledLogoContainer>
+                {/* to="/under-the-hood" */}
+            </div>
+        );
+    }
 }

@@ -9,58 +9,31 @@ import secureSVG from "assets/images/secure.svg";
 import downArrowSVG from "assets/images/down-arrow.svg";
 import interchangeSVG from "assets/images/interchange.svg";
 
-import depositPng from "assets/images/deposit-eth.png";
-import depositPng2x from "assets/images/deposit-eth@2x.png";
-import depositPng3x from "assets/images/deposit-eth@3x.png";
+import depositSVG from "assets/images/deposit-eth.svg";
 
-import getDepositPng from "assets/images/get-deposit.png";
-import getDepositPng2x from "assets/images/get-deposit@2x.png";
-import getDepositPng3x from "assets/images/get-deposit@3x.png";
+import getDepositSVG from "assets/images/get-deposit.svg";
 
-import spendEuroPng from "assets/images/spend-euro.png";
-import spendEuroPng2x from "assets/images/spend-euro@2x.png";
-import spendEuroPng3x from "assets/images/spend-euro@3x.png";
+import spendEuroSVG from "assets/images/spend-euro.svg";
 
-import exchangePng from "assets/images/exchange.png";
-import exchangePng2x from "assets/images/exchange@2x.png";
-import exchangePng3x from "assets/images/exchange@3x.png";
+import exchangeSVG from "assets/images/exchange.svg";
 
-import partnersPng from "assets/images/partners.png";
-import partnersPng2x from "assets/images/partners@2x.png";
-import partnersPng3x from "assets/images/partners@3x.png";
+import partnersSVG from "assets/images/partners.svg";
 
-import ethDPng from "assets/images/ether-delta.png";
-import ethDPng2x from "assets/images/ether-delta@2x.png";
-import ethDPng3x from "assets/images/ether-delta@3x.png";
+import ethDSVG from "assets/images/ether-delta.svg";
 
-import atmPng from "assets/images/atm.png";
-import atmPng2x from "assets/images/atm@2x.png";
-import atmPng3x from "assets/images/atm@3x.png";
+import atmSVG from "assets/images/atm.svg";
 
-import shopPng from "assets/images/shop.png";
-import shopPng2x from "assets/images/shop@2x.png";
-import shopPng3x from "assets/images/shop@3x.png";
+import shopSVG from "assets/images/shop.svg";
 
-import transferPng from "assets/images/transfer.png";
-import transferPng2x from "assets/images/transfer@2x.png";
-import transferPng3x from "assets/images/transfer@3x.png";
+import transferSVG from "assets/images/transfer.svg";
 
-import investPng from "assets/images/invest.png";
-import investPng2x from "assets/images/invest@2x.png";
-import investPng3x from "assets/images/invest@3x.png";
+import investSVG from "assets/images/invest.svg";
 
-import lockPng from "assets/images/lock.png";
-import lockPng2x from "assets/images/lock@2x.png";
-import lockPng3x from "assets/images/lock@3x.png";
+import lockSVG from "assets/images/lock.svg";
 
-import waitPng from "assets/images/wait.png";
-import waitPng2x from "assets/images/wait@2x.png";
-import waitPng3x from "assets/images/wait@3x.png";
+import waitSVG from "assets/images/wait.svg";
 
-import premiumPng from "assets/images/premium.png";
-import premiumPng2x from "assets/images/premium@2x.png";
-import premiumPng3x from "assets/images/premium@3x.png";
-
+import premiumSVG from "assets/images/premium.svg";
 export const BalanceIcon = () => (
   <Image centered>
   <svg xmlns="http://www.w3.org/2000/svg" width="393" height="148" viewBox="0 0 393 148">
@@ -105,53 +78,53 @@ export const InterchangeIcon = () => (
 );
 
 export const DepositIcon = () => (
-  <Image src={depositPng} srcSet={`${depositPng2x} 2x, ${depositPng3x} 3x,`}/>
+  <Image src={depositSVG} />
 );
 
 export const SpendIcon = () => (
-  <Image src={spendEuroPng} srcSet={`${spendEuroPng2x} 2x, ${spendEuroPng3x} 3x,`}/>
+  <Image src={spendEuroSVG} />
 );
 
 export const GetDepositIcon = () => (
-  <Image src={getDepositPng} srcSet={`${getDepositPng2x} 2x, ${getDepositPng3x} 3x,`}/>
+  <Image src={getDepositSVG} />
 );
 
 export const ExchangeIcon = () => (
-  <Image src={exchangePng} srcSet={`${exchangePng2x} 2x, ${exchangePng3x} 3x,`}/>
+  <Image src={exchangeSVG} />
 );
 
 export const PartnersIcon = () => (
-  <Image src={partnersPng} srcSet={`${partnersPng2x} 2x, ${partnersPng3x} 3x,`}/>
+  <Image src={partnersSVG} />
 );
 
 export const EtherDeltaIcon = () => (
-  <Image src={ethDPng} srcSet={`${ethDPng2x} 2x, ${ethDPng3x} 3x,`}/>
+  <Image src={ethDSVG} />
 );
 
 export const AtmIcon = () => (
-  <Image src={atmPng} srcSet={`${atmPng2x} 2x, ${atmPng3x} 3x,`}/>
+  <Image src={atmSVG} />
 );
 
 export const ShopIcon = () => (
-  <Image src={shopPng} srcSet={`${shopPng2x} 2x, ${shopPng3x} 3x,`}/>
+  <Image src={shopSVG} />
 );
 
 export const TransferIcon = () => (
-  <Image src={transferPng} srcSet={`${transferPng2x} 2x, ${transferPng3x} 3x,`}/>
+  <Image src={transferSVG} />
 );
 
 export const InvestIcon = () => (
-  <Image src={investPng} srcSet={`${investPng2x} 2x, ${investPng3x} 3x,`}/>
+  <Image src={investSVG} />
 );
 
 export const LockIcon = () => (
-  <Image src={lockPng} srcSet={`${lockPng2x} 2x, ${lockPng3x} 3x,`}/>
+  <Image src={lockSVG} />
 );
 
 export const WaitIcon = () => (
-  <Image src={waitPng} srcSet={`${waitPng2x} 2x, ${waitPng3x} 3x,`}/>
+  <Image src={waitSVG} />
 );
 
 export const PremiumIcon = () => (
-  <Image src={premiumPng} srcSet={`${premiumPng2x} 2x, ${premiumPng3x} 3x,`}/>
+  <Image src={premiumSVG} />
 );

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="55" height="50" viewBox="0 0 55 50">
+    <defs>
+        <linearGradient id="a" x1="50%" x2="50%" y1="-242.85%" y2="92.583%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="73.87%" stop-color="#FFF" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#FFF"/>
+        </linearGradient>
+    </defs>
+    <g fill="#350037" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <g transform="translate(30 36.449)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(30 30.76)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(30 25.07)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(30 19.38)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(30 13.69)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(30 8)">
+            <ellipse cx="11" cy="5.69" stroke="#350037" rx="11" ry="5.69"/>
+            <ellipse cx="11" cy="5.69" stroke="url(#a)" rx="11" ry="5.69"/>
+        </g>
+        <g transform="translate(4 36.704)">
+            <ellipse cx="11" cy="5.568" stroke="#350037" rx="11" ry="5.568"/>
+            <ellipse cx="11" cy="5.568" stroke="url(#a)" rx="11" ry="5.568"/>
+        </g>
+        <g transform="translate(4 31.136)">
+            <ellipse cx="11" cy="5.568" stroke="#350037" rx="11" ry="5.568"/>
+            <ellipse cx="11" cy="5.568" stroke="url(#a)" rx="11" ry="5.568"/>
+        </g>
+        <g transform="translate(4 25.568)">
+            <ellipse cx="11" cy="5.568" stroke="#350037" rx="11" ry="5.568"/>
+            <ellipse cx="11" cy="5.568" stroke="url(#a)" rx="11" ry="5.568"/>
+        </g>
+        <g transform="translate(4 20)">
+            <ellipse cx="11" cy="5.568" stroke="#350037" rx="11" ry="5.568"/>
+            <ellipse cx="11" cy="5.568" stroke="url(#a)" rx="11" ry="5.568"/>
+        </g>
+    </g>
+</svg>

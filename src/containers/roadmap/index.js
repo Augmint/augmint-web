@@ -4,30 +4,40 @@ import { states } from "./helpers.js";
 
 import {
     StyleRoadmap,
+    StyleRoadmapTitle,
     StyleRoadmapLine,
-    StyleRoadmapState
+    StyleRoadmapState,
+    StyleStateHeader,
+    StyleStateTitle,
+    StyleStateList,
+    StyleStateListItem
 } from './style';
-
-import roadmapLine from "assets/images/roadmap-line.svg";
 
 const statestLength = states.length;
 
 export default () => (
     <StyleRoadmap id="roadmap">
+        <StyleRoadmapTitle>Roadmap</StyleRoadmapTitle>
         {states.map((state, index) => (
-          <div key={state.state}>
-              <StyleRoadmapState className="state">
-                  <h4 className="state">{state.state}</h4>
+          <StyleRoadmapState key={state.state}>
+              <div className="state">
+                <StyleStateHeader>
+                  <StyleStateTitle className="state">{state.state}</StyleStateTitle>
                   <h4>{state.title}</h4>
-                  <h5>{state.date}</h5>
+                  <h4>{state.date}</h4>
+                  {(index < statestLength-1) &&
+                    <StyleRoadmapLine/>
+                  }
+                </StyleStateHeader>
+                <StyleStateList className="list">
                   {state.descriptions.map((description, index) => (
-                    <p key={state.state + '_' + index}>{description}</p>
+                    <div className="list-item"  key={state.state + '_' + index}>
+                        <StyleStateListItem>{description}</StyleStateListItem>
+                    </div>
                   ))}
-              </StyleRoadmapState>
-              {(index < statestLength-1) &&
-                  <StyleRoadmapLine alt="separator" src={roadmapLine} />
-              }
-          </div>
+                </StyleStateList>
+              </div>
+          </StyleRoadmapState>
         ))}
     </StyleRoadmap>
 );
