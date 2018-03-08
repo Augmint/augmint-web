@@ -26,7 +26,7 @@ export default class MsgPanel extends React.Component {
                         <Message.Header>{header}</Message.Header>
                         {children !== null && children}
                         {onDismiss && (
-                            <Button as="a" onClick={this.dismiss}>
+                            <Button data-testid="msgPanelOkButton" as="a" onClick={this.dismiss}>
                                 OK
                             </Button>
                         )}

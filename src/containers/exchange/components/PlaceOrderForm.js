@@ -139,10 +139,20 @@ class PlaceOrderForm extends React.Component {
 
         const header = (
             <Menu size="massive" tabular>
-                <Menu.Item active={orderType === TOKEN_BUY} index={TOKEN_BUY} onClick={this.onOrderTypeChange}>
+                <Menu.Item
+                    active={orderType === TOKEN_BUY}
+                    index={TOKEN_BUY}
+                    onClick={this.onOrderTypeChange}
+                    data-testid="buyMenuLink"
+                >
                     Buy A-EUR
                 </Menu.Item>
-                <Menu.Item active={orderType === TOKEN_SELL} index={TOKEN_SELL} onClick={this.onOrderTypeChange}>
+                <Menu.Item
+                    active={orderType === TOKEN_SELL}
+                    index={TOKEN_SELL}
+                    onClick={this.onOrderTypeChange}
+                    data-testid="sellMenuLink"
+                >
                     Sell A-EUR
                 </Menu.Item>
             </Menu>
@@ -180,7 +190,7 @@ class PlaceOrderForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
-                            <input />
+                            <input data-testid="tokenAmountInput" />
                             <Label>A-EUR</Label>
                         </Field>
 
@@ -196,7 +206,7 @@ class PlaceOrderForm extends React.Component {
                             normalize={Normalizations.fiveDecimals}
                             labelPosition="right"
                         >
-                            <input />
+                            <input data-testid="ethAmountInput" />
                             <Label>ETH</Label>
                         </Field>
 
@@ -212,11 +222,11 @@ class PlaceOrderForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             labelPosition="right"
                         >
-                            <input />
+                            <input data-testid="priceInput" />
                             <Label>A-EUR / ETH</Label>
                         </Field>
 
-                        <Button size="big" primary loading={submitting} disabled={pristine}>
+                        <Button size="big" primary loading={submitting} disabled={pristine} data-testid="submitButton">
                             {submitting && "Submitting..."}
                             {!submitting &&
                                 (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
