@@ -20,11 +20,12 @@ export default class TradeBook extends React.Component {
                     <div>
                       {trades && trades.map(trade => (
                         <div key={trade.type + trade.blockData.timestamp}>
-                          <span>{trade.blockTimeStampText}--</span>
-                          <span>{trade.type}--</span>
-                          <span>{trade.directionText}</span>
-                          {trade.ethAmountRounded && <span>--{trade.ethAmountRounded} eth</span>}
-                          {trade.tokenAmount && <span>--{trade.tokenAmount} A€</span>}
+                          <span>Date: {trade.blockTimeStampText}--</span>
+                          <span>Type: {trade.type}--</span>
+                          <span>Direction: {trade.directionText}--</span>
+                          <span>Price: {trade.price}</span>
+                          {trade.ethAmount && <span>--Eth Amount: {trade.ethAmountRounded} eth</span>}
+                          {trade.tokenAmount && <span>--Token Amount: {trade.tokenAmount} A€</span>}
                         </div>
                       ))}
                     </div>

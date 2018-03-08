@@ -64,7 +64,6 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
 
 async function _formatTradeLog(event, account, eventLog, type) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     let blockData;
     if (typeof eventLog.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
@@ -84,6 +83,7 @@ async function _formatTradeLog(event, account, eventLog, type) {
     const ethAmount  = bn_ethAmount.toString();
     const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
     const tokenAmount = parseFloat(bn_tokenAmount / decimalsDiv);
+    const price = parseFloat(parsedData.price / decimalsDiv);
     const direction = tokenAmount === 0 ? -1 : 1;
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
@@ -96,6 +96,7 @@ async function _formatTradeLog(event, account, eventLog, type) {
         tokenAmount: tokenAmount,
         ethAmount: ethAmount,
         ethAmountRounded: ethAmountRounded,
+        price: price ,
         type
     });
 
