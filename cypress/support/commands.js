@@ -105,7 +105,7 @@ Cypress.Commands.add("ganacheRevertSnapshot", (options = {}) => {
     });
 });
 
-// get user balance from ganache. Usage: cy.getUserAEurBalance or this.startingAeurBalance (set in before each)
+// get user AEUR balance from ganache. Usage: cy.getUserAEurBalance or this.startingAeurBalance (set in before each)
 Cypress.Commands.add("getUserAEurBalance", (account, options = {}) => {
     if (typeof account === "undefined") {
         account = accounts[0];
@@ -116,7 +116,18 @@ Cypress.Commands.add("getUserAEurBalance", (account, options = {}) => {
     });
 });
 
-// get user balance from UI.
+// get user ETH balance from ganache. Usage: cy.getUserEthBalance or this.startingEthBalance (set in before each)
+Cypress.Commands.add("getUserEthBalance", (account, options = {}) => {
+    if (typeof account === "undefined") {
+        account = accounts[0];
+    }
+
+    return web3.eth.getBalance(account).then(bal => {
+        return web3.utils.fromWei(bal);
+    });
+});
+
+// assert user balance on UI.
 Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
@@ -124,6 +135,20 @@ Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
         .get("[data-testid=userAEurBalance]")
         .invoke("text")
         .should("equal", balance.toString());
+});
+
+// assert user balance on UI.
+Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals, options = {}) => {
+    const expectedEth = Number(_expectedEth.toFixed(decimals));
+    cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
+
+    cy
+        .get("[data-testid=userEthBalance]")
+        .invoke("text")
+        .should(val => {
+            // TODO: this throws a lot of console warnings
+            expect(Number(val)).to.be.approximately(expectedEth, 1 / 10 ** decimals);
+        });
 });
 
 // issue AEUR to account
