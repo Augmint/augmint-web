@@ -53,7 +53,7 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
         const logs = [...formattedLogsNewOrder, ...formattedLogsCanceledOrder, ...formattedLogsOrderFillBuy, ...formattedLogsOrderFillSell];
 
         logs.sort((log1, log2) => {
-          return log1.blockData.timestamp - log2.blockData.timestamp;
+          return log2.blockData.timestamp - log1.blockData.timestamp;
         });
 
         return logs;
