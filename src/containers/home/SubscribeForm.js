@@ -48,13 +48,18 @@ class SubscribeForm extends React.Component {
                 {submitSucceeded && <SuccessPanel header="Successful subscription" onDismiss={() => reset()} />}
                 {!submitSucceeded && (
                     <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <ErrorPanel
-                            content={error}
-                            header={"Subscription failed"}
-                            onDismiss={() => {
-                                clearSubmitErrors();
-                            }}
-                        />
+                        {error && (
+                            <p>
+                                aaa
+                                <ErrorPanel
+                                    content={error}
+                                    header={"Subscription failed"}
+                                    onDismiss={() => {
+                                        clearSubmitErrors();
+                                    }}
+                                />
+                            </p>
+                        )}
 
                         <Field
                             component={Form.Field}
@@ -62,7 +67,7 @@ class SubscribeForm extends React.Component {
                             name="email"
                             type="text"
                             label="Keep me posted"
-                            placeholder="your email"
+                            placeholder="your aemail"
                             parse={Parsers.trim}
                             disabled={submitting}
                         />
