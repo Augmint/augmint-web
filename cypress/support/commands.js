@@ -11,6 +11,8 @@ let augmintReservesInstance = null;
 let accounts = null;
 let snapshotId;
 
+let gasPrice;
+
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 try {
@@ -45,6 +47,9 @@ try {
     }
     const web3Version = web3.version.api ? web3.version.api : web3.version;
     console["log"]("web3 connected", web3Version);
+    web3.eth.getGasPrice().then(res => {
+        gasPrice = res;
+    });
 } catch (error) {
     throw new Error(`Error while connecting to Augmint contracts\n${error}`);
 }
@@ -103,6 +108,10 @@ Cypress.Commands.add("ganacheRevertSnapshot", (options = {}) => {
             }
         );
     });
+});
+
+Cypress.Commands.add("getGasPriceInEth", (options = {}) => {
+    return parseFloat(web3.utils.fromWei(gasPrice));
 });
 
 // get user AEUR balance from ganache. Usage: cy.getUserAEurBalance or this.startingAeurBalance (set in before each)
