@@ -114,16 +114,17 @@ export async function placeOrderTx(orderType, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().exchange.contract.instance;
+    const exchangeWeb3 = store.getState().exchange.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const submitPrice = new BigNumber(price).mul(decimalsDiv);
     let submitAmount;
-    let result;
+    let tx;
 
     switch (orderType) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH);
-            result = await exchange.placeBuyTokenOrder(submitPrice.toString(), {
+            tx = exchangeWeb3.methods.placeBuyTokenOrder(submitPrice.toString()).send({
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
@@ -132,52 +133,71 @@ export async function placeOrderTx(orderType, amount, price) {
         case TOKEN_SELL:
             const augmintToken = store.getState().augmintToken;
             submitAmount = new BigNumber(amount).mul(decimalsDiv);
-            result = await augmintToken.contract.instance.transferAndNotify(
-                exchange.address,
-                submitAmount.toString(),
-                submitPrice.toString(),
-                {
+            tx = augmintToken.contract.web3ContractInstance.methods
+                .transferAndNotify(exchange.address, submitAmount.toString(), submitPrice.toString())
+                .send({
                     from: userAccount,
                     gas: gasEstimate
-                }
-            );
+                });
             break;
         default:
             throw new EthereumTransactionError(
                 "Place order failed.",
                 "Unknown orderType: " + orderType,
-                result,
+                tx,
                 gasEstimate
             );
     }
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  placeOrderTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("Place order failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Place order failed.",
-            "All gas provided was used. Check tx.",
-            result,
+            "Place order failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
 
-    if (
-        !result.logs ||
-        !result.logs[0] ||
-        (result.logs[0].event !== "NewOrder" && result.logs[1].event !== "AugmintTransfer")
-    ) {
-        throw new EthereumTransactionError(
-            "Place order failed.",
-            "NewOrder or Augmint transfer event wasn't received. Check tx. ",
-            result,
-            gasEstimate
-        );
+    if (orderType === TOKEN_SELL) {
+        // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
+        receipt.events.NewOrder = (await exchangeWeb3.getPastEvents("NewOrder", {
+            transactionHash: receipt.transactionHash,
+            fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
+            toBlock: receipt.blockNumber
+        }))[0];
     }
 
     return {
+        orderId: receipt.events.NewOrder.returnValues.orderId,
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }

@@ -42,6 +42,7 @@ class ExchangeHome extends React.Component {
                                 )}
 
                                 <OrderBook
+                                    data-testid="myOrdersBlock"
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="My orders"
