@@ -30,7 +30,7 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { userAccount } = this.props;
+        const { userAccount, lockProducts } = this.props;
 
         return (
             <Pcontainer>
@@ -52,10 +52,11 @@ class LockContainer extends React.Component {
                         className="accountInfo"
                         loading={false}
                         header="Lock"
-                        style={{maxWidth: '500px'}}
+                        style={{maxWidth: '700px'}}
                     >
                         <LockForm 
                             onSubmit={this.handleSubmit}
+                            lockProducts= {lockProducts}
                         />
                     </Pblock>
                 </EthereumState>
@@ -66,7 +67,8 @@ class LockContainer extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        userAccount: state.userBalances.account
+        userAccount: state.userBalances.account,
+        lockProducts: state.lockManager.products
     }
 };
 

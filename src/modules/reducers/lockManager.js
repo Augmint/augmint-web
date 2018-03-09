@@ -59,6 +59,18 @@ export default (state = initialState, action) => {
                 isConnected: false,
                 isLoading: false
             };
+        case LOCKMANAGER_PRODUCTLIST_REQUESTED:
+            return {
+                ...state,
+                isLoading: true
+            };
+
+        case LOCKMANAGER_PRODUCTLIST_RECEIVED:
+            return {
+                ...state,
+                isLoading: false,
+                products: action.products
+            };
         default:
             return state;
     }

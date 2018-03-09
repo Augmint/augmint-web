@@ -25,7 +25,6 @@ export async function fetchLockProductsTx() {
         const parsedProducts = parseProducts(productsArray);
         products = products.concat(parsedProducts);
     }
-    debugger;
     return products;
 }
     
@@ -45,11 +44,13 @@ function parseProducts(productsArray) {
             `${moment.duration(duration, "seconds").asDays()} days` :
             moment.duration(duration, "seconds").humanize();
 
+        const perTermInterest = bn_perTermInterest.toNumber();
         parsed.push({
-            perTermInterest: bn_perTermInterest.toNumber(),
+            perTermInterest,
             durationInSecs: duration,
             durationText,
             minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
+            interestRatePA: perTermInterest * (60*60*24*365/duration),
             isActive: (bn_isActive.toNumber() === 1)
         });
 

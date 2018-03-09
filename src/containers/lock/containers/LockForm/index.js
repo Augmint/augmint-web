@@ -15,25 +15,6 @@ import {
     TermTableHeader,
 } from "./styles";
 
-const LockTerms = [
-    {
-        label: '3 months',
-        value: 3,
-    },
-    {
-        label: '6 months',
-        value: 6,
-    },
-    {
-        label: '1 year',
-        value: 12,
-    },
-    {
-        label: '2 years',
-        value: 24,
-    }
-];
-
 const RadioInput = (props) => (
     <input
         type="radio"
@@ -46,7 +27,13 @@ const RadioInput = (props) => (
 class LockContainer extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            amountValue: null
+        }
+
         this.onTermChange = this.onTermChange.bind(this);
+        this.onAmountChange = this.onAmountChange.bind(this);
     }
 
     
@@ -54,8 +41,14 @@ class LockContainer extends React.Component {
         debugger;
     }
 
+    onAmountChange(input, nextVal) {
+        this.setState(() => ({
+            amountValue: parseInt(nextVal || 0, 10)
+        }));
+    }
+
     render() {
-        const { onSubmit, handleSubmit } = this.props;
+        const { lockProducts, onSubmit, handleSubmit } = this.props;
         return (
             <Form
                 onSubmit={handleSubmit(onSubmit)}
@@ -67,7 +60,7 @@ class LockContainer extends React.Component {
                     type="number"
                     label="Amount to lock:"
                     disabled={false}
-                    onChange={() => { }}
+                    onChange={this.onAmountChange}
                     validate={[Validations.required]}
                     labelPosition="right"
                 >
@@ -80,33 +73,38 @@ class LockContainer extends React.Component {
                         <TermTableRow>
                             <TermTableHeadCell></TermTableHeadCell>
                             <TermTableHeadCell></TermTableHeadCell>
+                            <TermTableHeadCell>min. amount to lock</TermTableHeadCell>
                             <TermTableHeadCell>Interest rates</TermTableHeadCell>
                             <TermTableHeadCell textAlign="right" singleLine>You earn</TermTableHeadCell>
                         </TermTableRow>
                     </TermTableHeader>
                     <TermTableBody>
-                        {LockTerms.map((term, i) => {
-                            return (<TermTableRow key={`lock-term-${term.value}`}>
+                        {lockProducts && lockProducts
+                            .filter(product => product.isActive)
+                            .map((product, i) => {
+                            return (<TermTableRow key={`lock-term-${i}`}>
                                 <TermTableCell>
                                     <Field
                                         name="term"
-                                        val={term.value}
+                                        val={i}
                                         component={RadioInput}
                                         onChange={this.onTermChange}
                                         validate={[Validations.required]}
-                                        checked={i === 0} // first item is selected by default
                                     >
                                         <input />
                                     </Field>
                                 </TermTableCell>
                                 <TermTableCell>
-                                    <label>{term.label}</label>
+                                    <label>{product.durationText}</label>
                                 </TermTableCell>
                                 <TermTableCell>
-                                    3.2% p.a.
+                                    {product.minimumLockAmount}
+                                </TermTableCell>
+                                <TermTableCell>
+                                    ~{Math.floor(product.interestRatePA / 10000)} % p.a.
                                 </TermTableCell>
                                 <TermTableCell textAlign="right">
-                                    14.55 A£
+                                    {this.state.amountValue && (this.state.amountValue * product.perTermInterest / 1000000).toFixed(2)}
                                 </TermTableCell>
                             </TermTableRow>
                             )
