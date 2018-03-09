@@ -1,7 +1,7 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { connectExchange, refreshExchange } from "modules/reducers/exchange";
-import { refreshTrades } from "modules/reducers/trades";
+import { fetchTrades, processNewTrade } from "modules/reducers/trades";
 import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
@@ -65,18 +65,18 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
         const userAccount = store.getState().web3Connect.userAccount;
         const augmintToken = store.getState().augmintToken;
 
-        store.dispatch(refreshTrades(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
+        store.dispatch(fetchTrades(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
         setupListeners();
     }
 };
 
 // event NewOrder(uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = (orderId, maker, price, tokenAmount, weiAmount) => {
+const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // store.dispatch(refreshExchangeTrade());
     const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(processNewTrade('NewOrder', userAccount, this));
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
         console.debug(
@@ -87,12 +87,12 @@ const onNewOrder = (orderId, maker, price, tokenAmount, weiAmount) => {
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
-const onCancelledOrder = (orderId, maker, tokenAmount, weiAmount) => {
+const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // store.dispatch(refreshExchangeTrade());
     const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(processNewTrade('CancelledOrder', userAccount, this));
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onCancelledOrder: cancelled buy tokenOrder for current user, dispatching fetchUserBalance()"
@@ -102,14 +102,14 @@ const onCancelledOrder = (orderId, maker, tokenAmount, weiAmount) => {
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
-const onOrderFill = (tokenBuyer, tokenSeller, buyTokenOrderId, sellTokenOrderId, price, weiAmount, tokenAmount) => {
+const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellTokenOrderId, price, weiAmount, tokenAmount) {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and regreshOrders()");
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
-    // store.dispatch(processNewTrade());
     const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(processNewTrade('OrderFill', userAccount, this));
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"
