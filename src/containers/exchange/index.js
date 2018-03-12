@@ -68,13 +68,15 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
+                        <Pgrid.Row>
+                            <TradeBook
+                                trades={trades}
+                                userAccountAddress={userAccount.address}
+                                header="Trades history"
+                            />
+                        </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
-                <TradeBook
-                    trades={trades}
-                    userAccountAddress={userAccount.address}
-                    header="Trades history"
-                />
             </EthereumState>
         );
     }

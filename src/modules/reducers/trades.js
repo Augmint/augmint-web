@@ -117,7 +117,6 @@ export const processNewTrade = (eventName, account, eventLog) => {
 
             if (!trades.find(a => a.transactionHash === newTrade.transactionHash)) {
                 trades.push(newTrade);
-                console.log(trades);
                 trades.sort((trade1, trade2) => {
                   return trade2.blockData.timestamp - trade1.blockData.timestamp;
                 });

@@ -2,11 +2,23 @@ import React from "react";
 
 import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
+import { CustomTable } from "components/Table";
 
 export default class TradeBook extends React.Component {
     render() {
         const { header, userAccountAddress } = this.props;
         const { trades, error, isLoading } = this.props.trades;
+        const dataKeys = ['blockTimeStampText', 'type', 'direction', 'price', 'tokenValue', 'ethAmountRounded', 'tokenAmount'];
+        const unit = ['', '', '', 'A-EUR/ETH', 'A€', 'ETH', 'A€'];
+        const headerData = {
+          'blockTimeStampText': 'Date',
+          'type': 'Type',
+          'direction': 'Direction',
+          'price': 'Price',
+          'tokenValue': 'Token Value',
+          'ethAmountRounded' : 'Eth Amount',
+          'tokenAmount': 'Token Amount'
+        }
 
         return (
             <Pblock loading={isLoading} header={header}>
@@ -17,21 +29,12 @@ export default class TradeBook extends React.Component {
                 {isLoading ? (
                     <p>Refreshing orders...</p>
                 ) : (
-                    <div>
-                      {trades && trades.map((trade, index) => (
-                        <div key={trade.type + '_' +trade.blockData.timestamp + '_' + index}>
-                          {/* <h1>{trade.blockNumber}</h1>
-                          <h1>{trade.blockData.timestamp}</h1> */}
-                          <span>Date: {trade.blockTimeStampText}--</span>
-                          <span>Type: {trade.type}--</span>
-                          <span>Direction: {trade.direction}--</span>
-                          <span>Price: {trade.price}</span>
-                          <span>TokenValue: {trade.tokenValue}</span>
-                          {trade.ethAmount && <span>--Eth Amount: {trade.ethAmountRounded} eth</span>}
-                          {trade.tokenAmount && <span>--Token Amount: {trade.tokenAmount} A€</span>}
-                        </div>
-                      ))}
-                    </div>
+                    <CustomTable
+                        datakeys={dataKeys}
+                        unit={unit}
+                        data={trades}
+                        headerdata={headerData}
+                    />
                 )}
             </Pblock>
         );
