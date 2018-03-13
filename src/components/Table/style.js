@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import { media, mediaopacity } from '../../styles/media';
 
 export const StyleTitle = styled.h3``;
 
