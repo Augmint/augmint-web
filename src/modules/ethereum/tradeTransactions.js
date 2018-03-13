@@ -3,6 +3,8 @@ import ethers from "ethers";
 import moment from "moment";
 import BigNumber from "bignumber.js";
 
+const ONE_ETH = 1000000000000000000;
+
 export async function fetchTradesTx(account, fromBlock, toBlock) {
     try {
         const exchangeInstance = store.getState().exchange.contract.ethersInstance;
@@ -79,9 +81,9 @@ async function _formatTradeLog(event, account, eventLog, type) {
     const parsedData = event.parse(eventLog.topics, eventLog.data);
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
-    const bn_weiAmount = parsedData.weiAmount;
+    const bn_weiAmount = new BigNumber(parsedData.weiAmount.toString());
     const bn_tokenAmount = parsedData.tokenAmount;
-    const bn_ethAmount  = new BigNumber(store.getState().web3Connect.web3Instance.utils.fromWei(bn_weiAmount._bn, 'ether'));
+    const bn_ethAmount = bn_weiAmount.div(ONE_ETH);
 
     const ethAmount  = bn_ethAmount.toString();
     const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
@@ -101,7 +103,6 @@ async function _formatTradeLog(event, account, eventLog, type) {
         .div(decimalsDiv)
         .toFixed(decimals)
       );
-
     }
 
     const tokenValue = direction === 'sell' ? tokenAmount : tokenBuy;

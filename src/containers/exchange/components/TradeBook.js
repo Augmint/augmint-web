@@ -26,7 +26,7 @@ export default class TradeBook extends React.Component {
                     <ErrorPanel header="Error while fetching trade list">{error.message}</ErrorPanel>
                 )}
                 {trades == null && !isLoading && <p>Connecting...</p>}
-                {isLoading ? (
+                {!error && isLoading ? (
                     <p>Refreshing orders...</p>
                 ) : (
                     <CustomTable
