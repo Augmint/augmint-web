@@ -47,7 +47,7 @@ describe("Augmint exchange", function() {
 
                 cy.assertUserEthBalanceOnUI(
                     parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth,
-                    8
+                    12
                 );
                 cy.get("[data-testid=msgPanelOkButton]").click();
 
@@ -73,7 +73,7 @@ describe("Augmint exchange", function() {
                 cy.assertUserEthBalanceOnUI(
                     parseFloat(this.startingEthBalance) -
                         (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
-                    4 // TODO: gasprice used for cancel tx seems to be different. revisit precison after tx refactor
+                    12
                 );
             });
     });
@@ -122,7 +122,7 @@ describe("Augmint exchange", function() {
 
                 cy.assertUserEthBalanceOnUI(
                     parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth,
-                    8
+                    12
                 );
                 cy.get("[data-testid=msgPanelOkButton]").click();
 
@@ -144,20 +144,11 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=acknowledgeFlashButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
-                // cy.log(
-                //     "gas",
-                //     this.orderGasUsed +
-                //         " " +
-                //         this.cancelGasUsed +
-                //         " " +
-                //         this.gasPriceInEth +
-                //         "  " +
-                //         (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth
-                // );
+
                 cy.assertUserEthBalanceOnUI(
                     parseFloat(this.startingEthBalance) -
                         (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
-                    4 // TODO: gasprice used for cancel tx seems to be different. revisit precison after tx refactor
+                    12
                 );
             });
     });
