@@ -162,5 +162,51 @@ describe("Augmint exchange", function() {
             });
     });
 
-    it("Should match a buy and sell order");
+    it("Should match a buy and sell order", function() {
+        const tokenAmount = 997;
+        const ethAmount = 1;
+        const price = 997;
+
+        cy.get("[data-testid=exchangeMenuLink]").click();
+        cy.get("[data-testid=sellMenuLink]").click();
+
+        cy
+            .get("[data-testid=priceInput]")
+            .type("{selectall}" + price)
+            .should("have.value", price.toString());
+
+        // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
+        cy
+            .get("[data-testid=ethAmountInput]")
+            .type(ethAmount)
+            .should("have.value", ethAmount.toString());
+
+        cy.get("[data-testid=submitButton]").click();
+
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
+
+        cy
+            .get("@successPanel")
+            .contains("Successful order")
+            .then(() => {
+                cy.get("[data-testid=msgPanelOkButton]").click();
+
+                cy.get("[data-testid=buyMenuLink]").click();
+
+                cy
+                    .get("[data-testid=tokenAmountInput]")
+                    .type(tokenAmount)
+                    .should("have.value", tokenAmount.toString());
+
+                cy.get("[data-testid=submitButton]").click();
+                cy.get("@successPanel").contains("Successful order");
+            })
+            .then(() => {
+                cy.get("[data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=matchTopOrdersButton]").click();
+                cy.get("@successPanel").contains("Successful match");
+                cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+                // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)
+            });
+    });
 });
