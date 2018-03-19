@@ -55,52 +55,69 @@ export async function transferTokenTx(payload) {
 
     const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().augmintToken.contract.instance;
+    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
 
-    let result;
+    let tx;
     if (_narrative) {
-        result = await augmintToken.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative, {
+        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
-        result = await augmintToken.transfer(payee, tokenAmount * decimalsDiv, {
+        tx = await augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
         });
     }
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  transferTokenTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("Token transfer failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Transfer transaction failed.",
-            "All gas provided was used. Check tx.".result,
+            "Token transfer failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
 
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "Transfer") {
-        throw new EthereumTransactionError(
-            "Transfer transaction error.",
-            "Transfer event wasn't received. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-
-    const bn_amount = result.logs[0].args.amount;
+    const bn_amount = receipt.events.AugmintTransfer.returnValues.amount;
     return {
-        to: result.logs[0].args.to,
-        from: result.logs[0].args.from,
+        to: receipt.events.AugmintTransfer.returnValues.to,
+        from: receipt.events.AugmintTransfer.returnValues.from,
         bn_amount: bn_amount,
         amount: bn_amount / decimalsDiv,
-        narrative: result.logs[0].args.narrative,
+        narrative: receipt.events.AugmintTransfer.returnValues.narrative,
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }

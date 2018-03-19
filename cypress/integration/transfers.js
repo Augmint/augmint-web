@@ -37,7 +37,7 @@ describe("Transfers", function() {
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").within(() => {
             cy.contains("Successful transfer");
-            cy.contains("Sent " + amount + " A-EUR to " + toAddress.toLowerCase());
+            cy.contains("Sent " + amount + " A-EUR to " + toAddress);
         });
 
         cy
