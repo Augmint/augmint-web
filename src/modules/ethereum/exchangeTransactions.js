@@ -202,12 +202,12 @@ export async function placeOrderTx(orderType, amount, price) {
     };
 }
 
-export async function matchOrdersTx(buyIndex, buyId, sellIndex, sellId) {
+export async function matchOrdersTx(buyId, sellId) {
     const gasEstimate = cost.MATCH_ORDERS_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().exchange.contract.instance;
 
-    const result = await exchange.matchOrders(buyIndex, buyId, sellIndex, sellId, {
+    const result = await exchange.matchOrders(buyId, sellId, {
         from: userAccount,
         gas: gasEstimate
     });
@@ -239,19 +239,19 @@ export async function matchOrdersTx(buyIndex, buyId, sellIndex, sellId) {
     };
 }
 
-export async function cancelOrderTx(orderType, orderIndex, orderId) {
+export async function cancelOrderTx(orderType, orderId) {
     const gasEstimate = cost.CANCEL_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().exchange.contract.instance;
 
     let result;
     if (orderType === TOKEN_BUY) {
-        result = await exchange.cancelBuyTokenOrder(orderIndex, orderId, {
+        result = await exchange.cancelBuyTokenOrder(orderId, {
             from: userAccount,
             gas: gasEstimate
         });
     } else if (orderType === TOKEN_SELL) {
-        result = await exchange.cancelSellTokenOrder(orderIndex, orderId, {
+        result = await exchange.cancelSellTokenOrder(orderId, {
             from: userAccount,
             gas: gasEstimate
         });
