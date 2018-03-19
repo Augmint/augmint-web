@@ -5,6 +5,8 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import ratesArtifacts from "contractsBuild/Rates.json";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const RATES_CONNECT_REQUESTED = "rates/RATES_CONNECT_REQUESTED";
 export const RATES_CONNECT_SUCCESS = "rates/RATES_CONNECT_SUCCESS";
 
@@ -108,11 +110,10 @@ export const refreshRates = () => {
             const bytes32_peggedSymbol = store.getState().augmintToken.info.bytes32_peggedSymbol;
             const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-            const ONE_ETH = 1000000000000000000;
             const rates = store.getState().rates.contract.instance;
 
             const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
-                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH),
+                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI),
                 augmintToken.balanceOf(rates.address),
                 web3.eth.getBalance(rates.address)
             ]);
@@ -121,7 +122,7 @@ export const refreshRates = () => {
                 type: RATES_REFRESHED,
                 result: {
                     bn_weiBalance,
-                    ethBalance: bn_weiBalance / ONE_ETH,
+                    ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
                     bn_tokenBalance,
                     tokenBalance: bn_tokenBalance / decimalsDiv,
 

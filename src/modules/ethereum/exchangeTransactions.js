@@ -3,9 +3,10 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
-const ONE_ETH = 1000000000000000000;
 
 export async function fetchOrders() {
     // TODO: handle when order changes while iterating
@@ -61,7 +62,7 @@ async function getOrders(orderType, offset) {
                     parsed.tokenValue = parseFloat(
                         parsed.bn_amount
                             .mul(parsed.bn_price)
-                            .div(ONE_ETH)
+                            .div(ONE_ETH_IN_WEI)
                             .round(0, BigNumber.ROUND_HALF_DOWN)
                             .div(decimalsDiv)
                             .toFixed(decimals)
@@ -71,13 +72,13 @@ async function getOrders(orderType, offset) {
                     parsed.orderType = TOKEN_SELL;
                     parsed.tokenValue = parseFloat(parsed.bn_amount / decimalsDiv);
                     parsed.bn_weiValue = parsed.bn_amount
-                        .mul(ONE_ETH)
+                        .mul(ONE_ETH_IN_WEI)
                         .div(parsed.bn_price)
                         .round(0, BigNumber.ROUND_HALF_UP);
                 }
 
                 parsed.price = parsed.bn_price / decimalsDiv; // price in tokens/ETH
-                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH);
+                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH_IN_WEI);
                 parsed.ethValue = parsed.bn_ethValue.toString();
                 parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
 
@@ -122,7 +123,7 @@ export async function placeOrderTx(orderType, amount, price) {
 
     switch (orderType) {
         case TOKEN_BUY:
-            submitAmount = new BigNumber(amount).mul(ONE_ETH);
+            submitAmount = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
             result = await exchange.placeBuyTokenOrder(submitPrice.toString(), {
                 value: submitAmount,
                 from: userAccount,
