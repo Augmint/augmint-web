@@ -113,8 +113,7 @@ export function isOrderBetter(o1, o2) {
 export async function placeOrderTx(orderType, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.instance;
-    const exchangeWeb3 = store.getState().exchange.contract.web3ContractInstance;
+    const exchange = store.getState().exchange.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const submitPrice = new BigNumber(price).mul(decimalsDiv);
@@ -124,22 +123,22 @@ export async function placeOrderTx(orderType, amount, price) {
     switch (orderType) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH);
-            tx = exchangeWeb3.methods.placeBuyTokenOrder(submitPrice.toString()).send({
+            tx = exchange.methods.placeBuyTokenOrder(submitPrice.toString()).send({
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
             });
             break;
+
         case TOKEN_SELL:
-            const augmintToken = store.getState().augmintToken;
+            const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
             submitAmount = new BigNumber(amount).mul(decimalsDiv);
-            tx = augmintToken.contract.web3ContractInstance.methods
-                .transferAndNotify(exchange.address, submitAmount.toString(), submitPrice.toString())
-                .send({
-                    from: userAccount,
-                    gas: gasEstimate
-                });
+            console.debug(exchange._address);
+            tx = augmintToken.methods
+                .transferAndNotify(exchange._address, submitAmount.toString(), submitPrice.toString())
+                .send({ from: userAccount, gas: gasEstimate });
             break;
+
         default:
             throw new EthereumTransactionError(
                 "Place order failed.",
@@ -186,7 +185,7 @@ export async function placeOrderTx(orderType, amount, price) {
 
     if (orderType === TOKEN_SELL) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
-        receipt.events.NewOrder = (await exchangeWeb3.getPastEvents("NewOrder", {
+        receipt.events.NewOrder = (await exchange.getPastEvents("NewOrder", {
             transactionHash: receipt.transactionHash,
             fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
             toBlock: receipt.blockNumber
@@ -205,28 +204,41 @@ export async function placeOrderTx(orderType, amount, price) {
 export async function matchOrdersTx(buyId, sellId) {
     const gasEstimate = cost.MATCH_ORDERS_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.instance;
+    const exchange = store.getState().exchange.contract.web3ContractInstance;
 
-    const result = await exchange.matchOrders(buyId, sellId, {
-        from: userAccount,
-        gas: gasEstimate
-    });
+    const tx = exchange.methods.matchOrders(buyId, sellId).send({ from: userAccount, gas: gasEstimate });
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  matchOrdersTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("Cancel order failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Order matching failed.",
-            "All gas provided was used. Check tx",
-            result,
-            gasEstimate
-        );
-    }
-
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "OrderFill") {
-        throw new EthereumTransactionError(
-            "Order matching failed.",
-            "OrderFill event wasn't received. Check tx",
-            result,
+            "Match orders failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
@@ -234,7 +246,7 @@ export async function matchOrdersTx(buyId, sellId) {
     return {
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }
@@ -242,43 +254,48 @@ export async function matchOrdersTx(buyId, sellId) {
 export async function cancelOrderTx(orderType, orderId) {
     const gasEstimate = cost.CANCEL_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.instance;
+    const exchange = store.getState().exchange.contract.web3ContractInstance;
 
-    let result;
+    let tx;
     if (orderType === TOKEN_BUY) {
-        result = await exchange.cancelBuyTokenOrder(orderId, {
-            from: userAccount,
-            gas: gasEstimate
-        });
+        tx = exchange.methods.cancelBuyTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
     } else if (orderType === TOKEN_SELL) {
-        result = await exchange.cancelSellTokenOrder(orderId, {
-            from: userAccount,
-            gas: gasEstimate
-        });
+        tx = exchange.methods.cancelSellTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
     } else {
-        throw new EthereumTransactionError(
-            "Order cancel error.",
-            "invalid orderType: " + orderType,
-            result,
-            gasEstimate
-        );
+        throw new EthereumTransactionError("Order cancel error.", "invalid orderType: " + orderType, tx, gasEstimate);
     }
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour
-        throw new EthereumTransactionError(
-            "Order cancel error.",
-            "All gas provided was used. Check tx. ",
-            result,
-            gasEstimate
-        );
-    }
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  cancelOrderTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
 
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "CancelledOrder") {
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("Cancel order failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Order cancel error.",
-            "CancelledOrder event wasn't received. Check tx.",
-            result,
+            "Cancel order failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
@@ -286,7 +303,7 @@ export async function cancelOrderTx(orderType, orderId) {
     return {
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }
