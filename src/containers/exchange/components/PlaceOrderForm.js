@@ -167,10 +167,9 @@ class PlaceOrderForm extends React.Component {
                         header={<h3>Successful order</h3>}
                         result={this.state.result}
                         onDismiss={() => reset()}
+                        data-test-orderid={this.state.result.orderId}
                     >
-                        <p data-test-orderid={this.state.result.orderId}>
-                            Order id: <span data-testid="orderId">{this.state.result.orderId}</span>
-                        </p>
+                        <p>Order id: {this.state.result.orderId}</p>
                     </EthSubmissionSuccessPanel>
                 )}
 

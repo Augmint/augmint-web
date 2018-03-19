@@ -2,6 +2,7 @@ describe("Augmint exchange", function() {
     beforeEach(function() {
         cy.getUserAEurBalance().as("startingAeurBalance");
         cy.getUserEthBalance().as("startingEthBalance");
+        cy.getGasPriceInEth().as("gasPriceInEth");
     });
 
     it("Should place and cancel buy order on exchange", function() {
@@ -25,17 +26,56 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("Successful order");
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
 
-        cy.get("[data-testid=msgPanelOkButton]").click();
+        cy
+            .get("@successPanel")
+            .contains("Successful order")
+            .then(() => {
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-orderid")
+                    .as("orderId");
 
-        cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-gasused")
+                    .as("orderGasUsed");
+            })
+            .then(() => {
+                cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
-        cy.assertUserEthBalanceOnUI(this.startingEthBalance - ethAmount, 8);
+                cy.assertUserEthBalanceOnUI(
+                    parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth,
+                    8
+                );
+                cy.get("[data-testid=msgPanelOkButton]").click();
 
-        // TODO: check orderlist
-        // TODO: check tradelist
-        // TODO: cancel order
+                // TODO: check orderlist
+                // TODO: check tradelist
+
+                // Cancel order
+                cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
+                cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
+                cy.get("@successPanel").contains("Order cancelled");
+            })
+            .then(() => {
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-gasused")
+                    .as("cancelGasUsed");
+            })
+            .then(() => {
+                cy.get("[data-testid=acknowledgeFlashButton]").click();
+
+                cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
+
+                cy.assertUserEthBalanceOnUI(
+                    parseFloat(this.startingEthBalance) -
+                        (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
+                    4 // TODO: gasprice used for cancel tx seems to be different. revisit precison after tx refactor
+                );
+            });
     });
 
     it("Should place and cancel sell order on exchange", function() {
@@ -61,17 +101,65 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("Successful order");
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
 
-        cy.get("[data-testid=msgPanelOkButton]").click();
+        cy
+            .get("@successPanel")
+            .contains("Successful order")
+            .then(() => {
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-orderid")
+                    .as("orderId");
 
-        cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - tokenAmount);
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-gasused")
+                    .as("orderGasUsed");
+            })
+            .then(() => {
+                cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - tokenAmount);
 
-        cy.assertUserEthBalanceOnUI(parseFloat(this.startingEthBalance), 8);
+                cy.assertUserEthBalanceOnUI(
+                    parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth,
+                    8
+                );
+                cy.get("[data-testid=msgPanelOkButton]").click();
 
-        // TODO: check orderlist
-        // TODO: check tradelist
-        // TODO: cancel order
+                // TODO: check orderlist
+                // TODO: check tradelist
+
+                // Cancel order
+                cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
+                cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
+                cy.get("@successPanel").contains("Order cancelled");
+            })
+            .then(() => {
+                cy
+                    .get("@successPanel")
+                    .invoke("attr", "data-test-gasused")
+                    .as("cancelGasUsed");
+            })
+            .then(() => {
+                cy.get("[data-testid=acknowledgeFlashButton]").click();
+
+                cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
+                // cy.log(
+                //     "gas",
+                //     this.orderGasUsed +
+                //         " " +
+                //         this.cancelGasUsed +
+                //         " " +
+                //         this.gasPriceInEth +
+                //         "  " +
+                //         (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth
+                // );
+                cy.assertUserEthBalanceOnUI(
+                    parseFloat(this.startingEthBalance) -
+                        (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
+                    4 // TODO: gasprice used for cancel tx seems to be different. revisit precison after tx refactor
+                );
+            });
     });
 
     it("Should match a buy and sell order");

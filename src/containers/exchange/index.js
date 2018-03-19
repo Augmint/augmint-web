@@ -42,7 +42,7 @@ class ExchangeHome extends React.Component {
                                 )}
 
                                 <OrderBook
-                                    data-testid="myOrdersBlock"
+                                    testid="myOrdersBlock"
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="My orders"
@@ -62,6 +62,7 @@ class ExchangeHome extends React.Component {
                                     />
                                 )}
                                 <OrderBook
+                                    testid="allOrdersBlock"
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
                                     header="All orders"
