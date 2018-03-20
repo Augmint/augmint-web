@@ -231,52 +231,59 @@ export async function fetchLoansToCollectTx() {
 // loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loansToCollect) {
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
     const loanIdsToCollect = loansToCollect.map(loan => loan.id);
 
-    const result = await loanManager.collect(loanIdsToCollect, {
-        from: userAccount,
-        gas: gasEstimate
-    });
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
-        throw new EthereumTransactionError(
-            "Loan collection error.",
-            "All gas provided was used. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-    if (!result.logs || result.logs.length === 0) {
-        throw new EthereumTransactionError(
-            "Loan collection error.",
-            "No LoanCollected events received. Check tx",
-            result,
-            gasEstimate
-        );
-    }
+    const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
-    result.logs.map((logItem, index) => {
-        if (!logItem.event || logItem.event !== "LoanCollected") {
-            throw new EthereumTransactionError(
-                "Likely not all loans has been collected",
-                "One of the events received is not LoanCollected. Check tx.\n" +
-                    `logs[${index}] received: ${logItem.event}.`,
-                result,
-                gasEstimate
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  collectLoansTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
             );
-        }
-        return true;
-    });
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
 
-    if (result.logs.length !== loansToCollect.length) {
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("New loan failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
+        throw new EthereumTransactionError(
+            "Collect loans failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            { receipt }, // TODO: refactor EthereumTransactionError to expect only receipt (or tx too?)
+            gasEstimate
+        );
+    }
+
+    const loanCollectedEventsCount =
+        typeof receipt.events.LoanCollected === "undefined"
+            ? 0
+            : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
+
+    if (loanCollectedEventsCount !== loansToCollect.length) {
         throw new EthereumTransactionError(
             "Likely not all loans has been collected.",
             "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
-                `Received: ${result.logs.length} events. Expected: ${loansToCollect.length}`,
-            result,
+                `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
+            { receipt }, // TODO: refactor EthereumTransactionError to expect only receipt (or tx too?)
             gasEstimate
         );
     }
@@ -285,7 +292,7 @@ export async function collectLoansTx(loansToCollect) {
         loansCollected: loansToCollect.length,
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }
