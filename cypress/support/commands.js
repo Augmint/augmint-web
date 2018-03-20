@@ -147,7 +147,7 @@ Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
 });
 
 // assert user balance on UI.
-Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals, options = {}) => {
+Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 12, options = {}) => {
     const expectedEth = Number(_expectedEth.toFixed(decimals));
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
