@@ -9,8 +9,7 @@ import { EthereumTransactionError } from "modules/ethereum/ethHelper";
 const ONE_ETH = 1000000000000000000;
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     let gasEstimate;
@@ -23,46 +22,57 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     const userAccount = store.getState().web3Connect.userAccount;
     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH);
 
-    const result = await loanManager.newEthBackedLoan(productId, {
-        value: weiAmount,
-        from: userAccount,
-        gas: gasEstimate
-    });
+    const tx = loanManager.methods
+        .newEthBackedLoan(productId)
+        .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  newEthBackedLoanTx() Confirmation #${confirmationNumber} received. txhash: ${
+                    receipt.transactionHash
+                }`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("New loan failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Create loan transaction failed.",
-            "All gas provided was used. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-
-    // should we get byzantium tx status? if so then how?
-    // if (result.status !== 1) {
-    //     throw new Error(...);
-    // }
-
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "NewLoan") {
-        throw new EthereumTransactionError(
-            "Create loan transaction failed.",
-            "NewLoan event wasn't received. Check tx.",
-            result,
+            "New loan failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
 
     return {
-        loanId: result.logs[0].args.loanId.toString(),
-        productId: result.logs[0].args.productId.toNumber(),
-        borrower: result.logs[0].args.borrower,
-        loanAmount: result.logs[0].args.loanAmount.div(decimalsDiv).toNumber(),
-        repaymentAmount: result.logs[0].args.repaymentAmount.div(decimalsDiv).toNumber(),
-        collateralEth: web3.utils.fromWei(result.logs[0].args.collateralAmount.toString()),
+        loanId: receipt.events.NewLoan.returnValues.loanId,
+        productId: parseInt(receipt.events.NewLoan.returnValues.productId),
+        borrower: receipt.events.NewLoan.returnValues.borrower,
+        loanAmount: parseInt(receipt.events.NewLoan.returnValues.loanAmount) / decimalsDiv,
+        repaymentAmount: parseInt(receipt.events.NewLoan.returnValues.repaymentAmount) / decimalsDiv,
+        collateralEth: new BigNumber(receipt.events.NewLoan.returnValues.collateralAmount).div(ONE_ETH).toString(),
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }
@@ -132,50 +142,62 @@ export async function repayLoanTx(repaymentAmount, loanId) {
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
 
     const augmintToken = store.getState().augmintToken;
-    const augmintTokenInstance = augmintToken.contract.instance;
+    const augmintTokenInstance = augmintToken.contract.web3ContractInstance;
     const decimalsDiv = augmintToken.info.decimalsDiv;
 
-    const result = await augmintTokenInstance.transferAndNotify(
-        loanManager.address,
-        new BigNumber(repaymentAmount).mul(decimalsDiv).toString(),
-        loanId,
-        {
-            from: userAccount,
-            gas: gasEstimate
-        }
-    );
+    const tx = augmintTokenInstance.methods
+        .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
+        .send({ from: userAccount, gas: gasEstimate });
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.debug(
+                `  repayLoanTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug("  mined: ", receipt.transactionHash);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug("  tx hash received: " + hash);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError("Repay loan failed", error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
         throw new EthereumTransactionError(
-            "Repay loan failed.",
-            "All gas provided was used. Check tx.",
-            result,
+            "Repay loan failed",
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
             gasEstimate
         );
     }
-    if (
-        !result.logs ||
-        !result.logs[5] ||
-        result.logs[5].event !== "AugmintTransfer" ||
-        result.logs[5].args.to !== "0x0000000000000000000000000000000000000000"
-    ) {
-        // TODO: web3 doesn't return LoanRepayed on testrpc, so we test only for TokenBurned
-        throw new EthereumTransactionError(
-            "Repay loan failed.",
-            "AugmintTransfer to 0x0 (burn) event wasn't received. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
+
+    // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
+    receipt.events.LoanRepayed = (await loanManager.getPastEvents("LoanRepayed", {
+        transactionHash: receipt.transactionHash,
+        fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
+        toBlock: receipt.blockNumber
+    }))[0];
 
     return {
         eth: {
             gasEstimate,
-            result
+            result: { receipt } // TODO: refactor this and include just receipt
         }
     };
 }
