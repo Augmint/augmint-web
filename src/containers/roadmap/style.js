@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { media, mediaopacity } from '../../styles/media';
-import bulletPoint from '../../assets/images/bullet-point.svg';
+import { media, mediaopacity } from 'styles/media';
+import bulletPoint from 'assets/images/bullet-point.svg';
 
 export const StyleRoadmapTitle = styled.h1`
     font-size: 42px;

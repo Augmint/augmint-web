@@ -5,8 +5,7 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError } from "modules/ethereum/ethHelper";
-
-const ONE_ETH = 1000000000000000000;
+import { ONE_ETH_IN_WEI } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const web3 = store.getState().web3Connect.web3Instance;
@@ -21,7 +20,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     }
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH);
+    const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
 
     const result = await loanManager.newEthBackedLoan(productId, {
         value: weiAmount,
@@ -353,7 +352,7 @@ function parseLoans(loansArray) {
                 productId: bn_productId.toNumber(),
                 state,
                 loanStateText,
-                collateralEth: bn_collateralAmount / ONE_ETH,
+                collateralEth: bn_collateralAmount / ONE_ETH_IN_WEI,
                 repaymentAmount: bn_repaymentAmount / decimalsDiv,
                 loanAmount: bn_loanAmount / decimalsDiv,
                 interestAmount: bn_interestAmount / decimalsDiv,
