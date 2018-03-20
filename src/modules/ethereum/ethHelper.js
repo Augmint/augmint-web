@@ -62,7 +62,6 @@ export async function getNetworkDetails(web3) {
 export async function processTx(tx, txName, gasEstimate) {
     tx
         .on("confirmation", (confirmationNumber, receipt) => {
-            console.log(receipt);
             console.debug(
                 `  ${txName} Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
             );
