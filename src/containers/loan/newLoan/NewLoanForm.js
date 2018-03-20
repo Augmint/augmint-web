@@ -11,8 +11,8 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
 import ToolTip from "components/ToolTip";
+import { ONE_ETH_IN_WEI } from "utils/constants";
 
-const ONE_ETH = 1000000000000000000;
 const PPM_DIV = 1000000;
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -46,11 +46,11 @@ class NewLoanForm extends React.Component {
 
         const weiAmount = repaymentAmount
             .div(this.props.rates.info.bn_ethFiatRate)
-            .mul(ONE_ETH)
+            .mul(ONE_ETH_IN_WEI)
             .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+        const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -73,11 +73,11 @@ class NewLoanForm extends React.Component {
 
         const weiAmount = val
             .div(this.props.rates.info.bn_ethFiatRate)
-            .mul(ONE_ETH)
+            .mul(ONE_ETH_IN_WEI)
             .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+        const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -86,7 +86,7 @@ class NewLoanForm extends React.Component {
     onEthAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value).mul(ONE_ETH);
+            val = new BigNumber(e.target.value).mul(ONE_ETH_IN_WEI);
         } catch (error) {
             this.props.change("loanTokenAmount", "");
             this.props.change("repaymentAmount", "");
@@ -94,7 +94,7 @@ class NewLoanForm extends React.Component {
         }
         const fiatValue = val
             .mul(this.props.rates.info.bn_ethFiatRate)
-            .div(ONE_ETH)
+            .div(ONE_ETH_IN_WEI)
             .round(0, BigNumber.ROUND_HALF_UP);
 
         const repaymentAmount = fiatValue
