@@ -31,7 +31,7 @@ export class CustomTable extends React.Component {
                           <StyleTr key={'row_' + rowIndex}>
                           {datakeys.map((key, index) => (
                             <StyleTd key={'row_' + rowIndex + '_cell_' + index}>
-                              {rowData[key] !== 0 ? rowData[key] : '-'}{rowData[key]? (' ' + unit[index]) : ''}</StyleTd>
+                              {rowData[key]}{' ' + unit[index]}</StyleTd>
                           ))}
                         </StyleTr>
                         ))}
