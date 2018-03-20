@@ -1,0 +1,1 @@
+export const ONE_ETH_IN_WEI = 1e18;

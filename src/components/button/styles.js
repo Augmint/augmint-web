@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
 
-import theme from '../../styles/theme';
+import theme from 'styles/theme';
 
 const BaseButton = `
     display: inline-flex;

@@ -17,7 +17,7 @@ import {
     LockIcon,
     WaitIcon,
     PremiumIcon
-} from '../../../components/Icons';
+} from 'components/Icons';
 
 import petrovics from 'assets/images/team/ppetrovics.jpg';
 import bdebreczeni from 'assets/images/team/bdebreczeni.jpg';
