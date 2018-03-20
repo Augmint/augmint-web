@@ -76,7 +76,11 @@ const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    store.dispatch(processNewTrade('NewOrder', userAccount, this));
+    if (userAccount === maker) {
+        store.dispatch(processNewTrade('NewOrder', userAccount, this));
+    } else {
+        processNewTrade('NewOrder', userAccount, this)
+    }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
         console.debug(
@@ -92,7 +96,11 @@ const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    store.dispatch(processNewTrade('CancelledOrder', userAccount, this));
+    if (userAccount === maker) {
+        store.dispatch(processNewTrade('CancelledOrder', userAccount, this));
+    } else {
+        processNewTrade('CancelledOrder', userAccount, this)
+    }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onCancelledOrder: cancelled buy tokenOrder for current user, dispatching fetchUserBalance()"
@@ -109,7 +117,11 @@ const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellToken
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    store.dispatch(processNewTrade('OrderFill', userAccount, this));
+    if (userAccount === tokenBuyer || userAccount === tokenSeller) {
+        store.dispatch(processNewTrade('OrderFill', userAccount, this));
+    } else {
+        processNewTrade('OrderFill', userAccount, this)
+    }
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"
