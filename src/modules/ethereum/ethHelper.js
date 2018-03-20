@@ -12,9 +12,7 @@ class ExtendableError extends Error {
 
 export class EthereumTransactionError extends ExtendableError {
     constructor(message, details, txResult, gasEstimate, ...args) {
-        console.debug("message:", message, "details:", details);
         super(message, ...args);
-
         this.details = details;
         this.txResult = txResult;
         this.gasEstimate = gasEstimate;
@@ -59,4 +57,44 @@ export async function getNetworkDetails(web3) {
         name: networkName,
         type: networkType
     };
+}
+
+export async function processTx(tx, txName, gasEstimate) {
+    tx
+        .on("confirmation", (confirmationNumber, receipt) => {
+            console.log(receipt);
+            console.debug(
+                `  ${txName} Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
+            );
+        })
+        .then(receipt => {
+            console.debug(` ${txName}  mined. Hash: ${receipt.transactionHash}`);
+        });
+
+    const receipt = await tx
+        .once("transactionHash", hash => {
+            console.debug(` ${txName} hash received: ${hash}`);
+        })
+        .on("error", error => {
+            throw new EthereumTransactionError(`${txName} failed`, error, null, gasEstimate);
+        })
+        .once("receipt", receipt => {
+            console.debug(
+                `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            return receipt;
+        });
+
+    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+        // ganache returns 0x01, Rinkeby 0x1
+        throw new EthereumTransactionError(
+            `${txName} failed`,
+            "Ethereum transaction returned status: " + receipt.status,
+            receipt,
+            gasEstimate
+        );
+    }
+
+    return receipt;
 }

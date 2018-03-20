@@ -4,7 +4,7 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
-import { EthereumTransactionError } from "modules/ethereum/ethHelper";
+import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import { ONE_ETH_IN_WEI } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
@@ -25,42 +25,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         .newEthBackedLoan(productId)
         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
-    tx
-        .on("confirmation", (confirmationNumber, receipt) => {
-            console.debug(
-                `  newEthBackedLoanTx() Confirmation #${confirmationNumber} received. txhash: ${
-                    receipt.transactionHash
-                }`
-            );
-        })
-        .then(receipt => {
-            console.debug("  mined: ", receipt.transactionHash);
-        });
-
-    const receipt = await tx
-        .once("transactionHash", hash => {
-            console.debug("  tx hash received: " + hash);
-        })
-        .on("error", error => {
-            throw new EthereumTransactionError("New loan failed", error, null, gasEstimate);
-        })
-        .once("receipt", receipt => {
-            console.debug(
-                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                receipt
-            );
-            return receipt;
-        });
-
-    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-        // ganache returns 0x01, Rinkeby 0x1
-        throw new EthereumTransactionError(
-            "New loan failed",
-            "Ethereum transaction returned status: " + receipt.status,
-            receipt,
-            gasEstimate
-        );
-    }
+    const receipt = await processTx(tx, "newEthBackedLoan", gasEstimate);
 
     return {
         loanId: receipt.events.NewLoan.returnValues.loanId,
@@ -153,40 +118,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
         .send({ from: userAccount, gas: gasEstimate });
 
-    tx
-        .on("confirmation", (confirmationNumber, receipt) => {
-            console.debug(
-                `  repayLoanTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
-            );
-        })
-        .then(receipt => {
-            console.debug("  mined: ", receipt.transactionHash);
-        });
-
-    const receipt = await tx
-        .once("transactionHash", hash => {
-            console.debug("  tx hash received: " + hash);
-        })
-        .on("error", error => {
-            throw new EthereumTransactionError("Repay loan failed", error, null, gasEstimate);
-        })
-        .once("receipt", receipt => {
-            console.debug(
-                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                receipt
-            );
-            return receipt;
-        });
-
-    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-        // ganache returns 0x01, Rinkeby 0x1
-        throw new EthereumTransactionError(
-            "Repay loan failed",
-            "Ethereum transaction returned status: " + receipt.status,
-            receipt,
-            gasEstimate
-        );
-    }
+    const receipt = await processTx(tx, "repayLoan(transferAndNotify)", gasEstimate);
 
     // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
     receipt.events.LoanRepayed = (await loanManager.getPastEvents("LoanRepayed", {
@@ -239,40 +171,7 @@ export async function collectLoansTx(loansToCollect) {
 
     const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
-    tx
-        .on("confirmation", (confirmationNumber, receipt) => {
-            console.debug(
-                `  collectLoansTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
-            );
-        })
-        .then(receipt => {
-            console.debug("  mined: ", receipt.transactionHash);
-        });
-
-    const receipt = await tx
-        .once("transactionHash", hash => {
-            console.debug("  tx hash received: " + hash);
-        })
-        .on("error", error => {
-            throw new EthereumTransactionError("New loan failed", error, null, gasEstimate);
-        })
-        .once("receipt", receipt => {
-            console.debug(
-                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                receipt
-            );
-            return receipt;
-        });
-
-    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-        // ganache returns 0x01, Rinkeby 0x1
-        throw new EthereumTransactionError(
-            "Collect loans failed",
-            "Ethereum transaction returned status: " + receipt.status,
-            { receipt }, // TODO: refactor EthereumTransactionError to expect only receipt (or tx too?)
-            gasEstimate
-        );
-    }
+    const receipt = await processTx(tx, "collect", gasEstimate);
 
     const loanCollectedEventsCount =
         typeof receipt.events.LoanCollected === "undefined"

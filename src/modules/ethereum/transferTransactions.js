@@ -10,7 +10,7 @@ import store from "modules/store";
 import moment from "moment";
 import { cost } from "./gas";
 import ethers from "ethers";
-import { EthereumTransactionError } from "modules/ethereum/ethHelper";
+import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
 export function getTransferFee(amount) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
@@ -61,52 +61,22 @@ export async function transferTokenTx(payload) {
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
 
     let tx;
+    let txName;
     if (_narrative) {
+        txName = "transferWithNarrative";
         tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
+        txName = "transfer";
         tx = await augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
         });
     }
 
-    tx
-        .on("confirmation", (confirmationNumber, receipt) => {
-            console.debug(
-                `  transferTokenTx() Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
-            );
-        })
-        .then(receipt => {
-            console.debug("  mined: ", receipt.transactionHash);
-        });
-
-    const receipt = await tx
-        .once("transactionHash", hash => {
-            console.debug("  tx hash received: " + hash);
-        })
-        .on("error", error => {
-            throw new EthereumTransactionError("Token transfer failed", error, null, gasEstimate);
-        })
-        .once("receipt", receipt => {
-            console.debug(
-                `  receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                receipt
-            );
-            return receipt;
-        });
-
-    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-        // ganache returns 0x01, Rinkeby 0x1
-        throw new EthereumTransactionError(
-            "Token transfer failed",
-            "Ethereum transaction returned status: " + receipt.status,
-            receipt,
-            gasEstimate
-        );
-    }
+    const receipt = await processTx(tx, txName, gasEstimate);
 
     const bn_amount = receipt.events.AugmintTransfer.returnValues.amount;
     return {
