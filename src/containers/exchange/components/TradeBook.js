@@ -4,7 +4,7 @@ import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
 import { CustomTable } from "components/Table";
 
-export default class TradeBook extends React.Component {
+export default class TradeHistory extends React.Component {
     render() {
         const { header, userAccountAddress } = this.props;
         const { trades, error, isLoading } = this.props.trades;
