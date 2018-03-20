@@ -107,16 +107,14 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel data-testid={testid} {...other} data-test-gasused={result.eth.result.receipt.gasUsed}>
+            <MsgPanel data-testid={testid} {...other} data-test-gasused={result.eth.receipt.gasUsed}>
                 {children}
                 <small>
                     <p>
-                        Tx hash:{" "}
-                        <small data-testid="transactionHash">{result.eth.result.receipt.transactionHash}</small>
+                        Tx hash: <small data-testid="transactionHash">{result.eth.receipt.transactionHash}</small>
                     </p>
                     <p>
-                        Gas used: {result.eth.result.receipt.gasUsed.toString()} (from {result.eth.gasEstimate}{" "}
-                        provided)
+                        Gas used: {result.eth.receipt.gasUsed.toString()} (from {result.eth.gasEstimate} provided)
                     </p>
                 </small>
             </MsgPanel>

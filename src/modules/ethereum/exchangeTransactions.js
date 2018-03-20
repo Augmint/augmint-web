@@ -197,7 +197,7 @@ export async function placeOrderTx(orderType, amount, price) {
         orderId: receipt.events.NewOrder.returnValues.orderId,
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }
@@ -247,7 +247,7 @@ export async function matchOrdersTx(buyId, sellId) {
     return {
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }
@@ -304,7 +304,7 @@ export async function cancelOrderTx(orderType, orderId) {
     return {
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }

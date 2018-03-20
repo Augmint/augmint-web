@@ -73,7 +73,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
             .toString(),
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }
@@ -198,7 +198,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
     return {
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }
@@ -293,7 +293,7 @@ export async function collectLoansTx(loansToCollect) {
         loansCollected: loansToCollect.length,
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }

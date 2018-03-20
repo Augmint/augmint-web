@@ -117,7 +117,7 @@ export async function transferTokenTx(payload) {
         narrative: receipt.events.AugmintTransfer.returnValues.narrative,
         eth: {
             gasEstimate,
-            result: { receipt } // TODO: refactor this and include just receipt
+            receipt
         }
     };
 }
