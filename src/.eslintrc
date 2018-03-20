@@ -1,6 +1,7 @@
 {
   "extends": "react-app",
   "rules": {
-     max-len: "off"
+    radix: "off",
+    max-len: "off"
   }
 }
