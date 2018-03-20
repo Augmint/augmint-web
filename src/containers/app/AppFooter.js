@@ -5,7 +5,7 @@ import Subscribe from "./Subscribe";
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
 import decent from 'assets/images/decent.png';
-import telegramLogo from 'assets/images/telegram_logo.png';
+import telegramLogo from 'assets/images/telegram_logo.svg';
 
 import "./custom_footer_style.css";
 
