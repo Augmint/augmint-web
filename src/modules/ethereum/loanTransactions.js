@@ -183,7 +183,7 @@ export async function collectLoansTx(loansToCollect) {
             "Likely not all loans has been collected.",
             "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
                 `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
-            { receipt }, // TODO: refactor EthereumTransactionError to expect only receipt (or tx too?)
+            receipt,
             gasEstimate
         );
     }

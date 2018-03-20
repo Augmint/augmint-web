@@ -10,7 +10,7 @@ import store from "modules/store";
 import moment from "moment";
 import { cost } from "./gas";
 import ethers from "ethers";
-import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
+import { processTx } from "modules/ethereum/ethHelper";
 
 export function getTransferFee(amount) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;

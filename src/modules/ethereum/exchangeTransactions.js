@@ -146,7 +146,7 @@ export async function placeOrderTx(orderType, amount, price) {
             throw new EthereumTransactionError(
                 "Place order failed.",
                 "Unknown orderType: " + orderType,
-                tx,
+                null,
                 gasEstimate
             );
     }
@@ -202,7 +202,7 @@ export async function cancelOrderTx(orderType, orderId) {
         tx = exchange.methods.cancelSellTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
         txName = "cancelSellTokenOrder";
     } else {
-        throw new EthereumTransactionError("Order cancel error.", "invalid orderType: " + orderType, tx, gasEstimate);
+        throw new EthereumTransactionError("Order cancel error.", "invalid orderType: " + orderType, null, gasEstimate);
     }
 
     const receipt = await processTx(tx, txName, gasEstimate);

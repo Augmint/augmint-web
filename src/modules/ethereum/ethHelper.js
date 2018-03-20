@@ -11,10 +11,10 @@ class ExtendableError extends Error {
 }
 
 export class EthereumTransactionError extends ExtendableError {
-    constructor(message, details, txResult, gasEstimate, ...args) {
+    constructor(message, details, receipt, gasEstimate, ...args) {
         super(message, ...args);
         this.details = details;
-        this.txResult = txResult;
+        this.receipt = receipt;
         this.gasEstimate = gasEstimate;
     }
 }
