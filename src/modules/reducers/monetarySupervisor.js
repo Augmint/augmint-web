@@ -5,6 +5,8 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import monetarySupervisor_artifacts from "contractsBuild/MonetarySupervisor.json";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const MONETARY_SUPERVISOR_CONNECT_REQUESTED = "augmintToken/MONETARY_SUPERVISOR_CONNECT_REQUESTED";
 export const MONETARY_SUPERVISOR_CONNECT_SUCCESS = "augmintToken/MONETARY_SUPERVISOR_CONNECT_SUCCESS";
 export const MONETARY_SUPERVISOR_CONNECT_ERROR = "augmintToken/MONETARY_SUPERVISOR_CONNECT_ERROR";
@@ -131,7 +133,6 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const ONE_ETH = 1000000000000000000;
 
     const [
         augmintTokenAddress,
@@ -171,7 +172,7 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         augmintToken.balanceOf(interestEarnedAccountAddress)
     ]);
 
-    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH;
+    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH_IN_WEI;
     const reserveTokenBalance = bn_reserveTokenBalance / decimalsDiv;
     const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / decimalsDiv;
 

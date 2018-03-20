@@ -3,8 +3,8 @@ import { ifProp } from 'styled-tools';
 
 import { NavLink } from "react-router-dom";
 
-import theme from '../../styles/theme';
-import { media, mediaopacity } from '../../styles/media';
+import theme from 'styles/theme';
+import { media, mediaopacity } from 'styles/media';
 
 export const StyleNavList = styled.ul`
     display: flex;
