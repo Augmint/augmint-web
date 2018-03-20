@@ -11,6 +11,7 @@ export const EXCHANGE_REFRESH_ERROR = "exchange/EXCHANGE_REFRESH_ERROR";
 export const EXCHANGE_REFRESH_SUCCESS = "exchange/EXCHANGE_REFRESH_SUCCESS";
 
 const initialState = {
+    contract: null,
     error: null,
     connectionError: false,
     isLoading: false,
