@@ -65,10 +65,10 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 
     return {
         loanId: receipt.events.NewLoan.returnValues.loanId,
-        productId: parseInt(receipt.events.NewLoan.returnValues.productId),
+        productId: parseInt(receipt.events.NewLoan.returnValues.productId, 10),
         borrower: receipt.events.NewLoan.returnValues.borrower,
-        loanAmount: parseInt(receipt.events.NewLoan.returnValues.loanAmount) / decimalsDiv,
-        repaymentAmount: parseInt(receipt.events.NewLoan.returnValues.repaymentAmount) / decimalsDiv,
+        loanAmount: parseInt(receipt.events.NewLoan.returnValues.loanAmount, 10) / decimalsDiv,
+        repaymentAmount: parseInt(receipt.events.NewLoan.returnValues.repaymentAmount, 10) / decimalsDiv,
         collateralEth: new BigNumber(receipt.events.NewLoan.returnValues.collateralAmount).div(ONE_ETH).toString(),
         eth: {
             gasEstimate,
