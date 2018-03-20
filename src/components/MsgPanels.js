@@ -26,7 +26,7 @@ export default class MsgPanel extends React.Component {
                         <Message.Header>{header}</Message.Header>
                         {children !== null && children}
                         {onDismiss && (
-                            <Button as="a" onClick={this.dismiss}>
+                            <Button data-testid="msgPanelOkButton" as="a" onClick={this.dismiss}>
                                 OK
                             </Button>
                         )}
@@ -107,7 +107,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel data-testid={testid} {...other}>
+            <MsgPanel data-testid={testid} {...other} data-test-gasused={result.eth.result.receipt.gasUsed}>
                 {children}
                 <small>
                     <p>
