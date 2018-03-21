@@ -105,13 +105,13 @@ const OrderList = props => {
 
 export default class OrderBook extends React.Component {
     render() {
-        const { filter, header, userAccountAddress } = this.props;
+        const { filter, header, userAccountAddress, testid } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
         const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
 
         return (
-            <Pblock loading={isLoading} header={header}>
+            <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && (
                     <ErrorPanel header="Error while fetching order list">{refreshError.message}</ErrorPanel>
                 )}

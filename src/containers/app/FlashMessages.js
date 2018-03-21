@@ -29,12 +29,7 @@ class FlashMessages extends React.Component {
                     )}
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button
-                        primary
-                        className="AcknowledgeFlashButton"
-                        id={`AcknowledgeFlashButton`}
-                        onClick={this.handleClose}
-                    >
+                    <Button primary data-testid="acknowledgeFlashButton" onClick={this.handleClose}>
                         <Icon name="checkmark" />
                         OK
                     </Button>

@@ -10,7 +10,7 @@ import store from "modules/store";
 import moment from "moment";
 import { cost } from "./gas";
 import ethers from "ethers";
-import { EthereumTransactionError } from "modules/ethereum/ethHelper";
+import { processTx } from "modules/ethereum/ethHelper";
 
 export function getTransferFee(amount) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
@@ -55,52 +55,39 @@ export async function transferTokenTx(payload) {
 
     const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().augmintToken.contract.instance;
+    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
 
-    let result;
+    let tx;
+    let txName;
     if (_narrative) {
-        result = await augmintToken.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative, {
+        txName = "transferWithNarrative";
+        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
-        result = await augmintToken.transfer(payee, tokenAmount * decimalsDiv, {
+        txName = "transfer";
+        tx = await augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
         });
     }
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour
-        throw new EthereumTransactionError(
-            "Transfer transaction failed.",
-            "All gas provided was used. Check tx.".result,
-            gasEstimate
-        );
-    }
+    const receipt = await processTx(tx, txName, gasEstimate);
 
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "Transfer") {
-        throw new EthereumTransactionError(
-            "Transfer transaction error.",
-            "Transfer event wasn't received. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-
-    const bn_amount = result.logs[0].args.amount;
+    const bn_amount = receipt.events.AugmintTransfer.returnValues.amount;
     return {
-        to: result.logs[0].args.to,
-        from: result.logs[0].args.from,
+        to: receipt.events.AugmintTransfer.returnValues.to,
+        from: receipt.events.AugmintTransfer.returnValues.from,
         bn_amount: bn_amount,
         amount: bn_amount / decimalsDiv,
-        narrative: result.logs[0].args.narrative,
+        narrative: receipt.events.AugmintTransfer.returnValues.narrative,
         eth: {
             gasEstimate,
-            result
+            receipt
         }
     };
 }

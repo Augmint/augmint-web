@@ -26,7 +26,7 @@ export default class MsgPanel extends React.Component {
                         <Message.Header>{header}</Message.Header>
                         {children !== null && children}
                         {onDismiss && (
-                            <Button as="a" onClick={this.dismiss}>
+                            <Button data-testid="msgPanelOkButton" as="a" onClick={this.dismiss}>
                                 OK
                             </Button>
                         )}
@@ -78,16 +78,16 @@ export function LoadingPanel(props) {
 export class EthSubmissionErrorPanel extends React.Component {
     render() {
         const { children, error, ...other } = this.props;
-        const txResult = error && error.txResult ? error.txResult : null;
+        const receipt = error && error.receipt ? error.receipt : null;
         return (
             <MsgPanel error {...other}>
                 {children}
                 {error && error.message}
-                {txResult && (
+                {receipt && (
                     <div>
-                        <p>Tx hash: {txResult.receipt.transactionHash}</p>
+                        <p>Tx hash: {receipt.transactionHash}</p>
                         <p>
-                            Gas used: {txResult.receipt.gasUsed} (from {error.gasEstimate} provided)
+                            Gas used: {receipt.gasUsed} (from {error.gasEstimate} provided)
                         </p>
                     </div>
                 )}
@@ -107,16 +107,14 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel data-testid={testid} {...other}>
+            <MsgPanel data-testid={testid} {...other} data-test-gasused={result.eth.receipt.gasUsed}>
                 {children}
                 <small>
                     <p>
-                        Tx hash:{" "}
-                        <small data-testid="transactionHash">{result.eth.result.receipt.transactionHash}</small>
+                        Tx hash: <small data-testid="transactionHash">{result.eth.receipt.transactionHash}</small>
                     </p>
                     <p>
-                        Gas used: {result.eth.result.receipt.gasUsed.toString()} (from {result.eth.gasEstimate}{" "}
-                        provided)
+                        Gas used: {result.eth.receipt.gasUsed.toString()} (from {result.eth.gasEstimate} provided)
                     </p>
                 </small>
             </MsgPanel>
