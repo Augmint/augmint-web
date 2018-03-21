@@ -63,13 +63,13 @@ export async function transferTokenTx(payload) {
     let tx;
     let txName;
     if (_narrative) {
-        txName = "transferWithNarrative";
+        txName = "A-EUR transfer (with narrative)";
         tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
-        txName = "transfer";
+        txName = "A-EUR transfer";
         tx = augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
