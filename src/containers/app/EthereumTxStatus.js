@@ -20,7 +20,7 @@ class EthereumTxStatus extends React.Component {
     }
 
     render() {
-        const transactions = this.props.transactions;
+        const { transactions, network } = this.props;
 
         const txList =
             transactions &&
@@ -40,20 +40,35 @@ class EthereumTxStatus extends React.Component {
                                     <small>Tx hash: {tx.transactionHash}</small>
                                 </p>
                             </LoadingPanel>
-                        ) /* TODO: on ganache only this shown.. */}
-
-                        {tx.event === "receipt" && (
-                            <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
-                                <p>
-                                    Transaction receipt received. Wait for confirmations.<br />
-                                    <small>
-                                        Gas used: {tx.receipt.gasUsed}
-                                        <br />
-                                        Tx hash: {tx.transactionHash}
-                                    </small>
-                                </p>
-                            </LoadingPanel>
                         )}
+
+                        {tx.event === "receipt" &&
+                            network.id !== 999 && (
+                                <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                    <p>
+                                        Transaction receipt received. Wait for confirmations.<br />
+                                        <small>
+                                            Gas used: {tx.receipt.gasUsed}
+                                            <br />
+                                            Tx hash: {tx.transactionHash}
+                                        </small>
+                                    </p>
+                                </LoadingPanel>
+                            )}
+
+                        {tx.event === "receipt" &&
+                            network.id === 999 && (
+                                <SuccessPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                    <p>
+                                        Transaction receipt received, success. (no confirmations on testrpc).<br />
+                                        <small>
+                                            Gas used: {tx.receipt.gasUsed}
+                                            <br />
+                                            Tx hash: {tx.transactionHash}
+                                        </small>
+                                    </p>
+                                </SuccessPanel>
+                            )}
 
                         {tx.event === "confirmation" && (
                             <SuccessPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
@@ -112,7 +127,8 @@ class EthereumTxStatus extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        transactions: state.submittedTransactions.transactions
+        transactions: state.submittedTransactions.transactions,
+        network: state.web3Connect.network
     };
 }
 
