@@ -1,3 +1,7 @@
+/* TODO: consider moving processTx somewhere else */
+import store from "modules/store";
+import { updateTx } from "modules/reducers/submittedTransactions";
+
 class ExtendableError extends Error {
     constructor(message) {
         super(message);
@@ -59,41 +63,70 @@ export async function getNetworkDetails(web3) {
     };
 }
 
-export async function processTx(tx, txName, gasEstimate) {
-    tx
-        .on("confirmation", (confirmationNumber, receipt) => {
-            console.debug(
-                `  ${txName} Confirmation #${confirmationNumber} received. txhash: ${receipt.transactionHash}`
-            );
-        })
-        .then(receipt => {
-            console.debug(` ${txName}  mined. Hash: ${receipt.transactionHash}`);
-        });
+export function processTx(tx, txName, gasEstimate) {
+    return new Promise((resolve, reject) => {
+        let receipt;
+        let transactionHash;
+        let error;
+        tx
+            .once("transactionHash", hash => {
+                transactionHash = hash;
+                store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
+                console.debug(` ${txName} hash received: ${hash}`);
+                resolve(transactionHash);
+            })
 
-    const receipt = await tx
-        .once("transactionHash", hash => {
-            console.debug(` ${txName} hash received: ${hash}`);
-        })
-        .on("error", error => {
-            throw new EthereumTransactionError(`${txName} failed`, error, null, gasEstimate);
-        })
-        .once("receipt", receipt => {
-            console.debug(
-                `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                receipt
-            );
-            return receipt;
-        });
+            .on("error", e => {
+                error = new EthereumTransactionError(`${txName} failed`, e, receipt, gasEstimate);
+                if (transactionHash) {
+                    // if error before tx submitted then (ie. no tx hash) then the form handles the error
+                    store.dispatch(updateTx({ event: "error", txName, transactionHash, error }));
+                } else {
+                    reject(error);
+                }
+            })
 
-    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-        // ganache returns 0x01, Rinkeby 0x1
-        throw new EthereumTransactionError(
-            `${txName} failed`,
-            "Ethereum transaction returned status: " + receipt.status,
-            receipt,
-            gasEstimate
-        );
-    }
+            .on("confirmation", (confirmationNumber, rec) => {
+                if (!error) {
+                    // we receive confirmations of failed txs but we don't want to display those
+                    store.dispatch(
+                        updateTx({
+                            event: "confirmation",
+                            txName,
+                            transactionHash: rec.transactionHash,
+                            confirmationNumber
+                        })
+                    );
+                }
+                console.debug(
+                    `  ${txName} Confirmation #${confirmationNumber} received. txhash: ${rec.transactionHash}`
+                );
+            })
 
-    return receipt;
+            .once("receipt", rec => {
+                receipt = rec;
+                store.dispatch(
+                    updateTx({ event: "receipt", txName, transactionHash: receipt.transactionHash, receipt })
+                );
+
+                console.debug(
+                    `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                    receipt
+                );
+
+                if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+                    // ganache returns 0x01, Rinkeby 0x1
+                    error = new EthereumTransactionError(
+                        `${txName} failed`,
+                        "Ethereum transaction returned status: " + receipt.status,
+                        receipt,
+                        gasEstimate
+                    );
+
+                    store.dispatch(
+                        updateTx({ event: "error", txName, transactionHash: receipt.transactionHash, error })
+                    );
+                }
+            });
+    });
 }

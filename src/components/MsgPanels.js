@@ -86,9 +86,7 @@ export class EthSubmissionErrorPanel extends React.Component {
                 {receipt && (
                     <div>
                         <p>Tx hash: {receipt.transactionHash}</p>
-                        <p>
-                            Gas used: {receipt.gasUsed} (from {error.gasEstimate} provided)
-                        </p>
+                        <p>Gas used: {receipt.gasUsed}</p>
                     </div>
                 )}
                 {error && <ErrorDetails details={error.details} />}
@@ -107,24 +105,24 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel data-testid={testid} {...other} data-test-gasused={result.eth.receipt.gasUsed}>
+            <MsgPanel data-testid={testid} {...other}>
                 {children}
-                <small>
-                    <p>
-                        Tx hash: <small data-testid="transactionHash">{result.eth.receipt.transactionHash}</small>
-                    </p>
-                    <p>
-                        Gas used: {result.eth.receipt.gasUsed.toString()} (from {result.eth.gasEstimate} provided)
-                    </p>
-                </small>
+                <p>{result.txName} transaction sent to Ethereum network but it's not mined yet.</p>
+                <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
+                <p>
+                    <small>
+                        Tx hash: <span data-testid="transactionHash">{result.transactionHash}</span>
+                        <br />
+                    </small>
+                </p>
             </MsgPanel>
         );
     }
 }
 
 EthSubmissionSuccessPanel.defaultProps = {
-    success: true,
-    header: <h3>Successfull transaction</h3>,
+    info: true,
+    header: <h3>Transaction sent</h3>,
     dismissable: true
 };
 

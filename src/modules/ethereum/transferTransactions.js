@@ -76,20 +76,8 @@ export async function transferTokenTx(payload) {
         });
     }
 
-    const receipt = await processTx(tx, txName, gasEstimate);
-
-    const bn_amount = receipt.events.AugmintTransfer.returnValues.amount;
-    return {
-        to: receipt.events.AugmintTransfer.returnValues.to,
-        from: receipt.events.AugmintTransfer.returnValues.from,
-        bn_amount: bn_amount,
-        amount: bn_amount / decimalsDiv,
-        narrative: receipt.events.AugmintTransfer.returnValues.narrative,
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {

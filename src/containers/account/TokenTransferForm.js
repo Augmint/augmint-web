@@ -36,10 +36,11 @@ class TokenTransferForm extends React.Component {
     }
 
     async handleSubmit(values) {
+        const tokenAmount = parseFloat(values.tokenAmount);
         const res = await store.dispatch(
             transferToken({
                 payee: values.payee,
-                tokenAmount: parseFloat(values.tokenAmount),
+                tokenAmount,
                 narrative: values.narrative
             })
         );
@@ -50,6 +51,8 @@ class TokenTransferForm extends React.Component {
         } else {
             this.setState({
                 result: res.result,
+                to: values.payee,
+                tokenAmount,
                 feeAmount: "0"
             });
             return;
@@ -76,12 +79,12 @@ class TokenTransferForm extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful transfer</h3>}
+                        header="Token transfer submitted"
                         result={this.state.result}
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Sent {this.state.result.amount} A-EUR to {this.state.result.to}
+                            Transfer {this.state.tokenAmount} A-EUR to {this.state.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
