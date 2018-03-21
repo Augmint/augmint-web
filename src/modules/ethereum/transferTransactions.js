@@ -70,7 +70,7 @@ export async function transferTokenTx(payload) {
         });
     } else {
         txName = "transfer";
-        tx = await augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
+        tx = augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
         });
