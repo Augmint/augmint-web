@@ -56,11 +56,11 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
     }
 }
 
-export async function processNewTradeTx(eventName, account, eventLog) {
+export async function processNewTradeTx(eventName, account, eventLog, type) {
     const exchangeInstance = store.getState().exchange.contract.ethersInstance;
     const event = exchangeInstance.interface.events[eventName];
 
-    return _formatTradeLog(event, account, eventLog);
+    return _formatTradeLog(event, account, eventLog, type);
 }
 
 async function _formatTradeLog(event, account, eventLog, type) {

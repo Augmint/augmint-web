@@ -76,10 +76,8 @@ const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount === maker) {
+    if (userAccount.toLowerCase() === maker.toLowerCase()) {
         store.dispatch(processNewTrade('NewOrder', userAccount, this));
-    } else {
-        processNewTrade('NewOrder', userAccount, this)
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
@@ -96,10 +94,8 @@ const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount === maker) {
+    if (userAccount.toLowerCase() === maker.toLowerCase()) {
         store.dispatch(processNewTrade('CancelledOrder', userAccount, this));
-    } else {
-        processNewTrade('CancelledOrder', userAccount, this)
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -117,10 +113,11 @@ const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellToken
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount === tokenBuyer || userAccount === tokenSeller) {
-        store.dispatch(processNewTrade('OrderFill', userAccount, this));
-    } else {
-        processNewTrade('OrderFill', userAccount, this)
+    if (userAccount.toLowerCase() === tokenBuyer.toLowerCase()) {
+        store.dispatch(processNewTrade('OrderFill', userAccount, this, 'buy'));
+    }
+    if (userAccount.toLowerCase() === tokenSeller.toLowerCase()) {
+        store.dispatch(processNewTrade('OrderFill', userAccount, this, 'sell'));
     }
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(

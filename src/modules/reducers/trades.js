@@ -100,7 +100,7 @@ export const fetchTrades = (account, fromBlock, toBlock) => {
     };
 };
 
-export const processNewTrade = (eventName, account, eventLog) => {
+export const processNewTrade = (eventName, account, eventLog, type) => {
     return async dispatch => {
         dispatch({
             type: TRADE_PROCESS_REQUESTED,
@@ -108,14 +108,27 @@ export const processNewTrade = (eventName, account, eventLog) => {
             eventLog
         });
         try {
-            const newTrade = await processNewTradeTx(eventName, account, eventLog);
+            const newTrade = await processNewTradeTx(eventName, account, eventLog, type);
             let trades = store.getState().trades.trades;
 
             if (!trades) {
               trades = [];
             }
 
-            if (!trades.find(a => a.transactionHash === newTrade.transactionHash)) {
+            if (!trades.find(a => {
+              let returnValue;
+              if (a.transactionHash === newTrade.transactionHash) {
+                if (!newTrade.direction || newTrade.direction !== a.direction) {
+                    returnValue = false;
+                } else {
+                    returnValue = true;
+                }
+              } else {
+                  returnValue = false;
+              }
+              console.log(returnValue);
+              return returnValue;
+            })) {
                 trades.push(newTrade);
                 trades.sort((trade1, trade2) => {
                   return trade2.blockData.timestamp - trade1.blockData.timestamp;
