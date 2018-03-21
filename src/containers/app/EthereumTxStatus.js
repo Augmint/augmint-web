@@ -100,9 +100,7 @@ class EthereumTxStatus extends React.Component {
 
         return !txList ? null : (
             <Psegment>
-                <Container>
-                    <MyListGroup>{txList}</MyListGroup>
-                </Container>
+                <Container>{txList}</Container>
                 {/* <Modal open={true}>
                 >
                 <Header icon="checkmark" content="Successful Ethereum transaction" onClose={this.handleClose} />

@@ -90,13 +90,15 @@ class TokenTransferForm extends React.Component {
                 )}
                 {!submitSucceeded && (
                     <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <EthSubmissionErrorPanel
-                            error={error}
-                            header={<h3>Transfer failed</h3>}
-                            onDismiss={() => {
-                                clearSubmitErrors();
-                            }}
-                        />
+                        {error && (
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                header="Transfer failed"
+                                onDismiss={() => {
+                                    clearSubmitErrors();
+                                }}
+                            />
+                        )}
 
                         <Field
                             component={Form.Field}

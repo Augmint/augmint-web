@@ -18,13 +18,17 @@ export default class MsgPanel extends React.Component {
     }
 
     render() {
-        let { children, eth, dismissable, dismissed, onDismiss, header, ...other } = this.props;
+        const { children, eth, icon, dismissable, dismissed, onDismiss, header, loading, ...other } = this.props;
         return (
             (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
                     <Message onDismiss={onDismiss ? this.dismiss : null} {...other}>
-                        <Message.Header>{header}</Message.Header>
-                        {children !== null && children}
+                        <h3>
+                            {icon && <Icon name={icon} loading={loading} />} {header}
+                        </h3>
+
+                        {children}
+
                         {onDismiss && (
                             <Button data-testid="msgPanelOkButton" as="a" onClick={this.dismiss}>
                                 OK
@@ -42,18 +46,13 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    return <MsgPanel success {...props} />;
+    const { success = true, icon = "check", ...other } = props;
+    return <MsgPanel success={success} icon={icon} {...other} />;
 }
 
 export function InfoPanel(props) {
-    const { info = true, icon = "info", header, ...other } = props;
-    return (
-        <MsgPanel info={info} icon={icon ? true : false} {...other}>
-            {icon && <Icon name={icon} />}
-            <Message.Header>{header}</Message.Header>
-            {props.children}
-        </MsgPanel>
-    );
+    const { info = true, icon = "info", ...other } = props;
+    return <MsgPanel info={info} icon={icon} {...other} />;
 }
 
 export function WarningPanel(props) {
@@ -65,14 +64,8 @@ export function ErrorPanel(props) {
 }
 
 export function LoadingPanel(props) {
-    const { info = true, header, ...other } = props;
-    return (
-        <MsgPanel info={info} icon {...other}>
-            <Icon name="circle notched" loading />
-            <Message.Header>{header}</Message.Header>
-            {props.children}
-        </MsgPanel>
-    );
+    const { info = true, icon = "circle notched", loading = true, ...other } = props;
+    return <MsgPanel info={info} icon={icon} loading={loading} {...other} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
@@ -96,7 +89,7 @@ export class EthSubmissionErrorPanel extends React.Component {
 }
 
 EthSubmissionErrorPanel.defaultProps = {
-    header: <h3>Submission error</h3>,
+    header: "Submission error",
     dismissable: false // pass onDismiss={() => {clearSubmitErrors();}} instead
 };
 
@@ -122,7 +115,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
 
 EthSubmissionSuccessPanel.defaultProps = {
     info: true,
-    header: <h3>Transaction sent</h3>,
+    header: "Transaction sent",
     dismissable: true
 };
 
