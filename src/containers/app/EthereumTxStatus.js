@@ -58,7 +58,11 @@ class EthereumTxStatus extends React.Component {
 
                         {tx.event === "receipt" &&
                             network.id === 999 && (
-                                <SuccessPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                <SuccessPanel
+                                    data-testid="EthReceiptReceivedPanel"
+                                    header={header}
+                                    onDismiss={() => this.handleClose(tx.transactionHash)}
+                                >
                                     <p>
                                         Transaction receipt received, success. (no confirmations on testrpc).<br />
                                         <small>
