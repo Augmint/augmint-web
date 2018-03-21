@@ -2,7 +2,7 @@ import React from "react";
 
 import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
 
-import Button from "components/button";
+import Button from "components/augmint-ui/button";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
