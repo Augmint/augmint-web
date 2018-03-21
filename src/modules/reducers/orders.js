@@ -152,7 +152,7 @@ export function matchOrders(buyOrder, sellOrder) {
         });
 
         try {
-            const result = await matchOrdersTx(buyOrder.index, buyOrder.id, sellOrder.index, sellOrder.id);
+            const result = await matchOrdersTx(buyOrder.id, sellOrder.id);
             return dispatch({
                 type: MATCH_ORDERS_SUCCESS,
                 result: result
@@ -174,7 +174,7 @@ export function cancelOrder(order) {
         });
 
         try {
-            const result = await cancelOrderTx(order.orderType, order.index, order.id);
+            const result = await cancelOrderTx(order.orderType, order.id);
             return dispatch({
                 type: CANCEL_ORDER_SUCCESS,
                 result: result

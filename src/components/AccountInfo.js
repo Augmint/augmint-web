@@ -21,7 +21,9 @@ export class AccountInfo extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
 
                 <p>Account: {account.address}</p>
-                <p>ETH: {account.ethBalance}</p>
+                <p>
+                    ETH: <span data-testid="userEthBalance">{account.ethBalance}</span>
+                </p>
                 <p>
                     A-EUR: <span data-testid="userAEurBalance">{account.tokenBalance}</span>
                 </p>

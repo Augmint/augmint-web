@@ -61,6 +61,7 @@ class CancelOrderButton extends React.Component {
         const CancelButton = (
             <a
                 href={`#cancelOrder-${order.id}`}
+                data-testid={`cancelOrderButton-${order.id}`}
                 onClick={event => {
                     event.preventDefault();
                     this.setState({ confirmOpen: true });
@@ -101,7 +102,7 @@ class CancelOrderButton extends React.Component {
 
                     <Button
                         primary
-                        className="ConfirmCancelOrderButton"
+                        data-testid={`confirmCancelOrderButton-${order.id}`}
                         id={`ConfirmCancelOrderButton-${order.id}`}
                         disabled={submitting}
                         onClick={this.submitCancel}
