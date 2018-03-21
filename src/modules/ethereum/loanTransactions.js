@@ -9,7 +9,7 @@ import { ONE_ETH_IN_WEI } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManager = store.getState().loanManager.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const txName = "New loan";
 
     let gasEstimate;
     if (store.getState().loanManager.info.loanCount === 0) {
@@ -25,22 +25,8 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         .newEthBackedLoan(productId)
         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "newEthBackedLoan", gasEstimate);
-
-    return {
-        loanId: receipt.events.NewLoan.returnValues.loanId,
-        productId: parseInt(receipt.events.NewLoan.returnValues.productId, 10),
-        borrower: receipt.events.NewLoan.returnValues.borrower,
-        loanAmount: parseInt(receipt.events.NewLoan.returnValues.loanAmount, 10) / decimalsDiv,
-        repaymentAmount: parseInt(receipt.events.NewLoan.returnValues.repaymentAmount, 10) / decimalsDiv,
-        collateralEth: new BigNumber(receipt.events.NewLoan.returnValues.collateralAmount)
-            .div(ONE_ETH_IN_WEI)
-            .toString(),
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }
 
 export async function fetchProductsTx() {

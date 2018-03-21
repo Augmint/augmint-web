@@ -13,11 +13,12 @@ describe("Loans", function() {
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=submitBtn]").click();
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New loan submitted");
 
         return cy
-            .get("[data-testid=EthSubmissionSuccessPanel]")
+            .get("[data-testid=EthReceiptReceivedPanel]")
             .within(() => {
-                cy.contains("You've got a loan");
+                cy.contains("New loan");
                 cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
                 cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
                 cy.contains("Collateral in escrow: " + ethAmount + " ETH");
@@ -33,6 +34,8 @@ describe("Loans", function() {
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
         getLoan(6, 1000, 1010.11, 1.06541).then(res => {
+            cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 1000);
             cy.get("[data-testid=reservesMenuLink").click();
             // // TODO: check reserves
@@ -47,7 +50,13 @@ describe("Loans", function() {
         getLoan(0, 200, 250, 0.31313).then(() => {
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 200);
 
-            cy.contains("this loan's page").click();
+            cy
+                .contains("this loan's page")
+                .click()
+                .then(() => {
+                    cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                });
+
             cy.get("[data-testid=repayLoanButton]").click();
             cy.get("[data-testid=confirmRepayButton]").click();
 

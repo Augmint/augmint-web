@@ -1,13 +1,14 @@
 import React from "react";
 import store from "modules/store";
 import { connect } from "react-redux";
+import BigNumber from "bignumber.js";
+import { ONE_ETH_IN_WEI } from "../../utils/constants";
+import { Link } from "react-router-dom";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
 import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { Container } from "semantic-ui-react";
 import { dismissTx } from "modules/reducers/submittedTransactions";
-// import { Modal, Header, Icon, Button } from "semantic-ui-react";
-// import { EthSubmissionSuccessPanel } from "components/MsgPanels";
 
 class EthereumTxStatus extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class EthereumTxStatus extends React.Component {
     }
 
     render() {
-        const { transactions, network } = this.props;
+        const { transactions, network, decimalsDiv } = this.props;
 
         const txList =
             transactions &&
@@ -28,9 +29,34 @@ class EthereumTxStatus extends React.Component {
                 const tx = transactions[hash];
                 const index = _index + 1;
                 const header = `${index}. ${tx.txName}`;
-                if (tx.event === "confirmation") {
-                    console.debug("confirmation. tx: ", tx);
+                let txInfo;
+
+                if (tx.receipt && tx.receipt.events.NewLoan) {
+                    const vals = tx.receipt.events.NewLoan.returnValues;
+
+                    const loanAmount = parseInt(vals.loanAmount, 10) / decimalsDiv;
+                    const repaymentAmount = parseInt(vals.repaymentAmount, 10) / decimalsDiv;
+                    const collateralEth = new BigNumber(vals.collateralAmount).div(ONE_ETH_IN_WEI).toString();
+                    txInfo = (
+                        <div>
+                            <p>
+                                You've a new loan. Don't forget to pay it back on maturity to get back your collateral.
+                            </p>
+                            <p>
+                                You can always check your loans' status on <Link to="/account">My account page</Link>
+                                <br />
+                                or directly on <Link to={"/loan/" + vals.loanId}>this loan's page</Link>
+                            </p>
+                            <p>Disbursed: {loanAmount} A-EUR</p>
+                            <p>To be repaid: {repaymentAmount} A-EUR</p>
+                            <p>Collateral in escrow: {collateralEth} ETH</p>
+                            <p>
+                                Loan id: {vals.loanId} | Product id: {vals.productId} | borrower: {vals.borrower}
+                            </p>
+                        </div>
+                    );
                 }
+
                 return (
                     <MyListGroup.Row key={`txRowDiv-${hash}`}>
                         {tx.event === "transactionHash" && (
@@ -45,8 +71,11 @@ class EthereumTxStatus extends React.Component {
                         {tx.event === "receipt" &&
                             network.id !== 999 && (
                                 <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                    <p>Transaction receipt received. Wait for confirmations.</p>
+
+                                    {txInfo}
+
                                     <p>
-                                        Transaction receipt received. Wait for confirmations.<br />
                                         <small>
                                             Gas used: {tx.receipt.gasUsed}
                                             <br />
@@ -63,8 +92,11 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                 >
+                                    <p>Transaction receipt received, success. (no confirmations on testrpc).</p>
+
+                                    {txInfo}
+
                                     <p>
-                                        Transaction receipt received, success. (no confirmations on testrpc).<br />
                                         <small>
                                             Gas used: {tx.receipt.gasUsed}
                                             <br />
@@ -76,8 +108,11 @@ class EthereumTxStatus extends React.Component {
 
                         {tx.event === "confirmation" && (
                             <SuccessPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                <p>{tx.confirmationNumber}. confirmation</p>
+
+                                {txInfo}
+
                                 <p>
-                                    {tx.confirmationNumber}. confirmation<br />
                                     <small>
                                         Gas used:{" "}
                                         {tx.receipt
@@ -130,6 +165,7 @@ class EthereumTxStatus extends React.Component {
 function mapStateToProps(state) {
     return {
         transactions: state.submittedTransactions.transactions,
+        decimalsDiv: state.augmintToken.info.decimalsDiv,
         network: state.web3Connect.network
     };
 }
