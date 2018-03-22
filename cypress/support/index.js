@@ -3,11 +3,8 @@
 // You can read more here: https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
 import "./commands";
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
 before(function() {
     cy.ganacheTakeSnapshot();
     cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)

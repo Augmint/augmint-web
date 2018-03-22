@@ -7,6 +7,7 @@ import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderBook from "./components/OrderBook";
+import TradeHistory from "./components/TradeHistory";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
@@ -20,7 +21,7 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { orders, userAccount, exchange, rates } = this.props;
+        const { orders, userAccount, exchange, rates, trades } = this.props;
         return (
             <EthereumState>
                 <Psegment>
@@ -69,6 +70,13 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
+                        <Pgrid.Row>
+                            <TradeHistory
+                                trades={trades}
+                                userAccountAddress={userAccount.address}
+                                header="Trades history"
+                            />
+                        </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
             </EthereumState>
@@ -80,7 +88,8 @@ const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,
-    rates: state.rates
+    rates: state.rates,
+    trades: state.trades
 });
 
 export default connect(mapStateToProps)(ExchangeHome);

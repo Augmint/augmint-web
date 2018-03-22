@@ -11,6 +11,7 @@ import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
 import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
+import trades from "modules/reducers/trades";
 import subscriptions from "modules/reducers/subscriptions";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
@@ -27,6 +28,7 @@ export default combineReducers({
     userTransfers,
     exchange,
     orders,
+    trades,
     loans,
     subscriptions,
     submittedTransactions,

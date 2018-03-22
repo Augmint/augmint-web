@@ -53,10 +53,9 @@ describe("Augmint exchange", function() {
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
-                cy.assertUserEthBalanceOnUI(
-                    parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth,
-                    12
-                );
+                const expectedEthBalance =
+                    parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth;
+                cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
                 // TODO: check orderlist
                 // TODO: check tradelist
@@ -77,11 +76,10 @@ describe("Augmint exchange", function() {
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
-                cy.assertUserEthBalanceOnUI(
+                const expectedEthBalance =
                     parseFloat(this.startingEthBalance) -
-                        (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
-                    12
-                );
+                    (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
+                cy.assertUserEthBalanceOnUI(expectedEthBalance);
             });
     });
 
@@ -128,12 +126,12 @@ describe("Augmint exchange", function() {
             })
             .then(() => {
                 cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
-                cy.assertUserAEurBalanceOnUI(Math.round((this.startingAeurBalance - tokenAmount) * 100) / 100); // 2397.99 - 997 = 1400.9899999999998
 
-                cy.assertUserEthBalanceOnUI(
-                    parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth,
-                    12
-                );
+                const expectedEthBalance =
+                    parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth;
+                const expectedAEurBalance = Math.round((this.startingAeurBalance - tokenAmount) * 100) / 100; // 2397.99 - 997 = 1400.9899999999998
+                cy.assertUserAEurBalanceOnUI(expectedAEurBalance);
+                cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
                 // TODO: check orderlist
                 // TODO: check tradelist
@@ -155,11 +153,10 @@ describe("Augmint exchange", function() {
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
-                cy.assertUserEthBalanceOnUI(
+                const expectedEthBalance =
                     parseFloat(this.startingEthBalance) -
-                        (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth,
-                    12
-                );
+                    (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
+                cy.assertUserEthBalanceOnUI(expectedEthBalance);
             });
     });
 
