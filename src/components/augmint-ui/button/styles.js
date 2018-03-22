@@ -21,11 +21,15 @@ const BaseButton = `
 
     :hover {
         color: ${theme.colors.primary};
-        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);        
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    &[disabled] {
+        opacity: .45
     }
 `;
 
-export const StyledLink = styled(Link)`${BaseButton}`; 
+export const StyledLink = styled(Link)`${BaseButton}`;
 
 export const StyledA = styled.a`${BaseButton}`;
 
