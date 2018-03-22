@@ -41,7 +41,13 @@ describe("Loans", function() {
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
             cy.get("[data-testid=collectLoanButton]").click();
-            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Successful collection of 1 loans");
+
+            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
+            cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
+
+            cy.get("[data-testid=EthReceiptReceivedPanel]").should("contain", "Transaction receipt received");
+            cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+
             cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
         });
     });

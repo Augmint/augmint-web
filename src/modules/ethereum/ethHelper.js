@@ -63,7 +63,10 @@ export async function getNetworkDetails(web3) {
     };
 }
 
-export function processTx(tx, txName, gasEstimate) {
+/* returns a Promise which resolves a transactionHash and then dispatches
+use onReceipt cb arg to do extra checks on the receipt (throw an EthereumTransactionError or return processed args)
+*/
+export function processTx(tx, txName, gasEstimate, onReceipt) {
     return new Promise((resolve, reject) => {
         let receipt;
         let transactionHash;
@@ -79,9 +82,10 @@ export function processTx(tx, txName, gasEstimate) {
             .on("error", e => {
                 error = new EthereumTransactionError(`${txName} failed`, e, receipt, gasEstimate);
                 if (transactionHash) {
-                    // if error before tx submitted then (ie. no tx hash) then the form handles the error
+                    // if error after tx hash then async EthereumTxStatus component handles the error
                     store.dispatch(updateTx({ event: "error", txName, transactionHash, error }));
                 } else {
+                    // if error before tx submitted then (ie. no tx hash) then the form handles the error
                     reject(error);
                 }
             })
@@ -104,27 +108,48 @@ export function processTx(tx, txName, gasEstimate) {
             })
 
             .once("receipt", rec => {
-                receipt = rec;
-                store.dispatch(
-                    updateTx({ event: "receipt", txName, transactionHash: receipt.transactionHash, receipt })
-                );
+                try {
+                    let onReceiptResult;
+                    receipt = rec;
 
-                console.debug(
-                    `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
-                    receipt
-                );
-
-                if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-                    // ganache returns 0x01, Rinkeby 0x1
-                    error = new EthereumTransactionError(
-                        `${txName} failed`,
-                        "Ethereum transaction returned status: " + receipt.status,
-                        receipt,
-                        gasEstimate
+                    console.debug(
+                        `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                        receipt
                     );
 
+                    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
+                        // ganache returns 0x01, Rinkeby 0x1
+                        throw new EthereumTransactionError(
+                            `${txName} failed`,
+                            "Ethereum transaction returned status: " + receipt.status,
+                            receipt,
+                            gasEstimate
+                        );
+                    }
+
+                    if (onReceipt) {
+                        onReceiptResult = onReceipt(receipt);
+                    }
+
                     store.dispatch(
-                        updateTx({ event: "error", txName, transactionHash: receipt.transactionHash, error })
+                        updateTx({
+                            event: "receipt",
+                            txName,
+                            transactionHash: receipt.transactionHash,
+                            receipt,
+                            onReceiptResult
+                        })
+                    );
+                } catch (e) {
+                    error = e;
+                    store.dispatch(
+                        updateTx({
+                            event: "error",
+                            txName,
+                            transactionHash: receipt.transactionHash,
+                            receipt,
+                            error
+                        })
                     );
                 }
             });

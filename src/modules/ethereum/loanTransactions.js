@@ -149,6 +149,7 @@ export async function fetchLoansToCollectTx() {
 
 // loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loansToCollect) {
+    const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
     const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
@@ -157,30 +158,27 @@ export async function collectLoansTx(loansToCollect) {
 
     const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "collect", gasEstimate);
+    const onReceipt = receipt => {
+        const loanCollectedEventsCount =
+            typeof receipt.events.LoanCollected === "undefined"
+                ? 0
+                : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
 
-    const loanCollectedEventsCount =
-        typeof receipt.events.LoanCollected === "undefined"
-            ? 0
-            : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
-
-    if (loanCollectedEventsCount !== loansToCollect.length) {
-        throw new EthereumTransactionError(
-            "Likely not all loans has been collected.",
-            "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
-                `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
-            receipt,
-            gasEstimate
-        );
-    }
-
-    return {
-        loansCollected: loansToCollect.length,
-        eth: {
-            gasEstimate,
-            receipt
+        if (loanCollectedEventsCount !== loansToCollect.length) {
+            throw new EthereumTransactionError(
+                "Likely not all loans has been collected.",
+                "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
+                    `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
+                receipt,
+                gasEstimate
+            );
+        } else {
+            return { loanCollectedEventsCount };
         }
     };
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansForAddressTx(account) {
