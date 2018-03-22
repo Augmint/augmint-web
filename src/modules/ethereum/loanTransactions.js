@@ -106,18 +106,18 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         .send({ from: userAccount, gas: gasEstimate });
 
     const onReceipt = receipt => {
-        receipt.events[0].event = "LoanRepayed";
-        // TODO: parse events[0] so that we can display data on confirmation
-        //console.log(".options.jsonInterface:", loanManager.options.jsonInterface.find( (i) => ));
-        //parsedData = web3.eth.abi.decodeLog( loanManager.
-        // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
-        // const loanRepayedEvent = (await loanManager.getPastEvents("LoanRepayed", {
-        //     transactionHash: receipt.transactionHash,
-        //     fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
-        //     toBlock: receipt.blockNumber
-        // }))[0];
+        // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
+        const web3 = store.getState().web3Connect.web3Instance;
+        const loanRepayedEventInputs = loanManager.options.jsonInterface.find(val => val.name === "LoanRepayed").inputs;
 
-        return;
+        const decodedArgs = web3.eth.abi.decodeLog(
+            loanRepayedEventInputs,
+            receipt.events[0].raw.data,
+            receipt.events[0].raw.topics.slice(1) // topics[0] is event name
+        );
+        receipt.events.LoanRepayed = receipt.events[0];
+        receipt.events.LoanRepayed.returnValues = decodedArgs;
+        return { loanId: decodedArgs.loanId };
     };
 
     const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);

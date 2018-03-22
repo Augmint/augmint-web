@@ -154,18 +154,19 @@ export async function placeOrderTx(orderType, amount, price) {
     let onReceipt;
     if (orderType === TOKEN_SELL) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
-        onReceipt = async receipt => {
-            // TODO: parse events[0] so that we don't need a getPastEvents call
-            return await exchange
-                .getPastEvents("NewOrder", {
-                    transactionHash: receipt.transactionHash,
-                    fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
-                    toBlock: receipt.blockNumber
-                })
-                .then(events => {
-                    receipt.events.NewOrder = events[0];
-                    return { orderId: receipt.events.NewOrder.returnValues.orderId };
-                });
+        onReceipt = receipt => {
+            const exchange = store.getState().exchange.contract.web3ContractInstance;
+            const web3 = store.getState().web3Connect.web3Instance;
+            const newOrderEventInputs = exchange.options.jsonInterface.find(val => val.name === "NewOrder").inputs;
+
+            const decodedArgs = web3.eth.abi.decodeLog(
+                newOrderEventInputs,
+                receipt.events[0].raw.data,
+                receipt.events[0].raw.topics.slice(1) // topics[0] is event name
+            );
+            receipt.events.NewOrder = receipt.events[0];
+            receipt.events.NewOrder.returnValues = decodedArgs;
+            return { orderId: decodedArgs.orderId };
         };
     }
 
