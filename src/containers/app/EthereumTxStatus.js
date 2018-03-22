@@ -30,6 +30,7 @@ class EthereumTxStatus extends React.Component {
                 const index = _index + 1;
                 const header = `${index}. ${tx.txName}`;
                 let txInfo;
+                let orderId;
 
                 if (tx.receipt && tx.receipt.events.NewLoan) {
                     const vals = tx.receipt.events.NewLoan.returnValues;
@@ -55,6 +56,11 @@ class EthereumTxStatus extends React.Component {
                             </p>
                         </div>
                     );
+                }
+
+                if (tx.receipt && tx.receipt.events.NewOrder) {
+                    orderId = tx.receipt.events.NewOrder.returnValues.orderId;
+                    txInfo = <p>Order id: {orderId}</p>;
                 }
 
                 return (
@@ -89,6 +95,8 @@ class EthereumTxStatus extends React.Component {
                             network.id === 999 && (
                                 <SuccessPanel
                                     data-testid="EthReceiptReceivedPanel"
+                                    data-test-orderid={orderId}
+                                    data-test-gasused={tx.receipt.gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                 >

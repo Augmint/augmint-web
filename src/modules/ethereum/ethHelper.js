@@ -107,7 +107,7 @@ export function processTx(tx, txName, gasEstimate, onReceipt) {
                 );
             })
 
-            .once("receipt", rec => {
+            .once("receipt", async rec => {
                 try {
                     let onReceiptResult;
                     receipt = rec;
@@ -128,7 +128,7 @@ export function processTx(tx, txName, gasEstimate, onReceipt) {
                     }
 
                     if (onReceipt) {
-                        onReceiptResult = onReceipt(receipt);
+                        onReceiptResult = await onReceipt(receipt);
                     }
 
                     store.dispatch(

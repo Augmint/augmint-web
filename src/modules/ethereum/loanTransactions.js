@@ -107,6 +107,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 
     const onReceipt = receipt => {
         receipt.events[0].event = "LoanRepayed";
+        // TODO: parse events[0] so that we can display data on confirmation
         //console.log(".options.jsonInterface:", loanManager.options.jsonInterface.find( (i) => ));
         //parsedData = web3.eth.abi.decodeLog( loanManager.
         // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
