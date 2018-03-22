@@ -7,15 +7,15 @@ import { fetchUserBalance } from "modules/reducers/userBalances";
 
 export default () => {
     const exchange = store.getState().exchange;
-    const web3Connect = store.getState().web3Connect;
+    const augmintToken = store.getState().augmintToken;
 
     if (!exchange.isLoading && !exchange.isConnected) {
         //setupWatch("web3Connect.network", onWeb3NetworkChange);
         setupWatch("augmintToken.contract", onAugmintTokenContractChange);
         setupWatch("exchange.contract", onExchangeContractChange);
-        if (web3Connect.isConnected) {
+        if (augmintToken.isConnected) {
             console.debug(
-                "exchangeProvider - exchange not connected or loading and web3 alreay loaded, dispatching connectExchange() "
+                "exchangeProvider - exchange not connected or loading and augmintToken already loaded, dispatching connectExchange() "
             );
             store.dispatch(connectExchange());
         }

@@ -5,6 +5,7 @@ import Subscribe from "./Subscribe";
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
 import decent from 'assets/images/decent.png';
+import telegramLogo from 'assets/images/telegram_logo.svg';
 
 import "./custom_footer_style.css";
 
@@ -29,18 +30,31 @@ export function AppFooter(props) {
                 </Segment>
                 <Segment basic as="p" className="description">
                     {description}
-                </Segment>
-                <Segment
-                    basic
-                    className="join-discord"
-                    size="tiny"
-                    as="a"
-                    href="https://discord.gg/PwDmsnu"
-                    target="_blank"
-                >
-                    <Image src={discordLogo} />
-                    Talk to us on Discord
-                </Segment>
+                </Segment >
+                <Segment basic className="chat-container">
+                    <Segment
+                        basic
+                        className="join-discord"
+                        size="tiny"
+                        as="a"
+                        href="https://discord.gg/PwDmsnu"
+                        target="_blank"
+                    >
+                        <Image src={discordLogo} />
+                        Talk to us on Discord
+                    </Segment>
+                    <Segment
+                        basic
+                        className="join-telegram"
+                        size="tiny"
+                        as="a"
+                        href="https://t.me/augmint"
+                        target="_blank"
+                    >
+                        <Image src={telegramLogo} />
+                        Talk to us on Telegram
+                    </Segment>
+              </Segment>
 
                 <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
