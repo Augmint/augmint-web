@@ -57,7 +57,7 @@ export const dismissTx = txHash => {
         try {
             const transactions = Object.assign({}, store.getState().submittedTransactions.transactions);
             delete transactions[txHash];
-            console.debug("transactions", txHash, transactions);
+
             return dispatch({
                 type: DISMISS_TX_SUCCESS,
                 result: transactions
