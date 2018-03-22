@@ -66,7 +66,10 @@ describe("Loans", function() {
             cy.get("[data-testid=repayLoanButton]").click();
             cy.get("[data-testid=confirmRepayButton]").click();
 
-            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Successful repayment");
+            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Repayment submitted");
+
+            cy.get("[data-testid=EthReceiptReceivedPanel]").should("contain", "Transaction receipt received");
+            cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 50); // interest
 

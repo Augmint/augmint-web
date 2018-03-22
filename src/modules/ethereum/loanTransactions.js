@@ -91,6 +91,7 @@ function parseProducts(productsArray) {
 }
 
 export async function repayLoanTx(repaymentAmount, loanId) {
+    const txName = "Repay loan";
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
@@ -104,21 +105,22 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
         .send({ from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "repayLoan(transferAndNotify)", gasEstimate);
+    const onReceipt = receipt => {
+        receipt.events[0].event = "LoanRepayed";
+        //console.log(".options.jsonInterface:", loanManager.options.jsonInterface.find( (i) => ));
+        //parsedData = web3.eth.abi.decodeLog( loanManager.
+        // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
+        // const loanRepayedEvent = (await loanManager.getPastEvents("LoanRepayed", {
+        //     transactionHash: receipt.transactionHash,
+        //     fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
+        //     toBlock: receipt.blockNumber
+        // }))[0];
 
-    // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
-    receipt.events.LoanRepayed = (await loanManager.getPastEvents("LoanRepayed", {
-        transactionHash: receipt.transactionHash,
-        fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
-        toBlock: receipt.blockNumber
-    }))[0];
-
-    return {
-        eth: {
-            gasEstimate,
-            receipt
-        }
+        return;
     };
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansToCollectTx() {
