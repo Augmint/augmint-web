@@ -44,7 +44,6 @@ export function getMaxTransfer(amount) {
         maxAmount = amount - feeMax;
     } else {
         maxAmount = Math.round(amount / (feePt + 1) * decimalsDiv) / decimalsDiv;
-        console.debug(amount, feePt, decimalsDiv, maxAmount);
     }
 
     return maxAmount;

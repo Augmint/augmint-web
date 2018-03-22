@@ -25,7 +25,6 @@ class Subscribe extends React.Component {
 
         let res = await store.dispatch(subscribe(values.email));
         if (res.type !== SUBSCRIBE_SUCCESS) {
-            console.error("SubmissionError", res);
             throw new SubmissionError({
                 _error: {
                     title: "Subscription Failed",
