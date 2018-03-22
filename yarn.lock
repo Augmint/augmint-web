@@ -7946,9 +7946,9 @@ redux-actions@^2.0.3:
     lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
-redux-flash@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/redux-flash/-/redux-flash-1.2.0.tgz#006097224cda48f3287c262fce4c268eaf596a60"
+redux-flash@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/redux-flash/-/redux-flash-1.2.1.tgz#d35572e73bb7dc1a0b027372e613be39add046b7"
   dependencies:
     prop-types "^15.6.1"
     redux-actions "^2.0.3"
