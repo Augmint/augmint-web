@@ -126,7 +126,6 @@ export const processNewTrade = (eventName, account, eventLog, type) => {
               } else {
                   returnValue = false;
               }
-              console.log(returnValue);
               return returnValue;
             })) {
                 trades.push(newTrade);
