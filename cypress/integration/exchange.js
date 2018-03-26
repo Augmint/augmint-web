@@ -1,4 +1,5 @@
 describe("Augmint exchange", function() {
+    let tradeHistoryStartLength = document.querySelectorAll("[data-testid=trade-history] tbody tr").length;
     beforeEach(function() {
         cy.getUserAEurBalance().as("startingAeurBalance");
         cy.getUserEthBalance().as("startingEthBalance");
@@ -24,7 +25,7 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
-        cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 0);
+        cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength);
 
 
         cy.get("[data-testid=submitButton]").click();
@@ -53,7 +54,7 @@ describe("Augmint exchange", function() {
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
                 cy.get("[data-testid=msgPanelOkButton]").click();
-                cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 1);
+                cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 1);
 
                 // TODO: check orderlist
                 // TODO: check tradelist
@@ -62,7 +63,7 @@ describe("Augmint exchange", function() {
                 cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
                 cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
                 cy.get("@successPanel").contains("Order cancelled");
-                cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 2);
+                cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 2);
 
             })
             .then(() => {
@@ -129,7 +130,7 @@ describe("Augmint exchange", function() {
                 cy.assertUserAEurBalanceOnUI(expectedAEurBalance);
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
-                cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 3);
+                cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 3);
 
                 cy.get("[data-testid=msgPanelOkButton]").click();
 
@@ -140,7 +141,7 @@ describe("Augmint exchange", function() {
                 cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
                 cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
                 cy.get("@successPanel").contains("Order cancelled");
-                cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 4);
+                cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 4);
             })
             .then(() => {
                 cy
@@ -181,9 +182,8 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel").then(() => {
-            cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 5);
-        });
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
+        cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 5);
 
         cy
             .get("@successPanel")
@@ -199,15 +199,14 @@ describe("Augmint exchange", function() {
                     .should("have.value", tokenAmount.toString());
 
                 cy.get("[data-testid=submitButton]").click();
-                cy.get("@successPanel").contains("Successful order").then(() => {
-                    cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 6);
-                });
+                cy.get("@successPanel").contains("Successful order");
+                cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 6);
             })
             .then(() => {
                 cy.get("[data-testid=msgPanelOkButton]").click();
                 cy.get("[data-testid=matchTopOrdersButton]").click();
                 cy.get("@successPanel").contains("Successful match").then(() => {
-                  cy.get("[data-testid=tradeHistoryTable] table tbody").children().should('have.length', 8);
+                  cy.get("[data-testid=trade-history] tbody").children().should('have.length', tradeHistoryStartLength + 8);
                 });
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
                 // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)

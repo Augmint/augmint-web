@@ -21,7 +21,7 @@ export default class TradeHistory extends React.Component {
         }
 
         return (
-            <Pblock loading={isLoading} header={header} data-testid='tradeHistoryTable'>
+            <Pblock loading={isLoading} header={header}>
                 {error && (
                     <ErrorPanel header="Error while fetching trade list">{error.message}</ErrorPanel>
                 )}
@@ -34,6 +34,7 @@ export default class TradeHistory extends React.Component {
                         unit={unit}
                         data={trades}
                         headerdata={headerData}
+                        testid='trade-history'
                     />
                 )}
             </Pblock>

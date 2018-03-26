@@ -12,12 +12,12 @@ import {
 
 export class CustomTable extends React.Component {
     render() {
-        const { datakeys, unit, data, headerdata, title, extraClass } = this.props;
+        const { datakeys, unit, data, headerdata, title, extraClass, testid } = this.props;
 
         return (
             <div className={extraClass}>
                 {title && <StyleTitle>{title}</StyleTitle>}
-                <StyleTable>
+                <StyleTable data-testid={testid}>
                     <StyleThead>
                       {headerdata &&
                         <StyleTr>
