@@ -16,7 +16,7 @@
         "react-dom": "16.2.0",
         "react-ga": "2.4.1",
         "react-redux": "5.0.7",
-        "react-router-dom": "4.2.2",
+        "react-router-dom": "4.3.0-rc.1",
         "react-router-redux": "5.0.0-alpha.9",
         "react-scripts": "1.1.1",
         "react-scrollchor": "4.2.1",
