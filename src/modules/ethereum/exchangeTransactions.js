@@ -125,7 +125,7 @@ export async function placeOrderTx(orderType, amount, price) {
     switch (orderType) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
-            txName = "placeBuyTokenOrder";
+            txName = "Buy token order";
             tx = exchange.methods.placeBuyTokenOrder(submitPrice.toString()).send({
                 value: submitAmount,
                 from: userAccount,
@@ -136,7 +136,7 @@ export async function placeOrderTx(orderType, amount, price) {
         case TOKEN_SELL:
             const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
             submitAmount = new BigNumber(amount).mul(decimalsDiv);
-            txName = "placeSellTokenOrder(transferAndNotify)";
+            txName = "Sell token order";
             tx = augmintToken.methods
                 .transferAndNotify(exchange._address, submitAmount.toString(), submitPrice.toString())
                 .send({ from: userAccount, gas: gasEstimate });
@@ -151,41 +151,41 @@ export async function placeOrderTx(orderType, amount, price) {
             );
     }
 
-    const receipt = await processTx(tx, txName, gasEstimate);
-
+    let onReceipt;
     if (orderType === TOKEN_SELL) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
-        receipt.events.NewOrder = (await exchange.getPastEvents("NewOrder", {
-            transactionHash: receipt.transactionHash,
-            fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
-            toBlock: receipt.blockNumber
-        }))[0];
+        onReceipt = receipt => {
+            const exchange = store.getState().exchange.contract.web3ContractInstance;
+            const web3 = store.getState().web3Connect.web3Instance;
+            const newOrderEventInputs = exchange.options.jsonInterface.find(val => val.name === "NewOrder").inputs;
+
+            const decodedArgs = web3.eth.abi.decodeLog(
+                newOrderEventInputs,
+                receipt.events[0].raw.data,
+                receipt.events[0].raw.topics.slice(1) // topics[0] is event name
+            );
+            receipt.events.NewOrder = receipt.events[0];
+            receipt.events.NewOrder.returnValues = decodedArgs;
+            return { orderId: decodedArgs.orderId };
+        };
     }
 
-    return {
-        orderId: receipt.events.NewOrder.returnValues.orderId,
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+
+    return { txName, transactionHash };
 }
 
 export async function matchOrdersTx(buyId, sellId) {
+    const txName = "Match orders";
     const gasEstimate = cost.MATCH_ORDERS_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().exchange.contract.web3ContractInstance;
 
     const tx = exchange.methods.matchOrders(buyId, sellId).send({ from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "matchOrders", gasEstimate);
+    const transactionHash = await processTx(tx, txName, gasEstimate);
 
-    return {
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    return { txName, transactionHash };
 }
 
 export async function cancelOrderTx(orderType, orderId) {
@@ -197,20 +197,15 @@ export async function cancelOrderTx(orderType, orderId) {
     let txName;
     if (orderType === TOKEN_BUY) {
         tx = exchange.methods.cancelBuyTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
-        txName = "cancelBuyTokenOrder";
+        txName = "Cancel buy order";
     } else if (orderType === TOKEN_SELL) {
         tx = exchange.methods.cancelSellTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
-        txName = "cancelSellTokenOrder";
+        txName = "Cancel sell order";
     } else {
         throw new EthereumTransactionError("Order cancel error.", "invalid orderType: " + orderType, null, gasEstimate);
     }
 
-    const receipt = await processTx(tx, txName, gasEstimate);
+    const transactionHash = await processTx(tx, txName, gasEstimate);
 
-    return {
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    return { txName, transactionHash };
 }

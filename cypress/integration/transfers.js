@@ -36,15 +36,19 @@ describe("Transfers", function() {
         cy.get("[data-testid=submitTransferButton]").click();
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").within(() => {
-            cy.contains("Successful transfer");
-            cy.contains("Sent " + amount + " A-EUR to " + toAddress);
+            cy.contains("Token transfer submitted");
+            cy.contains("Transfer " + amount + " A-EUR to " + toAddress);
         });
+
+        cy.get("[data-testid=EthReceiptReceivedPanel]").contains("Transaction receipt received");
+        cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
             .get("[data-testid=transactionHash]")
             .invoke("text")
             .as("txHash")
             .then(() => {
+                cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
                 cy.get(`[data-testid=transferListItem-${this.txHash}]`).within(() => {
                     cy.contains("To: " + toAddress);
                     cy.contains("Amount: -" + amount);

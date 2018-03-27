@@ -10,7 +10,7 @@ export function OrdersInfo(props) {
         e.preventDefault();
         store.dispatch(refreshOrders());
     };
-    console.log(props);
+
     return (
         <Pblock header="Orders">
             {props.orders
