@@ -100,7 +100,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
         return (
             <MsgPanel data-testid={testid} {...other}>
                 {children}
-                <p>{result.txName} transaction sent to Ethereum network but it's not mined yet.</p>
+                <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
                 <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
                 <p>
                     <small>

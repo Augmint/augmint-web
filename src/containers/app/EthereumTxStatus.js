@@ -2,7 +2,7 @@ import React from "react";
 import store from "modules/store";
 import { connect } from "react-redux";
 import BigNumber from "bignumber.js";
-import { ONE_ETH_IN_WEI } from "../../utils/constants";
+import { ONE_ETH_IN_WEI } from "utils/constants";
 import { Link } from "react-router-dom";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
@@ -44,7 +44,8 @@ class EthereumTxStatus extends React.Component {
                                 You've a new loan. Don't forget to pay it back on maturity to get back your collateral.
                             </p>
                             <p>
-                                You can always check your loans' status on <Link to="/account">My account page</Link>
+                                You can always check your the status of your loan on{" "}
+                                <Link to="/account">My account page</Link>
                                 <br />
                                 or directly on <Link to={"/loan/" + vals.loanId}>this loan's page</Link>
                             </p>
@@ -148,23 +149,6 @@ class EthereumTxStatus extends React.Component {
         return !txList ? null : (
             <Psegment>
                 <Container>{txList}</Container>
-                {/* <Modal open={true}>
-                >
-                <Header icon="checkmark" content="Successful Ethereum transaction" onClose={this.handleClose} />
-                <Modal.Content>
-                    {flash.props.result && flash.props.result.eth ? (
-                        <EthSubmissionSuccessPanel header={<h3>{flash.message}</h3>} result={flash.props.result} />
-                    ) : (
-                        flash.message
-                    )}
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button primary data-testid="acknowledgeFlashButton" onClick={this.handleClose}>
-                        <Icon name="checkmark" />
-                        OK
-                    </Button>
-                </Modal.Actions>
-            </Modal> */}
             </Psegment>
         );
     }
