@@ -9,7 +9,7 @@ import { ONE_ETH_IN_WEI } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManager = store.getState().loanManager.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const txName = "New loan";
 
     let gasEstimate;
     if (store.getState().loanManager.info.loanCount === 0) {
@@ -25,22 +25,8 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
         .newEthBackedLoan(productId)
         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "newEthBackedLoan", gasEstimate);
-
-    return {
-        loanId: receipt.events.NewLoan.returnValues.loanId,
-        productId: parseInt(receipt.events.NewLoan.returnValues.productId, 10),
-        borrower: receipt.events.NewLoan.returnValues.borrower,
-        loanAmount: parseInt(receipt.events.NewLoan.returnValues.loanAmount, 10) / decimalsDiv,
-        repaymentAmount: parseInt(receipt.events.NewLoan.returnValues.repaymentAmount, 10) / decimalsDiv,
-        collateralEth: new BigNumber(receipt.events.NewLoan.returnValues.collateralAmount)
-            .div(ONE_ETH_IN_WEI)
-            .toString(),
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }
 
 export async function fetchProductsTx() {
@@ -105,6 +91,7 @@ function parseProducts(productsArray) {
 }
 
 export async function repayLoanTx(repaymentAmount, loanId) {
+    const txName = "Repay loan";
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
@@ -118,21 +105,23 @@ export async function repayLoanTx(repaymentAmount, loanId) {
         .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
         .send({ from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "repayLoan(transferAndNotify)", gasEstimate);
+    const onReceipt = receipt => {
+        // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
+        const web3 = store.getState().web3Connect.web3Instance;
+        const loanRepayedEventInputs = loanManager.options.jsonInterface.find(val => val.name === "LoanRepayed").inputs;
 
-    // repay is called via AugmintToken and event emmitted from loanManager is not parsed by web3
-    receipt.events.LoanRepayed = (await loanManager.getPastEvents("LoanRepayed", {
-        transactionHash: receipt.transactionHash,
-        fromBlock: receipt.blockNumber, // txhash should be enough but unsure how well getPastEvents optimised
-        toBlock: receipt.blockNumber
-    }))[0];
-
-    return {
-        eth: {
-            gasEstimate,
-            receipt
-        }
+        const decodedArgs = web3.eth.abi.decodeLog(
+            loanRepayedEventInputs,
+            receipt.events[0].raw.data,
+            receipt.events[0].raw.topics.slice(1) // topics[0] is event name
+        );
+        receipt.events.LoanRepayed = receipt.events[0];
+        receipt.events.LoanRepayed.returnValues = decodedArgs;
+        return { loanId: decodedArgs.loanId };
     };
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansToCollectTx() {
@@ -163,6 +152,7 @@ export async function fetchLoansToCollectTx() {
 
 // loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loansToCollect) {
+    const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
     const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
@@ -171,30 +161,27 @@ export async function collectLoansTx(loansToCollect) {
 
     const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
-    const receipt = await processTx(tx, "collect", gasEstimate);
+    const onReceipt = receipt => {
+        const loanCollectedEventsCount =
+            typeof receipt.events.LoanCollected === "undefined"
+                ? 0
+                : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
 
-    const loanCollectedEventsCount =
-        typeof receipt.events.LoanCollected === "undefined"
-            ? 0
-            : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
-
-    if (loanCollectedEventsCount !== loansToCollect.length) {
-        throw new EthereumTransactionError(
-            "Likely not all loans has been collected.",
-            "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
-                `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
-            receipt,
-            gasEstimate
-        );
-    }
-
-    return {
-        loansCollected: loansToCollect.length,
-        eth: {
-            gasEstimate,
-            receipt
+        if (loanCollectedEventsCount !== loansToCollect.length) {
+            throw new EthereumTransactionError(
+                "Likely not all loans has been collected.",
+                "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
+                    `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
+                receipt,
+                gasEstimate
+            );
+        } else {
+            return { loanCollectedEventsCount };
         }
     };
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansForAddressTx(account) {
