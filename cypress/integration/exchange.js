@@ -53,11 +53,16 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
+
+        cy
+            .get("[data-testid=EthReceiptReceivedPanel]")
+            .should("contain", "Transaction receipt received")
+            .as("successPanel");
 
         cy
             .get("@successPanel")
-            .contains("Successful order")
+            .contains("Transaction receipt received")
             .then(() => {
                 cy
                     .get("@successPanel")
@@ -72,6 +77,8 @@ describe("Augmint exchange", function() {
                     .as("orderGasUsed");
             })
             .then(() => {
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
                 const expectedEthBalance =
@@ -98,7 +105,7 @@ describe("Augmint exchange", function() {
                 // Cancel order
                 cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
                 cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
-                cy.get("@successPanel").contains("Order cancelled");
+                cy.get("@successPanel").contains("Transaction receipt received");
             })
             .then(() => {
                 cy
@@ -107,7 +114,7 @@ describe("Augmint exchange", function() {
                     .as("cancelGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=acknowledgeFlashButton]").click();
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
@@ -168,11 +175,12 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
 
         cy
-            .get("@successPanel")
-            .contains("Successful order")
+            .get("[data-testid=EthReceiptReceivedPanel]")
+            .should("contain", "Transaction receipt received")
+            .as("successPanel")
             .then(() => {
                 cy
                     .get("@successPanel")
@@ -185,6 +193,8 @@ describe("Augmint exchange", function() {
                     .as("orderGasUsed");
             })
             .then(() => {
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth;
                 const expectedAEurBalance = Math.round((this.startingAeurBalance - tokenAmount) * 100) / 100; // 2397.99 - 997 = 1400.9899999999998
@@ -211,7 +221,8 @@ describe("Augmint exchange", function() {
                 // Cancel order
                 cy.get(`[data-testid=myOrdersBlock] [data-testid=cancelOrderButton-${this.orderId}]`).click();
                 cy.get(`[data-testid=confirmCancelOrderButton-${this.orderId}`).click();
-                cy.get("@successPanel").contains("Order cancelled");
+
+                cy.get("@successPanel").should("contain", "Transaction receipt received");
             })
             .then(() => {
                 cy
@@ -220,7 +231,7 @@ describe("Augmint exchange", function() {
                     .as("cancelGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=acknowledgeFlashButton]").click();
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
@@ -279,12 +290,15 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").as("successPanel");
+        cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
+        cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+
         cy
-            .get("@successPanel")
-            .contains("Successful order")
+            .get("[data-testid=EthReceiptReceivedPanel]")
+            .should("contain", "Transaction receipt received")
+            .as("successPanel")
             .then(() => {
-                cy.get("[data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.get("[data-testid=buyMenuLink]").click();
 
@@ -294,16 +308,26 @@ describe("Augmint exchange", function() {
                     .should("have.value", tokenAmount.toString());
 
                 cy.get("[data-testid=submitButton]").click();
-                cy.get("@successPanel").contains("Successful order");
+
+                cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
+                cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+
+                cy.get("@successPanel").should("contain", "Transaction receipt received");
             })
             .then(() => {
-                cy.get("[data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+
                 cy.get("[data-testid=matchTopOrdersButton]").click();
+
+                cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order match submitted");
+                cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+
+                cy.get("@successPanel").should("contain", "Transaction receipt received");
                 cy
-                    .get("@successPanel")
-                    .contains("Successful match")
+                    .get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]")
+                    .click()
                     .then(() => {
-                        cy.wait(4000);
+                        cy.wait(6000);
                         cy
                             .get("@tradeHistoryTbody")
                             .then(() => {
@@ -316,10 +340,6 @@ describe("Augmint exchange", function() {
                                 expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 4);
                             });
                     });
-                cy
-                    .get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]")
-                    .click()
-                    .then(() => {});
                 // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)
             });
     });

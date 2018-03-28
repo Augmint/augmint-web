@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 import { Button, Modal, Header, Icon } from "semantic-ui-react";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
-import { flashSuccessMessage } from "redux-flash";
 
 class CancelOrderButton extends React.Component {
     async submitCancel(values) {
@@ -25,12 +24,9 @@ class CancelOrderButton extends React.Component {
         } else {
             this.setState({
                 submitting: false,
+                confirmOpen: false,
                 error: null,
                 result: res.result
-            });
-            this.props.flashSuccessMessage("Order cancelled", {
-                timeout: false,
-                props: { result: res.result, order: order }
             });
             return;
         }
@@ -119,6 +115,6 @@ const mapStateToProps = state => ({
     isLoading: state.exchange.isLoading
 });
 
-const mapDispatchToProps = { cancelOrder, flashSuccessMessage };
+const mapDispatchToProps = { cancelOrder };
 
 export default (CancelOrderButton = connect(mapStateToProps, mapDispatchToProps)(CancelOrderButton));

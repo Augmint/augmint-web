@@ -164,13 +164,11 @@ class PlaceOrderForm extends React.Component {
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful order</h3>}
+                        header="Order submitted"
                         result={this.state.result}
                         onDismiss={() => reset()}
                         data-test-orderid={this.state.result.orderId}
-                    >
-                        <p>Order id: {this.state.result.orderId}</p>
-                    </EthSubmissionSuccessPanel>
+                    />
                 )}
 
                 {!submitSucceeded && (
