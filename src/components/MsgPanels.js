@@ -1,5 +1,6 @@
 import React from "react";
-import { Container, Message, Button, Icon } from "semantic-ui-react";
+import { Container, Message, Icon } from "semantic-ui-react";
+import Button from "./augmint-ui/button";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ export default class MsgPanel extends React.Component {
                         {children}
 
                         {onDismiss && (
-                            <Button data-testid="msgPanelOkButton" as="a" onClick={this.dismiss}>
+                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
                                 OK
                             </Button>
                         )}
