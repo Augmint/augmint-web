@@ -290,7 +290,6 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
         cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
