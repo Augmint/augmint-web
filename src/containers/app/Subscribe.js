@@ -25,7 +25,6 @@ class Subscribe extends React.Component {
 
         let res = await store.dispatch(subscribe(values.email));
         if (res.type !== SUBSCRIBE_SUCCESS) {
-            console.error("SubmissionError", res);
             throw new SubmissionError({
                 _error: {
                     title: "Subscription Failed",
@@ -44,17 +43,19 @@ class Subscribe extends React.Component {
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
 
         return (
-            <Pblock className='subscribe' >
+            <Pblock className="subscribe">
                 {submitSucceeded && <SuccessPanel header="Successful subscription" onDismiss={() => reset()} />}
                 {!submitSucceeded && (
                     <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <ErrorPanel
-                            content={error}
-                            header={"Subscription failed"}
-                            onDismiss={() => {
-                                clearSubmitErrors();
-                            }}
-                        />
+                        {error && (
+                            <ErrorPanel
+                                content={error}
+                                header={"Subscription failed"}
+                                onDismiss={() => {
+                                    clearSubmitErrors();
+                                }}
+                            />
+                        )}
 
                         <Field
                             component={Form.Field}

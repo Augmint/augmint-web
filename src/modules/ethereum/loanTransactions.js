@@ -4,13 +4,12 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
-import { EthereumTransactionError } from "modules/ethereum/ethHelper";
+import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import { ONE_ETH_IN_WEI } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const loanManager = store.getState().loanManager.contract.instance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
+    const txName = "New loan";
 
     let gasEstimate;
     if (store.getState().loanManager.info.loanCount === 0) {
@@ -22,48 +21,12 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     const userAccount = store.getState().web3Connect.userAccount;
     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
 
-    const result = await loanManager.newEthBackedLoan(productId, {
-        value: weiAmount,
-        from: userAccount,
-        gas: gasEstimate
-    });
+    const tx = loanManager.methods
+        .newEthBackedLoan(productId)
+        .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
-        throw new EthereumTransactionError(
-            "Create loan transaction failed.",
-            "All gas provided was used. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-
-    // should we get byzantium tx status? if so then how?
-    // if (result.status !== 1) {
-    //     throw new Error(...);
-    // }
-
-    if (!result.logs || !result.logs[0] || result.logs[0].event !== "NewLoan") {
-        throw new EthereumTransactionError(
-            "Create loan transaction failed.",
-            "NewLoan event wasn't received. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-
-    return {
-        loanId: result.logs[0].args.loanId.toString(),
-        productId: result.logs[0].args.productId.toNumber(),
-        borrower: result.logs[0].args.borrower,
-        loanAmount: result.logs[0].args.loanAmount.div(decimalsDiv).toNumber(),
-        repaymentAmount: result.logs[0].args.repaymentAmount.div(decimalsDiv).toNumber(),
-        collateralEth: web3.utils.fromWei(result.logs[0].args.collateralAmount.toString()),
-        eth: {
-            gasEstimate,
-            result
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }
 
 export async function fetchProductsTx() {
@@ -128,55 +91,37 @@ function parseProducts(productsArray) {
 }
 
 export async function repayLoanTx(repaymentAmount, loanId) {
+    const txName = "Repay loan";
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
 
     const augmintToken = store.getState().augmintToken;
-    const augmintTokenInstance = augmintToken.contract.instance;
+    const augmintTokenInstance = augmintToken.contract.web3ContractInstance;
     const decimalsDiv = augmintToken.info.decimalsDiv;
 
-    const result = await augmintTokenInstance.transferAndNotify(
-        loanManager.address,
-        new BigNumber(repaymentAmount).mul(decimalsDiv).toString(),
-        loanId,
-        {
-            from: userAccount,
-            gas: gasEstimate
-        }
-    );
+    const tx = augmintTokenInstance.methods
+        .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
+        .send({ from: userAccount, gas: gasEstimate });
 
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
-        throw new EthereumTransactionError(
-            "Repay loan failed.",
-            "All gas provided was used. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-    if (
-        !result.logs ||
-        !result.logs[5] ||
-        result.logs[5].event !== "AugmintTransfer" ||
-        result.logs[5].args.to !== "0x0000000000000000000000000000000000000000"
-    ) {
-        // TODO: web3 doesn't return LoanRepayed on testrpc, so we test only for TokenBurned
-        throw new EthereumTransactionError(
-            "Repay loan failed.",
-            "AugmintTransfer to 0x0 (burn) event wasn't received. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
+    const onReceipt = receipt => {
+        // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
+        const web3 = store.getState().web3Connect.web3Instance;
+        const loanRepayedEventInputs = loanManager.options.jsonInterface.find(val => val.name === "LoanRepayed").inputs;
 
-    return {
-        eth: {
-            gasEstimate,
-            result
-        }
+        const decodedArgs = web3.eth.abi.decodeLog(
+            loanRepayedEventInputs,
+            receipt.events[0].raw.data,
+            receipt.events[0].raw.topics.slice(1) // topics[0] is event name
+        );
+        receipt.events.LoanRepayed = receipt.events[0];
+        receipt.events.LoanRepayed.returnValues = decodedArgs;
+        return { loanId: decodedArgs.loanId };
     };
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansToCollectTx() {
@@ -207,64 +152,36 @@ export async function fetchLoansToCollectTx() {
 
 // loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loansToCollect) {
+    const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
     const loanIdsToCollect = loansToCollect.map(loan => loan.id);
 
-    const result = await loanManager.collect(loanIdsToCollect, {
-        from: userAccount,
-        gas: gasEstimate
-    });
-    if (result.receipt.gasUsed === gasEstimate) {
-        // Neeed for testnet behaviour (TODO: test it!)
-        throw new EthereumTransactionError(
-            "Loan collection error.",
-            "All gas provided was used. Check tx.",
-            result,
-            gasEstimate
-        );
-    }
-    if (!result.logs || result.logs.length === 0) {
-        throw new EthereumTransactionError(
-            "Loan collection error.",
-            "No LoanCollected events received. Check tx",
-            result,
-            gasEstimate
-        );
-    }
+    const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
-    result.logs.map((logItem, index) => {
-        if (!logItem.event || logItem.event !== "LoanCollected") {
+    const onReceipt = receipt => {
+        const loanCollectedEventsCount =
+            typeof receipt.events.LoanCollected === "undefined"
+                ? 0
+                : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
+
+        if (loanCollectedEventsCount !== loansToCollect.length) {
             throw new EthereumTransactionError(
-                "Likely not all loans has been collected",
-                "One of the events received is not LoanCollected. Check tx.\n" +
-                    `logs[${index}] received: ${logItem.event}.`,
-                result,
+                "Likely not all loans has been collected.",
+                "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
+                    `Received: ${loanCollectedEventsCount} LoanCollected events. Expected: ${loansToCollect.length}`,
+                receipt,
                 gasEstimate
             );
-        }
-        return true;
-    });
-
-    if (result.logs.length !== loansToCollect.length) {
-        throw new EthereumTransactionError(
-            "Likely not all loans has been collected.",
-            "Number of LoanCollected events != loansToCollect passed. Check tx.\n" +
-                `Received: ${result.logs.length} events. Expected: ${loansToCollect.length}`,
-            result,
-            gasEstimate
-        );
-    }
-
-    return {
-        loansCollected: loansToCollect.length,
-        eth: {
-            gasEstimate,
-            result
+        } else {
+            return { loanCollectedEventsCount };
         }
     };
+    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+
+    return { txName, transactionHash };
 }
 
 export async function fetchLoansForAddressTx(account) {
