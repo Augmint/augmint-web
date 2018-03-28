@@ -72,7 +72,7 @@ class MatchOrdersButton extends React.Component {
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful match </h3>}
+                        header="Order match submitted"
                         onDismiss={this.onDismiss}
                         result={result}
                     />

@@ -44,7 +44,6 @@ export function getMaxTransfer(amount) {
         maxAmount = amount - feeMax;
     } else {
         maxAmount = Math.round(amount / (feePt + 1) * decimalsDiv) / decimalsDiv;
-        console.debug(amount, feePt, decimalsDiv, maxAmount);
     }
 
     return maxAmount;
@@ -63,33 +62,21 @@ export async function transferTokenTx(payload) {
     let tx;
     let txName;
     if (_narrative) {
-        txName = "transferWithNarrative";
+        txName = "A-EUR transfer (with narrative)";
         tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
-        txName = "transfer";
-        tx = await augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
+        txName = "A-EUR transfer";
+        tx = augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
             from: userAccount,
             gas: gasEstimate
         });
     }
 
-    const receipt = await processTx(tx, txName, gasEstimate);
-
-    const bn_amount = receipt.events.AugmintTransfer.returnValues.amount;
-    return {
-        to: receipt.events.AugmintTransfer.returnValues.to,
-        from: receipt.events.AugmintTransfer.returnValues.from,
-        bn_amount: bn_amount,
-        amount: bn_amount / decimalsDiv,
-        narrative: receipt.events.AugmintTransfer.returnValues.narrative,
-        eth: {
-            gasEstimate,
-            receipt
-        }
-    };
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
