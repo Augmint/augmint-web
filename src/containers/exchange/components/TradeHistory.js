@@ -34,6 +34,7 @@ export default class TradeHistory extends React.Component {
                         unit={unit}
                         data={trades}
                         headerdata={headerData}
+                        testid='trade-history'
                     />
                 )}
             </Pblock>
