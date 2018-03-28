@@ -194,12 +194,12 @@ export function transferToken(payload) {
             const result = await transferTokenTx(payload);
             return dispatch({
                 type: TOKEN_TRANSFER_SUCCESS,
-                result: result
+                result
             });
         } catch (error) {
             return dispatch({
                 type: AUGMINT_TOKEN_TRANSFER_ERROR,
-                error: error
+                error
             });
         }
     };

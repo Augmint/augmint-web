@@ -111,7 +111,7 @@ class RepayLoanPage extends React.Component {
     }
 
     render() {
-        const { submitSucceeded, clearSubmitErrors } = this.props;
+        const { submitSucceeded, clearSubmitErrors, userAccount } = this.props;
 
         if (this.state.isLoading) {
             return <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>;
@@ -120,11 +120,7 @@ class RepayLoanPage extends React.Component {
         if (!this.state.isLoanFound) {
             return (
                 <ErrorPanel
-                    header={
-                        <h3>
-                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount.address}
-                        </h3>
-                    }
+                    header={`Can't find loan #{this.state.loanId} for current account ${userAccount.address}`}
                 />
             );
         }
@@ -139,7 +135,7 @@ class RepayLoanPage extends React.Component {
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
-                            header={<h3>Repay failed</h3>}
+                            header="Repay failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
                     )}
@@ -174,7 +170,7 @@ class RepayLoanPage extends React.Component {
 
                     {submitSucceeded && (
                         <EthSubmissionSuccessPanel
-                            header={<h3>Successful repayment</h3>}
+                            header="Repayment submitted"
                             result={this.state.result}
                             dismissable={false}
                         />
