@@ -21,11 +21,8 @@ export function TryItConnected(props) {
                     </p>
                     <p>
                         If you can't be bothered ask for some{" "}
-                        <Link
-                            target="_blank"
-                            to="https://gitter.im/digital-credit-money/Lobby?utm_source=TryItConnected&utm_medium=web&utm_campaign=init"
-                        >
-                            on our gitter channel
+                        <Link target="_blank" to="https://discord.gg/PwDmsnu">
+                            on our discord channel
                         </Link>
                     </p>
                 </Tblock>
