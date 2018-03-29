@@ -62,8 +62,7 @@ class MatchOrdersButton extends React.Component {
                         <Button
                             size={size}
                             primary={primary}
-                            className="MatchOrderButton"
-                            id={`MatchOrderButton-${buyOrder.id}-${sellOrder.id}`}
+                            data-testid="matchTopOrdersButton"
                             disabled={submitting === 0}
                             onClick={this.handleClick}
                         >
@@ -73,7 +72,7 @@ class MatchOrdersButton extends React.Component {
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful match </h3>}
+                        header="Order match submitted"
                         onDismiss={this.onDismiss}
                         result={result}
                     />

@@ -17,7 +17,7 @@ import {
     LockIcon,
     WaitIcon,
     PremiumIcon
-} from '../../../components/Icons';
+} from 'components/Icons';
 
 import petrovics from 'assets/images/team/ppetrovics.jpg';
 import bdebreczeni from 'assets/images/team/bdebreczeni.jpg';
@@ -30,6 +30,8 @@ import thume from 'assets/images/team/thume.jpg';
 import vkontra from 'assets/images/team/vkontra.jpg';
 import gycsado from 'assets/images/team/gycsado.jpg';
 import aszabo from 'assets/images/team/aszabo.jpg';
+import tnadrai from 'assets/images/team/tnadrai.jpg';
+import pkolcza from 'assets/images/team/pkolcza.jpg';
 
 import decent from 'assets/images/decent.png';
 import euedge from 'assets/images/euedge.png';
@@ -289,7 +291,26 @@ export const teamMembers = [
         title: 'Technical project manager',
         linedinUrl:'https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853',
         description: "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from EU Edge.</a>"
-    }
+    },
+    {
+        pk: 'team-12',
+        firstName: 'Tamas',
+        lastName: 'Nadrai',
+        imgSrc: tnadrai,
+        title: 'Full stack developer',
+        linedinUrl:'https://www.linkedin.com/in/nadrai/',
+        githubUrl:'https://github.com/CryppTom',
+        description: "Tamas has 8+ years experience in software development and testing. He is a blockchain and cryptocurrency enthusiast since 2017."
+    },
+    {
+        pk: 'team-13',
+        firstName: 'Peter',
+        lastName: 'Kolcza',
+        imgSrc: pkolcza,
+        title: 'IT consultant, backend developer',
+        linedinUrl:'https://www.linkedin.com/in/p%C3%A9ter-kolcza-0b04bb8/',
+        description: "Peter has 10+ years of experience in building enterprise solutions for financial institutions in the areas of loans and data quality. He performs best when complex problems should be solved: when technology meets finance, tax, business and complience."
+    },
 ];
 
 export const partners = [

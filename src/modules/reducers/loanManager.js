@@ -8,6 +8,8 @@ import loanManagerArtifacts from "contractsBuild/LoanManager.json";
 
 import { fetchLoansToCollectTx, fetchProductsTx } from "modules/ethereum/loanTransactions";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const LOANMANAGER_CONNECT_REQUESTED = "loanManager/LOANMANAGER_CONNECT_REQUESTED";
 export const LOANMANAGER_CONNECT_SUCCESS = "loanManager/LOANMANAGER_CONNECT_SUCCESS";
 export const LOANMANAGER_CONNECT_ERROR = "loanManager/LOANMANAGER_CONNECT_ERROR";
@@ -174,7 +176,6 @@ export const refreshLoanManager = () => {
 };
 
 async function getLoanManagerInfo(loanManager) {
-    const ONE_ETH = 1000000000000000000;
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
@@ -202,7 +203,7 @@ async function getLoanManagerInfo(loanManager) {
     return {
         chunkSize: chunkSize.toNumber(),
         bn_weiBalance,
-        ethBalance: bn_weiBalance / ONE_ETH,
+        ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
         tokenBalance: bn_tokenBalance / decimalsDiv,
         loanCount: loanCount.toNumber(),

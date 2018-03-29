@@ -1,23 +1,22 @@
 // ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
+// Main support file for test. It's processed and loaded automatically before all test files.
+// You can read more here: https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+before(function() {
+    cy.ganacheTakeSnapshot();
+    cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)
+
+    cy.visit("/");
+    cy.get("[data-testid=useAEurButton]").click();
+    cy.get("[data-testid=TryItConnectedPanel]").should("contain", "You are connected");
+});
+
+after(function() {
+    cy.ganacheRevertSnapshot();
+});
 
 const defaultWhitelist = xhr => {
     // this function receives the xhr object in question and
@@ -30,9 +29,7 @@ Cypress.Server.defaults({
         // hide logging web3 polling XHR request to testrpc
         return (
             (xhr.method === "POST" && xhr.url === "http://localhost:8545/") ||
-            (xhr.method === "GET" &&
-                xhr.url.slice(0, 34) ===
-                    "http://localhost:3000/sockjs-node/") ||
+            (xhr.method === "GET" && xhr.url.slice(0, 34) === "http://localhost:3000/sockjs-node/") ||
             defaultWhitelist(xhr)
         );
     }

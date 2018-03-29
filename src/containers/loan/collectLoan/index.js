@@ -31,7 +31,6 @@ class CollectLoanMain extends React.Component {
                 this.props.augmintToken.isConnected)
         ) {
             // loanManager mounted
-            console.debug("fetch2");
             store.dispatch(fetchLoansToCollect());
         }
     }

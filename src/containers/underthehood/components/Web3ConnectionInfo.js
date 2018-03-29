@@ -17,7 +17,7 @@ export default class Web3ConnectionInfo extends React.Component {
     }
 
     render() {
-        const { isLoading, isConnected, web3Instance, error, info } = this.props.web3Connect;
+        const { isLoading, isConnected, web3Instance, error, info, network } = this.props.web3Connect;
         const handleRefreshClick = e => {
             e.preventDefault();
             store.dispatch(setupWeb3());
@@ -30,6 +30,8 @@ export default class Web3ConnectionInfo extends React.Component {
                 </p>
                 <p>Info:</p>
                 <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(info)}</pre>
+                <p>Network:</p>
+                <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(network)}</pre>
 
                 {error ? <ErrorPanel header="Error">{error.message}</ErrorPanel> : <p>No connection error</p>}
 

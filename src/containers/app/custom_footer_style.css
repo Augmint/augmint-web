@@ -30,16 +30,28 @@
   max-width: 397px;
 }
 
-.Site-footer .footer .join-discord {
-  color: #ffad00;
-  display: block;
-  font-size: 17px;
-  line-height: 1.29;
+.Site-footer .footer .chat-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   margin: 0;
   padding: 0;
 }
 
-.Site-footer .footer .join-discord img {
+.Site-footer .footer .chat-container a.join-discord,
+.Site-footer .footer .chat-container a.join-telegram {
+  color: #ffad00;
+  display: inline-block;
+  font-size: 17px;
+  line-height: 1.29;
+  margin: 15px;
+  padding: 0;
+  min-width: 245px;
+}
+
+.Site-footer .footer .chat-container .join-discord img,
+.Site-footer .footer .chat-container .join-telegram img {
   display: inline-block;
   margin-right: 20px;
   max-width: 38px;
