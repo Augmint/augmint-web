@@ -21,12 +21,25 @@ const BaseButton = `
     letter-spacing: 2.6px;
 
     :hover {
-        color: ${theme.colors.primary};
+        background-color: ${theme.colors.primary};
+        color: ${theme.colors.white};
         box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
     }
 
     &.grey {
       background-color: ${theme.colors.grey};
+    }
+
+    &.loading {
+      position: relative;
+      cursor: default;
+      text-shadow: none!important;
+      color: transparent!important;
+      opacity: 1;
+      pointer-events: auto;
+      -webkit-transition: all 0s linear,opacity .1s ease;
+      -o-transition: all 0s linear,opacity .1s ease;
+      transition: all 0s linear,opacity .1s ease;
     }
 `;
 
