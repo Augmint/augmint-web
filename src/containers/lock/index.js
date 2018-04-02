@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import { SubmissionError } from "redux-form";
 
-
+import store from "modules/store";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
+import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lockTransactions";
 import { EthereumState } from "containers/app/EthereumState";
 
 import { Pcontainer, Pblock, Pgrid } from "components/PageLayout";
@@ -25,12 +27,23 @@ class LockContainer extends React.Component {
         lockManagerProvider();
     }
 
-    handleSubmit(values) {
-        debugger;
+    async handleSubmit(values) {
+        const res = await store.dispatch(newLock(values.productId, values.lockAmount));
+        if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
+            throw new SubmissionError({
+                _error: res.error
+            });
+        } else {
+            this.setState({
+                submitSucceeded: true,
+                result: res.result
+            });
+            return res;
+        }
     }
 
     render() {
-        const { userAccount, lockProducts } = this.props;
+        const { userAccount, lockManager, lockProducts } = this.props;
 
         return (
             <Pcontainer>
@@ -50,9 +63,10 @@ class LockContainer extends React.Component {
                     <Pblock
                         testid="accountInfoBlock"
                         className="accountInfo"
-                        loading={false}
+                        loading={lockManager.isLoading}
                         header="Lock"
                         style={{maxWidth: '700px'}}
+                        
                     >
                         <LockForm 
                             onSubmit={this.handleSubmit}
@@ -68,6 +82,7 @@ class LockContainer extends React.Component {
 const mapStateToProps = state => {
     return {
         userAccount: state.userBalances.account,
+        lockManager: state.lockManager,
         lockProducts: state.lockManager.products
     }
 };

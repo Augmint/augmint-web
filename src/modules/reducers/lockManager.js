@@ -2,7 +2,7 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import lockManagerArtifacts from "contractsBuild/Locker.json";
 
-import { fetchLockProductsTx } from "modules/ethereum/lockTransactions";
+import { fetchLockProductsTx, newLockTx } from "modules/ethereum/lockTransactions";
 
 const LOCKMANAGER_CONNECT_REQUESTED = "lockManager/LOCKMANAGER_CONNECT_REQUESTED";
 const LOCKMANAGER_CONNECT_SUCCESS = "lockManager/LOCKMANAGER_CONNECT_SUCCESS";
@@ -11,6 +11,10 @@ const LOCKMANAGER_CONNECT_ERROR = "lockManager/LOCKMANAGER_CONNECT_ERROR";
 const LOCKMANAGER_PRODUCTLIST_REQUESTED = "lockManager/LOCKMANAGER_PRODUCTLIST_REQUESTED";
 const LOCKMANAGER_PRODUCTLIST_RECEIVED = "lockManager/LOCKMANAGER_PRODUCTLIST_RECEIVED";
 const LOCKMANAGER_PRODUCTLIST_ERROR = "lockManager/LOCKMANAGER_PRODUCTLIST_ERROR";
+
+const LOCKMANAGER_NEWLOCK_REQUESTED = "lockManager/LOCKMANAGER_NEWLOCK_REQUESTED";
+const LOCKMANAGER_NEWLOCK_SUCCESS = "lockManager/LOCKMANAGER_NEWLOCK_SUCCESS";
+const LOCKMANAGER_NEWLOCK_ERROR = "lockManager/LOCKMANAGER_NEWLOCK_ERROR";
 
 const initialState = {
     contract: null,

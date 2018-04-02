@@ -29,7 +29,8 @@ class LockContainer extends React.Component {
         super(props);
 
         this.state = {
-            amountValue: null
+            amountValue: null,
+            productId: null
         }
 
         this.onTermChange = this.onTermChange.bind(this);
@@ -38,7 +39,11 @@ class LockContainer extends React.Component {
 
     
     onTermChange(input, nextVal) {
-        debugger;
+        if (this.state.amout && nextVal) {
+            this.setState(()=> ({
+                productId: nextVal
+            }));
+        }
     }
 
     onAmountChange(input, nextVal) {
@@ -85,7 +90,7 @@ class LockContainer extends React.Component {
                             return (<TermTableRow key={`lock-term-${i}`}>
                                 <TermTableCell>
                                     <Field
-                                        name="term"
+                                        name="productId"
                                         val={i}
                                         component={RadioInput}
                                         onChange={this.onTermChange}
@@ -111,7 +116,7 @@ class LockContainer extends React.Component {
                         })}
                     </TermTableBody>
                 </TermTable>
-                <Button type="submit">Lock</Button>
+                <Button disabled={!this.state.amountValue && !this.state.productId} type="submit">Lock</Button>
 
             </Form>
         );

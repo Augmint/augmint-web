@@ -1,16 +1,14 @@
 /* Loan ethereum functions
 Use only from reducers.  */
 import store from "modules/store";
-// import BigNumber from "bignumber.js";
+import BigNumber from "bignumber.js";
 import moment from "moment";
-// import { cost } from "./gas";
-// import { EthereumTransactionError } from "modules/ethereum/ethHelper";
-
-// const ONE_ETH = 1000000000000000000;
+import { cost } from "./gas";
+import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
 export async function fetchLockProductsTx() {
     const lockManager = store.getState().lockManager.contract.instance;
-   
+
     const [chunkSize, productCount] = await Promise.all([
         lockManager.CHUNK_SIZE().then(res => res.toNumber()),
         lockManager.getLockProductCount().then(res => res.toNumber())
@@ -27,7 +25,7 @@ export async function fetchLockProductsTx() {
     }
     return products;
 }
-    
+
 function parseProducts(productsArray) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
@@ -40,7 +38,7 @@ function parseProducts(productsArray) {
         ] = product;
         const duration = bn_durationInSecs.toNumber();
 
-        const durationText = (duration < 60 * 60 * 24 * 31  ) ? 
+        const durationText = (duration < 60 * 60 * 24 * 31) ?
             `${moment.duration(duration, "seconds").asDays()} days` :
             moment.duration(duration, "seconds").humanize();
 
@@ -50,7 +48,7 @@ function parseProducts(productsArray) {
             durationInSecs: duration,
             durationText,
             minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
-            interestRatePA: perTermInterest * (60*60*24*365/duration),
+            interestRatePA: perTermInterest * (60 * 60 * 24 * 365 / duration),
             isActive: (bn_isActive.toNumber() === 1)
         });
 
@@ -60,32 +58,43 @@ function parseProducts(productsArray) {
 
     return products;
 }
-    
-   
-    
-    // export async function fetchLoansToCollectTx() {
-    //     try {
-    //         const loanManager = store.getState().loanManager.contract.instance;
-    //         // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
-    //         const [chunkSize, loanCount] = await Promise.all([
-    //             loanManager.CHUNK_SIZE().then(res => res.toNumber()),
-    //             loanManager.getLoanCount().then(res => res.toNumber())
-    //         ]);
-    //         // const chunkSize = store.getState().loanManager.info.chunkSize;
-    //         // const loanCount = await loanManager.getLoanCount();
-    
-    //         let loansToCollect = [];
-    
-    //         const queryCount = Math.ceil(loanCount / chunkSize);
-    //         for (let i = 0; i < queryCount; i++) {
-    //             const loansArray = await loanManager.getLoans(i * chunkSize);
-    //             const defaultedLoans = parseLoans(loansArray).filter(loan => loan.isCollectable);
-    //             loansToCollect = loansToCollect.concat(defaultedLoans);
-    //         }
-    
-    //         return loansToCollect;
-    //     } catch (error) {
-    //         throw new Error("fetchLoansToCollectTx failed.\n" + error);
-    //     }
-    // }
-    
+
+export async function newLockTx(productId, lockAmount) {
+    const txName = "New lock";
+    const getState = store.getState;
+
+    const lockManager = getState().lockManager.contract.instance;
+    const augmintToken = getState().augmintToken;
+
+    const gasEstimate = (getState().lockManager.info.lockCount === 0) ?
+        cost.NEW_FIRST_LOAN_GAS :
+        cost.NEW_LOAN_GAS;
+
+    const userAccount = store.getState().web3Connect.userAccount;
+    const decimalsDiv = augmintToken.info.decimalsDiv;
+    const lockAmountBNString = new BigNumber(lockAmount).mul(decimalsDiv).toString();
+
+    const tx = augmintToken.contract.web3ContractInstance.methods
+        .transferAndNotify(
+            lockManager.address,
+            lockAmountBNString,
+            productId
+        )
+        .send({
+            from: userAccount,
+            gas: gasEstimate
+        });
+
+    try {
+        const transactionHash = await processTx(tx, txName, gasEstimate);
+        return { txName, transactionHash };
+    } catch(error) {
+        throw new EthereumTransactionError(
+            "Place order failed.",
+            "Unknown orderType: " + error,
+            null,
+            gasEstimate
+        );
+    }
+
+}
