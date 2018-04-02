@@ -1,37 +1,58 @@
 import React from "react";
-//import store from "modules/store";
+import store from "modules/store";
 import { connect } from "react-redux";
 import legacyBalancesProvider from "modules/legacyBalancesProvider";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
 //import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/MsgPanels";
+import Button from "components/button";
 import { InfoPanel } from "components/MsgPanels";
 import { Container } from "semantic-ui-react";
-//import { dismissTx } from "modules/reducers/submittedTransactions";
+import { dismissLegacyBalance, convertLegacyBalance } from "modules/reducers/legacyBalances";
 
 class LegacyTokens extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.handleClose = this.handleClose.bind(this);
-    // }
+    constructor(props) {
+        super(props);
+        this.handleDismiss = this.handleDismiss.bind(this);
+        this.submitConvert = this.submitConvert.bind(this);
+    }
 
     componentDidMount() {
         legacyBalancesProvider();
     }
-    // handleClose(txHash) {
-    //     store.dispatch(dismissTx(txHash));
-    // }
+
+    handleDismiss(legacyTokenAddress) {
+        store.dispatch(dismissLegacyBalance(legacyTokenAddress));
+    }
+
+    submitConvert(legacyTokenAddress) {
+        store.dispatch(convertLegacyBalance(legacyTokenAddress));
+    }
 
     render() {
         const { contractBalances, augmintToken, network } = this.props;
 
         const balances = contractBalances
-            ? contractBalances.filter(item => item.balance > 0).map(item => {
+            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => {
                   return (
                       <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
                           Balance in legacy contract: {item.balance} A-EUR{" "}
                           <small>Contract address: {item.contract} </small>
-                          <p>Convert: TODO</p>
+                          <Button
+                              type="submit"
+                              data-testid={`dismissLegacyBalanceButton-${item.contract}`}
+                              onClick={() => this.handleDismiss(item.contract)}
+                          >
+                              Dismiss
+                          </Button>
+                          <Button
+                              type="submit"
+                              primary
+                              data-testid={`convertLegacyBalanceButton-${item.contract}`}
+                              onClick={() => this.submitConvert(item.contract)}
+                          >
+                              Convert
+                          </Button>
                       </MyListGroup.Row>
                   );
               })
