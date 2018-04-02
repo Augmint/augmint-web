@@ -13,6 +13,7 @@ import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
 import trades from "modules/reducers/trades";
 import subscriptions from "modules/reducers/subscriptions";
+import legacyBalances from "modules/reducers/legacyBalances";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
 
@@ -32,5 +33,6 @@ export default combineReducers({
     loans,
     subscriptions,
     submittedTransactions,
+    legacyBalances,
     form: formReducer
 });
