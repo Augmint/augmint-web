@@ -17,7 +17,9 @@ const initialState = {
     refreshError: null,
     error: null,
     isLoading: false,
-    contractBalances: null
+    contractBalances: null,
+    result: null,
+    request: null
 };
 
 export default (state = initialState, action) => {
@@ -44,15 +46,18 @@ export default (state = initialState, action) => {
                 refreshError: action.error
             };
 
+        case LEGACY_BALANCE_CONVERSION_REQUESTED:
         case LEGACY_BALANCE_DISMISS_REQUESTED:
             return {
-                ...state
+                ...state,
+                request: action.request
             };
 
         case LEGACY_BALANCE_CONVERSION_SUCCESS:
             return {
                 ...state,
-                contractBalances: action.result
+                result: action.result,
+                request: null
             };
 
         case LEGACY_BALANCE_CONVERSION_ERROR:
@@ -60,13 +65,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                error: action.error,
+                request: null
             };
 
         case LEGACY_BALANCE_DISMISS_SUCCESS:
             return {
                 ...state,
-                contractBalances: action.result
+                contractBalances: action.result,
+                request: null
             };
 
         default:
@@ -101,7 +108,7 @@ export function dismissLegacyBalance(legacyTokenAddress) {
     return async dispatch => {
         dispatch({
             type: LEGACY_BALANCE_DISMISS_REQUESTED,
-            legacyTokenAddress
+            request: { legacyTokenAddress }
         });
         try {
             const contractBalances = [...store.getState().legacyBalances.contractBalances];
@@ -126,15 +133,15 @@ export function dismissLegacyBalance(legacyTokenAddress) {
     };
 }
 
-export function convertLegacyBalance(legacyTokenAddress) {
+export function convertLegacyBalance(legacyTokenAddress, amount) {
     return async dispatch => {
         dispatch({
             type: LEGACY_BALANCE_CONVERSION_REQUESTED,
-            legacyTokenAddress
+            request: { legacyTokenAddress, amount }
         });
 
         try {
-            const result = await convertLegacyBalanceTx(legacyTokenAddress);
+            const result = await convertLegacyBalanceTx(legacyTokenAddress, amount);
             return dispatch({
                 type: LEGACY_BALANCE_CONVERSION_SUCCESS,
                 result: result

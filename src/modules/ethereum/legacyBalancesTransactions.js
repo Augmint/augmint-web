@@ -1,10 +1,11 @@
 import store from "modules/store";
-//import BigNumber from "bignumber.js";
-//import { cost } from "./gas";
-//import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
+import BigNumber from "bignumber.js";
+import { cost } from "./gas";
+import { processTx } from "modules/ethereum/ethHelper";
 //import { ONE_ETH_IN_WEI } from "../../utils/constants";
 //import AugmintToken from "contractsBuild/AugmintToken.json";
 import AugmintToken from "contractsBuild/TokenAEur.json";
+import MonetarySupervisor from "contractsBuild/MonetarySupervisor.json";
 import { default as Contract } from "truffle-contract";
 import { DECIMALS_DIV } from "utils/constants";
 
@@ -36,6 +37,28 @@ export async function fetchLegacyBalances() {
     return ret;
 }
 
-export async function convertLegacyBalanceTx() {
-    throw new Error("not implemented yet");
+export async function convertLegacyBalanceTx(legacyTokenAddress, amount) {
+    const txName = "Convert legacy balance";
+    const web3 = store.getState().web3Connect;
+    const gasEstimate = cost.LEGACY_BALANCE_CONVERT_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const augmintTokenContract = Contract(AugmintToken);
+
+    const monetarySupervisorContract = Contract(MonetarySupervisor);
+    monetarySupervisorContract.setProvider(web3.web3Instance.currentProvider);
+    monetarySupervisorContract.setNetwork(web3.network.id);
+
+    const web3ContractInstance = new web3.web3Instance.eth.Contract(augmintTokenContract.abi, legacyTokenAddress);
+
+    const tx = web3ContractInstance.methods
+        .transferAndNotify(monetarySupervisorContract.address, new BigNumber(amount).mul(decimalsDiv).toString(), 0)
+        .send({
+            from: userAccount,
+            gas: gasEstimate
+        });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
 }

@@ -11,5 +11,7 @@ export const cost = {
 
     PLACE_ORDER_GAS: 200000,
     MATCH_ORDERS_GAS: 100000,
-    CANCEL_ORDER_GAS: 80000 // TODO: revisit after tx refactor done
+    CANCEL_ORDER_GAS: 80000, // TODO: revisit after tx refactor done
+
+    LEGACY_BALANCE_CONVERT_GAS: 200000
 };

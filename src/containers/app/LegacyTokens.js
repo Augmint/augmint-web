@@ -1,20 +1,29 @@
 import React from "react";
-import store from "modules/store";
 import { connect } from "react-redux";
 import legacyBalancesProvider from "modules/legacyBalancesProvider";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
-//import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/MsgPanels";
+import { EthSubmissionSuccessPanel, EthSubmissionErrorPanel } from "components/MsgPanels";
 import Button from "components/button";
 import { InfoPanel } from "components/MsgPanels";
 import { Container } from "semantic-ui-react";
-import { dismissLegacyBalance, convertLegacyBalance } from "modules/reducers/legacyBalances";
+import {
+    dismissLegacyBalance,
+    convertLegacyBalance,
+    LEGACY_BALANCE_CONVERSION_SUCCESS
+} from "modules/reducers/legacyBalances";
 
 class LegacyTokens extends React.Component {
     constructor(props) {
         super(props);
         this.handleDismiss = this.handleDismiss.bind(this);
         this.submitConvert = this.submitConvert.bind(this);
+        this.state = {
+            submitting: false,
+            submitSucceeded: false,
+            error: null,
+            result: null
+        };
     }
 
     componentDidMount() {
@@ -22,15 +31,30 @@ class LegacyTokens extends React.Component {
     }
 
     handleDismiss(legacyTokenAddress) {
-        store.dispatch(dismissLegacyBalance(legacyTokenAddress));
+        this.props.dismissLegacyBalance(legacyTokenAddress);
     }
 
-    submitConvert(legacyTokenAddress) {
-        store.dispatch(convertLegacyBalance(legacyTokenAddress));
+    async submitConvert(legacyTokenAddress, amount) {
+        this.setState({ submitting: true, error: null, result: null });
+        const res = await this.props.convertLegacyBalance(legacyTokenAddress, amount);
+        if (res.type !== LEGACY_BALANCE_CONVERSION_SUCCESS) {
+            this.setState({
+                submitting: false,
+                error: res.error
+            });
+        } else {
+            this.setState({
+                submitting: false,
+                error: null,
+                result: res.result
+            });
+            return;
+        }
     }
 
     render() {
         const { contractBalances, augmintToken, network } = this.props;
+        const { error, submitting, submitSucceeded, result } = this.state;
 
         const balances = contractBalances
             ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => {
@@ -41,6 +65,7 @@ class LegacyTokens extends React.Component {
                           <Button
                               type="submit"
                               data-testid={`dismissLegacyBalanceButton-${item.contract}`}
+                              id={`dismissLegacyBalanceButton-${item.contract}`}
                               onClick={() => this.handleDismiss(item.contract)}
                           >
                               Dismiss
@@ -48,10 +73,12 @@ class LegacyTokens extends React.Component {
                           <Button
                               type="submit"
                               primary
+                              disabled={submitting}
                               data-testid={`convertLegacyBalanceButton-${item.contract}`}
-                              onClick={() => this.submitConvert(item.contract)}
+                              id={`convertLegacyBalanceButton-${item.contract}`}
+                              onClick={() => this.submitConvert(item.contract, item.balance)}
                           >
-                              Convert
+                              {submitting ? "Submitting convert..." : "Convert"}
                           </Button>
                       </MyListGroup.Row>
                   );
@@ -73,7 +100,21 @@ class LegacyTokens extends React.Component {
                                 test the conversion process.
                             </small>
                         </p>
-                        {balances}
+                        {error && (
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                header="Legacy token conversion failed"
+                                onDismiss={() => this.setState({ error: null })}
+                            />
+                        )}
+                        {submitSucceeded && (
+                            <EthSubmissionSuccessPanel
+                                header="Token conversion submitted"
+                                result={result}
+                                onDismiss={() => this.setState({ submitSucceeded: false, result: null })}
+                            />
+                        )}
+                        {!submitSucceeded && !error && balances}
                     </InfoPanel>
                 </Container>
             </Psegment>
@@ -89,4 +130,6 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(LegacyTokens);
+const mapDispatchToProps = { dismissLegacyBalance, convertLegacyBalance };
+
+export default connect(mapStateToProps, mapDispatchToProps)(LegacyTokens);
