@@ -21,11 +21,11 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case TRADE_FETCH_REQUESTED:
             return {
+                ...state,
                 isLoading: true,
                 account: action.account,
                 fromBlock: action.fromBlock,
-                toBlock: action.toBlock,
-                ...state
+                toBlock: action.toBlock
             };
 
         case TRADE_FETCH_ERROR:
@@ -47,11 +47,11 @@ export default (state = initialState, action) => {
 
         case TRADE_PROCESS_REQUESTED:
             return {
+                ...state,
                 isLoading: true,
                 account: action.account,
                 fromBlock: action.fromBlock,
-                toBlock: action.toBlock,
-                ...state
+                toBlock: action.toBlock
             };
 
         case TRADE_PROCESS_ERROR:
