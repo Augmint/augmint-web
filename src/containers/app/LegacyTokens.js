@@ -45,6 +45,7 @@ class LegacyTokens extends React.Component {
         } else {
             this.setState({
                 submitting: false,
+                submitSucceeded: true,
                 error: null,
                 result: res.result
             });
