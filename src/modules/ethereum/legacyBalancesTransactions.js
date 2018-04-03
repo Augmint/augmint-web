@@ -11,9 +11,16 @@ import { DECIMALS_DIV } from "utils/constants";
 
 /* List of old augmint token deploy addresses by network id */
 const ACCEPTED_LEGACY_AEUR_CONTRACTS = {
-    1: [], // mainnet (no deploy yet)
-    999: ["0x2b464feba90a9c1fcf74ebdb15471b539ba1d9d4"], // local ganache (migrations deploys it for manual testing)
-    4: ["0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA"] // rinkeby
+    // mainnet (no deploy yet)
+    1: [],
+
+    // local ganache (migrations deploys it for manual testing)
+    999: ["0x2b464feba90a9c1fcf74ebdb15471b539ba1d9d4"],
+
+    // rinkeby
+    4: [
+        "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA" //https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
+    ]
 };
 
 export async function fetchLegacyBalances() {
