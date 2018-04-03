@@ -1,7 +1,8 @@
 import React from "react";
-import { Container, Message } from "semantic-ui-react";
+import { Message } from "semantic-ui-react";
 import Button from "./augmint-ui/button";
 import Icon from "./augmint-ui/icon";
+import Container from "./augmint-ui/container";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
