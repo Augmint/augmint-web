@@ -1,8 +1,8 @@
 import React from "react";
-import { Message } from "semantic-ui-react";
 import Button from "./augmint-ui/button";
 import Icon from "./augmint-ui/icon";
 import Container from "./augmint-ui/container";
+import Message from "./augmint-ui/message";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -21,11 +21,11 @@ export default class MsgPanel extends React.Component {
     }
 
     render() {
-        const { children, eth, icon, dismissable, dismissed, onDismiss, header, loading, ...other } = this.props;
+        const { children, eth, icon, dismissable, dismissed, onDismiss, header, loading, error, ...other } = this.props;
         return (
             (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} {...other}>
+                    <Message onDismiss={onDismiss ? this.dismiss : null} className={error ? "error" : ""} {...other}>
                         <h3>
                             {icon && <Icon name={icon} loading={loading} />} {header}
                         </h3>
@@ -75,8 +75,8 @@ export class EthSubmissionErrorPanel extends React.Component {
     render() {
         const { children, error, ...other } = this.props;
         const receipt = error && error.receipt ? error.receipt : null;
-        return (
-            <MsgPanel error {...other}>
+        const panel = !error ? null : (
+            <MsgPanel error={error ? true : false} {...other}>
                 {children}
                 {error && error.message}
                 {receipt && (
@@ -88,6 +88,7 @@ export class EthSubmissionErrorPanel extends React.Component {
                 {error && <ErrorDetails details={error.details} />}
             </MsgPanel>
         );
+        return panel;
     }
 }
 

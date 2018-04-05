@@ -4,7 +4,11 @@ const theme = {
         grey: "#e0e1e2",
         opacWhite: "rgba(255, 255, 255, 0.5)",
         primary: "#051d2d",
-        secondary: "#ffad00"
+        secondary: "#ffad00",
+        messageBoxBackground: "#f8ffff",
+        messageBoxColor: "#276f86",
+        messageBoxErrorBackground: "#fff6f6",
+        messageBoxErrorColor: "#9f3a38"
     },
     transitions: {
         standard: "0.3s ease-in"
