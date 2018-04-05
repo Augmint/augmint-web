@@ -315,11 +315,9 @@ describe("Augmint exchange", function() {
                     .get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]")
                     .click()
                     .then(() => {
-                        cy.get("[data-testid='TradeHistoryRefreshing']").then(() => {
-                            cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
-                            cy.get("@tradeHistoryTbody").then(() => {
-                                cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
-                            });
+                        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+                        cy.get("@tradeHistoryTbody").then(() => {
+                            cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
                         });
                     });
                 // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)
