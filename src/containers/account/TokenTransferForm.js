@@ -6,7 +6,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import Button from "components/augmint-ui/button";
-import { StyleLabelRight } from 'components/augmint-ui/FormCustomLabel/styles';
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -16,7 +16,6 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
-
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
@@ -119,7 +118,7 @@ class TokenTransferForm extends React.Component {
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input data-testid="transferAmountInput" />
-                            <StyleLabelRight>A-EUR</StyleLabelRight>
+                            <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 
                         <small>
@@ -151,7 +150,13 @@ class TokenTransferForm extends React.Component {
                             placeholder="short narrative (optional)"
                             disabled={submitting || !augmintToken.isConnected}
                         />
-                        <Button type="submit" loading={submitting} primary disabled={pristine} data-testid="submitTransferButton">
+                        <Button
+                            type="submit"
+                            loading={submitting}
+                            primary
+                            disabled={pristine}
+                            data-testid="submitTransferButton"
+                        >
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
                     </Form>

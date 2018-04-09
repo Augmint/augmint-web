@@ -7,7 +7,7 @@ const BaseLabel = `
     padding: 12px;
 `;
 
-export const StyleLabelRight = styled.label`
+export const StyleLabel = styled.label`
     ${BaseLabel};
-    border-radius: 0 5px 5px 0;
+    border-radius: ${props => (props.align === "right" ? "0 5px 5px 0" : "")};
 `;
