@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import theme from "styles/theme";
 
 const BaseLabel = `
-    background-color: #e8e8e8;
+    background-color: ${theme.colors.lightGray};
     color: rgba(0,0,0,.6);
     padding: 12px;
 `;
