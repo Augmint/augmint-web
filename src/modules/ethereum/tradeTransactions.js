@@ -42,12 +42,12 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
         const logs = await Promise.all([
             ...logsNewOrder.map(eventLog => _formatTradeLog(NewOrder, account, eventLog)),
             ...logsCanceledOrder.map(eventLog => _formatTradeLog(CancelledOrder, account, eventLog)),
-            ...logsOrderFillBuy.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, 'buy')),
-            ...logsOrderFillSell.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, 'sell'))
+            ...logsOrderFillBuy.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, "buy")),
+            ...logsOrderFillSell.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, "sell"))
         ]);
 
         logs.sort((log1, log2) => {
-          return log2.blockData.timestamp - log1.blockData.timestamp;
+            return log2.blockData.timestamp - log1.blockData.timestamp;
         });
 
         return logs;
@@ -84,27 +84,27 @@ async function _formatTradeLog(event, account, eventLog, type) {
     const bn_tokenAmount = parsedData.tokenAmount;
     const bn_ethAmount = bn_weiAmount.div(ONE_ETH_IN_WEI);
 
-    const ethAmount  = bn_ethAmount.toString();
+    const ethAmount = bn_ethAmount.toString();
     const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
     const tokenAmount = parseFloat(bn_tokenAmount / decimalsDiv);
     const price = parseFloat(parsedData.price / decimalsDiv);
-    let direction = tokenAmount === 0 ? 'buy' : 'sell';
-    if (event.name === 'OrderFill') {
-      direction = type
+    let direction = tokenAmount === 0 ? "buy" : "sell";
+    if (event.name === "OrderFill") {
+        direction = type;
     }
 
-    let tokenBuy
-    if (direction === 'buy' && parsedData.price) {
-      tokenBuy = parseFloat(
-        bn_ethAmount
-        .mul(parsedData.price)
-        .round(0, BigNumber.ROUND_HALF_DOWN)
-        .div(decimalsDiv)
-        .toFixed(decimals)
-      );
+    let tokenBuy;
+    if (direction === "buy" && parsedData.price) {
+        tokenBuy = parseFloat(
+            bn_ethAmount
+                .mul(parsedData.price)
+                .round(0, BigNumber.ROUND_HALF_DOWN)
+                .div(decimalsDiv)
+                .toFixed(decimals)
+        );
     }
 
-    const tokenValue = direction === 'sell' ? tokenAmount : tokenBuy;
+    const tokenValue = direction === "sell" ? tokenAmount : tokenBuy;
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
         blockData,
@@ -112,10 +112,10 @@ async function _formatTradeLog(event, account, eventLog, type) {
         blockTimeStampText: blockTimeStampText,
         bn_weiAmount: bn_weiAmount,
         bn_tokenAmount: bn_tokenAmount,
-        tokenAmount: tokenAmount,
+        tokenAmount: tokenAmount ? tokenAmount : "",
         ethAmount: ethAmount,
-        ethAmountRounded: ethAmountRounded,
-        price: price ,
+        ethAmountRounded: ethAmountRounded ? ethAmountRounded : "",
+        price: price ? price : "",
         type: event.name,
         tokenValue
     });
