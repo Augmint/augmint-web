@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Statistic, Segment, Button } from "semantic-ui-react";
+import { Statistic, Segment } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
 
 export class EarningStats extends React.Component {
