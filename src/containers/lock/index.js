@@ -65,13 +65,9 @@ class LockContainer extends React.Component {
                         className="accountInfo"
                         loading={lockManager.isLoading}
                         header="Lock"
-                        style={{maxWidth: '700px'}}
-                        
+                        style={{ maxWidth: "700px" }}
                     >
-                        <LockForm 
-                            onSubmit={this.handleSubmit}
-                            lockProducts= {lockProducts}
-                        />
+                        <LockForm onSubmit={this.handleSubmit} lockProducts={lockProducts} />
                     </Pblock>
                 </EthereumState>
             </Pcontainer>
@@ -84,7 +80,7 @@ const mapStateToProps = state => {
         userAccount: state.userBalances.account,
         lockManager: state.lockManager,
         lockProducts: state.lockManager.products
-    }
+    };
 };
 
 export default connect(mapStateToProps)(LockContainer);

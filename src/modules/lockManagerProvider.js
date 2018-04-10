@@ -1,9 +1,6 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import {
-    connectLockManager,
-    fetchProducts
-} from "modules/reducers/lockManager";
+import { connectLockManager, fetchProducts } from "modules/reducers/lockManager";
 // import { fetchLoansForAddress } from "modules/reducers/loans";
 // import { refreshAugmintToken } from "modules/reducers/augmintToken";
 // import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -47,7 +44,7 @@ const refresLockManagerIfNeeded = (newVal, oldVal) => {
     }
 };
 
-const onWeb3NetworkChange = (newVal) => {
+const onWeb3NetworkChange = newVal => {
     if (newVal !== null) {
         console.debug("lockManagerProvider - web3Connect.network changed. Dispatching connectLockManager()");
         store.dispatch(connectLockManager());

@@ -6,22 +6,10 @@ import { Form, Validations } from "components/BaseComponents";
 
 import Button from "components/button";
 
-import {
-    TermTable,
-    TermTableBody,
-    TermTableRow,
-    TermTableCell,
-    TermTableHeadCell,
-    TermTableHeader,
-} from "./styles";
+import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 
-const RadioInput = (props) => (
-    <input
-        type="radio"
-        name={props.input.name}
-        value={props.val}
-        onChange={props.input.onChange}
-    />
+const RadioInput = props => (
+    <input type="radio" name={props.input.name} value={props.val} onChange={props.input.onChange} />
 );
 
 class LockContainer extends React.Component {
@@ -31,16 +19,15 @@ class LockContainer extends React.Component {
         this.state = {
             amountValue: null,
             productId: null
-        }
+        };
 
         this.onTermChange = this.onTermChange.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
     }
 
-    
     onTermChange(input, nextVal) {
         if (this.state.amout && nextVal) {
-            this.setState(()=> ({
+            this.setState(() => ({
                 productId: nextVal
             }));
         }
@@ -55,9 +42,7 @@ class LockContainer extends React.Component {
     render() {
         const { lockProducts, onSubmit, handleSubmit } = this.props;
         return (
-            <Form
-                onSubmit={handleSubmit(onSubmit)}
-            >
+            <Form onSubmit={handleSubmit(onSubmit)}>
                 <Field
                     name="lockAmount"
                     component={Form.Field}
@@ -76,53 +61,55 @@ class LockContainer extends React.Component {
                 <TermTable fixed>
                     <TermTableHeader>
                         <TermTableRow>
-                            <TermTableHeadCell></TermTableHeadCell>
-                            <TermTableHeadCell></TermTableHeadCell>
+                            <TermTableHeadCell />
+                            <TermTableHeadCell />
                             <TermTableHeadCell>min. amount to lock</TermTableHeadCell>
                             <TermTableHeadCell>Interest rates</TermTableHeadCell>
-                            <TermTableHeadCell textAlign="right" singleLine>You earn</TermTableHeadCell>
+                            <TermTableHeadCell textAlign="right" singleLine>
+                                You earn
+                            </TermTableHeadCell>
                         </TermTableRow>
                     </TermTableHeader>
                     <TermTableBody>
-                        {lockProducts && lockProducts
-                            .filter(product => product.isActive)
-                            .map((product, i) => {
-                            return (<TermTableRow key={`lock-term-${i}`}>
-                                <TermTableCell>
-                                    <Field
-                                        name="productId"
-                                        val={i}
-                                        component={RadioInput}
-                                        onChange={this.onTermChange}
-                                        validate={[Validations.required]}
-                                    >
-                                        <input />
-                                    </Field>
-                                </TermTableCell>
-                                <TermTableCell>
-                                    <label>{product.durationText}</label>
-                                </TermTableCell>
-                                <TermTableCell>
-                                    {product.minimumLockAmount}
-                                </TermTableCell>
-                                <TermTableCell>
-                                    ~{Math.floor(product.interestRatePA / 10000)} % p.a.
-                                </TermTableCell>
-                                <TermTableCell textAlign="right">
-                                    {this.state.amountValue && (this.state.amountValue * product.perTermInterest / 1000000).toFixed(2)}
-                                </TermTableCell>
-                            </TermTableRow>
-                            )
-                        })}
+                        {lockProducts &&
+                            lockProducts.filter(product => product.isActive).map((product, i) => {
+                                return (
+                                    <TermTableRow key={`lock-term-${i}`}>
+                                        <TermTableCell>
+                                            <Field
+                                                name="productId"
+                                                val={i}
+                                                component={RadioInput}
+                                                onChange={this.onTermChange}
+                                                validate={[Validations.required]}
+                                            >
+                                                <input />
+                                            </Field>
+                                        </TermTableCell>
+                                        <TermTableCell>
+                                            <label>{product.durationText}</label>
+                                        </TermTableCell>
+                                        <TermTableCell>{product.minimumLockAmount}</TermTableCell>
+                                        <TermTableCell>
+                                            ~{Math.floor(product.interestRatePA / 10000)} % p.a.
+                                        </TermTableCell>
+                                        <TermTableCell textAlign="right">
+                                            {this.state.amountValue &&
+                                                (this.state.amountValue * product.perTermInterest / 1000000).toFixed(2)}
+                                        </TermTableCell>
+                                    </TermTableRow>
+                                );
+                            })}
                     </TermTableBody>
                 </TermTable>
-                <Button disabled={!this.state.amountValue && !this.state.productId} type="submit">Lock</Button>
-
+                <Button disabled={!this.state.amountValue && !this.state.productId} type="submit">
+                    Lock
+                </Button>
             </Form>
         );
     }
 }
 
 export default reduxForm({
-    form: "LockForm",
+    form: "LockForm"
 })(LockContainer);

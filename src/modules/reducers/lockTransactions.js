@@ -1,4 +1,4 @@
-import { newLockTx } from 'modules/ethereum/lockTransactions';
+import { newLockTx } from "modules/ethereum/lockTransactions";
 
 const LOCKTRANSACTIONS_NEWLOCK_REQUESTED = "lockTransactions/LOCKTRANSACTIONS_NEWLOCK_REQUESTED";
 const LOCKTRANSACTIONS_NEWLOCK_ERROR = "lockTransactions/LOCKTRANSACTIONS_NEWLOCK_ERROR";

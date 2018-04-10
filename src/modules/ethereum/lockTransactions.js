@@ -49,11 +49,10 @@ function parseProducts(productsArray) {
             durationText,
             minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
             interestRatePA: perTermInterest * (60 * 60 * 24 * 365 / duration),
-            isActive: (bn_isActive.toNumber() === 1)
+            isActive: bn_isActive.toNumber() === 1
         });
 
         return parsed;
-
     }, []);
 
     return products;
@@ -66,20 +65,14 @@ export async function newLockTx(productId, lockAmount) {
     const lockManager = getState().lockManager.contract.instance;
     const augmintToken = getState().augmintToken;
 
-    const gasEstimate = (getState().lockManager.info.lockCount === 0) ?
-        cost.NEW_FIRST_LOAN_GAS :
-        cost.NEW_LOAN_GAS;
+    const gasEstimate = getState().lockManager.info.lockCount === 0 ? cost.NEW_FIRST_LOAN_GAS : cost.NEW_LOAN_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
     const decimalsDiv = augmintToken.info.decimalsDiv;
     const lockAmountBNString = new BigNumber(lockAmount).mul(decimalsDiv).toString();
 
     const tx = augmintToken.contract.web3ContractInstance.methods
-        .transferAndNotify(
-            lockManager.address,
-            lockAmountBNString,
-            productId
-        )
+        .transferAndNotify(lockManager.address, lockAmountBNString, productId)
         .send({
             from: userAccount,
             gas: gasEstimate
@@ -88,13 +81,7 @@ export async function newLockTx(productId, lockAmount) {
     try {
         const transactionHash = await processTx(tx, txName, gasEstimate);
         return { txName, transactionHash };
-    } catch(error) {
-        throw new EthereumTransactionError(
-            "Place order failed.",
-            "Unknown orderType: " + error,
-            null,
-            gasEstimate
-        );
+    } catch (error) {
+        throw new EthereumTransactionError("Place order failed.", "Unknown orderType: " + error, null, gasEstimate);
     }
-
 }
