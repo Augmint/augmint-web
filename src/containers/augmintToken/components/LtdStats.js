@@ -26,7 +26,9 @@ export class LtdStats extends React.Component {
 
                     <Statistic data-testid="reserveTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>Loan to Deposit ratio</Statistic.Label>
-                        <Statistic.Value>{totalLockedAmount === 0 ? "N/A" : ltdPercent * 100} %</Statistic.Value>
+                        <Statistic.Value>
+                            {totalLockedAmount === 0 ? "N/A" : `${(ltdPercent * 100).toFixed(2)} %`}{" "}
+                        </Statistic.Value>
                     </Statistic>
                 </Statistic.Group>
             </Segment>

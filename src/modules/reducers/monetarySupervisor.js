@@ -174,10 +174,8 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
     const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
     const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
     const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
-    const bn_ltd = bn_totalLockedAmount.eq(0)
-        ? bn_totalLockedAmount
-        : totalLoanAmount.mul(1000000).div(totalLockedAmount);
-    const ltdPercent = bn_ltd.div(1000000).toNumber();
+
+    const ltdPercent = totalLockedAmount === 0 ? 0 : totalLoanAmount / totalLockedAmount;
 
     const ltdLockDifferenceLimit = bn_ltdLockDifferenceLimit / 1000000;
     const ltdLoanDifferenceLimit = bn_ltdLoanDifferenceLimit / 1000000;
