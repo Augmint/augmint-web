@@ -32,17 +32,19 @@ function parseProducts(productsArray) {
     const products = productsArray.reduce((parsed, product) => {
         const [bn_perTermInterest, bn_durationInSecs, bn_minimumLockAmount, bn_maxLockAmount, bn_isActive] = product;
         if (bn_durationInSecs.gt(0)) {
-            const duration = bn_durationInSecs.toNumber();
+            const durationInSecs = bn_durationInSecs.toNumber();
+            const durationInDays = durationInSecs / 60 / 60 / 24;
 
             const durationText =
-                duration < 60 * 60 * 24 * 31
-                    ? `${moment.duration(duration, "seconds").asDays()} days`
-                    : moment.duration(duration, "seconds").humanize();
+                durationInDays < 31
+                    ? `${moment.duration(durationInSecs, "seconds").asDays()} days`
+                    : moment.duration(durationInSecs, "seconds").humanize();
 
             const perTermInterest = bn_perTermInterest.toNumber();
             parsed.push({
                 perTermInterest,
-                durationInSecs: duration,
+                durationInSecs,
+                durationInDays,
                 durationText,
                 minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
                 maxLockAmount: bn_maxLockAmount / decimalsDiv,
