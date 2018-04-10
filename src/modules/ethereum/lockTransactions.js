@@ -40,7 +40,8 @@ function parseProducts(productsArray) {
                     ? `${moment.duration(durationInSecs, "seconds").asDays()} days`
                     : moment.duration(durationInSecs, "seconds").humanize();
 
-            const perTermInterest = bn_perTermInterest.toNumber();
+            const perTermInterest = bn_perTermInterest / 1000000;
+            const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
             parsed.push({
                 perTermInterest,
                 durationInSecs,
@@ -48,7 +49,7 @@ function parseProducts(productsArray) {
                 durationText,
                 minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
                 maxLockAmount: bn_maxLockAmount / decimalsDiv,
-                interestRatePA: perTermInterest * (60 * 60 * 24 * 365 / duration),
+                interestRatePa,
                 isActive: bn_isActive.toNumber() === 1
             });
         }
