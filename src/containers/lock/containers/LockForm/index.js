@@ -63,7 +63,8 @@ class LockContainer extends React.Component {
                         <TermTableRow>
                             <TermTableHeadCell />
                             <TermTableHeadCell />
-                            <TermTableHeadCell>min. amount to lock</TermTableHeadCell>
+                            <TermTableHeadCell>Min lock</TermTableHeadCell>
+                            <TermTableHeadCell>Max lock</TermTableHeadCell>
                             <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
                             <TermTableHeadCell textAlign="right" singleLine>
                                 You earn
@@ -89,7 +90,8 @@ class LockContainer extends React.Component {
                                         <TermTableCell>
                                             <label>{product.durationText}</label>
                                         </TermTableCell>
-                                        <TermTableCell>{product.minimumLockAmount}</TermTableCell>
+                                        <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
+                                        <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
                                         <TermTableCell>{(product.interestRatePa * 100).toFixed(2)}%</TermTableCell>
                                         <TermTableCell textAlign="right">
                                             {this.state.amountValue &&
