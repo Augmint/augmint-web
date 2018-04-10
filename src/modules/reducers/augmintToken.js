@@ -34,7 +34,7 @@ const initialState = {
 
         feeAccount: null,
         feeAccountTokenBalance: "?",
-        bn_feeAccountEthBalance: "?"
+        feeAccountEthBalance: "?"
     }
 };
 
