@@ -7,7 +7,7 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
-import { AugmintStats } from "components/AugmintStats";
+import { AugmintStats } from "./components/AugmintStats";
 import { EthereumState } from "containers/app/EthereumState";
 import { Button } from "semantic-ui-react";
 
