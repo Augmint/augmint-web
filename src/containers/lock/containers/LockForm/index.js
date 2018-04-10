@@ -73,34 +73,37 @@ class LockContainer extends React.Component {
                     </TermTableHeader>
                     <TermTableBody>
                         {lockProducts &&
-                            lockProducts.filter(product => product.isActive).map((product, i) => {
-                                return (
-                                    <TermTableRow key={`lock-term-${i}`}>
-                                        <TermTableCell>
-                                            <Field
-                                                name="productId"
-                                                val={i}
-                                                component={RadioInput}
-                                                onChange={this.onTermChange}
-                                                validate={[Validations.required]}
-                                            >
-                                                <input />
-                                            </Field>
-                                        </TermTableCell>
-                                        <TermTableCell>
-                                            <label>{product.durationText}</label>
-                                        </TermTableCell>
-                                        <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                        <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
-                                        <TermTableCell>{(product.interestRatePa * 100).toFixed(2)}%</TermTableCell>
-                                        <TermTableCell textAlign="right">
-                                            {this.state.amountValue &&
-                                                (this.state.amountValue * product.perTermInterest).toFixed(2)}{" "}
-                                            A€
-                                        </TermTableCell>
-                                    </TermTableRow>
-                                );
-                            })}
+                            lockProducts
+                                .filter(product => product.isActive)
+                                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
+                                .map((product, i) => {
+                                    return (
+                                        <TermTableRow key={`lock-term-${i}`}>
+                                            <TermTableCell>
+                                                <Field
+                                                    name="productId"
+                                                    val={i}
+                                                    component={RadioInput}
+                                                    onChange={this.onTermChange}
+                                                    validate={[Validations.required]}
+                                                >
+                                                    <input />
+                                                </Field>
+                                            </TermTableCell>
+                                            <TermTableCell>
+                                                <label>{product.durationText}</label>
+                                            </TermTableCell>
+                                            <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
+                                            <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
+                                            <TermTableCell>{(product.interestRatePa * 100).toFixed(2)}%</TermTableCell>
+                                            <TermTableCell textAlign="right">
+                                                {this.state.amountValue &&
+                                                    (this.state.amountValue * product.perTermInterest).toFixed(2)}{" "}
+                                                A€
+                                            </TermTableCell>
+                                        </TermTableRow>
+                                    );
+                                })}
                     </TermTableBody>
                 </TermTable>
                 <Button disabled={!this.state.amountValue && !this.state.productId} type="submit">
