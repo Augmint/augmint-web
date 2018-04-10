@@ -633,9 +633,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "/* Augmint Token interface (abstract contract)\n\nTODO: overload transfer() & transferFrom() instead of transferWithNarrative() & transferFromWithNarrative()\n      when this fix available in web3& truffle also uses that web3: https://github.com/ethereum/web3.js/pull/1185\nTODO: shall we use bytes for narrative?\n */\npragma solidity 0.4.21;\nimport \"../generic/SafeMath.sol\";\nimport \"../generic/Restricted.sol\";\nimport \"./ERC20Interface.sol\";\nimport \"./TokenReceiver.sol\";\n\n\ncontract AugmintTokenInterface is Restricted, ERC20Interface {\n    using SafeMath for uint256;\n\n    string public name;\n    string public symbol;\n    bytes32 public peggedSymbol;\n    uint8 public decimals;\n\n    uint public totalSupply;\n    mapping(address => uint256) public balances; // Balances for each account\n    mapping(address => mapping (address => uint256)) public allowed; // allowances added with approve()\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n    event Transfer(address indexed from, address indexed to, uint amount);\n    event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);\n    event TokenIssued(uint amount);\n    event TokenBurned(uint amount);\n    event Approval(address indexed _owner, address indexed _spender, uint256 _value);\n\n    function transfer(address to, uint value) external returns (bool); // solhint-disable-line no-simple-event-func-name\n    function transferFrom(address from, address to, uint value) external returns (bool);\n    function approve(address spender, uint value) external returns (bool);\n    function increaseApproval(address spender, uint addedValue) external returns (bool);\n    function decreaseApproval(address spender, uint subtractedValue) external returns (bool);\n\n    function issueTo(address to, uint amount) external restrict(\"MonetarySupervisorContract\");\n    function burn(uint amount) external;\n\n    function transferAndNotify(TokenReceiver target, uint amount, uint data) external;\n\n    function transferWithNarrative(address to, uint256 amount, string narrative) external;\n    function transferFromWithNarrative(address from, address to, uint256 amount, string narrative) external;\n\n    function allowance(address owner, address spender) external view returns (uint256 remaining);\n\n    function balanceOf(address who) external view returns (uint);\n\n\n}\n",
-  "sourcePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
+  "sourcePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
   "ast": {
-    "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
     "exportedSymbols": {
       "AugmintTokenInterface": [
         4615
@@ -655,7 +655,7 @@
         "src": "314:23:14"
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SafeMath.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/generic/SafeMath.sol",
         "file": "../generic/SafeMath.sol",
         "id": 4433,
         "nodeType": "ImportDirective",
@@ -666,7 +666,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/Restricted.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/generic/Restricted.sol",
         "file": "../generic/Restricted.sol",
         "id": 4434,
         "nodeType": "ImportDirective",
@@ -677,7 +677,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
         "file": "./ERC20Interface.sol",
         "id": 4435,
         "nodeType": "ImportDirective",
@@ -688,7 +688,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
         "file": "./TokenReceiver.sol",
         "id": 4436,
         "nodeType": "ImportDirective",
@@ -2841,7 +2841,7 @@
     "src": "314:2077:14"
   },
   "legacyAST": {
-    "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/AugmintTokenInterface.sol",
     "exportedSymbols": {
       "AugmintTokenInterface": [
         4615
@@ -2861,7 +2861,7 @@
         "src": "314:23:14"
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SafeMath.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/generic/SafeMath.sol",
         "file": "../generic/SafeMath.sol",
         "id": 4433,
         "nodeType": "ImportDirective",
@@ -2872,7 +2872,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/Restricted.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/generic/Restricted.sol",
         "file": "../generic/Restricted.sol",
         "id": 4434,
         "nodeType": "ImportDirective",
@@ -2883,7 +2883,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
         "file": "./ERC20Interface.sol",
         "id": 4435,
         "nodeType": "ImportDirective",
@@ -2894,7 +2894,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+        "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
         "file": "./TokenReceiver.sol",
         "id": 4436,
         "nodeType": "ImportDirective",
@@ -5052,5 +5052,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-10T14:12:08.494Z"
+  "updatedAt": "2018-04-10T18:32:39.835Z"
 }

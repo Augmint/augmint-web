@@ -166,9 +166,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "/*\n * ERC20 interface\n * see https://github.com/ethereum/EIPs/issues/20\n */\npragma solidity 0.4.21;\n\n\ninterface ERC20Interface {\n    event Approval(address indexed _owner, address indexed _spender, uint _value);\n    event Transfer(address indexed from, address indexed to, uint amount);\n\n    function transfer(address to, uint value) external returns (bool); // solhint-disable-line no-simple-event-func-name\n    function transferFrom(address from, address to, uint value) external returns (bool);\n    function approve(address spender, uint value) external returns (bool);\n    function balanceOf(address who) external view returns (uint);\n    function allowance(address _owner, address _spender) external view returns (uint remaining);\n\n}\n",
-  "sourcePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
+  "sourcePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
   "ast": {
-    "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
     "exportedSymbols": {
       "ERC20Interface": [
         4679
@@ -945,7 +945,7 @@
     "src": "76:663:15"
   },
   "legacyAST": {
-    "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ERC20Interface.sol",
     "exportedSymbols": {
       "ERC20Interface": [
         4679
@@ -1727,5 +1727,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-10T14:12:08.495Z"
+  "updatedAt": "2018-04-10T18:32:39.836Z"
 }
