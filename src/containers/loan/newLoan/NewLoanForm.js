@@ -118,7 +118,7 @@ class NewLoanForm extends React.Component {
                 {error && (
                     <EthSubmissionErrorPanel
                         error={error}
-                        header={<h3>Create loan failed</h3>}
+                        header="Create loan failed"
                         onDismiss={() => clearSubmitErrors()}
                     />
                 )}
