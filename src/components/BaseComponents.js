@@ -78,6 +78,12 @@ export const Validations = {
 
     minTokenAmount: minValue => value => {
         return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A-EUR` : undefined;
+    },
+
+    maxLoanAmount: maxValue => value => {
+        return parseFloat(value) > maxValue
+            ? `Loan amount is greater than currently available maximum of ${maxValue} A-EUR`
+            : undefined;
     }
 };
 

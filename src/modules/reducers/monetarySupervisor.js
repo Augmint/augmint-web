@@ -29,9 +29,14 @@ const initialState = {
 
         totalLoanAmount: "?",
         totalLockedAmount: "?",
+        ltdPercent: "?",
 
-        ltdDifferenceLimit: "?",
+        ltdLoanDifferenceLimit: "?",
+        ltdLockDifferenceLimit: "?",
         allowedLtdDifferenceAmount: "?",
+
+        maxLoanByLtd: "?",
+        maxLockByLtd: "?",
 
         reserveEthBalance: "?",
         bn_reserveWeiBalance: null,
@@ -144,8 +149,10 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         bn_totalLoanAmount,
         bn_totalLockedAmount,
 
-        bn_ltdDifferenceLimit,
-        bn_allowedLtdDifferenceAmount
+        paramsArray,
+
+        bn_maxLockByLtd,
+        bn_maxLoanByLtd
     ] = await Promise.all([
         monetarySupervisor.augmintToken(),
         monetarySupervisor.interestEarnedAccount(),
@@ -156,15 +163,28 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         monetarySupervisor.totalLoanAmount(),
         monetarySupervisor.totalLockedAmount(),
 
-        monetarySupervisor.ltdDifferenceLimit(), // TODO: use monetarySupervisor.getParams() to reduce calls
-        monetarySupervisor.allowedLtdDifferenceAmount()
+        monetarySupervisor.getParams(),
+
+        monetarySupervisor.getMaxLockAmountAllowedByLtd(),
+        monetarySupervisor.getMaxLoanAmountAllowedByLtd()
     ]);
+
+    const [bn_ltdLockDifferenceLimit, bn_ltdLoanDifferenceLimit, bn_allowedLtdDifferenceAmount] = paramsArray;
 
     const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
     const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
     const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
-    const ltdDifferenceLimit = bn_ltdDifferenceLimit / 1000000;
+    const bn_ltd = bn_totalLockedAmount.eq(0)
+        ? bn_totalLockedAmount
+        : totalLoanAmount.mul(1000000).div(totalLockedAmount);
+    const ltdPercent = bn_ltd.div(1000000).toNumber();
+
+    const ltdLockDifferenceLimit = bn_ltdLockDifferenceLimit / 1000000;
+    const ltdLoanDifferenceLimit = bn_ltdLoanDifferenceLimit / 1000000;
     const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount / decimalsDiv;
+
+    const maxLockByLtd = bn_maxLockByLtd / decimalsDiv;
+    const maxLoanByLtd = bn_maxLoanByLtd / decimalsDiv;
 
     const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
         web3.eth.getBalance(augmintReservesAddress),
@@ -184,9 +204,14 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         issuedByMonetaryBoard,
         totalLoanAmount,
         totalLockedAmount,
+        ltdPercent,
 
-        ltdDifferenceLimit,
+        ltdLockDifferenceLimit,
+        ltdLoanDifferenceLimit,
         allowedLtdDifferenceAmount,
+
+        maxLockByLtd,
+        maxLoanByLtd,
 
         reserveEthBalance,
         bn_reserveWeiBalance,
