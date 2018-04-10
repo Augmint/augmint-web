@@ -89,6 +89,7 @@ describe("Augmint exchange", function() {
 
                 cy
                     .get("@tradeHistoryTbody")
+                    .should("contain", "NewOrder")
                     .then(() => {
                         cy
                             .get("@tradeHistoryTbody")
@@ -125,6 +126,7 @@ describe("Augmint exchange", function() {
 
                 cy
                     .get("@tradeHistoryTbody")
+                    .should("contain", "CancelledOrder")
                     .then(() => {
                         cy
                             .get("@tradeHistoryTbody")
@@ -203,6 +205,7 @@ describe("Augmint exchange", function() {
 
                 cy
                     .get("@tradeHistoryTbody")
+                    .should("contain", "NewOrder")
                     .then(() => {
                         cy
                             .get("@tradeHistoryTbody")
@@ -242,6 +245,7 @@ describe("Augmint exchange", function() {
 
                 cy
                     .get("@tradeHistoryTbody")
+                    .should("contain", "CancelledOrder")
                     .then(() => {
                         cy
                             .get("@tradeHistoryTbody")
@@ -259,23 +263,8 @@ describe("Augmint exchange", function() {
         const ethAmount = 1;
         const price = 997;
 
-        let tradeHistoryStartLength;
-
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
-
-        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
-        cy
-            .get("@tradeHistoryTbody")
-            .then(() => {
-                cy
-                    .get("@tradeHistoryTbody")
-                    .invoke("attr", "data-test-historycount")
-                    .as("tradeHistoryStartLength");
-            })
-            .then(() => {
-                tradeHistoryStartLength = parseInt(this.tradeHistoryStartLength);
-            });
 
         cy
             .get("[data-testid=priceInput]")
@@ -326,20 +315,9 @@ describe("Augmint exchange", function() {
                     .get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]")
                     .click()
                     .then(() => {
-                        cy.get("[data-testid='TradeHistoryRefreshing']").then(() => {
-                            cy
-                                .get("@tradeHistoryTbody")
-                                .then(() => {
-                                    cy
-                                        .get("@tradeHistoryTbody")
-                                        .invoke("attr", "data-test-historycount")
-                                        .as("tradeHistoryCurrentLength");
-                                })
-                                .then(() => {
-                                    expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(
-                                        tradeHistoryStartLength + 4
-                                    );
-                                });
+                        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+                        cy.get("@tradeHistoryTbody").then(() => {
+                            cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
                         });
                     });
                 // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)
