@@ -35,10 +35,9 @@ function parseProducts(productsArray) {
             const durationInSecs = bn_durationInSecs.toNumber();
             const durationInDays = durationInSecs / 60 / 60 / 24;
 
-            const durationText =
-                durationInDays < 31
-                    ? `${moment.duration(durationInSecs, "seconds").asDays()} days`
-                    : moment.duration(durationInSecs, "seconds").humanize();
+            const durationText = `${moment.duration(durationInSecs, "seconds").humanize()}${
+                durationInDays <= 2 ? " (for testing)" : ""
+            }`;
 
             const perTermInterest = bn_perTermInterest / 1000000;
             const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
