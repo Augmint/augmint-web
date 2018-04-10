@@ -33,7 +33,8 @@ const initialState = {
         totalSupply: "?",
 
         feeAccount: null,
-        feeAccountTokenBalance: "?"
+        feeAccountTokenBalance: "?",
+        bn_feeAccountEthBalance: "?"
     }
 };
 
@@ -160,8 +161,11 @@ async function getAugmintTokenInfo(augmintToken) {
 
     const decimalsDiv = 10 ** decimals;
 
-    const bn_feeAccountTokenBalance = await augmintToken.balanceOf(feeAccount);
-
+    const [bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
+        augmintToken.balanceOf(feeAccount),
+        web3.eth.getBalance(feeAccount)
+    ]);
+    const feeAccountEthBalance = web3.utils.fromWei(bn_feeAccountEthBalance).toString();
     const totalSupply = bn_totalSupply / decimalsDiv;
 
     const [bn_feePt, bn_feeMin, bn_feeMax] = transferFeeStruct;
@@ -179,7 +183,8 @@ async function getAugmintTokenInfo(augmintToken) {
         feeMax: bn_feeMax / decimalsDiv,
 
         feeAccount,
-        feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv
+        feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv,
+        feeAccountEthBalance
     };
 }
 
