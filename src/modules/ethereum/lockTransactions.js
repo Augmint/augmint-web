@@ -30,28 +30,26 @@ function parseProducts(productsArray) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const products = productsArray.reduce((parsed, product) => {
-        const [
-            bn_perTermInterest,
-            bn_durationInSecs,
-            bn_minimumLockAmount,
-            bn_isActive
-        ] = product;
-        const duration = bn_durationInSecs.toNumber();
+        const [bn_perTermInterest, bn_durationInSecs, bn_minimumLockAmount, bn_maxLockAmount, bn_isActive] = product;
+        if (bn_durationInSecs.gt(0)) {
+            const duration = bn_durationInSecs.toNumber();
 
-        const durationText = (duration < 60 * 60 * 24 * 31) ?
-            `${moment.duration(duration, "seconds").asDays()} days` :
-            moment.duration(duration, "seconds").humanize();
+            const durationText =
+                duration < 60 * 60 * 24 * 31
+                    ? `${moment.duration(duration, "seconds").asDays()} days`
+                    : moment.duration(duration, "seconds").humanize();
 
-        const perTermInterest = bn_perTermInterest.toNumber();
-        parsed.push({
-            perTermInterest,
-            durationInSecs: duration,
-            durationText,
-            minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
-            interestRatePA: perTermInterest * (60 * 60 * 24 * 365 / duration),
-            isActive: bn_isActive.toNumber() === 1
-        });
-
+            const perTermInterest = bn_perTermInterest.toNumber();
+            parsed.push({
+                perTermInterest,
+                durationInSecs: duration,
+                durationText,
+                minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
+                maxLockAmount: bn_maxLockAmount / decimalsDiv,
+                interestRatePA: perTermInterest * (60 * 60 * 24 * 365 / duration),
+                isActive: bn_isActive.toNumber() === 1
+            });
+        }
         return parsed;
     }, []);
 
