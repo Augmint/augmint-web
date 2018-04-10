@@ -7762,11 +7762,11 @@ react-scripts@1.1.4:
   optionalDependencies:
     fsevents "^1.1.3"
 
-react-scrollchor@4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-scrollchor/-/react-scrollchor-4.2.1.tgz#0fe5f63ac4bcfcf5775bec942d87d7192953b29d"
+react-scrollchor@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-scrollchor/-/react-scrollchor-5.0.0.tgz#8023c3733000b322ffaed9c4b5a10b7c37ce2f62"
   dependencies:
-    requestanimationframe-timer "^1.0.2"
+    requestanimationframe-timer "1.x.x"
 
 react@16.2.0, "react@^15.6.2 || ^16.0":
   version "16.2.0"
@@ -8093,7 +8093,7 @@ request@^2.79.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-requestanimationframe-timer@^1.0.2:
+requestanimationframe-timer@1.x.x:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/requestanimationframe-timer/-/requestanimationframe-timer-1.0.4.tgz#3b48fe55f4359f07c54745caec7437e2532f89d8"
   dependencies:
