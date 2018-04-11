@@ -29,7 +29,7 @@ export async function fetchLockProductsTx() {
 function parseProducts(productsArray) {
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-    const products = productsArray.reduce((parsed, product) => {
+    const products = productsArray.reduce((parsed, product, index) => {
         const [bn_perTermInterest, bn_durationInSecs, bn_minimumLockAmount, bn_maxLockAmount, bn_isActive] = product;
         if (bn_durationInSecs.gt(0)) {
             const durationInSecs = bn_durationInSecs.toNumber();
@@ -42,6 +42,7 @@ function parseProducts(productsArray) {
             const perTermInterest = bn_perTermInterest / 1000000;
             const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
             parsed.push({
+                id: index,
                 perTermInterest,
                 durationInSecs,
                 durationInDays,
