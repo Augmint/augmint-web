@@ -2,8 +2,6 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
-//import { ONE_ETH_IN_WEI } from "../../utils/constants";
-//import AugmintToken from "contractsBuild/AugmintToken.json";
 import AugmintToken from "contractsBuild/TokenAEur.json";
 import MonetarySupervisor from "contractsBuild/MonetarySupervisor.json";
 import { default as Contract } from "truffle-contract";

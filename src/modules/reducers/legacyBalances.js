@@ -1,16 +1,16 @@
 import store from "modules/store";
 import { fetchLegacyBalances, convertLegacyBalanceTx } from "modules/ethereum/legacyBalancesTransactions";
 
-export const LEGACY_BALANCE_REFRESH_REQUESTED = "legacyBalances/LEGACY_BALANCE_REFRESH_REQUESTED";
-export const LEGACY_BALANCE_REFRESH_ERROR = "legacyBalances/LEGACY_BALANCE_REFRESH_ERROR";
-export const LEGACY_BALANCE_REFRESH_SUCCESS = "legacyBalances/LEGACY_BALANCE_REFRESH_SUCCESS";
+const LEGACY_BALANCE_REFRESH_REQUESTED = "legacyBalances/LEGACY_BALANCE_REFRESH_REQUESTED";
+const LEGACY_BALANCE_REFRESH_ERROR = "legacyBalances/LEGACY_BALANCE_REFRESH_ERROR";
+const LEGACY_BALANCE_REFRESH_SUCCESS = "legacyBalances/LEGACY_BALANCE_REFRESH_SUCCESS";
 
-export const LEGACY_BALANCE_DISMISS_REQUESTED = "legacyBalances/LEGACY_BALANCE_DISMISS_REQUESTED";
-export const LEGACY_BALANCE_DISMISS_ERROR = "legacyBalances/LEGACY_BALANCE_DISMISS_ERROR";
-export const LEGACY_BALANCE_DISMISS_SUCCESS = "legacyBalances/LEGACY_BALANCE_DISMISS_SUCCESS";
+const LEGACY_BALANCE_DISMISS_REQUESTED = "legacyBalances/LEGACY_BALANCE_DISMISS_REQUESTED";
+const LEGACY_BALANCE_DISMISS_ERROR = "legacyBalances/LEGACY_BALANCE_DISMISS_ERROR";
+const LEGACY_BALANCE_DISMISS_SUCCESS = "legacyBalances/LEGACY_BALANCE_DISMISS_SUCCESS";
 
-export const LEGACY_BALANCE_CONVERSION_REQUESTED = "legacyBalances/LEGACY_BALANCE_CONVERSION_REQUESTED";
-export const LEGACY_BALANCE_CONVERSION_ERROR = "legacyBalances/LEGACY_BALANCE_CONVERSION_ERROR";
+const LEGACY_BALANCE_CONVERSION_REQUESTED = "legacyBalances/LEGACY_BALANCE_CONVERSION_REQUESTED";
+const LEGACY_BALANCE_CONVERSION_ERROR = "legacyBalances/LEGACY_BALANCE_CONVERSION_ERROR";
 export const LEGACY_BALANCE_CONVERSION_SUCCESS = "legacyBalances/LEGACY_BALANCE_CONVERSION_SUCCESS";
 
 const initialState = {
@@ -112,7 +112,6 @@ export function dismissLegacyBalance(legacyTokenAddress) {
         });
         try {
             const contractBalances = [...store.getState().legacyBalances.contractBalances];
-            // TODO: shall we use tokenAddress as key instead of using an array?
 
             const index = contractBalances.findIndex(item => item.contract === legacyTokenAddress);
             contractBalances[index].isDismissed = true;
