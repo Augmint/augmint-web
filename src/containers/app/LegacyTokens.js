@@ -64,7 +64,6 @@ class LegacyTokens extends React.Component {
                       <Button
                           type="submit"
                           data-testid={`dismissLegacyBalanceButton-${item.contract}`}
-                          id={`dismissLegacyBalanceButton-${item.contract}`}
                           onClick={() => this.handleDismiss(item.contract)}
                       >
                           Dismiss
@@ -74,7 +73,6 @@ class LegacyTokens extends React.Component {
                           primary
                           disabled={submitting}
                           data-testid={`convertLegacyBalanceButton-${item.contract}`}
-                          id={`convertLegacyBalanceButton-${item.contract}`}
                           onClick={() => this.submitConvert(item.contract, item.balance)}
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
