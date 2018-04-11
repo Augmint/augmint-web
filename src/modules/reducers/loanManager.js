@@ -217,7 +217,7 @@ async function getLoanManagerInfo(loanManager) {
     };
 }
 
-export function fetchProducts() {
+export function fetchLoanProducts() {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_PRODUCTLIST_REQUESTED

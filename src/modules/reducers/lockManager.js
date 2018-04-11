@@ -152,7 +152,7 @@ export const refreshLockManager = () => {
     };
 };
 
-export function fetchProducts() {
+export function fetchLockProducts() {
     return async dispatch => {
         dispatch({
             type: LOCKMANAGER_PRODUCTLIST_REQUESTED
