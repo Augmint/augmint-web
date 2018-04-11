@@ -719,14 +719,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/TokenAEur.sol",
     "exportedSymbols": {
       "TokenAEur": [
-        3372
+        3369
       ]
     },
-    "id": 3373,
+    "id": 3370,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3346,
+        "id": 3343,
         "literals": [
           "solidity",
           "0.4",
@@ -738,10 +738,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
         "file": "./generic/AugmintToken.sol",
-        "id": 3347,
+        "id": 3344,
         "nodeType": "ImportDirective",
-        "scope": 3373,
-        "sourceUnit": 4086,
+        "scope": 3370,
+        "sourceUnit": 4083,
         "src": "77:36:9",
         "symbolAliases": [],
         "unitAlias": ""
@@ -752,50 +752,50 @@
             "arguments": [],
             "baseName": {
               "contractScope": null,
-              "id": 3348,
+              "id": 3345,
               "name": "AugmintToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4085,
+              "referencedDeclaration": 4082,
               "src": "138:12:9",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AugmintToken_$4085",
+                "typeIdentifier": "t_contract$_AugmintToken_$4082",
                 "typeString": "contract AugmintToken"
               }
             },
-            "id": 3349,
+            "id": 3346,
             "nodeType": "InheritanceSpecifier",
             "src": "138:12:9"
           }
         ],
         "contractDependencies": [
-          4085,
-          4275,
-          4615,
-          4679
+          4082,
+          4272,
+          4612,
+          4676
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 3372,
+        "id": 3369,
         "linearizedBaseContracts": [
-          3372,
-          4085,
-          4615,
-          4679,
-          4275
+          3369,
+          4082,
+          4612,
+          4676,
+          4272
         ],
         "name": "TokenAEur",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 3370,
+              "id": 3367,
               "nodeType": "Block",
               "src": "439:2:9",
               "statements": []
             },
             "documentation": null,
-            "id": 3371,
+            "id": 3368,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -805,7 +805,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "4175676d696e742043727970746f204575726f",
-                    "id": 3360,
+                    "id": 3357,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -823,7 +823,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "41455552",
-                    "id": 3361,
+                    "id": 3358,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -841,7 +841,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "455552",
-                    "id": 3362,
+                    "id": 3359,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -859,7 +859,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "32",
-                    "id": 3363,
+                    "id": 3360,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -876,11 +876,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3364,
+                    "id": 3361,
                     "name": "_feeAccount",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3351,
+                    "referencedDeclaration": 3348,
                     "src": "327:11:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -889,11 +889,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3365,
+                    "id": 3362,
                     "name": "_transferFeePt",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3353,
+                    "referencedDeclaration": 3350,
                     "src": "384:14:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -902,11 +902,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3366,
+                    "id": 3363,
                     "name": "_transferFeeMin",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3355,
+                    "referencedDeclaration": 3352,
                     "src": "400:15:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -915,11 +915,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3367,
+                    "id": 3364,
                     "name": "_transferFeeMax",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3357,
+                    "referencedDeclaration": 3354,
                     "src": "417:15:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -927,17 +927,17 @@
                     }
                   }
                 ],
-                "id": 3368,
+                "id": 3365,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3359,
+                  "id": 3356,
                   "name": "AugmintToken",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4085,
+                  "referencedDeclaration": 4082,
                   "src": "273:12:9",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_type$_t_contract$_AugmintToken_$4085_$",
+                    "typeIdentifier": "t_type$_t_contract$_AugmintToken_$4082_$",
                     "typeString": "type(contract AugmintToken)"
                   }
                 },
@@ -948,15 +948,15 @@
             "name": "TokenAEur",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3358,
+              "id": 3355,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3351,
+                  "id": 3348,
                   "name": "_feeAccount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "176:19:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -965,7 +965,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3350,
+                    "id": 3347,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:9",
@@ -979,10 +979,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3353,
+                  "id": 3350,
                   "name": "_transferFeePt",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "197:19:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -991,7 +991,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3352,
+                    "id": 3349,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "197:4:9",
@@ -1005,10 +1005,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3355,
+                  "id": 3352,
                   "name": "_transferFeeMin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "218:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1017,7 +1017,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3354,
+                    "id": 3351,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:4:9",
@@ -1031,10 +1031,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3357,
+                  "id": 3354,
                   "name": "_transferFeeMax",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "240:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1043,7 +1043,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3356,
+                    "id": 3353,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "240:4:9",
@@ -1060,19 +1060,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 3369,
+              "id": 3366,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "439:0:9"
             },
-            "scope": 3372,
+            "scope": 3369,
             "src": "157:284:9",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3373,
+        "scope": 3370,
         "src": "116:368:9"
       }
     ],
@@ -1082,14 +1082,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/TokenAEur.sol",
     "exportedSymbols": {
       "TokenAEur": [
-        3372
+        3369
       ]
     },
-    "id": 3373,
+    "id": 3370,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3346,
+        "id": 3343,
         "literals": [
           "solidity",
           "0.4",
@@ -1101,10 +1101,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
         "file": "./generic/AugmintToken.sol",
-        "id": 3347,
+        "id": 3344,
         "nodeType": "ImportDirective",
-        "scope": 3373,
-        "sourceUnit": 4086,
+        "scope": 3370,
+        "sourceUnit": 4083,
         "src": "77:36:9",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1115,50 +1115,50 @@
             "arguments": [],
             "baseName": {
               "contractScope": null,
-              "id": 3348,
+              "id": 3345,
               "name": "AugmintToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4085,
+              "referencedDeclaration": 4082,
               "src": "138:12:9",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AugmintToken_$4085",
+                "typeIdentifier": "t_contract$_AugmintToken_$4082",
                 "typeString": "contract AugmintToken"
               }
             },
-            "id": 3349,
+            "id": 3346,
             "nodeType": "InheritanceSpecifier",
             "src": "138:12:9"
           }
         ],
         "contractDependencies": [
-          4085,
-          4275,
-          4615,
-          4679
+          4082,
+          4272,
+          4612,
+          4676
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 3372,
+        "id": 3369,
         "linearizedBaseContracts": [
-          3372,
-          4085,
-          4615,
-          4679,
-          4275
+          3369,
+          4082,
+          4612,
+          4676,
+          4272
         ],
         "name": "TokenAEur",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 3370,
+              "id": 3367,
               "nodeType": "Block",
               "src": "439:2:9",
               "statements": []
             },
             "documentation": null,
-            "id": 3371,
+            "id": 3368,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -1168,7 +1168,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "4175676d696e742043727970746f204575726f",
-                    "id": 3360,
+                    "id": 3357,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1186,7 +1186,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "41455552",
-                    "id": 3361,
+                    "id": 3358,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1204,7 +1204,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "455552",
-                    "id": 3362,
+                    "id": 3359,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1222,7 +1222,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "32",
-                    "id": 3363,
+                    "id": 3360,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1239,11 +1239,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3364,
+                    "id": 3361,
                     "name": "_feeAccount",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3351,
+                    "referencedDeclaration": 3348,
                     "src": "327:11:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1252,11 +1252,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3365,
+                    "id": 3362,
                     "name": "_transferFeePt",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3353,
+                    "referencedDeclaration": 3350,
                     "src": "384:14:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1265,11 +1265,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3366,
+                    "id": 3363,
                     "name": "_transferFeeMin",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3355,
+                    "referencedDeclaration": 3352,
                     "src": "400:15:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1278,11 +1278,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 3367,
+                    "id": 3364,
                     "name": "_transferFeeMax",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3357,
+                    "referencedDeclaration": 3354,
                     "src": "417:15:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1290,17 +1290,17 @@
                     }
                   }
                 ],
-                "id": 3368,
+                "id": 3365,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3359,
+                  "id": 3356,
                   "name": "AugmintToken",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4085,
+                  "referencedDeclaration": 4082,
                   "src": "273:12:9",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_type$_t_contract$_AugmintToken_$4085_$",
+                    "typeIdentifier": "t_type$_t_contract$_AugmintToken_$4082_$",
                     "typeString": "type(contract AugmintToken)"
                   }
                 },
@@ -1311,15 +1311,15 @@
             "name": "TokenAEur",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3358,
+              "id": 3355,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3351,
+                  "id": 3348,
                   "name": "_feeAccount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "176:19:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1328,7 +1328,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3350,
+                    "id": 3347,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:9",
@@ -1342,10 +1342,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3353,
+                  "id": 3350,
                   "name": "_transferFeePt",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "197:19:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1354,7 +1354,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3352,
+                    "id": 3349,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "197:4:9",
@@ -1368,10 +1368,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3355,
+                  "id": 3352,
                   "name": "_transferFeeMin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "218:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1380,7 +1380,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3354,
+                    "id": 3351,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:4:9",
@@ -1394,10 +1394,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 3357,
+                  "id": 3354,
                   "name": "_transferFeeMax",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3371,
+                  "scope": 3368,
                   "src": "240:20:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1406,7 +1406,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3356,
+                    "id": 3353,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "240:4:9",
@@ -1423,19 +1423,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 3369,
+              "id": 3366,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "439:0:9"
             },
-            "scope": 3372,
+            "scope": 3369,
             "src": "157:284:9",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3373,
+        "scope": 3370,
         "src": "116:368:9"
       }
     ],
@@ -1611,5 +1611,5 @@
     }
   },
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-11T09:31:22.620Z"
+  "updatedAt": "2018-04-11T18:06:51.536Z"
 }

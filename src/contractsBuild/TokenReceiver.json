@@ -34,14 +34,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
     "exportedSymbols": {
       "TokenReceiver": [
-        4691
+        4688
       ]
     },
-    "id": 4692,
+    "id": 4689,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4681,
+        "id": 4678,
         "literals": [
           "solidity",
           "0.4",
@@ -56,9 +56,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 4691,
+        "id": 4688,
         "linearizedBaseContracts": [
-          4691
+          4688
         ],
         "name": "TokenReceiver",
         "nodeType": "ContractDefinition",
@@ -66,7 +66,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 4690,
+            "id": 4687,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -74,15 +74,15 @@
             "name": "transferNotification",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4688,
+              "id": 4685,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4683,
+                  "id": 4680,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "176:12:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -91,7 +91,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4682,
+                    "id": 4679,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:16",
@@ -105,10 +105,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4685,
+                  "id": 4682,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "190:14:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -117,7 +117,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4684,
+                    "id": 4681,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "190:7:16",
@@ -131,10 +131,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4687,
+                  "id": 4684,
                   "name": "data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "206:9:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -143,7 +143,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4686,
+                    "id": 4683,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "206:4:16",
@@ -160,19 +160,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 4689,
+              "id": 4686,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "225:0:16"
             },
-            "scope": 4691,
+            "scope": 4688,
             "src": "146:80:16",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 4692,
+        "scope": 4689,
         "src": "116:112:16"
       }
     ],
@@ -182,14 +182,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
     "exportedSymbols": {
       "TokenReceiver": [
-        4691
+        4688
       ]
     },
-    "id": 4692,
+    "id": 4689,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4681,
+        "id": 4678,
         "literals": [
           "solidity",
           "0.4",
@@ -204,9 +204,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 4691,
+        "id": 4688,
         "linearizedBaseContracts": [
-          4691
+          4688
         ],
         "name": "TokenReceiver",
         "nodeType": "ContractDefinition",
@@ -214,7 +214,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 4690,
+            "id": 4687,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -222,15 +222,15 @@
             "name": "transferNotification",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4688,
+              "id": 4685,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4683,
+                  "id": 4680,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "176:12:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -239,7 +239,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4682,
+                    "id": 4679,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:16",
@@ -253,10 +253,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4685,
+                  "id": 4682,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "190:14:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -265,7 +265,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4684,
+                    "id": 4681,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "190:7:16",
@@ -279,10 +279,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4687,
+                  "id": 4684,
                   "name": "data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4690,
+                  "scope": 4687,
                   "src": "206:9:16",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -291,7 +291,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4686,
+                    "id": 4683,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "206:4:16",
@@ -308,19 +308,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 4689,
+              "id": 4686,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "225:0:16"
             },
-            "scope": 4691,
+            "scope": 4688,
             "src": "146:80:16",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 4692,
+        "scope": 4689,
         "src": "116:112:16"
       }
     ],
@@ -332,5 +332,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-10T21:38:30.466Z"
+  "updatedAt": "2018-04-11T18:06:13.933Z"
 }

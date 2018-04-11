@@ -189,7 +189,7 @@
         "id": 809,
         "nodeType": "ImportDirective",
         "scope": 813,
-        "sourceUnit": 4431,
+        "sourceUnit": 4428,
         "src": "68:37:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -203,10 +203,10 @@
               "id": 810,
               "name": "SystemAccount",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4430,
+              "referencedDeclaration": 4427,
               "src": "131:13:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SystemAccount_$4430",
+                "typeIdentifier": "t_contract$_SystemAccount_$4427",
                 "typeString": "contract SystemAccount"
               }
             },
@@ -216,8 +216,8 @@
           }
         ],
         "contractDependencies": [
-          4275,
-          4430
+          4272,
+          4427
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -225,8 +225,8 @@
         "id": 812,
         "linearizedBaseContracts": [
           812,
-          4430,
-          4275
+          4427,
+          4272
         ],
         "name": "FeeAccount",
         "nodeType": "ContractDefinition",
@@ -263,7 +263,7 @@
         "id": 809,
         "nodeType": "ImportDirective",
         "scope": 813,
-        "sourceUnit": 4431,
+        "sourceUnit": 4428,
         "src": "68:37:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -277,10 +277,10 @@
               "id": 810,
               "name": "SystemAccount",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4430,
+              "referencedDeclaration": 4427,
               "src": "131:13:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SystemAccount_$4430",
+                "typeIdentifier": "t_contract$_SystemAccount_$4427",
                 "typeString": "contract SystemAccount"
               }
             },
@@ -290,8 +290,8 @@
           }
         ],
         "contractDependencies": [
-          4275,
-          4430
+          4272,
+          4427
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -299,8 +299,8 @@
         "id": 812,
         "linearizedBaseContracts": [
           812,
-          4430,
-          4275
+          4427,
+          4272
         ],
         "name": "FeeAccount",
         "nodeType": "ContractDefinition",
@@ -324,5 +324,5 @@
     }
   },
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-11T09:31:21.403Z"
+  "updatedAt": "2018-04-11T18:06:50.801Z"
 }
