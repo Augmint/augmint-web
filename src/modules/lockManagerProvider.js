@@ -1,6 +1,6 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectLockManager, fetchProducts } from "modules/reducers/lockManager";
+import { connectLockManager, refreshLockManager, fetchProducts } from "modules/reducers/lockManager";
 // import { fetchLoansForAddress } from "modules/reducers/loans";
 // import { refreshAugmintToken } from "modules/reducers/augmintToken";
 // import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -25,7 +25,7 @@ export default () => {
 };
 
 const setupListeners = () => {
-    const lockManager = store.getState().lockManager.contract.ethersInstance;
+    //const lockManager = store.getState().lockManager.contract.ethersInstance;
     // lockManager.onnewloan = onNewLoan;
     // lockManager.onloanrepayed = onLoanRepayed;
     // lockManager.onloancollected = onLoanCollected;
@@ -37,7 +37,7 @@ const refresLockManagerIfNeeded = (newVal, oldVal) => {
             "lockManagerProvider - new augmintToken or loanManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocks"
         );
         // const userAccount = store.getState().web3Connect.userAccount;
-        // store.dispatch(refreshLoanManager());
+        store.dispatch(refreshLockManager());
         store.dispatch(fetchProducts());
         // store.dispatch(fetchLoansForAddress(userAccount));
         setupListeners();

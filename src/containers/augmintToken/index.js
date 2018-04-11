@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
+import lockManagerProvider from "modules/lockManagerProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { ReserveStats } from "./components/ReserveStats";
@@ -21,6 +22,7 @@ class AugmintToken extends React.Component {
         ratesProvider();
         augmintTokenProvider();
         loanManagerProvider();
+        lockManagerProvider();
     }
 
     handleAugmintTokenRefreshClick = e => {
@@ -54,6 +56,7 @@ class AugmintToken extends React.Component {
                             <LtdStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 loanManager={this.props.loanManager}
+                                lockManager={this.props.lockManager}
                             />
                             <Button
                                 content="Loans to Collect"
@@ -91,6 +94,7 @@ const mapStateToProps = state => ({
 
     augmintToken: state.augmintToken,
     loanManager: state.loanManager,
+    lockManager: state.lockManager,
     monetarySupervisor: state.monetarySupervisor,
     rates: state.rates
 });
