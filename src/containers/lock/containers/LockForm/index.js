@@ -1,6 +1,14 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { Label } from "semantic-ui-react";
+import store from "modules/store";
+import { SubmissionError } from "redux-form";
+
+import { Pblock } from "components/PageLayout";
+
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
+
+import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lockTransactions";
 
 import { Form, Validations } from "components/BaseComponents";
 
@@ -23,6 +31,7 @@ class LockContainer extends React.Component {
 
         this.onTermChange = this.onTermChange.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onTermChange(input, nextVal) {
@@ -39,77 +48,149 @@ class LockContainer extends React.Component {
         }));
     }
 
+    async onSubmit(values) {
+        let amount;
+        try {
+            amount = parseFloat(values.lockAmount);
+        } catch (error) {
+            throw new SubmissionError({
+                _error: {
+                    title: "Invalid amount",
+                    details: error
+                }
+            });
+        }
+
+        let productId;
+        try {
+            productId = parseFloat(values.productId);
+        } catch (error) {
+            throw new SubmissionError({
+                _error: {
+                    title: "Invalid productId",
+                    details: error
+                }
+            });
+        }
+
+        const res = await store.dispatch(newLock(productId, amount));
+        if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
+            console.error(res);
+            throw new SubmissionError({
+                _error: res.error
+            });
+        } else {
+            this.setState({
+                result: res.result
+            });
+            return res;
+        }
+    }
+
     render() {
-        const { lockProducts, onSubmit, handleSubmit } = this.props;
+        const { lockProducts, lockManager } = this.props;
+        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
         return (
-            <Form onSubmit={handleSubmit(onSubmit)}>
-                <Field
-                    name="lockAmount"
-                    component={Form.Field}
-                    as={Form.Input}
-                    type="number"
-                    label="Amount to lock:"
-                    disabled={false}
-                    onChange={this.onAmountChange}
-                    validate={[Validations.required]}
-                    labelPosition="right"
-                >
-                    <input />
-                    <Label>A-EUR</Label>
-                </Field>
-                <label>Select term:</label>
-                <TermTable fixed>
-                    <TermTableHeader>
-                        <TermTableRow>
-                            <TermTableHeadCell />
-                            <TermTableHeadCell />
-                            <TermTableHeadCell>Min lock</TermTableHeadCell>
-                            <TermTableHeadCell>Max lock</TermTableHeadCell>
-                            <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
-                            <TermTableHeadCell textAlign="right" singleLine>
-                                You earn
-                            </TermTableHeadCell>
-                        </TermTableRow>
-                    </TermTableHeader>
-                    <TermTableBody>
-                        {lockProducts &&
-                            lockProducts
-                                .filter(product => product.isActive)
-                                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
-                                .map((product, i) => {
-                                    return (
-                                        <TermTableRow key={`lock-term-${i}`}>
-                                            <TermTableCell>
-                                                <Field
-                                                    name="productId"
-                                                    val={i}
-                                                    component={RadioInput}
-                                                    onChange={this.onTermChange}
-                                                    validate={[Validations.required]}
-                                                >
-                                                    <input />
-                                                </Field>
-                                            </TermTableCell>
-                                            <TermTableCell>
-                                                <label>{product.durationText}</label>
-                                            </TermTableCell>
-                                            <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                            <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
-                                            <TermTableCell>{(product.interestRatePa * 100).toFixed(2)}%</TermTableCell>
-                                            <TermTableCell textAlign="right">
-                                                {this.state.amountValue &&
-                                                    (this.state.amountValue * product.perTermInterest).toFixed(2)}{" "}
-                                                A€
-                                            </TermTableCell>
-                                        </TermTableRow>
-                                    );
-                                })}
-                    </TermTableBody>
-                </TermTable>
-                <Button disabled={!this.state.amountValue && !this.state.productId} type="submit">
-                    Lock
-                </Button>
-            </Form>
+            <Pblock loading={lockManager.isLoading} header="Lock" style={{ maxWidth: "700px" }}>
+                {submitSucceeded && (
+                    <EthSubmissionSuccessPanel
+                        header="New Lock submitted"
+                        result={this.state.result}
+                        onDismiss={() => reset()}
+                    />
+                )}
+
+                {!submitSucceeded && (
+                    <Form error={error ? true : false} onSubmit={handleSubmit(this.onSubmit)}>
+                        {error && (
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                header="Create loan failed"
+                                onDismiss={() => clearSubmitErrors()}
+                            />
+                        )}
+
+                        <Field
+                            name="lockAmount"
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            label="Amount to lock:"
+                            disabled={false}
+                            onChange={this.onAmountChange}
+                            validate={[Validations.required]}
+                            labelPosition="right"
+                        >
+                            <input />
+                            <Label>A-EUR</Label>
+                        </Field>
+                        <label>Select term:</label>
+                        <TermTable fixed>
+                            <TermTableHeader>
+                                <TermTableRow>
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
+                                    <TermTableHeadCell textAlign="right" singleLine>
+                                        You earn
+                                    </TermTableHeadCell>
+                                </TermTableRow>
+                            </TermTableHeader>
+                            <TermTableBody>
+                                {lockProducts &&
+                                    lockProducts
+                                        .filter(product => product.isActive)
+                                        .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
+                                        .map((product, i) => {
+                                            return (
+                                                <TermTableRow key={`lock-term-${i}`}>
+                                                    <TermTableCell>
+                                                        <Field
+                                                            name="productId"
+                                                            val={i}
+                                                            component={RadioInput}
+                                                            onChange={this.onTermChange}
+                                                            validate={[Validations.required]}
+                                                        >
+                                                            <input />
+                                                        </Field>
+                                                    </TermTableCell>
+                                                    <TermTableCell>
+                                                        <label>{product.durationText}</label>
+                                                    </TermTableCell>
+                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>
+                                                        {(product.interestRatePa * 100).toFixed(2)}%
+                                                    </TermTableCell>
+                                                    <TermTableCell textAlign="right">
+                                                        {this.state.amountValue &&
+                                                            (this.state.amountValue * product.perTermInterest).toFixed(
+                                                                2
+                                                            )}{" "}
+                                                        A€
+                                                    </TermTableCell>
+                                                </TermTableRow>
+                                            );
+                                        })}
+                            </TermTableBody>
+                        </TermTable>
+                        <Button
+                            size="big"
+                            primary
+                            disabled={(!this.state.amountValue && !this.state.productId) || pristine}
+                            loading={submitting}
+                            data-testid="submitButton"
+                            type="submit"
+                        >
+                            {submitting && "Submitting..."}
+                            {!submitting && "Lock"}
+                        </Button>
+                    </Form>
+                )}
+            </Pblock>
         );
     }
 }
