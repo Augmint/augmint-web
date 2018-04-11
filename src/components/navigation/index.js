@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "components/augmint-ui/button";
+import Button from "components/button";
 
 import {
     StyleNavLink,
