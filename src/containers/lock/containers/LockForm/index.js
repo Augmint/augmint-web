@@ -105,7 +105,7 @@ class LockContainer extends React.Component {
                             label="Amount to lock:"
                             disabled={false}
                             onChange={this.onAmountChange}
-                            validate={[Validations.required]}
+                            validate={[Validations.required, Validations.tokenAmount, Validations.userTokenBalance]}
                             labelPosition="right"
                         >
                             <input />
