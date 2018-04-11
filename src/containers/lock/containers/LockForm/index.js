@@ -16,9 +16,10 @@ import Button from "components/button";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 
-const RadioInput = props => (
-    <input type="radio" name={props.input.name} value={props.val} onChange={props.input.onChange} />
-);
+const RadioInput = props => {
+    const { type = "radio", val, ...other } = props;
+    return <input type={type} value={val} name={props.input.name} onChange={props.input.onChange} {...other} />;
+};
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class LockContainer extends React.Component {
 
         this.state = {
             amountValue: null,
-            productId: null
+            productId: 0
         };
 
         this.onTermChange = this.onTermChange.bind(this);
@@ -35,11 +36,9 @@ class LockContainer extends React.Component {
     }
 
     onTermChange(input, nextVal) {
-        if (this.state.amout && nextVal) {
-            this.setState(() => ({
-                productId: nextVal
-            }));
-        }
+        this.setState(() => ({
+            productId: nextVal
+        }));
     }
 
     onAmountChange(input, nextVal) {
@@ -61,19 +60,7 @@ class LockContainer extends React.Component {
             });
         }
 
-        let productId;
-        try {
-            productId = parseFloat(values.productId);
-        } catch (error) {
-            throw new SubmissionError({
-                _error: {
-                    title: "Invalid productId",
-                    details: error
-                }
-            });
-        }
-
-        const res = await store.dispatch(newLock(productId, amount));
+        const res = await store.dispatch(newLock(this.state.productId, amount));
         if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
             console.error(res);
             throw new SubmissionError({
@@ -124,6 +111,7 @@ class LockContainer extends React.Component {
                             <input />
                             <Label>A-EUR</Label>
                         </Field>
+
                         <label>Select term:</label>
                         <TermTable fixed>
                             <TermTableHeader>
@@ -150,12 +138,10 @@ class LockContainer extends React.Component {
                                                         <Field
                                                             name="productId"
                                                             val={i}
+                                                            defaultChecked={i === this.state.productId}
                                                             component={RadioInput}
                                                             onChange={this.onTermChange}
-                                                            validate={[Validations.required]}
-                                                        >
-                                                            <input />
-                                                        </Field>
+                                                        />
                                                     </TermTableCell>
                                                     <TermTableCell>
                                                         <label>{product.durationText}</label>
@@ -177,16 +163,16 @@ class LockContainer extends React.Component {
                                         })}
                             </TermTableBody>
                         </TermTable>
+
                         <Button
                             size="big"
                             primary
-                            disabled={(!this.state.amountValue && !this.state.productId) || pristine}
+                            disabled={pristine}
                             loading={submitting}
                             data-testid="submitButton"
                             type="submit"
                         >
-                            {submitting && "Submitting..."}
-                            {!submitting && "Lock"}
+                            {submitting ? "Submitting..." : "Lock"}
                         </Button>
                     </Form>
                 )}
