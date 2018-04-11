@@ -33,6 +33,22 @@ class LockContainer extends React.Component {
         this.onTermChange = this.onTermChange.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+        this.lockAmountValidation = this.lockAmountValidation.bind(this);
+    }
+
+    lockAmountValidation(value) {
+        const minValue = this.props.lockProducts[this.state.productId].minimumLockAmount;
+        const maxValue = this.props.lockProducts[this.state.productId].maxLockAmount;
+        const val = parseFloat(value);
+
+        if (val < minValue) {
+            return `Minimum lockable amount is ${minValue} A-EUR for selected product`;
+        } else if (val > maxValue) {
+            return `Currently maximum ${maxValue} A-EUR is available for lock with selected product`;
+        } else {
+            return undefined;
+        }
     }
 
     onTermChange(input, nextVal) {
@@ -77,6 +93,7 @@ class LockContainer extends React.Component {
     render() {
         const { lockProducts, lockManager } = this.props;
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
+
         return (
             <Pblock loading={lockManager.isLoading} header="Lock" style={{ maxWidth: "700px" }}>
                 {submitSucceeded && (
@@ -105,7 +122,12 @@ class LockContainer extends React.Component {
                             label="Amount to lock:"
                             disabled={false}
                             onChange={this.onAmountChange}
-                            validate={[Validations.required, Validations.tokenAmount, Validations.userTokenBalance]}
+                            validate={[
+                                Validations.required,
+                                Validations.tokenAmount,
+                                this.lockAmountValidation,
+                                Validations.userTokenBalance
+                            ]}
                             labelPosition="right"
                         >
                             <input />
