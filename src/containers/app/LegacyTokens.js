@@ -4,7 +4,7 @@ import legacyBalancesProvider from "modules/legacyBalancesProvider";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
 import { EthSubmissionSuccessPanel, EthSubmissionErrorPanel } from "components/MsgPanels";
-import Button from "components/button";
+import Button from "components/augmint-ui/button";
 import { InfoPanel } from "components/MsgPanels";
 import { Container } from "semantic-ui-react";
 import {
