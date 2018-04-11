@@ -58,32 +58,29 @@ class LegacyTokens extends React.Component {
         const { error, submitting, submitSucceeded, result } = this.state;
 
         const balances = contractBalances
-            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => {
-                  return (
-                      <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
-                          Balance in legacy contract: {item.balance} A-EUR{" "}
-                          <small>Contract address: {item.contract} </small>
-                          <Button
-                              type="submit"
-                              data-testid={`dismissLegacyBalanceButton-${item.contract}`}
-                              id={`dismissLegacyBalanceButton-${item.contract}`}
-                              onClick={() => this.handleDismiss(item.contract)}
-                          >
-                              Dismiss
-                          </Button>
-                          <Button
-                              type="submit"
-                              primary
-                              disabled={submitting}
-                              data-testid={`convertLegacyBalanceButton-${item.contract}`}
-                              id={`convertLegacyBalanceButton-${item.contract}`}
-                              onClick={() => this.submitConvert(item.contract, item.balance)}
-                          >
-                              {submitting ? "Submitting convert..." : "Convert"}
-                          </Button>
-                      </MyListGroup.Row>
-                  );
-              })
+            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => (
+                  <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
+                      Balance in legacy contract: {item.balance} A-EUR <small>Contract address: {item.contract} </small>
+                      <Button
+                          type="submit"
+                          data-testid={`dismissLegacyBalanceButton-${item.contract}`}
+                          id={`dismissLegacyBalanceButton-${item.contract}`}
+                          onClick={() => this.handleDismiss(item.contract)}
+                      >
+                          Dismiss
+                      </Button>
+                      <Button
+                          type="submit"
+                          primary
+                          disabled={submitting}
+                          data-testid={`convertLegacyBalanceButton-${item.contract}`}
+                          id={`convertLegacyBalanceButton-${item.contract}`}
+                          onClick={() => this.submitConvert(item.contract, item.balance)}
+                      >
+                          {submitting ? "Submitting convert..." : "Convert"}
+                      </Button>
+                  </MyListGroup.Row>
+              ))
             : null;
 
         return balances && balances.length > 0 && augmintToken.isConnected ? (
