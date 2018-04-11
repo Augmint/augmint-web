@@ -2,7 +2,7 @@ import styled from "styled-components";
 import theme from "styles/theme";
 
 const BaseLabel = `
-    background-color: ${theme.colors.lightGray};
+    background-color: ${theme.colors.lightGrey};
     color: rgba(0,0,0,.6);
     padding: 12px;
 `;

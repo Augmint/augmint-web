@@ -156,6 +156,7 @@ class TokenTransferForm extends React.Component {
                             primary
                             disabled={pristine}
                             data-testid="submitTransferButton"
+                            className={submitting ? "loading" : ""}
                         >
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
