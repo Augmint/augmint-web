@@ -30,7 +30,7 @@ const setupListeners = () => {
     lockManager.onnewlockproduct = onNewLockProduct;
     lockManager.onlockproductactivechange = onLockProductActiveChange;
     lockManager.onnewlock = onNewLock;
-    // TODO: LockReleased event
+    lockManager.onlockreleased = onLockReleased;
 };
 
 const refresLockManagerIfNeeded = (newVal, oldVal) => {
@@ -100,6 +100,29 @@ const onNewLock = (lockOwner, lockId, amountLocked, interestEarned, lockedUntil,
                 durationInSecs
             })
         );
+        store.dispatch(fetchUserBalance(userAccount));
+    }
+};
+
+const onLockReleased = (lockOwner, lockId) => {
+    // event LockReleased(address indexed lockOwner, uint lockId);
+
+    console.debug(
+        "lockManagerProvider.onLockReleased: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
+    );
+    store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
+    store.dispatch(refreshLockManager()); // to update lockCount
+    store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+    if (store.getState().loanManager.isConnected) {
+        store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
+    }
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (lockOwner.toLowerCase() === userAccount.toLowerCase()) {
+        console.debug(
+            "lockManagerProvider.onLockReleased: lock released for current user. Dispatching fetchLocksForAddress & fetchUserBalance"
+        );
+        // TODO: just update the lock instead of full refetch of all locks
+        store.dispatch(fetchLocksForAddress(userAccount));
         store.dispatch(fetchUserBalance(userAccount));
     }
 };
