@@ -12,7 +12,7 @@ import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lock
 
 import { Form, Validations } from "components/BaseComponents";
 
-import Button from "components/button";
+import Button from "components/augmint-ui/button";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 

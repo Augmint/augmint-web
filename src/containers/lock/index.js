@@ -9,7 +9,7 @@ import { EthereumState } from "containers/app/EthereumState";
 
 import { Pcontainer, Pgrid } from "components/PageLayout";
 import AccountInfo from "components/AccountInfo";
-import Button from "components/button";
+import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
 
 import { StyledButtonContainer } from "./styles";

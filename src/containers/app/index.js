@@ -31,6 +31,7 @@ import { AppFooter } from "containers/app/AppFooter";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
+import LegacyTokens from "./LegacyTokens";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -84,7 +85,11 @@ class App extends React.Component {
                     showMenu={this.state.showMobileMenu}
                     toggleMenu={this.toggleMenu}
                 />
+
                 <EthereumTxStatus />
+
+                <LegacyTokens />
+
                 <div className="Site-content">
                     <Switch>
                         <Route exact path="/" component={NotConnectedHome} />
