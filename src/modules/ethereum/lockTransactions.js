@@ -60,7 +60,7 @@ function parseProducts(productsArray) {
 }
 
 export async function newLockTx(productId, lockAmount) {
-    const gasEstimate = store.getState().lockManager.info.lockCount === 0 ? cost.NEW_FIRST_LOAN_GAS : cost.NEW_LOAN_GAS;
+    const gasEstimate = store.getState().lockManager.info.lockCount === 0 ? cost.NEW_FIRST_LOCK_GAS : cost.NEW_LOCK_GAS;
 
     const txName = "New lock";
 
