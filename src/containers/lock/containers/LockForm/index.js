@@ -1,17 +1,15 @@
 import React from "react";
-import { reduxForm, Field } from "redux-form";
-import { Label } from "semantic-ui-react";
 import store from "modules/store";
-import { SubmissionError } from "redux-form";
-
-import { Pblock } from "components/PageLayout";
-
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
+import { connect } from "react-redux";
 
 import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lockTransactions";
 
-import { Form, Validations } from "components/BaseComponents";
+import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 
+import { Label } from "semantic-ui-react";
+import { Pblock } from "components/PageLayout";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
+import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
@@ -24,22 +22,13 @@ const RadioInput = props => {
 class LockContainer extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            amountValue: null,
-            productId: 0
-        };
-
-        this.onTermChange = this.onTermChange.bind(this);
-        this.onAmountChange = this.onAmountChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-
         this.lockAmountValidation = this.lockAmountValidation.bind(this);
     }
 
-    lockAmountValidation(value) {
-        const minValue = this.props.lockProducts[this.state.productId].minimumLockAmount;
-        const maxValue = this.props.lockProducts[this.state.productId].maxLockAmount;
+    lockAmountValidation(value, allValues) {
+        const minValue = this.props.lockProducts[allValues.productId].minimumLockAmount;
+        const maxValue = this.props.lockProducts[allValues.productId].maxLockAmount;
         const val = parseFloat(value);
 
         if (val < minValue) {
@@ -49,18 +38,6 @@ class LockContainer extends React.Component {
         } else {
             return undefined;
         }
-    }
-
-    onTermChange(input, nextVal) {
-        this.setState(() => ({
-            productId: nextVal
-        }));
-    }
-
-    onAmountChange(input, nextVal) {
-        this.setState(() => ({
-            amountValue: parseInt(nextVal || 0, 10)
-        }));
     }
 
     async onSubmit(values) {
@@ -76,7 +53,7 @@ class LockContainer extends React.Component {
             });
         }
 
-        const res = await store.dispatch(newLock(this.state.productId, amount));
+        const res = await store.dispatch(newLock(this.props.productId, amount));
         if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
             console.error(res);
             throw new SubmissionError({
@@ -121,7 +98,6 @@ class LockContainer extends React.Component {
                             type="number"
                             label="Amount to lock:"
                             disabled={false}
-                            onChange={this.onAmountChange}
                             validate={[
                                 Validations.required,
                                 Validations.tokenAmount,
@@ -160,9 +136,8 @@ class LockContainer extends React.Component {
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
-                                                            defaultChecked={product.id === this.state.productId}
+                                                            defaultChecked={product.id === this.props.productId}
                                                             component={RadioInput}
-                                                            onChange={this.onTermChange}
                                                         />
                                                     </TermTableCell>
                                                     <TermTableCell>
@@ -174,11 +149,10 @@ class LockContainer extends React.Component {
                                                         {(product.interestRatePa * 100).toFixed(2)}%
                                                     </TermTableCell>
                                                     <TermTableCell textAlign="right">
-                                                        {this.state.amountValue &&
-                                                            (this.state.amountValue * product.perTermInterest).toFixed(
-                                                                2
-                                                            )}{" "}
-                                                        A€
+                                                        {this.props.lockAmount &&
+                                                            `${(
+                                                                this.props.lockAmount * product.perTermInterest
+                                                            ).toFixed(2)} A€`}
                                                     </TermTableCell>
                                                 </TermTableRow>
                                             );
@@ -203,6 +177,11 @@ class LockContainer extends React.Component {
     }
 }
 
+const selector = formValueSelector("LockForm");
+
+LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
+
 export default reduxForm({
-    form: "LockForm"
+    form: "LockForm",
+    initialValues: { productId: 0 }
 })(LockContainer);
