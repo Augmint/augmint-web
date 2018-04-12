@@ -120,7 +120,7 @@ class RepayLoanPage extends React.Component {
         if (!this.state.isLoanFound) {
             return (
                 <ErrorPanel
-                    header={`Can't find loan #{this.state.loanId} for current account ${userAccount.address}`}
+                    header={`Can't find loan #${this.state.loanId} for current account ${userAccount.address}`}
                 />
             );
         }
