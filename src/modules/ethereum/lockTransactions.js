@@ -152,6 +152,15 @@ function parseLocks(locksArray) {
             const isActive = bn_isActive.eq(1) ? true : false;
             const isReleasebale = lockedUntil <= currentTime && isActive;
 
+            let lockStateText;
+            if (isReleasebale) {
+                lockStateText = "Ready to release";
+            } else if (isActive) {
+                lockStateText = "Active";
+            } else {
+                lockStateText = "Released";
+            }
+
             parsed.push({
                 id: bn_id.toNumber(),
                 amountLocked: bn_amountLocked / decimalsDiv,
@@ -164,7 +173,8 @@ function parseLocks(locksArray) {
                 durationInDays,
                 durationText,
                 isActive,
-                isReleasebale
+                isReleasebale,
+                lockStateText
             });
         }
 
