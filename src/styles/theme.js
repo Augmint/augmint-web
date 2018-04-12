@@ -2,6 +2,7 @@ const theme = {
     colors: {
         white: "white",
         grey: "#e0e1e2",
+        lightGrey: "#e8e8e8",
         opacWhite: "rgba(255, 255, 255, 0.5)",
         primary: "#051d2d",
         secondary: "#ffad00",

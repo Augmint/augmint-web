@@ -5,7 +5,8 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Button, Label } from "semantic-ui-react";
+import Button from "components/augmint-ui/button";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -117,7 +118,7 @@ class TokenTransferForm extends React.Component {
                             disabled={submitting || !augmintToken.isConnected}
                         >
                             <input data-testid="transferAmountInput" />
-                            <Label>A-EUR</Label>
+                            <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 
                         <small>
@@ -149,7 +150,14 @@ class TokenTransferForm extends React.Component {
                             placeholder="short narrative (optional)"
                             disabled={submitting || !augmintToken.isConnected}
                         />
-                        <Button loading={submitting} primary disabled={pristine} data-testid="submitTransferButton">
+                        <Button
+                            type="submit"
+                            loading={submitting}
+                            primary
+                            disabled={pristine}
+                            data-testid="submitTransferButton"
+                            className={submitting ? "loading" : ""}
+                        >
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
                     </Form>
