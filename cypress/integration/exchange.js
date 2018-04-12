@@ -5,12 +5,27 @@ describe("Augmint exchange", function() {
         cy.getGasPriceInEth().as("gasPriceInEth");
     });
 
-    it("Should place and cancel buy order on exchange", function() {
+    it("Should place and cancel buy order on exchange and also check the trade history", function() {
         const tokenAmount = 1000;
         const ethAmount = 1.00301;
         const price = 997;
 
+        let tradeHistoryStartLength;
+
         cy.get("[data-testid=exchangeMenuLink]").click();
+
+        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy
+            .get("@tradeHistoryTbody")
+            .then(() => {
+                cy
+                    .get("@tradeHistoryTbody")
+                    .invoke("attr", "data-test-historycount")
+                    .as("tradeHistoryStartLength");
+            })
+            .then(() => {
+                tradeHistoryStartLength = parseInt(this.tradeHistoryStartLength);
+            });
 
         cy
             .get("[data-testid=priceInput]")
@@ -24,10 +39,21 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
+        cy
+            .get("@tradeHistoryTbody")
+            .then(() => {
+                cy
+                    .get("@tradeHistoryTbody")
+                    .invoke("attr", "data-test-historycount")
+                    .as("tradeHistoryCurrentLength");
+            })
+            .then(() => {
+                expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength);
+            });
+
         cy.get("[data-testid=submitButton]").click();
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
-        cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
             .get("[data-testid=EthReceiptReceivedPanel]")
@@ -43,6 +69,8 @@ describe("Augmint exchange", function() {
                     .invoke("attr", "data-test-orderid")
                     .as("orderId");
 
+                console.log("orderidi", this.orderId);
+
                 cy
                     .get("@successPanel")
                     .invoke("attr", "data-test-gasused")
@@ -56,6 +84,21 @@ describe("Augmint exchange", function() {
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
+
+                cy.get("[data-testid=msgPanelOkButton]").click();
+
+                cy
+                    .get("@tradeHistoryTbody")
+                    .should("contain", "NewOrder")
+                    .then(() => {
+                        cy
+                            .get("@tradeHistoryTbody")
+                            .invoke("attr", "data-test-historycount")
+                            .as("tradeHistoryCurrentLength");
+                    })
+                    .then(() => {
+                        expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 1);
+                    });
 
                 // TODO: check orderlist
                 // TODO: check tradelist
@@ -80,16 +123,44 @@ describe("Augmint exchange", function() {
                     parseFloat(this.startingEthBalance) -
                     (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
+
+                cy
+                    .get("@tradeHistoryTbody")
+                    .should("contain", "CancelledOrder")
+                    .then(() => {
+                        cy
+                            .get("@tradeHistoryTbody")
+                            .invoke("attr", "data-test-historycount")
+                            .as("tradeHistoryCurrentLength");
+                    })
+                    .then(() => {
+                        expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 2);
+                    });
             });
     });
 
-    it("Should place and cancel sell order on exchange", function() {
+    it("Should place and cancel sell order on exchange and also check the trade history", function() {
         const tokenAmount = 997;
         const ethAmount = 1;
         const price = 997;
 
+        let tradeHistoryStartLength;
+
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
+
+        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy
+            .get("@tradeHistoryTbody")
+            .then(() => {
+                cy
+                    .get("@tradeHistoryTbody")
+                    .invoke("attr", "data-test-historycount")
+                    .as("tradeHistoryStartLength");
+            })
+            .then(() => {
+                tradeHistoryStartLength = parseInt(this.tradeHistoryStartLength);
+            });
 
         cy
             .get("[data-testid=priceInput]")
@@ -107,7 +178,6 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=submitButton]").click();
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
-        cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
             .get("[data-testid=EthReceiptReceivedPanel]")
@@ -133,6 +203,21 @@ describe("Augmint exchange", function() {
                 cy.assertUserAEurBalanceOnUI(expectedAEurBalance);
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
+                cy
+                    .get("@tradeHistoryTbody")
+                    .should("contain", "NewOrder")
+                    .then(() => {
+                        cy
+                            .get("@tradeHistoryTbody")
+                            .invoke("attr", "data-test-historycount")
+                            .as("tradeHistoryCurrentLength");
+                    })
+                    .then(() => {
+                        expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 1);
+                    });
+
+                cy.get("[data-testid=msgPanelOkButton]").click();
+
                 // TODO: check orderlist
                 // TODO: check tradelist
 
@@ -157,10 +242,23 @@ describe("Augmint exchange", function() {
                     parseFloat(this.startingEthBalance) -
                     (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
+
+                cy
+                    .get("@tradeHistoryTbody")
+                    .should("contain", "CancelledOrder")
+                    .then(() => {
+                        cy
+                            .get("@tradeHistoryTbody")
+                            .invoke("attr", "data-test-historycount")
+                            .as("tradeHistoryCurrentLength");
+                    })
+                    .then(() => {
+                        expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 2);
+                    });
             });
     });
 
-    it("Should match a buy and sell order", function() {
+    it("Should match a buy and sell order and also check the trade history", function() {
         const tokenAmount = 997;
         const ethAmount = 1;
         const price = 997;
@@ -181,7 +279,6 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=submitButton]").click();
 
-        cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
         cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
@@ -214,7 +311,15 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.get("@successPanel").should("contain", "Transaction receipt received");
-                cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy
+                    .get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]")
+                    .click()
+                    .then(() => {
+                        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+                        cy.get("@tradeHistoryTbody").then(() => {
+                            cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
+                        });
+                    });
                 // TODO: check balances (it might be too complicated to make test independent, i.e. unsure what are the top orders b/c of prev tests' leftovers)
             });
     });
