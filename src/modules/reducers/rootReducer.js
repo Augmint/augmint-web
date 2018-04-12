@@ -6,14 +6,15 @@ import augmintToken from "modules/reducers/augmintToken";
 import monetarySupervisor from "modules/reducers/monetarySupervisor";
 import loanManager from "modules/reducers/loanManager";
 import loanTransactions from "modules/reducers/loanTransactions";
+import lockManager from "modules/reducers/lockManager";
 import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
+import locks from "modules/reducers/locks";
 import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
 import trades from "modules/reducers/trades";
 import subscriptions from "modules/reducers/subscriptions";
-import legacyBalances from "modules/reducers/legacyBalances";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
 
@@ -25,14 +26,15 @@ export default combineReducers({
     monetarySupervisor,
     loanManager,
     loanTransactions,
+    lockManager,
     userBalances,
     userTransfers,
     exchange,
     orders,
     trades,
     loans,
+    locks,
     subscriptions,
     submittedTransactions,
-    legacyBalances,
     form: formReducer
 });
