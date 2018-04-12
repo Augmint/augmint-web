@@ -17,7 +17,7 @@ install:
 before_script:
     - greenkeeper-lockfile-update
     - yarn ganache:run > ganache.out &
-    - yarn contracts:migrate
+    - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
     - yarn start  &
 script:
     - yarn cypress:runrecord
