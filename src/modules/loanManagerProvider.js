@@ -94,10 +94,10 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
 const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, repaymentAmount) => {
     // event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount, uint repaymentAmount);
     console.debug(
-        "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, refreshAugmintToken, fetchLoanProducts & refreshMonetarySupervisor"
+        "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
-    store.dispatch(refreshAugmintToken());
-    store.dispatch(refreshMonetarySupervisor());
+    // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
+    store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(refreshLoanManager()); // to update loanCount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     const userAccount = store.getState().web3Connect.userAccount;
@@ -114,10 +114,9 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
 const onLoanRepayed = (loanId, borrower) => {
     // event LoanRepayed(uint loanId, address borrower);
     console.debug(
-        "loanManagerProvider.onRepayed:: Dispatching refreshAugmintToken, fetchLoanProducts & refreshMonetarySupervisor"
+        "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
-    store.dispatch(refreshAugmintToken());
-    store.dispatch(refreshMonetarySupervisor());
+    // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     const userAccount = store.getState().web3Connect.userAccount;
     if (borrower.toLowerCase() === userAccount.toLowerCase()) {
@@ -133,10 +132,10 @@ const onLoanRepayed = (loanId, borrower) => {
 const onLoanCollected = (loanId, borrower) => {
     // event LoanCollected(uint loanId, address borrower);
     console.debug(
-        "loanManagerProvider.onCollected: Dispatching refreshAugmintToken, fetchLoanProducts & refreshMonetarySupervisor"
+        "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"
     );
-    store.dispatch(refreshAugmintToken());
-    store.dispatch(refreshMonetarySupervisor());
+    store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
+    store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     const userAccount = store.getState().web3Connect.userAccount;
     if (borrower.toLowerCase() === userAccount.toLowerCase()) {
