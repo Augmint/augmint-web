@@ -8,6 +8,7 @@ import {
     fetchLoanProducts,
     fetchLoansToCollect
 } from "modules/reducers/loanManager";
+import { fetchLockProducts } from "modules/reducers/lockManager";
 import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -100,6 +101,9 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(refreshLoanManager()); // to update loanCount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
+    if (store.getState().lockManager.isConnected) {
+        store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+    }
     const userAccount = store.getState().web3Connect.userAccount;
     if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -117,7 +121,11 @@ const onLoanRepayed = (loanId, borrower) => {
         "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
+    store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
+    if (store.getState().lockManager.isConnected) {
+        store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+    }
     const userAccount = store.getState().web3Connect.userAccount;
     if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -137,6 +145,9 @@ const onLoanCollected = (loanId, borrower) => {
     store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
+    if (store.getState().lockManager.isConnected) {
+        store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+    }
     const userAccount = store.getState().web3Connect.userAccount;
     if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(

@@ -81,3 +81,95 @@ export async function newLockTx(productId, lockAmount) {
     const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
 }
+
+export async function fetchLocksForAddressTx(account) {
+    const lockManager = store.getState().lockManager.contract.instance;
+
+    // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
+    const [chunkSize, loanCount] = await Promise.all([
+        lockManager.CHUNK_SIZE().then(res => res.toNumber()),
+        lockManager.getLockCountForAddress(account).then(res => res.toNumber())
+    ]);
+    // const chunkSize = store.getState().loanManager.info.chunkSize;
+    // const loanCount = await loanManager.getLoanCountForAddress(account);
+
+    let locks = [];
+
+    const queryCount = Math.ceil(loanCount / chunkSize);
+
+    for (let i = 0; i < queryCount; i++) {
+        const locksArray = await lockManager.getLocksForAddress(account, i * chunkSize);
+        locks = locks.concat(parseLocks(locksArray));
+    }
+
+    return locks;
+}
+
+export async function processNewLockTx(account, lockData) {
+    // reprdocue an array in same format as getLocksForAddress returnvalue:
+    //     [ lockOwner, lockId, amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs]
+    const lockArray = [
+        lockData.lockId,
+        lockData.amountLocked,
+        lockData.interestEarned,
+        new BigNumber(lockData.lockedUntil), // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
+        new BigNumber(lockData.perTermInterest),
+        new BigNumber(lockData.durationInSecs),
+        new BigNumber(1) // we don't get isActive in event data
+    ];
+
+    const parsed = parseLocks([lockArray]); // expecting array of lock data arrays
+    return parsed[0];
+}
+
+function parseLocks(locksArray) {
+    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+
+    const locks = locksArray.reduce((parsed, lock) => {
+        const [
+            bn_id,
+            bn_amountLocked,
+            bn_interestEarned,
+            bn_lockedUntil,
+            bn_perTermInterest,
+            bn_durationInSecs,
+            bn_isActive
+        ] = lock;
+
+        if (bn_amountLocked.gt(0)) {
+            const lockedUntil = bn_lockedUntil.toNumber();
+            const lockedUntilText = moment.unix(lockedUntil).format("D MMM YYYY HH:mm");
+            const durationInSecs = bn_durationInSecs.toNumber();
+            const durationInDays = durationInSecs / 60 / 60 / 24;
+            const durationText = moment.duration(durationInSecs, "seconds").humanize();
+
+            const perTermInterest = bn_perTermInterest / 1000000;
+            const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
+
+            const currentTime = moment()
+                .utc()
+                .unix();
+            const isActive = bn_isActive.eq(1) ? true : false;
+            const isReleasebale = lockedUntil <= currentTime && isActive;
+
+            parsed.push({
+                id: bn_id.toNumber(),
+                amountLocked: bn_amountLocked / decimalsDiv,
+                interestEarned: bn_interestEarned / decimalsDiv,
+                lockedUntil,
+                lockedUntilText,
+                perTermInterest,
+                interestRatePa,
+                durationInSecs,
+                durationInDays,
+                durationText,
+                isActive,
+                isReleasebale
+            });
+        }
+
+        return parsed;
+    }, []);
+
+    return locks;
+}

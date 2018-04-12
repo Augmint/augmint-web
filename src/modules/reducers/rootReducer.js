@@ -10,6 +10,7 @@ import lockManager from "modules/reducers/lockManager";
 import userBalances from "modules/reducers/userBalances";
 import userTransfers from "modules/reducers/userTransfers";
 import loans from "modules/reducers/loans";
+import locks from "modules/reducers/locks";
 import exchange from "modules/reducers/exchange";
 import orders from "modules/reducers/orders";
 import trades from "modules/reducers/trades";
@@ -32,6 +33,7 @@ export default combineReducers({
     orders,
     trades,
     loans,
+    locks,
     subscriptions,
     submittedTransactions,
     form: formReducer
