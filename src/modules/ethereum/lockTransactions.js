@@ -82,6 +82,24 @@ export async function newLockTx(productId, lockAmount) {
     return { txName, transactionHash };
 }
 
+export async function releaseFundsTx(lockId) {
+    const gasEstimate = cost.RELEASE_LOCK_GAS;
+
+    const txName = "Release funds";
+
+    const lockManager = store.getState().lockManager;
+
+    const userAccount = store.getState().web3Connect.userAccount;
+
+    const tx = lockManager.contract.web3ContractInstance.methods.releaseFunds(lockId).send({
+        from: userAccount,
+        gas: gasEstimate
+    });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+    return { txName, transactionHash };
+}
+
 export async function fetchLocksForAddressTx(account) {
     const lockManager = store.getState().lockManager.contract.instance;
 

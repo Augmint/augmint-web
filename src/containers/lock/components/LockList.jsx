@@ -2,6 +2,7 @@ import React from "react";
 import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
+import ReleaseFundsButton from "./ReleaseFundsButton";
 
 function LockDetails(props) {
     const { lock } = props;
@@ -23,11 +24,8 @@ function LockDetails(props) {
                 <Col>locked for {lock.durationText}</Col>
                 <Col>until {lock.lockedUntilText}</Col>
             </Row>
-            {lock.isReleasebale && (
-                <Row columns={1}>
-                    <Col>TODO: RELEASE LOCK</Col>
-                </Row>
-            )}
+
+            <Row>{lock.isReleasebale && <ReleaseFundsButton lockId={lock.id} />}</Row>
         </MyGridTable>
     );
 }
