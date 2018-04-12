@@ -68,12 +68,24 @@ class CancelOrderButton extends React.Component {
             </a>
         );
         return (
-            <Modal size="small" open={confirmOpen} onClose={this.handleClose} trigger={CancelButton}>
+            <Modal
+                size="small"
+                open={confirmOpen}
+                closeOnDimmerClick={false}
+                onClose={this.handleClose}
+                trigger={CancelButton}
+            >
                 <Header icon="question" content="Cancel your order" />
 
                 <Modal.Content>
                     {error && (
-                        <EthSubmissionErrorPanel dismissable error={error} header="Order cancel failed.">
+                        <EthSubmissionErrorPanel
+                            onDismiss={() => {
+                                this.setState({ error: null });
+                            }}
+                            error={error}
+                            header="Order cancel failed."
+                        >
                             <p>Error cancelling the order.</p>
                         </EthSubmissionErrorPanel>
                     )}
