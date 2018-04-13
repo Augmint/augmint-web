@@ -18,6 +18,7 @@ const segmentStyle = {
 };
 
 export function AppFooter(props) {
+    const { isConnected } = props.web3Connect;
     let community = "WE'RE AN ACTIVE COMUNITY",
         description =
             "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance structure - anyone can join at any time.";
@@ -77,6 +78,12 @@ export function AppFooter(props) {
                         href="/disclaimer"
                         content="DISCLAIMER"
                     />
+                    {isConnected ? (<List.Item
+                        as="a"
+                        href="/under-the-hood"
+                        data-testid="underTheHoodLink"
+                        content="UNDER THE HOOD"
+                    />) : null};
                     <List.Item
                         as="a"
                         href="/contact"
