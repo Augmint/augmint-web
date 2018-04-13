@@ -116,7 +116,6 @@ export default class AppMenu extends React.Component {
                         alt="Augmint logo"
                     />
                 </StyledLogoContainer>
-                {/* to="/under-the-hood" */}
             </div>
         );
     }

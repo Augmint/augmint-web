@@ -6,7 +6,7 @@ import { CustomTable } from "components/Table";
 
 export default class TradeHistory extends React.Component {
     render() {
-        const { header, userAccountAddress } = this.props;
+        const { header } = this.props;
         const { trades, error, isLoading } = this.props.trades;
         const dataKeys = [
             "blockTimeStampText",
