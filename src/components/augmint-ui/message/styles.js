@@ -24,6 +24,11 @@ const BaseDiv = `
       background: ${theme.colors.messageBoxErrorBackground};
       color: ${theme.colors.messageBoxErrorColor};
     }
+
+    &.success {
+      background: ${theme.colors.messageBoxSuccessBackground};
+      color: ${theme.colors.messageBoxSuccessColor};
+    }
 `;
 
 export const StyledDiv = styled.div`

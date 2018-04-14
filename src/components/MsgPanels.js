@@ -21,11 +21,33 @@ export default class MsgPanel extends React.Component {
     }
 
     render() {
-        const { children, eth, icon, dismissable, dismissed, onDismiss, header, loading, error, ...other } = this.props;
+        const {
+            children,
+            eth,
+            icon,
+            dismissable,
+            dismissed,
+            onDismiss,
+            header,
+            loading,
+            error,
+            success,
+            ...other
+        } = this.props;
+        let className;
+
+        if (error) {
+            className = "error";
+        }
+
+        if (success) {
+            className = "success";
+        }
+
         return (
             (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} className={error ? "error" : ""} {...other}>
+                    <Message onDismiss={onDismiss ? this.dismiss : null} className={className} {...other}>
                         <h3>
                             {icon && <Icon name={icon} loading={loading} />} {header}
                         </h3>

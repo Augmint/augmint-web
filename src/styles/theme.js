@@ -9,7 +9,9 @@ const theme = {
         messageBoxBackground: "#f8ffff",
         messageBoxColor: "#276f86",
         messageBoxErrorBackground: "#fff6f6",
-        messageBoxErrorColor: "#9f3a38"
+        messageBoxErrorColor: "#9f3a38",
+        messageBoxSuccessBackground: "#fcfff5",
+        messageBoxSuccessColor: "#2c662d"
     },
     transitions: {
         standard: "0.3s ease-in"
