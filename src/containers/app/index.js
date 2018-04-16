@@ -28,6 +28,8 @@ import Roadmap from "containers/roadmap";
 import AppMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
+
+import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
 
@@ -104,6 +106,7 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

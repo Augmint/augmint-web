@@ -5,9 +5,14 @@ import { connectWeb3 } from "modules/web3Provider";
 import { Link } from "react-router-dom";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
+import loanManagerProvider from "modules/loanManagerProvider";
+import lockManagerProvider from "modules/lockManagerProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
-import { AugmintStats } from "components/AugmintStats";
+import { ReserveStats } from "./components/ReserveStats";
+import { TotalSupply } from "./components/TotalSupply";
+import { LtdStats } from "./components/LtdStats";
+import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
 import { Button } from "semantic-ui-react";
 
@@ -16,6 +21,8 @@ class AugmintToken extends React.Component {
         connectWeb3();
         ratesProvider();
         augmintTokenProvider();
+        loanManagerProvider();
+        lockManagerProvider();
     }
 
     handleAugmintTokenRefreshClick = e => {
@@ -27,19 +34,30 @@ class AugmintToken extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Augmint Reserves" />
-
                     <Pgrid columns={1}>
                         <Pgrid.Column>
-                            <AugmintStats
-                                size="small"
-                                showDetails
+                            <TotalSupply
+                                augmintToken={this.props.augmintToken}
+                                monetarySupervisor={this.props.monetarySupervisor}
+                            />
+                        </Pgrid.Column>
+
+                        <Pheader header="Reserves" />
+                        <Pgrid.Column>
+                            <ReserveStats
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 rates={this.props.rates}
                             />
                         </Pgrid.Column>
+
+                        <Pheader header="Loans & Locks" />
                         <Pgrid.Column>
+                            <LtdStats
+                                monetarySupervisor={this.props.monetarySupervisor}
+                                loanManager={this.props.loanManager}
+                                lockManager={this.props.lockManager}
+                            />
                             <Button
                                 content="Loans to Collect"
                                 as={Link}
@@ -49,6 +67,14 @@ class AugmintToken extends React.Component {
                                 labelPosition="right"
                                 basic
                                 size="large"
+                            />
+                        </Pgrid.Column>
+
+                        <Pheader header="Earnings" />
+                        <Pgrid.Column>
+                            <EarningStats
+                                monetarySupervisor={this.props.monetarySupervisor}
+                                augmintToken={this.props.augmintToken}
                             />
                         </Pgrid.Column>
                     </Pgrid>
@@ -67,6 +93,8 @@ const mapStateToProps = state => ({
     web3Instance: state.web3Connect.web3Instance,
 
     augmintToken: state.augmintToken,
+    loanManager: state.loanManager,
+    lockManager: state.lockManager,
     monetarySupervisor: state.monetarySupervisor,
     rates: state.rates
 });

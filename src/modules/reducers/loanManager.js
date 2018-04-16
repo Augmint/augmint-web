@@ -44,7 +44,8 @@ const initialState = {
         productCount: null,
 
         ratesAddress: "?",
-        augmintTokenAddress: "?"
+        augmintTokenAddress: "?",
+        monetarySupervisorAddress: "?"
     }
 };
 
@@ -186,6 +187,7 @@ async function getLoanManagerInfo(loanManager) {
         productCount,
         augmintTokenAddress,
         ratesAddress,
+        monetarySupervisorAddress,
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
@@ -195,6 +197,7 @@ async function getLoanManagerInfo(loanManager) {
 
         loanManager.augmintToken(),
         loanManager.rates(),
+        loanManager.monetarySupervisor(),
 
         web3.eth.getBalance(loanManager.address),
         augmintToken.balanceOf(loanManager.address)
@@ -209,11 +212,12 @@ async function getLoanManagerInfo(loanManager) {
         loanCount: loanCount.toNumber(),
         productCount: productCount.toNumber(),
         augmintTokenAddress,
-        ratesAddress
+        ratesAddress,
+        monetarySupervisorAddress
     };
 }
 
-export function fetchProducts() {
+export function fetchLoanProducts() {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_PRODUCTLIST_REQUESTED

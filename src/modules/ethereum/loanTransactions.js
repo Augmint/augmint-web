@@ -65,6 +65,7 @@ function parseProducts(productsArray) {
             bn_discountRate,
             bn_collateralRatio,
             bn_defaultingFeePt,
+            bn_maxLoanAmount,
             bn_isActive
         ] = product;
 
@@ -79,6 +80,7 @@ function parseProducts(productsArray) {
                 bn_collateralRatio,
                 collateralRatio: bn_collateralRatio / ppmDiv,
                 minDisbursedAmountInToken: bn_minDisbursedAmount / decimalsDiv,
+                maxLoanAmount: bn_maxLoanAmount / decimalsDiv,
                 bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / ppmDiv,
                 isActive: bn_isActive.eq(1) ? true : false
