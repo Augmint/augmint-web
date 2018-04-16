@@ -167,14 +167,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
     "exportedSymbols": {
       "SystemAccount": [
-        4427
+        4415
       ]
     },
-    "id": 4428,
+    "id": 4416,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4399,
+        "id": 4387,
         "literals": [
           "solidity",
           "0.4",
@@ -186,10 +186,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/Restricted.sol",
         "file": "./Restricted.sol",
-        "id": 4400,
+        "id": 4388,
         "nodeType": "ImportDirective",
-        "scope": 4428,
-        "sourceUnit": 4273,
+        "scope": 4416,
+        "sourceUnit": 4261,
         "src": "67:26:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -197,10 +197,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
         "file": "./AugmintToken.sol",
-        "id": 4401,
+        "id": 4389,
         "nodeType": "ImportDirective",
-        "scope": 4428,
-        "sourceUnit": 4083,
+        "scope": 4416,
+        "sourceUnit": 4071,
         "src": "94:28:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -211,38 +211,38 @@
             "arguments": [],
             "baseName": {
               "contractScope": null,
-              "id": 4402,
+              "id": 4390,
               "name": "Restricted",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4272,
+              "referencedDeclaration": 4260,
               "src": "151:10:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Restricted_$4272",
+                "typeIdentifier": "t_contract$_Restricted_$4260",
                 "typeString": "contract Restricted"
               }
             },
-            "id": 4403,
+            "id": 4391,
             "nodeType": "InheritanceSpecifier",
             "src": "151:10:13"
           }
         ],
         "contractDependencies": [
-          4272
+          4260
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 4427,
+        "id": 4415,
         "linearizedBaseContracts": [
-          4427,
-          4272
+          4415,
+          4260
         ],
         "name": "SystemAccount",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 4425,
+              "id": 4413,
               "nodeType": "Block",
               "src": "446:74:13",
               "statements": [
@@ -252,11 +252,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 4420,
+                        "id": 4408,
                         "name": "to",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4407,
+                        "referencedDeclaration": 4395,
                         "src": "491:2:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -265,11 +265,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 4421,
+                        "id": 4409,
                         "name": "amount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4409,
+                        "referencedDeclaration": 4397,
                         "src": "495:6:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -278,11 +278,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 4422,
+                        "id": 4410,
                         "name": "narrative",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4411,
+                        "referencedDeclaration": 4399,
                         "src": "503:9:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_calldata_ptr",
@@ -307,32 +307,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 4417,
+                        "id": 4405,
                         "name": "tokenAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4405,
+                        "referencedDeclaration": 4393,
                         "src": "456:12:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                          "typeIdentifier": "t_contract$_AugmintToken_$4070",
                           "typeString": "contract AugmintToken"
                         }
                       },
-                      "id": 4419,
+                      "id": 4407,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "transferWithNarrative",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3749,
+                      "referencedDeclaration": 3737,
                       "src": "456:34:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (address,uint256,string memory) external"
                       }
                     },
-                    "id": 4423,
+                    "id": 4411,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -346,14 +346,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4424,
+                  "id": 4412,
                   "nodeType": "ExpressionStatement",
                   "src": "456:57:13"
                 }
               ]
             },
             "documentation": null,
-            "id": 4426,
+            "id": 4414,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -363,7 +363,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "4d6f6e6574617279426f617264",
-                    "id": 4414,
+                    "id": 4402,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -379,14 +379,14 @@
                     "value": "MonetaryBoard"
                   }
                 ],
-                "id": 4415,
+                "id": 4403,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 4413,
+                  "id": 4401,
                   "name": "restrict",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4117,
+                  "referencedDeclaration": 4105,
                   "src": "420:8:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -400,31 +400,31 @@
             "name": "withdrawTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4412,
+              "id": 4400,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4405,
+                  "id": 4393,
                   "name": "tokenAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "337:25:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                    "typeIdentifier": "t_contract$_AugmintToken_$4070",
                     "typeString": "contract AugmintToken"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 4404,
+                    "id": 4392,
                     "name": "AugmintToken",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 4082,
+                    "referencedDeclaration": 4070,
                     "src": "337:12:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                      "typeIdentifier": "t_contract$_AugmintToken_$4070",
                       "typeString": "contract AugmintToken"
                     }
                   },
@@ -433,10 +433,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4407,
+                  "id": 4395,
                   "name": "to",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "364:10:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -445,7 +445,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4406,
+                    "id": 4394,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "364:7:13",
@@ -459,10 +459,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4409,
+                  "id": 4397,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "376:11:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -471,7 +471,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4408,
+                    "id": 4396,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "376:4:13",
@@ -485,10 +485,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4411,
+                  "id": 4399,
                   "name": "narrative",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "389:16:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -497,7 +497,7 @@
                     "typeString": "string calldata"
                   },
                   "typeName": {
-                    "id": 4410,
+                    "id": 4398,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "389:6:13",
@@ -514,19 +514,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 4416,
+              "id": 4404,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "446:0:13"
             },
-            "scope": 4427,
+            "scope": 4415,
             "src": "313:207:13",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 4428,
+        "scope": 4416,
         "src": "125:397:13"
       }
     ],
@@ -536,14 +536,14 @@
     "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/SystemAccount.sol",
     "exportedSymbols": {
       "SystemAccount": [
-        4427
+        4415
       ]
     },
-    "id": 4428,
+    "id": 4416,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4399,
+        "id": 4387,
         "literals": [
           "solidity",
           "0.4",
@@ -555,10 +555,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/Restricted.sol",
         "file": "./Restricted.sol",
-        "id": 4400,
+        "id": 4388,
         "nodeType": "ImportDirective",
-        "scope": 4428,
-        "sourceUnit": 4273,
+        "scope": 4416,
+        "sourceUnit": 4261,
         "src": "67:26:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -566,10 +566,10 @@
       {
         "absolutePath": "/Users/petro/ether/augmint-web/augmint-contracts/contracts/generic/AugmintToken.sol",
         "file": "./AugmintToken.sol",
-        "id": 4401,
+        "id": 4389,
         "nodeType": "ImportDirective",
-        "scope": 4428,
-        "sourceUnit": 4083,
+        "scope": 4416,
+        "sourceUnit": 4071,
         "src": "94:28:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -580,38 +580,38 @@
             "arguments": [],
             "baseName": {
               "contractScope": null,
-              "id": 4402,
+              "id": 4390,
               "name": "Restricted",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4272,
+              "referencedDeclaration": 4260,
               "src": "151:10:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Restricted_$4272",
+                "typeIdentifier": "t_contract$_Restricted_$4260",
                 "typeString": "contract Restricted"
               }
             },
-            "id": 4403,
+            "id": 4391,
             "nodeType": "InheritanceSpecifier",
             "src": "151:10:13"
           }
         ],
         "contractDependencies": [
-          4272
+          4260
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 4427,
+        "id": 4415,
         "linearizedBaseContracts": [
-          4427,
-          4272
+          4415,
+          4260
         ],
         "name": "SystemAccount",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 4425,
+              "id": 4413,
               "nodeType": "Block",
               "src": "446:74:13",
               "statements": [
@@ -621,11 +621,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 4420,
+                        "id": 4408,
                         "name": "to",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4407,
+                        "referencedDeclaration": 4395,
                         "src": "491:2:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -634,11 +634,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 4421,
+                        "id": 4409,
                         "name": "amount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4409,
+                        "referencedDeclaration": 4397,
                         "src": "495:6:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -647,11 +647,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 4422,
+                        "id": 4410,
                         "name": "narrative",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4411,
+                        "referencedDeclaration": 4399,
                         "src": "503:9:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_calldata_ptr",
@@ -676,32 +676,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 4417,
+                        "id": 4405,
                         "name": "tokenAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4405,
+                        "referencedDeclaration": 4393,
                         "src": "456:12:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                          "typeIdentifier": "t_contract$_AugmintToken_$4070",
                           "typeString": "contract AugmintToken"
                         }
                       },
-                      "id": 4419,
+                      "id": 4407,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "transferWithNarrative",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3749,
+                      "referencedDeclaration": 3737,
                       "src": "456:34:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (address,uint256,string memory) external"
                       }
                     },
-                    "id": 4423,
+                    "id": 4411,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -715,14 +715,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 4424,
+                  "id": 4412,
                   "nodeType": "ExpressionStatement",
                   "src": "456:57:13"
                 }
               ]
             },
             "documentation": null,
-            "id": 4426,
+            "id": 4414,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -732,7 +732,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "4d6f6e6574617279426f617264",
-                    "id": 4414,
+                    "id": 4402,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -748,14 +748,14 @@
                     "value": "MonetaryBoard"
                   }
                 ],
-                "id": 4415,
+                "id": 4403,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 4413,
+                  "id": 4401,
                   "name": "restrict",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 4117,
+                  "referencedDeclaration": 4105,
                   "src": "420:8:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -769,31 +769,31 @@
             "name": "withdrawTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4412,
+              "id": 4400,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4405,
+                  "id": 4393,
                   "name": "tokenAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "337:25:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                    "typeIdentifier": "t_contract$_AugmintToken_$4070",
                     "typeString": "contract AugmintToken"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 4404,
+                    "id": 4392,
                     "name": "AugmintToken",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 4082,
+                    "referencedDeclaration": 4070,
                     "src": "337:12:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AugmintToken_$4082",
+                      "typeIdentifier": "t_contract$_AugmintToken_$4070",
                       "typeString": "contract AugmintToken"
                     }
                   },
@@ -802,10 +802,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4407,
+                  "id": 4395,
                   "name": "to",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "364:10:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -814,7 +814,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4406,
+                    "id": 4394,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "364:7:13",
@@ -828,10 +828,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4409,
+                  "id": 4397,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "376:11:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -840,7 +840,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4408,
+                    "id": 4396,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "376:4:13",
@@ -854,10 +854,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4411,
+                  "id": 4399,
                   "name": "narrative",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4426,
+                  "scope": 4414,
                   "src": "389:16:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -866,7 +866,7 @@
                     "typeString": "string calldata"
                   },
                   "typeName": {
-                    "id": 4410,
+                    "id": 4398,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "389:6:13",
@@ -883,19 +883,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 4416,
+              "id": 4404,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "446:0:13"
             },
-            "scope": 4427,
+            "scope": 4415,
             "src": "313:207:13",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 4428,
+        "scope": 4416,
         "src": "125:397:13"
       }
     ],
@@ -907,5 +907,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-12T14:59:59.970Z"
+  "updatedAt": "2018-04-16T10:11:21.575Z"
 }
