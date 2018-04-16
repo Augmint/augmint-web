@@ -6,15 +6,19 @@ const theme = {
         opacWhite: "rgba(255, 255, 255, 0.5)",
         primary: "#051d2d",
         secondary: "#ffad00",
-        messageBoxBackground: "#f8ffff",
-        messageBoxColor: "#276f86",
-        messageBoxErrorBackground: "#fff6f6",
-        messageBoxErrorColor: "#9f3a38",
-        messageBoxSuccessBackground: "#fcfff5",
-        messageBoxSuccessColor: "#2c662d"
+        lightCyan: "#f8ffff",
+        darkCyan: "#276f86",
+        lightRed: "#fff6f6",
+        darkRed: "#9f3a38",
+        lightGreen: "#fcfff5",
+        darkGreen: "#2c662d"
     },
     transitions: {
-        standard: "0.3s ease-in"
+        standard: "0.3s ease-in",
+        fast: "0.1s ease"
+    },
+    pageSize: {
+        maxSize: "1127px"
     }
 };
 

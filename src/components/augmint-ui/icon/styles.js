@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import theme from "styles/theme";
 
 const BaseIcon = `
-    height: 1em;
+    height: 1rem;
     text-align: center;
-    width: 1.18em;
+    width: 1.18rem;
 
     &.disabled {
         opacity: .45;
@@ -12,11 +13,11 @@ const BaseIcon = `
     &.close {
         cursor: pointer;
         position: absolute;
-        margin: 0em;
+        margin: 0;
         top: 10px;
         right: 10px;
         opacity: .7;
-        transition: opacity 0.1s ease;
+        transition: opacity ${theme.transitions.fast};
     }
 
     &.close:hover {

@@ -98,7 +98,7 @@ export class EthSubmissionErrorPanel extends React.Component {
         const { children, error, ...other } = this.props;
         const receipt = error && error.receipt ? error.receipt : null;
         const panel = !error ? null : (
-            <MsgPanel error={error ? true : false} {...other}>
+            <MsgPanel error={!!error} {...other}>
                 {children}
                 {error && error.message}
                 {receipt && (

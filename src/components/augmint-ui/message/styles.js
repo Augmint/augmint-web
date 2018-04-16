@@ -3,9 +3,9 @@ import styled from "styled-components";
 import theme from "styles/theme";
 
 const BaseDiv = `
-    background: ${theme.colors.messageBoxBackground};
+    background: ${theme.colors.lightCyan};
     border-radius: 4px;
-    color: ${theme.colors.messageBoxColor};
+    color: ${theme.colors.darkCyan};
     font-size: 16px;
     font-smoothing: antialiased;
     min-height: 1em;
@@ -21,13 +21,13 @@ const BaseDiv = `
     }
 
     &.error {
-      background: ${theme.colors.messageBoxErrorBackground};
-      color: ${theme.colors.messageBoxErrorColor};
+      background: ${theme.colors.lightRed};
+      color: ${theme.colors.darkRed};
     }
 
     &.success {
-      background: ${theme.colors.messageBoxSuccessBackground};
-      color: ${theme.colors.messageBoxSuccessColor};
+      background: ${theme.colors.lightGreen};
+      color: ${theme.colors.darkGreen};
     }
 `;
 

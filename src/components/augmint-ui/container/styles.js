@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { media } from "styles/media";
+import theme from "styles/theme";
 
 const BaseDiv = `
     display: block;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1127px;
+    max-width: ${theme.pageSize.maxSize};
 `;
 
 export const StyledDiv = styled.div`
@@ -17,8 +18,8 @@ export const StyledDiv = styled.div`
       max-width: 723px;
     `};
     ${media.tablet`
-      margin-left: 1em;
-      margin-right: 1em;
+      margin-left: 1rem;
+      margin-right: 1rem;
       max-width: 100%;
     `};
 `;
