@@ -27,6 +27,7 @@ class NewLoanForm extends React.Component {
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
         this.minToken = Validations.minTokenAmount(this.props.product.minDisbursedAmountInToken);
+        this.maxLoanAmount = Validations.maxLoanAmount(this.props.product.maxLoanAmount);
     }
 
     onLoanTokenAmountChange(e) {
@@ -118,7 +119,7 @@ class NewLoanForm extends React.Component {
                 {error && (
                     <EthSubmissionErrorPanel
                         error={error}
-                        header={<h3>Create loan failed</h3>}
+                        header="Create loan failed"
                         onDismiss={() => clearSubmitErrors()}
                     />
                 )}
@@ -129,7 +130,7 @@ class NewLoanForm extends React.Component {
                         name="loanTokenAmount"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
-                        validate={[Validations.required, Validations.tokenAmount, this.minToken]}
+                        validate={[Validations.required, Validations.tokenAmount, this.maxLoanAmount, this.minToken]}
                         normalize={Normalizations.twoDecimals}
                         onChange={this.onLoanTokenAmountChange}
                         labelPosition="right"

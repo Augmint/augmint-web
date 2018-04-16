@@ -26,8 +26,10 @@ export default function LoanProductDetails(props) {
                 <Col>{prod.collateralRatio * 100}%</Col>
             </Row>
             <Row>
-                <Col>Min. payout:</Col>
-                <Col>{prod.minDisbursedAmountInToken} A-EUR</Col>
+                <Col>Min / max payout:</Col>
+                <Col>
+                    {prod.minDisbursedAmountInToken} A-EUR / {prod.maxLoanAmount} A-EUR
+                </Col>
             </Row>
             <Row>
                 <Col>
