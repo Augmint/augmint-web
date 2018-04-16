@@ -111,7 +111,9 @@ class App extends React.Component {
                     </Switch>
                 </div>
                 <div className="Site-footer">
-                    <AppFooter />
+                    <AppFooter
+                        web3Connect={this.props.web3Connect}
+                    />
                 </div>
             </div>
         );

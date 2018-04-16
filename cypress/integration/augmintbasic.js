@@ -1,6 +1,6 @@
 describe("Augmint base", function() {
     it("Under the hood", function() {
-        cy.visit("/under-the-hood"); // TODO: expose link on UI to avoid need for slow reconneect from visit()
+        cy.get("[data-testid=underTheHoodLink]").click();
 
         cy.get("[data-testid=baseInfoLink]").click();
         cy.get("[data-testid=web3ConnectionInfo]").contains("connected");
