@@ -4,6 +4,7 @@ Wrapper for the whole App
 */
 import "semantic/dist/semantic.min.css";
 import "./site.css";
+import "assets/fontawesome/css/fontawesome-all.css";
 
 import "styles/global";
 
