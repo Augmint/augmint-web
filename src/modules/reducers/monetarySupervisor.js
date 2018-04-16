@@ -163,7 +163,7 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         monetarySupervisor.totalLoanAmount(),
         monetarySupervisor.totalLockedAmount(),
 
-        monetarySupervisor.getParams(),
+        monetarySupervisor.ltdParams(),
 
         monetarySupervisor.getMaxLockAmountAllowedByLtd(),
         monetarySupervisor.getMaxLoanAmountAllowedByLtd()
