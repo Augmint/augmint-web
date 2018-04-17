@@ -6,7 +6,7 @@ export function TransferFeeToolTip(props) {
 
     return (
         <ToolTip header="A-EUR transfer fees">
-            Fee: {feePt}%<br />
+            Fee: {feePt * 100}%<br />
             Min fee: {feeMin} A-EUR
             <br />
             Max fee: {feeMax} A-EUR <br />
