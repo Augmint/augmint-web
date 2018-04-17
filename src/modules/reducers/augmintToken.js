@@ -160,7 +160,7 @@ async function getAugmintTokenInfo(augmintToken) {
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
     const decimalsDiv = 10 ** decimals;
-    console.debug(feeAccountContract);
+
     const [transferFeeStruct, bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
         feeAccountContract.instance.transferFee(),
         augmintToken.balanceOf(feeAccountAddress),
