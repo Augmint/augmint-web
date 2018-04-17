@@ -161,22 +161,23 @@ Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 12, o
 });
 
 // issue AEUR to account
-Cypress.Commands.add("issueTo", (amount, to, options = {}) => {
+Cypress.Commands.add("issueTo", (tokenAmount, to, options = {}) => {
     if (typeof to === "undefined") {
         to = accounts[0];
     }
 
     return monetarySupervisorInstance
-        .issueToReserve(amount, {
+        .issueToReserve(tokenAmount, {
             from: accounts[0],
             gas: 400000
         })
         .then(res => {
-            return augmintReservesInstance.withdrawTokens(
+            return augmintReservesInstance.withdraw(
                 augmintTokenInstance.address,
                 to,
-                amount,
-                "withdrawal for tests",
+                tokenAmount,
+                0,
+                "token withdrawal for tests",
                 { from: accounts[0] }
             );
         });
