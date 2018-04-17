@@ -237,6 +237,7 @@ function parseLoans(loansArray) {
             let isDue = false;
             let isRepayable = false;
             let isCollectable = false;
+            let collateralStatus;
 
             const state = bn_state.toNumber();
             switch (state) {
@@ -250,16 +251,20 @@ function parseLoans(loansArray) {
                         isRepayable = true;
                         loanStateText = "Open";
                     }
+                    collateralStatus = "in escrow";
                     break;
                 case 1:
                     loanStateText = "Repaid";
+                    collateralStatus = "released";
                     break;
                 case 2:
                     isCollectable = true;
+                    collateralStatus = "in escrow";
                     loanStateText = "Defaulted (not yet collected)";
                     break;
                 case 3:
                     loanStateText = "Defaulted and collected";
+                    collateralStatus = "collected & leftover refunded";
                     break;
                 default:
                     loanStateText = "Invalid state";
@@ -270,6 +275,7 @@ function parseLoans(loansArray) {
                 borrower: "0x" + borrower.toString(16),
                 productId: bn_productId.toNumber(),
                 state,
+                collateralStatus,
                 loanStateText,
                 collateralEth: bn_collateralAmount / ONE_ETH_IN_WEI,
                 repaymentAmount: bn_repaymentAmount / decimalsDiv,

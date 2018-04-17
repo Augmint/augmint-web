@@ -24,35 +24,6 @@ import { RepayHelp } from "./components/RepayHelp";
 //import { push } from 'react-router-redux'
 //import { Route, Redirect } from 'react-router-dom';
 
-function LoanDetailsWithStatusCheck(props) {
-    const loan = props.loan;
-    let msg;
-
-    if (loan.loanState === 0) {
-        msg = (
-            <WarningPanel header="Can't repay">
-                This loan is not yet due
-                <br />(loan id: {loan.id}){" "}
-            </WarningPanel>
-        );
-    } else if (loan.loanState !== 5) {
-        msg = (
-            <WarningPanel header="Can't repay">
-                This loan is in "{loan.loanStateText}" status. <br />
-                (Loan id: {loan.loanId}){" "}
-            </WarningPanel>
-        );
-    }
-
-    return (
-        <div>
-            {msg}
-            <h4>Selected Loan</h4>
-            <LoanDetails loan={loan} />
-        </div>
-    );
-}
-
 class RepayLoanPage extends React.Component {
     constructor(props) {
         super(props);
@@ -112,6 +83,7 @@ class RepayLoanPage extends React.Component {
 
     render() {
         const { submitSucceeded, clearSubmitErrors, userAccount } = this.props;
+        const loan = this.state.loan;
 
         if (this.state.isLoading) {
             return <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>;
@@ -143,7 +115,15 @@ class RepayLoanPage extends React.Component {
                     {!submitSucceeded &&
                         !this.state.isLoading && (
                             <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                <LoanDetailsWithStatusCheck loan={this.state.loan} />
+                                {loan.state !== 5 &&
+                                    loan.state !== 0 && (
+                                        <WarningPanel header="Can't repay">
+                                            This loan is in "{loan.loanStateText}" status.
+                                        </WarningPanel>
+                                    )}
+                                <h4>Selected Loan</h4>
+                                <LoanDetails loan={loan} />
+
                                 {this.state.loan.isRepayable &&
                                     !this.state.loan.isDue && (
                                         <p>This loan is not due soon but you can repay early without any extra fee.</p>
