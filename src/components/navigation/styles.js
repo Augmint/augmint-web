@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { ifProp } from 'styled-tools';
+import styled from "styled-components";
+import { ifProp } from "styled-tools";
 
 import { NavLink } from "react-router-dom";
 
-import theme from 'styles/theme';
-import { media, mediaopacity } from 'styles/media';
+import theme from "styles/theme";
+import { media, mediaopacity } from "styles/media";
 
 export const StyleNavList = styled.ul`
     display: flex;
@@ -16,7 +16,7 @@ export const StyleNavList = styled.ul`
       position: absolute;
       left: 0;
       right: 0;
-    `}
+    `};
 `;
 
 export const StyleNavLink = styled(NavLink)`
@@ -24,7 +24,7 @@ export const StyleNavLink = styled(NavLink)`
     letter-spacing: 2.6px;
     text-transform: uppercase;
     white-space: nowrap;
-    color: ${ifProp('active', theme.colors.white, theme.colors.opacWhite)};
+    color: ${ifProp("active", theme.colors.white, theme.colors.opacWhite)};
     transition: color ${theme.transitions.standard};
 
     &:hover,
@@ -37,27 +37,31 @@ export const StyleNavItem = styled.li`
     display: flex;
     ${media.tablet`
       text-align: center;
-    `}
-
-    & + li {
+    `} & + li {
         margin-left: 8px;
         ${media.tablet`
           margin-left: 0px;
-        `}
+        `};
     }
 
     & a {
-      padding: 15px 5px;
-      width: 100%;
-      ${media.tablet`
+        padding: 15px 5px;
+        width: 100%;
+        ${media.tablet`
         font-size: 18px;
-      `}
+      `};
+    }
+
+    &.augmint img {
+        max-height: 50px;
+        max-width: none;
     }
 `;
 
 export const StyledLogoContainer = styled.div`
     display: flex;
     justify-content: center;
+    min-height: 80px;
 `;
 
 export const StyledLogo = styled.img`
@@ -69,11 +73,10 @@ export const HamburgerMenu = styled.img`
     height: 32px;
     width: 32px;
     visibility: hidden;
-    ${mediaopacity.handheld`opacity: .8`}
-    ${media.tablet`
+    ${mediaopacity.handheld`opacity: .8`} ${media.tablet`
       display: block;
       visibility: visible;
-    `}
+    `};
 `;
 
 export const StyledNavContainer = styled.div`
@@ -87,8 +90,7 @@ export const StyledNavContainer = styled.div`
     background-color: ${theme.colors.primary};
 
     &.opened {
-        ${mediaopacity.handheld`opacity: .95`}
-        height: 100%;
+        ${mediaopacity.handheld`opacity: .95`} height: 100%;
     }
 
     & ${StyleNavList}.show {

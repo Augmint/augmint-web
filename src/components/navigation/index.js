@@ -11,6 +11,8 @@ import {
     HamburgerMenu
 } from "./styles";
 
+import { AugmintIcon } from "components/Icons";
+
 import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
@@ -107,6 +109,11 @@ export default class AppMenu extends React.Component {
                                     Reserves
                                 </AppMenuItem>
                             )}
+                            {showConnection && (
+                                <StyleNavItem className="augmint">
+                                    <AugmintIcon />
+                                </StyleNavItem>
+                            )}
                         </StyleNavList>
                     </div>
                     {!showConnection &&
@@ -119,11 +126,13 @@ export default class AppMenu extends React.Component {
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
                 <StyledLogoContainer>
-                    <StyledLogo
-                        src={augmintLogo}
-                        srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
-                        alt="Augmint logo"
-                    />
+                    {!showConnection && (
+                        <StyledLogo
+                            src={augmintLogo}
+                            srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
+                            alt="Augmint logo"
+                        />
+                    )}
                 </StyledLogoContainer>
             </div>
         );
