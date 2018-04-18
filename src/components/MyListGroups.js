@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, Header } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
+import Header from "./augmint-ui/header";
 
 export function MyListGroup(props) {
     const { children, divided = "vertically", container = false, style = { margin: "0em 0em" }, ...other } = props;
