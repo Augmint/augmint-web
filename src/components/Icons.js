@@ -98,4 +98,4 @@ export const WaitIcon = () => <Image src={waitSVG} />;
 
 export const PremiumIcon = () => <Image src={premiumSVG} />;
 
-export const AugmintIcon = () => <Image src={augmintSVG} />;
+export const AugmintIcon = () => <Image src={augmintSVG} className="augmint" />;

@@ -7,6 +7,7 @@ import {
     StyleNavList,
     StyledLogoContainer,
     StyledNavContainer,
+    StyledNavLeftSide,
     StyledLogo,
     HamburgerMenu
 } from "./styles";
@@ -47,13 +48,14 @@ export default class AppMenu extends React.Component {
         return (
             <div>
                 <StyledNavContainer className={this.props.showMenu ? "opened" : ""}>
-                    <div>
+                    <StyledNavLeftSide>
                         <HamburgerMenu
                             src={this.props.showMenu ? close : hamburgerMenu}
                             onClick={this.toggleMenu}
                             id="hamburgerMenu"
                             className={this.props.showMenu ? "opened" : ""}
                         />
+                        {showConnection && <AugmintIcon className="augmint" />}
                         <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
                             <AppMenuItem isActive={() => currentLocation === "/"} to="/">
                                 Home
@@ -109,13 +111,8 @@ export default class AppMenu extends React.Component {
                                     Reserves
                                 </AppMenuItem>
                             )}
-                            {showConnection && (
-                                <StyleNavItem className="augmint">
-                                    <AugmintIcon />
-                                </StyleNavItem>
-                            )}
                         </StyleNavList>
-                    </div>
+                    </StyledNavLeftSide>
                     {!showConnection &&
                         !isConnected && (
                             <Button type="a" data-testid="useAEurButton" to="/tryit" color="primary">

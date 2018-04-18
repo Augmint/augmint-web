@@ -64,6 +64,18 @@ export const StyledLogoContainer = styled.div`
     min-height: 80px;
 `;
 
+export const StyledNavLeftSide = styled.div`
+    display: flex;
+
+    & img.augmint {
+        max-height: 50px;
+        padding-right: 10px;
+        ${media.tablet`
+          display: none;
+        `};
+    }
+`;
+
 export const StyledLogo = styled.img`
     margin-top: 80px;
 `;
