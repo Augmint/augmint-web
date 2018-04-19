@@ -7,9 +7,12 @@ import {
     StyleNavList,
     StyledLogoContainer,
     StyledNavContainer,
+    StyledNavLeftSide,
     StyledLogo,
     HamburgerMenu
 } from "./styles";
+
+import { AugmintIcon } from "components/Icons";
 
 import augmintLogo from "assets/images/logo/logo.png";
 import augmintLogo2x from "assets/images/logo/logo@2x.png";
@@ -45,13 +48,14 @@ export default class AppMenu extends React.Component {
         return (
             <div>
                 <StyledNavContainer className={this.props.showMenu ? "opened" : ""}>
-                    <div>
+                    <StyledNavLeftSide>
                         <HamburgerMenu
                             src={this.props.showMenu ? close : hamburgerMenu}
                             onClick={this.toggleMenu}
                             id="hamburgerMenu"
                             className={this.props.showMenu ? "opened" : ""}
                         />
+                        {showConnection && <AugmintIcon className="augmint" />}
                         <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
                             <AppMenuItem isActive={() => currentLocation === "/"} to="/">
                                 Home
@@ -108,7 +112,7 @@ export default class AppMenu extends React.Component {
                                 </AppMenuItem>
                             )}
                         </StyleNavList>
-                    </div>
+                    </StyledNavLeftSide>
                     {!showConnection &&
                         !isConnected && (
                             <Button type="a" data-testid="useAEurButton" to="/tryit" color="primary">
@@ -119,11 +123,13 @@ export default class AppMenu extends React.Component {
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
                 <StyledLogoContainer>
-                    <StyledLogo
-                        src={augmintLogo}
-                        srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
-                        alt="Augmint logo"
-                    />
+                    {!showConnection && (
+                        <StyledLogo
+                            src={augmintLogo}
+                            srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
+                            alt="Augmint logo"
+                        />
+                    )}
                 </StyledLogoContainer>
             </div>
         );
