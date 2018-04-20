@@ -15,7 +15,7 @@ export function MyListGroup(props) {
 export function MyListGroupRow(props) {
     const { children, header, style /*= { margin: "0em 0em" }*/, ...other } = props;
     return (
-        <Grid style={style} {...other}>
+        <Grid style={style} wrap={false} {...other}>
             {header && <h3>{header}</h3>}
             {children}
         </Grid>
@@ -55,7 +55,7 @@ export function MyGridTable(props) {
 export function MyGridTableRow(props) {
     const { children, style = { padding: "0 0.5em" }, ...other } = props;
     return (
-        <Grid style={style} {...other}>
+        <Grid style={style} wrap={false} {...other}>
             {children}
         </Grid>
     );
