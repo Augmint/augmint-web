@@ -20,8 +20,10 @@ export default function LoanDetails(props) {
             </Row>
 
             <Row>
-                <Col>Collateral held:</Col>
-                <Col>{loan.collateralEth} ETH</Col>
+                <Col>Collateral:</Col>
+                <Col>
+                    {loan.collateralEth} ETH ({loan.collateralStatus})
+                </Col>
             </Row>
 
             <Row>
@@ -33,7 +35,7 @@ export default function LoanDetails(props) {
 
             <Row>
                 <Col>Disbursed on:</Col>
-                <Col>{loan.disbursementDateText}</Col>
+                <Col>{loan.disbursementTimeText}</Col>
             </Row>
 
             <Row>

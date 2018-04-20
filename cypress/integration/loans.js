@@ -48,7 +48,9 @@ describe("Loans", function() {
             cy.get("[data-testid=EthReceiptReceivedPanel]").should("contain", "Transaction receipt received");
             cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
+            cy
+                .get("[data-testid=loansToCollectBlock]", { timeout: 8000 }) // increase timeout b/c of occassional Travis timeouts
+                .should("contain", "No defaulted and uncollected loan.");
         });
     });
 

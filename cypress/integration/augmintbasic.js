@@ -2,6 +2,8 @@ describe("Augmint base", function() {
     it("Under the hood", function() {
         cy.get("[data-testid=underTheHoodLink]").click();
 
+        cy.get("[data-testid=dismissLegacyBalanceButton-0x5d77f09a3703be84d84810379067a6d9ad759582]").click();
+
         cy.get("[data-testid=baseInfoLink]").click();
         cy.get("[data-testid=web3ConnectionInfo]").contains("connected");
         cy.get("[data-testid=userAccountTokenBalance]").should("not.contain", "?");
