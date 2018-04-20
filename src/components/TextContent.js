@@ -1,5 +1,6 @@
 import React from "react";
-import { Container, Header, Segment, Grid } from "semantic-ui-react";
+import { Header, Segment, Grid } from "semantic-ui-react";
+import Container from "./augmint-ui/container";
 
 export function Theader(props) {
     // TODO: this doesn't align the header container to center when embedded in children (and not from Tsegment header prop)
@@ -42,13 +43,8 @@ export function Tsegment(props) {
         ...other
     } = props;
     return (
-        <Segment
-            vertical={vertical}
-            textAlign={textAlign}
-            style={style}
-            {...other}
-        >
-            <Container text>
+        <Segment vertical={vertical} textAlign={textAlign} style={style} {...other}>
+            <Container text="true">
                 {header && <Theader header={header} subheader={subheader} />}
                 <Grid container stackable>
                     {children}
