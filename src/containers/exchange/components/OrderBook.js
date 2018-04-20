@@ -12,14 +12,14 @@ import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 const OrderItem = props => {
     const { order, userAccountAddress } = props;
     const ret = [
-        <Col textAlign="right" width={3} key={`${order.orderType}-amount`}>
+        <Col width={3} key={`${order.orderType}-amount`}>
             {order.orderType === TOKEN_SELL && <span>{order.amount} A€ </span>}
             {order.orderType === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
         </Col>,
-        <Col width={2} textAlign="right" key={`${order.orderType}-price`}>
+        <Col width={2} key={`${order.orderType}-price`}>
             {order.price}
         </Col>,
-        <Col textAlign="right" key={`${order.orderType}-action`}>
+        <Col width={2} key={`${order.orderType}-action`}>
             <MoreInfoTip>
                 {order.orderType === TOKEN_SELL && (
                     <p>
@@ -58,7 +58,7 @@ const OrderList = props => {
 
     for (let i = 0; i < listLen; i++) {
         itemList.push(
-            <Row columns={7} key={`ordersRow-${i}`}>
+            <Row wrap={false} key={`ordersRow-${i}`}>
                 {i < buyOrders.length ? (
                     <OrderItem order={buyOrders[i]} userAccountAddress={userAccountAddress} />
                 ) : (
@@ -77,18 +77,23 @@ const OrderList = props => {
 
     return (
         <MyListGroup>
-            <Row textAlign="center" columns={2}>
-                <Col header="Buy A-EUR">{totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}</Col>
-                <Col header="Sell A-EUR">{totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}</Col>
+            <Row wrap={false} halign="center">
+                <Col width={3} header="Buy A-EUR" style={{ textAlign: "center" }}>
+                    {totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
+                </Col>
+                <Col width={1} />
+                <Col width={3} header="Sell A-EUR" style={{ textAlign: "center" }}>
+                    {totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}
+                </Col>
             </Row>
-            <Row columns={7} textAlign="center">
+            <Row wrap={false} halign="center">
                 <Col width={3}>
                     <strong>Amount</strong>
                 </Col>
                 <Col width={2}>
                     <strong>Price</strong> <PriceToolTip />
                 </Col>
-                <Col />
+                <Col width={2} />
                 <Col width={1} />
                 <Col width={3}>
                     <strong>Amount</strong>
@@ -96,7 +101,7 @@ const OrderList = props => {
                 <Col width={2}>
                     <strong>Price</strong> <PriceToolTip />
                 </Col>
-                <Col />
+                <Col width={2} />
             </Row>
             {itemList}
         </MyListGroup>
