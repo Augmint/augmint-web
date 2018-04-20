@@ -1,5 +1,4 @@
 import React from "react";
-// import { Grid } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import Header from "./augmint-ui/header";
 
