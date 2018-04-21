@@ -33,6 +33,7 @@ const initialState = {
 
         totalSupply: "?",
 
+        feeAccountContract: null,
         feeAccount: null,
         feeAccountTokenBalance: "?",
         feeAccountEthBalance: "?"
@@ -155,7 +156,10 @@ async function getAugmintTokenInfo(augmintToken) {
         augmintToken.decimals(),
         augmintToken.feeAccount()
     ]);
+
+    // TODO: move feeAccount to its own redux state same as other contracts
     const feeAccountContract = SolidityContract.connectNew(store.getState().web3Connect, feeAccount_artifacts);
+    const feeAccount = { contract: feeAccountContract };
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
@@ -185,7 +189,8 @@ async function getAugmintTokenInfo(augmintToken) {
 
         feeAccountAddress,
         feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv,
-        feeAccountEthBalance
+        feeAccountEthBalance,
+        feeAccount
     };
 }
 

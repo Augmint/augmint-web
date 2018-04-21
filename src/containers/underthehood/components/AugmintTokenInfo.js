@@ -18,7 +18,10 @@ export function AugmintTokenInfo(props) {
             <p>
                 Fee account: <small>{contract.info.feeAccountAddress}</small>
             </p>
-            <p>Fee account balance: {contract.info.feeAccountTokenBalance} A-EUR</p>
+            <p>
+                Fee account balance: {contract.info.feeAccountTokenBalance} A-EUR | {contract.info.feeAccountEthBalance}{" "}
+                ETH
+            </p>
             <ContractBaseInfo contractName="AugmintToken" contract={contract} refreshCb={handleRefreshClick} />
         </Pblock>
     );
