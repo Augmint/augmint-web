@@ -34,6 +34,8 @@ class EthereumTxStatus extends React.Component {
                     let txInfo;
                     let orderId;
 
+                    const gasUsed = tx.receipt ? tx.receipt.gasUsed : "waiting for receipt...";
+
                     if (tx.receipt && tx.receipt.events.NewLoan) {
                         const vals = tx.receipt.events.NewLoan.returnValues;
 
@@ -90,7 +92,7 @@ class EthereumTxStatus extends React.Component {
 
                                         <p>
                                             <small>
-                                                Gas used: {tx.receipt.gasUsed}
+                                                Gas used: {gasUsed}
                                                 <br />
                                                 Tx hash: {tx.transactionHash}
                                             </small>
@@ -102,7 +104,7 @@ class EthereumTxStatus extends React.Component {
                                 <SuccessPanel
                                     data-testid="EthConfirmationReceivedPanel"
                                     data-test-orderid={orderId}
-                                    data-test-gasused={tx.receipt.gasUsed}
+                                    data-test-gasused={gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                 >
@@ -112,10 +114,7 @@ class EthereumTxStatus extends React.Component {
 
                                     <p>
                                         <small>
-                                            Gas used:{" "}
-                                            {tx.receipt
-                                                ? tx.receipt.gasUsed
-                                                : "waiting for receipt..." /* confirmation 0 doesn't have receipt on Rinkeby */}
+                                            Gas used: {gasUsed}
                                             <br />
                                             Tx hash: {tx.transactionHash}
                                         </small>
