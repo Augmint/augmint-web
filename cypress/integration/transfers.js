@@ -40,8 +40,8 @@ describe("Transfers", function() {
             cy.contains("Transfer " + amount + " A-EUR to " + toAddress);
         });
 
-        cy.get("[data-testid=EthReceiptReceivedPanel]").contains("Transaction receipt received");
-        cy.get("[data-testid=EthReceiptReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+        cy.get("[data-testid=EthConfirmationReceivedPanel]").contains("confirmation");
+        cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
         cy
             .get("[data-testid=transactionHash]")
