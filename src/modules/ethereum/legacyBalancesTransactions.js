@@ -13,11 +13,12 @@ const ACCEPTED_LEGACY_AEUR_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
+    999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
 
     // rinkeby
     4: [
-        "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA" //https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
+        "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA", //https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
+        "0x03fe291f8a30e54cd05459f368d554b40784ca78"
     ]
 };
 

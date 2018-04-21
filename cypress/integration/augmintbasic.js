@@ -2,7 +2,7 @@ describe("Augmint base", function() {
     it("Under the hood", function() {
         cy.get("[data-testid=underTheHoodLink]").click();
 
-        cy.get("[data-testid=dismissLegacyBalanceButton-0x5d77f09a3703be84d84810379067a6d9ad759582]").click();
+        cy.get("[data-testid=dismissLegacyBalanceButton-0x9f5420ec1348df8de8c85dab8d240ace122204c5]").click();
 
         cy.get("[data-testid=baseInfoLink]").click();
         cy.get("[data-testid=web3ConnectionInfo]").contains("connected");
