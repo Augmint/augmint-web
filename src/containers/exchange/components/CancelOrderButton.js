@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 import { Button, Modal, Header, Icon } from "semantic-ui-react";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
-import { flashSuccessMessage } from "redux-flash";
 
 class CancelOrderButton extends React.Component {
     async submitCancel(values) {
@@ -25,12 +24,9 @@ class CancelOrderButton extends React.Component {
         } else {
             this.setState({
                 submitting: false,
+                confirmOpen: false,
                 error: null,
                 result: res.result
-            });
-            this.props.flashSuccessMessage("Order cancelled", {
-                timeout: false,
-                props: { result: res.result, order: order }
             });
             return;
         }
@@ -61,6 +57,7 @@ class CancelOrderButton extends React.Component {
         const CancelButton = (
             <a
                 href={`#cancelOrder-${order.id}`}
+                data-testid={`cancelOrderButton-${order.id}`}
                 onClick={event => {
                     event.preventDefault();
                     this.setState({ confirmOpen: true });
@@ -71,12 +68,24 @@ class CancelOrderButton extends React.Component {
             </a>
         );
         return (
-            <Modal size="small" open={confirmOpen} onClose={this.handleClose} trigger={CancelButton}>
+            <Modal
+                size="small"
+                open={confirmOpen}
+                closeOnDimmerClick={false}
+                onClose={this.handleClose}
+                trigger={CancelButton}
+            >
                 <Header icon="question" content="Cancel your order" />
 
                 <Modal.Content>
                     {error && (
-                        <EthSubmissionErrorPanel dismissable error={error} header="Order cancel failed.">
+                        <EthSubmissionErrorPanel
+                            onDismiss={() => {
+                                this.setState({ error: null });
+                            }}
+                            error={error}
+                            header="Order cancel failed."
+                        >
                             <p>Error cancelling the order.</p>
                         </EthSubmissionErrorPanel>
                     )}
@@ -101,7 +110,7 @@ class CancelOrderButton extends React.Component {
 
                     <Button
                         primary
-                        className="ConfirmCancelOrderButton"
+                        data-testid={`confirmCancelOrderButton-${order.id}`}
                         id={`ConfirmCancelOrderButton-${order.id}`}
                         disabled={submitting}
                         onClick={this.submitCancel}
@@ -118,6 +127,6 @@ const mapStateToProps = state => ({
     isLoading: state.exchange.isLoading
 });
 
-const mapDispatchToProps = { cancelOrder, flashSuccessMessage };
+const mapDispatchToProps = { cancelOrder };
 
 export default (CancelOrderButton = connect(mapStateToProps, mapDispatchToProps)(CancelOrderButton));

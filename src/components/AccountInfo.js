@@ -9,7 +9,7 @@ export class AccountInfo extends React.Component {
         const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading } = this.props;
         return (
             <Pblock
-                testid="accountInfoBlock"
+                data-testid="accountInfoBlock"
                 className="accountInfo"
                 loading={
                     augmintToken.isLoading ||
@@ -21,9 +21,11 @@ export class AccountInfo extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
 
                 <p>Account: {account.address}</p>
-                <p>ETH: {account.ethBalance}</p>
                 <p>
-                    A-EUR: <span id="userAEurBalance">{account.tokenBalance}</span>
+                    ETH: <span data-testid="userEthBalance">{account.ethBalance}</span>
+                </p>
+                <p>
+                    A-EUR: <span data-testid="userAEurBalance">{account.tokenBalance}</span>
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Pblock>

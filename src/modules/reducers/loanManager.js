@@ -8,6 +8,8 @@ import loanManagerArtifacts from "contractsBuild/LoanManager.json";
 
 import { fetchLoansToCollectTx, fetchProductsTx } from "modules/ethereum/loanTransactions";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const LOANMANAGER_CONNECT_REQUESTED = "loanManager/LOANMANAGER_CONNECT_REQUESTED";
 export const LOANMANAGER_CONNECT_SUCCESS = "loanManager/LOANMANAGER_CONNECT_SUCCESS";
 export const LOANMANAGER_CONNECT_ERROR = "loanManager/LOANMANAGER_CONNECT_ERROR";
@@ -42,7 +44,8 @@ const initialState = {
         productCount: null,
 
         ratesAddress: "?",
-        augmintTokenAddress: "?"
+        augmintTokenAddress: "?",
+        monetarySupervisorAddress: "?"
     }
 };
 
@@ -174,7 +177,6 @@ export const refreshLoanManager = () => {
 };
 
 async function getLoanManagerInfo(loanManager) {
-    const ONE_ETH = 1000000000000000000;
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
@@ -185,6 +187,7 @@ async function getLoanManagerInfo(loanManager) {
         productCount,
         augmintTokenAddress,
         ratesAddress,
+        monetarySupervisorAddress,
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
@@ -194,6 +197,7 @@ async function getLoanManagerInfo(loanManager) {
 
         loanManager.augmintToken(),
         loanManager.rates(),
+        loanManager.monetarySupervisor(),
 
         web3.eth.getBalance(loanManager.address),
         augmintToken.balanceOf(loanManager.address)
@@ -202,17 +206,18 @@ async function getLoanManagerInfo(loanManager) {
     return {
         chunkSize: chunkSize.toNumber(),
         bn_weiBalance,
-        ethBalance: bn_weiBalance / ONE_ETH,
+        ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
         tokenBalance: bn_tokenBalance / decimalsDiv,
         loanCount: loanCount.toNumber(),
         productCount: productCount.toNumber(),
         augmintTokenAddress,
-        ratesAddress
+        ratesAddress,
+        monetarySupervisorAddress
     };
 }
 
-export function fetchProducts() {
+export function fetchLoanProducts() {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_PRODUCTLIST_REQUESTED

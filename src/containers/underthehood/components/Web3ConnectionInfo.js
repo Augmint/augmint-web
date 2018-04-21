@@ -17,19 +17,21 @@ export default class Web3ConnectionInfo extends React.Component {
     }
 
     render() {
-        const { isLoading, isConnected, web3Instance, error, info } = this.props.web3Connect;
+        const { isLoading, isConnected, web3Instance, error, info, network } = this.props.web3Connect;
         const handleRefreshClick = e => {
             e.preventDefault();
             store.dispatch(setupWeb3());
         };
         return (
             <Pblock header="Web3 connection">
-                <p testid="web3ConnectionInfo">
+                <p data-testid="web3ConnectionInfo">
                     {isConnected ? "connected - " + web3Instance.currentProvider.constructor.name : "not connected"} |{" "}
                     {isLoading ? "Loading..." : "not loading"}
                 </p>
                 <p>Info:</p>
                 <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(info)}</pre>
+                <p>Network:</p>
+                <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(network)}</pre>
 
                 {error ? <ErrorPanel header="Error">{error.message}</ErrorPanel> : <p>No connection error</p>}
 

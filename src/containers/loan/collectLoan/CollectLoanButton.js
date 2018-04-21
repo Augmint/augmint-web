@@ -63,7 +63,7 @@ class CollectLoanButton extends React.Component {
                         <Form onSubmit={handleSubmit(this.handleSubmit)}>
                             <Button
                                 size="large"
-                                className="collectLoanButton"
+                                data-testid="collectLoanButton"
                                 primary
                                 disabled={submitting || isLoading || loansToCollect.length === 0}
                             >
@@ -76,7 +76,7 @@ class CollectLoanButton extends React.Component {
 
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful collection of {this.state.result.loansCollected} loans</h3>}
+                        header="Collect loan(s) submitted"
                         onDismiss={() => reset()}
                         result={this.state.result}
                     />

@@ -27,6 +27,7 @@ export default () => {
 const setupListeners = () => {
     const augmintToken = store.getState().augmintToken.contract.ethersInstance;
     augmintToken.onaugminttransfer = onAugmintTransfer;
+    // TODO: monetarySupervisor events: ParamsChanged, AcceptedLegacyAugmintTokenChanged,
 };
 
 const removeListeners = oldInstance => {

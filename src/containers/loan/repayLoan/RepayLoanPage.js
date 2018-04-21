@@ -24,35 +24,6 @@ import { RepayHelp } from "./components/RepayHelp";
 //import { push } from 'react-router-redux'
 //import { Route, Redirect } from 'react-router-dom';
 
-function LoanDetailsWithStatusCheck(props) {
-    const loan = props.loan;
-    let msg;
-
-    if (loan.loanState === 0) {
-        msg = (
-            <WarningPanel header="Can't repay">
-                This loan is not yet due
-                <br />(loan id: {loan.id}){" "}
-            </WarningPanel>
-        );
-    } else if (loan.loanState !== 5) {
-        msg = (
-            <WarningPanel header="Can't repay">
-                This loan is in "{loan.loanStateText}" status. <br />
-                (Loan id: {loan.loanId}){" "}
-            </WarningPanel>
-        );
-    }
-
-    return (
-        <div>
-            {msg}
-            <h4>Selected Loan</h4>
-            <LoanDetails loan={loan} />
-        </div>
-    );
-}
-
 class RepayLoanPage extends React.Component {
     constructor(props) {
         super(props);
@@ -111,7 +82,8 @@ class RepayLoanPage extends React.Component {
     }
 
     render() {
-        const { submitSucceeded, clearSubmitErrors } = this.props;
+        const { submitSucceeded, clearSubmitErrors, userAccount } = this.props;
+        const loan = this.state.loan;
 
         if (this.state.isLoading) {
             return <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>;
@@ -120,11 +92,7 @@ class RepayLoanPage extends React.Component {
         if (!this.state.isLoanFound) {
             return (
                 <ErrorPanel
-                    header={
-                        <h3>
-                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount.address}
-                        </h3>
-                    }
+                    header={`Can't find loan #${this.state.loanId} for current account ${userAccount.address}`}
                 />
             );
         }
@@ -139,7 +107,7 @@ class RepayLoanPage extends React.Component {
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
-                            header={<h3>Repay failed</h3>}
+                            header="Repay failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
                     )}
@@ -147,7 +115,15 @@ class RepayLoanPage extends React.Component {
                     {!submitSucceeded &&
                         !this.state.isLoading && (
                             <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                <LoanDetailsWithStatusCheck loan={this.state.loan} />
+                                {loan.state !== 5 &&
+                                    loan.state !== 0 && (
+                                        <WarningPanel header="Can't repay">
+                                            This loan is in "{loan.loanStateText}" status.
+                                        </WarningPanel>
+                                    )}
+                                <h4>Selected Loan</h4>
+                                <LoanDetails loan={loan} />
+
                                 {this.state.loan.isRepayable &&
                                     !this.state.loan.isDue && (
                                         <p>This loan is not due soon but you can repay early without any extra fee.</p>
@@ -155,7 +131,7 @@ class RepayLoanPage extends React.Component {
                                 {this.state.loan.isRepayable && (
                                     <Button
                                         primary
-                                        className="confirmRepayButton"
+                                        data-testid="confirmRepayButton"
                                         size="big"
                                         disabled={
                                             this.props.submitting ||
@@ -174,7 +150,7 @@ class RepayLoanPage extends React.Component {
 
                     {submitSucceeded && (
                         <EthSubmissionSuccessPanel
-                            header={<h3>Successful repayment</h3>}
+                            header="Repayment submitted"
                             result={this.state.result}
                             dismissable={false}
                         />

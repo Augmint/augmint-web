@@ -1,5 +1,8 @@
 import React from "react";
-import { Container, Message, Button, Icon } from "semantic-ui-react";
+import Button from "./augmint-ui/button";
+import Icon from "./augmint-ui/icon";
+import Container from "./augmint-ui/container";
+import Message from "./augmint-ui/message";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -18,15 +21,41 @@ export default class MsgPanel extends React.Component {
     }
 
     render() {
-        let { children, eth, dismissable, dismissed, onDismiss, header, ...other } = this.props;
+        const {
+            children,
+            eth,
+            icon,
+            dismissable,
+            dismissed,
+            onDismiss,
+            header,
+            loading,
+            error,
+            success,
+            ...other
+        } = this.props;
+        let className;
+
+        if (error) {
+            className = "error";
+        }
+
+        if (success) {
+            className = "success";
+        }
+
         return (
             (!this.state.dismissed || !dismissable) && (
                 <Container style={{ margin: "1em" }}>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} {...other}>
-                        <Message.Header>{header}</Message.Header>
-                        {children !== null && children}
+                    <Message onDismiss={onDismiss ? this.dismiss : null} className={className} {...other}>
+                        <h3>
+                            {icon && <Icon name={icon} loading={loading} />} {header}
+                        </h3>
+
+                        {children}
+
                         {onDismiss && (
-                            <Button as="a" onClick={this.dismiss}>
+                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
                                 OK
                             </Button>
                         )}
@@ -42,18 +71,13 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    return <MsgPanel success {...props} />;
+    const { success = true, icon = "check", ...other } = props;
+    return <MsgPanel success={success} icon={icon} {...other} />;
 }
 
 export function InfoPanel(props) {
-    const { info = true, icon = "info", header, ...other } = props;
-    return (
-        <MsgPanel info={info} icon={icon ? true : false} {...other}>
-            {icon && <Icon name={icon} />}
-            <Message.Header>{header}</Message.Header>
-            {props.children}
-        </MsgPanel>
-    );
+    const { info = true, icon = "info", ...other } = props;
+    return <MsgPanel info={info} icon={icon} {...other} />;
 }
 
 export function WarningPanel(props) {
@@ -65,40 +89,33 @@ export function ErrorPanel(props) {
 }
 
 export function LoadingPanel(props) {
-    const { info = true, header, ...other } = props;
-    return (
-        <MsgPanel info={info} icon {...other}>
-            <Icon name="circle notched" loading />
-            <Message.Header>{header}</Message.Header>
-            {props.children}
-        </MsgPanel>
-    );
+    const { info = true, icon = "circle notched", loading = true, ...other } = props;
+    return <MsgPanel info={info} icon={icon} loading={loading} {...other} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
     render() {
         const { children, error, ...other } = this.props;
-        const txResult = error && error.txResult ? error.txResult : null;
-        return (
-            <MsgPanel error {...other}>
+        const receipt = error && error.receipt ? error.receipt : null;
+        const panel = !error ? null : (
+            <MsgPanel error={!!error} {...other}>
                 {children}
                 {error && error.message}
-                {txResult && (
+                {receipt && (
                     <div>
-                        <p>Tx hash: {txResult.receipt.transactionHash}</p>
-                        <p>
-                            Gas used: {txResult.receipt.gasUsed} (from {error.gasEstimate} provided)
-                        </p>
+                        <p>Tx hash: {receipt.transactionHash}</p>
+                        <p>Gas used: {receipt.gasUsed}</p>
                     </div>
                 )}
                 {error && <ErrorDetails details={error.details} />}
             </MsgPanel>
         );
+        return panel;
     }
 }
 
 EthSubmissionErrorPanel.defaultProps = {
-    header: <h3>Submission error</h3>,
+    header: "Submission error",
     dismissable: false // pass onDismiss={() => {clearSubmitErrors();}} instead
 };
 
@@ -107,25 +124,24 @@ export class EthSubmissionSuccessPanel extends React.Component {
         const { children, result, testid = "EthSubmissionSuccessPanel", ...other } = this.props;
 
         return (
-            <MsgPanel testid={testid} {...other}>
+            <MsgPanel data-testid={testid} {...other}>
                 {children}
-                <small>
-                    <p>
-                        Tx hash: <small>{result.eth.result.receipt.transactionHash}</small>
-                    </p>
-                    <p>
-                        Gas used: {result.eth.result.receipt.gasUsed.toString()} (from {result.eth.gasEstimate}{" "}
-                        provided)
-                    </p>
-                </small>
+                <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
+                <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
+                <p>
+                    <small>
+                        Tx hash: <span data-testid="transactionHash">{result.transactionHash}</span>
+                        <br />
+                    </small>
+                </p>
             </MsgPanel>
         );
     }
 }
 
 EthSubmissionSuccessPanel.defaultProps = {
-    success: true,
-    header: <h3>Successfull transaction</h3>,
+    info: true,
+    header: "Transaction sent",
     dismissable: true
 };
 

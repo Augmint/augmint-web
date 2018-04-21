@@ -1,15 +1,12 @@
 /*
 TODO: form client side validation. eg:
-    - A-EUR balance check
-    - address format check
-    - number  format check
-    - To: can't be the same as From:
+    - address checksum and format check
 TODO: input formatting: decimals, thousand separators
-TODO: make this a pure component
   */
 
 import React from "react";
-import { Button, Label } from "semantic-ui-react";
+import Button from "components/augmint-ui/button";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -40,10 +37,11 @@ class TokenTransferForm extends React.Component {
     }
 
     async handleSubmit(values) {
+        const tokenAmount = parseFloat(values.tokenAmount);
         const res = await store.dispatch(
             transferToken({
                 payee: values.payee,
-                tokenAmount: parseFloat(values.tokenAmount),
+                tokenAmount,
                 narrative: values.narrative
             })
         );
@@ -54,6 +52,8 @@ class TokenTransferForm extends React.Component {
         } else {
             this.setState({
                 result: res.result,
+                to: values.payee,
+                tokenAmount,
                 feeAmount: "0"
             });
             return;
@@ -80,24 +80,26 @@ class TokenTransferForm extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header={<h3>Successful transfer</h3>}
+                        header="Token transfer submitted"
                         result={this.state.result}
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Sent {this.state.result.amount} A-EUR to {this.state.result.to}
+                            Transfer {this.state.tokenAmount} A-EUR to {this.state.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
                 {!submitSucceeded && (
                     <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <EthSubmissionErrorPanel
-                            error={error}
-                            header={<h3>Transfer failed</h3>}
-                            onDismiss={() => {
-                                clearSubmitErrors();
-                            }}
-                        />
+                        {error && (
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                header="Transfer failed"
+                                onDismiss={() => {
+                                    clearSubmitErrors();
+                                }}
+                            />
+                        )}
 
                         <Field
                             component={Form.Field}
@@ -115,13 +117,13 @@ class TokenTransferForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isConnected}
                         >
-                            <input />
-                            <Label>A-EUR</Label>
+                            <input data-testid="transferAmountInput" />
+                            <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 
                         <small>
                             Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            {this.state.feeAmount} A€
+                            <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€
                         </small>
 
                         <Field
@@ -129,6 +131,7 @@ class TokenTransferForm extends React.Component {
                             as={Form.Input}
                             label="To:"
                             size="small"
+                            data-testid="transferToAddressField"
                             name="payee"
                             type="text"
                             parse={Parsers.trim}
@@ -140,13 +143,21 @@ class TokenTransferForm extends React.Component {
                         <Field
                             component={Form.Field}
                             as={Form.Input}
+                            data-testid="transferNarrativeField"
                             label="Reference:"
                             name="narrative"
                             type="text"
                             placeholder="short narrative (optional)"
                             disabled={submitting || !augmintToken.isConnected}
                         />
-                        <Button loading={submitting} primary disabled={pristine}>
+                        <Button
+                            type="submit"
+                            loading={submitting}
+                            primary
+                            disabled={pristine}
+                            data-testid="submitTransferButton"
+                            className={submitting ? "loading" : ""}
+                        >
                             {submitting ? "Submitting..." : "Transfer"}
                         </Button>
                     </Form>

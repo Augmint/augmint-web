@@ -8,45 +8,45 @@ These instructions are about the dev environment for frontend development. For c
 
 ### OSX / Linux
 
-1. [Git](https://git-scm.com/download)
-1. [Ethereum CLI](https://www.ethereum.org/cli)
-1. Install [nodejs](https://nodejs.org/en/download/) - _tested with v8.9.4 LTS_
+1.  [Git](https://git-scm.com/download)
+1.  [Ethereum CLI](https://www.ethereum.org/cli)
+1.  Install [nodejs](https://nodejs.org/en/download/) - _tested with v8.11.1 LTS_
 
     or install nodejs with [n node version manager](https://github.com/tj/n):
 
     ```
     npm install -g n
-    n 8.9.4
+    n 8.11.1
     ```
 
-1. Install yarn if you don't have it: `npm install -g yarn`
-1. ```
-   git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
-   cd augmint-web
-   yarn install
-   cd augmint-contracts
-   git checkout master
-   yarn install
-   ```
+1.  Install yarn if you don't have it: `npm install -g yarn`
+1.  ```
+    git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
+    cd augmint-web
+    yarn install
+    cd augmint-contracts
+    git checkout master
+    yarn install
+    ```
 
 ### Windows
 
 _Note: windows install was not tested since a while, update on it is welcome_
 
-1. [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
-1. [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
-1. [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
-1. [nodejs](https://nodejs.org/en/download/) - _tested with v8.9.4 LTS_
+1.  [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
+1.  [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
+1.  [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
+1.  [nodejs](https://nodejs.org/en/download/) - _tested with v8.11.1 LTS_
 
     or install nodejs with [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases):
 
     ```
-    nvm install 8.9.4
-    nvm use 8.9.4
+    nvm install 8.11.1
+    nvm use 8.11.1
     ```
 
-1. Install yarn if you don't have it: `npm install -g yarn`
-1. in Git bash:
+1.  Install yarn if you don't have it: `npm install -g yarn`
+1.  in Git bash:
     ```
     git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
     cd augmint-web
@@ -116,8 +116,8 @@ You can also use `gulp watch`
 
 _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
-* Start interactive: `yarn cypress:open`
-* Start command line: `yarn cypress:run`
+*   Start interactive: `yarn cypress:open`
+*   Start command line: `yarn cypress:run`
 
 ## Non ganache launches/deploys
 

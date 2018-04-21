@@ -5,6 +5,8 @@ import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import monetarySupervisor_artifacts from "contractsBuild/MonetarySupervisor.json";
 
+import { ONE_ETH_IN_WEI } from "utils/constants";
+
 export const MONETARY_SUPERVISOR_CONNECT_REQUESTED = "augmintToken/MONETARY_SUPERVISOR_CONNECT_REQUESTED";
 export const MONETARY_SUPERVISOR_CONNECT_SUCCESS = "augmintToken/MONETARY_SUPERVISOR_CONNECT_SUCCESS";
 export const MONETARY_SUPERVISOR_CONNECT_ERROR = "augmintToken/MONETARY_SUPERVISOR_CONNECT_ERROR";
@@ -27,9 +29,14 @@ const initialState = {
 
         totalLoanAmount: "?",
         totalLockedAmount: "?",
+        ltdPercent: "?",
 
-        ltdDifferenceLimit: "?",
+        ltdLoanDifferenceLimit: "?",
+        ltdLockDifferenceLimit: "?",
         allowedLtdDifferenceAmount: "?",
+
+        maxLoanByLtd: "?",
+        maxLockByLtd: "?",
 
         reserveEthBalance: "?",
         bn_reserveWeiBalance: null,
@@ -131,7 +138,6 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().augmintToken.contract.instance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const ONE_ETH = 1000000000000000000;
 
     const [
         augmintTokenAddress,
@@ -143,8 +149,10 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         bn_totalLoanAmount,
         bn_totalLockedAmount,
 
-        bn_ltdDifferenceLimit,
-        bn_allowedLtdDifferenceAmount
+        paramsArray,
+
+        bn_maxLockByLtd,
+        bn_maxLoanByLtd
     ] = await Promise.all([
         monetarySupervisor.augmintToken(),
         monetarySupervisor.interestEarnedAccount(),
@@ -155,15 +163,26 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         monetarySupervisor.totalLoanAmount(),
         monetarySupervisor.totalLockedAmount(),
 
-        monetarySupervisor.ltdDifferenceLimit(), // TODO: use monetarySupervisor.getParams() to reduce calls
-        monetarySupervisor.allowedLtdDifferenceAmount()
+        monetarySupervisor.ltdParams(),
+
+        monetarySupervisor.getMaxLockAmountAllowedByLtd(),
+        monetarySupervisor.getMaxLoanAmountAllowedByLtd()
     ]);
+
+    const [bn_ltdLockDifferenceLimit, bn_ltdLoanDifferenceLimit, bn_allowedLtdDifferenceAmount] = paramsArray;
 
     const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
     const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
     const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
-    const ltdDifferenceLimit = bn_ltdDifferenceLimit / 1000000;
+
+    const ltdPercent = totalLockedAmount === 0 ? 0 : totalLoanAmount / totalLockedAmount;
+
+    const ltdLockDifferenceLimit = bn_ltdLockDifferenceLimit / 1000000;
+    const ltdLoanDifferenceLimit = bn_ltdLoanDifferenceLimit / 1000000;
     const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount / decimalsDiv;
+
+    const maxLockByLtd = bn_maxLockByLtd / decimalsDiv;
+    const maxLoanByLtd = bn_maxLoanByLtd / decimalsDiv;
 
     const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
         web3.eth.getBalance(augmintReservesAddress),
@@ -171,7 +190,7 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         augmintToken.balanceOf(interestEarnedAccountAddress)
     ]);
 
-    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH;
+    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH_IN_WEI;
     const reserveTokenBalance = bn_reserveTokenBalance / decimalsDiv;
     const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / decimalsDiv;
 
@@ -183,9 +202,14 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         issuedByMonetaryBoard,
         totalLoanAmount,
         totalLockedAmount,
+        ltdPercent,
 
-        ltdDifferenceLimit,
+        ltdLockDifferenceLimit,
+        ltdLoanDifferenceLimit,
         allowedLtdDifferenceAmount,
+
+        maxLockByLtd,
+        maxLoanByLtd,
 
         reserveEthBalance,
         bn_reserveWeiBalance,

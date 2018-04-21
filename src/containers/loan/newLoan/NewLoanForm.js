@@ -11,8 +11,8 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
 import ToolTip from "components/ToolTip";
+import { ONE_ETH_IN_WEI } from "utils/constants";
 
-const ONE_ETH = 1000000000000000000;
 const PPM_DIV = 1000000;
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -27,6 +27,7 @@ class NewLoanForm extends React.Component {
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
         this.minToken = Validations.minTokenAmount(this.props.product.minDisbursedAmountInToken);
+        this.maxLoanAmount = Validations.maxLoanAmount(this.props.product.maxLoanAmount);
     }
 
     onLoanTokenAmountChange(e) {
@@ -46,11 +47,11 @@ class NewLoanForm extends React.Component {
 
         const weiAmount = repaymentAmount
             .div(this.props.rates.info.bn_ethFiatRate)
-            .mul(ONE_ETH)
+            .mul(ONE_ETH_IN_WEI)
             .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+        const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("repaymentAmount", repaymentAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -73,11 +74,11 @@ class NewLoanForm extends React.Component {
 
         const weiAmount = val
             .div(this.props.rates.info.bn_ethFiatRate)
-            .mul(ONE_ETH)
+            .mul(ONE_ETH_IN_WEI)
             .div(this.props.product.bn_collateralRatio)
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
-        const ethAmount = weiAmount.div(ONE_ETH).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+        const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
@@ -86,7 +87,7 @@ class NewLoanForm extends React.Component {
     onEthAmountChange(e) {
         let val;
         try {
-            val = new BigNumber(e.target.value).mul(ONE_ETH);
+            val = new BigNumber(e.target.value).mul(ONE_ETH_IN_WEI);
         } catch (error) {
             this.props.change("loanTokenAmount", "");
             this.props.change("repaymentAmount", "");
@@ -94,7 +95,7 @@ class NewLoanForm extends React.Component {
         }
         const fiatValue = val
             .mul(this.props.rates.info.bn_ethFiatRate)
-            .div(ONE_ETH)
+            .div(ONE_ETH_IN_WEI)
             .round(0, BigNumber.ROUND_HALF_UP);
 
         const repaymentAmount = fiatValue
@@ -118,7 +119,7 @@ class NewLoanForm extends React.Component {
                 {error && (
                     <EthSubmissionErrorPanel
                         error={error}
-                        header={<h3>Create loan failed</h3>}
+                        header="Create loan failed"
                         onDismiss={() => clearSubmitErrors()}
                     />
                 )}
@@ -129,7 +130,7 @@ class NewLoanForm extends React.Component {
                         name="loanTokenAmount"
                         type="number"
                         disabled={submitting || !loanManager.isConnected}
-                        validate={[Validations.required, Validations.tokenAmount, this.minToken]}
+                        validate={[Validations.required, Validations.tokenAmount, this.maxLoanAmount, this.minToken]}
                         normalize={Normalizations.twoDecimals}
                         onChange={this.onLoanTokenAmountChange}
                         labelPosition="right"
@@ -140,7 +141,7 @@ class NewLoanForm extends React.Component {
                             <ToolTip>Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate </ToolTip>
                         </Label>
 
-                        <input testid="loanTokenAmountField" />
+                        <input data-testid="loanTokenAmountInput" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
@@ -161,7 +162,7 @@ class NewLoanForm extends React.Component {
                                 Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                             </ToolTip>
                         </Label>
-                        <input testid="repaymentAmountField" />
+                        <input data-testid="repaymentAmountInput" />
                         <Label>A-EUR</Label>
                     </Field>
                     <Field
@@ -183,10 +184,10 @@ class NewLoanForm extends React.Component {
                                 <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                             </ToolTip>
                         </Label>
-                        <input testid="ethAmountField" />
+                        <input data-testid="ethAmountInput" />
                         <Label>ETH</Label>
                     </Field>
-                    <Button primary size="big" id="submitBtn" loading={submitting} disabled={pristine}>
+                    <Button primary size="big" data-testid="submitBtn" loading={submitting} disabled={pristine}>
                         {submitting ? "Submitting..." : "Get loan"}
                     </Button>
                 </Form>

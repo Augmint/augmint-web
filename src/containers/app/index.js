@@ -4,8 +4,9 @@ Wrapper for the whole App
 */
 import "semantic/dist/semantic.min.css";
 import "./site.css";
+import "assets/fontawesome/css/fontawesome-all.css";
 
-import '../../styles/global';
+import "styles/global";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -28,7 +29,10 @@ import Roadmap from "containers/roadmap";
 import AppMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
-import FlashMessages from "./FlashMessages";
+
+import LockContainer from "containers/lock";
+import EthereumTxStatus from "./EthereumTxStatus";
+import LegacyTokens from "./LegacyTokens";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -51,24 +55,24 @@ if (process.env.NODE_ENV === "production") {
 
 class App extends React.Component {
     constructor(props) {
-      super(props);
-      this.toggleMenu = this.toggleMenu.bind(this);
-      this.state = {
-        showMobileMenu: false,
-      };
+        super(props);
+        this.toggleMenu = this.toggleMenu.bind(this);
+        this.state = {
+            showMobileMenu: false
+        };
     }
     toggleMenu() {
         this.setState({
-          showMobileMenu: !this.state.showMobileMenu
+            showMobileMenu: !this.state.showMobileMenu
         });
     }
     componentDidMount() {
         this.props.history.listen((location, action) => {
-            this.setState((state) => {
+            this.setState(state => {
                 return {
                     showMobileMenu: false
-                }
-            })
+                };
+            });
         });
     }
 
@@ -76,8 +80,17 @@ class App extends React.Component {
         return (
             <div className="Site">
                 <ScrollToTop />
-                <AppMenu web3Connect={this.props.web3Connect} location={this.props.location} showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />
-                <FlashMessages />
+                <AppMenu
+                    web3Connect={this.props.web3Connect}
+                    location={this.props.location}
+                    showMenu={this.state.showMobileMenu}
+                    toggleMenu={this.toggleMenu}
+                />
+
+                <EthereumTxStatus />
+
+                <LegacyTokens />
+
                 <div className="Site-content">
                     <Switch>
                         <Route exact path="/" component={NotConnectedHome} />
@@ -94,11 +107,14 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>
                 <div className="Site-footer">
-                    <AppFooter />
+                    <AppFooter
+                        web3Connect={this.props.web3Connect}
+                    />
                 </div>
             </div>
         );

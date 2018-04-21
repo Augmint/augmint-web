@@ -5,6 +5,7 @@ import Subscribe from "./Subscribe";
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
 import decent from 'assets/images/decent.png';
+import telegramLogo from 'assets/images/telegram_logo.svg';
 
 import "./custom_footer_style.css";
 
@@ -17,6 +18,7 @@ const segmentStyle = {
 };
 
 export function AppFooter(props) {
+    const { isConnected } = props.web3Connect;
     let community = "WE'RE AN ACTIVE COMUNITY",
         description =
             "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance structure - anyone can join at any time.";
@@ -29,18 +31,31 @@ export function AppFooter(props) {
                 </Segment>
                 <Segment basic as="p" className="description">
                     {description}
-                </Segment>
-                <Segment
-                    basic
-                    className="join-discord"
-                    size="tiny"
-                    as="a"
-                    href="https://discord.gg/PwDmsnu"
-                    target="_blank"
-                >
-                    <Image src={discordLogo} />
-                    Talk to us on Discord
-                </Segment>
+                </Segment >
+                <Segment basic className="chat-container">
+                    <Segment
+                        basic
+                        className="join-discord"
+                        size="tiny"
+                        as="a"
+                        href="https://discord.gg/PwDmsnu"
+                        target="_blank"
+                    >
+                        <Image src={discordLogo} />
+                        Talk to us on Discord
+                    </Segment>
+                    <Segment
+                        basic
+                        className="join-telegram"
+                        size="tiny"
+                        as="a"
+                        href="https://t.me/augmint"
+                        target="_blank"
+                    >
+                        <Image src={telegramLogo} />
+                        Talk to us on Telegram
+                    </Segment>
+              </Segment>
 
                 <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
@@ -63,6 +78,12 @@ export function AppFooter(props) {
                         href="/disclaimer"
                         content="DISCLAIMER"
                     />
+                    {isConnected ? (<List.Item
+                        as="a"
+                        href="/under-the-hood"
+                        data-testid="underTheHoodLink"
+                        content="UNDER THE HOOD"
+                    />) : null};
                     <List.Item
                         as="a"
                         href="/contact"
