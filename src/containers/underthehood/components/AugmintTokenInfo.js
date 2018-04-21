@@ -15,9 +15,8 @@ export function AugmintTokenInfo(props) {
     return (
         <Pblock header="AugmintToken">
             <p>Total token supply: {contract.info.totalSupply} A-EUR</p>
-            <p>Total token supply: {contract.info.total} A-EUR</p>
             <p>
-                Fee account: <small>{contract.info.feeAccount}</small>
+                Fee account: <small>{contract.info.feeAccountAddress}</small>
             </p>
             <p>Fee account balance: {contract.info.feeAccountTokenBalance} A-EUR</p>
             <ContractBaseInfo contractName="AugmintToken" contract={contract} refreshCb={handleRefreshClick} />
