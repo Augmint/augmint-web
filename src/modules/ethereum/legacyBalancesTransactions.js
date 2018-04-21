@@ -18,7 +18,7 @@ const ACCEPTED_LEGACY_AEUR_CONTRACTS = {
     // rinkeby
     4: [
         "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA", //https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
-        "0x03fe291f8a30e54cd05459f368d554b40784ca78"
+        "0x95aa79d7410eb60f49bfd570b445836d402bd7b1"
     ]
 };
 
