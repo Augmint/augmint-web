@@ -117,8 +117,7 @@ export function processTx(tx, txName, gasEstimate, onReceipt) {
                         receipt
                     );
 
-                    if (receipt.status !== "0x1" && receipt.status !== "0x01") {
-                        // ganache returns 0x01, Rinkeby 0x1
+                    if (receipt.status !== true) {
                         throw new EthereumTransactionError(
                             `${txName} failed`,
                             "Ethereum transaction returned status: " + receipt.status,

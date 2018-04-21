@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 
 import { AugmintTokenInfo } from "./components/AugmintTokenInfo";
+import { FeeAccountInfo } from "./components/FeeAccountInfo";
 import { MonetarySupervisorInfo } from "./components/MonetarySupervisorInfo";
 import { Pgrid } from "components/PageLayout";
 
@@ -13,9 +14,12 @@ class BaseInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={2}>
+            <Pgrid columns={3}>
                 <Pgrid.Column>
                     <AugmintTokenInfo contract={this.props.augmintToken} />
+                </Pgrid.Column>
+                <Pgrid.Column>
+                    <FeeAccountInfo contract={this.props.augmintToken.info.feeAccount} />
                 </Pgrid.Column>
                 <Pgrid.Column>
                     <MonetarySupervisorInfo contract={this.props.monetarySupervisor} />
