@@ -8,3 +8,11 @@ const BaseHeader = `
 export const StyledHeaderH3 = styled.h3`
     ${BaseHeader};
 `;
+
+export const StyledHeaderH2 = styled.h2`
+    ${BaseHeader};
+`;
+
+export const StyledHeaderH4 = styled.h4`
+    ${BaseHeader};
+`;
