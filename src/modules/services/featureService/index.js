@@ -7,7 +7,6 @@ const systemFeatures = {};
 
 function addFeatureFlag(param) {
     // validate
-    // turn to boolean ?
     const flag = param.split('=');
     const flagKey = flag[0].substr(2);
     const flagVal = flag[1] === 'false' ? false : flag[1] === 'true' ? true : flag[1];
@@ -17,7 +16,7 @@ function addFeatureFlag(param) {
     };
 }
 
-export function getFeaturesFromUrl() {
+function getFeaturesFromUrl() {
     const urlParams = window.location.search.substr(1);
     let userFeatures = {};
 
