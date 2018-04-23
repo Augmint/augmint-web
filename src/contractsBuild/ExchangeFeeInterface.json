@@ -1,26 +1,23 @@
 {
-  "contractName": "TokenReceiver",
+  "contractName": "ExchangeFeeInterface",
   "abi": [
     {
-      "constant": false,
+      "constant": true,
       "inputs": [
         {
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "name": "data",
+          "name": "weiAmount",
           "type": "uint256"
         }
       ],
-      "name": "transferNotification",
-      "outputs": [],
+      "name": "calculateExchangeFee",
+      "outputs": [
+        {
+          "name": "weiFee",
+          "type": "uint256"
+        }
+      ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     }
   ],
@@ -28,20 +25,20 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "/*\n *  receiver contract interface\n * see https://github.com/ethereum/EIPs/issues/677\n */\npragma solidity ^0.4.23;\n\n\ninterface TokenReceiver {\n    function transferNotification(address from, uint256 amount, uint data) external;\n}\n",
-  "sourcePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+  "source": "/*\n *  exchange fee calculation  interface (not used yet)\n */\npragma solidity ^0.4.23;\n\n\ninterface ExchangeFeeInterface {\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee);\n}\n",
+  "sourcePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ExchangeFeeInterface.sol",
   "ast": {
-    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ExchangeFeeInterface.sol",
     "exportedSymbols": {
-      "TokenReceiver": [
-        5079
+      "ExchangeFeeInterface": [
+        5067
       ]
     },
-    "id": 5080,
+    "id": 5068,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5069,
+        "id": 5059,
         "literals": [
           "solidity",
           "^",
@@ -49,7 +46,7 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "90:24:17"
+        "src": "62:24:16"
       },
       {
         "baseContracts": [],
@@ -57,60 +54,34 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 5079,
+        "id": 5067,
         "linearizedBaseContracts": [
-          5079
+          5067
         ],
-        "name": "TokenReceiver",
+        "name": "ExchangeFeeInterface",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
-            "id": 5078,
+            "id": 5066,
             "implemented": false,
             "isConstructor": false,
-            "isDeclaredConst": false,
+            "isDeclaredConst": true,
             "modifiers": [],
-            "name": "transferNotification",
+            "name": "calculateExchangeFee",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5076,
+              "id": 5062,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5071,
-                  "name": "from",
+                  "id": 5061,
+                  "name": "weiAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "177:12:17",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 5070,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "177:7:17",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 5073,
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "191:14:17",
+                  "scope": 5066,
+                  "src": "156:14:16",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -118,36 +89,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5072,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "191:7:17",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 5075,
-                  "name": "data",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "207:9:17",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 5074,
+                    "id": 5060,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "207:4:17",
+                    "src": "156:4:16",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -157,40 +102,67 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "176:41:17"
+              "src": "155:16:16"
             },
             "payable": false,
             "returnParameters": {
-              "id": 5077,
+              "id": 5065,
               "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "226:0:17"
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5064,
+                  "name": "weiFee",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5066,
+                  "src": "195:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5063,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "195:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "194:16:16"
             },
-            "scope": 5079,
-            "src": "147:80:17",
-            "stateMutability": "nonpayable",
+            "scope": 5067,
+            "src": "126:85:16",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 5080,
-        "src": "117:112:17"
+        "scope": 5068,
+        "src": "89:124:16"
       }
     ],
-    "src": "90:140:17"
+    "src": "62:152:16"
   },
   "legacyAST": {
-    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/TokenReceiver.sol",
+    "absolutePath": "/Users/petro/ether/augmint-contracts/contracts/interfaces/ExchangeFeeInterface.sol",
     "exportedSymbols": {
-      "TokenReceiver": [
-        5079
+      "ExchangeFeeInterface": [
+        5067
       ]
     },
-    "id": 5080,
+    "id": 5068,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5069,
+        "id": 5059,
         "literals": [
           "solidity",
           "^",
@@ -198,7 +170,7 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "90:24:17"
+        "src": "62:24:16"
       },
       {
         "baseContracts": [],
@@ -206,60 +178,34 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 5079,
+        "id": 5067,
         "linearizedBaseContracts": [
-          5079
+          5067
         ],
-        "name": "TokenReceiver",
+        "name": "ExchangeFeeInterface",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
-            "id": 5078,
+            "id": 5066,
             "implemented": false,
             "isConstructor": false,
-            "isDeclaredConst": false,
+            "isDeclaredConst": true,
             "modifiers": [],
-            "name": "transferNotification",
+            "name": "calculateExchangeFee",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5076,
+              "id": 5062,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5071,
-                  "name": "from",
+                  "id": 5061,
+                  "name": "weiAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "177:12:17",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 5070,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "177:7:17",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 5073,
-                  "name": "amount",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "191:14:17",
+                  "scope": 5066,
+                  "src": "156:14:16",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -267,36 +213,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5072,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "191:7:17",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 5075,
-                  "name": "data",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 5078,
-                  "src": "207:9:17",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 5074,
+                    "id": 5060,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "207:4:17",
+                    "src": "156:4:16",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -306,27 +226,54 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "176:41:17"
+              "src": "155:16:16"
             },
             "payable": false,
             "returnParameters": {
-              "id": 5077,
+              "id": 5065,
               "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "226:0:17"
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5064,
+                  "name": "weiFee",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5066,
+                  "src": "195:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5063,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "195:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "194:16:16"
             },
-            "scope": 5079,
-            "src": "147:80:17",
-            "stateMutability": "nonpayable",
+            "scope": 5067,
+            "src": "126:85:16",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 5080,
-        "src": "117:112:17"
+        "scope": 5068,
+        "src": "89:124:16"
       }
     ],
-    "src": "90:140:17"
+    "src": "62:152:16"
   },
   "compiler": {
     "name": "solc",
@@ -334,5 +281,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-04-20T17:42:05.297Z"
+  "updatedAt": "2018-04-20T17:42:05.294Z"
 }
