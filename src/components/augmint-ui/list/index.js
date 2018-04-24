@@ -8,4 +8,7 @@ export const BaseUl = styled.ul`
 
 export const BaseLi = styled.li`
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;

@@ -18,6 +18,9 @@ export default function Icon(props) {
         case "connect":
             className += " fas fa-plug";
             break;
+        case "account":
+            className += " far fa-id-card";
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";

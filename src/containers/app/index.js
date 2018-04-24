@@ -88,11 +88,12 @@ class App extends React.Component {
                 {
                     features => {
                         const showDash = features.dashboard && showConnection;
-                        console.log(this.props.location);
                         return (<div className={showDash ? 'Site Site__dash' : 'Site'}>
                             <ScrollToTop />
                             {showDash ?
-                                (<TopNav />) :
+                                (<TopNav
+                                    web3Connect={this.props.web3Connect}
+                                />) :
                                 (<AppMenu
                                     web3Connect={this.props.web3Connect}
                                     location={this.props.location}
