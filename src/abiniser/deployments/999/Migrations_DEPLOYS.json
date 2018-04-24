@@ -1,0 +1,21 @@
+{
+  "contractName": "Migrations",
+  "latestAbiHash": "78141a323f4a8416891b06a0a2b90065",
+  "78141a323f4a8416891b06a0a2b90065": {
+    "latestDeployedAddress": "0xd217ac4354211cda27dd4027b5e223280f885ad3",
+    "deployments": {
+      "0xd217ac4354211cda27dd4027b5e223280f885ad3": {
+        "generatedAt": "2018-04-24T18:57:53.350Z",
+        "truffleContractFileUpdatedAt": "2018-02-14T23:31:03.063Z",
+        "compiler": {
+          "name": "solc",
+          "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+        },
+        "bytecodeHash": "dafdfde2cb0510d2cf640d9906cf2aa3",
+        "deployedBytecodeHash": "3daa7b91f2db8b848eb07fe6e3ec1dfb",
+        "sourceHash": "73453b2f522d50aaa2f4864b97228d70",
+        "source": "pragma solidity 0.4.19;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration; // solhint-disable-line var-name-mixedcase\n\n    modifier restricted() {\n        if (msg.sender == owner) _;\n    }\n\n    function Migrations() public {\n        owner = msg.sender;\n    }\n\n    function setCompleted(uint completed) external restricted {\n        last_completed_migration = completed;\n    }\n\n    function upgrade(address newAddress) external restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n"
+      }
+    }
+  }
+}
