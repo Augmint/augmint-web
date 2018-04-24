@@ -1,45 +1,47 @@
 import React from "react";
 
-const FEATURE_PREFIX = 'f_';
+const FEATURE_PREFIX = "f_";
 
 // set deterministic flags
 const systemFeatures = {};
 
-function addFeatureFlag(param) {
+function setFeatureCookie(param) {
     // validate
     // turn to boolean ?
     const flag = param.split('=');
-    const flagKey = flag[0].substr(2);
-    const flagVal = flag[1] === 'false' ? false : flag[1] === 'true' ? true : flag[1];
-
-    return {
-        [flagKey]: flagVal
-    };
+    document.cookie = `${flag[0]}=${flag[1]}`;
 }
 
 export function getFeaturesFromUrl() {
     const urlParams = window.location.search.substr(1);
-    let userFeatures = {};
 
     if (urlParams.includes(FEATURE_PREFIX)) {
-        if (urlParams.includes('&')) {
-            userFeatures = urlParams.split('&')
+        if (urlParams.includes("&")) {
+            urlParams
+                .split("&")
                 .filter(param => param.includes(FEATURE_PREFIX))
-                .map(param => addFeatureFlag(param))
-                .reduce(function(acc, val) {
-                    const currKey = Object.keys(val)[0];
-                    acc[currKey] = val[currKey];
-                    return acc;
-                }, {});
+                .map(param => setFeatureCookie(param));
         } else {
-            userFeatures = addFeatureFlag(urlParams);
+            setFeatureCookie(urlParams);
         }
     }
-    return userFeatures;
+}
+
+function getFeaturesFromCookie() {
+    return document.cookie
+        .split(";")
+        .map(cookie => cookie.trim())
+        .map(cookie => cookie.split("="))
+        .reduce(function(acc, val) {
+            const currKey = val[0].substr(2);
+            acc[currKey] = val[1] === "false" ? false : val[1] === "true" ? true : val[1];
+            return acc;
+        }, {});
 }
 
 function getCombinedFeatures() {
-    return Object.assign({}, systemFeatures, getFeaturesFromUrl());
+    getFeaturesFromUrl();
+    return Object.assign({}, systemFeatures, getFeaturesFromCookie());
 }
 
 export const FeatureContext = React.createContext(getCombinedFeatures());
