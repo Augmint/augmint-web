@@ -25,6 +25,10 @@ const BaseButton = `
       opacity: .45;
     }
 
+    &.hideIfDisables[disabled] {
+      visibility: hidden;
+    }
+
     &:not([disabled]):hover {
         background-color: ${theme.colors.grey};
         color: ${theme.colors.white};

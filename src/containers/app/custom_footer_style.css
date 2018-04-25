@@ -1,181 +1,176 @@
 .Site-footer .footer {
-  font-weight: 200;
-  height: 100%;
-  padding: 0;
-  position: absolute;
-  width: 100%;
+    font-weight: 200;
+    height: 100%;
+    padding: 0;
+    position: absolute;
+    width: 100%;
 }
 
-.Site-footer .footer>div {
-  margin-top: 15%;
+.Site-footer .footer > div {
+    margin-top: 15%;
 }
 
 .Site-footer .footer .title {
-  color: #fff;
-  font-size: 13px;
-  letter-spacing: 2.6px;
-  margin: 0;
-  margin-bottom: 19px;
-  padding: 0;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 2.6px;
+    margin: 0;
+    margin-bottom: 19px;
+    padding: 0;
 }
 
 .Site-footer .footer .description {
-  color: #fff;
-  font-size: 15px;
-  line-height: 1.47;
-  margin: auto;
-  margin-bottom: 25px;
-  opacity: .7;
-  padding: 0;
-  max-width: 397px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.47;
+    margin: auto;
+    margin-bottom: 25px;
+    opacity: 0.7;
+    padding: 0;
+    max-width: 397px;
 }
 
 .Site-footer .footer .chat-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
 .Site-footer .footer .chat-container a.join-discord,
 .Site-footer .footer .chat-container a.join-telegram {
-  color: #ffad00;
-  display: inline-block;
-  font-size: 17px;
-  line-height: 1.29;
-  margin: 15px;
-  padding: 0;
-  min-width: 245px;
+    color: #ffad00;
+    display: inline-block;
+    font-size: 17px;
+    line-height: 1.29;
+    margin: 15px;
+    padding: 0;
+    min-width: 245px;
 }
 
 .Site-footer .footer .chat-container .join-discord img,
 .Site-footer .footer .chat-container .join-telegram img {
-  display: inline-block;
-  margin-right: 20px;
-  max-width: 38px;
+    display: inline-block;
+    margin-right: 20px;
+    max-width: 38px;
 }
 
-.Site-footer .footer .contact-list.list>.item {
-  border: none;
-  letter-spacing: 2.4px;
-  margin: 0 10px;
+.Site-footer .footer .contact-list.list > .item {
+    border: none;
+    letter-spacing: 2.4px;
+    margin: 0 10px;
 }
 
 .Site-footer .footer .contact-list.list .item a.content {
-  color: rgba(255, 255, 255, .5) !important;
-  padding-left: 3px;
+    color: rgba(255, 255, 255, 0.5) !important;
+    padding-left: 3px;
 }
 
 .Site-footer .footer .contact-list.list .item:hover a.content,
 .Site-footer .footer .contact-list.list .item:hover i {
-  color: rgba(255, 255, 255, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
 }
 
 .Site-footer .footer .contact-list.list .item i {
-  padding-right: 0;
+    padding-right: 0;
 }
 
 .Site-footer .footer .contact-list.list:first-child {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 .Site-footer .footer .contact-list.list:last-child {
-  margin-right: 0;
+    margin-right: 0;
 }
 
 .Site-footer .footer .subscribe,
 .Site-footer .footer .subscribe .container {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .Site-footer .footer .subscribe {
-  margin: 35px 0 0;
+    margin: 35px 0 0;
 }
 
 .Site-footer .footer .subscribe label {
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 200;
-  letter-spacing: 2.4px;
-  margin-right: 7px;
-  opacity: .7;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 200;
+    letter-spacing: 2.4px;
+    margin-right: 7px;
+    opacity: 0.7;
 }
 
 .Site-footer .footer .subscribe .input {
-  height: 41px;
-  max-width: 246px;
+    height: 41px;
+    max-width: 246px;
 }
 
 .Site-footer .footer .subscribe .input input {
-  color: #051d2d;
-  font-size: 12px;
-  font-weight: 200;
-  letter-spacing: 2.4px;
+    color: #051d2d;
+    font-size: 12px;
+    font-weight: 200;
+    letter-spacing: 2.4px;
 }
 
 .Site-footer .footer .subscribe .input input::placeholder,
 .Site-footer .footer .subscribe .input input:-ms-input-placeholder,
 .Site-footer .footer .subscribe .input input::-ms-input-placeholder {
-  opacity: .4;
+    opacity: 0.4;
 }
 
 .Site-footer .footer .subscribe button {
-  font-weight: 200;
-  visibility: visible;
-}
-
-.Site-footer .footer .subscribe button.disabled {
-  visibility: hidden;
+    font-weight: 200;
 }
 
 .Site-footer .footer .subscribe .success.message {
-  margin: auto;
-  max-width: 397px;
+    margin: auto;
+    max-width: 397px;
 }
 
 .Site-footer .footer .partner {
-  display: inline-block;
-  margin: 15px 0;
+    display: inline-block;
+    margin: 15px 0;
 }
 .Site-footer .footer .partner img {
-  background-color: #fff;
-  border-radius: 500rem;
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-  float: left;
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
+    background-color: #fff;
+    border-radius: 500rem;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px 0 0;
 }
 
 .Site-footer .footer .partner h5 {
-  display: inline-block;
-  font-size: 14px;
-  height: 30px;
-  line-height: 30px;
-  margin: 0;
+    display: inline-block;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
 }
 
 .Site-footer .footer .partner a {
-  color: #fff;
-  font-weight: 400;
+    color: #fff;
+    font-weight: 400;
 }
 
 @media (max-width: 1200px) {
-  .Site-footer .footer>div {
-    margin-top: 200px;
-  }
+    .Site-footer .footer > div {
+        margin-top: 200px;
+    }
 }
 
 @media (max-width: 768px) {
-  .Site-footer .footer .contact-list.list>.item {
-    margin: 0;
-  }
-  .Site-footer .footer>div {
-    margin-top: 150px;
-  }
+    .Site-footer .footer .contact-list.list > .item {
+        margin: 0;
+    }
+    .Site-footer .footer > div {
+        margin-top: 150px;
+    }
 }
