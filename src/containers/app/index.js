@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 
-import { FeatureContext } from 'modules/services/featureService';
+import { FeatureContext } from "modules/services/featureService";
 
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -33,6 +33,7 @@ import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
 
 import TopNav from "components/dashboard/components/topNav";
+import SideNav from "components/dashboard/components/sideNav";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
@@ -82,30 +83,32 @@ class App extends React.Component {
 
     render() {
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit"].indexOf(this.props.location.pathname) > -1;
+            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit"].indexOf(
+                this.props.location.pathname
+            ) > -1;
         return (
             <FeatureContext.Consumer>
-                {
-                    features => {
-                        const showDash = features.dashboard && showConnection;
-                        return (<div className={showDash ? 'Site Site__dash' : 'Site'}>
+                {features => {
+                    const showDash = features.dashboard && showConnection;
+                    return (
+                        <div className={showDash ? "Site Site__dash" : "Site"}>
                             <ScrollToTop />
-                            {showDash ?
-                                (<TopNav
-                                    web3Connect={this.props.web3Connect}
-                                />) :
-                                (<AppMenu
+                            {showDash ? (
+                                <TopNav web3Connect={this.props.web3Connect} />
+                            ) : (
+                                <AppMenu
                                     web3Connect={this.props.web3Connect}
                                     location={this.props.location}
                                     showMenu={this.state.showMobileMenu}
                                     toggleMenu={this.toggleMenu}
-                                />)
-                            }
+                                />
+                            )}
+                            {showDash ? <SideNav /> : null}
                             <EthereumTxStatus />
 
                             <LegacyTokens />
 
-                            <div className="Site-content">
+                            <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
                                 <Switch>
                                     <Route exact path="/" component={NotConnectedHome} />
                                     <Route exact path="/account" component={AccountHome} />
@@ -125,16 +128,14 @@ class App extends React.Component {
                                     <Route component={PageNotFound} />
                                 </Switch>
                             </div>
-                            {showDash ? null :
-                                (<div className="Site-footer">
-                                    <AppFooter
-                                        web3Connect={this.props.web3Connect}
-                                    />
-                                </div>)
-                            }
-                        </div>)
-                    }
-                }
+                            {showDash ? null : (
+                                <div className="Site-footer">
+                                    <AppFooter web3Connect={this.props.web3Connect} />
+                                </div>
+                            )}
+                        </div>
+                    );
+                }}
             </FeatureContext.Consumer>
         );
     }

@@ -9,9 +9,9 @@ const TOP_NAV_HEIGHT = '60px';
 
 export const StyledTopNav = styled.nav`
     width: 100%;
-    border-bottom: 1px solid ${theme.colors.primary};
+    border-bottom: 1px solid #ccc;
     height: ${TOP_NAV_HEIGHT}
-    position: fixed;
+    position: absolute;
     background-color: ${theme.colors.white};
     z-index: 103;
     top: 0;
