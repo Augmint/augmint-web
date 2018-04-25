@@ -68,6 +68,48 @@ const BaseButton = `
       border-width: 3px;
       box-shadow: 0 0 0 1px transparent;
     }
+
+    &[icon] {
+      color: ${theme.colors.opacLighterGrey};
+      position: relative;
+    }
+
+    &[icon]:hover {
+      background-color: white;
+      color: ${theme.colors.opacLightGrey};
+    }
+
+    &[icon][labelposition="right"] {
+      padding-right: 50px;
+    }
+
+    & i {
+      position: absolute;
+      height: 100%;
+      margin: 0;
+      width: 3rem;
+      background-color: ${theme.colors.opacExtraLighterGrey};
+      top: 0;
+      left: 0;
+    }
+
+    & i:before {
+      display: block;
+      font-size: 25px
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      width: 100%;
+    }
+
+    &[labelposition="right"] i {
+      left: auto;
+      right: 0;
+      border-radius: 0;
+      border-top-right-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
 `;
 
 export const StyledLink = styled(Link)`
