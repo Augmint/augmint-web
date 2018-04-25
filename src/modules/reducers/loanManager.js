@@ -4,7 +4,7 @@
 
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import loanManagerArtifacts from "contractsBuild/LoanManager.json";
+import LoanManager from "abiniser/abis/LoanManager_ABI_291572b8d2ffe95dca1733ebc1472e08.json";
 
 import { fetchLoansToCollectTx, fetchProductsTx } from "modules/ethereum/loanTransactions";
 
@@ -135,7 +135,7 @@ export const connectLoanManager = () => {
             type: LOANMANAGER_CONNECT_REQUESTED
         });
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, loanManagerArtifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, LoanManager);
             return dispatch({
                 type: LOANMANAGER_CONNECT_SUCCESS,
                 contract

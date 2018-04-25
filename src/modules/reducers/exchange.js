@@ -1,6 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import exchangeArtifacts from "contractsBuild/Exchange.json";
+import Exchange from "abiniser/abis/Exchange_ABI_7595b255e567ae1d0eeef4460d0b0c16.json";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
 export const EXCHANGE_CONNECT_SUCCESS = "exchange/EXCHANGE_CONNECT_SUCCESS";
@@ -85,7 +85,7 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, Exchange);
 
             const info = await getExchangeInfo(contract.web3ContractInstance);
 

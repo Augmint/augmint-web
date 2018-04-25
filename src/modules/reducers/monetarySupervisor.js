@@ -3,7 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import monetarySupervisor_artifacts from "contractsBuild/MonetarySupervisor.json";
+import MonetarySupervisor from "abiniser/abis/MonetarySupervisor_ABI_a552ee1f90ae83cb91d07311ae8eab1e.json";
 
 import { ONE_ETH_IN_WEI } from "utils/constants";
 
@@ -101,7 +101,7 @@ export const connectMonetarySupervisor = () => {
         });
 
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, monetarySupervisor_artifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, MonetarySupervisor);
             const info = await getMonetarySupervisorInfo(contract.web3ContractInstance);
             return dispatch({
                 type: MONETARY_SUPERVISOR_CONNECT_SUCCESS,

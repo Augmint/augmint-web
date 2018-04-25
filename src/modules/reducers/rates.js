@@ -3,7 +3,7 @@
     */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import ratesArtifacts from "contractsBuild/Rates.json";
+import Rates from "abiniser/abis/Rates_ABI_cc8bc64cd780f047eca819e6cd3b8af9.json";
 
 import { ONE_ETH_IN_WEI } from "utils/constants";
 
@@ -85,7 +85,7 @@ export const connectRates = () => {
         try {
             return dispatch({
                 type: RATES_CONNECT_SUCCESS,
-                contract: SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
+                contract: SolidityContract.connectLatest(store.getState().web3Connect, Rates)
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {

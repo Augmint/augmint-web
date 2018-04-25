@@ -1,6 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import lockManagerArtifacts from "contractsBuild/Locker.json";
+import LockManager from "abiniser/abis/Locker_ABI_66e3e89133d9bbd91baac5552f21f7e1.json";
 
 import { fetchLockProductsTx } from "modules/ethereum/lockTransactions";
 
@@ -111,7 +111,7 @@ export const connectLockManager = () => {
             type: LOCKMANAGER_CONNECT_REQUESTED
         });
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, lockManagerArtifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, LockManager);
             return dispatch({
                 type: LOCKMANAGER_CONNECT_SUCCESS,
                 contract

@@ -3,8 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
-import feeAccount_artifacts from "contractsBuild/FeeAccount.json";
+import TokenAEur from "abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
@@ -114,7 +113,7 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, TokenAEur);
             const info = await getAugmintTokenInfo(contract.web3ContractInstance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,
@@ -158,7 +157,11 @@ async function getAugmintTokenInfo(augmintTokenInstance) {
     ]);
 
     // TODO: move feeAccount to its own redux state same as other contracts
-    const feeAccountContract = SolidityContract.connectNew(store.getState().web3Connect, feeAccount_artifacts);
+    const feeAccountContract = SolidityContract.connectAt(
+        store.getState().web3Connect,
+        "FeeAccount",
+        feeAccountAddress
+    );
     const feeAccount = { contract: feeAccountContract };
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
