@@ -1,7 +1,7 @@
 import React from "react";
 import store from "modules/store";
 import { Pblock } from "components/PageLayout";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { SubmissionError, reduxForm } from "redux-form";
 import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
@@ -66,6 +66,7 @@ class CollectLoanButton extends React.Component {
                                 data-testid="collectLoanButton"
                                 primary
                                 disabled={submitting || isLoading || loansToCollect.length === 0}
+                                type="submit"
                             >
                                 {submitting ? "Submitting..." : "Collect"}
                             </Button>
