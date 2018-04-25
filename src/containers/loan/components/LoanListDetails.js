@@ -1,6 +1,6 @@
 import React from "react";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { Link } from "react-router-dom";
 import { LoanRepayLink } from "./LoanRepayLink";
 
