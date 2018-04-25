@@ -134,7 +134,7 @@ export const refreshLockManager = () => {
             type: LOCKMANAGER_REFRESH_REQUESTED
         });
         try {
-            const lockManagerInstance = store.getState().lockManager.contract.instance;
+            const lockManagerInstance = store.getState().lockManager.contract.web3ContractInstance;
             const info = await getLockManagerInfo(lockManagerInstance);
             return dispatch({
                 type: LOCKMANAGER_REFRESHED,
@@ -176,9 +176,9 @@ export function fetchLockProducts() {
     };
 }
 
-async function getLockManagerInfo(lockManager) {
+async function getLockManagerInfo(lockManagerInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.instance;
+    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const [
@@ -190,25 +190,25 @@ async function getLockManagerInfo(lockManager) {
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
-        lockManager.CHUNK_SIZE(),
-        lockManager.getLockCount(),
-        lockManager.getLockProductCount(),
+        lockManagerInstance.methods.CHUNK_SIZE().call(),
+        lockManagerInstance.methods.getLockCount().call(),
+        lockManagerInstance.methods.getLockProductCount().call(),
 
-        lockManager.augmintToken(),
-        lockManager.monetarySupervisor(),
+        lockManagerInstance.methods.augmintToken().call(),
+        lockManagerInstance.methods.monetarySupervisor().call(),
 
-        web3.eth.getBalance(lockManager.address),
-        augmintToken.balanceOf(lockManager.address)
+        web3.eth.getBalance(lockManagerInstance._address),
+        augmintToken.methods.balanceOf(lockManagerInstance._address).call()
     ]);
 
     return {
-        chunkSize: chunkSize.toNumber(),
+        chunkSize: parseInt(chunkSize, 10),
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
         tokenBalance: bn_tokenBalance / decimalsDiv,
-        lockCount: lockCount.toNumber(),
-        productCount: productCount.toNumber(),
+        lockCount: parseInt(lockCount, 10),
+        productCount: parseInt(productCount, 10),
         augmintTokenAddress,
         monetarySupervisorAddress
     };

@@ -106,16 +106,16 @@ export const refreshRates = () => {
         });
         try {
             const web3 = store.getState().web3Connect.web3Instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
+            const augmintTokenInstance = store.getState().augmintToken.contract.web3ContractInstance;
             const bytes32_peggedSymbol = store.getState().augmintToken.info.bytes32_peggedSymbol;
             const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-            const rates = store.getState().rates.contract.instance;
+            const rates = store.getState().rates.contract.web3ContractInstance;
 
             const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
-                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI),
-                augmintToken.balanceOf(rates.address),
-                web3.eth.getBalance(rates.address)
+                rates.methods.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI).call(),
+                augmintTokenInstance.methods.balanceOf(rates._address).call(),
+                web3.eth.getBalance(rates._address)
             ]);
 
             return dispatch({

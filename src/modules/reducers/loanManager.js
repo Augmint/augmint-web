@@ -158,7 +158,7 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            const loanManagerInstance = store.getState().loanManager.contract.instance;
+            const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
             const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
@@ -176,9 +176,9 @@ export const refreshLoanManager = () => {
     };
 };
 
-async function getLoanManagerInfo(loanManager) {
+async function getLoanManagerInfo(loanManagerInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.instance;
+    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const [
@@ -191,26 +191,26 @@ async function getLoanManagerInfo(loanManager) {
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
-        loanManager.CHUNK_SIZE(),
-        loanManager.getLoanCount(),
-        loanManager.getProductCount(),
+        loanManagerInstance.methods.CHUNK_SIZE().call(),
+        loanManagerInstance.methods.getLoanCount().call(),
+        loanManagerInstance.methods.getProductCount().call(),
 
-        loanManager.augmintToken(),
-        loanManager.rates(),
-        loanManager.monetarySupervisor(),
+        loanManagerInstance.methods.augmintToken().call(),
+        loanManagerInstance.methods.rates().call(),
+        loanManagerInstance.methods.monetarySupervisor().call(),
 
-        web3.eth.getBalance(loanManager.address),
-        augmintToken.balanceOf(loanManager.address)
+        web3.eth.getBalance(loanManagerInstance._address),
+        augmintToken.methods.balanceOf(loanManagerInstance._address).call()
     ]);
 
     return {
-        chunkSize: chunkSize.toNumber(),
+        chunkSize: parseInt(chunkSize, 10),
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
         tokenBalance: bn_tokenBalance / decimalsDiv,
-        loanCount: loanCount.toNumber(),
-        productCount: productCount.toNumber(),
+        loanCount: parseInt(loanCount, 10),
+        productCount: parseInt(productCount, 10),
         augmintTokenAddress,
         ratesAddress,
         monetarySupervisorAddress
