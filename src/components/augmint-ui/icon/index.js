@@ -19,6 +19,9 @@ export default function Icon(props) {
         case "angle-right":
             className += " fas fa-angle-right";
             break;
+        case "right chevron":
+            className += " fas fa-angle-right";
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";
