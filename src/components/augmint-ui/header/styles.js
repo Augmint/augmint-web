@@ -11,7 +11,7 @@ const BaseHeader = `
 const HeaderH3 = `
     font-size: ${theme.typography.fontSizes.h3};
     line-height: ${theme.typography.fontSizes.h3};
-    margin-bottom: 0,875rem;
+    margin-bottom: 0.875rem;
 `;
 
 export const StyledHeaderH3 = styled.h3`
