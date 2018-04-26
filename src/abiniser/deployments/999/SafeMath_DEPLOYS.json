@@ -1,0 +1,24 @@
+{
+  "contractName": "SafeMath",
+  "latestAbiHash": "d751713988987e9331980363e24189ce",
+  "deployedAbis": {
+    "d751713988987e9331980363e24189ce": {
+      "latestDeployedAddress": "0xd3ef19679c2dbbf3b8e2077c61b88f5e9c6178eb",
+      "deployments": {
+        "0xd3ef19679c2dbbf3b8e2077c61b88f5e9c6178eb": {
+          "generatedAt": "2018-04-25T12:31:28.938Z",
+          "truffleContractFileUpdatedAt": "2018-04-20T18:25:08.412Z",
+          "deployTransactionHash": "0xd8e25dba18520bed923f67e86eccfc28fc3c91375b1ccccc426e95e1c66f5c77",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+          },
+          "bytecodeHash": "5c02a412ee11dc181e23608b85b249b9",
+          "deployedBytecodeHash": "d808bf41b73524260974a832a9735da9",
+          "sourceHash": "f07bc306764da6ef496a297a30a18531",
+          "source": "/**\n* @title SafeMath\n* @dev Math operations with safety checks that throw on error\n\n    TODO: check against ds-math: https://blog.dapphub.com/ds-math/\n    TODO: move roundedDiv to a sep lib? (eg. Math.sol)\n*/\npragma solidity ^0.4.23;\n\n\nlibrary SafeMath {\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\n        uint256 c = a * b;\n        require(a == 0 || c / a == b, \"mul overflow\");\n        return c;\n    }\n\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\n        require(b > 0, \"div by 0\"); // Solidity automatically throws for div by 0 but require to emit reason\n        uint256 c = a / b;\n        // require(a == b * c + a % b); // There is no case in which this doesn't hold\n        return c;\n    }\n\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\n        require(b <= a, \"sub underflow\");\n        return a - b;\n    }\n\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\n        uint256 c = a + b;\n        require(c >= a, \"add overflow\");\n        return c;\n    }\n\n    function roundedDiv(uint a, uint b) internal pure returns (uint256) {\n        require(b > 0, \"div by 0\"); // Solidity automatically throws for div by 0 but require to emit reason\n        uint256 z = a / b;\n        if (a % b >= b / 2) {\n            z++;  // no need for safe add b/c it can happen only if we divided the input\n        }\n        return z;\n    }\n}\n"
+        }
+      }
+    }
+  }
+}

@@ -3,8 +3,7 @@
 */
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
-import feeAccount_artifacts from "contractsBuild/FeeAccount.json";
+import TokenAEur from "abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
@@ -114,12 +113,12 @@ export const connectAugmintToken = () => {
         });
 
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, augmintToken_artifacts);
-            const info = await getAugmintTokenInfo(contract.instance);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, TokenAEur);
+            const info = await getAugmintTokenInfo(contract.web3ContractInstance);
             return dispatch({
                 type: AUGMINT_TOKEN_CONNECT_SUCCESS,
-                contract: contract,
-                info: info
+                contract,
+                info
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -138,8 +137,8 @@ export const refreshAugmintToken = () => {
         dispatch({
             type: AUGMINT_TOKEN_REFRESH_REQUESTED
         });
-        const augmintToken = store.getState().augmintToken.contract.instance;
-        const info = await getAugmintTokenInfo(augmintToken);
+        const augmintTokenInstance = store.getState().augmintToken.contract.web3ContractInstance;
+        const info = await getAugmintTokenInfo(augmintTokenInstance);
         return dispatch({
             type: AUGMINT_TOKEN_REFRESHED,
             result: info
@@ -147,18 +146,22 @@ export const refreshAugmintToken = () => {
     };
 };
 
-async function getAugmintTokenInfo(augmintToken) {
+async function getAugmintTokenInfo(augmintTokenInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
     const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals, feeAccountAddress] = await Promise.all([
-        augmintToken.symbol(),
-        augmintToken.peggedSymbol(),
-        augmintToken.totalSupply(),
-        augmintToken.decimals(),
-        augmintToken.feeAccount()
+        augmintTokenInstance.methods.symbol().call(),
+        augmintTokenInstance.methods.peggedSymbol().call(),
+        augmintTokenInstance.methods.totalSupply().call(),
+        augmintTokenInstance.methods.decimals().call(),
+        augmintTokenInstance.methods.feeAccount().call()
     ]);
 
     // TODO: move feeAccount to its own redux state same as other contracts
-    const feeAccountContract = SolidityContract.connectNew(store.getState().web3Connect, feeAccount_artifacts);
+    const feeAccountContract = SolidityContract.connectAt(
+        store.getState().web3Connect,
+        "FeeAccount",
+        feeAccountAddress
+    );
     const feeAccount = { contract: feeAccountContract };
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
@@ -166,14 +169,13 @@ async function getAugmintTokenInfo(augmintToken) {
     const decimalsDiv = 10 ** decimals;
 
     const [transferFeeStruct, bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
-        feeAccountContract.instance.transferFee(),
-        augmintToken.balanceOf(feeAccountAddress),
+        feeAccountContract.web3ContractInstance.methods.transferFee().call(),
+        augmintTokenInstance.methods.balanceOf(feeAccountAddress).call(),
         web3.eth.getBalance(feeAccountAddress)
     ]);
-    const feeAccountEthBalance = web3.utils.fromWei(bn_feeAccountEthBalance).toString();
-    const totalSupply = bn_totalSupply / decimalsDiv;
 
-    const [bn_feePt, bn_feeMin, bn_feeMax] = transferFeeStruct;
+    const feeAccountEthBalance = web3.utils.fromWei(bn_feeAccountEthBalance);
+    const totalSupply = bn_totalSupply / decimalsDiv;
 
     return {
         symbol,
@@ -183,9 +185,9 @@ async function getAugmintTokenInfo(augmintToken) {
         decimalsDiv,
         totalSupply,
 
-        feePt: bn_feePt / 1000000,
-        feeMin: bn_feeMin / decimalsDiv,
-        feeMax: bn_feeMax / decimalsDiv,
+        feePt: parseInt(transferFeeStruct.pt, 10) / 1000000,
+        feeMin: parseInt(transferFeeStruct.min, 10) / decimalsDiv,
+        feeMax: parseInt(transferFeeStruct.max, 10) / decimalsDiv,
 
         feeAccountAddress,
         feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv,
