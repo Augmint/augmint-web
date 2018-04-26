@@ -34,7 +34,11 @@
     flex: 1 0 auto; /* 2 */
     /* padding: var(--space) var(--space) 0; */
     width: 100%;
+}
+
+.Site-content.Site-content__dash {
     padding-left: 180px;
+
 }
 .Site-content::after {
     content: "\00a0"; /* &nbsp; */
