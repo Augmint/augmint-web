@@ -92,6 +92,38 @@ export default class SolidityContract {
         return new SolidityContract(connection, contractAddress, abiFile);
     }
 
+    /* NB: this is not in use atm, not tested */
+    static connectLatestAbi(connection, contractName) {
+        const deploysFile = this.getDeploysFile(connection.network.id, contractName);
+        const abiVersionHash = deploysFile.latestAbiHash;
+        const abiFile = this.getAbiFile(contractName, abiVersionHash);
+
+        if (
+            !deploysFile.deployedAbis[abiVersionHash] ||
+            !deploysFile.deployedAbis[abiVersionHash].latestDeployedAddress
+        ) {
+            throw new Error(
+                `Couldn't find deployment info for ${contractName} with latest abi version ${abiVersionHash} in ${
+                    deploysFile._fileName
+                }`
+            );
+        }
+        const contractAddress = deploysFile.deployedAbis[abiVersionHash].latestDeployedAddress;
+
+        if (
+            !deploysFile.deployedAbis[abiVersionHash] ||
+            !deploysFile.deployedAbis[abiVersionHash].latestDeployedAddress
+        ) {
+            throw new Error(
+                `Couldn't find deployment info for ${contractName} with abi version ${abiVersionHash} in ${
+                    deploysFile._fileName
+                }`
+            );
+        }
+
+        return new SolidityContract(connection, contractAddress, abiFile);
+    }
+
     static getDeploysFile(networkId, contractName) {
         const deploysFileName = `abiniser/deployments/${networkId}/${contractName}_DEPLOYS.json`;
         let deploysFile;
