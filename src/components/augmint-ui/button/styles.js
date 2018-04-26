@@ -19,7 +19,7 @@ const BaseButton = `
     height: 42px;
     line-height: 42px;
     font-size: 13px;
-    letter-spacing: 2.6px;
+    letter-spacing: normal;
 
     &[disabled] {
       cursor: default;
