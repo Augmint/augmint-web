@@ -32,10 +32,18 @@ export const StyledTopNavLink = styled(Link)`
     height: ${TOP_NAV_HEIGHT};
     Width: ${TOP_NAV_HEIGHT};
     color: ${theme.colors.primary};
+    transition: all ${theme.transitions.fast};
+    transition-property: background-color, color;
     
     > i {
-        font-size: 24px;
-        height: 24px;
+        font-size: 1.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    &:hover {
+        background-color: ${theme.colors.secondary};
+        color: ${theme.colors.white};
     }
     `;
     

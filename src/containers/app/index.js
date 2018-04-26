@@ -32,7 +32,7 @@ import AppMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
 
-import TopNav from "components/dashboard/components/topNav";
+import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
 
 import LockContainer from "containers/lock";
@@ -83,7 +83,7 @@ class App extends React.Component {
 
     render() {
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit"].indexOf(
+            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit", "/loan"].indexOf(
                 this.props.location.pathname
             ) > -1;
         return (
