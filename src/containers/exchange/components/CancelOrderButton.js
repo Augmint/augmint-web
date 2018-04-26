@@ -6,8 +6,9 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Header, Icon } from "semantic-ui-react";
+import { Modal, Header } from "semantic-ui-react";
 import Button from "../../../components/augmint-ui/button";
+import Icon from "../../../components/augmint-ui/icon";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 
@@ -106,7 +107,7 @@ class CancelOrderButton extends React.Component {
 
                 <Modal.Actions>
                     <Button className="grey" onClick={this.handleClose}>
-                        <Icon name="cancel" style={{ height: "100%" }} />Close
+                        <Icon name="close" style={{ marginRight: "6px" }} />Close
                     </Button>
 
                     <Button
@@ -117,7 +118,7 @@ class CancelOrderButton extends React.Component {
                         onClick={this.submitCancel}
                         content={submitting ? "Submitting..." : "Submit order cancellation"}
                     >
-                        <Icon name="trash" style={{ height: "100%" }} />
+                        <Icon name="trash" style={{ marginRight: "6px" }} />
                     </Button>
                 </Modal.Actions>
             </Modal>
