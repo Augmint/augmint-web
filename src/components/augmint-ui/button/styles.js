@@ -88,7 +88,7 @@ const BaseButton = `
       padding-right: 50px;
     }
 
-    & i {
+    &[icon] i {
       position: absolute;
       height: 100%;
       margin: 0;
@@ -98,7 +98,7 @@ const BaseButton = `
       left: 0;
     }
 
-    & i:before {
+    &[icon] i:before {
       display: block;
       font-size: 25px
       position: absolute;
