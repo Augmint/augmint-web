@@ -133,6 +133,7 @@ class RepayLoanPage extends React.Component {
                                         primary
                                         data-testid="confirmRepayButton"
                                         size="big"
+                                        type="submit"
                                         disabled={
                                             this.props.submitting ||
                                             !this.state.isLoanFound ||
