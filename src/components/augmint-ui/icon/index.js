@@ -21,6 +21,18 @@ export default function Icon(props) {
         case "account":
             className += " far fa-id-card";
             break;
+        case "exchange":
+            className += " fas fa-exchange-alt";
+            break;
+        case "lock":
+            className += " fas fa-lock";
+            break;
+        case "loan":
+            className += " far fa-money-bill-alt";
+            break;
+        case "reserves":
+            className += " fas fa-university";
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";

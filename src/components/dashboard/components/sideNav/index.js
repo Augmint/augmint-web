@@ -50,29 +50,32 @@ export const SideNavLink = styled(NavLink)`
     color: ${theme.colors.white};
     opacity: 0.9;
     transition: opacity ${theme.transitions.fast};
+    border-left: 3px solid transparent;
     
     &:hover {
-        color: ${theme.colors.white};
+        color: ${theme.colors.secondary};
         opacity: 1;
     }
 
     &.active {
-        border-left: 1px solid ${theme.colors.secondary};
+        border-left-color: ${theme.colors.secondary};
         color: ${theme.colors.secondary};
         display: flex;
         align-items: center;
     }
 
     > i {
-        font-size: 24px;
-        line-height: 24px;
-        width: 24px;
-        height: 24px
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem
     }
 
     > span {
-        margin-left: 7px;
-        line-height: 23px;
+        margin-left: 12px;
+        line-height: 1.5rem;
+        text-transform: uppercase;
+        font-size: 12px;
     }
 `;
 
@@ -88,26 +91,26 @@ export default props => (
             </SideNavLi>
             <SideNavLi>
                 <SideNavLink to="exchange" activeClassName="active">
-                    <Icon name="account"/>
+                    <Icon name="exchange"/>
                     <span>Buy/Sell</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
                 <SideNavLink to="loan" activeClassName="active">
-                    <Icon name="account"/>
+                    <Icon name="loan"/>
                     <span>Loan</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
                 <SideNavLink to="lock" activeClassName="active">
-                    <Icon name="account"/>
-                    <span>lock</span>
+                    <Icon name="lock"/>
+                    <span>Lock</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
                 <SideNavLink to="reserves" activeClassName="active">
-                    <Icon name="account"/>
-                    <span>reserves</span>
+                    <Icon name="reserves"/>
+                    <span>Reserves</span>
                 </SideNavLink>
             </SideNavLi>
         </SideNavUl>
