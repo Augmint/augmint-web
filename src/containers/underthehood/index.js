@@ -4,6 +4,7 @@ import LoansInfoGroup from "./LoansInfoGroup";
 import AugmintInfoGroup from "./AugmintInfoGroup";
 import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
+import LocksInfoGroup from "./LocksInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "semantic-ui-react";
@@ -43,6 +44,7 @@ export default class underTheHood extends React.Component {
                                 >
                                     Base info
                                 </Menu.Item>
+
                                 <Menu.Item
                                     data-testid="augmintInfoLink"
                                     active={selectedGroup === "augmintInfo"}
@@ -51,6 +53,7 @@ export default class underTheHood extends React.Component {
                                 >
                                     Augmint info
                                 </Menu.Item>
+
                                 <Menu.Item
                                     data-testid="loansInfoLink"
                                     active={selectedGroup === "loans"}
@@ -59,6 +62,16 @@ export default class underTheHood extends React.Component {
                                 >
                                     Loans
                                 </Menu.Item>
+
+                                <Menu.Item
+                                    data-testid="locksInfoLink"
+                                    active={selectedGroup === "locks"}
+                                    name="locks"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Locks
+                                </Menu.Item>
+
                                 <Menu.Item
                                     data-testid="exchangeInfoLink"
                                     active={selectedGroup === "exchange"}
@@ -72,6 +85,7 @@ export default class underTheHood extends React.Component {
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
                             {selectedGroup === "augmintInfo" && <AugmintInfoGroup />}
                             {selectedGroup === "loans" && <LoansInfoGroup />}
+                            {selectedGroup === "locks" && <LocksInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                         </Pgrid.Column>
                     </Pgrid>

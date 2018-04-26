@@ -4,6 +4,7 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import augmintToken_artifacts from "contractsBuild/TokenAEur.json";
+import feeAccount_artifacts from "contractsBuild/FeeAccount.json";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
@@ -32,6 +33,7 @@ const initialState = {
 
         totalSupply: "?",
 
+        feeAccountContract: null,
         feeAccount: null,
         feeAccountTokenBalance: "?",
         feeAccountEthBalance: "?"
@@ -147,23 +149,26 @@ export const refreshAugmintToken = () => {
 
 async function getAugmintTokenInfo(augmintToken) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals, feeAccount, transferFeeStruct] = await Promise.all([
+    const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals, feeAccountAddress] = await Promise.all([
         augmintToken.symbol(),
         augmintToken.peggedSymbol(),
         augmintToken.totalSupply(),
         augmintToken.decimals(),
-        augmintToken.feeAccount(),
-
-        augmintToken.transferFee()
+        augmintToken.feeAccount()
     ]);
+
+    // TODO: move feeAccount to its own redux state same as other contracts
+    const feeAccountContract = SolidityContract.connectNew(store.getState().web3Connect, feeAccount_artifacts);
+    const feeAccount = { contract: feeAccountContract };
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
     const decimalsDiv = 10 ** decimals;
 
-    const [bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
-        augmintToken.balanceOf(feeAccount),
-        web3.eth.getBalance(feeAccount)
+    const [transferFeeStruct, bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
+        feeAccountContract.instance.transferFee(),
+        augmintToken.balanceOf(feeAccountAddress),
+        web3.eth.getBalance(feeAccountAddress)
     ]);
     const feeAccountEthBalance = web3.utils.fromWei(bn_feeAccountEthBalance).toString();
     const totalSupply = bn_totalSupply / decimalsDiv;
@@ -182,9 +187,10 @@ async function getAugmintTokenInfo(augmintToken) {
         feeMin: bn_feeMin / decimalsDiv,
         feeMax: bn_feeMax / decimalsDiv,
 
-        feeAccount,
+        feeAccountAddress,
         feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv,
-        feeAccountEthBalance
+        feeAccountEthBalance,
+        feeAccount
     };
 }
 
