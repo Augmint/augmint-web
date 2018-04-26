@@ -25,6 +25,12 @@ export default function Icon(props) {
         case "trash":
             className += " fas fa-trash-alt";
             break;
+        case "zoom":
+            className += " fas fa-search-plus";
+            break;
+        case "help circle":
+            className += " fas fa-question-circle";
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";
