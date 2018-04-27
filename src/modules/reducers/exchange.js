@@ -1,6 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import exchangeArtifacts from "contractsBuild/Exchange.json";
+import Exchange from "abiniser/abis/Exchange_ABI_7595b255e567ae1d0eeef4460d0b0c16.json";
 
 export const EXCHANGE_CONNECT_REQUESTED = "exchange/EXCHANGE_CONNECT_REQUESTED";
 export const EXCHANGE_CONNECT_SUCCESS = "exchange/EXCHANGE_CONNECT_SUCCESS";
@@ -18,7 +18,6 @@ const initialState = {
     isConnected: false,
     info: {
         chunkSize: null,
-        bn_ethBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
         tokenBalance: "?",
@@ -86,9 +85,9 @@ export const connectExchange = () => {
             type: EXCHANGE_CONNECT_REQUESTED
         });
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, exchangeArtifacts);
+            const contract = SolidityContract.connectLatest(store.getState().web3Connect, Exchange);
 
-            const info = await getExchangeInfo(contract.instance);
+            const info = await getExchangeInfo(contract.web3ContractInstance);
 
             return dispatch({
                 type: EXCHANGE_CONNECT_SUCCESS,
@@ -113,8 +112,8 @@ export const refreshExchange = () => {
             type: EXCHANGE_REFRESH_REQUESTED
         });
         try {
-            const exchange = store.getState().exchange.contract.instance;
-            const info = await getExchangeInfo(exchange);
+            const exchangeInstance = store.getState().exchange.contract.web3ContractInstance;
+            const info = await getExchangeInfo(exchangeInstance);
 
             return dispatch({
                 type: EXCHANGE_REFRESH_SUCCESS,
@@ -129,25 +128,25 @@ export const refreshExchange = () => {
     };
 };
 
-async function getExchangeInfo(exchange) {
+async function getExchangeInfo(exchangeInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.instance;
+    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-    const [bn_ethBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
-        web3.eth.getBalance(exchange.address),
-        augmintToken.balanceOf(exchange.address),
-        exchange.getActiveOrderCounts(),
-        exchange.CHUNK_SIZE()
+    const [bn_weiBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
+        web3.eth.getBalance(exchangeInstance._address),
+        augmintToken.methods.balanceOf(exchangeInstance._address).call(),
+        exchangeInstance.methods.getActiveOrderCounts().call(),
+        exchangeInstance.methods.CHUNK_SIZE().call()
     ]);
 
     return {
-        bn_ethBalance: bn_ethBalance,
-        ethBalance: bn_ethBalance.toString(),
+        bn_ethBalance: bn_weiBalance,
+        ethBalance: web3.utils.fromWei(bn_weiBalance),
         bn_tokenBalance: bn_tokenBalance,
         tokenBalance: bn_tokenBalance / decimalsDiv,
-        buyOrderCount: orderCount[0].toNumber(),
-        sellOrderCount: orderCount[1].toNumber(),
-        chunkSize: chunkSize.toNumber()
+        buyOrderCount: parseInt(orderCount.buyTokenOrderCount, 10),
+        sellOrderCount: parseInt(orderCount.sellTokenOrderCount, 10),
+        chunkSize: parseInt(chunkSize, 10)
     };
 }

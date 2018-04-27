@@ -1,11 +1,12 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Segment, Container, List, Image } from "semantic-ui-react";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
-import decent from 'assets/images/decent.png';
-import telegramLogo from 'assets/images/telegram_logo.svg';
+import decent from "assets/images/decent.png";
+import telegramLogo from "assets/images/telegram_logo.svg";
 
 import "./custom_footer_style.css";
 
@@ -14,7 +15,7 @@ const segmentStyle = {
     backgroundPosition: "top",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
-    minHeight: 500,
+    minHeight: 500
 };
 
 export function AppFooter(props) {
@@ -31,7 +32,7 @@ export function AppFooter(props) {
                 </Segment>
                 <Segment basic as="p" className="description">
                     {description}
-                </Segment >
+                </Segment>
                 <Segment basic className="chat-container">
                     <Segment
                         basic
@@ -55,12 +56,14 @@ export function AppFooter(props) {
                         <Image src={telegramLogo} />
                         Talk to us on Telegram
                     </Segment>
-              </Segment>
+                </Segment>
 
                 <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
-                        <List.Icon name='github' size='large' verticalAlign='middle' />
-                        <List.Content as="a" href="https://github.com/Augmint" target="_blank">GITHUB</List.Content>
+                        <List.Icon name="github" size="large" verticalAlign="middle" />
+                        <List.Content as="a" href="https://github.com/Augmint" target="_blank">
+                            GITHUB
+                        </List.Content>
                     </List.Item>
                     <List.Item
                         as="a"
@@ -68,32 +71,27 @@ export function AppFooter(props) {
                         target="_blank"
                         content="WHITEPAPER"
                     />
-                    <List.Item
-                        as="a"
-                        href="/manifesto"
-                        content="MANIFESTO"
-                    />
-                    <List.Item
-                        as="a"
-                        href="/disclaimer"
-                        content="DISCLAIMER"
-                    />
-                    {isConnected ? (<List.Item
-                        as="a"
-                        href="/under-the-hood"
-                        data-testid="underTheHoodLink"
-                        content="UNDER THE HOOD"
-                    />) : null};
-                    <List.Item
-                        as="a"
-                        href="/contact"
-                        content="CONTACT"
-                    />
+                    <List.Item as={NavLink} to="/manifesto" content="MANIFESTO" />
+                    <List.Item as={NavLink} to="/disclaimer" content="DISCLAIMER" />
+                    {isConnected ? (
+                        <List.Item
+                            as={NavLink}
+                            to="/under-the-hood"
+                            data-testid="underTheHoodLink"
+                            content="UNDER THE HOOD"
+                        />
+                    ) : null};
+                    <List.Item as="a" href="/contact" content="CONTACT" />
                 </List>
                 <Subscribe />
                 <div className="partner">
-                  <img src={decent} alt="Decent logo" />
-                  <h5>Augmint was born at <a href="http://www.decent.org/" target="_blank" rel="noopener noreferrer">Decent</a>.</h5>
+                    <img src={decent} alt="Decent logo" />
+                    <h5>
+                        Augmint was born at{" "}
+                        <a href="http://www.decent.org/" target="_blank" rel="noopener noreferrer">
+                            Decent
+                        </a>.
+                    </h5>
                 </div>
             </Container>
         </Segment>

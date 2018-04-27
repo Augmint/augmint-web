@@ -1,0 +1,53 @@
+{
+  "contractName": "FeeAccount",
+  "latestAbiHash": "dd4594a936e439aa46ed5b06cb69eafa",
+  "deployedAbis": {
+    "3bf67cdfa9f7a16596598e19aeb06b39": {
+      "latestDeployedAddress": "0xad897f2c86d892cf221fdbd276029c3ba732af20",
+      "deployments": {
+        "0xd87c5eacfa897a1ef04e891554b65d3f52e0b4cc": {
+          "generatedAt": "2018-04-25T12:29:07.534Z",
+          "truffleContractFileUpdatedAt": "2018-02-14T23:21:02.850Z",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+          },
+          "bytecodeHash": "69b026002a4dee77ed6f6c3751706a16",
+          "deployedBytecodeHash": "1667a0501fd9994acd15101d508e8b50",
+          "sourceHash": "683f4469ac7396c5de93d4ce60e32c47",
+          "source": "/* Contract to collect fees from system */\n\npragma solidity 0.4.19;\nimport \"./generic/SystemAccount.sol\";\n\n\ncontract FeeAccount is SystemAccount { // solhint-disable-line no-empty-blocks\n\n}\n"
+        },
+        "0xad897f2c86d892cf221fdbd276029c3ba732af20": {
+          "generatedAt": "2018-04-25T12:30:49.084Z",
+          "truffleContractFileUpdatedAt": "2018-02-27T07:23:57.497Z",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+          },
+          "bytecodeHash": "590b35b115c16a5eeb45e74226771380",
+          "deployedBytecodeHash": "1d79d9ce02c401f7a91c98ab2d54b5e5",
+          "sourceHash": "683f4469ac7396c5de93d4ce60e32c47",
+          "source": "/* Contract to collect fees from system */\n\npragma solidity 0.4.19;\nimport \"./generic/SystemAccount.sol\";\n\n\ncontract FeeAccount is SystemAccount { // solhint-disable-line no-empty-blocks\n\n}\n"
+        }
+      }
+    },
+    "dd4594a936e439aa46ed5b06cb69eafa": {
+      "latestDeployedAddress": "0xc26667132b0b798ab87864f7c29c0819c887aadb",
+      "deployments": {
+        "0xc26667132b0b798ab87864f7c29c0819c887aadb": {
+          "generatedAt": "2018-04-25T12:31:29.048Z",
+          "truffleContractFileUpdatedAt": "2018-04-20T18:26:53.864Z",
+          "deployTransactionHash": "0xf4b06960e7ad9995e6466aee4f5b12a28599165d85abe3fe07b9be8f28533d24",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+          },
+          "bytecodeHash": "afe432dc74f46f15001b4d1071b890ea",
+          "deployedBytecodeHash": "b50181831074ded6293f030ac08dfbb9",
+          "sourceHash": "fe888fa25a5c364abea5c0856f1ebd5b",
+          "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity ^0.4.23;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(uint transferFeePt, uint transferFeeMin, uint transferFeeMax) public {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"MonetaryBoard\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoFeeTransferContracts\"] && !permissions[to][\"NoFeeTransferContracts\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
+        }
+      }
+    }
+  }
+}
