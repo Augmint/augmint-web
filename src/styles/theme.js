@@ -23,6 +23,14 @@ const theme = {
     },
     pageSize: {
         maxSize: "1127px"
+    },
+    typography: {
+        fontFamilies: {
+            default: "MaisonNeue,'Helvetica Neue',Arial,Helvetica,sans-serif"
+        },
+        fontSizes: {
+            h3: "1.625rem"
+        }
     }
 };
 

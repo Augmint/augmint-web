@@ -1,0 +1,53 @@
+{
+  "contractName": "Rates",
+  "latestAbiHash": "cc8bc64cd780f047eca819e6cd3b8af9",
+  "deployedAbis": {
+    "aad689098442fe73d35b427a36786f06": {
+      "latestDeployedAddress": "0x283456269eb05d7c9f4555bc2225fbb300375382",
+      "deployments": {
+        "0x591fb852bc42a710afdcdaf622064570deea66d2": {
+          "generatedAt": "2018-04-25T12:29:07.453Z",
+          "truffleContractFileUpdatedAt": "2018-02-14T23:28:03.092Z",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+          },
+          "bytecodeHash": "2c309dbef5cc7635eb4f12dc105f644c",
+          "deployedBytecodeHash": "f617816c8be26392a73fe690de438219",
+          "sourceHash": "6aba5d7c578a7c3d328066fa72de1429",
+          "source": "/*\n Generic symbol / WEI rates contract.\n only callable by trusted price oracles.\n Being regularly called by a price oracle\n    TODO: trustless/decentrilezed price Oracle\n    TODO: shall we use blockNumber instead of now for lastUpdated?\n    TODO: consider if we need storing rates with variable decimals instead of fixed 4\n    TODO: could we emit 1 RateChanged event from setMultipleRates (symbols and newrates arrays)?\n*/\npragma solidity 0.4.19;\n\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/Restricted.sol\";\n\n\ncontract Rates is Restricted {\n    using SafeMath for uint256;\n\n    struct RateInfo {\n        uint rate; // how much 1 WEI worth 1 unit , i.e. symbol/ETH rate\n                    // 0 rate means no rate info available\n        uint lastUpdated;\n    }\n\n    // mapping currency symbol => rate. all rates are stored with 4 decimals. i.e. ETH/EUR = 989.12 then rate = 989,1200\n    mapping(bytes32 => RateInfo) public rates;\n\n    event RateChanged(bytes32 symbol, uint newRate);\n\n    function setRate(bytes32 symbol, uint newRate) external restrict(\"setRate\") {\n        rates[symbol] = RateInfo(newRate, now);\n        RateChanged(symbol, newRate);\n    }\n\n    function setMultipleRates(bytes32[] symbols, uint[] newRates) external restrict(\"setRate\") {\n        require(symbols.length == newRates.length);\n        for (uint256 i = 0; i < symbols.length; i++) {\n            rates[symbols[i]] = RateInfo(newRates[i], now);\n            RateChanged(symbols[i], newRates[i]);\n        }\n    }\n\n    function convertFromWei(bytes32 bSymbol, uint weiValue) external view returns(uint value) {\n        require(rates[bSymbol].rate > 0);\n        return weiValue.mul(rates[bSymbol].rate).roundedDiv(1000000000000000000);\n    }\n\n    function convertToWei(bytes32 bSymbol, uint value) external view returns(uint weiValue) {\n        // no require(rates[symbol].rate >  0) needed b/c it will revert with div by zero\n        /* TODO: can we make this not loosing max scale? */\n        return value.mul(1000000000000000000).roundedDiv(rates[bSymbol].rate);\n    }\n\n}\n"
+        },
+        "0x283456269eb05d7c9f4555bc2225fbb300375382": {
+          "generatedAt": "2018-04-25T12:30:49.023Z",
+          "truffleContractFileUpdatedAt": "2018-02-27T07:31:58.107Z",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.19+commit.c4cbbb05.Emscripten.clang"
+          },
+          "bytecodeHash": "b072f2ac9f39bd4e54ec18306443b251",
+          "deployedBytecodeHash": "94217efb3293a39e7ccfaf54347d3bfe",
+          "sourceHash": "6aba5d7c578a7c3d328066fa72de1429",
+          "source": "/*\n Generic symbol / WEI rates contract.\n only callable by trusted price oracles.\n Being regularly called by a price oracle\n    TODO: trustless/decentrilezed price Oracle\n    TODO: shall we use blockNumber instead of now for lastUpdated?\n    TODO: consider if we need storing rates with variable decimals instead of fixed 4\n    TODO: could we emit 1 RateChanged event from setMultipleRates (symbols and newrates arrays)?\n*/\npragma solidity 0.4.19;\n\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/Restricted.sol\";\n\n\ncontract Rates is Restricted {\n    using SafeMath for uint256;\n\n    struct RateInfo {\n        uint rate; // how much 1 WEI worth 1 unit , i.e. symbol/ETH rate\n                    // 0 rate means no rate info available\n        uint lastUpdated;\n    }\n\n    // mapping currency symbol => rate. all rates are stored with 4 decimals. i.e. ETH/EUR = 989.12 then rate = 989,1200\n    mapping(bytes32 => RateInfo) public rates;\n\n    event RateChanged(bytes32 symbol, uint newRate);\n\n    function setRate(bytes32 symbol, uint newRate) external restrict(\"setRate\") {\n        rates[symbol] = RateInfo(newRate, now);\n        RateChanged(symbol, newRate);\n    }\n\n    function setMultipleRates(bytes32[] symbols, uint[] newRates) external restrict(\"setRate\") {\n        require(symbols.length == newRates.length);\n        for (uint256 i = 0; i < symbols.length; i++) {\n            rates[symbols[i]] = RateInfo(newRates[i], now);\n            RateChanged(symbols[i], newRates[i]);\n        }\n    }\n\n    function convertFromWei(bytes32 bSymbol, uint weiValue) external view returns(uint value) {\n        require(rates[bSymbol].rate > 0);\n        return weiValue.mul(rates[bSymbol].rate).roundedDiv(1000000000000000000);\n    }\n\n    function convertToWei(bytes32 bSymbol, uint value) external view returns(uint weiValue) {\n        // no require(rates[symbol].rate >  0) needed b/c it will revert with div by zero\n        /* TODO: can we make this not loosing max scale? */\n        return value.mul(1000000000000000000).roundedDiv(rates[bSymbol].rate);\n    }\n\n}\n"
+        }
+      }
+    },
+    "cc8bc64cd780f047eca819e6cd3b8af9": {
+      "latestDeployedAddress": "0xca8100fccb479516a5b30f8bc5daea09fb7a7473",
+      "deployments": {
+        "0xca8100fccb479516a5b30f8bc5daea09fb7a7473": {
+          "generatedAt": "2018-04-25T12:31:28.978Z",
+          "truffleContractFileUpdatedAt": "2018-04-20T18:21:38.645Z",
+          "deployTransactionHash": "0x50401a2e7d1292cd9360f11d38f10453233bba4e3e89b20b94f4e108759ca610",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+          },
+          "bytecodeHash": "7b3cb84bdbfbe54d0c253744ccc86bd9",
+          "deployedBytecodeHash": "36714b840505a1bedac90a82a36e514c",
+          "sourceHash": "e9dda67ca678fd3a4700e8970b50acd3",
+          "source": "/*\n Generic symbol / WEI rates contract.\n only callable by trusted price oracles.\n Being regularly called by a price oracle\n    TODO: trustless/decentrilezed price Oracle\n    TODO: shall we use blockNumber instead of now for lastUpdated?\n    TODO: consider if we need storing rates with variable decimals instead of fixed 4\n    TODO: could we emit 1 RateChanged event from setMultipleRates (symbols and newrates arrays)?\n*/\npragma solidity ^0.4.23;\n\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/Restricted.sol\";\n\n\ncontract Rates is Restricted {\n    using SafeMath for uint256;\n\n    struct RateInfo {\n        uint rate; // how much 1 WEI worth 1 unit , i.e. symbol/ETH rate\n                    // 0 rate means no rate info available\n        uint lastUpdated;\n    }\n\n    // mapping currency symbol => rate. all rates are stored with 4 decimals. i.e. ETH/EUR = 989.12 then rate = 989,1200\n    mapping(bytes32 => RateInfo) public rates;\n\n    event RateChanged(bytes32 symbol, uint newRate);\n\n    function setRate(bytes32 symbol, uint newRate) external restrict(\"setRate\") {\n        rates[symbol] = RateInfo(newRate, now);\n        emit RateChanged(symbol, newRate);\n    }\n\n    function setMultipleRates(bytes32[] symbols, uint[] newRates) external restrict(\"setRate\") {\n        require(symbols.length == newRates.length, \"symobls and newRates lengths must be equal\");\n        for (uint256 i = 0; i < symbols.length; i++) {\n            rates[symbols[i]] = RateInfo(newRates[i], now);\n            emit RateChanged(symbols[i], newRates[i]);\n        }\n    }\n\n    function convertFromWei(bytes32 bSymbol, uint weiValue) external view returns(uint value) {\n        require(rates[bSymbol].rate > 0, \"rates[bSymbol] must be > 0\");\n        return weiValue.mul(rates[bSymbol].rate).roundedDiv(1000000000000000000);\n    }\n\n    function convertToWei(bytes32 bSymbol, uint value) external view returns(uint weiValue) {\n        // next line would revert with div by zero but require to emit reason\n        require(rates[bSymbol].rate > 0, \"rates[bSymbol] must be > 0\");\n        /* TODO: can we make this not loosing max scale? */\n        return value.mul(1000000000000000000).roundedDiv(rates[bSymbol].rate);\n    }\n\n}\n"
+        }
+      }
+    }
+  }
+}

@@ -12,9 +12,10 @@ export async function fetchOrders() {
     // TODO: handle when order changes while iterating
     const exchange = store.getState().exchange;
 
-    const orderCounts = await exchange.contract.instance.getActiveOrderCounts();
-    const buyCount = orderCounts[0].toNumber();
-    const sellCount = orderCounts[1].toNumber();
+    const orderCounts = await exchange.contract.web3ContractInstance.methods.getActiveOrderCounts().call();
+    const buyCount = parseInt(orderCounts.buyTokenOrderCount, 10);
+    const sellCount = parseInt(orderCounts.sellTokenOrderCount, 10);
+
     // retreive all orders
     let buyOrders = [];
     let queryCount = Math.ceil(buyCount / exchange.info.chunkSize);
@@ -34,27 +35,28 @@ export async function fetchOrders() {
 }
 
 async function getOrders(orderType, offset) {
-    const exchange = store.getState().exchange.contract.instance;
+    const exchangeInstance = store.getState().exchange.contract.web3ContractInstance;
     const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
     const decimals = store.getState().augmintToken.info.decimals;
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
 
     let result;
     if (orderType === TOKEN_BUY) {
-        result = await exchange.getActiveBuyOrders(offset, { gas: blockGasLimit });
+        result = await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit });
     } else {
-        result = await exchange.getActiveSellOrders(offset, { gas: blockGasLimit });
+        result = await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit });
     }
 
     // result format: [id, maker,  price, amount]
     const orders = result.reduce(
         (res, order, idx) => {
-            if (!order[3].eq(0)) {
+            const bn_amount = new BigNumber(order[3]);
+            if (!bn_amount.eq(0)) {
                 const parsed = {
-                    id: order[0].toNumber(),
-                    maker: "0x" + order[1].toString(16), // ethers.utils.hexlify(order[1].toString(16)),
-                    bn_price: order[2],
-                    bn_amount: order[3]
+                    id: parseInt(order[0], 10),
+                    maker: "0x" + new BigNumber(order[1]).toString(16),
+                    bn_price: new BigNumber(order[2]),
+                    bn_amount
                 };
 
                 if (orderType === TOKEN_BUY) {

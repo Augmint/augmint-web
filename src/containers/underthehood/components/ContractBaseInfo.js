@@ -38,7 +38,9 @@ export function ContractBaseInfo(props) {
                     Copy contract ABI to clipboard
                 </Button>
             </CopyToClipboard>
-
+            <p>
+                Abi version hash: <small>{contract ? contract.abiVersionHash : "?"}</small>
+            </p>
             <p>Info:</p>
             <pre style={{ fontSize: "0.8em", overflow: "auto" }}>{stringifyInfo(info)}</pre>
 
