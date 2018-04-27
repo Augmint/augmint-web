@@ -26,11 +26,3 @@ export const StyledHeaderH2 = styled.h2`
 export const StyledHeaderH4 = styled.h4`
     ${BaseHeader};
 `;
-
-export const StyledHeaderH2 = styled.h2`
-    ${BaseHeader};
-`;
-
-export const StyledHeaderH4 = styled.h4`
-    ${BaseHeader};
-`;
