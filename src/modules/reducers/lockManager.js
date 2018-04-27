@@ -134,7 +134,7 @@ export const refreshLockManager = () => {
             type: LOCKMANAGER_REFRESH_REQUESTED
         });
         try {
-            const lockManagerInstance = store.getState().lockManager.contract.web3ContractInstance;
+            const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
             const info = await getLockManagerInfo(lockManagerInstance);
             return dispatch({
                 type: LOCKMANAGER_REFRESHED,

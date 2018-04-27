@@ -148,11 +148,12 @@ EthSubmissionSuccessPanel.defaultProps = {
 export function ConnectionStatus(props) {
     const { contract, error = true, size = "tiny", ...other } = props;
     return (
-        contract.connectionError && (
+        contract.connectionError ||
+        (contract.error && (
             <Message size={size} error={error} {...other}>
                 Couldn't connect to Ethereum contract.
             </Message>
-        )
+        ))
     );
 }
 

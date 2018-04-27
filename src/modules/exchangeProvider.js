@@ -1,34 +1,39 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectExchange, refreshExchange } from "modules/reducers/exchange";
+import { refreshExchange } from "modules/reducers/exchange";
 import { fetchTrades, processNewTrade } from "modules/reducers/trades";
 import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
-export default () => {
-    const exchange = store.getState().exchange;
-    const augmintToken = store.getState().augmintToken;
+let isWatchSetup = false;
 
-    if (!exchange.isLoading && !exchange.isConnected) {
-        //setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
-        setupWatch("exchange.contract", onExchangeContractChange);
-        if (augmintToken.isConnected) {
-            console.debug(
-                "exchangeProvider - exchange not connected or loading and augmintToken already loaded, dispatching connectExchange() "
-            );
-            store.dispatch(connectExchange());
-        }
+export default () => {
+    const exchange = store.getState().contracts.latest.exchange;
+    const exchangeData = store.getState().exchange;
+
+    if (exchange && !exchangeData.isLoaded && !exchangeData.isLoading) {
+        console.debug(
+            "exchangeProvider - first time. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
+        );
+        refresh();
+        setupListeners();
     }
+
+    if (!isWatchSetup) {
+        console.log("**** DO WATCH SETP");
+        // first time call of exchangeProvider
+        isWatchSetup = true;
+        setupWatch("contracts.latest.exchange", onExchangeContractChange);
+    }
+
     return;
 };
 
 const setupListeners = () => {
-    const exchange = store.getState().exchange.contract.ethersInstance;
+    const exchange = store.getState().contracts.latest.exchange.ethersInstance;
     exchange.onneworder = onNewOrder;
     exchange.onorderfill = onOrderFill;
     exchange.oncancelledorder = onCancelledOrder;
-    exchange.onminorderamountchanged = onMinOrderAmountChanged;
 };
 
 const removeListeners = oldInstance => {
@@ -40,33 +45,24 @@ const removeListeners = oldInstance => {
     // }
 };
 
-// const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-//     removeListeners(oldVal);
-//     if (newVal !== null) {
-//         console.debug("exchangeProvider - web3Connect.network changed. Dispatching connectExchange()");
-//         store.dispatch(connectExchange());
-//     }
-// };
+const refresh = () => {
+    store.dispatch(refreshExchange());
+    store.dispatch(refreshOrders());
 
-const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
-    removeListeners(oldVal);
-    if (newVal) {
-        console.debug("exchangeProvider - augmintToken contract changed. Dispatching connectExchange()");
-        store.dispatch(connectExchange());
-    }
+    const userAccount = store.getState().web3Connect.userAccount;
+    const exchange = store.getState().contracts.latest.exchange;
+
+    store.dispatch(fetchTrades(userAccount, exchange.deployedAtBlock, "latest"));
 };
 
 const onExchangeContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
-    if (newVal && store.getState().augmintToken.isConnected) {
-        console.debug("exchangeProvider - new Exchange contract. Dispatching refreshOrders()");
-        store.dispatch(refreshOrders());
+    if (newVal) {
+        console.debug(
+            "exchangeProvider - new Exchange contract. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
+        );
 
-        const userAccount = store.getState().web3Connect.userAccount;
-        const augmintToken = store.getState().augmintToken;
-
-        store.dispatch(fetchTrades(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
-        setupListeners();
+        refresh();
     }
 };
 
@@ -77,7 +73,7 @@ const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade('NewOrder', userAccount, this));
+        store.dispatch(processNewTrade("NewOrder", userAccount, this));
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
@@ -95,7 +91,7 @@ const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade('CancelledOrder', userAccount, this));
+        store.dispatch(processNewTrade("CancelledOrder", userAccount, this));
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -106,7 +102,15 @@ const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
-const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellTokenOrderId, price, weiAmount, tokenAmount) {
+const onOrderFill = function(
+    tokenBuyer,
+    tokenSeller,
+    buyTokenOrderId,
+    sellTokenOrderId,
+    price,
+    weiAmount,
+    tokenAmount
+) {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and regreshOrders()");
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
@@ -114,10 +118,10 @@ const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellToken
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === tokenBuyer.toLowerCase()) {
-        store.dispatch(processNewTrade('OrderFill', userAccount, this, 'buy'));
+        store.dispatch(processNewTrade("OrderFill", userAccount, this, "buy"));
     }
     if (userAccount.toLowerCase() === tokenSeller.toLowerCase()) {
-        store.dispatch(processNewTrade('OrderFill', userAccount, this, 'sell'));
+        store.dispatch(processNewTrade("OrderFill", userAccount, this, "sell"));
     }
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -125,10 +129,4 @@ const onOrderFill = function(tokenBuyer, tokenSeller, buyTokenOrderId, sellToken
         );
         store.dispatch(fetchUserBalance(userAccount));
     }
-};
-
-// MinOrderAmountChanged(uint newMinOrderAmount);
-const onMinOrderAmountChanged = newMinOrderAmount => {
-    console.debug("exchangeProvider.onMinOrderAmountChanged: dispatching refreshExchange()");
-    store.dispatch(refreshExchange());
 };

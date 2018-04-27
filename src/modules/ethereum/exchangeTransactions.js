@@ -3,31 +3,32 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, DECIMALS, EXCHANGE_CHUNK_SIZE } from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
 
 export async function fetchOrders() {
     // TODO: handle when order changes while iterating
-    const exchange = store.getState().exchange;
+    const exchange = store.getState().contracts.latest.exchange;
 
-    const orderCounts = await exchange.contract.web3ContractInstance.methods.getActiveOrderCounts().call();
+    const orderCounts = await exchange.web3ContractInstance.methods.getActiveOrderCounts().call();
     const buyCount = parseInt(orderCounts.buyTokenOrderCount, 10);
     const sellCount = parseInt(orderCounts.sellTokenOrderCount, 10);
 
     // retreive all orders
     let buyOrders = [];
-    let queryCount = Math.ceil(buyCount / exchange.info.chunkSize);
+    let queryCount = Math.ceil(buyCount / EXCHANGE_CHUNK_SIZE);
+
     for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = await getOrders(TOKEN_BUY, i * exchange.info.chunkSize);
+        const fetchedOrders = await getOrders(TOKEN_BUY, i * EXCHANGE_CHUNK_SIZE);
         buyOrders = buyOrders.concat(fetchedOrders.buyOrders);
     }
 
     let sellOrders = [];
-    queryCount = Math.ceil(sellCount / exchange.info.chunkSize);
+    queryCount = Math.ceil(sellCount / EXCHANGE_CHUNK_SIZE);
     for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = await getOrders(TOKEN_SELL, i * exchange.info.chunkSize);
+        const fetchedOrders = await getOrders(TOKEN_SELL, i * EXCHANGE_CHUNK_SIZE);
         sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
     }
 
@@ -35,9 +36,7 @@ export async function fetchOrders() {
 }
 
 async function getOrders(orderType, offset) {
-    const exchangeInstance = store.getState().exchange.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const decimals = store.getState().augmintToken.info.decimals;
+    const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
 
     let result;
@@ -66,20 +65,20 @@ async function getOrders(orderType, offset) {
                             .mul(parsed.bn_price)
                             .div(ONE_ETH_IN_WEI)
                             .round(0, BigNumber.ROUND_HALF_DOWN)
-                            .div(decimalsDiv)
-                            .toFixed(decimals)
+                            .div(DECIMALS_DIV)
+                            .toFixed(DECIMALS)
                     );
                     parsed.bn_weiValue = parsed.bn_amount;
                 } else {
                     parsed.orderType = TOKEN_SELL;
-                    parsed.tokenValue = parseFloat(parsed.bn_amount / decimalsDiv);
+                    parsed.tokenValue = parseFloat(parsed.bn_amount / DECIMALS_DIV);
                     parsed.bn_weiValue = parsed.bn_amount
                         .mul(ONE_ETH_IN_WEI)
                         .div(parsed.bn_price)
                         .round(0, BigNumber.ROUND_HALF_UP);
                 }
 
-                parsed.price = parsed.bn_price / decimalsDiv; // price in tokens/ETH
+                parsed.price = parsed.bn_price / DECIMALS_DIV; // price in tokens/ETH
                 parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH_IN_WEI);
                 parsed.ethValue = parsed.bn_ethValue.toString();
                 parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
@@ -116,10 +115,9 @@ export function isOrderBetter(o1, o2) {
 export async function placeOrderTx(orderType, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
-    const submitPrice = new BigNumber(price).mul(decimalsDiv);
+    const submitPrice = new BigNumber(price).mul(DECIMALS_DIV);
     let submitAmount;
     let tx;
     let txName;
@@ -137,7 +135,7 @@ export async function placeOrderTx(orderType, amount, price) {
 
         case TOKEN_SELL:
             const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
-            submitAmount = new BigNumber(amount).mul(decimalsDiv);
+            submitAmount = new BigNumber(amount).mul(DECIMALS_DIV);
             txName = "Sell token order";
             tx = augmintToken.methods
                 .transferAndNotify(exchange._address, submitAmount.toString(), submitPrice.toString())
@@ -157,7 +155,6 @@ export async function placeOrderTx(orderType, amount, price) {
     if (orderType === TOKEN_SELL) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
         onReceipt = receipt => {
-            const exchange = store.getState().exchange.contract.web3ContractInstance;
             const web3 = store.getState().web3Connect.web3Instance;
             const newOrderEventInputs = exchange.options.jsonInterface.find(val => val.name === "NewOrder").inputs;
 
@@ -181,7 +178,7 @@ export async function matchOrdersTx(buyId, sellId) {
     const txName = "Match orders";
     const gasEstimate = cost.MATCH_ORDERS_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.web3ContractInstance;
+    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
     const tx = exchange.methods.matchOrders(buyId, sellId).send({ from: userAccount, gas: gasEstimate });
 
@@ -193,7 +190,7 @@ export async function matchOrdersTx(buyId, sellId) {
 export async function cancelOrderTx(orderType, orderId) {
     const gasEstimate = cost.CANCEL_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().exchange.contract.web3ContractInstance;
+    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
     let tx;
     let txName;

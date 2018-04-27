@@ -4,14 +4,14 @@ import { ConnectionStatus } from "components/MsgPanels";
 
 export class LtdStats extends React.Component {
     render() {
-        const { isConnected, isLoading, connectionError } = this.props.monetarySupervisor;
+        const { isLoaded, isLoading, error } = this.props.monetarySupervisor;
         const { monetarySupervisor, size } = this.props;
         const { totalLockedAmount, totalLoanAmount, ltdPercent } = this.props.monetarySupervisor.info;
         const { loanCount } = this.props.loanManager.info;
         const { lockCount } = this.props.lockManager.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
+            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !error)}>
                 <ConnectionStatus contract={monetarySupervisor} />
 
                 <Statistic.Group widths="3" size={size}>

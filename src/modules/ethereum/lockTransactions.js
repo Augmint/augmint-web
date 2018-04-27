@@ -5,9 +5,10 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
+import { DECIMALS_DIV } from "utils/constants";
 
 export async function fetchLockProductsTx() {
-    const lockManagerInstance = store.getState().lockManager.contract.web3ContractInstance;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     const [chunkSize, productCount] = await Promise.all([
         lockManagerInstance.methods
@@ -33,8 +34,6 @@ export async function fetchLockProductsTx() {
 }
 
 function parseProducts(productsArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const products = productsArray.reduce((parsed, product, index) => {
         const [bn_perTermInterest, bn_durationInSecs, bn_minimumLockAmount, bn_maxLockAmount, bn_isActive] = product;
         const durationInSecs = parseInt(bn_durationInSecs, 10);
@@ -53,8 +52,8 @@ function parseProducts(productsArray) {
                 durationInSecs,
                 durationInDays,
                 durationText,
-                minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
-                maxLockAmount: bn_maxLockAmount / decimalsDiv,
+                minimumLockAmount: bn_minimumLockAmount / DECIMALS_DIV,
+                maxLockAmount: bn_maxLockAmount / DECIMALS_DIV,
                 interestRatePa,
                 isActive: parseInt(bn_isActive, 10) === 1
             });
@@ -70,19 +69,16 @@ export async function newLockTx(productId, lockAmount) {
 
     const txName = "New lock";
 
-    const lockManagerAddress = store.getState().lockManager.contract.address;
-    const augmintToken = store.getState().augmintToken;
+    const lockManagerAddress = store.getState().contracts.latest.lockManager.web3ContractInstance._address;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const decimalsDiv = augmintToken.info.decimalsDiv;
-    const lockAmountBNString = new BigNumber(lockAmount).mul(decimalsDiv).toString();
+    const lockAmountBNString = new BigNumber(lockAmount).mul(DECIMALS_DIV).toString();
 
-    const tx = augmintToken.contract.web3ContractInstance.methods
-        .transferAndNotify(lockManagerAddress, lockAmountBNString, productId)
-        .send({
-            from: userAccount,
-            gas: gasEstimate
-        });
+    const tx = augmintTokenInstance.methods.transferAndNotify(lockManagerAddress, lockAmountBNString, productId).send({
+        from: userAccount,
+        gas: gasEstimate
+    });
 
     const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
@@ -93,21 +89,18 @@ export async function releaseFundsTx(lockId) {
 
     const txName = "Release funds";
 
-    const lockManager = store.getState().lockManager;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;
 
-    const tx = lockManager.contract.web3ContractInstance.methods.releaseFunds(lockId).send({
-        from: userAccount,
-        gas: gasEstimate
-    });
+    const tx = lockManagerInstance.methods.releaseFunds(lockId).send({ from: userAccount, gas: gasEstimate });
 
     const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
 }
 
 export async function fetchLocksForAddressTx(account) {
-    const lockManagerInstance = store.getState().lockManager.contract.web3ContractInstance;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     // TODO: resolve timing of loanManager refresh in order to get chunkSize from loanManager
     // const chunkSize = store.getState().loanManager.info.chunkSize;
@@ -152,8 +145,6 @@ export async function processNewLockTx(account, lockData) {
 }
 
 function parseLocks(locksArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const locks = locksArray.reduce((parsed, lock) => {
         const [
             bn_id,
@@ -165,7 +156,7 @@ function parseLocks(locksArray) {
             bn_isActive
         ] = lock;
 
-        const amountLocked = bn_amountLocked / decimalsDiv;
+        const amountLocked = bn_amountLocked / DECIMALS_DIV;
         if (amountLocked > 0) {
             const lockedUntil = parseInt(bn_lockedUntil, 10);
             const lockedUntilText = moment.unix(lockedUntil).format("D MMM YYYY HH:mm");
@@ -194,7 +185,7 @@ function parseLocks(locksArray) {
             parsed.push({
                 id: parseInt(bn_id, 10),
                 amountLocked,
-                interestEarned: bn_interestEarned / decimalsDiv,
+                interestEarned: bn_interestEarned / DECIMALS_DIV,
                 lockedUntil,
                 lockedUntilText,
                 perTermInterest,

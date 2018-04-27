@@ -12,24 +12,27 @@ import { DiscordButton } from "components/LinkButtons";
 export class EthereumState extends React.Component {
     render() {
         let msg = null;
-        const { web3Connect, loanManager, rates, augmintToken, exchange, children = null } = this.props;
-        const { isConnected, isLoading, network, error } = this.props.web3Connect;
+        const { web3Connect, contracts, loanManager, rates, augmintToken, exchange, children = null } = this.props;
+        const { network } = web3Connect;
+        const isConnected = web3Connect.isConnected && contracts.isConnected;
 
         const anyLoading =
-            isLoading ||
-            exchange.isLoading ||
+            web3Connect.isLoading ||
+            contracts.isLoading ||
             augmintToken.isLoading ||
             rates.isLoading ||
             loanManager.isLoading ||
             document.readyState !== "complete";
+
         const anyConnectionError =
+            web3Connect.error ||
+            contracts.error ||
             loanManager.connectionError ||
             rates.connectionError ||
             augmintToken.connectionError ||
-            (exchange && rates.connectionError) ||
-            (exchange && exchange.connectionError);
+            (exchange && rates.connectionError);
 
-        if (isLoading || document.readyState !== "complete") {
+        if (web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete") {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!isConnected && !anyLoading) {
             msg = (
@@ -40,7 +43,12 @@ export class EthereumState extends React.Component {
                     </p>
 
                     {web3Connect.error && (
-                        <ErrorDetails header="Connection error details:">{error.message}</ErrorDetails>
+                        <ErrorDetails header="Web3 connection error details:">{web3Connect.error.message}</ErrorDetails>
+                    )}
+                    {contracts.error && (
+                        <ErrorDetails header="Augmint contracts connection error details:">
+                            {contracts.error.message}
+                        </ErrorDetails>
                     )}
                 </WarningPanel>
             );
@@ -102,10 +110,10 @@ export class EthereumState extends React.Component {
                         )}
                     <p>Error(s):</p>
                     <ErrorDetails>
+                        {contracts.error ? contracts.error.message : ""}
                         {loanManager.connectionError ? loanManager.connectionError.message + "\n" : ""}
                         {rates.connectionError ? rates.connectionError.message + "\n" : ""}
                         {augmintToken.connectionError ? augmintToken.connectionError.message + "\n" : ""}
-                        {exchange.connectionError ? exchange.connectionError.message : ""}
                     </ErrorDetails>
                 </ErrorPanel>
             );
@@ -129,7 +137,7 @@ const mapStateToProps = state => ({
     loanManager: state.loanManager,
     rates: state.rates,
     augmintToken: state.augmintToken,
-    exchange: state.exchange
+    contracts: state.contracts
 });
 
 export default (EthereumState = connect(mapStateToProps)(EthereumState));
