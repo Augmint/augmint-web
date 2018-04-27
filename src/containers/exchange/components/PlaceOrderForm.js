@@ -228,7 +228,14 @@ class PlaceOrderForm extends React.Component {
                             <Label>A-EUR / ETH</Label>
                         </Field>
 
-                        <Button size="big" primary loading={submitting} disabled={pristine} data-testid="submitButton">
+                        <Button
+                            size="big"
+                            primary
+                            loading={submitting}
+                            disabled={pristine}
+                            data-testid="submitButton"
+                            type="submit"
+                        >
                             {submitting && "Submitting..."}
                             {!submitting &&
                                 (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}

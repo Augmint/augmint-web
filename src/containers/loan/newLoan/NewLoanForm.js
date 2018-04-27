@@ -188,7 +188,14 @@ class NewLoanForm extends React.Component {
                         <input data-testid="ethAmountInput" />
                         <Label>ETH</Label>
                     </Field>
-                    <Button primary size="big" data-testid="submitBtn" loading={submitting} disabled={pristine}>
+                    <Button
+                        primary
+                        size="big"
+                        data-testid="submitBtn"
+                        loading={submitting}
+                        disabled={pristine}
+                        type="submit"
+                    >
                         {submitting ? "Submitting..." : "Get loan"}
                     </Button>
                 </Form>
