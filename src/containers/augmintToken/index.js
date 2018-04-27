@@ -85,13 +85,6 @@ class AugmintToken extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.web3Connect.userAccount,
-    accounts: state.web3Connect.accounts,
-    balance: state.web3Connect.balance,
-    isLoading: state.web3Connect.isLoading,
-    isConnected: state.web3Connect.isConnected,
-    web3Instance: state.web3Connect.web3Instance,
-
     augmintToken: state.augmintToken,
     loanManager: state.loanManager,
     lockManager: state.lockManager,
