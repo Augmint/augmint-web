@@ -34,22 +34,12 @@ export function Theader(props) {
 }
 
 export function Tsegment(props) {
-    const {
-        children,
-        header,
-        subheader,
-        textAlign = "center",
-        vertical = true,
-        style = { padding: "28px 0em", textAlign: "center" },
-        ...other
-    } = props;
+    const { children, header, subheader, style = { padding: "28px 0em", textAlign: "center" }, ...other } = props;
     return (
-        <div vertical={vertical} textAlign={textAlign} style={style} {...other}>
+        <div style={style} {...other}>
             <Container text="true">
                 {header && <Theader header={header} subheader={subheader} />}
-                <div container stackable>
-                    {children}
-                </div>
+                <div>{children}</div>
             </Container>
         </div>
     );
@@ -78,7 +68,7 @@ export function TblockSubHeader(props) {
 }
 
 export function Tblock(props) {
-    const { children, header, textAlign = "justified" } = props;
+    const { children, header } = props;
     return (
         <Grid wrap={false} style={{ padding: "14px 0" }} columns={2}>
             <Grid.Unit style={{ textAlign: "left" }} width={6}>
