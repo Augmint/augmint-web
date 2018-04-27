@@ -22,6 +22,7 @@ const BaseButton = `
     letter-spacing: normal;
 
     &[disabled] {
+      color: ${theme.colors.primary};
       cursor: default;
       opacity: .45;
     }
