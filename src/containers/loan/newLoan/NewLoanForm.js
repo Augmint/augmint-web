@@ -5,7 +5,8 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
-import { Button, Label } from "semantic-ui-react";
+import { Label } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
