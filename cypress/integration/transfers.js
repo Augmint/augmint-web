@@ -9,7 +9,7 @@ describe("Transfers", function() {
         const fee = 0.2;
         const toAddress = "0x5e09B21cCF42c1c30ca9C1C8D993d922E7c0d036";
         const narrative = "cypress test transfer";
-        const expBal = this.startingAeurBalance - amount - fee;
+        const expBal = parseFloat((this.startingAeurBalance - amount - fee).toFixed(2));
 
         cy.get("[data-testid=myAccountMenuLink]").click();
 

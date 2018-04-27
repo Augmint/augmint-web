@@ -76,14 +76,13 @@ describe("Augmint exchange", function() {
             })
             .then(() => {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
-
-                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 cy
                     .get("@tradeHistoryTbody")
@@ -194,6 +193,7 @@ describe("Augmint exchange", function() {
             })
             .then(() => {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth;
@@ -213,8 +213,6 @@ describe("Augmint exchange", function() {
                     .then(() => {
                         expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 1);
                     });
-
-                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 // TODO: check orderlist
                 // TODO: check tradelist

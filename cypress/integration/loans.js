@@ -33,10 +33,10 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(7, 1000, 1000.01, 1.01214).then(res => {
+        getLoan(7, 50, 50.01, 0.05062).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 1000);
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
             cy.get("[data-testid=reservesMenuLink").click();
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
@@ -55,8 +55,8 @@ describe("Loans", function() {
     });
 
     it("Should repay a loan", function() {
-        getLoan(0, 200, 232.56, 0.42369).then(() => {
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 200);
+        getLoan(0, 50, 58.14, 0.10593).then(() => {
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
 
             cy
                 .contains("this loan's page")
@@ -73,7 +73,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 32.56); // interest
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 8.14); // interest
 
             // TODO loan removed, status etc.
             //cy.get("[data-testid=myAccountMenuLink]").click();
