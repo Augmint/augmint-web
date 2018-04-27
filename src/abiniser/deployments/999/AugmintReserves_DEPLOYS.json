@@ -23,15 +23,15 @@
       "latestDeployedAddress": "0x56ad79460db45ac29cb672b1914e30c5ffa4e38e",
       "deployments": {
         "0x56ad79460db45ac29cb672b1914e30c5ffa4e38e": {
-          "generatedAt": "2018-04-25T12:31:29.003Z",
-          "truffleContractFileUpdatedAt": "2018-04-20T18:14:08.862Z",
-          "deployTransactionHash": "0x2b5a21c00e08fbe47e506c13e03be07d96bbe4834966a0c3c0e7d68f6d5849ca",
+          "generatedAt": "2018-04-26T01:54:21.104Z",
+          "truffleContractFileUpdatedAt": "2018-04-26T01:54:07.621Z",
+          "deployTransactionHash": "0xe2ce1261d55f43164e99807cb981e7c9043787c02606a0020d70080708ff367f",
           "compiler": {
             "name": "solc",
             "version": "0.4.23+commit.124ca40d.Emscripten.clang"
           },
-          "bytecodeHash": "7a5b30598800cdd29ccd600d1342b26a",
-          "deployedBytecodeHash": "c64995bfa42dc887ffeaf649da038f6e",
+          "bytecodeHash": "87789807f6218a256d40b300869a717e",
+          "deployedBytecodeHash": "b8d26b4b6589916289f69078a09536aa",
           "sourceHash": "c3fd200d4510ea1b3d7c6c7ae04683b9",
           "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or MonetaryBoard or MonetarySupervisor)\n\n */\n\npragma solidity ^0.4.23;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is SystemAccount {\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    function burn(AugmintTokenInterface augmintToken, uint amount) external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.burn(amount);\n    }\n\n}\n"
         }

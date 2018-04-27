@@ -40,15 +40,15 @@
       "latestDeployedAddress": "0x1efb52b6aacc403cc9d762282b2aec1b066931c5",
       "deployments": {
         "0x1efb52b6aacc403cc9d762282b2aec1b066931c5": {
-          "generatedAt": "2018-04-25T12:31:29.087Z",
-          "truffleContractFileUpdatedAt": "2018-04-20T18:26:53.513Z",
-          "deployTransactionHash": "0x97bd849bd819e75929e1c091e066532a0a90033e59b0dab075189e9398ccd6cc",
+          "generatedAt": "2018-04-26T01:54:21.126Z",
+          "truffleContractFileUpdatedAt": "2018-04-26T01:54:11.447Z",
+          "deployTransactionHash": "0x12bf84c2b3100d293c9b8444fbe25604ebd121da216fa59940cc8f88a44c3be7",
           "compiler": {
             "name": "solc",
             "version": "0.4.23+commit.124ca40d.Emscripten.clang"
           },
-          "bytecodeHash": "ced60db09eb71a444fbd40650541230d",
-          "deployedBytecodeHash": "8df8ab5bffd0bfae417f91cd6256cb15",
+          "bytecodeHash": "9a779166b00ad29d1415869063f4ee51",
+          "deployedBytecodeHash": "0064ccab590d4152e492e7eb1717492b",
           "sourceHash": "61dded7836f4431e621382340f32670c",
           "source": "/* Augmint Crypto Euro token (ACE) implementation */\npragma solidity ^0.4.23;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(TransferFeeInterface _feeAccount)\n    public AugmintToken(\"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
         }
