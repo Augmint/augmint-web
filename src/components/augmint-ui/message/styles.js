@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 
 const BaseDiv = `
     background: ${theme.colors.lightCyan};
     border-radius: 4px;
     color: ${theme.colors.darkCyan};
-    font-size: 16px;
+    font-size: ${remCalc(16)};
     font-smoothing: antialiased;
     min-height: 1em;
     margin: 1em 0em;

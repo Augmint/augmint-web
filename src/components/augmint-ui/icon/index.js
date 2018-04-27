@@ -16,6 +16,8 @@ export default function Icon(props) {
         case "close":
             className += " fas fa-times";
             break;
+        default:
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";

@@ -3,9 +3,9 @@ import Grid from "styled-components-grid";
 import Header from "./augmint-ui/header";
 
 export function MyListGroup(props) {
-    const { children, divided = "vertically", container = false, style = { margin: "0em 0em" }, ...other } = props;
+    const { children, divided = "vertically", container = "false", style = { margin: "0em 0em" }, ...other } = props;
     return (
-        <div stackable divided={divided} style={style} container={container} {...other}>
+        <div stackable="true" divided={divided} style={style} container={container} {...other}>
             {children}
         </div>
     );
@@ -39,8 +39,8 @@ export function MyGridTable(props) {
         header,
         divided = "vertically",
         style = { margin: "0.5em 0em" },
-        stackable = true,
-        container = false,
+        stackable = "true",
+        container = "false",
         ...other
     } = props;
     return (
