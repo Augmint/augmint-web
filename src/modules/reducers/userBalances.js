@@ -62,11 +62,11 @@ export function fetchUserBalance(address) {
 
         try {
             const web3 = store.getState().web3Connect.web3Instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
+            const augmintTokenInstance = store.getState().augmintToken.contract.web3ContractInstance;
             const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
             const [bn_tokenBalance, bn_ethBalance] = await Promise.all([
-                augmintToken.balanceOf(address),
+                augmintTokenInstance.methods.balanceOf(address).call(),
                 web3.eth.getBalance(address)
             ]);
 

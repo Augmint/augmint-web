@@ -1,12 +1,13 @@
 import { default as Web3 } from "web3";
-import { default as Contract } from "truffle-contract";
-import augmintToken_artifacts from "../../src/contractsBuild/TokenAEur.json";
-import monetarySupervisor_artifacts from "../../src/contractsBuild/MonetarySupervisor.json";
-import augmintReserves_artifacts from "../../src/contractsBuild/AugmintReserves.json";
 
-let augmintTokenInstance = null;
-let monetarySupervisorInstance = null;
-let augmintReservesInstance = null;
+import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
+import TokenAEurDeploys from "../../src/abiniser/deployments/999/TokenAEur_DEPLOYS.json";
+
+import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_a552ee1f90ae83cb91d07311ae8eab1e.json";
+import MonetarySupervisorDeploys from "../../src/abiniser/deployments/999/MonetarySupervisor_DEPLOYS.json";
+
+import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_33995f203f6c629e9916d82dd78e875f.json";
+import AugmintReservesDeploys from "../../src/abiniser/deployments/999/AugmintReserves_DEPLOYS.json";
 
 let accounts = null;
 let snapshotId;
@@ -15,44 +16,36 @@ let gasPrice;
 
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-try {
-    const augmintTokenContract = Contract(augmintToken_artifacts);
-    augmintTokenContract.setProvider(web3.currentProvider);
+if (typeof web3.currentProvider.sendAsync !== "function") {
+    web3.currentProvider.sendAsync = function() {
+        return web3.currentProvider.send.apply(web3.currentProvider, arguments);
+    };
+}
 
-    const monetarySupervisorContract = Contract(monetarySupervisor_artifacts);
-    monetarySupervisorContract.setProvider(web3.currentProvider);
-
-    const augmintReservesContract = Contract(augmintReserves_artifacts);
-    augmintReservesContract.setProvider(web3.currentProvider);
-
-    web3.eth.net.getId().then(networkId => {
-        augmintTokenContract.setNetwork(networkId);
-        augmintTokenInstance = augmintTokenContract.at(augmintTokenContract.address);
-
-        monetarySupervisorContract.setNetwork(networkId);
-        monetarySupervisorInstance = monetarySupervisorContract.at(monetarySupervisorContract.address);
-
-        augmintReservesContract.setNetwork(networkId);
-        augmintReservesInstance = augmintReservesContract.at(augmintReservesContract.address);
-    });
-
-    web3.eth.getAccounts().then(_accounts => {
-        accounts = _accounts;
-    });
-
-    if (typeof web3.currentProvider.sendAsync !== "function") {
-        web3.currentProvider.sendAsync = function() {
-            return web3.currentProvider.send.apply(web3.currentProvider, arguments);
-        };
-    }
-    const web3Version = web3.version.api ? web3.version.api : web3.version;
-    console["log"]("web3 connected", web3Version);
-    web3.eth.getGasPrice().then(res => {
+web3.eth
+    .getAccounts()
+    .then(res => {
+        accounts = res;
+        return web3.eth.getGasPrice();
+    })
+    .then(res => {
         gasPrice = res;
     });
-} catch (error) {
-    throw new Error(`Error while connecting to Augmint contracts\n${error}`);
-}
+
+const augmintTokenInstance = new web3.eth.Contract(
+    TokenAEur.abi,
+    TokenAEurDeploys.deployedAbis[TokenAEur.abiHash].latestDeployedAddress
+);
+
+const monetarySupervisorInstance = new web3.eth.Contract(
+    MonetarySupervisor.abi,
+    MonetarySupervisorDeploys.deployedAbis[MonetarySupervisor.abiHash].latestDeployedAddress
+);
+
+const augmintReservesInstance = new web3.eth.Contract(
+    AugmintReserves.abi,
+    AugmintReservesDeploys.deployedAbis[AugmintReserves.abiHash].latestDeployedAddress
+);
 
 Cypress.Commands.add("ganacheTakeSnapshot", (options = {}) => {
     const startTime = new Date().getTime();
@@ -120,9 +113,10 @@ Cypress.Commands.add("getUserAEurBalance", (account, options = {}) => {
         account = accounts[0];
     }
 
-    return augmintTokenInstance.balanceOf(account).then(bal => {
-        return Number(bal) / 100;
-    });
+    return augmintTokenInstance.methods
+        .balanceOf(account)
+        .call()
+        .then(bal => Number(bal) / 100);
 });
 
 // get user ETH balance from ganache. Usage: cy.getUserEthBalance or this.startingEthBalance (set in before each)
@@ -131,9 +125,7 @@ Cypress.Commands.add("getUserEthBalance", (account, options = {}) => {
         account = accounts[0];
     }
 
-    return web3.eth.getBalance(account).then(bal => {
-        return web3.utils.fromWei(bal);
-    });
+    return web3.eth.getBalance(account).then(bal => web3.utils.fromWei(bal));
 });
 
 // assert user balance on UI.
@@ -161,23 +153,20 @@ Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 12, o
 });
 
 // issue AEUR to account
-Cypress.Commands.add("issueTo", (amount, to, options = {}) => {
+Cypress.Commands.add("issueTo", (tokenAmount, to, options = {}) => {
     if (typeof to === "undefined") {
         to = accounts[0];
     }
 
-    return monetarySupervisorInstance
-        .issueToReserve(amount, {
+    monetarySupervisorInstance.methods
+        .issueToReserve(tokenAmount)
+        .send({
             from: accounts[0],
             gas: 400000
         })
         .then(res => {
-            return augmintReservesInstance.withdrawTokens(
-                augmintTokenInstance.address,
-                to,
-                amount,
-                "withdrawal for tests",
-                { from: accounts[0] }
-            );
+            augmintReservesInstance.methods
+                .withdraw(augmintTokenInstance._address, to, tokenAmount, 0, "token withdrawal for tests")
+                .send({ from: accounts[0], gas: 200000 });
         });
 });

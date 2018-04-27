@@ -1,0 +1,601 @@
+{
+  "contractName": "LoanManager",
+  "abiHash": "dd8d5ec97e0a22b6f9e63b04d4e11e09",
+  "generatedAt": "2018-04-24T15:43:19.945Z",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "revokeMulitplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "monetarySupervisor",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "rates",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "permissions",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "interestEarnedAccount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokePermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "products",
+      "outputs": [
+        {
+          "name": "term",
+          "type": "uint256"
+        },
+        {
+          "name": "discountRate",
+          "type": "uint256"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "uint256"
+        },
+        {
+          "name": "minDisbursedAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "defaultingFeePt",
+          "type": "uint256"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "augmintToken",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "grantMultiplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "mLoans",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "loans",
+      "outputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "name": "collateralAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "repaymentAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "loanAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "interestAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "term",
+          "type": "uint256"
+        },
+        {
+          "name": "disbursementDate",
+          "type": "uint256"
+        },
+        {
+          "name": "maturity",
+          "type": "uint256"
+        },
+        {
+          "name": "defaultingFeePt",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantPermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_augmintToken",
+          "type": "address"
+        },
+        {
+          "name": "_monetarySupervisor",
+          "type": "address"
+        },
+        {
+          "name": "_rates",
+          "type": "address"
+        },
+        {
+          "name": "_interestEarnedAccount",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "productId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "loanId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "collateralAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "loanAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "repaymentAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewLoan",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "productId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "newState",
+          "type": "bool"
+        }
+      ],
+      "name": "LoanProductActiveStateChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "productId",
+          "type": "uint256"
+        }
+      ],
+      "name": "LoanProductAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "loanId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "borrower",
+          "type": "address"
+        }
+      ],
+      "name": "LoanRepayed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "loanId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "collectedCollateral",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "releasedCollateral",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "defaultingFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "LoanCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "grantedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "revokedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionRevoked",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_term",
+          "type": "uint256"
+        },
+        {
+          "name": "_discountRate",
+          "type": "uint256"
+        },
+        {
+          "name": "_collateralRatio",
+          "type": "uint256"
+        },
+        {
+          "name": "_minDisbursedAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "_defaultingFee",
+          "type": "uint256"
+        },
+        {
+          "name": "_isActive",
+          "type": "bool"
+        }
+      ],
+      "name": "addLoanProduct",
+      "outputs": [
+        {
+          "name": "newProductId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "productId",
+          "type": "uint8"
+        },
+        {
+          "name": "newState",
+          "type": "bool"
+        }
+      ],
+      "name": "setLoanProductActiveState",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "productId",
+          "type": "uint8"
+        }
+      ],
+      "name": "newEthBackedLoan",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "loanIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "collect",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getLoanCount",
+      "outputs": [
+        {
+          "name": "ct",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getProductCount",
+      "outputs": [
+        {
+          "name": "ct",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        }
+      ],
+      "name": "getLoanIds",
+      "outputs": [
+        {
+          "name": "_loans",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "repaymentAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "loanId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferNotification",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+}

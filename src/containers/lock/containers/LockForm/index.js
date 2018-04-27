@@ -146,13 +146,13 @@ class LockContainer extends React.Component {
                                                     <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
                                                     <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
                                                     <TermTableCell>
-                                                        {(product.interestRatePa * 100).toFixed(2)}%
+                                                        {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
                                                     <TermTableCell textAlign="right">
                                                         {this.props.lockAmount &&
-                                                            `${(
-                                                                this.props.lockAmount * product.perTermInterest
-                                                            ).toFixed(2)} A€`}
+                                                            `${Math.floor(
+                                                                this.props.lockAmount * product.perTermInterest * 100
+                                                            ) / 100} A€`}
                                                     </TermTableCell>
                                                 </TermTableRow>
                                             );

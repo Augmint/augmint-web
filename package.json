@@ -14,12 +14,12 @@
         "react": "16.3.2",
         "react-copy-to-clipboard": "5.0.1",
         "react-dom": "16.3.2",
-        "react-ga": "2.4.1",
+        "react-ga": "2.5.0",
         "react-redux": "5.0.7",
         "react-router-dom": "4.2.2",
         "react-router-redux": "5.0.0-alpha.9",
         "react-scripts": "1.1.4",
-        "react-scrollchor": "5.0.1",
+        "react-scrollchor": "5.0.2",
         "redux": "3.7.2",
         "redux-form": "7.3.0",
         "redux-logger": "3.0.6",
@@ -30,8 +30,7 @@
         "styled-components": "3.2.6",
         "styled-components-grid": "1.0.0-preview.15",
         "styled-tools": "0.5.0",
-        "truffle-contract": "3.0.5",
-        "web3": "1.0.0-beta.30"
+        "web3": "1.0.0-beta.34"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -40,9 +39,11 @@
         "eject": "react-scripts eject",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
-        "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
+        "cypress:runrecord":
+            "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
         "contracts:migrate": "cd augmint-contracts && yarn migrate",
-        "contracts:migratecopy": "cd augmint-contracts && yarn migrate --reset && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
+        "contracts:migratecopy":
+            "cd augmint-contracts && yarn migrate --reset && cp build/contracts/* ../src/contractsBuild && echo 'Copied contract artifacts from augmint-contracts/build/contracts to src/contractsBuild. Make sure you do not check in contracts build folder.' ",
         "ganache:run": "cd augmint-contracts && yarn ganache:run",
         "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
     },
@@ -51,10 +52,6 @@
         "semantic-ui": "2.2.14"
     },
     "greenkeeper": {
-        "ignore": [
-            "bignumber.js",
-            "semantic-ui",
-            "semantic-ui-react"
-        ]
+        "ignore": ["bignumber.js", "semantic-ui", "semantic-ui-react"]
     }
 }
