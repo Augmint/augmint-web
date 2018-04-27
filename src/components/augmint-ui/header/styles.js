@@ -16,6 +16,15 @@ const HeaderH3 = `
 
 export const StyledHeaderH3 = styled.h3`
     ${BaseHeader};
+    ${HeaderH3};
+`;
+
+export const StyledHeaderH2 = styled.h2`
+    ${BaseHeader};
+`;
+
+export const StyledHeaderH4 = styled.h4`
+    ${BaseHeader};
 `;
 
 export const StyledHeaderH2 = styled.h2`

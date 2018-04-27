@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 
 const BaseButton = `
     display: inline-flex;
@@ -17,7 +18,7 @@ const BaseButton = `
     border-radius: 4px;
     height: 42px;
     line-height: 42px;
-    font-size: 13px;
+    font-size: ${remCalc(13)};
     letter-spacing: 2.6px;
 
     &[disabled] {
