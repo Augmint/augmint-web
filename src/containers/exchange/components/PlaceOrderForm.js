@@ -187,13 +187,7 @@ class PlaceOrderForm extends React.Component {
 
                 {!submitSucceeded &&
                     this.props.rates.isLoaded && (
-                        <Form
-                            initialValues={{
-                                price: 1000 //state.rates.info.ethFiatRate
-                            }}
-                            error={error ? true : false}
-                            onSubmit={handleSubmit(this.handleSubmit)}
-                        >
+                        <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
                             <EthSubmissionErrorPanel
                                 error={error}
                                 header="Place Order failed"
