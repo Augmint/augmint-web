@@ -100,9 +100,6 @@ export const connectContracts = () => {
                 contracts
             });
         } catch (error) {
-            if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
-            }
             return dispatch({
                 type: CONTRACTS_CONNECT_ERROR,
                 error: error
