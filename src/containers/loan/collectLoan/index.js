@@ -17,22 +17,7 @@ class CollectLoanMain extends React.Component {
     }
 
     componentDidMount() {
-        // needed when landing from Link within App
-        if (this.props.loanManager.contract) {
-            store.dispatch(fetchLoansToCollect());
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        // when landing directly on this page - augmintToken loads later than loanManager
-        if (
-            (this.props.loanManager.contract && prevProps.loanManager.contract !== this.props.loanManager.contract) ||
-            (this.props.augmintToken.contract !== prevProps.augmintToken.contract &&
-                this.props.augmintToken.isConnected)
-        ) {
-            // loanManager mounted
-            store.dispatch(fetchLoansToCollect());
-        }
+        store.dispatch(fetchLoansToCollect());
     }
 
     render() {
@@ -70,6 +55,7 @@ class CollectLoanMain extends React.Component {
 
 const mapStateToProps = state => ({
     loanManager: state.loanManager,
+    loanManagerContract: state.contracts.latest.loanManager,
     augmintToken: state.augmintToken
 });
 
