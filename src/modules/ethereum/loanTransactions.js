@@ -289,7 +289,7 @@ function parseLoans(loansArray) {
 
             parsed.push({
                 id: parseInt(bn_id, 10),
-                borrower: "0x" + new BigNumber(borrower).toString(16),
+                borrower: "0x" + new BigNumber(borrower).toString(16).padStart(40, "0"), // leading 0s if address starts with 0,
                 productId: parseInt(bn_productId, 10),
                 state,
                 collateralStatus,

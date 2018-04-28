@@ -53,7 +53,7 @@ async function getOrders(orderType, offset) {
             if (!bn_amount.eq(0)) {
                 const parsed = {
                     id: parseInt(order[0], 10),
-                    maker: "0x" + new BigNumber(order[1]).toString(16),
+                    maker: "0x" + new BigNumber(order[1]).toString(16).padStart(40, "0"), // leading 0s if address starts with 0
                     bn_price: new BigNumber(order[2]),
                     bn_amount
                 };
