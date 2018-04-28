@@ -3,16 +3,9 @@
 */
 
 import store from "modules/store";
-import SolidityContract from "modules/ethereum/SolidityContract";
-import LoanManager from "abiniser/abis/LoanManager_ABI_291572b8d2ffe95dca1733ebc1472e08.json";
-
 import { fetchLoansToCollectTx, fetchProductsTx } from "modules/ethereum/loanTransactions";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
-
-export const LOANMANAGER_CONNECT_REQUESTED = "loanManager/LOANMANAGER_CONNECT_REQUESTED";
-export const LOANMANAGER_CONNECT_SUCCESS = "loanManager/LOANMANAGER_CONNECT_SUCCESS";
-export const LOANMANAGER_CONNECT_ERROR = "loanManager/LOANMANAGER_CONNECT_ERROR";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 export const LOANMANAGER_REFRESH_REQUESTED = "loanManager/LOANMANAGER_REFRESH_REQUESTED";
 export const LOANMANAGER_REFRESHED = "loanManager/LOANMANAGER_REFRESHED";
@@ -27,10 +20,9 @@ export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED = "loanManager/LOANMANA
 export const LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR = "loanManager/LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR";
 
 const initialState = {
-    contract: null,
-    isConnected: false,
+    isLoaded: false,
     isLoading: false,
-    connectionError: null,
+    loadError: null,
     result: null,
     error: null,
     products: null,
@@ -51,31 +43,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case LOANMANAGER_CONNECT_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                connectionError: null,
-                error: null
-            };
-
-        case LOANMANAGER_CONNECT_SUCCESS:
-            return {
-                ...state,
-                contract: action.contract,
-                isConnected: true,
-                isLoading: false,
-                connectionError: null
-            };
-
-        case LOANMANAGER_CONNECT_ERROR:
-            return {
-                ...state,
-                connectionError: action.error,
-                isConnected: false,
-                isLoading: false
-            };
-
         case LOANMANAGER_REFRESH_REQUESTED:
             return {
                 ...state,
@@ -86,7 +53,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
                 info: action.info
+            };
+
+        case LOANMANAGER_REFRESH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                loadError: action.error
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
@@ -116,7 +91,6 @@ export default (state = initialState, action) => {
                 isLoading: false
             };
 
-        case LOANMANAGER_REFRESH_ERROR:
         case LOANMANAGER_PRODUCTLIST_ERROR:
             return {
                 ...state,
@@ -129,36 +103,13 @@ export default (state = initialState, action) => {
     }
 };
 
-export const connectLoanManager = () => {
-    return async dispatch => {
-        dispatch({
-            type: LOANMANAGER_CONNECT_REQUESTED
-        });
-        try {
-            const contract = SolidityContract.connectLatest(store.getState().web3Connect, LoanManager);
-            return dispatch({
-                type: LOANMANAGER_CONNECT_SUCCESS,
-                contract
-            });
-        } catch (error) {
-            if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
-            }
-            return dispatch({
-                type: LOANMANAGER_CONNECT_ERROR,
-                error: error
-            });
-        }
-    };
-};
-
 export const refreshLoanManager = () => {
     return async dispatch => {
         dispatch({
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
+            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
             const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
@@ -178,8 +129,7 @@ export const refreshLoanManager = () => {
 
 async function getLoanManagerInfo(loanManagerInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [
         chunkSize,
@@ -200,7 +150,7 @@ async function getLoanManagerInfo(loanManagerInstance) {
         loanManagerInstance.methods.monetarySupervisor().call(),
 
         web3.eth.getBalance(loanManagerInstance._address),
-        augmintToken.methods.balanceOf(loanManagerInstance._address).call()
+        augmintTokenInstance.methods.balanceOf(loanManagerInstance._address).call()
     ]);
 
     return {
@@ -208,7 +158,7 @@ async function getLoanManagerInfo(loanManagerInstance) {
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
-        tokenBalance: bn_tokenBalance / decimalsDiv,
+        tokenBalance: bn_tokenBalance / DECIMALS_DIV,
         loanCount: parseInt(loanCount, 10),
         productCount: parseInt(productCount, 10),
         augmintTokenAddress,

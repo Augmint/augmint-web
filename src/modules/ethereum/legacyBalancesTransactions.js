@@ -43,15 +43,14 @@ export async function fetchLegacyBalances() {
 export async function convertLegacyBalanceTx(legacyTokenAddress, amount) {
     const txName = "Convert legacy balance";
     const web3 = store.getState().web3Connect;
-    const monetarySupervisorAddress = store.getState().monetarySupervisor.contract.address;
+    const monetarySupervisorAddress = store.getState().contracts.latest.monetarySupervisor.address;
     const gasEstimate = cost.LEGACY_BALANCE_CONVERT_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
     const legacyContract = SolidityContract.connectAt(web3, "TokenAEur", legacyTokenAddress);
 
     const tx = legacyContract.web3ContractInstance.methods
-        .transferAndNotify(monetarySupervisorAddress, new BigNumber(amount).mul(decimalsDiv).toString(), 0)
+        .transferAndNotify(monetarySupervisorAddress, new BigNumber(amount).mul(DECIMALS_DIV).toString(), 0)
         .send({
             from: userAccount,
             gas: gasEstimate

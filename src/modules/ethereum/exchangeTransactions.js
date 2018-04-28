@@ -10,9 +10,9 @@ export const TOKEN_SELL = 1;
 
 export async function fetchOrders() {
     // TODO: handle when order changes while iterating
-    const exchange = store.getState().contracts.latest.exchange;
+    const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
 
-    const orderCounts = await exchange.web3ContractInstance.methods.getActiveOrderCounts().call();
+    const orderCounts = await exchangeInstance.methods.getActiveOrderCounts().call();
     const buyCount = parseInt(orderCounts.buyTokenOrderCount, 10);
     const sellCount = parseInt(orderCounts.sellTokenOrderCount, 10);
 
@@ -115,7 +115,7 @@ export function isOrderBetter(o1, o2) {
 export async function placeOrderTx(orderType, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
+    const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
 
     const submitPrice = new BigNumber(price).mul(DECIMALS_DIV);
     let submitAmount;
@@ -126,7 +126,7 @@ export async function placeOrderTx(orderType, amount, price) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
             txName = "Buy token order";
-            tx = exchange.methods.placeBuyTokenOrder(submitPrice.toString()).send({
+            tx = exchangeInstance.methods.placeBuyTokenOrder(submitPrice.toString()).send({
                 value: submitAmount,
                 from: userAccount,
                 gas: gasEstimate
@@ -134,11 +134,11 @@ export async function placeOrderTx(orderType, amount, price) {
             break;
 
         case TOKEN_SELL:
-            const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
+            const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
             submitAmount = new BigNumber(amount).mul(DECIMALS_DIV);
             txName = "Sell token order";
-            tx = augmintToken.methods
-                .transferAndNotify(exchange._address, submitAmount.toString(), submitPrice.toString())
+            tx = augmintTokenInstance.methods
+                .transferAndNotify(exchangeInstance._address, submitAmount.toString(), submitPrice.toString())
                 .send({ from: userAccount, gas: gasEstimate });
             break;
 
@@ -156,7 +156,8 @@ export async function placeOrderTx(orderType, amount, price) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
         onReceipt = receipt => {
             const web3 = store.getState().web3Connect.web3Instance;
-            const newOrderEventInputs = exchange.options.jsonInterface.find(val => val.name === "NewOrder").inputs;
+            const newOrderEventInputs = exchangeInstance.options.jsonInterface.find(val => val.name === "NewOrder")
+                .inputs;
 
             const decodedArgs = web3.eth.abi.decodeLog(
                 newOrderEventInputs,

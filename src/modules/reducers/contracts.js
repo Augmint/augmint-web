@@ -1,8 +1,9 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import TokenAEur from "abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
-import MonetarySupervisor from "abiniser/abis/MonetarySupervisor_ABI_a552ee1f90ae83cb91d07311ae8eab1e.json";
+import Rates from "abiniser/abis/Rates_ABI_cc8bc64cd780f047eca819e6cd3b8af9.json";
 import LockManager from "abiniser/abis/Locker_ABI_66e3e89133d9bbd91baac5552f21f7e1.json";
+import LoanManager from "abiniser/abis/LoanManager_ABI_291572b8d2ffe95dca1733ebc1472e08.json";
 import Exchange from "abiniser/abis/Exchange_ABI_7595b255e567ae1d0eeef4460d0b0c16.json";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
@@ -12,6 +13,7 @@ export const CONTRACTS_CONNECT_ERROR = "contracts/CONTRACTS_CONNECT_ERROR";
 const initialState = {
     latest: {
         augmintToken: null,
+        feeAccount: null,
         rates: null,
         monetarySupervisor: null,
         loanManager: null,
@@ -38,7 +40,6 @@ export default (state = initialState, action) => {
                 latest: action.contracts,
                 isLoading: false,
                 isConnected: true,
-                connectionError: false,
                 error: null
             };
 
@@ -63,18 +64,37 @@ export const connectContracts = () => {
         try {
             const web3 = store.getState().web3Connect;
             const augmintToken = SolidityContract.connectLatest(web3, TokenAEur);
+            const rates = SolidityContract.connectLatest(web3, Rates);
             const lockManager = SolidityContract.connectLatest(web3, LockManager);
+            const loanManager = SolidityContract.connectLatest(web3, LoanManager);
             const exchange = SolidityContract.connectLatest(web3, Exchange);
-            const lockManagerMonetarySupervisorAddress = await lockManager.web3ContractInstance.methods
-                .monetarySupervisor()
-                .call();
+
+            const [feeAccountAddress, lockManagerMonetarySupervisorAddress] = await Promise.all([
+                augmintToken.web3ContractInstance.methods.feeAccount().call(),
+                lockManager.web3ContractInstance.methods.monetarySupervisor().call()
+            ]);
+
+            const feeAccount = SolidityContract.connectAt(
+                store.getState().web3Connect,
+                "FeeAccount",
+                feeAccountAddress
+            );
             const monetarySupervisor = SolidityContract.connectAt(
                 web3,
                 "MonetarySupervisor",
                 lockManagerMonetarySupervisorAddress
             );
 
-            const contracts = { augmintToken, monetarySupervisor, lockManager, exchange };
+            const contracts = {
+                augmintToken,
+                rates,
+                feeAccount,
+                monetarySupervisor,
+                lockManager,
+                loanManager,
+                exchange
+            };
+
             return dispatch({
                 type: CONTRACTS_CONNECT_SUCCESS,
                 contracts

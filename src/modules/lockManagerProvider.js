@@ -6,12 +6,20 @@ import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLocksForAddress, processNewLock } from "modules/reducers/locks";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
-export default () => {
-    const lockManager = store.getState().lockManager;
+let isWatchSetup = false;
 
-    if (!lockManager.isLoading && !lockManager.isConnected) {
-        setupWatch("augmintToken.contract", onContractChange);
-        setupWatch("lockManager.contract", onContractChange);
+export default () => {
+    const lockManager = store.getState().contracts.latest.lockManager;
+    const lockManagerData = store.getState().lockManager;
+
+    if (lockManager && !lockManagerData.isLoading && !lockManagerData.isLoaded) {
+        refresh();
+        setupListeners();
+    }
+    if (!isWatchSetup) {
+        isWatchSetup = true;
+        setupWatch("contracts.latest.lockManager", onLockContractChange);
+        setupWatch("web3Connect.userAccount", onUserAccountChange);
     }
     return;
 };
@@ -24,21 +32,28 @@ const setupListeners = () => {
     lockManager.onlockreleased = onLockReleased;
 };
 
-const refresLockManagerIfNeeded = (newVal, oldVal) => {
-    if (newVal && store.getState().augmintToken.isConnected) {
-        console.debug(
-            "lockManagerProvider - new augmintToken or loanManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
-        );
+const refresh = () => {
+    const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(refreshLockManager());
+    store.dispatch(fetchLockProducts());
+    store.dispatch(fetchLocksForAddress(userAccount));
+};
+
+const onUserAccountChange = (newVal, oldVal, objectPath) => {
+    const lockManager = store.getState().contracts.latest.loanManager;
+    if (lockManager && newVal !== "?") {
+        console.debug("lockManagerProvider - web3Connect.userAccount changed. Dispatching fetchLocksForAddress()");
         const userAccount = store.getState().web3Connect.userAccount;
-        store.dispatch(refreshLockManager());
-        store.dispatch(fetchLockProducts());
         store.dispatch(fetchLocksForAddress(userAccount));
-        setupListeners();
     }
 };
 
-const onContractChange = (newVal, oldVal) => {
-    refresLockManagerIfNeeded(newVal, oldVal);
+const onLockContractChange = (newVal, oldVal) => {
+    console.debug(
+        "lockManagerProvider - new lockManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
+    );
+    refresh();
+    setupListeners();
 };
 
 const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive) => {

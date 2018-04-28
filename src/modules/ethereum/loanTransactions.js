@@ -5,10 +5,10 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
-import { ONE_ETH_IN_WEI } from "../../utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
-    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
     const txName = "New loan";
 
     let gasEstimate;
@@ -21,7 +21,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     const userAccount = store.getState().web3Connect.userAccount;
     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
 
-    const tx = loanManager.methods
+    const tx = loanManagerInstance.methods
         .newEthBackedLoan(productId)
         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
@@ -30,7 +30,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 }
 
 export async function fetchProductsTx() {
-    const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
 
     // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
     const [chunkSize, productCount] = await Promise.all([
@@ -60,9 +60,6 @@ export async function fetchProductsTx() {
 }
 
 function parseProducts(productsArray) {
-    const ppmDiv = 1000000;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const products = productsArray.reduce((parsed, product) => {
         const [
             bn_id,
@@ -82,13 +79,13 @@ function parseProducts(productsArray) {
                 term,
                 termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
                 bn_discountRate,
-                discountRate: bn_discountRate / ppmDiv,
+                discountRate: bn_discountRate / PPM_DIV,
                 bn_collateralRatio,
-                collateralRatio: bn_collateralRatio / ppmDiv,
-                minDisbursedAmountInToken: bn_minDisbursedAmount / decimalsDiv,
-                maxLoanAmount: bn_maxLoanAmount / decimalsDiv,
+                collateralRatio: bn_collateralRatio / PPM_DIV,
+                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV,
+                maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
                 bn_defaultingFeePt,
-                defaultingFeePt: bn_defaultingFeePt / ppmDiv,
+                defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
                 isActive: bn_isActive === "1"
             });
         }
@@ -103,20 +100,22 @@ export async function repayLoanTx(repaymentAmount, loanId) {
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
-
-    const augmintToken = store.getState().augmintToken;
-    const augmintTokenInstance = augmintToken.contract.web3ContractInstance;
-    const decimalsDiv = augmintToken.info.decimalsDiv;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const tx = augmintTokenInstance.methods
-        .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
+        .transferAndNotify(
+            loanManagerInstance._address,
+            new BigNumber(repaymentAmount).mul(DECIMALS_DIV).toString(),
+            loanId
+        )
         .send({ from: userAccount, gas: gasEstimate });
 
     const onReceipt = receipt => {
         // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
         const web3 = store.getState().web3Connect.web3Instance;
-        const loanRepayedEventInputs = loanManager.options.jsonInterface.find(val => val.name === "LoanRepayed").inputs;
+        const loanRepayedEventInputs = loanManagerInstance.options.jsonInterface.find(val => val.name === "LoanRepayed")
+            .inputs;
 
         const decodedArgs = web3.eth.abi.decodeLog(
             loanRepayedEventInputs,
@@ -134,7 +133,7 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 
 export async function fetchLoansToCollectTx() {
     try {
-        const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
+        const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
 
         // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
         const [chunkSize, loanCount] = await Promise.all([
@@ -169,7 +168,7 @@ export async function fetchLoansToCollectTx() {
 export async function collectLoansTx(loansToCollect) {
     const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
     const loanIdsToCollect = loansToCollect.map(loan => loan.id);
@@ -200,7 +199,7 @@ export async function collectLoansTx(loansToCollect) {
 }
 
 export async function fetchLoansForAddressTx(account) {
-    const loanManagerInstance = store.getState().loanManager.contract.web3ContractInstance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
 
     // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
     const [chunkSize, loanCount] = await Promise.all([
@@ -229,8 +228,6 @@ export async function fetchLoansForAddressTx(account) {
 }
 
 function parseLoans(loansArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const loans = loansArray.reduce((parsed, loan) => {
         const [
             bn_id,
@@ -298,9 +295,9 @@ function parseLoans(loansArray) {
                 collateralStatus,
                 loanStateText,
                 collateralEth: bn_collateralAmount / ONE_ETH_IN_WEI,
-                repaymentAmount: bn_repaymentAmount / decimalsDiv,
-                loanAmount: bn_loanAmount / decimalsDiv,
-                interestAmount: bn_interestAmount / decimalsDiv,
+                repaymentAmount: bn_repaymentAmount / DECIMALS_DIV,
+                loanAmount: bn_loanAmount / DECIMALS_DIV,
+                interestAmount: bn_interestAmount / DECIMALS_DIV,
                 term,
                 termText: moment.duration(term, "seconds").humanize(),
                 disbursementTime,

@@ -12,7 +12,7 @@ export const MONETARY_SUPERVISOR_REFRESH_ERROR = "monetarySupervisor/MONETARY_SU
 const initialState = {
     isLoading: false,
     isLoaded: false,
-    error: null,
+    loadError: null,
     info: {
         augmintToken: null,
         interestEarnedAccount: null,
@@ -53,6 +53,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
+                loadError: null,
                 info: action.result
             };
 
@@ -60,7 +61,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                loadError: action.error
             };
 
         default:

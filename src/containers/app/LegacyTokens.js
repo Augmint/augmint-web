@@ -54,7 +54,7 @@ class LegacyTokens extends React.Component {
     }
 
     render() {
-        const { contractBalances, augmintToken, network } = this.props;
+        const { contractBalances, augmintTokenContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
 
         const balances = contractBalances
@@ -81,13 +81,13 @@ class LegacyTokens extends React.Component {
               ))
             : null;
 
-        return balances && balances.length > 0 && augmintToken.isConnected ? (
+        return balances && balances.length > 0 && augmintTokenContract ? (
             <Psegment>
                 <Container>
                     <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
                         <p>
                             There is newer Augmint A-EUR Token version deployed to the {network.name} network at{" "}
-                            {augmintToken.contract.address}.
+                            {augmintTokenContract.address}.
                             <br />
                             You can convert your old A-EUR balance to the new contract.<br />
                             <small>
@@ -121,7 +121,7 @@ class LegacyTokens extends React.Component {
 function mapStateToProps(state) {
     return {
         contractBalances: state.legacyBalances.contractBalances,
-        augmintToken: state.augmintToken,
+        augmintTokenContract: state.contracts.latest.augmintToken,
         network: state.web3Connect.network
     };
 }

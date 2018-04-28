@@ -20,10 +20,9 @@ export default () => {
     }
 
     if (!isWatchSetup) {
-        console.log("**** DO WATCH SETP");
-        // first time call of exchangeProvider
         isWatchSetup = true;
         setupWatch("contracts.latest.exchange", onExchangeContractChange);
+        setupWatch("web3Connect.userAccount", onUserAccountChange);
     }
 
     return;
@@ -36,15 +35,6 @@ const setupListeners = () => {
     exchange.oncancelledorder = onCancelledOrder;
 };
 
-const removeListeners = oldInstance => {
-    // TODO: test if we need this with ethers
-    // if (oldInstance && oldInstance.instance) {
-    //     oldInstance.instance.NewOrder().stopWatching();
-    //     oldInstance.instance.OrderFill().stopWatching();
-    //     oldInstance.instance.CancelledOrder().stopWatching();
-    // }
-};
-
 const refresh = () => {
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
@@ -55,14 +45,23 @@ const refresh = () => {
     store.dispatch(fetchTrades(userAccount, exchange.deployedAtBlock, "latest"));
 };
 
+const onUserAccountChange = (newVal, oldVal, objectPath) => {
+    const exchange = store.getState().contracts.latest.exchange;
+    if (exchange && newVal !== "?") {
+        console.debug(
+            "exchangeProvider - web3Connect.userAccount changed. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
+        );
+        refresh();
+    }
+};
+
 const onExchangeContractChange = (newVal, oldVal, objectPath) => {
-    removeListeners(oldVal);
     if (newVal) {
         console.debug(
             "exchangeProvider - new Exchange contract. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
         );
-
         refresh();
+        setupListeners();
     }
 };
 

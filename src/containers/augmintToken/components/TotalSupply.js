@@ -6,13 +6,13 @@ export class TotalSupply extends React.Component {
     render() {
         const { augmintToken, monetarySupervisor, size, showDetails } = this.props;
 
-        const { isConnected, isLoading, connectionError } = this.props.augmintToken;
+        const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { totalSupply } = augmintToken.info;
 
         const { issuedByMonetaryBoard } = monetarySupervisor.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
+            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group widths="1" size={size}>

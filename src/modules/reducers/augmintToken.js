@@ -2,27 +2,21 @@
     TODO: separate transfer from here to tackle isLoading race conditions
 */
 import store from "modules/store";
-import SolidityContract from "modules/ethereum/SolidityContract";
-import TokenAEur from "abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
 import { transferTokenTx } from "modules/ethereum/transferTransactions";
-
-export const AUGMINT_TOKEN_CONNECT_REQUESTED = "augmintToken/AUGMINT_TOKEN_CONNECT_REQUESTED";
-export const AUGMINT_TOKEN_CONNECT_SUCCESS = "augmintToken/AUGMINT_TOKEN_CONNECT_SUCCESS";
-export const AUGMINT_TOKEN_CONNECT_ERROR = "augmintToken/AUGMINT_TOKEN_CONNECT_ERROR";
 
 export const AUGMINT_TOKEN_REFRESH_REQUESTED = "augmintToken/AUGMINT_TOKEN_REFRESH_REQUESTED";
 export const AUGMINT_TOKEN_REFRESHED = "augmintToken/AUGMINT_TOKEN_REFRESHED";
+export const AUGMINT_TOKEN_REFRESH_ERROR = "augmintToken/AUGMINT_TOKEN_REFRESH_ERROR";
 
 export const AUGMINT_TOKEN_TRANSFER_REQUESTED = "augmintToken/AUGMINT_TOKEN_TRANSFER_REQUESTED";
 export const TOKEN_TRANSFER_SUCCESS = "augmintToken/TOKEN_TRANSFER_SUCCESS";
 export const AUGMINT_TOKEN_TRANSFER_ERROR = "augmintToken/AUGMINT_TOKEN_TRANSFER_ERROR";
 
 const initialState = {
-    contract: null,
     isLoading: false,
-    isConnected: false,
+    isLoaded: false,
+    loadError: null,
     error: null,
-    connectionError: null,
     info: {
         symbol: "?",
         peggedSymbol: "?",
@@ -41,33 +35,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case AUGMINT_TOKEN_CONNECT_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                connectionError: null,
-                error: null
-            };
-
-        case AUGMINT_TOKEN_CONNECT_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                isConnected: true,
-                error: null,
-                connectionError: null,
-                contract: action.contract,
-                info: action.info
-            };
-
-        case AUGMINT_TOKEN_CONNECT_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                isConnected: false,
-                connectionError: action.error
-            };
-
         case AUGMINT_TOKEN_REFRESH_REQUESTED:
             return {
                 ...state,
@@ -78,7 +45,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
+                loadError: null,
                 info: action.result
+            };
+
+        case AUGMINT_TOKEN_REFRESH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                loadError: action.error
             };
 
         case AUGMINT_TOKEN_TRANSFER_REQUESTED:
@@ -98,6 +74,7 @@ export default (state = initialState, action) => {
         case AUGMINT_TOKEN_TRANSFER_ERROR:
             return {
                 ...state,
+                isLoading: false,
                 error: action.error
             };
 
@@ -106,38 +83,12 @@ export default (state = initialState, action) => {
     }
 };
 
-export const connectAugmintToken = () => {
-    return async dispatch => {
-        dispatch({
-            type: AUGMINT_TOKEN_CONNECT_REQUESTED
-        });
-
-        try {
-            const contract = SolidityContract.connectLatest(store.getState().web3Connect, TokenAEur);
-            const info = await getAugmintTokenInfo(contract.web3ContractInstance);
-            return dispatch({
-                type: AUGMINT_TOKEN_CONNECT_SUCCESS,
-                contract,
-                info
-            });
-        } catch (error) {
-            if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
-            }
-            return dispatch({
-                type: AUGMINT_TOKEN_CONNECT_ERROR,
-                error: error
-            });
-        }
-    };
-};
-
 export const refreshAugmintToken = () => {
     return async dispatch => {
         dispatch({
             type: AUGMINT_TOKEN_REFRESH_REQUESTED
         });
-        const augmintTokenInstance = store.getState().augmintToken.contract.web3ContractInstance;
+        const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
         const info = await getAugmintTokenInfo(augmintTokenInstance);
         return dispatch({
             type: AUGMINT_TOKEN_REFRESHED,
@@ -148,21 +99,15 @@ export const refreshAugmintToken = () => {
 
 async function getAugmintTokenInfo(augmintTokenInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals, feeAccountAddress] = await Promise.all([
+    const [symbol, bytes32_peggedSymbol, bn_totalSupply, decimals] = await Promise.all([
         augmintTokenInstance.methods.symbol().call(),
         augmintTokenInstance.methods.peggedSymbol().call(),
         augmintTokenInstance.methods.totalSupply().call(),
-        augmintTokenInstance.methods.decimals().call(),
-        augmintTokenInstance.methods.feeAccount().call()
+        augmintTokenInstance.methods.decimals().call()
     ]);
 
-    // TODO: move feeAccount to its own redux state same as other contracts
-    const feeAccountContract = SolidityContract.connectAt(
-        store.getState().web3Connect,
-        "FeeAccount",
-        feeAccountAddress
-    );
-    const feeAccount = { contract: feeAccountContract };
+    // TODO: move feeAccount info to its own redux feeAccount state same as other contracts
+    const feeAccountContract = store.getState().contracts.latest.feeAccount;
 
     const peggedSymbol = web3.utils.toAscii(bytes32_peggedSymbol);
 
@@ -170,8 +115,8 @@ async function getAugmintTokenInfo(augmintTokenInstance) {
 
     const [transferFeeStruct, bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
         feeAccountContract.web3ContractInstance.methods.transferFee().call(),
-        augmintTokenInstance.methods.balanceOf(feeAccountAddress).call(),
-        web3.eth.getBalance(feeAccountAddress)
+        augmintTokenInstance.methods.balanceOf(feeAccountContract.address).call(),
+        web3.eth.getBalance(feeAccountContract.address)
     ]);
 
     const feeAccountEthBalance = web3.utils.fromWei(bn_feeAccountEthBalance);
@@ -189,10 +134,9 @@ async function getAugmintTokenInfo(augmintTokenInstance) {
         feeMin: parseInt(transferFeeStruct.min, 10) / decimalsDiv,
         feeMax: parseInt(transferFeeStruct.max, 10) / decimalsDiv,
 
-        feeAccountAddress,
+        feeAccountAddress: feeAccountContract.address,
         feeAccountTokenBalance: bn_feeAccountTokenBalance / decimalsDiv,
-        feeAccountEthBalance,
-        feeAccount
+        feeAccountEthBalance
     };
 }
 

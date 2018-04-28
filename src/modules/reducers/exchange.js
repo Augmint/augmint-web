@@ -7,7 +7,7 @@ export const EXCHANGE_REFRESH_ERROR = "exchange/EXCHANGE_REFRESH_ERROR";
 export const EXCHANGE_REFRESH_SUCCESS = "exchange/EXCHANGE_REFRESH_SUCCESS";
 
 const initialState = {
-    error: null,
+    loadError: null,
     isLoading: false,
     isLoaded: false,
     info: {
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                loadError: action.error
             };
 
         case EXCHANGE_REFRESH_SUCCESS:
