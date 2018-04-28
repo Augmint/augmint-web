@@ -31,16 +31,18 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
-                                {rates.info.ethFiatRate && (
-                                    <PlaceOrderForm //rates.info &&
-                                        initialValues={{
-                                            price: rates.info.ethFiatRate
-                                        }}
-                                        orders={orders}
-                                        exchange={exchange}
-                                        rates={rates}
-                                    />
-                                )}
+                                {/* {rates.isLoading || !rates.isLoaded ? (
+                                    <h5>Loading rates...</h5>
+                                ) : ( */}
+                                <PlaceOrderForm //rates.info &&
+                                    // initialValues={{
+                                    //     price: rates.info.ethFiatRate
+                                    // }}
+                                    orders={orders}
+                                    exchange={exchange}
+                                    rates={rates}
+                                />
+                                {/* )} */}
 
                                 <OrderBook
                                     testid="myOrdersBlock"
