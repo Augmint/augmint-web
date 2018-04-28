@@ -5,8 +5,6 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 
 export function FeeAccountInfo(props) {
-    let { contract } = props;
-
     const handleRefreshClick = e => {
         e.preventDefault();
         store.dispatch(refreshAugmintToken());
@@ -14,7 +12,7 @@ export function FeeAccountInfo(props) {
 
     return (
         <Pblock header="FeeAccount">
-            <ContractBaseInfo contractName="FeeAccount" contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }

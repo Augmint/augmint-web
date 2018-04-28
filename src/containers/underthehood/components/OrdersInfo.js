@@ -15,7 +15,9 @@ export function OrdersInfo(props) {
         <Pblock header="Orders">
             {props.orders
                 ? [
+                      <h3>Sell</h3>,
                       <ArrayDump key="sellOrdersDump" items={props.orders.sellOrders} />,
+                      <h3>Buy</h3>,
                       <ArrayDump key="buyOrdersDump" items={props.orders.buyOrders} />
                   ]
                 : "No orders loaded"}

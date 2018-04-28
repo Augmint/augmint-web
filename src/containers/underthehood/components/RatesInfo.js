@@ -5,7 +5,7 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshRates } from "modules/reducers/rates";
 
 export function RatesInfo(props) {
-    let { contract } = props;
+    const { contractData } = props;
 
     const handleRefreshClick = e => {
         e.preventDefault();
@@ -14,9 +14,9 @@ export function RatesInfo(props) {
 
     return (
         <Pblock header="Rates">
-            <p>ETH/EUR: {contract.info.ethFiatRate}</p>
+            <p>ETH/EUR: {contractData.info.ethFiatRate}</p>
 
-            <ContractBaseInfo contractName="Rates" contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }

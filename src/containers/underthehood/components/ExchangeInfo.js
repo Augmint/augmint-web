@@ -5,7 +5,7 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshExchange } from "modules/reducers/exchange";
 
 export function ExchangeInfo(props) {
-    let { contract } = props;
+    const { contractData } = props;
 
     const handleRefreshClick = e => {
         e.preventDefault();
@@ -15,9 +15,9 @@ export function ExchangeInfo(props) {
     return (
         <Pblock header="Exchange">
             <p>
-                Order Count: Buy: {contract.info.buyOrderCount} | Sell: {contract.info.sellOrderCount}
+                Order Count: Buy: {contractData.info.buyOrderCount} | Sell: {contractData.info.sellOrderCount}
             </p>
-            <ContractBaseInfo contractName="Exchange" contract={contract} refreshCb={handleRefreshClick} />
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }

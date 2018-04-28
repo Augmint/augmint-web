@@ -5,7 +5,7 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshLockManager } from "modules/reducers/lockManager";
 
 export function LockManagerInfo(props) {
-    let { contract } = props;
+    const { contractData } = props;
 
     const handleRefreshClick = e => {
         e.preventDefault();
@@ -14,8 +14,8 @@ export function LockManagerInfo(props) {
 
     return (
         <Pblock header="LockerInfo">
-            <p>LockCount: {contract.info.lockCount} </p>
-            <ContractBaseInfo contractName="Locker" contract={contract} refreshCb={handleRefreshClick} />
+            <p>LockCount: {contractData.info.lockCount} </p>
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }
