@@ -15,15 +15,11 @@ export class EthereumState extends React.Component {
         const { web3Connect, contracts, augmintToken, children = null } = this.props;
         const { network } = web3Connect;
 
-        const anyLoading =
-            web3Connect.isLoading ||
-            contracts.isLoading ||
-            augmintToken.isLoading ||
-            document.readyState !== "complete";
+        const isConnecting = web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
 
         const anyConnectionError = web3Connect.error || contracts.error || augmintToken.loadError;
 
-        if (anyLoading) {
+        if (isConnecting) {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
             msg = (
