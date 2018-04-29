@@ -29,9 +29,17 @@ const theme = {
             default: "MaisonNeue,'Helvetica Neue',Arial,Helvetica,sans-serif"
         },
         fontSizes: {
-            h3: "1.625rem"
+            h4: remCalc(24),
+            h3: remCalc(26),
+            h2: remCalc(34)
         }
     }
 };
 
 export default theme;
+
+export function remCalc(pixelSize) {
+    const remCorrection = 16 / 14;
+
+    return pixelSize / 16 * remCorrection + "rem";
+}
