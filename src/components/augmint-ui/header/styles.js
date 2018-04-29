@@ -29,4 +29,15 @@ const HeaderH2 = `
 
 export const StyledHeaderH3 = styled.h3`
     ${BaseHeader};
+    ${HeaderH3};
+`;
+
+export const StyledHeaderH2 = styled.h2`
+    ${BaseHeader};
+    ${HeaderH2};
+`;
+
+export const StyledHeaderH4 = styled.h4`
+    ${BaseHeader};
+    ${HeaderH4};
 `;
