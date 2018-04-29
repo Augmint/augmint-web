@@ -2,7 +2,7 @@ import React from "react";
 import store from "modules/store";
 import { refreshOrders } from "modules/reducers/orders";
 import { Pblock } from "components/PageLayout";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { ArrayDump } from "./ArrayDump";
 
 export function OrdersInfo(props) {
@@ -21,7 +21,12 @@ export function OrdersInfo(props) {
                       <ArrayDump key="buyOrdersDump" items={props.orders.buyOrders} />
                   ]
                 : "No orders loaded"}
-            <Button size="small" onClick={handleRefreshClick} disabled={!props.orders || props.orders.isLoading}>
+            <Button
+                size="small"
+                type="submit"
+                onClick={handleRefreshClick}
+                disabled={!props.orders || props.orders.isLoading}
+            >
                 Refresh orders
             </Button>
         </Pblock>

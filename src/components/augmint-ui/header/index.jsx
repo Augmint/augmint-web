@@ -1,11 +1,19 @@
 import React from "react";
 
-import { StyledHeaderH3 } from "./styles";
+import { StyledHeaderH4, StyledHeaderH3, StyledHeaderH2 } from "./styles";
 
 export default function Header(props) {
-    const { children } = props;
+    const { as, children, content } = props;
 
     let elementType = StyledHeaderH3;
 
-    return React.createElement(elementType, props, children);
+    if (as === "h2") {
+        elementType = StyledHeaderH2;
+    }
+
+    if (as === "h4") {
+        elementType = StyledHeaderH4;
+    }
+
+    return React.createElement(elementType, props, children, content);
 }

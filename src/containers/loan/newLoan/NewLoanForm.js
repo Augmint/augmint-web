@@ -5,7 +5,8 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
-import { Button, Label } from "semantic-ui-react";
+import { Label } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
@@ -200,7 +201,14 @@ class NewLoanForm extends React.Component {
                             <input data-testid="ethAmountInput" />
                             <Label>ETH</Label>
                         </Field>
-                        <Button primary size="big" data-testid="submitBtn" loading={submitting} disabled={pristine}>
+                        <Button
+                            primary
+                            size="big"
+                            data-testid="submitBtn"
+                            loading={submitting}
+                            disabled={pristine}
+                            type="submit"
+                        >
                             {submitting ? "Submitting..." : "Get loan"}
                         </Button>
                     </Form>

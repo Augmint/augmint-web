@@ -1,5 +1,6 @@
 import React from "react";
-import { Popup, Icon } from "semantic-ui-react";
+import { Popup } from "semantic-ui-react";
+import Icon from "../components/augmint-ui/icon";
 
 export default function ToolTip(props) {
     const {
@@ -18,6 +19,10 @@ export default function ToolTip(props) {
 }
 
 export function MoreInfoTip(props) {
-    const { trigger = <Icon color="grey" name="zoom" />, hoverable = true, ...other } = props;
+    const {
+        trigger = <Icon color="grey" name="zoom" style={{ marginRight: "6px" }} />,
+        hoverable = true,
+        ...other
+    } = props;
     return <ToolTip hoverable={hoverable} trigger={trigger} {...other} />;
 }

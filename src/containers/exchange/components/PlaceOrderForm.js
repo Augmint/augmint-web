@@ -3,7 +3,8 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Menu, Button, Label } from "semantic-ui-react";
+import { Menu, Label } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
@@ -248,6 +249,7 @@ class PlaceOrderForm extends React.Component {
                                 loading={submitting}
                                 disabled={pristine}
                                 data-testid="submitButton"
+                                type="submit"
                             >
                                 {submitting && "Submitting..."}
                                 {!submitting &&

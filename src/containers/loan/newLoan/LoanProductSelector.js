@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
-import { Message, Button } from "semantic-ui-react";
+import { Message } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { Link } from "react-router-dom";
-//import { Container, Message, Icon } from "semantic-ui-react";
 
 export function SelectLoanButton(props) {
     return (

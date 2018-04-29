@@ -16,6 +16,21 @@ export default function Icon(props) {
         case "close":
             className += " fas fa-times";
             break;
+        case "angle-right":
+            className += " fas fa-angle-right";
+            break;
+        case "right chevron":
+            className += " fas fa-angle-right";
+            break;
+        case "trash":
+            className += " fas fa-trash-alt";
+            break;
+        case "zoom":
+            className += " fas fa-search-plus";
+            break;
+        case "help circle":
+            className += " fas fa-question-circle";
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";
