@@ -5,13 +5,20 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
+import { DECIMALS_DIV } from "utils/constants";
 
 export async function fetchLockProductsTx() {
-    const lockManager = store.getState().lockManager.contract.instance;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     const [chunkSize, productCount] = await Promise.all([
-        lockManager.CHUNK_SIZE().then(res => res.toNumber()),
-        lockManager.getLockProductCount().then(res => res.toNumber())
+        lockManagerInstance.methods
+            .CHUNK_SIZE()
+            .call()
+            .then(res => parseInt(res, 10)),
+        lockManagerInstance.methods
+            .getLockProductCount()
+            .call()
+            .then(res => parseInt(res, 10))
     ]);
 
     let products = [];
@@ -19,7 +26,7 @@ export async function fetchLockProductsTx() {
     const queryCount = Math.ceil(productCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const productsArray = await lockManager.getLockProducts(i * chunkSize);
+        const productsArray = await lockManagerInstance.methods.getLockProducts(i * chunkSize).call();
         const parsedProducts = parseProducts(productsArray);
         products = products.concat(parsedProducts);
     }
@@ -27,12 +34,10 @@ export async function fetchLockProductsTx() {
 }
 
 function parseProducts(productsArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const products = productsArray.reduce((parsed, product, index) => {
         const [bn_perTermInterest, bn_durationInSecs, bn_minimumLockAmount, bn_maxLockAmount, bn_isActive] = product;
-        if (bn_durationInSecs.gt(0)) {
-            const durationInSecs = bn_durationInSecs.toNumber();
+        const durationInSecs = parseInt(bn_durationInSecs, 10);
+        if (durationInSecs > 0) {
             const durationInDays = durationInSecs / 60 / 60 / 24;
 
             const durationText = `${moment.duration(durationInSecs, "seconds").humanize()}${
@@ -47,10 +52,10 @@ function parseProducts(productsArray) {
                 durationInSecs,
                 durationInDays,
                 durationText,
-                minimumLockAmount: bn_minimumLockAmount / decimalsDiv,
-                maxLockAmount: bn_maxLockAmount / decimalsDiv,
+                minimumLockAmount: bn_minimumLockAmount / DECIMALS_DIV,
+                maxLockAmount: bn_maxLockAmount / DECIMALS_DIV,
                 interestRatePa,
-                isActive: bn_isActive.toNumber() === 1
+                isActive: parseInt(bn_isActive, 10) === 1
             });
         }
         return parsed;
@@ -64,19 +69,16 @@ export async function newLockTx(productId, lockAmount) {
 
     const txName = "New lock";
 
-    const lockManager = store.getState().lockManager.contract.instance;
-    const augmintToken = store.getState().augmintToken;
+    const lockManagerAddress = store.getState().contracts.latest.lockManager.web3ContractInstance._address;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const decimalsDiv = augmintToken.info.decimalsDiv;
-    const lockAmountBNString = new BigNumber(lockAmount).mul(decimalsDiv).toString();
+    const lockAmountBNString = new BigNumber(lockAmount).mul(DECIMALS_DIV).toString();
 
-    const tx = augmintToken.contract.web3ContractInstance.methods
-        .transferAndNotify(lockManager.address, lockAmountBNString, productId)
-        .send({
-            from: userAccount,
-            gas: gasEstimate
-        });
+    const tx = augmintTokenInstance.methods.transferAndNotify(lockManagerAddress, lockAmountBNString, productId).send({
+        from: userAccount,
+        gas: gasEstimate
+    });
 
     const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
@@ -87,36 +89,38 @@ export async function releaseFundsTx(lockId) {
 
     const txName = "Release funds";
 
-    const lockManager = store.getState().lockManager;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;
 
-    const tx = lockManager.contract.web3ContractInstance.methods.releaseFunds(lockId).send({
-        from: userAccount,
-        gas: gasEstimate
-    });
+    const tx = lockManagerInstance.methods.releaseFunds(lockId).send({ from: userAccount, gas: gasEstimate });
 
     const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
 }
 
 export async function fetchLocksForAddressTx(account) {
-    const lockManager = store.getState().lockManager.contract.instance;
+    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
-    // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
-    const [chunkSize, loanCount] = await Promise.all([
-        lockManager.CHUNK_SIZE().then(res => res.toNumber()),
-        lockManager.getLockCountForAddress(account).then(res => res.toNumber())
-    ]);
+    // TODO: resolve timing of loanManager refresh in order to get chunkSize from loanManager
     // const chunkSize = store.getState().loanManager.info.chunkSize;
-    // const loanCount = await loanManager.getLoanCountForAddress(account);
+    const [chunkSize, loanCount] = await Promise.all([
+        lockManagerInstance.methods
+            .CHUNK_SIZE()
+            .call()
+            .then(res => parseInt(res, 10)),
+        lockManagerInstance.methods
+            .getLockCountForAddress(account)
+            .call()
+            .then(res => parseInt(res, 10))
+    ]);
 
     let locks = [];
 
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const locksArray = await lockManager.getLocksForAddress(account, i * chunkSize);
+        const locksArray = await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize).call();
         locks = locks.concat(parseLocks(locksArray));
     }
 
@@ -130,9 +134,9 @@ export async function processNewLockTx(account, lockData) {
         lockData.lockId,
         lockData.amountLocked,
         lockData.interestEarned,
-        new BigNumber(lockData.lockedUntil), // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
-        new BigNumber(lockData.perTermInterest),
-        new BigNumber(lockData.durationInSecs),
+        lockData.lockedUntil, // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
+        lockData.perTermInterest,
+        lockData.durationInSecs,
         new BigNumber(1) // we don't get isActive in event data
     ];
 
@@ -141,8 +145,6 @@ export async function processNewLockTx(account, lockData) {
 }
 
 function parseLocks(locksArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const locks = locksArray.reduce((parsed, lock) => {
         const [
             bn_id,
@@ -154,10 +156,11 @@ function parseLocks(locksArray) {
             bn_isActive
         ] = lock;
 
-        if (bn_amountLocked.gt(0)) {
-            const lockedUntil = bn_lockedUntil.toNumber();
+        const amountLocked = bn_amountLocked / DECIMALS_DIV;
+        if (amountLocked > 0) {
+            const lockedUntil = parseInt(bn_lockedUntil, 10);
             const lockedUntilText = moment.unix(lockedUntil).format("D MMM YYYY HH:mm");
-            const durationInSecs = bn_durationInSecs.toNumber();
+            const durationInSecs = parseInt(bn_durationInSecs, 10);
             const durationInDays = durationInSecs / 60 / 60 / 24;
             const durationText = moment.duration(durationInSecs, "seconds").humanize();
 
@@ -167,7 +170,7 @@ function parseLocks(locksArray) {
             const currentTime = moment()
                 .utc()
                 .unix();
-            const isActive = bn_isActive.eq(1) ? true : false;
+            const isActive = bn_isActive === "1";
             const isReleasebale = lockedUntil <= currentTime && isActive;
 
             let lockStateText;
@@ -180,9 +183,9 @@ function parseLocks(locksArray) {
             }
 
             parsed.push({
-                id: bn_id.toNumber(),
-                amountLocked: bn_amountLocked / decimalsDiv,
-                interestEarned: bn_interestEarned / decimalsDiv,
+                id: parseInt(bn_id, 10),
+                amountLocked,
+                interestEarned: bn_interestEarned / DECIMALS_DIV,
                 lockedUntil,
                 lockedUntilText,
                 perTermInterest,

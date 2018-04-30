@@ -2,25 +2,17 @@
     TODO: add RATES_REFRESH_ERROR
     */
 import store from "modules/store";
-import SolidityContract from "modules/ethereum/SolidityContract";
-import ratesArtifacts from "contractsBuild/Rates.json";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
-
-export const RATES_CONNECT_REQUESTED = "rates/RATES_CONNECT_REQUESTED";
-export const RATES_CONNECT_SUCCESS = "rates/RATES_CONNECT_SUCCESS";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 export const RATES_REFRESH_REQUESTED = "rates/RATES_REFRESH_REQUESTED";
 export const RATES_REFRESHED = "rates/RATES_REFRESHED";
-
-export const RATES_ERROR = "rates/RATES_ERROR";
+export const RATES_REFRESH_ERROR = "rates/RATES_REFRESH_ERROR";
 
 const initialState = {
-    contract: null,
-    error: null,
-    connectionError: null,
     isLoading: false,
-    isConnected: false,
+    isLoaded: false,
+    loadError: null,
     info: {
         bn_weiBalance: null,
         ethBalance: null,
@@ -35,68 +27,30 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case RATES_CONNECT_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                connectionError: null,
-                error: null
-            };
-
-        case RATES_CONNECT_SUCCESS:
-            return {
-                ...state,
-                contract: action.contract,
-                isLoading: false,
-                isConnected: true,
-                connectionError: null,
-                error: null
-            };
-
-        case RATES_ERROR:
+        case RATES_REFRESH_ERROR:
             return {
                 ...state,
                 isLoading: false,
-                isConnected: false,
-                connectionError: action.error
+                loadError: action.error
             };
 
         case RATES_REFRESH_REQUESTED:
             return {
-                ...state
+                ...state,
+                isLoading: true
             };
 
         case RATES_REFRESHED:
             return {
                 ...state,
+                isLoaded: true,
+                isLoading: false,
                 info: action.result
             };
 
         default:
             return state;
     }
-};
-
-export const connectRates = () => {
-    return async dispatch => {
-        dispatch({
-            type: RATES_CONNECT_REQUESTED
-        });
-        try {
-            return dispatch({
-                type: RATES_CONNECT_SUCCESS,
-                contract: SolidityContract.connectNew(store.getState().web3Connect, ratesArtifacts)
-            });
-        } catch (error) {
-            if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
-            }
-            return dispatch({
-                type: RATES_ERROR,
-                error: error
-            });
-        }
-    };
 };
 
 export const refreshRates = () => {
@@ -106,16 +60,15 @@ export const refreshRates = () => {
         });
         try {
             const web3 = store.getState().web3Connect.web3Instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
-            const bytes32_peggedSymbol = store.getState().augmintToken.info.bytes32_peggedSymbol;
-            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+            const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+            const bytes32_peggedSymbol = await augmintTokenInstance.methods.peggedSymbol().call();
 
-            const rates = store.getState().rates.contract.instance;
+            const ratesInstance = store.getState().contracts.latest.rates.web3ContractInstance;
 
             const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
-                rates.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI),
-                augmintToken.balanceOf(rates.address),
-                web3.eth.getBalance(rates.address)
+                ratesInstance.methods.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI).call(),
+                augmintTokenInstance.methods.balanceOf(ratesInstance._address).call(),
+                web3.eth.getBalance(ratesInstance._address)
             ]);
 
             return dispatch({
@@ -124,11 +77,11 @@ export const refreshRates = () => {
                     bn_weiBalance,
                     ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
                     bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance / decimalsDiv,
+                    tokenBalance: bn_tokenBalance / DECIMALS_DIV,
 
                     bn_ethFiatRate,
-                    ethFiatRate: bn_ethFiatRate / decimalsDiv,
-                    fiatEthRate: 1 / bn_ethFiatRate * decimalsDiv
+                    ethFiatRate: bn_ethFiatRate / DECIMALS_DIV,
+                    fiatEthRate: 1 / bn_ethFiatRate * DECIMALS_DIV
                 }
             });
         } catch (error) {
@@ -136,7 +89,7 @@ export const refreshRates = () => {
                 throw new Error(error);
             }
             return dispatch({
-                type: RATES_ERROR,
+                type: RATES_REFRESH_ERROR,
                 error: error
             });
         }

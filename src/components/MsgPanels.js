@@ -145,15 +145,15 @@ EthSubmissionSuccessPanel.defaultProps = {
     dismissable: true
 };
 
+/* it to be used on compents connected to contracts or contractData (i.e. contract.info style).*/
 export function ConnectionStatus(props) {
     const { contract, error = true, size = "tiny", ...other } = props;
-    return (
-        contract.connectionError && (
-            <Message size={size} error={error} {...other}>
-                Couldn't connect to Ethereum contract.
-            </Message>
-        )
-    );
+    const contractError = contract.error || contract.loadError || contract.connectionError;
+    return contractError ? (
+        <Message size={size} error={error} {...other}>
+            Couldn't connect to Ethereum contract.
+        </Message>
+    ) : null;
 }
 
 export function ErrorDetails(props) {

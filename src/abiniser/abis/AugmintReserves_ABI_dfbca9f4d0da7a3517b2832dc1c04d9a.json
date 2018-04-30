@@ -1,0 +1,185 @@
+{
+  "contractName": "AugmintReserves",
+  "abiHash": "dfbca9f4d0da7a3517b2832dc1c04d9a",
+  "generatedAt": "2018-04-24T15:43:19.777Z",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "revokeMulitplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "permissions",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokePermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermissions",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "grantMultiplePermissions",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "name": "requiredPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantPermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "tokenAddress",
+          "type": "address"
+        },
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "narrative",
+          "type": "string"
+        }
+      ],
+      "name": "withdrawTokens",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "grantedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "agent",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "revokedPermission",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PermissionRevoked",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "augmintToken",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "burn",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+}

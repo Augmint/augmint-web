@@ -13,7 +13,7 @@ export class AccountInfo extends React.Component {
                 className="accountInfo"
                 loading={
                     augmintToken.isLoading ||
-                    (!augmintToken.isConnected && !augmintToken.connectionError) ||
+                    (!augmintToken.isLoaded && !augmintToken.loadError) ||
                     userBalancesIsLoading
                 }
                 header={header}

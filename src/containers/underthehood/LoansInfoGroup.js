@@ -11,17 +11,16 @@ class LoansInfoGroup extends React.Component {
     }
 
     render() {
-        const { loanManager, loanProducts, loans } = this.props;
         return (
             <Pgrid columns={3}>
                 <Pgrid.Column>
-                    <LoanManagerInfo contract={loanManager} />
+                    <LoanManagerInfo contractData={this.props.loanManagerData} contract={this.props.loanManager} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <ArrayDump header="Loan Products" items={loanProducts} />
+                    <ArrayDump header="Loan Products" items={this.props.loanProducts} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <ArrayDump header="Loans for userAccount" items={loans} />
+                    <ArrayDump header="Loans for userAccount" items={this.props.loans} />
                 </Pgrid.Column>
             </Pgrid>
         );
@@ -29,7 +28,8 @@ class LoansInfoGroup extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    loanManager: state.loanManager,
+    loanManager: state.contracts.latest.loanManager,
+    loanManagerData: state.loanManager,
     loanProducts: state.loanManager.products,
     loans: state.loans.loans
 });

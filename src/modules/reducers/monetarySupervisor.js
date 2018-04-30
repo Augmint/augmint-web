@@ -2,24 +2,17 @@
     TODO: separate transfer from here to tackle isLoading race conditions
 */
 import store from "modules/store";
-import SolidityContract from "modules/ethereum/SolidityContract";
-import monetarySupervisor_artifacts from "contractsBuild/MonetarySupervisor.json";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
-export const MONETARY_SUPERVISOR_CONNECT_REQUESTED = "augmintToken/MONETARY_SUPERVISOR_CONNECT_REQUESTED";
-export const MONETARY_SUPERVISOR_CONNECT_SUCCESS = "augmintToken/MONETARY_SUPERVISOR_CONNECT_SUCCESS";
-export const MONETARY_SUPERVISOR_CONNECT_ERROR = "augmintToken/MONETARY_SUPERVISOR_CONNECT_ERROR";
-
-export const MONETARY_SUPERVISOR_REFRESH_REQUESTED = "augmintToken/MONETARY_SUPERVISOR_REFRESH_REQUESTED";
-export const MONETARY_SUPERVISOR_REFRESHED = "augmintToken/MONETARY_SUPERVISOR_REFRESHED";
+export const MONETARY_SUPERVISOR_REFRESH_REQUESTED = "monetarySupervisor/MONETARY_SUPERVISOR_REFRESH_REQUESTED";
+export const MONETARY_SUPERVISOR_REFRESHED = "monetarySupervisor/MONETARY_SUPERVISOR_REFRESHED";
+export const MONETARY_SUPERVISOR_REFRESH_ERROR = "monetarySupervisor/MONETARY_SUPERVISOR_REFRESH_ERROR";
 
 const initialState = {
-    contract: null,
     isLoading: false,
-    isConnected: false,
-    error: null,
-    connectionError: null,
+    isLoaded: false,
+    loadError: null,
     info: {
         augmintToken: null,
         interestEarnedAccount: null,
@@ -49,33 +42,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case MONETARY_SUPERVISOR_CONNECT_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                connectionError: null,
-                error: null
-            };
-
-        case MONETARY_SUPERVISOR_CONNECT_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                isConnected: true,
-                error: null,
-                connectionError: null,
-                contract: action.contract,
-                info: action.info
-            };
-
-        case MONETARY_SUPERVISOR_CONNECT_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                isConnected: false,
-                connectionError: action.error
-            };
-
         case MONETARY_SUPERVISOR_REFRESH_REQUESTED:
             return {
                 ...state,
@@ -86,7 +52,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
+                loadError: null,
                 info: action.result
+            };
+
+        case MONETARY_SUPERVISOR_REFRESH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                loadError: action.error
             };
 
         default:
@@ -94,50 +69,26 @@ export default (state = initialState, action) => {
     }
 };
 
-export const connectMonetarySupervisor = () => {
+export const refreshMonetarySupervisor = () => {
     return async dispatch => {
-        dispatch({
-            type: MONETARY_SUPERVISOR_CONNECT_REQUESTED
-        });
-
+        dispatch({ type: MONETARY_SUPERVISOR_REFRESH_REQUESTED });
         try {
-            const contract = SolidityContract.connectNew(store.getState().web3Connect, monetarySupervisor_artifacts);
-            const info = await getMonetarySupervisorInfo(contract.instance);
-            return dispatch({
-                type: MONETARY_SUPERVISOR_CONNECT_SUCCESS,
-                contract: contract,
-                info: info
-            });
+            const monetarySupervisorInstance = store.getState().contracts.latest.monetarySupervisor
+                .web3ContractInstance;
+            const info = await getMonetarySupervisorInfo(monetarySupervisorInstance);
+            return dispatch({ type: MONETARY_SUPERVISOR_REFRESHED, result: info });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
                 return Promise.reject(error);
             }
-            return dispatch({
-                type: MONETARY_SUPERVISOR_CONNECT_ERROR,
-                error: error
-            });
+            return dispatch({ type: MONETARY_SUPERVISOR_REFRESH_ERROR, error: error });
         }
     };
 };
 
-export const refreshMonetarySupervisor = () => {
-    return async dispatch => {
-        dispatch({
-            type: MONETARY_SUPERVISOR_REFRESH_REQUESTED
-        });
-        const monetarySupervisor = store.getState().monetarySupervisor.contract.instance;
-        const info = await getMonetarySupervisorInfo(monetarySupervisor);
-        return dispatch({
-            type: MONETARY_SUPERVISOR_REFRESHED,
-            result: info
-        });
-    };
-};
-
-async function getMonetarySupervisorInfo(monetarySupervisor) {
+async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.instance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [
         augmintTokenAddress,
@@ -149,50 +100,48 @@ async function getMonetarySupervisorInfo(monetarySupervisor) {
         bn_totalLoanAmount,
         bn_totalLockedAmount,
 
-        paramsArray,
+        ltdParams,
 
         bn_maxLockByLtd,
         bn_maxLoanByLtd
     ] = await Promise.all([
-        monetarySupervisor.augmintToken(),
-        monetarySupervisor.interestEarnedAccount(),
-        monetarySupervisor.augmintReserves(),
+        monetarySupervisorInstance.methods.augmintToken().call(),
+        monetarySupervisorInstance.methods.interestEarnedAccount().call(),
+        monetarySupervisorInstance.methods.augmintReserves().call(),
 
-        monetarySupervisor.issuedByMonetaryBoard(),
+        monetarySupervisorInstance.methods.issuedByMonetaryBoard().call(),
 
-        monetarySupervisor.totalLoanAmount(),
-        monetarySupervisor.totalLockedAmount(),
+        monetarySupervisorInstance.methods.totalLoanAmount().call(),
+        monetarySupervisorInstance.methods.totalLockedAmount().call(),
 
-        monetarySupervisor.ltdParams(),
+        monetarySupervisorInstance.methods.ltdParams().call(),
 
-        monetarySupervisor.getMaxLockAmountAllowedByLtd(),
-        monetarySupervisor.getMaxLoanAmountAllowedByLtd()
+        monetarySupervisorInstance.methods.getMaxLockAmountAllowedByLtd().call(),
+        monetarySupervisorInstance.methods.getMaxLoanAmountAllowedByLtd().call()
     ]);
 
-    const [bn_ltdLockDifferenceLimit, bn_ltdLoanDifferenceLimit, bn_allowedLtdDifferenceAmount] = paramsArray;
-
-    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / decimalsDiv;
-    const totalLoanAmount = bn_totalLoanAmount / decimalsDiv;
-    const totalLockedAmount = bn_totalLockedAmount / decimalsDiv;
+    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / DECIMALS_DIV;
+    const totalLoanAmount = bn_totalLoanAmount / DECIMALS_DIV;
+    const totalLockedAmount = bn_totalLockedAmount / DECIMALS_DIV;
 
     const ltdPercent = totalLockedAmount === 0 ? 0 : totalLoanAmount / totalLockedAmount;
 
-    const ltdLockDifferenceLimit = bn_ltdLockDifferenceLimit / 1000000;
-    const ltdLoanDifferenceLimit = bn_ltdLoanDifferenceLimit / 1000000;
-    const allowedLtdDifferenceAmount = bn_allowedLtdDifferenceAmount / decimalsDiv;
+    const ltdLockDifferenceLimit = ltdParams.lockDifferenceLimit / 1000000;
+    const ltdLoanDifferenceLimit = ltdParams.loanDifferenceLimit / 1000000;
+    const allowedLtdDifferenceAmount = ltdParams.allowedDifferenceAmount / DECIMALS_DIV;
 
-    const maxLockByLtd = bn_maxLockByLtd / decimalsDiv;
-    const maxLoanByLtd = bn_maxLoanByLtd / decimalsDiv;
+    const maxLockByLtd = bn_maxLockByLtd / DECIMALS_DIV;
+    const maxLoanByLtd = bn_maxLoanByLtd / DECIMALS_DIV;
 
     const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
         web3.eth.getBalance(augmintReservesAddress),
-        augmintToken.balanceOf(augmintReservesAddress),
-        augmintToken.balanceOf(interestEarnedAccountAddress)
+        augmintTokenInstance.methods.balanceOf(augmintReservesAddress).call(),
+        augmintTokenInstance.methods.balanceOf(interestEarnedAccountAddress).call()
     ]);
 
     const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH_IN_WEI;
-    const reserveTokenBalance = bn_reserveTokenBalance / decimalsDiv;
-    const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / decimalsDiv;
+    const reserveTokenBalance = bn_reserveTokenBalance / DECIMALS_DIV;
+    const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / DECIMALS_DIV;
 
     return {
         augmintToken: augmintTokenAddress,

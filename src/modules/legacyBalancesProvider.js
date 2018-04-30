@@ -2,34 +2,34 @@ import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshLegacyBalances } from "modules/reducers/legacyBalances";
 
+let isWatchSetup = false;
+
 export default () => {
-    const web3Connect = store.getState().web3Connect;
+    const legacyBalances = store.getState().legacyBalances;
 
-    if (web3Connect.isConnected) {
-        console.debug("legacyBalancesProvider - web3 already connected, dispatching refreshLegacyBalances() ");
+    if (legacyBalances && !legacyBalances.isLoaded && legacyBalances.isLoading) {
+        console.debug("legacyBalancesProvider - first time. Dispatching refreshLegacyBalances() ");
         store.dispatch(refreshLegacyBalances());
-    }
-
-    const monetarySupervisor = store.getState().monetarySupervisor;
-
-    if (monetarySupervisor.isConnected) {
         setupListeners();
     }
 
-    setupWatch("monetarySupervisor.contract", onMonetarySupervisorContractChange);
-    setupWatch("web3Connect.userAccount", onUserAccountChange);
+    if (!isWatchSetup) {
+        isWatchSetup = true;
+        setupWatch("contracts.latest.monetarySupervisor", onMonetarySupervisorContractChange);
+        setupWatch("web3Connect.userAccount", onUserAccountChange);
+    }
 
     return;
 };
 
 const onMonetarySupervisorContractChange = (newVal, oldVal) => {
-    if (newVal && store.getState().augmintToken.isConnected) {
-        setupListeners();
-    }
+    console.debug("legacyBalancesProvider - monetarySupervisor changed. Dispatching refreshLegacyBalances() ");
+    store.dispatch(refreshLegacyBalances());
+    setupListeners();
 };
 
 const setupListeners = () => {
-    const monetarySupervisor = store.getState().monetarySupervisor.contract.ethersInstance;
+    const monetarySupervisor = store.getState().contracts.latest.monetarySupervisor.ethersInstance;
     monetarySupervisor.onlegacytokenconverted = onLegacyTokenConverted;
 };
 
@@ -44,7 +44,7 @@ const onLegacyTokenConverted = (oldTokenAddress, account, amount) => {
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
-    if (newVal !== "?") {
+    if (store.getState().contracts.latest.monetarySupervisor && newVal !== "?") {
         console.debug("legacyBalancesProvider - web3Connect.userAccount changed. Dispatching refreshLegacyBalances() ");
         store.dispatch(refreshLegacyBalances());
     }

@@ -9,7 +9,9 @@ export const LOANS_LOANLIST_ERROR = "loans/LOANS_LOANLIST_ERROR";
 
 const initialState = {
     loans: null,
-    isLoading: false
+    isLoading: false,
+    isLoaded: false,
+    loadError: null
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +26,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
                 loans: action.loans
             };
 
@@ -31,7 +34,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                loadError: action.error
             };
 
         default:

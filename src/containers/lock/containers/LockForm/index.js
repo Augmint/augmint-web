@@ -97,7 +97,7 @@ class LockContainer extends React.Component {
                             as={Form.Input}
                             type="number"
                             label="Amount to lock:"
-                            disabled={false}
+                            disabled={submitting || !lockManager.isLoaded}
                             validate={[
                                 Validations.required,
                                 Validations.tokenAmount,
@@ -111,6 +111,7 @@ class LockContainer extends React.Component {
                         </Field>
 
                         <label>Select term:</label>
+                        {(lockManager.isLoading || !lockManager.isLoaded) && <h5>Loading lock products...</h5>}
                         <TermTable fixed>
                             <TermTableHeader>
                                 <TermTableRow>

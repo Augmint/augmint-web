@@ -2,9 +2,7 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
-import AugmintToken from "contractsBuild/TokenAEur.json";
-import MonetarySupervisor from "contractsBuild/MonetarySupervisor.json";
-import { default as Contract } from "truffle-contract";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import { DECIMALS_DIV } from "utils/constants";
 
 /* List of old augmint token deploy addresses by network id */
@@ -27,17 +25,16 @@ export async function fetchLegacyBalances() {
     const legacyTokenAddresses = ACCEPTED_LEGACY_AEUR_CONTRACTS[web3.network.id];
     const userAccount = store.getState().web3Connect.userAccount;
 
-    const contract = Contract(AugmintToken);
-    contract.setProvider(web3.web3Instance.currentProvider);
-    contract.setNetwork(web3.network.id);
-
-    const queryTxs = legacyTokenAddresses.map(address => contract.at(address).balanceOf(userAccount));
+    const queryTxs = legacyTokenAddresses.map(address => {
+        const legacyContract = SolidityContract.connectAt(web3, "TokenAEur", address);
+        return legacyContract.web3ContractInstance.methods.balanceOf(userAccount).call();
+    });
 
     const legacyBalances = await Promise.all(queryTxs);
-    const ret = legacyBalances.map((bal, i) => ({
+    const ret = legacyBalances.map((bn_balance, i) => ({
         contract: legacyTokenAddresses[i],
-        bn_balance: bal,
-        balance: bal.div(DECIMALS_DIV).toNumber()
+        bn_balance,
+        balance: bn_balance / DECIMALS_DIV
     }));
 
     return ret;
@@ -46,20 +43,14 @@ export async function fetchLegacyBalances() {
 export async function convertLegacyBalanceTx(legacyTokenAddress, amount) {
     const txName = "Convert legacy balance";
     const web3 = store.getState().web3Connect;
+    const monetarySupervisorAddress = store.getState().contracts.latest.monetarySupervisor.address;
     const gasEstimate = cost.LEGACY_BALANCE_CONVERT_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
 
-    const augmintTokenContract = Contract(AugmintToken);
+    const legacyContract = SolidityContract.connectAt(web3, "TokenAEur", legacyTokenAddress);
 
-    const monetarySupervisorContract = Contract(MonetarySupervisor);
-    monetarySupervisorContract.setProvider(web3.web3Instance.currentProvider);
-    monetarySupervisorContract.setNetwork(web3.network.id);
-
-    const web3ContractInstance = new web3.web3Instance.eth.Contract(augmintTokenContract.abi, legacyTokenAddress);
-
-    const tx = web3ContractInstance.methods
-        .transferAndNotify(monetarySupervisorContract.address, new BigNumber(amount).mul(decimalsDiv).toString(), 0)
+    const tx = legacyContract.web3ContractInstance.methods
+        .transferAndNotify(monetarySupervisorAddress, new BigNumber(amount).mul(DECIMALS_DIV).toString(), 0)
         .send({
             from: userAccount,
             gas: gasEstimate

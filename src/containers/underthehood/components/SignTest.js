@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 
 export function SignTest(props) {
@@ -42,7 +42,7 @@ export function SignTest(props) {
 
     return (
         <Pblock header="Sign test">
-            <Button size="small" onClick={handleSignClick}>
+            <Button type="submit" size="small" onClick={handleSignClick}>
                 Sign
             </Button>
         </Pblock>
