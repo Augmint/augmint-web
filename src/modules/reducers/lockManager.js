@@ -1,14 +1,8 @@
 import store from "modules/store";
-import SolidityContract from "modules/ethereum/SolidityContract";
-import LockManager from "abiniser/abis/Locker_ABI_66e3e89133d9bbd91baac5552f21f7e1.json";
 
 import { fetchLockProductsTx } from "modules/ethereum/lockTransactions";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
-
-const LOCKMANAGER_CONNECT_REQUESTED = "lockManager/LOCKMANAGER_CONNECT_REQUESTED";
-const LOCKMANAGER_CONNECT_SUCCESS = "lockManager/LOCKMANAGER_CONNECT_SUCCESS";
-const LOCKMANAGER_CONNECT_ERROR = "lockManager/LOCKMANAGER_CONNECT_ERROR";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 const LOCKMANAGER_REFRESH_REQUESTED = "lockManager/LOCKMANAGER_REFRESH_REQUESTED";
 const LOCKMANAGER_REFRESHED = "lockManager/LOCKMANAGER_REFRESHED";
@@ -19,10 +13,9 @@ const LOCKMANAGER_PRODUCTLIST_RECEIVED = "lockManager/LOCKMANAGER_PRODUCTLIST_RE
 const LOCKMANAGER_PRODUCTLIST_ERROR = "lockManager/LOCKMANAGER_PRODUCTLIST_ERROR";
 
 const initialState = {
-    contract: null,
-    isConnected: false,
+    isLoaded: false,
     isLoading: false,
-    connectionError: null,
+    loadError: null,
     result: null,
     error: null,
     products: null,
@@ -41,31 +34,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case LOCKMANAGER_CONNECT_REQUESTED:
-            return {
-                ...state,
-                isLoading: true,
-                connectionError: null,
-                error: null
-            };
-
-        case LOCKMANAGER_CONNECT_SUCCESS:
-            return {
-                ...state,
-                contract: action.contract,
-                isConnected: true,
-                isLoading: false,
-                connectionError: null
-            };
-
-        case LOCKMANAGER_CONNECT_ERROR:
-            return {
-                ...state,
-                connectionError: action.error,
-                isConnected: false,
-                isLoading: false
-            };
-
         case LOCKMANAGER_REFRESH_REQUESTED:
             return {
                 ...state,
@@ -76,7 +44,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
                 info: action.info
+            };
+
+        case LOCKMANAGER_REFRESH_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                loadError: action.error
             };
 
         case LOCKMANAGER_PRODUCTLIST_REQUESTED:
@@ -93,7 +69,6 @@ export default (state = initialState, action) => {
             };
 
         case LOCKMANAGER_PRODUCTLIST_ERROR:
-        case LOCKMANAGER_REFRESH_ERROR:
             return {
                 ...state,
                 isLoading: false,
@@ -105,36 +80,13 @@ export default (state = initialState, action) => {
     }
 };
 
-export const connectLockManager = () => {
-    return async dispatch => {
-        dispatch({
-            type: LOCKMANAGER_CONNECT_REQUESTED
-        });
-        try {
-            const contract = SolidityContract.connectLatest(store.getState().web3Connect, LockManager);
-            return dispatch({
-                type: LOCKMANAGER_CONNECT_SUCCESS,
-                contract
-            });
-        } catch (error) {
-            if (process.env.NODE_ENV !== "production") {
-                return Promise.reject(error);
-            }
-            return dispatch({
-                type: LOCKMANAGER_CONNECT_ERROR,
-                error: error
-            });
-        }
-    };
-};
-
 export const refreshLockManager = () => {
     return async dispatch => {
         dispatch({
             type: LOCKMANAGER_REFRESH_REQUESTED
         });
         try {
-            const lockManagerInstance = store.getState().lockManager.contract.web3ContractInstance;
+            const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
             const info = await getLockManagerInfo(lockManagerInstance);
             return dispatch({
                 type: LOCKMANAGER_REFRESHED,
@@ -178,8 +130,7 @@ export function fetchLockProducts() {
 
 async function getLockManagerInfo(lockManagerInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
-    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [
         chunkSize,
@@ -198,7 +149,7 @@ async function getLockManagerInfo(lockManagerInstance) {
         lockManagerInstance.methods.monetarySupervisor().call(),
 
         web3.eth.getBalance(lockManagerInstance._address),
-        augmintToken.methods.balanceOf(lockManagerInstance._address).call()
+        augmintTokenInstance.methods.balanceOf(lockManagerInstance._address).call()
     ]);
 
     return {
@@ -206,7 +157,7 @@ async function getLockManagerInfo(lockManagerInstance) {
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
-        tokenBalance: bn_tokenBalance / decimalsDiv,
+        tokenBalance: bn_tokenBalance / DECIMALS_DIV,
         lockCount: parseInt(lockCount, 10),
         productCount: parseInt(productCount, 10),
         augmintTokenAddress,

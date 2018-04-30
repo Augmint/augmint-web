@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { matchOrders, MATCH_ORDERS_SUCCESS } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 //import { LoadingPanel } from "components/MsgPanels";
@@ -42,7 +42,7 @@ class MatchOrdersButton extends React.Component {
     }
 
     render() {
-        const { buyOrder, sellOrder, isLoading, size = "medium", primary = true, label = "Match" } = this.props;
+        const { buyOrder, sellOrder, isLoaded, size = "medium", primary = true, label = "Match" } = this.props;
         const { submitSucceeded, submitting, error, result } = this.state;
 
         const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
@@ -54,11 +54,11 @@ class MatchOrdersButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!isMatching && <p>No matching orders</p>}
+                {!isMatching && isLoaded && <p>No matching orders</p>}
 
                 {!submitSucceeded &&
                     isMatching &&
-                    !isLoading && (
+                    isLoaded && (
                         <Button
                             size={size}
                             primary={primary}
@@ -83,7 +83,7 @@ class MatchOrdersButton extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    isLoading: state.exchange.isLoading
+    isLoaded: state.exchange.isLoaded
 });
 
 const mapDispatchToProps = { matchOrders };

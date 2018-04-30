@@ -14,7 +14,7 @@ import { TotalSupply } from "./components/TotalSupply";
 import { LtdStats } from "./components/LtdStats";
 import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
-import { Button } from "semantic-ui-react";
+import Button from "../../components/augmint-ui/button";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -63,7 +63,7 @@ class AugmintToken extends React.Component {
                                 as={Link}
                                 data-testid="loansToCollectButton"
                                 to="/loan/collect"
-                                icon="right chevron"
+                                icon="angle-right"
                                 labelPosition="right"
                                 basic
                                 size="large"
@@ -85,13 +85,6 @@ class AugmintToken extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.web3Connect.userAccount,
-    accounts: state.web3Connect.accounts,
-    balance: state.web3Connect.balance,
-    isLoading: state.web3Connect.isLoading,
-    isConnected: state.web3Connect.isConnected,
-    web3Instance: state.web3Connect.web3Instance,
-
     augmintToken: state.augmintToken,
     loanManager: state.loanManager,
     lockManager: state.lockManager,

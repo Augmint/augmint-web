@@ -10,14 +10,19 @@ describe("Augmint base", function() {
 
         cy.screenshot("underthehood_baseinfo");
 
+        const expectedLoadStatus = "Loaded | not loading | No load error";
         cy.get("[data-testid=augmintInfoLink]").click();
-        cy.get("[data-testid=MonetarySupervisor-connectionStatus]").should("contain", "connected | not loading");
-        cy.get("[data-testid=AugmintToken-connectionStatus]").should("contain", "connected | not loading");
-        cy.screenshot("underthehood_augmint_baseinfo");
+        cy.get("[data-testid=MonetarySupervisor-dataStatus]").should("contain", expectedLoadStatus);
+        cy.get("[data-testid=TokenAEur-dataStatus]").should("contain", "Loaded | not loading | No load error");
 
         cy.get("[data-testid=loansInfoLink]").click();
-        cy.get("[data-testid=LoanManager-connectionStatus]").should("contain", "connected | not loading");
-        cy.screenshot("underthehood_loans");
+        cy.get("[data-testid=LoanManager-dataStatus]").should("contain", expectedLoadStatus);
+
+        cy.get("[data-testid=locksInfoLink]").click();
+        cy.get("[data-testid=Locker-dataStatus]").should("contain", expectedLoadStatus);
+
+        cy.get("[data-testid=exchangeInfoLink]").click();
+        cy.get("[data-testid=Exchange-dataStatus]").should("contain", expectedLoadStatus);
     });
 
     it("Should display reserves", function() {

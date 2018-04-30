@@ -6,13 +6,13 @@ export class EarningStats extends React.Component {
     render() {
         const { augmintToken, monetarySupervisor, size } = this.props;
 
-        const { isConnected, isLoading, connectionError } = this.props.augmintToken;
+        const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { feeAccountTokenBalance, feeAccountEthBalance } = augmintToken.info;
 
         const { interestEarnedAccountTokenBalance } = monetarySupervisor.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
+            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group widths="3" size={size}>

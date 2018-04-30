@@ -5,7 +5,7 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 
 export function MonetarySupervisorInfo(props) {
-    let { contract } = props;
+    let { contractData } = props;
 
     const handleRefreshClick = e => {
         e.preventDefault();
@@ -14,9 +14,9 @@ export function MonetarySupervisorInfo(props) {
 
     return (
         <Pblock header="MonetarySupervisor">
-            <p>ETH Reserve: {contract.info.reserveEthBalance} ETH</p>
-            <p>A-EUR Reserve: {contract.info.reserveTokenBalance} A-EUR </p>
-            <ContractBaseInfo contractName="MonetarySupervisor" contract={contract} refreshCb={handleRefreshClick} />
+            <p>ETH Reserve: {contractData.info.reserveEthBalance} ETH</p>
+            <p>A-EUR Reserve: {contractData.info.reserveTokenBalance} A-EUR </p>
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }

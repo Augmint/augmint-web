@@ -14,9 +14,10 @@ const LEGACY_BALANCE_CONVERSION_ERROR = "legacyBalances/LEGACY_BALANCE_CONVERSIO
 export const LEGACY_BALANCE_CONVERSION_SUCCESS = "legacyBalances/LEGACY_BALANCE_CONVERSION_SUCCESS";
 
 const initialState = {
-    refreshError: null,
-    error: null,
     isLoading: false,
+    isLoaded: false,
+    loadError: null,
+    error: null,
     contractBalances: null,
     result: null,
     request: null
@@ -28,7 +29,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                refreshError: null
+                loadError: null
             };
 
         case LEGACY_BALANCE_REFRESH_SUCCESS:
@@ -36,7 +37,8 @@ export default (state = initialState, action) => {
                 ...state,
                 contractBalances: action.result,
                 isLoading: false,
-                refreshError: null
+                isLoaded: true,
+                loadError: null
             };
 
         case LEGACY_BALANCE_REFRESH_ERROR:

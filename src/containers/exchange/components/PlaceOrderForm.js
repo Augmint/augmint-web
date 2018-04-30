@@ -3,7 +3,8 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Menu, Button, Label } from "semantic-ui-react";
+import { Menu, Label } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
@@ -24,6 +25,12 @@ class PlaceOrderForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.pristine && nextProps.rates && nextProps.rates !== this.props.rates) {
+            this.props.initialize({ price: nextProps.rates.info.ethFiatRate });
+        }
     }
 
     onOrderTypeChange(e, { name, index }) {
@@ -122,10 +129,18 @@ class PlaceOrderForm extends React.Component {
     }
 
     render() {
-        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
-        const { isLoading } = this.props.exchange;
+        const {
+            rates,
+            exchange,
+            error,
+            handleSubmit,
+            pristine,
+            submitting,
+            submitSucceeded,
+            clearSubmitErrors,
+            reset
+        } = this.props;
         const { orderType } = this.state;
-        //const fiatRate = this.props.rates.info.bn_ethFiatRate;
 
         const ethAmountValidations = [Validations.required, Validations.ethAmount];
         if (orderType === TOKEN_BUY) {
@@ -159,7 +174,7 @@ class PlaceOrderForm extends React.Component {
         );
 
         return (
-            <Pblock loading={isLoading} header={header}>
+            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
                 <ConnectionStatus contract={this.props.exchange} />
 
                 {submitSucceeded && (
@@ -171,95 +186,89 @@ class PlaceOrderForm extends React.Component {
                     />
                 )}
 
-                {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <EthSubmissionErrorPanel
-                            error={error}
-                            header="Place Order failed"
-                            onDismiss={() => clearSubmitErrors()}
-                        />
+                {!submitSucceeded &&
+                    this.props.rates.isLoaded && (
+                        <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                            <EthSubmissionErrorPanel
+                                error={error}
+                                header="Place Order failed"
+                                onDismiss={() => clearSubmitErrors()}
+                            />
 
-                        <Field
-                            name="tokenAmount"
-                            label={orderType === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            disabled={submitting || isLoading}
-                            onChange={this.onTokenAmountChange}
-                            validate={tokenAmountValidations}
-                            normalize={Normalizations.twoDecimals}
-                            labelPosition="right"
-                        >
-                            <input data-testid="tokenAmountInput" />
-                            <Label>A-EUR</Label>
-                        </Field>
+                            <Field
+                                name="tokenAmount"
+                                label={orderType === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
+                                component={Form.Field}
+                                as={Form.Input}
+                                type="number"
+                                disabled={submitting || !exchange.isLoaded}
+                                onChange={this.onTokenAmountChange}
+                                validate={tokenAmountValidations}
+                                normalize={Normalizations.twoDecimals}
+                                labelPosition="right"
+                            >
+                                <input data-testid="tokenAmountInput" />
+                                <Label>A-EUR</Label>
+                            </Field>
 
-                        <Field
-                            name="ethAmount"
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            label={orderType === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
-                            disabled={submitting || isLoading}
-                            onChange={this.onEthAmountChange}
-                            validate={ethAmountValidations}
-                            normalize={Normalizations.fiveDecimals}
-                            labelPosition="right"
-                        >
-                            <input data-testid="ethAmountInput" />
-                            <Label>ETH</Label>
-                        </Field>
+                            <Field
+                                name="ethAmount"
+                                component={Form.Field}
+                                as={Form.Input}
+                                type="number"
+                                label={orderType === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
+                                disabled={submitting || !exchange.isLoaded}
+                                onChange={this.onEthAmountChange}
+                                validate={ethAmountValidations}
+                                normalize={Normalizations.fiveDecimals}
+                                labelPosition="right"
+                            >
+                                <input data-testid="ethAmountInput" />
+                                <Label>ETH</Label>
+                            </Field>
 
-                        <Field
-                            name="price"
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            label="price: "
-                            disabled={submitting || isLoading}
-                            onChange={this.onPriceChange}
-                            validate={Validations.price}
-                            normalize={Normalizations.twoDecimals}
-                            labelPosition="right"
-                        >
-                            <input data-testid="priceInput" />
-                            <Label>A-EUR / ETH</Label>
-                        </Field>
+                            <Field
+                                name="price"
+                                component={Form.Field}
+                                as={Form.Input}
+                                type="number"
+                                label="price: "
+                                disabled={submitting || !exchange.isLoaded}
+                                onChange={this.onPriceChange}
+                                validate={Validations.price}
+                                normalize={Normalizations.twoDecimals}
+                                labelPosition="right"
+                            >
+                                <input data-testid="priceInput" />
+                                <Label>A-EUR / ETH</Label>
+                            </Field>
 
-                        <Button size="big" primary loading={submitting} disabled={pristine} data-testid="submitButton">
-                            {submitting && "Submitting..."}
-                            {!submitting &&
-                                (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
-                        </Button>
-                    </Form>
-                )}
+                            <Button
+                                size="big"
+                                primary
+                                loading={submitting}
+                                disabled={pristine}
+                                data-testid="submitButton"
+                                type="submit"
+                            >
+                                {submitting && "Submitting..."}
+                                {!submitting &&
+                                    (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
+                            </Button>
+                        </Form>
+                    )}
             </Pblock>
         );
     }
 }
 
 const selector = formValueSelector("PlaceOrderForm");
-function mapStateToProps(state) {
-    return { initialValues: { price: 1 } }; //state.rates.info.bn_ethFiatRate.toNumber() } };
-}
-
-// couldn't make this work here, it has been added to the PlaceOrderForm component embed in index.js
-// function mapStateToProps(state, ownProps) {
-//   return {
-//     initialValues: {
-//       first_name: ownProps.propThatHasFirstName
-//     }
-// }
-
 PlaceOrderForm = connect(state => {
     const { ethAmount, tokenAmount, price } = selector(state, "ethAmount", "tokenAmount", "price");
     return { ethAmount, tokenAmount, price }; // to get amounts for orderHelpText in render
 })(PlaceOrderForm);
 
-PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);
-
-export default reduxForm({
+PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderType in menu.
@@ -272,3 +281,12 @@ export default reduxForm({
         return true;
     }
 })(PlaceOrderForm);
+
+// This is only if landing when rates already loaded. For direct landing see componentWillReceiveProps .
+function mapStateToProps(state, ownProps) {
+    return { initialValues: { price: state.rates.info.ethFiatRate } };
+}
+
+PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);
+
+export default PlaceOrderForm;

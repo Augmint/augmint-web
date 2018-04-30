@@ -102,9 +102,6 @@ export function processTx(tx, txName, gasEstimate, onReceipt) {
                         })
                     );
                 }
-                console.debug(
-                    `  ${txName} Confirmation #${confirmationNumber} received. txhash: ${rec.transactionHash}`
-                );
             })
 
             .once("receipt", rec => {

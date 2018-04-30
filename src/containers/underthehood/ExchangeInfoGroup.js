@@ -14,19 +14,17 @@ class ExchangeInfoGroup extends React.Component {
     }
 
     render() {
-        const { exchange, orders, rates } = this.props;
-
         return (
             <Pgrid columns={3}>
                 <Pgrid.Column>
-                    <ExchangeInfo contract={exchange} />
+                    <ExchangeInfo contractData={this.props.exchangeData} contract={this.props.exchange} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <RatesInfo contract={rates} />
+                    <RatesInfo contractData={this.props.ratesData} contract={this.props.rates} />
                 </Pgrid.Column>
 
                 <Pgrid.Column>
-                    <OrdersInfo orders={orders} />
+                    <OrdersInfo orders={this.props.orders} />
                 </Pgrid.Column>
             </Pgrid>
         );
@@ -34,9 +32,11 @@ class ExchangeInfoGroup extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    exchange: state.exchange,
+    exchange: state.contracts.latest.exchange,
+    exchangeData: state.exchange,
     orders: state.orders.orders,
-    rates: state.rates
+    rates: state.contracts.latest.rates,
+    ratesData: state.rates
 });
 
 export default connect(mapStateToProps)(ExchangeInfoGroup);

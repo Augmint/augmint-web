@@ -3,7 +3,7 @@ import store from "modules/store";
 import { setupWeb3 } from "modules/reducers/web3Connect";
 import { ErrorPanel } from "components/MsgPanels";
 import stringifier from "stringifier";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 
 const stringifyInfo = stringifier({ maxDepth: 3, indent: "   " });
@@ -43,6 +43,7 @@ export default class Web3ConnectionInfo extends React.Component {
                             providerInfoOpen: !this.state.providerInfoOpen
                         })
                     }
+                    style={{ marginBottom: "15px" }}
                 >
                     {this.state.providerInfoOpen ? "<< Hide provider info" : "Show provider info >>"}
                 </Button>
