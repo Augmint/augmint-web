@@ -35,12 +35,12 @@ export async function fetchOrders() {
     return { buyOrders: buyOrders, sellOrders: sellOrders };
 }
 
-async function getOrders(orderType, offset) {
+async function getOrders(orderDirection, offset) {
     const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
 
     let result;
-    if (orderType === TOKEN_BUY) {
+    if (orderDirection === TOKEN_BUY) {
         result = await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit });
     } else {
         result = await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit });
@@ -58,8 +58,8 @@ async function getOrders(orderType, offset) {
                     bn_amount
                 };
 
-                if (orderType === TOKEN_BUY) {
-                    parsed.orderType = TOKEN_BUY;
+                if (orderDirection === TOKEN_BUY) {
+                    parsed.direction = TOKEN_BUY;
                     parsed.tokenValue = parseFloat(
                         parsed.bn_amount
                             .mul(parsed.bn_price)
@@ -70,7 +70,7 @@ async function getOrders(orderType, offset) {
                     );
                     parsed.bn_weiValue = parsed.bn_amount;
                 } else {
-                    parsed.orderType = TOKEN_SELL;
+                    parsed.direction = TOKEN_SELL;
                     parsed.tokenValue = parseFloat(parsed.bn_amount / DECIMALS_DIV);
                     parsed.bn_weiValue = parsed.bn_amount
                         .mul(ONE_ETH_IN_WEI)
@@ -83,7 +83,7 @@ async function getOrders(orderType, offset) {
                 parsed.ethValue = parsed.bn_ethValue.toString();
                 parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
 
-                if (orderType === TOKEN_BUY) {
+                if (orderDirection === TOKEN_BUY) {
                     parsed.amount = parsed.ethValue;
                     parsed.amountRounded = parsed.ethValueRounded;
                     res.buyOrders.push(parsed);
@@ -104,15 +104,15 @@ async function getOrders(orderType, offset) {
 }
 
 export function isOrderBetter(o1, o2) {
-    if (o1.orderType !== o2.orderType) {
-        throw new Error("isOrderBetter(): ordertypes must be the same" + o1 + o2);
+    if (o1.direction !== o2.direction) {
+        throw new Error("isOrderBetter(): order directions must be the same" + o1 + o2);
     }
 
-    const dir = o1.orderType === TOKEN_SELL ? 1 : -1;
+    const dir = o1.direction === TOKEN_SELL ? 1 : -1;
     return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id);
 }
 
-export async function placeOrderTx(orderType, amount, price) {
+export async function placeOrderTx(orderDirection, amount, price) {
     const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
@@ -122,7 +122,7 @@ export async function placeOrderTx(orderType, amount, price) {
     let tx;
     let txName;
 
-    switch (orderType) {
+    switch (orderDirection) {
         case TOKEN_BUY:
             submitAmount = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
             txName = "Buy token order";
@@ -145,14 +145,14 @@ export async function placeOrderTx(orderType, amount, price) {
         default:
             throw new EthereumTransactionError(
                 "Place order failed.",
-                "Unknown orderType: " + orderType,
+                "Unknown orderDirection: " + orderDirection,
                 null,
                 gasEstimate
             );
     }
 
     let onReceipt;
-    if (orderType === TOKEN_SELL) {
+    if (orderDirection === TOKEN_SELL) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
         onReceipt = receipt => {
             const web3 = store.getState().web3Connect.web3Instance;
@@ -188,21 +188,26 @@ export async function matchOrdersTx(buyId, sellId) {
     return { txName, transactionHash };
 }
 
-export async function cancelOrderTx(orderType, orderId) {
+export async function cancelOrderTx(orderDirection, orderId) {
     const gasEstimate = cost.CANCEL_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
     const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
     let tx;
     let txName;
-    if (orderType === TOKEN_BUY) {
+    if (orderDirection === TOKEN_BUY) {
         tx = exchange.methods.cancelBuyTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
         txName = "Cancel buy order";
-    } else if (orderType === TOKEN_SELL) {
+    } else if (orderDirection === TOKEN_SELL) {
         tx = exchange.methods.cancelSellTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
         txName = "Cancel sell order";
     } else {
-        throw new EthereumTransactionError("Order cancel error.", "invalid orderType: " + orderType, null, gasEstimate);
+        throw new EthereumTransactionError(
+            "Order cancel error.",
+            "invalid orderDirection: " + orderDirection,
+            null,
+            gasEstimate
+        );
     }
 
     const transactionHash = await processTx(tx, txName, gasEstimate);

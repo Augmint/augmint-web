@@ -12,21 +12,21 @@ import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 const OrderItem = props => {
     const { order, userAccountAddress } = props;
     const ret = [
-        <Col width={3} key={`${order.orderType}-amount`}>
-            {order.orderType === TOKEN_SELL && <span>{order.amount} A€ </span>}
-            {order.orderType === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
+        <Col width={3} key={`${order.direction}-amount`}>
+            {order.direction === TOKEN_SELL && <span>{order.amount} A€ </span>}
+            {order.direction === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
         </Col>,
-        <Col width={2} key={`${order.orderType}-price`}>
+        <Col width={2} key={`${order.direction}-price`}>
             {order.price}
         </Col>,
-        <Col width={2} key={`${order.orderType}-action`}>
+        <Col width={2} key={`${order.direction}-action`}>
             <MoreInfoTip>
-                {order.orderType === TOKEN_SELL && (
+                {order.direction === TOKEN_SELL && (
                     <p>
                         Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
                     </p>
                 )}
-                {order.orderType === TOKEN_BUY && (
+                {order.direction === TOKEN_BUY && (
                     <p>
                         Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
                     </p>

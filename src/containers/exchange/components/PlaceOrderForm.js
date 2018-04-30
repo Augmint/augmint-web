@@ -19,9 +19,9 @@ const TOKEN_DECIMALS = 2;
 class PlaceOrderForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, orderType: TOKEN_BUY };
+        this.state = { result: null, orderDirection: TOKEN_BUY, orderType: LIMIT_ORDER };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderTypeChange = this.onOrderTypeChange.bind(this);
+        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
@@ -33,8 +33,8 @@ class PlaceOrderForm extends React.Component {
         }
     }
 
-    onOrderTypeChange(e, { name, index }) {
-        this.setState({ orderType: index });
+    onOrderDirectionChange(e, { name, index }) {
+        this.setState({ orderDirection: index });
     }
 
     onTokenAmountChange(e) {
@@ -72,7 +72,7 @@ class PlaceOrderForm extends React.Component {
         try {
             price = parseFloat(e.target.value);
 
-            if (this.state.orderType === TOKEN_BUY) {
+            if (this.state.orderDirection === TOKEN_BUY) {
                 const ethAmount = parseFloat(this.props.ethAmount);
                 const tokenValue = ethAmount * price;
                 this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
@@ -96,11 +96,11 @@ class PlaceOrderForm extends React.Component {
 
     async handleSubmit(values) {
         let amount, price;
-        const orderType = this.state.orderType;
+        const orderDirection = this.state.orderDirection;
 
         try {
             price = parseFloat(values.price);
-            if (orderType === TOKEN_BUY) {
+            if (orderDirection === TOKEN_BUY) {
                 amount = parseFloat(values.ethAmount);
             } else {
                 amount = parseFloat(values.tokenAmount);
@@ -114,7 +114,7 @@ class PlaceOrderForm extends React.Component {
             });
         }
 
-        const res = await store.dispatch(placeOrder(orderType, amount, price));
+        const res = await store.dispatch(placeOrder(orderDirection, amount, price));
 
         if (res.type !== PLACE_ORDER_SUCCESS) {
             throw new SubmissionError({
@@ -140,32 +140,32 @@ class PlaceOrderForm extends React.Component {
             clearSubmitErrors,
             reset
         } = this.props;
-        const { orderType } = this.state;
+        const { orderDirection } = this.state;
 
         const ethAmountValidations = [Validations.required, Validations.ethAmount];
-        if (orderType === TOKEN_BUY) {
+        if (orderDirection === TOKEN_BUY) {
             ethAmountValidations.push(Validations.ethUserBalance);
         }
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
-        if (orderType === TOKEN_SELL) {
+        if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
         const header = (
             <Menu size="massive" tabular>
                 <Menu.Item
-                    active={orderType === TOKEN_BUY}
+                    active={orderDirection === TOKEN_BUY}
                     index={TOKEN_BUY}
-                    onClick={this.onOrderTypeChange}
+                    onClick={this.onOrderDirectionChange}
                     data-testid="buyMenuLink"
                 >
                     Buy A-EUR
                 </Menu.Item>
                 <Menu.Item
-                    active={orderType === TOKEN_SELL}
+                    active={orderDirection === TOKEN_SELL}
                     index={TOKEN_SELL}
-                    onClick={this.onOrderTypeChange}
+                    onClick={this.onOrderDirectionChange}
                     data-testid="sellMenuLink"
                 >
                     Sell A-EUR
@@ -197,7 +197,7 @@ class PlaceOrderForm extends React.Component {
 
                             <Field
                                 name="tokenAmount"
-                                label={orderType === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
+                                label={orderDirection === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
@@ -216,7 +216,7 @@ class PlaceOrderForm extends React.Component {
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label={orderType === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
+                                label={orderDirection === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
@@ -253,7 +253,9 @@ class PlaceOrderForm extends React.Component {
                             >
                                 {submitting && "Submitting..."}
                                 {!submitting &&
-                                    (orderType === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
+                                    (orderDirection === TOKEN_BUY
+                                        ? "Submit buy A-EUR order"
+                                        : "Submit sell A-EUR order")}
                             </Button>
                         </Form>
                     )}
@@ -271,7 +273,7 @@ PlaceOrderForm = connect(state => {
 PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
     shouldValidate: params => {
-        // workaround for issue that validations are not triggered when changing orderType in menu.
+        // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
         //       is not always happening before submission attempt.
         //       also lot of unnecessary validation call
