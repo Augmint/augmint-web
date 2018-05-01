@@ -40,14 +40,6 @@ const OrderItem = props => {
     return ret;
 };
 
-const DummyCols = props => {
-    const ret = [];
-    for (let i = 0; i < props.count; i++) {
-        ret.push(<Col key={i} />);
-    }
-    return ret;
-};
-
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress } = props;
 
@@ -62,14 +54,15 @@ const OrderList = props => {
                 {i < buyOrders.length ? (
                     <OrderItem order={buyOrders[i]} userAccountAddress={userAccountAddress} />
                 ) : (
-                    <DummyCols count={3} />
+                    <Col width={7} />
                 )}
+
                 <Col width={1} />
 
                 {i < sellOrders.length ? (
                     <OrderItem order={sellOrders[i]} userAccountAddress={userAccountAddress} />
                 ) : (
-                    <DummyCols count={3} />
+                    <Col width={7} />
                 )}
             </Row>
         );
