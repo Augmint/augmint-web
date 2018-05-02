@@ -17,9 +17,8 @@ export default () => {
             "augmintTokenProvider - augmintToken not connected and not loading, dispatching refreshAugmintToken() refreshMonetarySupervisor() "
         );
 
+        refresh();
         setupListeners();
-        store.dispatch(refreshAugmintToken());
-        store.dispatch(refreshMonetarySupervisor());
     }
 
     if (!isWatchSetup) {
@@ -53,6 +52,16 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     }
 };
 
+const refresh = () => {
+    const userAccount = store.getState().web3Connect.userAccount;
+    const augmintToken = store.getState().contracts.latest.augmintToken;
+
+    store.dispatch(refreshAugmintToken());
+    store.dispatch(refreshMonetarySupervisor());
+    store.dispatch(fetchUserBalance(userAccount));
+    store.dispatch(fetchTransfers(userAccount, augmintToken.deployedAtBlock, "latest"));
+};
+
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
@@ -60,13 +69,7 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
             "augmintTokenProvider - augmintToken.contract changed. Dispatching refreshAugmintToken(), fetchUserBalance(), fetchTransferList() and refreshMonetarySupervisor()"
         );
 
-        const userAccount = store.getState().web3Connect.userAccount;
-        const augmintToken = store.getState().contracts.latest.augmintToken;
-
-        store.dispatch(refreshAugmintToken());
-        store.dispatch(refreshMonetarySupervisor());
-        store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(fetchTransfers(userAccount, augmintToken.deployedAtBlock, "latest"));
+        refresh();
         setupListeners();
     }
 };
