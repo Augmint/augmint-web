@@ -70,7 +70,6 @@ class LegacyTokens extends React.Component {
                       </Button>
                       <Button
                           type="submit"
-                          primary
                           disabled={submitting}
                           data-testid={`convertLegacyBalanceButton-${item.contract}`}
                           onClick={() => this.submitConvert(item.contract, item.balance)}

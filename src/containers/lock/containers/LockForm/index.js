@@ -104,7 +104,7 @@ class LockContainer extends React.Component {
                                 this.lockAmountValidation,
                                 Validations.userTokenBalance
                             ]}
-                            labelPosition="right"
+                            labelposition="right"
                         >
                             <input />
                             <Label>A-EUR</Label>
@@ -163,7 +163,6 @@ class LockContainer extends React.Component {
 
                         <Button
                             size="big"
-                            primary
                             disabled={pristine}
                             loading={submitting}
                             data-testid="submitButton"

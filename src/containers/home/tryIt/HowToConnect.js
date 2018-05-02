@@ -7,8 +7,8 @@ import { DiscordButton } from "components/LinkButtons";
 export function HowToConnect(props) {
     return (
         <Tsegment>
-            <Tsegment.Row centered columns={1}>
-                <Tsegment.Column textAlign="center">
+            <Tsegment.Row columns={1}>
+                <Tsegment.Column>
                     <p>To use Augmint you need an Ethereum capable browser:</p>
                     <p>
                         Install{" "}
@@ -23,8 +23,8 @@ export function HowToConnect(props) {
                     <p>then connect to Rinkeby test network</p>
                 </Tsegment.Column>
             </Tsegment.Row>
-            <Tsegment.Row centered columns={1}>
-                <Tsegment.Column textAlign="center">
+            <Tsegment.Row columns={1}>
+                <Tsegment.Column>
                     <DiscordButton />
                     <p>
                         If you feel geeky you can{" "}

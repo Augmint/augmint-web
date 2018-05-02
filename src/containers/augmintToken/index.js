@@ -2,7 +2,6 @@ import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Link } from "react-router-dom";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
@@ -60,12 +59,10 @@ class AugmintToken extends React.Component {
                             />
                             <Button
                                 content="Loans to Collect"
-                                as={Link}
                                 data-testid="loansToCollectButton"
                                 to="/loan/collect"
                                 icon="angle-right"
-                                labelPosition="right"
-                                basic
+                                labelposition="right"
                                 size="large"
                             />
                         </Pgrid.Column>

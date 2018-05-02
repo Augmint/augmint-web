@@ -23,14 +23,14 @@ class TryIt extends React.Component {
                 {!isLoading && !isConnected && <HowToConnect />}
                 {!isLoading && isConnected && <TryItConnected />}
 
-                <Tsegment.Row centered columns={1}>
-                    <Tsegment.Column textAlign="center">
+                <Tsegment.Row columns={1}>
+                    <Tsegment.Column>
                         <Button
                             content="Read more about the concept"
                             as={Link}
                             to="/concept#"
                             icon="angle-right"
-                            labelPosition="right"
+                            labelposition="right"
                             size="large"
                         />
                     </Tsegment.Column>

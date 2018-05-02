@@ -7,10 +7,10 @@ import decentLogo from "assets/images/decent-logo.svg";
 const decentImg = <Image src={decentLogo} as="a" size="small" href="http://decent.org" target="_blank" />;
 export default () => (
     <Tsegment header="About us">
-        <Tsegment.Row textAlign="center">
+        <Tsegment.Row>
             <Tsegment.Column>{decentImg}</Tsegment.Column>
         </Tsegment.Row>
-        <Tsegment.Row textAlign="center">
+        <Tsegment.Row>
             <Tsegment.Column>
                 <p>
                     Augmint is being built by people at{" "}

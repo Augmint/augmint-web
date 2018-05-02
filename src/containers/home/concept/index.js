@@ -68,7 +68,7 @@ export default () => (
                 </Grid.Row>
             </Grid>
             <Segment basic textAlign="center">
-                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                <Button content="TRY NOW" to="/tryit" className="try-now" />
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
@@ -111,7 +111,7 @@ export default () => (
                 grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
             <Segment basic textAlign="center" className="custom-button">
-                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                <Button content="TRY NOW" to="/tryit" className="try-now" />
             </Segment>
             <Segment basic as="h2" className="header" content="Governance" id={"governance"} />
             <p>
