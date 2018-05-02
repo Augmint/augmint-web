@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 
 const BaseButton = `
     display: inline-flex;
@@ -115,6 +116,20 @@ const BaseButton = `
       border-radius: 0;
       border-top-right-radius: inherit;
       border-bottom-right-radius: inherit;
+    }
+
+    &.discord,
+    &.discord:hover {
+      all: initial;
+      color: ${theme.colors.secondary};
+      cursor: pointer;
+      font-family: ${theme.typography.fontFamilies.default};
+      display: flex;
+      font-size: ${remCalc(18)};
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
     }
 `;
 
