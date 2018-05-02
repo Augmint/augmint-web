@@ -4,7 +4,7 @@ import TokenAEur from "abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf24
 import Rates from "abiniser/abis/Rates_ABI_cc8bc64cd780f047eca819e6cd3b8af9.json";
 import LockManager from "abiniser/abis/Locker_ABI_66e3e89133d9bbd91baac5552f21f7e1.json";
 import LoanManager from "abiniser/abis/LoanManager_ABI_291572b8d2ffe95dca1733ebc1472e08.json";
-import Exchange from "abiniser/abis/Exchange_ABI_7595b255e567ae1d0eeef4460d0b0c16.json";
+import Exchange from "abiniser/abis/Exchange_ABI_a1dd11684e0aba7b453b7dbae42b2edb.json";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
 export const CONTRACTS_CONNECT_SUCCESS = "contracts/CONTRACTS_CONNECT_SUCCESS";
