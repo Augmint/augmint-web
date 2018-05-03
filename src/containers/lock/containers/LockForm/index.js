@@ -10,6 +10,7 @@ import { Label } from "semantic-ui-react";
 import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import Button from "components/augmint-ui/button";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
@@ -106,8 +107,8 @@ class LockContainer extends React.Component {
                             ]}
                             labelposition="right"
                         >
-                            <input />
-                            <Label>A-EUR</Label>
+                            <input style={{ borderRadius: "5px 0 0 5px" }} />
+                            <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 
                         <label>Select term:</label>

@@ -117,7 +117,7 @@ class TokenTransferForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isLoaded}
                         >
-                            <input data-testid="transferAmountInput" />
+                            <input data-testid="transferAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
                             <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 
