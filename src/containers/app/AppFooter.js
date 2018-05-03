@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Segment, Container, List, Image } from "semantic-ui-react";
+import { Segment, List, Image } from "semantic-ui-react";
+import Container from "../../components/augmint-ui/container";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
@@ -26,7 +27,7 @@ export function AppFooter(props) {
 
     return (
         <Segment basic textAlign="center" className="footer" style={segmentStyle}>
-            <Container fluid>
+            <Container>
                 <Segment basic as="h5" className="title">
                     {community}
                 </Segment>
