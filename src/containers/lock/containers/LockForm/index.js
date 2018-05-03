@@ -6,7 +6,6 @@ import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lock
 
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 
-import { Label } from "semantic-ui-react";
 import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
