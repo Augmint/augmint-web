@@ -31,6 +31,9 @@ export default function Icon(props) {
         case "help circle":
             className += " fas fa-question-circle";
             break;
+        case "question":
+            className += " fas fa-question";
+            break;
         default:
             break;
     }
