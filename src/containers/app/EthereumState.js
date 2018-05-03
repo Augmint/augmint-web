@@ -3,7 +3,7 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Container } from "semantic-ui-react";
+import Container from "../../components/augmint-ui/container";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
@@ -105,7 +105,7 @@ export class EthereumState extends React.Component {
         if (msg) {
             msg = (
                 <Tsegment>
-                    <Container text>{msg}</Container>
+                    <Container>{msg}</Container>
                 </Tsegment>
             );
         } else {
