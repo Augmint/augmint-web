@@ -3,6 +3,7 @@ describe("Augmint base", function() {
         cy.get("[data-testid=underTheHoodLink]").click();
 
         cy.get("[data-testid=dismissLegacyBalanceButton-0]").click();
+        cy.get("[data-testid=dismissLegacyExchangeButton-0]").click();
 
         cy.get("[data-testid=baseInfoLink]").click();
         cy.get("[data-testid=web3ConnectionInfo]").contains("connected");

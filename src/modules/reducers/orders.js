@@ -1,3 +1,4 @@
+import store from "modules/store";
 import { fetchOrders, placeOrderTx, matchOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
@@ -174,7 +175,8 @@ export function cancelOrder(order) {
         });
 
         try {
-            const result = await cancelOrderTx(order.direction, order.id);
+            const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
+            const result = await cancelOrderTx(exchangeInstance, order.direction, order.id);
             return dispatch({
                 type: CANCEL_ORDER_SUCCESS,
                 result: result

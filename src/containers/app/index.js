@@ -33,6 +33,7 @@ import { AppFooter } from "containers/app/AppFooter";
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
+import LegacyExchanges from "./LegacyExchanges";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -91,6 +92,8 @@ class App extends React.Component {
 
                 <LegacyTokens />
 
+                <LegacyExchanges />
+
                 <div className="Site-content">
                     <Switch>
                         <Route exact path="/" component={NotConnectedHome} />
@@ -112,9 +115,7 @@ class App extends React.Component {
                     </Switch>
                 </div>
                 <div className="Site-footer">
-                    <AppFooter
-                        web3Connect={this.props.web3Connect}
-                    />
+                    <AppFooter web3Connect={this.props.web3Connect} />
                 </div>
             </div>
         );
