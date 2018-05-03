@@ -31,6 +31,8 @@ export default function Icon(props) {
         case "help circle":
             className += " fas fa-question-circle";
             break;
+        default:
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";

@@ -3,16 +3,16 @@ import Grid from "styled-components-grid";
 import Header from "./augmint-ui/header";
 
 export function MyListGroup(props) {
-    const { children, divided = "vertically", container = false, style = { margin: "0em 0em" }, ...other } = props;
+    const { children, style = { margin: "0em 0em" }, ...other } = props;
     return (
-        <div stackable divided={divided} style={style} container={container} {...other}>
+        <div style={style} {...other}>
             {children}
         </div>
     );
 }
 
 export function MyListGroupRow(props) {
-    const { children, header, style /*= { margin: "0em 0em" }*/, ...other } = props;
+    const { children, header, style, ...other } = props;
     return (
         <Grid style={style} wrap={false} {...other}>
             {header && <h3>{header}</h3>}
@@ -34,17 +34,9 @@ export function MyListGroupColumn(props) {
 MyListGroup.Col = MyListGroupColumn;
 
 export function MyGridTable(props) {
-    const {
-        children,
-        header,
-        divided = "vertically",
-        style = { margin: "0.5em 0em" },
-        stackable = true,
-        container = false,
-        ...other
-    } = props;
+    const { children, header, style = { margin: "0.5em 0em" }, ...other } = props;
     return (
-        <div divided={divided} stackable={stackable} style={style} container={container} {...other}>
+        <div style={style} {...other}>
             {header && <h4>{header}</h4>}
             {children}
         </div>

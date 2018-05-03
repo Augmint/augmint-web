@@ -69,7 +69,6 @@ class Subscribe extends React.Component {
                         />
                         <Button
                             loading={submitting}
-                            primary
                             disabled={pristine}
                             className="hideIfDisables"
                             size="large"

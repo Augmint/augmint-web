@@ -245,7 +245,6 @@ class PlaceOrderForm extends React.Component {
 
                             <Button
                                 size="big"
-                                primary
                                 loading={submitting}
                                 disabled={pristine}
                                 data-testid="submitButton"

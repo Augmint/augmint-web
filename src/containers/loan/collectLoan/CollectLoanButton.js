@@ -64,7 +64,6 @@ class CollectLoanButton extends React.Component {
                             <Button
                                 size="large"
                                 data-testid="collectLoanButton"
-                                primary
                                 disabled={submitting || isLoading || loansToCollect.length === 0}
                                 type="submit"
                             >
