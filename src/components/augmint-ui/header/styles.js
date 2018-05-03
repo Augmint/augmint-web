@@ -16,6 +16,11 @@ const BaseHeader = `
     }
 `;
 
+const HeaderH5 = `
+    font-size: ${theme.typography.fontSizes.h5};
+    line-height: $${remCalc(15)};
+`;
+
 const HeaderH4 = `
     font-size: ${theme.typography.fontSizes.h4};
     line-height: ${theme.typography.fontSizes.h4};
@@ -58,4 +63,9 @@ export const StyledHeaderH3 = styled.h3`
 export const StyledHeaderH4 = styled.h4`
     ${BaseHeader};
     ${HeaderH4};
+`;
+
+export const StyledHeaderH5 = styled.h5`
+    ${BaseHeader};
+    ${HeaderH5};
 `;

@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "../icon";
 
-import { StyledHeaderH4, StyledHeaderH3, StyledHeaderH2, StyledHeaderH1 } from "./styles";
+import { StyledHeaderH5, StyledHeaderH4, StyledHeaderH3, StyledHeaderH2, StyledHeaderH1 } from "./styles";
 
 export default function Header(props) {
     const { as, children, content, icon } = props;
@@ -19,6 +19,9 @@ export default function Header(props) {
 
     if (as === "h1") {
         elementType = StyledHeaderH1;
+    }
+    if (as === "h5") {
+        elementType = StyledHeaderH5;
     }
     if (icon) {
         _icon = <Icon name={icon} />;
