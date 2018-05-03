@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import { LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
-import { Link } from "react-router-dom";
 import Button from "../../../components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
@@ -27,7 +26,6 @@ class TryIt extends React.Component {
                     <Tsegment.Column>
                         <Button
                             content="Read more about the concept"
-                            as={Link}
                             to="/concept#"
                             icon="angle-right"
                             labelposition="right"
