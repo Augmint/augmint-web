@@ -10,25 +10,43 @@ import CancelOrderButton from "./CancelOrderButton";
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 
 const OrderItem = props => {
-    const { order, userAccountAddress } = props;
+    const { order, ethFiatRate, userAccountAddress } = props;
+
+    const price = order.price * 100;
+    const actualRate = ethFiatRate * order.price;
+    const actualValue =
+        order.direction === TOKEN_SELL
+            ? (order.amount / actualRate).toFixed(5)
+            : (order.amount * actualRate).toFixed(2);
+
     const ret = [
         <Col width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <span>{order.amount} A€ </span>}
-            {order.direction === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
+            {order.direction === TOKEN_SELL && (
+                <span>
+                    {order.amount} A€<br />({actualValue} ETH)
+                </span>
+            )}
+            {order.direction === TOKEN_BUY && (
+                <span>
+                    {order.amountRounded} ETH<br />({actualValue} A€)
+                </span>
+            )}
         </Col>,
         <Col width={2} key={`${order.direction}-price`}>
-            {order.price}
+            {price} %
         </Col>,
         <Col width={2} key={`${order.direction}-action`}>
             <MoreInfoTip>
                 {order.direction === TOKEN_SELL && (
                     <p>
-                        Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
+                        Sell {order.amount} A€ @{price}% of current {ethFiatRate} A€/ETH = <br />
+                        {order.amount} A€ / {actualRate} A€/ETH = {actualValue} ETH
                     </p>
                 )}
                 {order.direction === TOKEN_BUY && (
                     <p>
-                        Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
+                        Buy A€ for {order.amount} ETH @{price}% of current {ethFiatRate} A€/ETH =<br />
+                        {order.amount} ETH x {actualRate} A€/ETH = {actualValue} A€
                     </p>
                 )}
                 Maker: {order.maker}
@@ -41,7 +59,7 @@ const OrderItem = props => {
 };
 
 const OrderList = props => {
-    const { sellOrders, buyOrders, userAccountAddress } = props;
+    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
     const totalSellAmount = sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString();
@@ -52,7 +70,7 @@ const OrderList = props => {
         itemList.push(
             <Row key={`ordersRow-${i}`}>
                 {i < buyOrders.length ? (
-                    <OrderItem order={buyOrders[i]} userAccountAddress={userAccountAddress} />
+                    <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
                 ) : (
                     <Col width={7} />
                 )}
@@ -60,7 +78,11 @@ const OrderList = props => {
                 <Col width={1} />
 
                 {i < sellOrders.length ? (
-                    <OrderItem order={sellOrders[i]} userAccountAddress={userAccountAddress} />
+                    <OrderItem
+                        order={sellOrders[i]}
+                        ethFiatRate={ethFiatRate}
+                        userAccountAddress={userAccountAddress}
+                    />
                 ) : (
                     <Col width={7} />
                 )}
@@ -107,6 +129,8 @@ export default class OrderBook extends React.Component {
         const { orders, refreshError, isLoading } = this.props.orders;
         const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
+        const { ethFiatRate } = this.props.rates.info;
+        //const { ethFiatRate } = this.props.rates ? rates.info : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
@@ -121,6 +145,7 @@ export default class OrderBook extends React.Component {
                         <OrderList
                             buyOrders={buyOrders}
                             sellOrders={sellOrders}
+                            ethFiatRate={ethFiatRate}
                             userAccountAddress={userAccountAddress}
                         />
                     </MyGridTable>

@@ -12,6 +12,7 @@ import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
+import { PriceToolTip } from "./ExchangeToolTips";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -19,7 +20,7 @@ const TOKEN_DECIMALS = 2;
 class PlaceOrderForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, orderDirection: TOKEN_BUY, orderType: LIMIT_ORDER };
+        this.state = { result: null, orderDirection: TOKEN_BUY, lastChangedAmountField: "" };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
@@ -27,9 +28,10 @@ class PlaceOrderForm extends React.Component {
         this.onPriceChange = this.onPriceChange.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.pristine && nextProps.rates && nextProps.rates !== this.props.rates) {
-            this.props.initialize({ price: nextProps.rates.info.ethFiatRate });
+    componentDidUpdate(prevProps) {
+        // recaluclate amounts displayed when published ETH/EUR rates changed
+        if (prevProps.rates && prevProps.rates.info.ethFiatRate !== this.props.rates.info.ethFiatRate) {
+            this.reCalcAmounts(this.props.price);
         }
     }
 
@@ -38,59 +40,57 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
+        console.debug("onTokenAmountChange ", e);
         let tokenAmount, price;
         try {
+            this.setState({ lastChangedAmountField: "tokenAmount" });
             tokenAmount = parseFloat(e.target.value);
-            price = parseFloat(this.props.price);
+            price = this.parsePrice(this.props.price);
+            const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+            this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
         } catch (error) {
             this.props.change("ethAmount", "");
-            return;
         }
-
-        const ethValue = tokenAmount / price;
-
-        this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
     }
 
     onEthAmountChange(e) {
         let price, ethAmount;
         try {
+            this.setState({ lastChangedAmountField: "ethAmount" });
             ethAmount = parseFloat(e.target.value);
-            price = parseFloat(this.props.price);
+            price = this.parsePrice(this.props.price);
+            const tokenValue = ethAmount * this.props.rates.info.ethFiatRate * price;
+
+            this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
         } catch (error) {
             this.props.change("tokenAmount", "");
-            return;
         }
-
-        const tokenValue = ethAmount * price;
-
-        this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
     }
 
     onPriceChange(e) {
-        let price;
-        try {
-            price = parseFloat(e.target.value);
+        this.reCalcAmounts(e.target.value);
+    }
 
-            if (this.state.orderDirection === TOKEN_BUY) {
-                const ethAmount = parseFloat(this.props.ethAmount);
-                const tokenValue = ethAmount * price;
+    reCalcAmounts(_price) {
+        const price = this.parsePrice(_price);
+        if (this.state.lastChangedAmountField === "ethAmount") {
+            const ethAmount = parseFloat(this.props.ethAmount);
+            if (!isNaN(ethAmount) && isFinite(ethAmount)) {
+                const tokenValue = ethAmount * this.props.rates.info.ethFiatRate * price;
                 this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
             } else {
-                const tokenAmount = parseFloat(this.props.tokenAmount);
-                const ethValue = tokenAmount / price;
-
-                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
-            }
-        } catch (error) {
-            // tokenAmount or ethAmount is not entered yet
-            if (!isNaN(parseFloat(this.props.tokenAmount)) && isFinite(this.props.tokenAmount)) {
-                this.props.change("ethAmount", "");
-            } else {
+                //  ethAmount is not entered yet
                 this.props.change("tokenAmount", "");
             }
-
-            return;
+        } else {
+            const tokenAmount = parseFloat(this.props.tokenAmount);
+            if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
+                const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
+            } else {
+                // tokenAmount is not entered yet
+                this.props.change("tokenAmount", "");
+            }
         }
     }
 
@@ -99,7 +99,8 @@ class PlaceOrderForm extends React.Component {
         const orderDirection = this.state.orderDirection;
 
         try {
-            price = parseFloat(values.price);
+            price = this.parsePrice(values.price);
+            console.debug(values.price, price);
             if (orderDirection === TOKEN_BUY) {
                 amount = parseFloat(values.ethAmount);
             } else {
@@ -126,6 +127,10 @@ class PlaceOrderForm extends React.Component {
             });
             return;
         }
+    }
+
+    parsePrice(price) {
+        return Math.round(price * 100) / 10000;
     }
 
     render() {
@@ -197,7 +202,9 @@ class PlaceOrderForm extends React.Component {
 
                             <Field
                                 name="tokenAmount"
-                                label={orderDirection === TOKEN_BUY ? `A-EUR amount: ` : "Sell amount: "}
+                                label={`${this.state.lastChangedAmountField === "ethAmount" ? "= " : "  "} ${
+                                    orderDirection === TOKEN_BUY ? "A-EUR amount: " : "Sell amount: "
+                                } `}
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
@@ -216,7 +223,9 @@ class PlaceOrderForm extends React.Component {
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label={orderDirection === TOKEN_BUY ? "ETH amount to sell: " : `ETH amount: `}
+                                label={`${this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "} ${
+                                    orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "
+                                }`}
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
@@ -232,15 +241,18 @@ class PlaceOrderForm extends React.Component {
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label="price: "
+                                label="Price (% of of published rate): "
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onPriceChange}
                                 validate={Validations.price}
                                 normalize={Normalizations.twoDecimals}
                                 labelPosition="right"
                             >
+                                <Label>
+                                    <PriceToolTip />
+                                </Label>
                                 <input data-testid="priceInput" />
-                                <Label>A-EUR / ETH</Label>
+                                <Label>%</Label>
                             </Field>
 
                             <Button
@@ -284,9 +296,8 @@ PlaceOrderForm = reduxForm({
     }
 })(PlaceOrderForm);
 
-// This is only if landing when rates already loaded. For direct landing see componentWillReceiveProps .
 function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: state.rates.info.ethFiatRate } };
+    return { initialValues: { price: 100 } };
 }
 
 PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);

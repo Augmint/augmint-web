@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, DECIMALS, EXCHANGE_CHUNK_SIZE } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, DECIMALS, EXCHANGE_CHUNK_SIZE } from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -78,7 +78,7 @@ async function getOrders(orderDirection, offset) {
                         .round(0, BigNumber.ROUND_HALF_UP);
                 }
 
-                parsed.price = parsed.bn_price / DECIMALS_DIV; // price in tokens/ETH
+                parsed.price = parsed.bn_price / PPM_DIV;
                 parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH_IN_WEI);
                 parsed.ethValue = parsed.bn_ethValue.toString();
                 parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
@@ -117,7 +117,7 @@ export async function placeOrderTx(orderDirection, amount, price) {
     const userAccount = store.getState().web3Connect.userAccount;
     const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
 
-    const submitPrice = new BigNumber(price).mul(DECIMALS_DIV);
+    const submitPrice = new BigNumber(price).mul(PPM_DIV);
     let submitAmount;
     let tx;
     let txName;
