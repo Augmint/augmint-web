@@ -1,6 +1,7 @@
 import React from "react";
-import { Divider, Header, Segment, Grid } from "semantic-ui-react";
+import { Divider, Segment, Grid } from "semantic-ui-react";
 import Container from "../components/augmint-ui/container";
+import Header from "../components/augmint-ui/header";
 
 export function Pheader(props) {
     const { children, header, ...other } = props;

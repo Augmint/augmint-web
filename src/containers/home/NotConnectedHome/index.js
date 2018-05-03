@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Header, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
+import { Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
 import Container from "../../../components/augmint-ui/container";
+import Header from "../../../components/augmint-ui/header";
 
 import Button from "components/augmint-ui/button";
 
@@ -38,7 +39,7 @@ export default class NotConnectedHome extends React.Component {
                 <Container>
                     <Segment basic textAlign="center" as="section" className="key-features large-gap">
                         <header className="key-features__header">
-                            <Header textAlign="center" as="h1" size="large">
+                            <Header style={{ textAlign: "center" }} as="h4" size="large">
                                 Augmint offers digital tokens pegged to a fiat currency.
                                 <br />
                                 The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
@@ -69,7 +70,7 @@ export default class NotConnectedHome extends React.Component {
                         </Grid>
                     </Segment>
                     <Segment basic textAlign="center" as="section" className="advantages">
-                        <Header textAlign="left" as="h2">
+                        <Header style={{ textAlign: "left" }} as="h2">
                             Great for business
                         </Header>
 
@@ -85,7 +86,7 @@ export default class NotConnectedHome extends React.Component {
                             ))}
                         </Grid>
 
-                        <Header textAlign="left" as="h2" style={{ marginTop: "100px" }}>
+                        <Header as="h2" style={{ marginTop: "100px", textAlign: "left" }}>
                             And for individuals
                         </Header>
 
