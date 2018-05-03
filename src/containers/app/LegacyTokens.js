@@ -58,12 +58,12 @@ class LegacyTokens extends React.Component {
         const { error, submitting, submitSucceeded, result } = this.state;
 
         const balances = contractBalances
-            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => (
+            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map((item, index) => (
                   <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
                       Balance in legacy contract: {item.balance} A-EUR <small>Contract address: {item.contract} </small>
                       <Button
                           type="submit"
-                          data-testid={`dismissLegacyBalanceButton-${item.contract}`}
+                          data-testid={`dismissLegacyBalanceButton-${index}`}
                           onClick={() => this.handleDismiss(item.contract)}
                       >
                           Dismiss
@@ -72,7 +72,7 @@ class LegacyTokens extends React.Component {
                           type="submit"
                           primary
                           disabled={submitting}
-                          data-testid={`convertLegacyBalanceButton-${item.contract}`}
+                          data-testid={`convertLegacyBalanceButton-${index}`}
                           onClick={() => this.submitConvert(item.contract, item.balance)}
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
