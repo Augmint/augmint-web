@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import store from "modules/store";
 import LoansToCollectList from "containers/loan/components/LoansToCollectList";
 import { Psegment, Pheader, Pgrid } from "components/PageLayout";
-import { Message } from "semantic-ui-react";
+import Message from "components/augmint-ui/message";
 
 import { fetchLoansToCollect } from "modules/reducers/loanManager";
 import CollectLoanButton from "./CollectLoanButton";
