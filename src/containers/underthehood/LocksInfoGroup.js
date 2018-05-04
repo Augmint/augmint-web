@@ -13,13 +13,15 @@ class LocksInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid.Row wrap={false}>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={10 / 32}>
                     <LockManagerInfo contractData={this.props.lockManagerData} contract={this.props.lockManager} />
                 </Pgrid.Column>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <ArrayDump header="Lock Products" items={this.props.lockProducts} />
                 </Pgrid.Column>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <ArrayDump header="Locks for userAccount" items={this.props.locks} />
                 </Pgrid.Column>
             </Pgrid.Row>

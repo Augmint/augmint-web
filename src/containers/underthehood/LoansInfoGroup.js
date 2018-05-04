@@ -13,13 +13,15 @@ class LoansInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid.Row wrap={false}>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={10 / 32}>
                     <LoanManagerInfo contractData={this.props.loanManagerData} contract={this.props.loanManager} />
                 </Pgrid.Column>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <ArrayDump header="Loan Products" items={this.props.loanProducts} />
                 </Pgrid.Column>
-                <Pgrid.Column size={1 / 3}>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <ArrayDump header="Loans for userAccount" items={this.props.loans} />
                 </Pgrid.Column>
             </Pgrid.Row>
