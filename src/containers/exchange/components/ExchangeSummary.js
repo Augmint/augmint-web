@@ -10,14 +10,7 @@ export default class ExchangeSummary extends React.Component {
             <Pblock loading={rates.isLoading} {...other}>
                 <ConnectionStatus contract={rates} />
 
-                {rates.isLoaded ? (
-                    <h4>
-                        1 ETH = {rates.info.ethFiatRate} A-EUR<br />
-                        1 A-EUR = {rates.info.fiatEthRate} ETH
-                    </h4>
-                ) : (
-                    <h5>Loading ETH/EUR rates...</h5>
-                )}
+                {rates.isLoaded ? <h4>1 ETH = {rates.info.ethFiatRate} A-EUR</h4> : <h5>Loading ETH/EUR rates...</h5>}
 
                 <ConnectionStatus contract={exchange} />
 

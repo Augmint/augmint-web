@@ -1,3 +1,4 @@
+import store from "modules/store";
 import { fetchOrders, placeOrderTx, matchOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
@@ -72,7 +73,7 @@ export default (state = initialState, action) => {
                 error: null,
                 amount: action.amount,
                 price: action.price,
-                orderType: action.orderType
+                direction: action.orderType
             };
 
         case MATCH_ORDERS_REQUESTED:
@@ -123,9 +124,9 @@ export function placeOrder(orderType, amount, price) {
     return async dispatch => {
         dispatch({
             type: PLACE_ORDER_REQUESTED,
-            orderType: orderType,
-            price: price,
-            amount: amount
+            direction: orderType,
+            price,
+            amount
         });
 
         try {
@@ -174,7 +175,8 @@ export function cancelOrder(order) {
         });
 
         try {
-            const result = await cancelOrderTx(order.orderType, order.id);
+            const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
+            const result = await cancelOrderTx(exchangeInstance, order.direction, order.id);
             return dispatch({
                 type: CANCEL_ORDER_SUCCESS,
                 result: result

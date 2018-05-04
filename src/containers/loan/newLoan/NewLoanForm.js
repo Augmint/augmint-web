@@ -144,7 +144,7 @@ class NewLoanForm extends React.Component {
                             ]}
                             normalize={Normalizations.twoDecimals}
                             onChange={this.onLoanTokenAmountChange}
-                            labelPosition="right"
+                            labelposition="right"
                             placeholder="pay out"
                         >
                             <Label basic>
@@ -167,7 +167,7 @@ class NewLoanForm extends React.Component {
                             validate={[Validations.required, Validations.tokenAmount]}
                             normalize={Normalizations.twoDecimals}
                             onChange={this.onRepaymentAmountAmountChange}
-                            labelPosition="right"
+                            labelposition="right"
                         >
                             <Label basic>
                                 Repayment amount{": "}
@@ -188,7 +188,7 @@ class NewLoanForm extends React.Component {
                             validate={[Validations.required, Validations.ethAmount, Validations.ethUserBalance]}
                             normalize={Normalizations.fiveDecimals}
                             onChange={this.onEthAmountChange}
-                            labelPosition="right"
+                            labelposition="right"
                         >
                             <Label basic>
                                 Collateral:{" "}
@@ -202,7 +202,6 @@ class NewLoanForm extends React.Component {
                             <Label>ETH</Label>
                         </Field>
                         <Button
-                            primary
                             size="big"
                             data-testid="submitBtn"
                             loading={submitting}

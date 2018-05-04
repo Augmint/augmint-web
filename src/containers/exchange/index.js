@@ -47,6 +47,7 @@ class ExchangeHome extends React.Component {
                                 <OrderBook
                                     testid="myOrdersBlock"
                                     orders={orders}
+                                    rates={rates}
                                     userAccountAddress={userAccount.address}
                                     header="My orders"
                                     filter={item => {
@@ -67,6 +68,7 @@ class ExchangeHome extends React.Component {
                                 <OrderBook
                                     testid="allOrdersBlock"
                                     orders={orders}
+                                    rates={rates}
                                     userAccountAddress={userAccount.address}
                                     header="All orders"
                                 />

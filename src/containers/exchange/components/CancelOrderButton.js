@@ -92,14 +92,14 @@ class CancelOrderButton extends React.Component {
                         </EthSubmissionErrorPanel>
                     )}
                     <p>Order id: {order.id}</p>
-                    {order.orderType === TOKEN_SELL && (
+                    {order.direction === TOKEN_SELL && (
                         <p>
-                            Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
+                            Sell {order.amount} A-EUR @{order.price * 100}% EUR/ETH rate
                         </p>
                     )}
-                    {order.orderType === TOKEN_BUY && (
+                    {order.direction === TOKEN_BUY && (
                         <p>
-                            Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
+                            Buy A-EUR for {order.amount} ETH @{order.price * 100}% EUR/ETH rate
                         </p>
                     )}
                     <p>Are you sure you want to cancel your order?</p>
@@ -111,7 +111,6 @@ class CancelOrderButton extends React.Component {
                     </Button>
 
                     <Button
-                        primary
                         data-testid={`confirmCancelOrderButton-${order.id}`}
                         id={`ConfirmCancelOrderButton-${order.id}`}
                         disabled={submitting}

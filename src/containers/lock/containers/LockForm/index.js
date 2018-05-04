@@ -11,13 +11,9 @@ import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
+import RadioInput from "components/augmint-ui/RadioInput";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
-
-const RadioInput = props => {
-    const { type = "radio", val, ...other } = props;
-    return <input type={type} value={val} name={props.input.name} onChange={props.input.onChange} {...other} />;
-};
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -104,7 +100,7 @@ class LockContainer extends React.Component {
                                 this.lockAmountValidation,
                                 Validations.userTokenBalance
                             ]}
-                            labelPosition="right"
+                            labelposition="right"
                         >
                             <input />
                             <Label>A-EUR</Label>
@@ -163,7 +159,6 @@ class LockContainer extends React.Component {
 
                         <Button
                             size="big"
-                            primary
                             disabled={pristine}
                             loading={submitting}
                             data-testid="submitButton"

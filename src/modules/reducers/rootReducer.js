@@ -17,6 +17,7 @@ import orders from "modules/reducers/orders";
 import trades from "modules/reducers/trades";
 import subscriptions from "modules/reducers/subscriptions";
 import legacyBalances from "modules/reducers/legacyBalances";
+import legacyExchanges from "modules/reducers/legacyExchanges";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
 
@@ -40,5 +41,6 @@ export default combineReducers({
     subscriptions,
     submittedTransactions,
     legacyBalances,
+    legacyExchanges,
     form: formReducer
 });
