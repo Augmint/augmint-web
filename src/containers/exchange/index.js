@@ -27,7 +27,7 @@ class ExchangeHome extends React.Component {
                 <Psegment>
                     <Pheader header="Buy & Sell A-EUR" />
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
+                        <Pgrid.Row wrap={false}>
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 

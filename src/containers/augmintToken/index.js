@@ -33,7 +33,7 @@ class AugmintToken extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pgrid columns={1}>
+                    <Pgrid.Row>
                         <Pgrid.Column>
                             <TotalSupply
                                 augmintToken={this.props.augmintToken}
@@ -41,7 +41,7 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Reserves" />
+                        <Pheader header="Reserves" style={{ width: "100%" }} />
                         <Pgrid.Column>
                             <ReserveStats
                                 augmintToken={this.props.augmintToken}
@@ -50,7 +50,7 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Loans & Locks" />
+                        <Pheader header="Loans & Locks" style={{ width: "100%" }} />
                         <Pgrid.Column>
                             <LtdStats
                                 monetarySupervisor={this.props.monetarySupervisor}
@@ -67,14 +67,14 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Earnings" />
+                        <Pheader header="Earnings" style={{ marginTop: "1em", width: "100%" }} />
                         <Pgrid.Column>
                             <EarningStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 augmintToken={this.props.augmintToken}
                             />
                         </Pgrid.Column>
-                    </Pgrid>
+                    </Pgrid.Row>
                 </Psegment>
             </EthereumState>
         );

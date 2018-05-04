@@ -15,19 +15,19 @@ class BaseInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
-                <Pgrid.Column>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={1 / 3}>
                     <Web3ConnectionInfo web3Connect={this.props.web3Connect} />
                     <ContractConnectionsInfo contracts={this.props.contracts} />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <UserAccountInfo userBalances={this.props.userBalances} />
                     <SystemInfo />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <ArrayDump header="Accounts" items={this.props.accounts} />
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }

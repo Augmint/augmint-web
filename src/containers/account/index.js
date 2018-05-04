@@ -26,7 +26,7 @@ class AccountHome extends React.Component {
                     <Pheader header="My Account" />
 
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
+                        <Pgrid.Row wrap={false}>
                             <Pgrid.Column>
                                 <AccountInfo account={this.props.userAccount} header="Overview" />
 

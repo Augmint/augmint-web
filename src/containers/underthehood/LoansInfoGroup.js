@@ -12,17 +12,17 @@ class LoansInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
-                <Pgrid.Column>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={1 / 3}>
                     <LoanManagerInfo contractData={this.props.loanManagerData} contract={this.props.loanManager} />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <ArrayDump header="Loan Products" items={this.props.loanProducts} />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <ArrayDump header="Loans for userAccount" items={this.props.loans} />
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }

@@ -15,18 +15,18 @@ class ExchangeInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
-                <Pgrid.Column>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={1 / 3}>
                     <ExchangeInfo contractData={this.props.exchangeData} contract={this.props.exchange} />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <RatesInfo contractData={this.props.ratesData} contract={this.props.rates} />
                 </Pgrid.Column>
 
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 3}>
                     <OrdersInfo orders={this.props.orders} />
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }

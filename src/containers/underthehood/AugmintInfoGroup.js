@@ -14,22 +14,27 @@ class BaseInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
-                <Pgrid.Column>
-                    <AugmintTokenInfo contractData={this.props.augmintTokenData} contract={this.props.augmintToken} />
-                </Pgrid.Column>
-                <Pgrid.Column>
-                    <FeeAccountInfo
-                        contractData={this.props.augmintTokenData.info.feeAccount}
-                        contract={this.props.feeAccount}
-                    />
-                </Pgrid.Column>
-                <Pgrid.Column>
-                    <MonetarySupervisorInfo
-                        contractData={this.props.monetarySupervisorData}
-                        contract={this.props.monetarySupervisor}
-                    />
-                </Pgrid.Column>
+            <Pgrid>
+                <Pgrid.Row wrap={false}>
+                    <Pgrid.Column size={1 / 3}>
+                        <AugmintTokenInfo
+                            contractData={this.props.augmintTokenData}
+                            contract={this.props.augmintToken}
+                        />
+                    </Pgrid.Column>
+                    <Pgrid.Column size={1 / 3}>
+                        <FeeAccountInfo
+                            contractData={this.props.augmintTokenData.info.feeAccount}
+                            contract={this.props.feeAccount}
+                        />
+                    </Pgrid.Column>
+                    <Pgrid.Column size={1 / 3}>
+                        <MonetarySupervisorInfo
+                            contractData={this.props.monetarySupervisorData}
+                            contract={this.props.monetarySupervisor}
+                        />
+                    </Pgrid.Column>
+                </Pgrid.Row>
             </Pgrid>
         );
     }

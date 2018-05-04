@@ -98,12 +98,13 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Pgrid columns={2}>
-                <Pgrid.Column width={6}>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={6}>
                     <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column width={10}>
+                <Pgrid.Column size={1} />
+                <Pgrid.Column size={10}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
@@ -156,7 +157,7 @@ class RepayLoanPage extends React.Component {
                         />
                     )}
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }

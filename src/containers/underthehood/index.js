@@ -33,7 +33,7 @@ export default class underTheHood extends React.Component {
                 <Psegment>
                     <Pheader header="Under the hood" />
 
-                    <Pgrid columns={1}>
+                    <Pgrid.Row>
                         <Pgrid.Column>
                             <Menu size="massive" tabular>
                                 <Menu.Item
@@ -88,7 +88,7 @@ export default class underTheHood extends React.Component {
                             {selectedGroup === "locks" && <LocksInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                         </Pgrid.Column>
-                    </Pgrid>
+                    </Pgrid.Row>
                 </Psegment>
             </div>
         );

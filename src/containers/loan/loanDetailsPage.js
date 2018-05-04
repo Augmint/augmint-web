@@ -65,8 +65,8 @@ class LoanDetailsPage extends React.Component {
 
                 {this.state.isLoanFound && (
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <Header>
                                     {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
                                 </Header>
