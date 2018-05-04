@@ -24,7 +24,7 @@ export default function LoanListDetails(props) {
                         as={Link}
                         key={"selectlink-" + loan.id}
                         to={`/loan/${loan.id}`}
-                        labelPosition="right"
+                        labelposition="right"
                         icon="right chevron"
                         basic
                     />

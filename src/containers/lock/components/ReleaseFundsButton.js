@@ -73,7 +73,6 @@ export default class ReleaseLockButton extends React.Component {
                 {!error &&
                     !submitSucceeded && (
                         <Button
-                            primary
                             data-testid={`releaseLockButton-${lockId}`}
                             disabled={submitting}
                             onClick={this.submitCancel}

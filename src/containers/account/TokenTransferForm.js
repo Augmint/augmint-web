@@ -107,7 +107,7 @@ class TokenTransferForm extends React.Component {
                             type="number"
                             name="tokenAmount"
                             placeholder="Amount"
-                            labelPosition="right"
+                            labelposition="right"
                             onChange={this.onTokenAmountChange}
                             validate={[
                                 Validations.required,
@@ -153,7 +153,6 @@ class TokenTransferForm extends React.Component {
                         <Button
                             type="submit"
                             loading={submitting}
-                            primary
                             disabled={pristine}
                             data-testid="submitTransferButton"
                             className={submitting ? "loading" : ""}

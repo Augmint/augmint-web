@@ -111,7 +111,6 @@ class CancelOrderButton extends React.Component {
                     </Button>
 
                     <Button
-                        primary
                         data-testid={`confirmCancelOrderButton-${order.id}`}
                         id={`ConfirmCancelOrderButton-${order.id}`}
                         disabled={submitting}

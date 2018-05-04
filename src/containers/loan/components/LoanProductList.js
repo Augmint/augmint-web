@@ -42,7 +42,7 @@ export default function LoanProductList(props) {
 
     return (
         <Pblock header={props.header}>
-            <MyListGroup divided={false}>{listItems}</MyListGroup>
+            <MyListGroup>{listItems}</MyListGroup>
         </Pblock>
     );
 }
