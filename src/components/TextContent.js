@@ -71,7 +71,7 @@ export function Tblock(props) {
     const { children, header } = props;
     return (
         <Grid wrap={false} style={{ padding: "14px 0" }} columns={2}>
-            <Grid.Unit style={{ textAlign: "left" }} width={6}>
+            <Grid.Unit style={{ textAlign: "left" }} size={6}>
                 <Header
                     as="h3"
                     content={header}
@@ -80,7 +80,7 @@ export function Tblock(props) {
                     }}
                 />
             </Grid.Unit>
-            <Grid.Unit width={10} style={{ textAlign: "left" }}>
+            <Grid.Unit size={10} style={{ textAlign: "left" }}>
                 {children}
             </Grid.Unit>
         </Grid>

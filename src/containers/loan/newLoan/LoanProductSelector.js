@@ -4,18 +4,15 @@ import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
 import { Message } from "semantic-ui-react";
 import Button from "../../../components/augmint-ui/button";
-import { Link } from "react-router-dom";
 
 export function SelectLoanButton(props) {
     return (
         <Button
-            labelPosition="right"
+            labelposition="right"
             content="Select"
             icon="right chevron"
             key={props.productId}
             data-testid={`selectLoanProduct-${props.productId}`}
-            as={Link}
-            primary
             to={`/loan/new/${props.productId}`}
         />
     );

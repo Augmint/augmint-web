@@ -42,7 +42,7 @@ class MatchOrdersButton extends React.Component {
     }
 
     render() {
-        const { buyOrder, sellOrder, isLoaded, size = "medium", primary = true, label = "Match" } = this.props;
+        const { buyOrder, sellOrder, isLoaded, size = "medium", label = "Match" } = this.props;
         const { submitSucceeded, submitting, error, result } = this.state;
 
         const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
@@ -61,7 +61,6 @@ class MatchOrdersButton extends React.Component {
                     isLoaded && (
                         <Button
                             size={size}
-                            primary={primary}
                             data-testid="matchTopOrdersButton"
                             disabled={submitting === 0}
                             onClick={this.handleClick}
