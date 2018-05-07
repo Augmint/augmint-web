@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Tsegment } from "components/TextContent";
-import { Image } from "semantic-ui-react";
 import decentLogo from "assets/images/decent-logo.svg";
 
 const decentImg = (
