@@ -1,9 +1,9 @@
 import React from "react";
-import { Segment } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
 import Divider from "components/augmint-ui/divider";
+import Segment from "components/augmint-ui/segment";
 
 import theme from "styles/theme";
 
@@ -59,8 +59,7 @@ export class Pcolumn extends React.Component {
 
 Pcolumn.defaultProps = {
     style: {
-        paddingBottom: "1em",
-        paddingTop: "1em"
+        padding: "1rem"
     }
 };
 
@@ -70,7 +69,7 @@ Pgrid.Row = Grid;
 export function Pblock(props) {
     const { children, header, ...other } = props;
     return (
-        <Segment basic {...other}>
+        <Segment {...other}>
             <Header as="h2" content={header} />
             {children}
         </Segment>
