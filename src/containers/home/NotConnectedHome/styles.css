@@ -3,8 +3,8 @@ article.ui.basic.segment {
 }
 
 .large-gap > * {
-    margin-bottom: 115px!important;
-    margin-top: 115px!important;
+    margin-bottom: 115px !important;
+    margin-top: 115px !important;
 }
 
 .key-features__header {
@@ -57,18 +57,16 @@ p {
     font-weight: 300;
 }
 
-.ui.header+p.loans {
+.ui.header + p.loans {
     margin-top: 20px;
 }
 
-.equal .home-image img {
-  max-height: 120px;
-  min-height: 120px;
+.grid .home-image img {
+    max-height: 120px;
+    min-height: 120px;
 }
 
-@media
-(-webkit-min-device-pixel-ratio: 2),
-(min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     p.opac {
         opacity: 0.6;
     }
@@ -76,10 +74,7 @@ p {
 
 .list-item {
     padding-left: 30px;
-    background:
-    url('../../../assets/images/bullet-point.svg')
-    no-repeat
-    left 6px;
+    background: url("../../../assets/images/bullet-point.svg") no-repeat left 6px;
     margin: 0 40px;
 }
 
@@ -87,57 +82,66 @@ p {
     position: relative;
     padding-top: 200px;
     padding-bottom: 200px;
-    background: linear-gradient(rgba(53, 0, 55, 0) 0%,rgba(53, 0, 55, 1) 20%, rgba(53, 0, 55, 1) 80%, rgba(53, 0, 55, 0) 100%);
+    background: linear-gradient(
+        rgba(53, 0, 55, 0) 0%,
+        rgba(53, 0, 55, 1) 20%,
+        rgba(53, 0, 55, 1) 80%,
+        rgba(53, 0, 55, 0) 100%
+    );
 }
 
-.team .grid .column>img,
-.partner .grid .column>img  {
-  background-color: #fff;
-  filter: grayscale(100%);
-  width: 120px;
-  height: 120px;
-  margin-bottom: 70px;
-  margin-right: 30px;
+.grid .column {
+    padding: 1rem;
+}
+
+.team .grid .column > img,
+.partner .grid .column > img {
+    background-color: #fff;
+    filter: grayscale(100%);
+    width: 120px;
+    height: 120px;
+    margin-bottom: 70px;
+    margin-right: 30px;
 }
 
 .team .grid .column h3 {
-  margin: 0;
+    margin: 0;
 }
 
 .team .grid .column h5 a.social {
-  height: 20px;
-  line-height: 20px;
-  margin-left: 10px;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 10px;
 }
 
 .team .grid .column p.description,
 .partner .grid .column p.description {
-  font-size: 14px;
-  font-weight: 200;
-  letter-spacing: 1.1px;
-  margin: 5px 0 0;
+    font-size: 14px;
+    font-weight: 200;
+    letter-spacing: 1.1px;
+    margin: 5px 0 0;
 }
 
 .partner .grid .column a,
 .team .grid .column a {
-  color: #fff;
-  font-weight: 400;
+    color: #fff;
+    font-weight: 400;
 }
 
 @media (max-width: 767px) and (min-width: 320px) {
-  .team .grid .column>img,
-  .partner .grid .column>img {
-    margin-bottom: 15px;
-  }
+    .team .grid .column > img,
+    .partner .grid .column > img {
+        margin-bottom: 15px;
+    }
 
-  .team .grid .column h3 {
-    margin-top: 35px;
-  }
+    .team .grid .column h3 {
+        margin-top: 35px;
+    }
 
-  .team .grid .column p.description,
-  .partner .grid .column p.description {
-    margin-top: 25px;
-  }
+    .team .grid .column p.description,
+    .partner .grid .column p.description {
+        margin-top: 25px;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1455px) {
@@ -161,9 +165,9 @@ p {
 }
 
 .interchange-icon {
-  width: 50px;
+    width: 50px;
 }
 
 a.try-now {
-  padding: 0 50px;
+    padding: 0 50px;
 }

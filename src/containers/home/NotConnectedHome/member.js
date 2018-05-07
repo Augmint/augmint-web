@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Grid, Image } from "semantic-ui-react";
-import Header from "../../../components/augmint-ui/header";
+import Grid from "styled-components-grid";
+import Header from "components/augmint-ui/header";
 
 import linkedinLogo from "assets/images/linkedin.png";
 import githubLogo from "assets/images/GitHub.png";
@@ -9,8 +9,17 @@ import githubLogo from "assets/images/GitHub.png";
 export class Member extends React.Component {
     render() {
         return (
-            <Grid.Column mobile="16" computer="8" textAlign="left" key={this.props.member.pk}>
-                <Image src={this.props.member.imgSrc} avatar floated="left" />
+            <Grid.Unit
+                size={{ tablet: 1, desktop: 1 / 2 }}
+                style={{ textAlign: "left" }}
+                key={this.props.member.pk}
+                className="column"
+            >
+                <img
+                    src={this.props.member.imgSrc}
+                    style={{ borderRadius: "500rem", float: "left" }}
+                    className="memberPic"
+                />
                 <Header as="h3">
                     {this.props.member.firstName} {this.props.member.lastName}
                 </Header>
@@ -23,27 +32,19 @@ export class Member extends React.Component {
                     )}
                     {this.props.member.linkedinUrl && (
                         <a href={this.props.member.linkedinUrl} target="_blank" className="social">
-                            <Image
-                                basic="true"
-                                src={linkedinLogo}
-                                style={{ display: "inline-block", margin: 0, width: 14 }}
-                            />
+                            <img src={linkedinLogo} style={{ display: "inline-block", margin: 0, width: 14 }} />
                         </a>
                     )}
                     {this.props.member.githubUrl && (
                         <a href={this.props.member.githubUrl} target="_blank" className="social">
-                            <Image
-                                basic="true"
-                                src={githubLogo}
-                                style={{ display: "inline-block", margin: 0, width: 14 }}
-                            />
+                            <img src={githubLogo} style={{ display: "inline-block", margin: 0, width: 14 }} />
                         </a>
                     )}
                 </Header>
                 {this.props.member.description && (
                     <p className="description" dangerouslySetInnerHTML={{ __html: this.props.member.description }} />
                 )}
-            </Grid.Column>
+            </Grid.Unit>
         );
     }
 }
