@@ -8,6 +8,7 @@ const theme = {
         opacLighterGrey: "rgba(0,0,0,.6)",
         opacLightGrey: "rgba(0,0,0,.8)",
         opacWhite: "rgba(255, 255, 255, 0.5)",
+        opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
         secondary: "#ffad00",
         lightCyan: "#f8ffff",
