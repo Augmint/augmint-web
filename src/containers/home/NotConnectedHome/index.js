@@ -303,7 +303,7 @@ export default class NotConnectedHome extends React.Component {
                                         style={{ textAlign: "left" }}
                                         key={partner.pk}
                                     >
-                                        <img src={partner.imgSrc} />
+                                        <img src={partner.imgSrc} alt={partner.pk} />
                                         <Header as="h3">{partner.name}</Header>
                                         {partner.description && (
                                             <p

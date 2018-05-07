@@ -4,8 +4,8 @@ import { Tsegment } from "components/TextContent";
 import decentLogo from "assets/images/decent-logo.svg";
 
 const decentImg = (
-    <a href="http://decent.org" target="_blank">
-        <img src={decentLogo} style={{ maxWidth: "100%" }} />
+    <a href="http://decent.org" target="_blank" rel="noopener noreferrer">
+        <img src={decentLogo} style={{ maxWidth: "100%" }} alt="dacent logo" />
     </a>
 );
 export default () => (

@@ -157,13 +157,13 @@ export default () => (
                             target="_blank"
                         >
                             <h5>WHITEPAPER</h5>
-                            <img src={whitePaper} />
+                            <img src={whitePaper} alt="whitepaper" />
                         </Segment>
                     </Grid.Unit>
                     <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
                         <Segment basic as="a" href="/manifesto">
                             <h5>MANIFESTO</h5>
-                            <img src={manifesto} />
+                            <img src={manifesto} alt="manifesto" />
                         </Segment>
                     </Grid.Unit>
                 </Grid>
