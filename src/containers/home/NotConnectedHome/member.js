@@ -15,11 +15,7 @@ export class Member extends React.Component {
                 key={this.props.member.pk}
                 className="column"
             >
-                <img
-                    src={this.props.member.imgSrc}
-                    style={{ borderRadius: "500rem", float: "left" }}
-                    className="memberPic"
-                />
+                <img src={this.props.member.imgSrc} className="memberPic" />
                 <Header as="h3">
                     {this.props.member.firstName} {this.props.member.lastName}
                 </Header>

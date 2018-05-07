@@ -97,7 +97,9 @@ p {
 .team .grid .column > img,
 .partner .grid .column > img {
     background-color: #fff;
+    border-radius: 500rem;
     filter: grayscale(100%);
+    float: left;
     width: 120px;
     height: 120px;
     margin-bottom: 70px;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Segment, Rail, Responsive, Image } from "semantic-ui-react";
+import { Segment, Rail, Responsive } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
@@ -299,11 +299,11 @@ export default class NotConnectedHome extends React.Component {
                                 {partners.map(partner => (
                                     <Grid.Unit
                                         className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
                                         style={{ textAlign: "left" }}
                                         key={partner.pk}
                                     >
-                                        <Image src={partner.imgSrc} avatar floated="left" />
+                                        <img src={partner.imgSrc} />
                                         <Header as="h3">{partner.name}</Header>
                                         {partner.description && (
                                             <p
