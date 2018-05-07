@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { List, Segment, Image, Grid } from "semantic-ui-react";
-import Button from "../../../components/augmint-ui/button";
+import { List, Segment, Image } from "semantic-ui-react";
+import Grid from "styled-components-grid";
+import { ThemeProvider } from "styled-components";
+import Button from "components/augmint-ui/button";
 import Scrollchor from "react-scrollchor";
 
 import "./style.css";
+import { theme } from "styles/media";
 import whitePaper from "assets/images/white-paper.png";
 import manifesto from "assets/images/manifesto.png";
 
@@ -22,10 +25,17 @@ export default () => (
             </List.Item>
         </List>
         <Segment basic as="section">
-            <Segment basic as="h2" className="header" content="Overview" id={"overview"} />
-            <Grid divided="vertically">
-                <Grid.Row columns={2}>
-                    <Grid.Column>
+            <Segment
+                basic
+                as="h2"
+                className="header"
+                content="Overview"
+                id={"overview"}
+                style={{ padding: "0 1rem" }}
+            />
+            <ThemeProvider theme={theme}>
+                <Grid>
+                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }} style={{ padding: "0 1rem" }}>
                         <Segment basic className="custom-column">
                             <Segment basic as="h5" content="MODERN MONEY" />
                             <p>
@@ -43,8 +53,12 @@ export default () => (
                                 in the economy as needed.
                             </p>
                         </Segment>
-                    </Grid.Column>
-                    <Grid.Column className="second-column">
+                    </Grid.Unit>
+                    <Grid.Unit
+                        className="second-column"
+                        size={{ phone: 1, tablet: 1 / 2 }}
+                        style={{ padding: "0 1rem" }}
+                    >
                         <Segment basic className="custom-column">
                             <Segment basic as="h5" content="AUGMINT" />
                             <p>
@@ -64,9 +78,9 @@ export default () => (
                             </p>
                             <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
                         </Segment>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                    </Grid.Unit>
+                </Grid>
+            </ThemeProvider>
             <Segment basic textAlign="center">
                 <Button content="TRY NOW" to="/tryit" className="try-now" />
             </Segment>
@@ -132,26 +146,28 @@ export default () => (
                 with GDCs the profit from fees is distributed among GDC holders.
             </p>
         </Segment>
-        <Grid divided="vertically" className="whitepaper-manifesto">
-            <Grid.Row columns={2}>
-                <Grid.Column>
-                    <Segment
-                        basic
-                        as="a"
-                        href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
-                        target="_blank"
-                    >
-                        <h5>WHITEPAPER</h5>
-                        <Image src={whitePaper} />
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column>
-                    <Segment basic as="a" href="/manifesto">
-                        <h5>MANIFESTO</h5>
-                        <Image src={manifesto} />
-                    </Segment>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
+        <Segment basic as="section">
+            <ThemeProvider theme={theme}>
+                <Grid className="whitepaper-manifesto">
+                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
+                        <Segment
+                            basic
+                            as="a"
+                            href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
+                            target="_blank"
+                        >
+                            <h5>WHITEPAPER</h5>
+                            <Image src={whitePaper} />
+                        </Segment>
+                    </Grid.Unit>
+                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
+                        <Segment basic as="a" href="/manifesto">
+                            <h5>MANIFESTO</h5>
+                            <Image src={manifesto} />
+                        </Segment>
+                    </Grid.Unit>
+                </Grid>
+            </ThemeProvider>
+        </Segment>
     </Segment>
 );
