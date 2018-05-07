@@ -1,6 +1,6 @@
 import React from "react";
 import { Popup } from "semantic-ui-react";
-import Icon from "../components/augmint-ui/icon";
+import Icon from "components/augmint-ui/icon";
 
 export default function ToolTip(props) {
     const {

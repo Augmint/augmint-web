@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
-import Button from "../../../components/augmint-ui/button";
-import Message from "../../../components/augmint-ui/message";
+import Button from "components/augmint-ui/button";
+import Message from "components/augmint-ui/message";
 
 export function SelectLoanButton(props) {
     return (

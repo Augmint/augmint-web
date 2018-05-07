@@ -7,9 +7,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Modal } from "semantic-ui-react";
-import Button from "../../../components/augmint-ui/button";
-import Icon from "../../../components/augmint-ui/icon";
-import Header from "../../../components/augmint-ui/header";
+import Button from "components/augmint-ui/button";
+import Icon from "components/augmint-ui/icon";
+import Header from "components/augmint-ui/header";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 

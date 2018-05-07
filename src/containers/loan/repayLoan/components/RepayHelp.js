@@ -1,5 +1,5 @@
 import React from "react";
-import Message from "../../../../components/augmint-ui/message";
+import Message from "components/augmint-ui/message";
 
 export function RepayHelp(props) {
     const { ...other } = props;

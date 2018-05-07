@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorPanel } from "components/MsgPanels";
 import stringifier from "stringifier";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // used instead of JSON.stringify to display any arbitary JSON in contracts.info (eg. handle circular dependencies )

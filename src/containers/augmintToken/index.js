@@ -13,7 +13,7 @@ import { TotalSupply } from "./components/TotalSupply";
 import { LtdStats } from "./components/LtdStats";
 import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
-import Button from "../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 
 class AugmintToken extends React.Component {
     componentDidMount() {

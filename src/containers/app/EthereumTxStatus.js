@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Psegment } from "components/PageLayout";
 import { MyListGroup } from "components/MyListGroups";
 import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/MsgPanels";
-import Container from "../../components/augmint-ui/container";
+import Container from "components/augmint-ui/container";
 import { dismissTx } from "modules/reducers/submittedTransactions";
 
 class EthereumTxStatus extends React.Component {

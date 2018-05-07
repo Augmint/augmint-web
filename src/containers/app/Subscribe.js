@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { ErrorPanel, SuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";

@@ -3,7 +3,7 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import Container from "../../components/augmint-ui/container";
+import Container from "components/augmint-ui/container";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";

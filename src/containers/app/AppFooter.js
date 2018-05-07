@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Segment, List, Image } from "semantic-ui-react";
-import Container from "../../components/augmint-ui/container";
+import Container from "components/augmint-ui/container";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
