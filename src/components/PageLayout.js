@@ -1,8 +1,9 @@
 import React from "react";
-import { Divider, Segment } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
+import Divider from "components/augmint-ui/divider";
 
 import theme from "styles/theme";
 
