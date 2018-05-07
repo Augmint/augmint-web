@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { List, Segment, Image } from "semantic-ui-react";
+import { List, Segment } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Button from "components/augmint-ui/button";
@@ -157,13 +157,13 @@ export default () => (
                             target="_blank"
                         >
                             <h5>WHITEPAPER</h5>
-                            <Image src={whitePaper} />
+                            <img src={whitePaper} />
                         </Segment>
                     </Grid.Unit>
                     <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
                         <Segment basic as="a" href="/manifesto">
                             <h5>MANIFESTO</h5>
-                            <Image src={manifesto} />
+                            <img src={manifesto} />
                         </Segment>
                     </Grid.Unit>
                 </Grid>
