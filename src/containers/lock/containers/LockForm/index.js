@@ -11,13 +11,9 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import { Form, Validations } from "components/BaseComponents";
 import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import Button from "components/augmint-ui/button";
+import RadioInput from "components/augmint-ui/RadioInput";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
-
-const RadioInput = props => {
-    const { type = "radio", val, ...other } = props;
-    return <input type={type} value={val} name={props.input.name} onChange={props.input.onChange} {...other} />;
-};
 
 class LockContainer extends React.Component {
     constructor(props) {
