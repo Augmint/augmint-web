@@ -1,6 +1,7 @@
 import store from "modules/store";
 import { default as Web3 } from "web3";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
+import { promiseTimeout } from "utils/helpers";
 import ethers from "ethers";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
@@ -90,9 +91,9 @@ export const setupWeb3 = () => {
                 };
             }
 
-            const [lastBlock, network, accounts] = await Promise.all([
+            const [network, lastBlock, accounts] = await Promise.all([
+                promiseTimeout(3000, getNetworkDetails(web3)),
                 web3.eth.getBlock("latest"),
-                getNetworkDetails(web3),
                 web3.eth.getAccounts()
             ]);
 
