@@ -19,8 +19,9 @@ export function HowToConnect(props) {
                     <h4>2. Connect to Rinkeby test network</h4>
                     <iframe
                         title="connect to rinkeby"
-                        width="640"
-                        height="360"
+                        width="100%"
+                        height="100%"
+                        style={{ "max-width": "640px", "max-height": "360px", height: "calc(100vw * 3/4 - 100px" }}
                         src="https://www.youtube.com/embed/0APcMesrZ_U"
                         frameborder="0"
                         allow="autoplay; encrypted-media"
