@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Segment, List, Image } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 import Container from "components/augmint-ui/container";
+import Segment from "components/augmint-ui/segment";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
@@ -16,7 +17,8 @@ const segmentStyle = {
     backgroundPosition: "top",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
-    minHeight: 500
+    minHeight: 500,
+    textAlign: "center"
 };
 
 export function AppFooter(props) {
@@ -26,37 +28,29 @@ export function AppFooter(props) {
             "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance structure - anyone can join at any time.";
 
     return (
-        <Segment basic textAlign="center" className="footer" style={segmentStyle}>
+        <Segment className="footer" style={segmentStyle}>
             <Container>
-                <Segment basic as="h5" className="title">
-                    {community}
-                </Segment>
-                <Segment basic as="p" className="description">
-                    {description}
-                </Segment>
-                <Segment basic className="chat-container">
-                    <Segment
-                        basic
+                <h5 className="title">{community}</h5>
+                <p className="description">{description}</p>
+                <Segment className="chat-container">
+                    <a
                         className="join-discord"
-                        size="tiny"
-                        as="a"
                         href="https://discord.gg/PwDmsnu"
                         target="_blank"
+                        style={{ display: "flex", alignItems: "center" }}
                     >
-                        <Image src={discordLogo} />
+                        <img src={discordLogo} alt="discord logo" />
                         Talk to us on Discord
-                    </Segment>
-                    <Segment
-                        basic
+                    </a>
+                    <a
                         className="join-telegram"
-                        size="tiny"
-                        as="a"
                         href="https://t.me/augmint"
                         target="_blank"
+                        style={{ display: "flex", alignItems: "center" }}
                     >
-                        <Image src={telegramLogo} />
+                        <img src={telegramLogo} alt="telegram logo" />
                         Talk to us on Telegram
-                    </Segment>
+                    </a>
                 </Segment>
 
                 <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
