@@ -14,12 +14,12 @@ class TryIt extends React.Component {
     }
 
     render() {
-        const { isLoading, isConnected } = this.props.web3Connect;
+        const { isLoading, isConnected, error } = this.props.web3Connect;
         return (
             <Tsegment header="Try Augmint">
                 <Disclaimer />
                 {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
-                {!isLoading && !isConnected && <HowToConnect />}
+                {!isLoading && error && <HowToConnect />}
                 {!isLoading && isConnected && <TryItConnected />}
 
                 <Tsegment.Row columns={1}>
