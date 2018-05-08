@@ -3,6 +3,7 @@ import React from "react";
 import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { DiscordButton } from "components/LinkButtons";
+import Video from "components/augmint-ui/video";
 
 export function HowToConnect(props) {
     return (
@@ -17,16 +18,7 @@ export function HowToConnect(props) {
                         </Link>
                     </h4>
                     <h4>2. Connect to Rinkeby test network</h4>
-                    <iframe
-                        title="connect to rinkeby"
-                        width="100%"
-                        height="100%"
-                        style={{ "max-width": "640px", "max-height": "360px", height: "calc(100vw * 3/4 - 100px" }}
-                        src="https://www.youtube.com/embed/0APcMesrZ_U"
-                        frameborder="0"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen
-                    />
+                    <Video title="connect to rinkeby" src="https://www.youtube.com/embed/0APcMesrZ_U" />
                 </Tsegment.Column>
             </Tsegment.Row>
             <Tsegment.Row columns={1}>
