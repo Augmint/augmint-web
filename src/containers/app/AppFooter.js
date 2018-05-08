@@ -36,6 +36,7 @@ export function AppFooter(props) {
                     <a
                         className="join-discord"
                         href="https://discord.gg/PwDmsnu"
+                        rel="noopener noreferrer"
                         target="_blank"
                         style={{ display: "flex", alignItems: "center" }}
                     >
@@ -45,6 +46,7 @@ export function AppFooter(props) {
                     <a
                         className="join-telegram"
                         href="https://t.me/augmint"
+                        rel="noopener noreferrer"
                         target="_blank"
                         style={{ display: "flex", alignItems: "center" }}
                     >
