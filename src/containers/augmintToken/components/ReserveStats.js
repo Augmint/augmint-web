@@ -1,6 +1,7 @@
 import React from "react";
-import { Statistic, Segment } from "semantic-ui-react";
+import { Statistic } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
+import Segment from "components/augmint-ui/segment";
 
 export class ReserveStats extends React.Component {
     render() {
@@ -17,7 +18,7 @@ export class ReserveStats extends React.Component {
                 : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group widths="2" size={size}>

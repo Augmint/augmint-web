@@ -1,6 +1,7 @@
 import React from "react";
-import { Statistic, Segment } from "semantic-ui-react";
+import { Statistic } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
+import Segment from "components/augmint-ui/segment";
 
 export class LtdStats extends React.Component {
     render() {

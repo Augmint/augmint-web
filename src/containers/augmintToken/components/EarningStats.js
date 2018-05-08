@@ -1,6 +1,7 @@
 import React from "react";
-import { Statistic, Segment } from "semantic-ui-react";
+import { Statistic } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
+import Segment from "components/augmint-ui/segment";
 
 export class EarningStats extends React.Component {
     render() {
@@ -12,9 +13,8 @@ export class EarningStats extends React.Component {
         const { interestEarnedAccountTokenBalance } = monetarySupervisor.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
-
                 <Statistic.Group widths="3" size={size}>
                     <Statistic data-testid="feeAccountTokenBalance" style={{ padding: "1em" }}>
                         <Statistic.Label>A-EUR fee account</Statistic.Label>
