@@ -3,8 +3,9 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Menu, Label } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import Button from "components/augmint-ui/button";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
@@ -205,10 +206,9 @@ class PlaceOrderForm extends React.Component {
                                 onChange={this.onTokenAmountChange}
                                 validate={tokenAmountValidations}
                                 normalize={Normalizations.twoDecimals}
-                                labelPosition="right"
                             >
-                                <input data-testid="tokenAmountInput" />
-                                <Label>A-EUR</Label>
+                                <input data-testid="tokenAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                                <StyleLabel align="right">A-EUR</StyleLabel>
                             </Field>
 
                             <Field
@@ -221,10 +221,9 @@ class PlaceOrderForm extends React.Component {
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
                                 normalize={Normalizations.fiveDecimals}
-                                labelPosition="right"
                             >
-                                <input data-testid="ethAmountInput" />
-                                <Label>ETH</Label>
+                                <input data-testid="ethAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                                <StyleLabel align="right">ETH</StyleLabel>
                             </Field>
 
                             <Field
@@ -237,10 +236,9 @@ class PlaceOrderForm extends React.Component {
                                 onChange={this.onPriceChange}
                                 validate={Validations.price}
                                 normalize={Normalizations.twoDecimals}
-                                labelPosition="right"
                             >
-                                <input data-testid="priceInput" />
-                                <Label>A-EUR / ETH</Label>
+                                <input data-testid="priceInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                                <StyleLabel align="right">A-EUR / ETH</StyleLabel>
                             </Field>
 
                             <Button
