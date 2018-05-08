@@ -35,7 +35,7 @@ const BaseDiv = `
     content: '';
     top: 0;
     left: 0;
-    background: rgba(255,255,255,.8);
+    background: ${theme.colors.opacWhite};
     width: 100%;
     height: 100%;
     border-radius: .28571429rem;
@@ -53,7 +53,9 @@ const BaseDiv = `
     animation: icon-loading .6s linear;
     animation-iteration-count: infinite;
     border-radius: 500rem;
-    border-color: #767676 rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.1);
+    border-color: ${theme.colors.mediumGrey} ${theme.colors.lightGrey} ${theme.colors.lightGrey} ${
+    theme.colors.lightGrey
+};
     border-style: solid;
     border-width: .2rem;
     box-shadow: 0 0 0 1px transparent;
