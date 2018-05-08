@@ -18,7 +18,11 @@ export function HowToConnect(props) {
                         </Link>
                     </h4>
                     <h4>2. Connect to Rinkeby test network</h4>
-                    <Video title="connect to rinkeby" src="https://www.youtube.com/embed/0APcMesrZ_U" />
+                    <Video
+                        title="connect to rinkeby"
+                        src="https://www.youtube.com/embed/0APcMesrZ_U"
+                        host="https://www.youtube.com"
+                    />
                 </Tsegment.Column>
             </Tsegment.Row>
             <Tsegment.Row columns={1}>
