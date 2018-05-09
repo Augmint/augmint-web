@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 
 const BaseDiv = `
     background: none transparent;
@@ -38,7 +39,7 @@ const BaseDiv = `
     background: ${theme.colors.opacWhite};
     width: 100%;
     height: 100%;
-    border-radius: .28571429rem;
+    border-radius: ${remCalc(4)};
     z-index: 100;
   }
 
