@@ -65,4 +65,8 @@ export const StyledGroup = styled.div`
     margin: 0 0 ${remCalc(-28)};
     text-align: center;
     text-size-adjust: 100%;
+
+    &.centered {
+        justify-content: space-around;
+    }
 `;
