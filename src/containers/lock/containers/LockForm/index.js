@@ -14,6 +14,7 @@ import Button from "components/augmint-ui/button";
 import RadioInput from "components/augmint-ui/RadioInput";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
+import theme from "styles/theme";
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -102,7 +103,7 @@ class LockContainer extends React.Component {
                             ]}
                             labelposition="right"
                         >
-                            <input style={{ borderRadius: "5px 0 0 5px" }} />
+                            <input style={{ borderRadius: theme.borderRadius.left }} />
                             <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 

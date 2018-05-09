@@ -15,6 +15,8 @@ import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
 
+import theme from "styles/theme";
+
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
 
@@ -214,7 +216,10 @@ class PlaceOrderForm extends React.Component {
                                 validate={tokenAmountValidations}
                                 normalize={Normalizations.twoDecimals}
                             >
-                                <input data-testid="tokenAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                                <input
+                                    data-testid="tokenAmountInput"
+                                    style={{ borderRadius: theme.borderRadius.left }}
+                                />
                                 <StyleLabel align="right">A-EUR</StyleLabel>
                             </Field>
 
@@ -231,7 +236,7 @@ class PlaceOrderForm extends React.Component {
                                 validate={ethAmountValidations}
                                 normalize={Normalizations.fiveDecimals}
                             >
-                                <input data-testid="ethAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                                <input data-testid="ethAmountInput" style={{ borderRadius: theme.borderRadius.left }} />
                                 <StyleLabel align="right">ETH</StyleLabel>
                             </Field>
 

@@ -17,6 +17,8 @@ import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintT
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
 
+import theme from "styles/theme";
+
 class TokenTransferForm extends React.Component {
     constructor(props) {
         super(props);
@@ -117,7 +119,10 @@ class TokenTransferForm extends React.Component {
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isLoaded}
                         >
-                            <input data-testid="transferAmountInput" style={{ borderRadius: "5px 0 0 5px" }} />
+                            <input
+                                data-testid="transferAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                            />
                             <StyleLabel align="right">A-EUR</StyleLabel>
                         </Field>
 

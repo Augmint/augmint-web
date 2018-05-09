@@ -9,5 +9,6 @@ const BaseLabel = `
 
 export const StyleLabel = styled.label`
     ${BaseLabel};
-    border-radius: ${props => (props.align === "right" ? "0 5px 5px 0" : props.align === "left" ? "5px 0 0 5px" : "")};
+    border-radius: ${props =>
+        props.align === "right" ? theme.borderRadius.right : props.align === "left" ? theme.borderRadius.left : ""};
 `;
