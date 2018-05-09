@@ -37,6 +37,10 @@ const theme = {
             h2: remCalc(34),
             h1: remCalc(34)
         }
+    },
+    borderRadius: {
+        right: "0 5px 5px 0",
+        left: "5px 0 0 5px"
     }
 };
 
