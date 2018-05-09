@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "../icon";
+import Icon from "components/augmint-ui/icon";
 
 import { StyledHeaderH5, StyledHeaderH4, StyledHeaderH3, StyledHeaderH2, StyledHeaderH1 } from "./styles";
 
