@@ -13,6 +13,8 @@ import Header from "components/augmint-ui/header";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 
+import theme from "styles/theme";
+
 class CancelOrderButton extends React.Component {
     async submitCancel(values) {
         //values.preventDefault();
@@ -82,7 +84,11 @@ class CancelOrderButton extends React.Component {
                     icon="question"
                     content="Cancel your order"
                     className="opacLightGrey"
-                    style={{ borderBottom: "1px solid rgba(34,36,38,.15)", padding: "20px" }}
+                    style={{
+                        borderBottom: "1px solid",
+                        borderBottomColor: theme.colors.opacGrey,
+                        padding: "20px"
+                    }}
                 />
 
                 <Modal.Content>
