@@ -1,11 +1,27 @@
 import React from "react";
 import Button from "./augmint-ui/button";
 
+import theme from "styles/theme";
+import { remCalc } from "styles/theme";
+
 import discordSVG from "assets/images/Discord-Logo.svg";
+
+const style = {
+    all: "initial",
+    color: theme.colors.secondary,
+    cursor: "pointer",
+    fontFamily: theme.typography.fontFamilies.default,
+    display: "flex",
+    fontSize: remCalc(18),
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+    padding: 0
+};
 
 export function DiscordButton(props) {
     return (
-        <Button className="discord" href="https://discord.gg/PwDmsnu" target="_blank">
+        <Button style={style} href="https://discord.gg/PwDmsnu" target="_blank">
             <img
                 alt="discord icon"
                 src={discordSVG}

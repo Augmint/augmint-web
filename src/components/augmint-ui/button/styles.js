@@ -117,20 +117,6 @@ const BaseButton = `
       border-top-right-radius: inherit;
       border-bottom-right-radius: inherit;
     }
-
-    &.discord,
-    &.discord:hover {
-      all: initial;
-      color: ${theme.colors.secondary};
-      cursor: pointer;
-      font-family: ${theme.typography.fontFamilies.default};
-      display: flex;
-      font-size: ${remCalc(18)};
-      justify-content: center;
-      align-items: center;
-      margin: 0;
-      padding: 0;
-    }
 `;
 
 export const StyledLink = styled(Link)`
