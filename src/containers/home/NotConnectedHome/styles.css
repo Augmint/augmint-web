@@ -1,4 +1,4 @@
-article.ui.basic.segment {
+article.segment {
     padding: 0;
 }
 
@@ -78,7 +78,7 @@ p {
     margin: 0 40px;
 }
 
-.ui.basic.segment.how-to-use {
+.segment.how-to-use {
     position: relative;
     padding-top: 200px;
     padding-bottom: 200px;
@@ -147,22 +147,22 @@ p {
 }
 
 @media (min-width: 768px) and (max-width: 1455px) {
-    .ui.basic.segment.how-to-use,
-    .ui.basic.segment.team {
+    .segment.how-to-use,
+    .segment.team {
         padding-left: 190px;
     }
-    .ui.basic.segment.team,
-    .ui.basic.segment.partner {
+    .segment.team,
+    .segment.partner {
         padding-left: 85px;
     }
 }
 
-.ui.basic.segment.how-to-use .grid.margin {
+.segment.how-to-use .grid.margin {
     margin-bottom: 100px;
 }
 
-.ui.basic.segment.how-to-use h5.ui.header,
-.ui.basic.segment.how-to-use h2.ui.header {
+.segment.how-to-use h5.ui.header,
+.segment.how-to-use h2.ui.header {
     margin: 0;
 }
 

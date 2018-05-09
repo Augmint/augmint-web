@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Segment, Rail, Responsive } from "semantic-ui-react";
+import { Rail, Responsive } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
@@ -37,9 +37,9 @@ export default class NotConnectedHome extends React.Component {
 
     render() {
         return (
-            <Segment basic as="article">
+            <article>
                 <Container>
-                    <Segment basic textAlign="center" as="section" className="key-features large-gap">
+                    <section style={{ textAlign: "center" }} className="key-features large-gap segment">
                         <header className="key-features__header">
                             <Header style={{ textAlign: "center" }} as="h4" size="large">
                                 Augmint offers digital tokens pegged to a fiat currency.
@@ -64,9 +64,9 @@ export default class NotConnectedHome extends React.Component {
                                         style={{ textAlign: "center" }}
                                         key={feature.title}
                                     >
-                                        <Segment style={styles.keyFeaturesSegment} basic>
+                                        <div style={styles.keyFeaturesSegment} className="segment">
                                             {feature.image}
-                                        </Segment>
+                                        </div>
                                         <Header as="h3" style={styles.keyFeaturesHeader}>
                                             {feature.title}
                                         </Header>
@@ -77,8 +77,8 @@ export default class NotConnectedHome extends React.Component {
                                 ))}
                             </Grid>
                         </ThemeProvider>
-                    </Segment>
-                    <Segment basic textAlign="center" as="section" className="advantages">
+                    </section>
+                    <section style={{ textAlign: "center" }} className="advantages segment">
                         <Header style={{ textAlign: "left" }} as="h2">
                             Great for business
                         </Header>
@@ -124,9 +124,9 @@ export default class NotConnectedHome extends React.Component {
                                 ))}
                             </Grid>
                         </ThemeProvider>
-                    </Segment>
+                    </section>
                 </Container>
-                <Segment basic as="section" className="how-to-use">
+                <section className="how-to-use segment">
                     <Responsive
                         as={Rail}
                         minWidth={768}
@@ -170,9 +170,9 @@ export default class NotConnectedHome extends React.Component {
                                         key={feature.pk}
                                         style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
                                     >
-                                        <Segment className="home-image" style={styles.howItWorksImage} basic>
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
                                             {feature.image}
-                                        </Segment>
+                                        </div>
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
@@ -184,11 +184,11 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
 
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                         <Header as="h2">Buy and sell A-Euro</Header>
 
                         <ThemeProvider theme={theme}>
@@ -200,9 +200,9 @@ export default class NotConnectedHome extends React.Component {
                                         key={feature.pk}
                                         style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
                                     >
-                                        <Segment className="home-image" style={styles.howItWorksImage} basic>
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
                                             {feature.image}
-                                        </Segment>
+                                        </div>
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
@@ -214,11 +214,11 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
 
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                         <Header as="h2">How to use your A-Euro</Header>
 
                         <ThemeProvider theme={theme}>
@@ -230,9 +230,9 @@ export default class NotConnectedHome extends React.Component {
                                         key={feature.pk}
                                         style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
                                     >
-                                        <Segment className="home-image" style={styles.howItWorksImage} basic>
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
                                             {feature.image}
-                                        </Segment>
+                                        </div>
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
@@ -255,9 +255,9 @@ export default class NotConnectedHome extends React.Component {
                                         key={feature.pk}
                                         style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
                                     >
-                                        <Segment className="home-image" style={styles.howItWorksImage} basic>
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
                                             {feature.image}
-                                        </Segment>
+                                        </div>
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
@@ -269,14 +269,14 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
 
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                     </Container>
-                </Segment>
-                <Segment basic textAlign="left" as="section" className="team">
+                </section>
+                <section style={{ textAlign: "left" }} className="team segment">
                     <Container>
                         <Header as="h2">Team</Header>
 
@@ -291,8 +291,8 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
                     </Container>
-                </Segment>
-                <Segment basic textAlign="left" as="section" className="partner" style={{ marginTop: 50 }}>
+                </section>
+                <section className="partner segment" style={{ marginTop: 50, textAlign: "center" }}>
                     <Container>
                         <ThemeProvider theme={theme}>
                             <Grid className="grid">
@@ -327,8 +327,8 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
                     </Container>
-                </Segment>
-            </Segment>
+                </section>
+            </article>
         );
     }
 }
