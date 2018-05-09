@@ -1,12 +1,12 @@
 import React from "react";
-import { Statistic } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
+import Statistic from "components/augmint-ui/statistic";
 
 export class LtdStats extends React.Component {
     render() {
         const { isLoaded, isLoading, loadError } = this.props.monetarySupervisor;
-        const { monetarySupervisor, size } = this.props;
+        const { monetarySupervisor } = this.props;
         const { totalLockedAmount, totalLoanAmount, ltdPercent } = this.props.monetarySupervisor.info;
         const { loanCount } = this.props.loanManager.info;
         const { lockCount } = this.props.lockManager.info;
@@ -15,30 +15,33 @@ export class LtdStats extends React.Component {
             <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={monetarySupervisor} />
 
-                <Statistic.Group widths="3" size={size}>
-                    <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>Total locked</Statistic.Label>
-                        <Statistic.Value data-testid="totalSupply">{totalLockedAmount} A-EUR</Statistic.Value>
+                <Statistic.Group>
+                    <Statistic
+                        data-testid="totalSupply"
+                        style={{ padding: "1em" }}
+                        label="Total locked"
+                        value={totalLockedAmount + " A-EUR"}
+                    >
                         {lockCount > 0 && <p>in {lockCount} locks (incl. released)</p>}
                     </Statistic>
-                    <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>Total loans</Statistic.Label>
-                        <Statistic.Value data-testid="reserveEthBalance">{totalLoanAmount} A-EUR</Statistic.Value>
+
+                    <Statistic
+                        data-testid="reserveEthBalance"
+                        style={{ padding: "1em" }}
+                        label="Total loans"
+                        value={totalLoanAmount + " A-EUR"}
+                    >
                         {loanCount > 0 && <p>{loanCount} loans (incl. repaid&defaulted)</p>}
                     </Statistic>
 
-                    <Statistic data-testid="reserveTokenBalance" style={{ padding: "1em" }}>
-                        <Statistic.Label>Loan to Deposit ratio</Statistic.Label>
-                        <Statistic.Value>
-                            {totalLockedAmount === 0 ? "N/A" : `${(ltdPercent * 100).toFixed(2)} %`}{" "}
-                        </Statistic.Value>
-                    </Statistic>
+                    <Statistic
+                        data-testid="reserveTokenBalance"
+                        style={{ padding: "1em" }}
+                        label="Total loans"
+                        value={totalLockedAmount === 0 ? "N/A " : `${(ltdPercent * 100).toFixed(2)} % `}
+                    />
                 </Statistic.Group>
             </Segment>
         );
     }
 }
-
-LtdStats.defaultProps = {
-    size: "small"
-};

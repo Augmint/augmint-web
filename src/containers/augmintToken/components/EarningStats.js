@@ -1,11 +1,11 @@
 import React from "react";
-import { Statistic } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
+import Statistic from "components/augmint-ui/statistic";
 
 export class EarningStats extends React.Component {
     render() {
-        const { augmintToken, monetarySupervisor, size } = this.props;
+        const { augmintToken, monetarySupervisor } = this.props;
 
         const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { feeAccountTokenBalance, feeAccountEthBalance } = augmintToken.info;
@@ -15,27 +15,29 @@ export class EarningStats extends React.Component {
         return (
             <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
-                <Statistic.Group widths="3" size={size}>
-                    <Statistic data-testid="feeAccountTokenBalance" style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR fee account</Statistic.Label>
-                        <Statistic.Value>{feeAccountTokenBalance} A-EUR</Statistic.Value>
-                    </Statistic>
+                <Statistic.Group>
+                    <Statistic
+                        data-testid="feeAccountTokenBalance"
+                        style={{ padding: "1em" }}
+                        label="A-EUR fee account"
+                        value={feeAccountTokenBalance + " A-EUR"}
+                    />
 
-                    <Statistic data-testid="feeAccountTokenBalance" style={{ padding: "1em" }}>
-                        <Statistic.Label>ETH fee account</Statistic.Label>
-                        <Statistic.Value>{feeAccountEthBalance} ETH</Statistic.Value>
-                    </Statistic>
+                    <Statistic
+                        data-testid="feeAccountTokenBalance"
+                        style={{ padding: "1em" }}
+                        label="ETH fee account"
+                        value={feeAccountEthBalance + " ETH"}
+                    />
 
-                    <Statistic data-testid="interestEarnedAccountTokenBalance" style={{ padding: "1em" }}>
-                        <Statistic.Label>Earned interest account</Statistic.Label>
-                        <Statistic.Value>{interestEarnedAccountTokenBalance} A-EUR</Statistic.Value>
-                    </Statistic>
+                    <Statistic
+                        data-testid="interestEarnedAccountTokenBalance"
+                        style={{ padding: "1em" }}
+                        label="Earned interest account"
+                        value={interestEarnedAccountTokenBalance + " A-EUR"}
+                    />
                 </Statistic.Group>
             </Segment>
         );
     }
 }
-
-EarningStats.defaultProps = {
-    size: "small"
-};
