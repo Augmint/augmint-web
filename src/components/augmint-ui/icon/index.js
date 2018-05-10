@@ -34,6 +34,9 @@ export default function Icon(props) {
         case "question":
             className += " fas fa-question";
             break;
+        case "github":
+            className += " fab fa-github";
+            break;
         default:
             break;
     }
