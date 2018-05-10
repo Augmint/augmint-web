@@ -152,6 +152,7 @@ export default () => (
                         <a
                             href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
                             target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <h5>WHITEPAPER</h5>
                             <img src={whitePaper} alt="whitepaper" />
