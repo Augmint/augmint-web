@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { List, Segment } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Button from "components/augmint-ui/button";
@@ -12,7 +12,7 @@ import whitePaper from "assets/images/white-paper.png";
 import manifesto from "assets/images/manifesto.png";
 
 export default () => (
-    <Segment basic textAlign="center" as="article" className="concept">
+    <article style={{ textAlign: "center" }} className="concept segment">
         <List horizontal inverted divided link>
             <List.Item>
                 <Scrollchor to="#overview">OVERVIEW</Scrollchor>
@@ -24,20 +24,15 @@ export default () => (
                 <Scrollchor to="#governance">GOVERNANCE</Scrollchor>
             </List.Item>
         </List>
-        <Segment basic as="section">
-            <Segment
-                basic
-                as="h2"
-                className="header"
-                content="Overview"
-                id={"overview"}
-                style={{ padding: "0 1rem" }}
-            />
+        <section className="segment">
+            <h2 className="header segment" id={"overview"} style={{ padding: "0 1rem" }}>
+                Overview
+            </h2>
             <ThemeProvider theme={theme}>
                 <Grid>
                     <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }} style={{ padding: "0 1rem" }}>
-                        <Segment basic className="custom-column">
-                            <Segment basic as="h5" content="MODERN MONEY" />
+                        <div className="custom-column segment">
+                            <h5 className="segment">MODERN MONEY</h5>
                             <p>
                                 Modern currencies are credit based. In layman's terms the amount of money in circulation
                                 (supply) is automatically adjusted by market participants (i.e. banks). Banks are
@@ -52,15 +47,15 @@ export default () => (
                                 general that's how the monetary system ensures there is always as much money available
                                 in the economy as needed.
                             </p>
-                        </Segment>
+                        </div>
                     </Grid.Unit>
                     <Grid.Unit
                         className="second-column"
                         size={{ phone: 1, tablet: 1 / 2 }}
                         style={{ padding: "0 1rem" }}
                     >
-                        <Segment basic className="custom-column">
-                            <Segment basic as="h5" content="AUGMINT" />
+                        <div className="custom-column segment">
+                            <h5 className="segment">AUGMINT</h5>
                             <p>
                                 Augmint is built on the concept of automatically adjusting the supply of each Augmint
                                 token in a similar way as modern fiat money but in a transparent, decentralised and
@@ -77,22 +72,24 @@ export default () => (
                                 decided by transparent and open governance processes.
                             </p>
                             <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
-                        </Segment>
+                        </div>
                     </Grid.Unit>
                 </Grid>
             </ThemeProvider>
-            <Segment basic textAlign="center">
+            <div className="segment" style={{ textAlign: "center" }}>
                 <Button content="TRY NOW" to="/tryit" className="try-now" />
-            </Segment>
-        </Segment>
-        <Segment basic as="section" className="green-gradient">
-            <Segment basic as="h2" className="header" content="How it works" id={"how-it-works"} />
-            <Segment basic as="h5" content="STABILITY" />
+            </div>
+        </section>
+        <section className="green-gradient segment">
+            <h2 className="header segment" id={"how-it-works"}>
+                How it works
+            </h2>
+            <h5 className="segment">STABILITY</h5>
             <p>
                 There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
                 the pegged currency.
             </p>
-            <Segment basic as="h5" content="MARKET MECHANICS" />
+            <h5 className="segment">MARKET MECHANICS</h5>
             <p>
                 The primary foundation of stability is the continuous supply of Augmint tokens via loan originations and
                 a corresponding demand for paying back loans on maturity.
@@ -101,12 +98,12 @@ export default () => (
                 Further specific features of the Augmint system will work towards maintaining stability by smoothing the
                 demand & supply peaks and troughs.
             </p>
-            <Segment basic as="h5" content="LOAN PARAMETERS" />
+            <h5 className="segment">LOAN PARAMETERS</h5>
             <p>
                 If A-EUR price deviating from parity then loan parameters are adjusted to make it more or less
                 compelling to get A-EUR loan for a certain digital asset. This has an effect on A-EUR demand/supply.
             </p>
-            <Segment basic as="h5" content="MARKET INTERVENTION" />
+            <h5 className="segment">MARKET INTERVENTION</h5>
             <p>
                 Augmint can intervene from its reserves accumulated from fees, defaults and interests. Augmint reserves
                 can be used on held only for market intervention.
@@ -118,16 +115,18 @@ export default () => (
                 </Link>{" "}
                 for additional tools and more scenarios.
             </p>
-            <Segment basic as="h5" content="GET A-EUR" />
+            <h5 className="segment">GET A-EUR</h5>
             <p>
                 You can always buy or sell your A-EUR for cryptocurrencies (ETH, BTC etc.) on a decentralised exchange.
                 Secondary exchanges will offer direct fiat conversions to/from A-EUR as well. As the Augmint ecosystem
                 grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
-            <Segment basic textAlign="center" className="custom-button">
+            <div style={{ textAlign: "left" }} className="custom-buttonsegment segment">
                 <Button content="TRY NOW" to="/tryit" className="try-now" />
-            </Segment>
-            <Segment basic as="h2" className="header" content="Governance" id={"governance"} />
+            </div>
+            <h2 className="header segment" id={"governance"}>
+                Governance
+            </h2>
             <p>
                 The fundamental rules, agreements and funds are maintained and enforced by smart contracts -
                 cryptographically immutable algorithms running on the blockchain.
@@ -145,29 +144,27 @@ export default () => (
                 Access to GDC is open to anyone who is willing to deposit A-EUR tokens. To incentify holding and voting
                 with GDCs the profit from fees is distributed among GDC holders.
             </p>
-        </Segment>
-        <Segment basic as="section">
+        </section>
+        <section className="segment">
             <ThemeProvider theme={theme}>
                 <Grid className="whitepaper-manifesto">
                     <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
-                        <Segment
-                            basic
-                            as="a"
+                        <a
                             href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
                             target="_blank"
                         >
                             <h5>WHITEPAPER</h5>
                             <img src={whitePaper} alt="whitepaper" />
-                        </Segment>
+                        </a>
                     </Grid.Unit>
                     <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
-                        <Segment basic as="a" href="/manifesto">
+                        <a href="/manifesto">
                             <h5>MANIFESTO</h5>
                             <img src={manifesto} alt="manifesto" />
-                        </Segment>
+                        </a>
                     </Grid.Unit>
                 </Grid>
             </ThemeProvider>
-        </Segment>
-    </Segment>
+        </section>
+    </article>
 );
