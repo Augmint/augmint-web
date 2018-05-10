@@ -34,6 +34,7 @@ import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
+import LegacyLockers from "./LegacyLockers";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -90,9 +91,11 @@ class App extends React.Component {
 
                 <EthereumTxStatus />
 
-                <LegacyTokens />
+                <LegacyLockers />
 
                 <LegacyExchanges />
+
+                <LegacyTokens />
 
                 <div className="Site-content">
                     <Switch>

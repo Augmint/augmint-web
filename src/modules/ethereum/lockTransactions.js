@@ -84,12 +84,10 @@ export async function newLockTx(productId, lockAmount) {
     return { txName, transactionHash };
 }
 
-export async function releaseFundsTx(lockId) {
+export async function releaseFundsTx(lockManagerInstance, lockId) {
     const gasEstimate = cost.RELEASE_LOCK_GAS;
 
     const txName = "Release funds";
-
-    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;
 
@@ -99,9 +97,7 @@ export async function releaseFundsTx(lockId) {
     return { txName, transactionHash };
 }
 
-export async function fetchLocksForAddressTx(account) {
-    const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
-
+export async function fetchLocksForAddressTx(lockManagerInstance, account) {
     // TODO: resolve timing of loanManager refresh in order to get chunkSize from loanManager
     // const chunkSize = store.getState().loanManager.info.chunkSize;
     const [chunkSize, loanCount] = await Promise.all([
