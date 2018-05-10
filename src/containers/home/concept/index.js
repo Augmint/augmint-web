@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { List } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Button from "components/augmint-ui/button";
+import List from "components/augmint-ui/list";
 import Scrollchor from "react-scrollchor";
 
 import "./style.css";
@@ -13,7 +13,7 @@ import manifesto from "assets/images/manifesto.png";
 
 export default () => (
     <article style={{ textAlign: "center" }} className="concept segment">
-        <List horizontal inverted divided link>
+        <List>
             <List.Item>
                 <Scrollchor to="#overview">OVERVIEW</Scrollchor>
             </List.Item>
