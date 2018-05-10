@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { List } from "semantic-ui-react";
 import Container from "components/augmint-ui/container";
 import Segment from "components/augmint-ui/segment";
+import List from "components/augmint-ui/list";
+import Icon from "components/augmint-ui/icon";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
@@ -55,30 +56,37 @@ export function AppFooter(props) {
                     </a>
                 </Segment>
 
-                <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
+                <List className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
-                        <List.Icon name="github" size="large" verticalAlign="middle" />
-                        <List.Content as="a" href="https://github.com/Augmint" target="_blank">
+                        <Icon name="github" style={{ marginRight: 5 }} />
+                        <a href="https://github.com/Augmint" target="_blank">
                             GITHUB
-                        </List.Content>
+                        </a>
                     </List.Item>
-                    <List.Item
-                        as="a"
-                        href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
-                        target="_blank"
-                        content="WHITEPAPER"
-                    />
-                    <List.Item as={NavLink} to="/manifesto" content="MANIFESTO" />
-                    <List.Item as={NavLink} to="/disclaimer" content="DISCLAIMER" />
+                    <List.Item>
+                        <a
+                            href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
+                            target="_blank"
+                        >
+                            WHITEPAPER
+                        </a>
+                    </List.Item>
+                    <List.Item>
+                        <a href="/manifesto">MANIFESTO</a>
+                    </List.Item>
+                    <List.Item>
+                        <a href="/disclaimer">DISCLAIMER</a>
+                    </List.Item>
                     {isConnected ? (
-                        <List.Item
-                            as={NavLink}
-                            to="/under-the-hood"
-                            data-testid="underTheHoodLink"
-                            content="UNDER THE HOOD"
-                        />
-                    ) : null};
-                    <List.Item as="a" href="/contact" content="CONTACT" />
+                        <List.Item>
+                            <a href="/under-the-hood" data-testid="underTheHoodLink">
+                                UNDER THE HOOD
+                            </a>
+                        </List.Item>
+                    ) : null}
+                    <List.Item>
+                        <a href="/contact">CONTACT</a>
+                    </List.Item>
                 </List>
                 <Subscribe />
                 <div className="partner">
