@@ -3,38 +3,31 @@ import React from "react";
 import { Tsegment } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { DiscordButton } from "components/LinkButtons";
+import Video from "components/augmint-ui/video";
 
 export function HowToConnect(props) {
     return (
         <Tsegment>
             <Tsegment.Row columns={1}>
                 <Tsegment.Column>
-                    <p>To use Augmint you need an Ethereum capable browser:</p>
-                    <p>
-                        Install{" "}
+                    <p>To use Augmint you need an Ethereum capable browser.</p>
+                    <h4>
+                        1. Install{" "}
                         <Link to="https://metamask.io/" target="_blank">
-                            Metamask Chrome plugin
-                        </Link>{" "}
-                        <br />or<br />
-                        <Link to="https://github.com/ethereum/mist/releases" target="_blank">
-                            Mist browser
+                            <strong>MetaMask Chrome plugin</strong>
                         </Link>
-                    </p>
-                    <p>then connect to Rinkeby test network</p>
+                    </h4>
+                    <h4>2. Connect to Rinkeby test network</h4>
+                    <Video
+                        title="connect to rinkeby"
+                        src="https://www.youtube.com/embed/0APcMesrZ_U"
+                        host="https://www.youtube.com"
+                    />
                 </Tsegment.Column>
             </Tsegment.Row>
             <Tsegment.Row columns={1}>
                 <Tsegment.Column>
                     <DiscordButton />
-                    <p>
-                        If you feel geeky you can{" "}
-                        <Link
-                            to="https://github.com/Augmint/augmint-web/blob/master/docs/developmentEnvironment.md"
-                            target="_blank"
-                        >
-                            install it locally
-                        </Link>.
-                    </p>
                 </Tsegment.Column>
             </Tsegment.Row>
         </Tsegment>
