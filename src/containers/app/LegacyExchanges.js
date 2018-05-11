@@ -13,7 +13,7 @@ import {
     LEGACY_EXCHANGES_CANCEL_ORDER_SUCCESS
 } from "modules/reducers/legacyExchanges";
 
-class LegacyTokens extends React.Component {
+class LegacyExchanges extends React.Component {
     constructor(props) {
         super(props);
         this.handleDismiss = this.handleDismiss.bind(this);
@@ -146,4 +146,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { dismissLegacyExchange, cancelLegacyExchangeOrder };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegacyTokens);
+export default connect(mapStateToProps, mapDispatchToProps)(LegacyExchanges);
