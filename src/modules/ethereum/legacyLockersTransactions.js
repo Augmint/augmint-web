@@ -11,7 +11,11 @@ const LEGACY_LOCKER_CONTRACTS = {
     999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
 
     // rinkeby
-    4: ["0xfb6b4803c590e564a3e6810289ab638b353a1367", "0x617cf9ba5c9cbecdd66412bc1d073b002aa26426"]
+    4: [
+        "0xfb6b4803c590e564a3e6810289ab638b353a1367",
+        "0x617cf9ba5c9cbecdd66412bc1d073b002aa26426",
+        "0xf98ae1fb568b267a7632bf54579a153c892e2ec2"
+    ]
 };
 
 export async function fetchActiveLegacyLocksForAddressTx(_userAccount) {

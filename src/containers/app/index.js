@@ -35,6 +35,7 @@ import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
+import LegacyLoanManagers from "./LegacyLoanManagers";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -90,6 +91,8 @@ class App extends React.Component {
                 />
 
                 <EthereumTxStatus />
+
+                <LegacyLoanManagers />
 
                 <LegacyLockers />
 
