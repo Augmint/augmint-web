@@ -1,6 +1,6 @@
 {
   "contractName": "TokenAEur",
-  "latestAbiHash": "d7dd02520f2d92b2ca237f066cf2488d",
+  "latestAbiHash": "4b49e7e6d1a9a2de81a4d2d088acbc04",
   "deployedAbis": {
     "27721a2c77dc40da7639abd46791c3d7": {
       "latestDeployedAddress": "0x95aa79d7410eb60f49bfd570b445836d402bd7b1",
@@ -49,6 +49,24 @@
           },
           "bytecodeHash": "ced60db09eb71a444fbd40650541230d",
           "deployedBytecodeHash": "8df8ab5bffd0bfae417f91cd6256cb15",
+          "sourceHash": "61dded7836f4431e621382340f32670c",
+          "source": "/* Augmint Crypto Euro token (ACE) implementation */\npragma solidity ^0.4.23;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(TransferFeeInterface _feeAccount)\n    public AugmintToken(\"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
+        }
+      }
+    },
+    "4b49e7e6d1a9a2de81a4d2d088acbc04": {
+      "latestDeployedAddress": "0x6c90c10d7a33815c2baeed66ee8b848f1d95268e",
+      "deployments": {
+        "0x6c90c10d7a33815c2baeed66ee8b848f1d95268e": {
+          "generatedAt": "2018-05-12T01:34:38.456Z",
+          "truffleContractFileUpdatedAt": "2018-05-12T01:30:50.031Z",
+          "deployTransactionHash": "0xf45e9817fca468b5438d7a00a6461fd47e14cf04f1bb4b36ccc7302284ec39c5",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+          },
+          "bytecodeHash": "042675fc70cfed8762b1e7de8d15799f",
+          "deployedBytecodeHash": "03b0c0d8c49d83af34516ac82bc0b2a9",
           "sourceHash": "61dded7836f4431e621382340f32670c",
           "source": "/* Augmint Crypto Euro token (ACE) implementation */\npragma solidity ^0.4.23;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(TransferFeeInterface _feeAccount)\n    public AugmintToken(\"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
         }

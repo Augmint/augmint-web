@@ -48,15 +48,15 @@
           "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity ^0.4.23;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
         },
         "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4": {
-          "generatedAt": "2018-05-09T12:19:24.870Z",
-          "truffleContractFileUpdatedAt": "2018-05-09T12:19:14.518Z",
-          "deployTransactionHash": "0x4a2ddab9798f94b774cf51564da108298989ae38eea8945303d43d885e4a7382",
+          "generatedAt": "2018-05-12T00:22:15.155Z",
+          "truffleContractFileUpdatedAt": "2018-05-12T00:22:09.283Z",
+          "deployTransactionHash": "0x2cdb7fd6f6500ec39f69a8633af900a2264fe9b6b2696b3f5930af950a708a24",
           "compiler": {
             "name": "solc",
             "version": "0.4.23+commit.124ca40d.Emscripten.clang"
           },
-          "bytecodeHash": "5fcc9d704336df748a50d2813334e9bf",
-          "deployedBytecodeHash": "345c5e752b0283e593d29d6193059fdd",
+          "bytecodeHash": "435a1a8da265b92f0ae3fd4eb5089baa",
+          "deployedBytecodeHash": "f7581b87c6854d5aec16c65f738876d8",
           "sourceHash": "080bdccd163b74b49fb908b443c45199",
           "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity ^0.4.23;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
         }
