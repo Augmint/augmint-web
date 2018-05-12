@@ -13,7 +13,7 @@ const LEGACY_LOANMANAGER_CONTRACTS = {
 
     // rinkeby
     4: [
-        "0xfb505462633ae3234760d0ee51c557199ab249df",
+        // too old version, no CHUNK_SIZE(), didn't bother to make compatible: "0xfb505462633ae3234760d0ee51c557199ab249df",
         "0xec5e35d8941386c3e08019b0ad1d4a8c40c7bcbc",
         "0xbdb02f82d7ad574f9f549895caf41e23a8981b07"
     ]
