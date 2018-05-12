@@ -1,3 +1,5 @@
+import store from "modules/store";
+
 import { repayLoanTx, newEthBackedLoanTx, collectLoansTx } from "modules/ethereum/loanTransactions";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
@@ -38,7 +40,7 @@ export default (state = initialState, action) => {
         case LOANTRANSACTIONS_REPAY_REQUESTED:
             return {
                 ...state,
-                loanId: action.loandId,
+                request: action.request,
                 error: null,
                 result: null
             };
@@ -105,12 +107,12 @@ export function repayLoan(repaymentAmount, loanId) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_REPAY_REQUESTED,
-            loanId,
-            repaymentAmount
+            request: { loanId, repaymentAmount }
         });
 
         try {
-            const result = await repayLoanTx(repaymentAmount, loanId);
+            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+            const result = await repayLoanTx(loanManagerInstance, repaymentAmount, loanId);
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_SUCCESS,
                 result: result
@@ -132,7 +134,8 @@ export function collectLoans(loansToCollect) {
         });
 
         try {
-            const result = await collectLoansTx(loansToCollect);
+            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+            const result = await collectLoansTx(loanManagerInstance, loansToCollect);
             return dispatch({
                 type: LOANTRANSACTIONS_COLLECT_SUCCESS,
                 result: result

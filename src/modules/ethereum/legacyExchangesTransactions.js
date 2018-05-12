@@ -8,7 +8,7 @@ const LEGACY_EXCHANGE_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0xf7b8384c392fc333d3858a506c4f1506af44d53c"],
+    999: ["0xef49d863bd9179da0e96fab02dd498efa149dbdc"],
 
     // rinkeby
     4: [
