@@ -1,6 +1,6 @@
 import { default as Web3 } from "web3";
 
-import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_d7dd02520f2d92b2ca237f066cf2488d.json";
+import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_6b1597192b36a746724929ec9ee7b6b8.json";
 import TokenAEurDeploys from "../../src/abiniser/deployments/999/TokenAEur_DEPLOYS.json";
 
 import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_a552ee1f90ae83cb91d07311ae8eab1e.json";
