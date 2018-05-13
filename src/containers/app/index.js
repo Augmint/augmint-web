@@ -38,6 +38,9 @@ import SideNav from "components/dashboard/components/sideNav";
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
+import LegacyExchanges from "./LegacyExchanges";
+import LegacyLockers from "./LegacyLockers";
+import LegacyLoanManagers from "./LegacyLoanManagers";
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -96,15 +99,21 @@ class App extends React.Component {
                             {showDash ? (
                                 <TopNav web3Connect={this.props.web3Connect} />
                             ) : (
-                                <AppMenu
-                                    web3Connect={this.props.web3Connect}
-                                    location={this.props.location}
-                                    showMenu={this.state.showMobileMenu}
-                                    toggleMenu={this.toggleMenu}
-                                />
-                            )}
+                                    <AppMenu
+                                        web3Connect={this.props.web3Connect}
+                                        location={this.props.location}
+                                        showMenu={this.state.showMobileMenu}
+                                        toggleMenu={this.toggleMenu}
+                                    />
+                                )}
                             {showDash ? <SideNav /> : null}
                             <EthereumTxStatus />
+
+                            <LegacyLoanManagers />
+
+                            <LegacyLockers />
+
+                            <LegacyExchanges />
 
                             <LegacyTokens />
 
@@ -134,6 +143,8 @@ class App extends React.Component {
                                 </div>
                             )}
                         </div>
+
+
                     );
                 }}
             </FeatureContext.Consumer>

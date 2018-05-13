@@ -2,20 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
-import { Message, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-//import { Container, Message, Icon } from "semantic-ui-react";
+import { Message } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 
 export function SelectLoanButton(props) {
     return (
         <Button
-            labelPosition="right"
+            labelposition="right"
             content="Select"
             icon="right chevron"
             key={props.productId}
             data-testid={`selectLoanProduct-${props.productId}`}
-            as={Link}
-            primary
             to={`/loan/new/${props.productId}`}
         />
     );

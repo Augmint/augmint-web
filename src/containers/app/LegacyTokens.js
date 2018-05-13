@@ -54,25 +54,24 @@ class LegacyTokens extends React.Component {
     }
 
     render() {
-        const { contractBalances, augmintToken, network } = this.props;
+        const { contractBalances, augmintTokenContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
 
         const balances = contractBalances
-            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map(item => (
+            ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map((item, index) => (
                   <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
                       Balance in legacy contract: {item.balance} A-EUR <small>Contract address: {item.contract} </small>
                       <Button
                           type="submit"
-                          data-testid={`dismissLegacyBalanceButton-${item.contract}`}
+                          data-testid={`dismissLegacyBalanceButton-${index}`}
                           onClick={() => this.handleDismiss(item.contract)}
                       >
                           Dismiss
                       </Button>
                       <Button
                           type="submit"
-                          primary
                           disabled={submitting}
-                          data-testid={`convertLegacyBalanceButton-${item.contract}`}
+                          data-testid={`convertLegacyBalanceButton-${index}`}
                           onClick={() => this.submitConvert(item.contract, item.balance)}
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
@@ -81,13 +80,13 @@ class LegacyTokens extends React.Component {
               ))
             : null;
 
-        return balances && balances.length > 0 && augmintToken.isConnected ? (
+        return balances && balances.length > 0 && augmintTokenContract ? (
             <Psegment>
                 <Container>
                     <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
                         <p>
                             There is newer Augmint A-EUR Token version deployed to the {network.name} network at{" "}
-                            {augmintToken.contract.address}.
+                            {augmintTokenContract.address}.
                             <br />
                             You can convert your old A-EUR balance to the new contract.<br />
                             <small>
@@ -121,7 +120,7 @@ class LegacyTokens extends React.Component {
 function mapStateToProps(state) {
     return {
         contractBalances: state.legacyBalances.contractBalances,
-        augmintToken: state.augmintToken,
+        augmintTokenContract: state.contracts.latest.augmintToken,
         network: state.web3Connect.network
     };
 }

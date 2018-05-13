@@ -2,7 +2,6 @@ import React from "react";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Link } from "react-router-dom";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
@@ -14,7 +13,7 @@ import { TotalSupply } from "./components/TotalSupply";
 import { LtdStats } from "./components/LtdStats";
 import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
-import { Button } from "semantic-ui-react";
+import Button from "../../components/augmint-ui/button";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -60,12 +59,10 @@ class AugmintToken extends React.Component {
                             />
                             <Button
                                 content="Loans to Collect"
-                                as={Link}
                                 data-testid="loansToCollectButton"
                                 to="/loan/collect"
-                                icon="right chevron"
-                                labelPosition="right"
-                                basic
+                                icon="angle-right"
+                                labelposition="right"
                                 size="large"
                             />
                         </Pgrid.Column>
@@ -85,13 +82,6 @@ class AugmintToken extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userAccount: state.web3Connect.userAccount,
-    accounts: state.web3Connect.accounts,
-    balance: state.web3Connect.balance,
-    isLoading: state.web3Connect.isLoading,
-    isConnected: state.web3Connect.isConnected,
-    web3Instance: state.web3Connect.web3Instance,
-
     augmintToken: state.augmintToken,
     loanManager: state.loanManager,
     lockManager: state.lockManager,

@@ -6,7 +6,9 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Modal, Header, Icon } from "semantic-ui-react";
+import { Modal, Header } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
+import Icon from "../../../components/augmint-ui/icon";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 
@@ -90,33 +92,33 @@ class CancelOrderButton extends React.Component {
                         </EthSubmissionErrorPanel>
                     )}
                     <p>Order id: {order.id}</p>
-                    {order.orderType === TOKEN_SELL && (
+                    {order.direction === TOKEN_SELL && (
                         <p>
-                            Sell {order.amount} A-EUR @{order.price} A-EUR/ETH = {order.ethValue} ETH
+                            Sell {order.amount} A-EUR @{order.price * 100}% EUR/ETH rate
                         </p>
                     )}
-                    {order.orderType === TOKEN_BUY && (
+                    {order.direction === TOKEN_BUY && (
                         <p>
-                            Buy A-EUR for {order.amount} ETH @{order.price} A-EUR/ETH = {order.tokenValue} A-EUR
+                            Buy A-EUR for {order.amount} ETH @{order.price * 100}% EUR/ETH rate
                         </p>
                     )}
                     <p>Are you sure you want to cancel your order?</p>
                 </Modal.Content>
 
                 <Modal.Actions>
-                    <Button onClick={this.handleClose}>
-                        <Icon name="cancel" />Close
+                    <Button className="grey" onClick={this.handleClose}>
+                        <Icon name="close" style={{ marginRight: "6px" }} />Close
                     </Button>
 
                     <Button
-                        primary
                         data-testid={`confirmCancelOrderButton-${order.id}`}
                         id={`ConfirmCancelOrderButton-${order.id}`}
                         disabled={submitting}
                         onClick={this.submitCancel}
-                        icon="trash"
                         content={submitting ? "Submitting..." : "Submit order cancellation"}
-                    />
+                    >
+                        <Icon name="trash" style={{ marginRight: "6px" }} />
+                    </Button>
                 </Modal.Actions>
             </Modal>
         );

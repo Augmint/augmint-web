@@ -74,7 +74,7 @@ class TokenTransferForm extends React.Component {
 
         return (
             <Pblock
-                loading={augmintToken.isLoading || (!augmintToken.isConnected && !augmintToken.connectionError)}
+                loading={augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)}
                 header="Send A-EUR"
             >
                 <ConnectionStatus contract={augmintToken} />
@@ -107,7 +107,7 @@ class TokenTransferForm extends React.Component {
                             type="number"
                             name="tokenAmount"
                             placeholder="Amount"
-                            labelPosition="right"
+                            labelposition="right"
                             onChange={this.onTokenAmountChange}
                             validate={[
                                 Validations.required,
@@ -115,7 +115,7 @@ class TokenTransferForm extends React.Component {
                                 Validations.userTokenBalanceWithTransferFee
                             ]}
                             normalize={Normalizations.twoDecimals}
-                            disabled={submitting || !augmintToken.isConnected}
+                            disabled={submitting || !augmintToken.isLoaded}
                         >
                             <input data-testid="transferAmountInput" />
                             <StyleLabel align="right">A-EUR</StyleLabel>
@@ -137,7 +137,7 @@ class TokenTransferForm extends React.Component {
                             parse={Parsers.trim}
                             validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
                             placeholder="0x0..."
-                            disabled={submitting || !augmintToken.isConnected}
+                            disabled={submitting || !augmintToken.isLoaded}
                         />
 
                         <Field
@@ -148,12 +148,11 @@ class TokenTransferForm extends React.Component {
                             name="narrative"
                             type="text"
                             placeholder="short narrative (optional)"
-                            disabled={submitting || !augmintToken.isConnected}
+                            disabled={submitting || !augmintToken.isLoaded}
                         />
                         <Button
                             type="submit"
                             loading={submitting}
-                            primary
                             disabled={pristine}
                             data-testid="submitTransferButton"
                             className={submitting ? "loading" : ""}

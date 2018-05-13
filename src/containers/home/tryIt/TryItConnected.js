@@ -44,8 +44,8 @@ export function TryItConnected(props) {
                         Check the <Link to="/reserves">Augmint reserves</Link>
                     </p>
                 </Tblock>
-                <Tsegment.Row centered columns={1}>
-                    <Tsegment.Column textAlign="center">
+                <Tsegment.Row columns={1}>
+                    <Tsegment.Column>
                         <DiscordButton />
                     </Tsegment.Column>
                 </Tsegment.Row>

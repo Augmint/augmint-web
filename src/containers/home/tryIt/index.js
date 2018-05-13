@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import { LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
-import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
 import { Disclaimer } from "./Disclaimer";
@@ -15,22 +14,21 @@ class TryIt extends React.Component {
     }
 
     render() {
-        const { isLoading, isConnected } = this.props.web3Connect;
+        const { isLoading, isConnected, error } = this.props.web3Connect;
         return (
             <Tsegment header="Try Augmint">
                 <Disclaimer />
                 {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
-                {!isLoading && !isConnected && <HowToConnect />}
+                {!isLoading && error && <HowToConnect />}
                 {!isLoading && isConnected && <TryItConnected />}
 
-                <Tsegment.Row centered columns={1}>
-                    <Tsegment.Column textAlign="center">
+                <Tsegment.Row columns={1}>
+                    <Tsegment.Column>
                         <Button
                             content="Read more about the concept"
-                            as={Link}
                             to="/concept#"
-                            icon="right chevron"
-                            labelPosition="right"
+                            icon="angle-right"
+                            labelposition="right"
                             size="large"
                         />
                     </Tsegment.Column>

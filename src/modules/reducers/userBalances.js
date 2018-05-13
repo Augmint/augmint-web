@@ -6,7 +6,7 @@ ETH and A-EUR balance for the active userAccount
 */
 import store from "modules/store";
 
-import { ONE_ETH_IN_WEI } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 export const USER_BALANCE_REQUESTED = "userBalances/BALANCE_REQUESTED";
 export const USER_BALANCE_RECEIVED = "userBalances/BALANCE_RECEIVED";
@@ -62,11 +62,10 @@ export function fetchUserBalance(address) {
 
         try {
             const web3 = store.getState().web3Connect.web3Instance;
-            const augmintToken = store.getState().augmintToken.contract.instance;
-            const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+            const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
             const [bn_tokenBalance, bn_ethBalance] = await Promise.all([
-                augmintToken.balanceOf(address),
+                augmintTokenInstance.methods.balanceOf(address).call(),
                 web3.eth.getBalance(address)
             ]);
 
@@ -77,7 +76,7 @@ export function fetchUserBalance(address) {
                     bn_ethBalance,
                     ethBalance: bn_ethBalance / ONE_ETH_IN_WEI,
                     bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance / decimalsDiv
+                    tokenBalance: bn_tokenBalance / DECIMALS_DIV
                 }
             });
         } catch (error) {

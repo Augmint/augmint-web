@@ -59,7 +59,8 @@ export function fetchLocksForAddress(account) {
             account: account
         });
         try {
-            const locks = await fetchLocksForAddressTx(account);
+            const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
+            const locks = await fetchLocksForAddressTx(lockManagerInstance, account);
 
             locks.sort((a, b) => {
                 return b.id > a.id;

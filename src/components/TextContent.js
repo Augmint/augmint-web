@@ -1,5 +1,7 @@
 import React from "react";
-import { Container, Header, Segment, Grid } from "semantic-ui-react";
+import Grid from "styled-components-grid";
+import Container from "./augmint-ui/container";
+import Header from "./augmint-ui/header";
 
 export function Theader(props) {
     // TODO: this doesn't align the header container to center when embedded in children (and not from Tsegment header prop)
@@ -32,34 +34,28 @@ export function Theader(props) {
 }
 
 export function Tsegment(props) {
-    const {
-        children,
-        header,
-        subheader,
-        textAlign = "center",
-        vertical = true,
-        style = { padding: "2em 0em" },
-        ...other
-    } = props;
+    const { children, header, subheader, style = { padding: "28px 0em", textAlign: "center" }, ...other } = props;
     return (
-        <Segment
-            vertical={vertical}
-            textAlign={textAlign}
-            style={style}
-            {...other}
-        >
-            <Container text>
+        <div style={style} {...other}>
+            <Container text="true">
                 {header && <Theader header={header} subheader={subheader} />}
-                <Grid container stackable>
-                    {children}
-                </Grid>
+                <div>{children}</div>
             </Container>
-        </Segment>
+        </div>
     );
 }
 
-Tsegment.Row = Grid.Row;
-Tsegment.Column = Grid.Column;
+export function TsegmentRow(props) {
+    const { children, style, ...other } = props;
+    return (
+        <Grid style={{ padding: "14px 0", style }} wrap={false} {...other}>
+            {children}
+        </Grid>
+    );
+}
+
+Tsegment.Row = TsegmentRow;
+Tsegment.Column = Grid.Unit;
 Tsegment.Header = Theader;
 
 export function TblockSubHeader(props) {
@@ -72,10 +68,10 @@ export function TblockSubHeader(props) {
 }
 
 export function Tblock(props) {
-    const { children, header, textAlign = "justified" } = props;
+    const { children, header } = props;
     return (
-        <Grid.Row columns={2}>
-            <Grid.Column textAlign="left" width={6}>
+        <Grid wrap={false} style={{ padding: "14px 0" }} columns={2}>
+            <Grid.Unit style={{ textAlign: "left" }} size={6}>
                 <Header
                     as="h3"
                     content={header}
@@ -83,11 +79,11 @@ export function Tblock(props) {
                         fontSize: "1.4em"
                     }}
                 />
-            </Grid.Column>
-            <Grid.Column width={10} textAlign={textAlign}>
+            </Grid.Unit>
+            <Grid.Unit size={10} style={{ textAlign: "left" }}>
                 {children}
-            </Grid.Column>
-        </Grid.Row>
+            </Grid.Unit>
+        </Grid>
     );
 }
 

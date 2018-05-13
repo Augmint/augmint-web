@@ -2,11 +2,11 @@ import store from "modules/store";
 import ethers from "ethers";
 import moment from "moment";
 import BigNumber from "bignumber.js";
-import { ONE_ETH_IN_WEI } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
 
 export async function fetchTradesTx(account, fromBlock, toBlock) {
     try {
-        const exchangeInstance = store.getState().exchange.contract.ethersInstance;
+        const exchangeInstance = store.getState().contracts.latest.exchange.ethersInstance;
         const NewOrder = exchangeInstance.interface.events.NewOrder;
         const OrderFill = exchangeInstance.interface.events.OrderFill;
         const CancelledOrder = exchangeInstance.interface.events.CancelledOrder;
@@ -57,16 +57,13 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
 }
 
 export async function processNewTradeTx(eventName, account, eventLog, type) {
-    const exchangeInstance = store.getState().exchange.contract.ethersInstance;
+    const exchangeInstance = store.getState().contracts.latest.exchange.ethersInstance;
     const event = exchangeInstance.interface.events[eventName];
 
     return _formatTradeLog(event, account, eventLog, type);
 }
 
 async function _formatTradeLog(event, account, eventLog, type) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const decimals = store.getState().augmintToken.info.decimals;
-
     let blockData;
     if (typeof eventLog.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
@@ -86,25 +83,12 @@ async function _formatTradeLog(event, account, eventLog, type) {
 
     const ethAmount = bn_ethAmount.toString();
     const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
-    const tokenAmount = parseFloat(bn_tokenAmount / decimalsDiv);
-    const price = parseFloat(parsedData.price / decimalsDiv);
+    const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
+    const price = parseFloat(parsedData.price / PPM_DIV);
     let direction = tokenAmount === 0 ? "buy" : "sell";
     if (event.name === "OrderFill") {
         direction = type;
     }
-
-    let tokenBuy;
-    if (direction === "buy" && parsedData.price) {
-        tokenBuy = parseFloat(
-            bn_ethAmount
-                .mul(parsedData.price)
-                .round(0, BigNumber.ROUND_HALF_DOWN)
-                .div(decimalsDiv)
-                .toFixed(decimals)
-        );
-    }
-
-    const tokenValue = direction === "sell" ? tokenAmount : tokenBuy;
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
         blockData,
@@ -116,8 +100,8 @@ async function _formatTradeLog(event, account, eventLog, type) {
         ethAmount: ethAmount,
         ethAmountRounded: ethAmountRounded ? ethAmountRounded : "",
         price: price ? price : "",
-        type: event.name,
-        tokenValue
+        pricePt: price ? price * 100 + " %" : "",
+        type: event.name
     });
 
     return logData;

@@ -11,5 +11,11 @@ export function NoOrdersToolTip(props) {
 }
 
 export function PriceToolTip(props) {
-    return <ToolTip header="A-EUR / ETH price">TODO: explanation</ToolTip>;
+    return (
+        <ToolTip header="Order price">
+            % of published EUR/ETH price.<br />
+            E.g.: An order on 101% price will fill on 1,010 EUR/ETH price if the published rate is 1,000 EUR/ETH at the
+            moment of the matching.
+        </ToolTip>
+    );
 }

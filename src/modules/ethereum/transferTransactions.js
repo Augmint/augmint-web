@@ -11,14 +11,12 @@ import moment from "moment";
 import { cost } from "./gas";
 import ethers from "ethers";
 import { processTx } from "modules/ethereum/ethHelper";
+import { DECIMALS_DIV } from "utils/constants";
 
 export function getTransferFee(amount) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const feePt = store.getState().augmintToken.info.feePt;
-    const feeMin = store.getState().augmintToken.info.feeMin;
-    const feeMax = store.getState().augmintToken.info.feeMax;
+    const { feePt, feeMin, feeMax } = store.getState().augmintToken.info;
 
-    let fee = Math.round(amount * feePt * decimalsDiv) / decimalsDiv;
+    let fee = Math.round(amount * feePt * DECIMALS_DIV) / DECIMALS_DIV;
     if (fee < feeMin) {
         fee = feeMin;
     } else if (fee > feeMax) {
@@ -28,10 +26,7 @@ export function getTransferFee(amount) {
 }
 
 export function getMaxTransfer(amount) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-    const feePt = store.getState().augmintToken.info.feePt;
-    const feeMin = store.getState().augmintToken.info.feeMin;
-    const feeMax = store.getState().augmintToken.info.feeMax;
+    const { feePt, feeMin, feeMax } = store.getState().augmintToken.info;
 
     const minLimit = Math.floor(feeMin / feePt);
     const maxLimit = Math.floor(feeMax / feePt);
@@ -43,7 +38,7 @@ export function getMaxTransfer(amount) {
         // TODO: fix this on edge cases, https://github.com/Augmint/augmint-web/issues/60
         maxAmount = amount - feeMax;
     } else {
-        maxAmount = Math.round(amount / (feePt + 1) * decimalsDiv) / decimalsDiv;
+        maxAmount = Math.round(amount / (feePt + 1) * DECIMALS_DIV) / DECIMALS_DIV;
     }
 
     return maxAmount;
@@ -54,8 +49,7 @@ export async function transferTokenTx(payload) {
 
     const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().augmintToken.contract.web3ContractInstance;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
+    const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
 
@@ -63,13 +57,13 @@ export async function transferTokenTx(payload) {
     let txName;
     if (_narrative) {
         txName = "A-EUR transfer (with narrative)";
-        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * decimalsDiv, _narrative).send({
+        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * DECIMALS_DIV, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
         txName = "A-EUR transfer";
-        tx = augmintToken.methods.transfer(payee, tokenAmount * decimalsDiv).send({
+        tx = augmintToken.methods.transfer(payee, tokenAmount * DECIMALS_DIV).send({
             from: userAccount,
             gas: gasEstimate
         });
@@ -81,7 +75,7 @@ export async function transferTokenTx(payload) {
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
-        const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+        const augmintTokenInstance = store.getState().contracts.latest.augmintToken.ethersInstance;
         const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer;
         const provider = store.getState().web3Connect.ethers.provider;
 
@@ -112,14 +106,12 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
 }
 
 export async function processNewTransferTx(account, eventLog) {
-    const augmintTokenInstance = store.getState().augmintToken.contract.ethersInstance;
+    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.ethersInstance;
     const AugmintTransfer = augmintTokenInstance.interface.events.AugmintTransfer;
     return _formatTransferLog(AugmintTransfer, account, eventLog);
 }
 
 async function _formatTransferLog(AugmintTransfer, account, eventLog) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     let blockData;
     if (typeof eventLog.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
@@ -133,7 +125,7 @@ async function _formatTransferLog(AugmintTransfer, account, eventLog) {
     const parsedData = AugmintTransfer.parse(eventLog.topics, eventLog.data);
 
     const direction = account.toLowerCase() === parsedData.from.toLowerCase() ? -1 : 1;
-    const senderFee = direction === -1 ? parsedData.fee / decimalsDiv : 0;
+    const senderFee = direction === -1 ? parsedData.fee / DECIMALS_DIV : 0;
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
     const logData = Object.assign({ args: parsedData }, eventLog, {
@@ -142,7 +134,7 @@ async function _formatTransferLog(AugmintTransfer, account, eventLog) {
         directionText: direction === -1 ? "sent" : "received",
         senderFee: senderFee,
         blockTimeStampText: blockTimeStampText,
-        signedAmount: parsedData.amount / decimalsDiv * direction
+        signedAmount: parsedData.amount / DECIMALS_DIV * direction
     });
 
     return logData;

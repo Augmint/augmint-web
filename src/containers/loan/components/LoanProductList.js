@@ -21,13 +21,20 @@ export default function LoanProductList(props) {
         } else {
             listItems = filteredProducts.map((prod, index) => (
                 <MyListGroup.Row
+                    wrap={true}
                     header={`Product ${prod.id + 1} - Repay in ${prod.termText}${
                         prod.term <= 172800 ? " (for testing)" : ""
                     }`}
                     key={prod.id}
                 >
-                    <LoanProductDetails key={`loanProdDiv-${prod.id}`} product={prod} />
-                    {props.selectComponent && <props.selectComponent productId={prod.id} />}
+                    <MyListGroup.Col>
+                        <LoanProductDetails key={`loanProdDiv-${prod.id}`} product={prod} />
+                    </MyListGroup.Col>
+                    {props.selectComponent && (
+                        <MyListGroup.Col style={{ paddingBottom: "2rem" }}>
+                            <props.selectComponent productId={prod.id} />
+                        </MyListGroup.Col>
+                    )}
                 </MyListGroup.Row>
             ));
         }
@@ -35,7 +42,7 @@ export default function LoanProductList(props) {
 
     return (
         <Pblock header={props.header}>
-            <MyListGroup divided={false}>{listItems}</MyListGroup>
+            <MyListGroup>{listItems}</MyListGroup>
         </Pblock>
     );
 }

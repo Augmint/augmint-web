@@ -5,7 +5,7 @@ import { ContractBaseInfo } from "./ContractBaseInfo";
 import { refreshLoanManager } from "modules/reducers/loanManager";
 
 export function LoanManagerInfo(props) {
-    let { contract } = props;
+    const { contractData } = props;
 
     const handleRefreshClick = e => {
         e.preventDefault();
@@ -14,8 +14,8 @@ export function LoanManagerInfo(props) {
 
     return (
         <Pblock header="LoanManager">
-            <p>LoanCount: {contract.info.loanCount} </p>
-            <ContractBaseInfo contractName="LoanManager" contract={contract} refreshCb={handleRefreshClick} />
+            <p>LoanCount: {contractData.info.loanCount} </p>
+            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
         </Pblock>
     );
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, List, Segment, Image, Grid } from "semantic-ui-react";
-import Scrollchor from 'react-scrollchor';
+import { List, Segment, Image, Grid } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
+import Scrollchor from "react-scrollchor";
 
 import "./style.css";
 import whitePaper from "assets/images/white-paper.png";
@@ -67,7 +68,7 @@ export default () => (
                 </Grid.Row>
             </Grid>
             <Segment basic textAlign="center">
-                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                <Button content="TRY NOW" to="/tryit" className="try-now" />
             </Segment>
         </Segment>
         <Segment basic as="section" className="green-gradient">
@@ -110,7 +111,7 @@ export default () => (
                 grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
             <Segment basic textAlign="center" className="custom-button">
-                <Button content="TRY NOW" as={Link} to="/tryit" className="try-now" />
+                <Button content="TRY NOW" to="/tryit" className="try-now" />
             </Segment>
             <Segment basic as="h2" className="header" content="Governance" id={"governance"} />
             <p>
@@ -145,11 +146,7 @@ export default () => (
                     </Segment>
                 </Grid.Column>
                 <Grid.Column>
-                    <Segment
-                        basic
-                        as="a"
-                        href="/manifesto"
-                    >
+                    <Segment basic as="a" href="/manifesto">
                         <h5>MANIFESTO</h5>
                         <Image src={manifesto} />
                     </Segment>

@@ -27,6 +27,10 @@ const BaseIcon = `
     &.loading {
         animation: icon-loading 2s linear infinite;
     }
+
+    &[color="grey"] {
+      color: ${theme.colors.mediumGrey};
+    }
 `;
 
 export const StyledIcon = styled.i`

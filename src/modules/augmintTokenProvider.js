@@ -1,31 +1,37 @@
-/* TODO: this is now not only augmintToken but monetarySupervisor too. shall we rename or split? */
+/* This is for monetarySupervisor too. Which requires LockManager (monetarySupervisor address to be used is comig from there) */
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectAugmintToken, refreshAugmintToken } from "modules/reducers/augmintToken";
-import { connectMonetarySupervisor } from "modules/reducers/monetarySupervisor";
+import { refreshAugmintToken } from "modules/reducers/augmintToken";
+import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
-export default () => {
-    const augmintToken = store.getState().augmintToken;
-    const web3Connect = store.getState().web3Connect;
+let isWatchSetup = false;
 
-    if (!augmintToken.isLoading && !augmintToken.isConnected) {
+export default () => {
+    const augmintToken = store.getState().contracts.latest.augmintToken;
+    const augmintTokenData = store.getState().augmintToken;
+
+    if (augmintToken && !augmintTokenData.isLoaded && !augmintTokenData.isLoading) {
+        console.debug(
+            "augmintTokenProvider - augmintToken not connected and not loading, dispatching refreshAugmintToken() refreshMonetarySupervisor() "
+        );
+
+        refresh();
+        setupListeners();
+    }
+
+    if (!isWatchSetup) {
+        isWatchSetup = true;
         setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("augmintToken.contract", onAugmintTokenContractChange);
+        setupWatch("contracts.latest.augmintToken", onAugmintTokenContractChange);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
-        if (web3Connect.isConnected) {
-            console.debug(
-                "augmintTokenProvider - augmintToken not connected and not loading and web3 alreay loaded, dispatching connectAugmintToken() "
-            );
-            store.dispatch(connectAugmintToken());
-        }
     }
     return;
 };
 
 const setupListeners = () => {
-    const augmintToken = store.getState().augmintToken.contract.ethersInstance;
+    const augmintToken = store.getState().contracts.latest.augmintToken.ethersInstance;
     augmintToken.onaugminttransfer = onAugmintTransfer;
     // TODO: monetarySupervisor events: ParamsChanged, AcceptedLegacyAugmintTokenChanged,
 };
@@ -39,46 +45,50 @@ const removeListeners = oldInstance => {
 
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
-    if (newVal !== null) {
-        console.debug(
-            "augmintTokenProvider - web3Connect.network changed. Dispatching connectAugmintToken() & connectMonetarySupervisor()"
-        );
-        store.dispatch(connectAugmintToken());
+    console.debug("augmintTokenProvider - web3Connect.network changed");
+    if (store.getState().contracts.latest.augmintToken && newVal !== null) {
+        console.debug("augmintTokenProvider - web3Connect.network changed. Dispatching refreshAugmintToken() ");
+        store.dispatch(refreshAugmintToken());
     }
+};
+
+const refresh = () => {
+    const userAccount = store.getState().web3Connect.userAccount;
+    const augmintToken = store.getState().contracts.latest.augmintToken;
+
+    store.dispatch(refreshAugmintToken());
+    store.dispatch(refreshMonetarySupervisor());
+    store.dispatch(fetchUserBalance(userAccount));
+    store.dispatch(fetchTransfers(userAccount, augmintToken.deployedAtBlock, "latest"));
 };
 
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
     removeListeners(oldVal);
     if (newVal) {
         console.debug(
-            "augmintTokenProvider - augmintToken.contract changed. Dispatching fetchUserBalance(), fetchTransferList() and connectMonetarySupervisor()"
+            "augmintTokenProvider - augmintToken.contract changed. Dispatching refreshAugmintToken(), fetchUserBalance(), fetchTransferList() and refreshMonetarySupervisor()"
         );
-        store.dispatch(connectMonetarySupervisor());
 
-        const userAccount = store.getState().web3Connect.userAccount;
-        const augmintToken = store.getState().augmintToken;
-
-        store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(fetchTransfers(userAccount, augmintToken.contract.deployedAtBlock, "latest"));
+        refresh();
         setupListeners();
     }
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
-    const augmintToken = store.getState().augmintToken;
-    if (augmintToken.isConnected && newVal !== "?") {
+    const augmintToken = store.getState().contracts.latest.augmintToken;
+    if (augmintToken && newVal !== "?") {
         console.debug(
             "augmintTokenProvider - web3Connect.userAccount changed. Dispatching fetchUserBalance() and fetchTransferList()"
         );
         store.dispatch(fetchUserBalance(newVal));
         // TODO: default fromBlock should be the blockNumber of the contract deploy (retrieve it in SolidityContract)
-        store.dispatch(fetchTransfers(newVal, augmintToken.contract.deployedAtBlock, "latest"));
+        store.dispatch(fetchTransfers(newVal, augmintToken.deployedAtBlock, "latest"));
     }
 };
 
 const onAugmintTransfer = function(from, to, amount, narrative, fee) {
     // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
-    console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken");
+    console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken()");
     store.dispatch(refreshAugmintToken());
     const userAccount = store.getState().web3Connect.userAccount;
     if (from.toLowerCase() === userAccount.toLowerCase() || to.toLowerCase() === userAccount.toLowerCase()) {

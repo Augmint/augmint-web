@@ -6,9 +6,9 @@ describe("Augmint exchange", function() {
     });
 
     it("Should place and cancel buy order on exchange and also check the trade history", function() {
-        const tokenAmount = 1000;
-        const ethAmount = 1.00301;
-        const price = 997;
+        const tokenAmount = 102.01;
+        const ethAmount = 0.10324;
+        const price = 101;
 
         let tradeHistoryStartLength;
 
@@ -29,12 +29,14 @@ describe("Augmint exchange", function() {
 
         cy
             .get("[data-testid=priceInput]")
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
         cy
             .get("[data-testid=tokenAmountInput]")
-            .type(tokenAmount)
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+            .type("{selectall}" + tokenAmount)
             .should("have.value", tokenAmount.toString());
 
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
@@ -76,14 +78,13 @@ describe("Augmint exchange", function() {
             })
             .then(() => {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
-
-                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 cy
                     .get("@tradeHistoryTbody")
@@ -138,9 +139,9 @@ describe("Augmint exchange", function() {
     });
 
     it("Should place and cancel sell order on exchange and also check the trade history", function() {
-        const tokenAmount = 997;
-        const ethAmount = 1;
-        const price = 997;
+        const tokenAmount = 98.8;
+        const ethAmount = 0.1;
+        const price = 99;
 
         let tradeHistoryStartLength;
 
@@ -162,13 +163,14 @@ describe("Augmint exchange", function() {
 
         cy
             .get("[data-testid=priceInput]")
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
-        // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("[data-testid=ethAmountInput]")
-            .type(ethAmount)
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+            .type("{selectall}" + ethAmount)
             .should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=tokenAmountInput]").should("have.value", tokenAmount.toString());
@@ -194,6 +196,7 @@ describe("Augmint exchange", function() {
             })
             .then(() => {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth;
@@ -213,8 +216,6 @@ describe("Augmint exchange", function() {
                     .then(() => {
                         expect(parseInt(this.tradeHistoryCurrentLength)).to.equal(tradeHistoryStartLength + 1);
                     });
-
-                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 // TODO: check orderlist
                 // TODO: check tradelist
@@ -257,22 +258,23 @@ describe("Augmint exchange", function() {
     });
 
     it("Should match a buy and sell order and also check the trade history", function() {
-        const tokenAmount = 997;
-        const ethAmount = 1;
-        const price = 997;
+        const tokenAmount = 201.6;
+        const ethAmount = 0.2;
+        const price = 101;
 
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
         cy
             .get("[data-testid=priceInput]")
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
-        // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy
             .get("[data-testid=ethAmountInput]")
-            .type(ethAmount)
+            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+            .type("{selectall}" + ethAmount)
             .should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=submitButton]").click();
@@ -289,8 +291,15 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=buyMenuLink]").click();
 
                 cy
+                    .get("[data-testid=priceInput]")
+                    .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+                    .type("{selectall}" + price)
+                    .should("have.value", price.toString());
+
+                cy
                     .get("[data-testid=tokenAmountInput]")
-                    .type(tokenAmount)
+                    .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+                    .type("{selectall}" + tokenAmount)
                     .should("have.value", tokenAmount.toString());
 
                 cy.get("[data-testid=submitButton]").click();

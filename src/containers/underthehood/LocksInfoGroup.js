@@ -11,17 +11,16 @@ class LocksInfoGroup extends React.Component {
     }
 
     render() {
-        const { lockManager, lockProducts, locks } = this.props;
         return (
             <Pgrid columns={3}>
                 <Pgrid.Column>
-                    <LockManagerInfo contract={lockManager} />
+                    <LockManagerInfo contractData={this.props.lockManagerData} contract={this.props.lockManager} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <ArrayDump header="Lock Products" items={lockProducts} />
+                    <ArrayDump header="Lock Products" items={this.props.lockProducts} />
                 </Pgrid.Column>
                 <Pgrid.Column>
-                    <ArrayDump header="Locks for userAccount" items={locks} />
+                    <ArrayDump header="Locks for userAccount" items={this.props.locks} />
                 </Pgrid.Column>
             </Pgrid>
         );
@@ -29,7 +28,8 @@ class LocksInfoGroup extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    lockManager: state.lockManager,
+    lockManager: state.contracts.latest.lockManager,
+    lockManagerData: state.lockManager,
     lockProducts: state.lockManager.products,
     locks: state.locks.locks
 });

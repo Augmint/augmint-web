@@ -1,6 +1,7 @@
 import store from "modules/store";
 import watch from "redux-watch";
 import { setupWeb3, accountChange } from "modules/reducers/web3Connect";
+import { connectContracts } from "modules/reducers/contracts";
 
 /*
     TODO: make it to a HOC
@@ -69,6 +70,7 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
         pendingTransactionsFilter.unsubscribe();
     }
     if (newVal) {
+        store.dispatch(connectContracts());
         console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
         // const web3 = store.getState().web3Connect.web3Instance;
         // FIXME: these are not working b/c: https://github.com/MetaMask/metamask-extension/issues/2393

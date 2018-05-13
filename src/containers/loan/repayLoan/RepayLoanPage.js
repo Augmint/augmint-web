@@ -4,7 +4,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
-import { Button } from "semantic-ui-react";
+import Button from "../../../components/augmint-ui/button";
 import store from "modules/store";
 import { repayLoan, LOANTRANSACTIONS_REPAY_SUCCESS } from "modules/reducers/loanTransactions";
 import LoanDetails from "containers/loan/components/LoanDetails";
@@ -130,9 +130,9 @@ class RepayLoanPage extends React.Component {
                                     )}
                                 {this.state.loan.isRepayable && (
                                     <Button
-                                        primary
                                         data-testid="confirmRepayButton"
                                         size="big"
+                                        type="submit"
                                         disabled={
                                             this.props.submitting ||
                                             !this.state.isLoanFound ||

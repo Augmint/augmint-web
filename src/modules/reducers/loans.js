@@ -1,6 +1,6 @@
 /* Loans for one account
     TODO: consider selectors https://github.com/reactjs/reselect */
-
+import store from "modules/store";
 import { fetchLoansForAddressTx } from "modules/ethereum/loanTransactions";
 
 export const LOANS_LOANLIST_REQUESTED = "loans/LOANS_LOANLIST_REQUESTED";
@@ -9,7 +9,9 @@ export const LOANS_LOANLIST_ERROR = "loans/LOANS_LOANLIST_ERROR";
 
 const initialState = {
     loans: null,
-    isLoading: false
+    isLoading: false,
+    isLoaded: false,
+    loadError: null
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +26,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                isLoaded: true,
                 loans: action.loans
             };
 
@@ -31,7 +34,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                error: action.error
+                loadError: action.error
             };
 
         default:
@@ -46,7 +49,8 @@ export function fetchLoansForAddress(userAccount) {
         });
 
         try {
-            const loans = await fetchLoansForAddressTx(userAccount);
+            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+            const loans = await fetchLoansForAddressTx(loanManagerInstance, userAccount);
 
             return dispatch({
                 type: LOANS_LOANLIST_RECEIVED,

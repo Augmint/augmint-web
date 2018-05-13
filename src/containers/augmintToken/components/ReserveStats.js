@@ -6,7 +6,7 @@ export class ReserveStats extends React.Component {
     render() {
         const { augmintToken, monetarySupervisor, size, showDetails } = this.props;
         const { ethFiatRate } = this.props.rates.info;
-        const { isConnected, isLoading, connectionError } = this.props.augmintToken;
+        const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { decimals } = augmintToken.info;
 
         const { reserveTokenBalance, reserveEthBalance } = monetarySupervisor.info;
@@ -17,7 +17,7 @@ export class ReserveStats extends React.Component {
                 : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isConnected && !connectionError)}>
+            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group widths="2" size={size}>

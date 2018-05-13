@@ -5,10 +5,11 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
-import { ONE_ETH_IN_WEI } from "../../utils/constants";
+import SolidityContract from "modules/ethereum/SolidityContract";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
-    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
     const txName = "New loan";
 
     let gasEstimate;
@@ -21,7 +22,7 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
     const userAccount = store.getState().web3Connect.userAccount;
     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
 
-    const tx = loanManager.methods
+    const tx = loanManagerInstance.methods
         .newEthBackedLoan(productId)
         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
 
@@ -30,12 +31,18 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 }
 
 export async function fetchProductsTx() {
-    const loanManager = store.getState().loanManager.contract.instance;
+    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
 
     // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
     const [chunkSize, productCount] = await Promise.all([
-        loanManager.CHUNK_SIZE().then(res => res.toNumber()),
-        loanManager.getProductCount().then(res => res.toNumber())
+        loanManagerInstance.methods
+            .CHUNK_SIZE()
+            .call()
+            .then(res => parseInt(res, 10)),
+        loanManagerInstance.methods
+            .getProductCount()
+            .call()
+            .then(res => parseInt(res, 10))
     ]);
     // const chunkSize = store.getState().loanManager.info.chunkSize;
     // const productCount = store.getState().loanManager.info.productCount;
@@ -45,7 +52,7 @@ export async function fetchProductsTx() {
     const queryCount = Math.ceil(productCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const productsArray = await loanManager.getProducts(i * chunkSize);
+        const productsArray = await loanManagerInstance.methods.getProducts(i * chunkSize).call();
         const parsedProducts = parseProducts(productsArray);
         products = products.concat(parsedProducts);
     }
@@ -54,9 +61,6 @@ export async function fetchProductsTx() {
 }
 
 function parseProducts(productsArray) {
-    const ppmDiv = 1000000;
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const products = productsArray.reduce((parsed, product) => {
         const [
             bn_id,
@@ -69,21 +73,21 @@ function parseProducts(productsArray) {
             bn_isActive
         ] = product;
 
-        if (bn_term.gt(0)) {
-            const term = bn_term.toNumber();
+        const term = parseInt(bn_term, 10);
+        if (term > 0) {
             parsed.push({
-                id: bn_id.toNumber(),
+                id: parseInt(bn_id, 10),
                 term,
                 termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
                 bn_discountRate,
-                discountRate: bn_discountRate / ppmDiv,
+                discountRate: bn_discountRate / PPM_DIV,
                 bn_collateralRatio,
-                collateralRatio: bn_collateralRatio / ppmDiv,
-                minDisbursedAmountInToken: bn_minDisbursedAmount / decimalsDiv,
-                maxLoanAmount: bn_maxLoanAmount / decimalsDiv,
+                collateralRatio: bn_collateralRatio / PPM_DIV,
+                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV,
+                maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
                 bn_defaultingFeePt,
-                defaultingFeePt: bn_defaultingFeePt / ppmDiv,
-                isActive: bn_isActive.eq(1) ? true : false
+                defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
+                isActive: bn_isActive === "1"
             });
         }
         return parsed;
@@ -92,25 +96,35 @@ function parseProducts(productsArray) {
     return products;
 }
 
-export async function repayLoanTx(repaymentAmount, loanId) {
+export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) {
     const txName = "Repay loan";
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
 
-    const augmintToken = store.getState().augmintToken;
-    const augmintTokenInstance = augmintToken.contract.web3ContractInstance;
-    const decimalsDiv = augmintToken.info.decimalsDiv;
+    let augmintTokenInstance;
+    if (loanManagerInstance._address !== store.getState().contracts.latest.loanManager.address) {
+        // repayment of a legacy loan, need to fetch which augmintToken is it
+        const augmintTokenAddress = await loanManagerInstance.methods.augmintToken().call();
+        const web3 = store.getState().web3Connect;
+        augmintTokenInstance = SolidityContract.connectAt(web3, "TokenAEur", augmintTokenAddress).web3ContractInstance;
+    } else {
+        augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+    }
 
     const tx = augmintTokenInstance.methods
-        .transferAndNotify(loanManager._address, new BigNumber(repaymentAmount).mul(decimalsDiv).toString(), loanId)
+        .transferAndNotify(
+            loanManagerInstance._address,
+            new BigNumber(repaymentAmount).mul(DECIMALS_DIV).toString(),
+            loanId
+        )
         .send({ from: userAccount, gas: gasEstimate });
 
     const onReceipt = receipt => {
         // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
         const web3 = store.getState().web3Connect.web3Instance;
-        const loanRepayedEventInputs = loanManager.options.jsonInterface.find(val => val.name === "LoanRepayed").inputs;
+        const loanRepayedEventInputs = loanManagerInstance.options.jsonInterface.find(val => val.name === "LoanRepayed")
+            .inputs;
 
         const decodedArgs = web3.eth.abi.decodeLog(
             loanRepayedEventInputs,
@@ -128,11 +142,18 @@ export async function repayLoanTx(repaymentAmount, loanId) {
 
 export async function fetchLoansToCollectTx() {
     try {
-        const loanManager = store.getState().loanManager.contract.instance;
+        const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+
         // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
         const [chunkSize, loanCount] = await Promise.all([
-            loanManager.CHUNK_SIZE().then(res => res.toNumber()),
-            loanManager.getLoanCount().then(res => res.toNumber())
+            loanManagerInstance.methods
+                .CHUNK_SIZE()
+                .call()
+                .then(res => parseInt(res, 10)),
+            loanManagerInstance.methods
+                .getLoanCount()
+                .call()
+                .then(res => parseInt(res, 10))
         ]);
         // const chunkSize = store.getState().loanManager.info.chunkSize;
         // const loanCount = await loanManager.getLoanCount();
@@ -141,7 +162,7 @@ export async function fetchLoansToCollectTx() {
 
         const queryCount = Math.ceil(loanCount / chunkSize);
         for (let i = 0; i < queryCount; i++) {
-            const loansArray = await loanManager.getLoans(i * chunkSize);
+            const loansArray = await loanManagerInstance.methods.getLoans(i * chunkSize).call();
             const defaultedLoans = parseLoans(loansArray).filter(loan => loan.isCollectable);
             loansToCollect = loansToCollect.concat(defaultedLoans);
         }
@@ -153,15 +174,14 @@ export async function fetchLoansToCollectTx() {
 }
 
 // loansToCollect is an array : [{loanId: <loanId>}]
-export async function collectLoansTx(loansToCollect) {
+export async function collectLoansTx(loanManagerInstance, loansToCollect) {
     const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManager = store.getState().loanManager.contract.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
     const loanIdsToCollect = loansToCollect.map(loan => loan.id);
 
-    const tx = loanManager.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
+    const tx = loanManagerInstance.methods.collect(loanIdsToCollect).send({ from: userAccount, gas: gasEstimate });
 
     const onReceipt = receipt => {
         const loanCollectedEventsCount =
@@ -186,13 +206,17 @@ export async function collectLoansTx(loansToCollect) {
     return { txName, transactionHash };
 }
 
-export async function fetchLoansForAddressTx(account) {
-    const loanManager = store.getState().loanManager.contract.instance;
-
+export async function fetchLoansForAddressTx(loanManagerInstance, account) {
     // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
     const [chunkSize, loanCount] = await Promise.all([
-        loanManager.CHUNK_SIZE().then(res => res.toNumber()),
-        loanManager.getLoanCountForAddress(account).then(res => res.toNumber())
+        loanManagerInstance.methods
+            .CHUNK_SIZE()
+            .call()
+            .then(res => parseInt(res, 10)),
+        loanManagerInstance.methods
+            .getLoanCountForAddress(account)
+            .call()
+            .then(res => parseInt(res, 10))
     ]);
     // const chunkSize = store.getState().loanManager.info.chunkSize;
     // const loanCount = await loanManager.getLoanCountForAddress(account);
@@ -202,7 +226,7 @@ export async function fetchLoansForAddressTx(account) {
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const loansArray = await loanManager.getLoansForAddress(account, i * chunkSize);
+        const loansArray = await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }
 
@@ -210,8 +234,6 @@ export async function fetchLoansForAddressTx(account) {
 }
 
 function parseLoans(loansArray) {
-    const decimalsDiv = store.getState().augmintToken.info.decimalsDiv;
-
     const loans = loansArray.reduce((parsed, loan) => {
         const [
             bn_id,
@@ -226,20 +248,21 @@ function parseLoans(loansArray) {
             bn_interestAmount
         ] = loan;
 
-        if (bn_maturity.gt(0)) {
+        const maturity = parseInt(bn_maturity, 10);
+        if (maturity > 0) {
             const currentTime = moment()
                 .utc()
                 .unix();
-            const disbursementTime = bn_disbursementTime.toNumber();
-            const term = bn_maturity.sub(bn_disbursementTime).toNumber();
-            const maturity = bn_maturity.toNumber();
+            const disbursementTime = parseInt(bn_disbursementTime, 10);
+            const term = maturity - disbursementTime;
+
             let loanStateText = null;
             let isDue = false;
             let isRepayable = false;
             let isCollectable = false;
             let collateralStatus;
 
-            const state = bn_state.toNumber();
+            const state = parseInt(bn_state, 10);
             switch (state) {
                 case 0:
                     if (maturity - currentTime < 24 * 60 * 60 * 2) {
@@ -271,16 +294,16 @@ function parseLoans(loansArray) {
             }
 
             parsed.push({
-                id: bn_id.toNumber(),
-                borrower: "0x" + borrower.toString(16),
-                productId: bn_productId.toNumber(),
+                id: parseInt(bn_id, 10),
+                borrower: "0x" + new BigNumber(borrower).toString(16).padStart(40, "0"), // leading 0s if address starts with 0,
+                productId: parseInt(bn_productId, 10),
                 state,
                 collateralStatus,
                 loanStateText,
                 collateralEth: bn_collateralAmount / ONE_ETH_IN_WEI,
-                repaymentAmount: bn_repaymentAmount / decimalsDiv,
-                loanAmount: bn_loanAmount / decimalsDiv,
-                interestAmount: bn_interestAmount / decimalsDiv,
+                repaymentAmount: bn_repaymentAmount / DECIMALS_DIV,
+                loanAmount: bn_loanAmount / DECIMALS_DIV,
+                interestAmount: bn_interestAmount / DECIMALS_DIV,
                 term,
                 termText: moment.duration(term, "seconds").humanize(),
                 disbursementTime,

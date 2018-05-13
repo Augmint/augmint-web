@@ -1,61 +1,59 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { connectLockManager, refreshLockManager, fetchLockProducts } from "modules/reducers/lockManager";
+import { refreshLockManager, fetchLockProducts } from "modules/reducers/lockManager";
 import { fetchLoanProducts } from "modules/reducers/loanManager";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLocksForAddress, processNewLock } from "modules/reducers/locks";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
-export default () => {
-    const lockManager = store.getState().lockManager;
-    const web3Connect = store.getState().web3Connect;
+let isWatchSetup = false;
 
-    if (!lockManager.isLoading && !lockManager.isConnected) {
-        setupWatch("web3Connect.network", onWeb3NetworkChange);
-        setupWatch("augmintToken.contract", onContractChange);
-        setupWatch("lockManager.contract", onContractChange);
-        // setupWatch("web3Connect.userAccount", onUserAccounChange);
-        if (web3Connect.isConnected) {
-            console.debug(
-                "lockManagerProvider - lockManager not connected or loading and web3 already loaded, dispatching connectLockManager() "
-            );
-            store.dispatch(connectLockManager());
-        }
+export default () => {
+    const lockManager = store.getState().contracts.latest.lockManager;
+    const lockManagerData = store.getState().lockManager;
+
+    if (lockManager && !lockManagerData.isLoading && !lockManagerData.isLoaded) {
+        refresh();
+        setupListeners();
+    }
+    if (!isWatchSetup) {
+        isWatchSetup = true;
+        setupWatch("contracts.latest.lockManager", onLockContractChange);
+        setupWatch("web3Connect.userAccount", onUserAccountChange);
     }
     return;
 };
 
 const setupListeners = () => {
-    const lockManager = store.getState().lockManager.contract.ethersInstance;
+    const lockManager = store.getState().contracts.latest.lockManager.ethersInstance;
     lockManager.onnewlockproduct = onNewLockProduct;
     lockManager.onlockproductactivechange = onLockProductActiveChange;
     lockManager.onnewlock = onNewLock;
     lockManager.onlockreleased = onLockReleased;
 };
 
-const refresLockManagerIfNeeded = (newVal, oldVal) => {
-    if (newVal && store.getState().augmintToken.isConnected) {
-        console.debug(
-            "lockManagerProvider - new augmintToken or loanManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
-        );
+const refresh = () => {
+    const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(refreshLockManager());
+    store.dispatch(fetchLockProducts());
+    store.dispatch(fetchLocksForAddress(userAccount));
+};
+
+const onUserAccountChange = (newVal, oldVal, objectPath) => {
+    const lockManager = store.getState().contracts.latest.loanManager;
+    if (lockManager && newVal !== "?") {
+        console.debug("lockManagerProvider - web3Connect.userAccount changed. Dispatching fetchLocksForAddress()");
         const userAccount = store.getState().web3Connect.userAccount;
-        store.dispatch(refreshLockManager());
-        store.dispatch(fetchLockProducts());
         store.dispatch(fetchLocksForAddress(userAccount));
-        setupListeners();
     }
 };
 
-const onWeb3NetworkChange = newVal => {
-    if (newVal !== null) {
-        console.debug("lockManagerProvider - web3Connect.network changed. Dispatching connectLockManager()");
-        store.dispatch(connectLockManager());
-        store.dispatch(fetchLockProducts());
-    }
-};
-
-const onContractChange = (newVal, oldVal) => {
-    refresLockManagerIfNeeded(newVal, oldVal);
+const onLockContractChange = (newVal, oldVal) => {
+    console.debug(
+        "lockManagerProvider - new lockManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
+    );
+    refresh();
+    setupListeners();
 };
 
 const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive) => {

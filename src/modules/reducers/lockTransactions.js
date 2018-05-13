@@ -1,3 +1,4 @@
+import store from "modules/store";
 import { newLockTx, releaseFundsTx } from "modules/ethereum/lockTransactions";
 
 const LOCKTRANSACTIONS_NEWLOCK_REQUESTED = "lockTransactions/LOCKTRANSACTIONS_NEWLOCK_REQUESTED";
@@ -82,7 +83,9 @@ export function releaseFunds(lockId) {
         });
 
         try {
-            const result = await releaseFundsTx(lockId);
+            const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
+            const result = await releaseFundsTx(lockManagerInstance, lockId);
+
             return dispatch({
                 type: LOCKTRANSACTIONS_RELEASE_FUNDS_SUCCESS,
                 result: result

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
+import Button from "../../components/augmint-ui/button";
 import store from "modules/store";
 import { ErrorPanel, SuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
@@ -67,7 +67,13 @@ class Subscribe extends React.Component {
                             parse={Parsers.trim}
                             disabled={submitting}
                         />
-                        <Button loading={submitting} primary disabled={pristine} size="large">
+                        <Button
+                            loading={submitting}
+                            disabled={pristine}
+                            className="hideIfDisables"
+                            size="large"
+                            type="submit"
+                        >
                             {submitting ? "Submitting..." : "Subscribe"}
                         </Button>
                     </Form>
