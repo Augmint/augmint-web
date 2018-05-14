@@ -40,7 +40,8 @@ const theme = {
     },
     borderRadius: {
         right: "0 5px 5px 0",
-        left: "5px 0 0 5px"
+        left: "5px 0 0 5px",
+        all: "5px"
     }
 };
 
