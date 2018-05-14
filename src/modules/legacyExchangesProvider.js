@@ -5,9 +5,9 @@ import { refreshLegacyExchanges } from "modules/reducers/legacyExchanges";
 let isWatchSetup = false;
 
 export default () => {
-    const legacyBalances = store.getState().legacyBalances;
+    const legacyExchanges = store.getState().legacyExchanges;
 
-    if (legacyBalances && !legacyBalances.isLoaded && legacyBalances.isLoading) {
+    if (legacyExchanges && !legacyExchanges.isLoaded && legacyExchanges.isLoading) {
         console.debug("legacyExchangesProvider - first time. Dispatching refreshLegacyExchanges() ");
         store.dispatch(refreshLegacyExchanges());
         setupListeners();
@@ -29,19 +29,7 @@ const onExchangeContractChange = (newVal, oldVal) => {
 };
 
 const setupListeners = () => {
-    const monetarySupervisor = store.getState().contracts.latest.monetarySupervisor.ethersInstance;
-    monetarySupervisor.onlegacytokenconverted = onLegacyTokenConverted;
-};
-
-// TODO:
-const onLegacyTokenConverted = (oldTokenAddress, account, amount) => {
-    const userAccount = store.getState().web3Connect.userAccount;
-    if (account.toLowerCase() === userAccount.toLowerCase()) {
-        console.debug(
-            "legacyExchangesProvider - LegacyTokenConverted event received for current user account. Dispatching refreshLegacyExchanges()"
-        );
-        store.dispatch(refreshLegacyExchanges());
-    }
+    // TODO: refresh on order change
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {

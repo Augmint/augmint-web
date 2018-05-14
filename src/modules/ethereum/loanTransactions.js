@@ -5,6 +5,7 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
+import SolidityContract from "modules/ethereum/SolidityContract";
 import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
@@ -95,13 +96,21 @@ function parseProducts(productsArray) {
     return products;
 }
 
-export async function repayLoanTx(repaymentAmount, loanId) {
+export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) {
     const txName = "Repay loan";
     const gasEstimate = cost.REPAY_GAS;
 
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+
+    let augmintTokenInstance;
+    if (loanManagerInstance._address !== store.getState().contracts.latest.loanManager.address) {
+        // repayment of a legacy loan, need to fetch which augmintToken is it
+        const augmintTokenAddress = await loanManagerInstance.methods.augmintToken().call();
+        const web3 = store.getState().web3Connect;
+        augmintTokenInstance = SolidityContract.connectAt(web3, "TokenAEur", augmintTokenAddress).web3ContractInstance;
+    } else {
+        augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+    }
 
     const tx = augmintTokenInstance.methods
         .transferAndNotify(
@@ -165,10 +174,9 @@ export async function fetchLoansToCollectTx() {
 }
 
 // loansToCollect is an array : [{loanId: <loanId>}]
-export async function collectLoansTx(loansToCollect) {
+export async function collectLoansTx(loanManagerInstance, loansToCollect) {
     const txName = "Collect loan(s)";
     const userAccount = store.getState().web3Connect.userAccount;
-    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
     const gasEstimate = cost.COLLECT_BASE_GAS + cost.COLLECT_ONE_GAS * loansToCollect.length;
 
     const loanIdsToCollect = loansToCollect.map(loan => loan.id);
@@ -198,9 +206,7 @@ export async function collectLoansTx(loansToCollect) {
     return { txName, transactionHash };
 }
 
-export async function fetchLoansForAddressTx(account) {
-    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-
+export async function fetchLoansForAddressTx(loanManagerInstance, account) {
     // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
     const [chunkSize, loanCount] = await Promise.all([
         loanManagerInstance.methods
