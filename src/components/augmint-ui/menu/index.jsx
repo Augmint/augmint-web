@@ -16,7 +16,7 @@ export function Menu(props) {
 }
 
 export function MenuItem(props) {
-    const { children, className, active, name, ...other } = props;
+    const { children, className, active, ...other } = props;
     let _className = " item ";
     if (className) {
         _className += className;
@@ -25,7 +25,7 @@ export function MenuItem(props) {
         _className += " active ";
     }
     return (
-        <StyledMenuItem className={_className} name={name} {...other}>
+        <StyledMenuItem className={_className} {...other}>
             {children}
         </StyledMenuItem>
     );
