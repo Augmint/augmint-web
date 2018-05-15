@@ -8,6 +8,7 @@ const theme = {
         opacExtraLighterGrey: "rgba(0,0,0,.05)",
         opacLighterGrey: "rgba(0,0,0,.6)",
         opacLightGrey: "rgba(0,0,0,.8)",
+        opacBlack: "rgba(0,0,0,.95)",
         opacWhite: "rgba(255, 255, 255, 0.5)",
         opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
@@ -41,6 +42,7 @@ const theme = {
     borderRadius: {
         right: "0 5px 5px 0",
         left: "5px 0 0 5px",
+        top: "5px 5px 0 0",
         all: "5px"
     }
 };
