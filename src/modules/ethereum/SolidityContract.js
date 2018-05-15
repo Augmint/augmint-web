@@ -70,11 +70,10 @@ export default class SolidityContract {
         });
 
         if (!abiVersionHash) {
-            if (networkId === 999 && deploysFile.latestAbiHash) {
+            if (deploysFile.latestAbiHash) {
                 abiVersionHash = deploysFile.latestAbiHash;
-                // for manual local testing we deploy a legacy token w/o truffle artificats from migration scripts
-                console.debug(
-                    `On test network, using latest ABI for (supposedly legacy) ${contractName} because couldn't find deployment info at address ${contractAddress} in ${
+                console.warning(
+                    `Using latest ABI for (supposedly legacy) ${contractName} because couldn't find deployment info at address ${contractAddress} in ${
                         deploysFile._fileName
                     }`
                 );
