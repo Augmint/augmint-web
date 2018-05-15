@@ -9,14 +9,17 @@ export default class Modal extends React.Component {
         super(props);
 
         this.handleKeyUp = this.handleKeyUp.bind(this);
+        this.body = document.getElementById("fakebody");
     }
 
     componentDidMount() {
         window.addEventListener("keyup", this.handleKeyUp, false);
+        this.body.classList.add("noScroll");
     }
 
     componentWillUnmount() {
         window.removeEventListener("keyup", this.handleKeyUp, false);
+        this.body.classList.remove("noScroll");
     }
 
     handleKeyUp(e) {
@@ -26,6 +29,7 @@ export default class Modal extends React.Component {
                 e.preventDefault();
                 onCloseRequest();
                 window.removeEventListener("keyup", this.handleKeyUp, false);
+                this.body.classList.remove("noScroll");
             }
         };
 
