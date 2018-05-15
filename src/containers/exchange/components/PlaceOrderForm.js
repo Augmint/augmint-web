@@ -3,7 +3,7 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import store from "modules/store";
@@ -38,8 +38,8 @@ class PlaceOrderForm extends React.Component {
         }
     }
 
-    onOrderDirectionChange(e, { name, index }) {
-        this.setState({ orderDirection: index });
+    onOrderDirectionChange(e) {
+        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
     }
 
     onTokenAmountChange(e) {
@@ -164,7 +164,7 @@ class PlaceOrderForm extends React.Component {
             <Menu size="massive" tabular>
                 <Menu.Item
                     active={orderDirection === TOKEN_BUY}
-                    index={TOKEN_BUY}
+                    data-index={TOKEN_BUY}
                     onClick={this.onOrderDirectionChange}
                     data-testid="buyMenuLink"
                 >
@@ -172,7 +172,7 @@ class PlaceOrderForm extends React.Component {
                 </Menu.Item>
                 <Menu.Item
                     active={orderDirection === TOKEN_SELL}
-                    index={TOKEN_SELL}
+                    data-index={TOKEN_SELL}
                     onClick={this.onOrderDirectionChange}
                     data-testid="sellMenuLink"
                 >
