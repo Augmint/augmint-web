@@ -7,7 +7,7 @@ import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import LocksInfoGroup from "./LocksInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
-import { Menu } from "semantic-ui-react";
+import { Menu } from "components/augmint-ui/menu";
 
 export default class underTheHood extends React.Component {
     constructor(props) {
@@ -17,8 +17,8 @@ export default class underTheHood extends React.Component {
         };
         this.handleSelectGroup = this.handleSelectGroup.bind(this);
     }
-    handleSelectGroup(e, { name }) {
-        this.setState({ selectedGroup: name });
+    handleSelectGroup(e) {
+        this.setState({ selectedGroup: e.target.name });
     }
 
     componentDidMount() {
@@ -35,7 +35,7 @@ export default class underTheHood extends React.Component {
 
                     <Pgrid.Row>
                         <Pgrid.Column>
-                            <Menu size="massive" tabular>
+                            <Menu>
                                 <Menu.Item
                                     data-testid="baseInfoLink"
                                     active={selectedGroup === "baseinfo"}
