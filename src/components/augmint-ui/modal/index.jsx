@@ -1,5 +1,4 @@
 import React from "react";
-import isNil from "lodash/fp/isNil";
 import Icon from "components/augmint-ui/icon";
 
 import { StyledOverlay, StyledModal, StyledModalContent, StyledModalActions, StyledCloseButton } from "./styles";
@@ -39,14 +38,14 @@ export default class Modal extends React.Component {
     }
 
     render() {
-        const { onCloseRequest, children, classes, showClose } = this.props;
+        const { onCloseRequest, children, showClose } = this.props;
 
         return (
             <StyledOverlay className="overlay">
                 <StyledModal className="modal">
                     {children}
                     {showClose && (
-                        <StyledCloseButton type="button" className="{classes.closeButton}" onClick={onCloseRequest}>
+                        <StyledCloseButton type="button" className="close" onClick={onCloseRequest}>
                             <Icon name="close" style={{}} />
                         </StyledCloseButton>
                     )}

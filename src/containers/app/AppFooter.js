@@ -1,5 +1,4 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import Container from "components/augmint-ui/container";
 import Segment from "components/augmint-ui/segment";
 import List from "components/augmint-ui/list";
@@ -59,7 +58,7 @@ export function AppFooter(props) {
                 <List className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
                         <Icon name="github" style={{ marginRight: 5 }} />
-                        <a href="https://github.com/Augmint" target="_blank">
+                        <a href="https://github.com/Augmint" target="_blank" rel="noopener noreferrer">
                             GITHUB
                         </a>
                     </List.Item>
@@ -67,6 +66,7 @@ export function AppFooter(props) {
                         <a
                             href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
                             target="_blank"
+                            rel="noopener noreferrer"
                         >
                             WHITEPAPER
                         </a>
