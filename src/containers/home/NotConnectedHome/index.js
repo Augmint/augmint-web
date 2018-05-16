@@ -1,11 +1,12 @@
 import React from "react";
 
-import { Rail, Responsive } from "semantic-ui-react";
+// import { Rail, Responsive } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
+import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
@@ -127,20 +128,7 @@ export default class NotConnectedHome extends React.Component {
                     </section>
                 </Container>
                 <section className="how-to-use segment">
-                    <Responsive
-                        as={Rail}
-                        minWidth={768}
-                        attached
-                        internal
-                        position="left"
-                        style={{
-                            width: "160px",
-                            position: "sticky",
-                            zIndex: "2",
-                            top: "200px",
-                            marginLeft: "-300px"
-                        }}
-                    >
+                    <Rail className="noSmallScreen">
                         <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
                             <div style={styles.howItWorksRail}>
                                 <div style={styles.howItWorksRailBox}>
@@ -154,7 +142,7 @@ export default class NotConnectedHome extends React.Component {
                                 </div>
                             </div>
                         </a>
-                    </Responsive>
+                    </Rail>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac loans" style={styles.howToUseText}>
