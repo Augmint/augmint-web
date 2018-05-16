@@ -6,6 +6,7 @@ import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
+import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
@@ -22,7 +23,7 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { orders, userAccount, exchange, rates, trades } = this.props;
+        const { network, orders, userAccount, exchange, rates, trades } = this.props;
         return (
             <EthereumState>
                 <Psegment>
@@ -32,11 +33,17 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
+                                <FiatExchange
+                                    header="€ &harr; A€ on partner exchange"
+                                    userAccountAddress={userAccount.address}
+                                    network={network}
+                                />
+
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}
                                     rates={rates}
-                                    header="A€&harr;ETH on exchange"
+                                    header="A€ &harr; ETH on Augmint"
                                 />
 
                                 <MyOrders
@@ -81,6 +88,7 @@ class ExchangeHome extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    network: state.web3Connect.network,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,
