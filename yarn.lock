@@ -3137,9 +3137,9 @@ eth-lib@0.2.7:
     elliptic "^6.4.0"
     xhr-request-promise "^0.1.2"
 
-ethers@3.0.15:
-  version "3.0.15"
-  resolved "https://registry.yarnpkg.com/ethers/-/ethers-3.0.15.tgz#7cdea4e23025681f69f575bf481b227315e0e7ab"
+ethers@3.0.17:
+  version "3.0.17"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-3.0.17.tgz#b24cbca4d5faaf738efcbab00e916f3f49def434"
   dependencies:
     aes-js "3.0.0"
     bn.js "^4.4.0"
@@ -7723,9 +7723,9 @@ react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
-react-ga@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.5.0.tgz#fbba2b33d41ce727f7d4cf383d54dbbfbf96c507"
+react-ga@2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.5.2.tgz#1574b26e30ed668e4e74735527314393b22c55a9"
   optionalDependencies:
     prop-types "^15.6.0"
     react "^15.6.2 || ^16.0"

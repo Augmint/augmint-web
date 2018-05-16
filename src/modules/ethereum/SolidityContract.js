@@ -72,7 +72,7 @@ export default class SolidityContract {
         if (!abiVersionHash) {
             if (deploysFile.latestAbiHash) {
                 abiVersionHash = deploysFile.latestAbiHash;
-                console.warning(
+                console.warn(
                     `Using latest ABI for (supposedly legacy) ${contractName} because couldn't find deployment info at address ${contractAddress} in ${
                         deploysFile._fileName
                     }`
