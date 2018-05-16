@@ -135,6 +135,7 @@ class PlaceOrderForm extends React.Component {
 
     render() {
         const {
+            header: mainHeader,
             rates,
             exchange,
             error,
@@ -158,24 +159,27 @@ class PlaceOrderForm extends React.Component {
         }
 
         const header = (
-            <Menu size="massive" tabular>
-                <Menu.Item
-                    active={orderDirection === TOKEN_BUY}
-                    index={TOKEN_BUY}
-                    onClick={this.onOrderDirectionChange}
-                    data-testid="buyMenuLink"
-                >
-                    Buy A-EUR
-                </Menu.Item>
-                <Menu.Item
-                    active={orderDirection === TOKEN_SELL}
-                    index={TOKEN_SELL}
-                    onClick={this.onOrderDirectionChange}
-                    data-testid="sellMenuLink"
-                >
-                    Sell A-EUR
-                </Menu.Item>
-            </Menu>
+            <div>
+                {mainHeader}
+                <Menu size="massive" tabular>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_BUY}
+                        index={TOKEN_BUY}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="buyMenuLink"
+                    >
+                        Buy A-EUR
+                    </Menu.Item>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_SELL}
+                        index={TOKEN_SELL}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="sellMenuLink"
+                    >
+                        Sell A-EUR
+                    </Menu.Item>
+                </Menu>
+            </div>
         );
 
         return (
