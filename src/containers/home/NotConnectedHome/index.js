@@ -1,6 +1,5 @@
 import React from "react";
 
-// import { Rail, Responsive } from "semantic-ui-react";
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
