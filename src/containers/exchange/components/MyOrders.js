@@ -69,27 +69,29 @@ const OrderList = props => {
     }
 
     return (
-        <MyListGroup>
-            <Row wrap={false} halign="center">
-                <Col width={2} />
+        itemList.length > 0 && (
+            <MyListGroup>
+                <Row wrap={false} halign="center">
+                    <Col width={2} />
 
-                <Col width={3}>
-                    <strong>ETH Amount</strong>
-                </Col>
+                    <Col width={3}>
+                        <strong>ETH Amount</strong>
+                    </Col>
 
-                <Col width={3}>
-                    <strong>A€ Amount</strong>
-                </Col>
+                    <Col width={3}>
+                        <strong>A€ Amount</strong>
+                    </Col>
 
-                <Col width={2}>
-                    <strong>Price</strong> <PriceToolTip />
-                </Col>
+                    <Col width={2}>
+                        <strong>Price</strong> <PriceToolTip />
+                    </Col>
 
-                <Col width={2} />
-            </Row>
+                    <Col width={2} />
+                </Row>
 
-            {itemList}
-        </MyListGroup>
+                {itemList}
+            </MyListGroup>
+        )
     );
 };
 
@@ -98,13 +100,6 @@ export default class OrderBook extends React.Component {
         const { header, userAccountAddress, testid } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
         const { ethFiatRate } = this.props.rates.info;
-
-        const totalBuyAmount = orders
-            ? parseFloat(orders.buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
-            : "?";
-        const totalSellAmount = orders
-            ? orders.sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString()
-            : "?";
 
         const buyOrders =
             orders == null
@@ -115,6 +110,11 @@ export default class OrderBook extends React.Component {
                 ? []
                 : orders.sellOrders.filter(order => order.maker.toLowerCase() === userAccountAddress.toLowerCase());
         const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o1.id > o2.id);
+
+        const totalBuyAmount = orders
+            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
+            : "?";
+        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString() : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
@@ -127,9 +127,6 @@ export default class OrderBook extends React.Component {
                     <p>Refreshing orders...</p>
                 ) : (
                     <MyGridTable>
-                        <Row halign="center">
-                            <Col width={8} header="" style={{ textAlign: "center" }} />
-                        </Row>
                         <OrderList
                             myOrders={myOrders}
                             ethFiatRate={ethFiatRate}
