@@ -32,9 +32,11 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
+                                <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}
                                     rates={rates}
+                                    header="A€&harr;ETH on exchange"
                                 />
 
                                 <MyOrders
