@@ -7,6 +7,7 @@ import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
 import OrderBook from "./components/OrderBook";
+import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
@@ -31,28 +32,17 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column>
                                 <AccountInfo account={userAccount} />
 
-                                {/* {rates.isLoading || !rates.isLoaded ? (
-                                    <h5>Loading rates...</h5>
-                                ) : ( */}
-                                <PlaceOrderForm //rates.info &&
-                                    // initialValues={{
-                                    //     price: rates.info.ethFiatRate
-                                    // }}
                                     orders={orders}
                                     exchange={exchange}
                                     rates={rates}
                                 />
-                                {/* )} */}
 
-                                <OrderBook
+                                <MyOrders
                                     testid="myOrdersBlock"
                                     orders={orders}
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
-                                    header="My orders"
-                                    filter={item => {
-                                        return item.maker.toLowerCase() === userAccount.address.toLowerCase();
-                                    }}
+                                    header="My open orders"
                                 />
                             </Pgrid.Column>
 
@@ -70,7 +60,7 @@ class ExchangeHome extends React.Component {
                                     orders={orders}
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
-                                    header="All orders"
+                                    header="Order book"
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
@@ -78,7 +68,7 @@ class ExchangeHome extends React.Component {
                             <TradeHistory
                                 trades={trades}
                                 userAccountAddress={userAccount.address}
-                                header="Trades history"
+                                header="My trade history"
                             />
                         </Pgrid.Row>
                     </Pgrid>
