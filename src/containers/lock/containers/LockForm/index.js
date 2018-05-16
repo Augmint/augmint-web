@@ -109,7 +109,7 @@ class LockContainer extends React.Component {
 
                         <label>Select term:</label>
                         {(lockManager.isLoading || !lockManager.isLoaded) && <h5>Loading lock products...</h5>}
-                        <TermTable fixed>
+                        <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
                                     <TermTableHeadCell />
@@ -117,9 +117,7 @@ class LockContainer extends React.Component {
                                     <TermTableHeadCell>Min lock</TermTableHeadCell>
                                     <TermTableHeadCell>Max lock</TermTableHeadCell>
                                     <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
-                                    <TermTableHeadCell textAlign="right" singleLine>
-                                        You earn
-                                    </TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
