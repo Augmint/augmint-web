@@ -66,6 +66,7 @@ class Subscribe extends React.Component {
                             placeholder="EMAIL ADDRESS"
                             parse={Parsers.trim}
                             disabled={submitting}
+                            oneLine={true}
                         />
                         <Button
                             loading={submitting}

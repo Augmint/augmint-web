@@ -215,47 +215,58 @@ class PlaceOrderForm extends React.Component {
                                 onChange={this.onTokenAmountChange}
                                 validate={tokenAmountValidations}
                                 normalize={Normalizations.twoDecimals}
+                                data-testid="tokenAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                                labelAlignRight="A-EUR"
                             >
-                                <input
+                                {/* <input
                                     data-testid="tokenAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left }}
-                                />
-                                <StyleLabel align="right">A-EUR</StyleLabel>
+                                /> */}
+                                {/* <StyleLabel align="right">A-EUR</StyleLabel> */}
                             </Field>
 
+                            <label>
+                                {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
+                                {orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "}
+                            </label>
                             <Field
                                 name="ethAmount"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label={`${this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "} ${
-                                    orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "
-                                }`}
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
                                 normalize={Normalizations.fiveDecimals}
+                                data-testid="ethAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                                labelAlignRight="ETH"
                             >
-                                <input data-testid="ethAmountInput" style={{ borderRadius: theme.borderRadius.left }} />
-                                <StyleLabel align="right">ETH</StyleLabel>
+                                {/* <input  />
+                                <StyleLabel align="right">ETH</StyleLabel> */}
                             </Field>
 
+                            <label>Price (% of of published rate):</label>
                             <Field
                                 name="price"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label="Price (% of of published rate): "
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onPriceChange}
                                 validate={Validations.price}
                                 normalize={Normalizations.twoDecimals}
+                                data-testid="priceInput"
+                                style={{ borderRadius: "0" }}
+                                labelAlignLeft={<PriceToolTip />}
+                                labelAlignRight="%"
                             >
-                                <StyleLabel align="left">
+                                {/* <StyleLabel align="left">
                                     <PriceToolTip />
                                 </StyleLabel>
                                 <input data-testid="priceInput" style={{ borderRadius: "0" }} />
-                                <StyleLabel align="right">%</StyleLabel>
+                                <StyleLabel align="right">%</StyleLabel> */}
                             </Field>
 
                             <Button

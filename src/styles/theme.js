@@ -15,6 +15,7 @@ const theme = {
         secondary: "#ffad00",
         lightCyan: "#f8ffff",
         darkCyan: "#276f86",
+        red: "red",
         lightRed: "#fff6f6",
         darkRed: "#9f3a38",
         lightGreen: "#fcfff5",

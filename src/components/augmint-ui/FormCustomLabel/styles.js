@@ -5,6 +5,7 @@ const BaseLabel = `
     background-color: ${theme.colors.lightGrey};
     color: rgba(0,0,0,.6);
     padding: 12px;
+    white-space:nowrap;
 `;
 
 export const StyleLabel = styled.label`
