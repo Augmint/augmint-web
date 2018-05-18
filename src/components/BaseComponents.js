@@ -2,7 +2,6 @@
 import React from "react";
 import BigNumber from "bignumber.js";
 import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
-// import { Form as SemanticForm } from "semantic-ui-react";
 import store from "modules/store";
 import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import {
@@ -138,7 +137,7 @@ export const Normalizations = {
     }
 };
 
-export const semanticFormField = ({
+export const formField = ({
     children,
     input,
     type,
@@ -181,4 +180,4 @@ export const Form = ({ ...other }) => {
     return <form {...other} />;
 };
 
-Form.Field = semanticFormField;
+Form.Field = formField;

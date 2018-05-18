@@ -49,7 +49,7 @@ export const StyledInput = styled.input`
 `;
 
 export const StyledLabel = styled.label`
-    font-size: ${remCalc(14)};
+    font-size: ${remCalc(15)};
     font-weight: 700;
     line-height: ${remCalc(20)};
 `;
