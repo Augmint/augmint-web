@@ -99,12 +99,12 @@ class RepayLoanPage extends React.Component {
 
         return (
             <Pgrid.Row wrap={false}>
-                <Pgrid.Column size={6}>
+                <Pgrid.Column size={6 / 17}>
                     <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column size={1} />
-                <Pgrid.Column size={10}>
+                <Pgrid.Column size={1 / 17} />
+                <Pgrid.Column size={10 / 17}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}

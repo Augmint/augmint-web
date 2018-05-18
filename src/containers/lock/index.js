@@ -29,10 +29,10 @@ class LockContainer extends React.Component {
                 <EthereumState>
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} header="Balance" />
                             </Pgrid.Column>
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <StyledButtonContainer>
                                     <Button to="/exchange">Buy A€</Button>
                                 </StyledButtonContainer>

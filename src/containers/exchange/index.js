@@ -30,7 +30,7 @@ class ExchangeHome extends React.Component {
                     <Pheader header="Buy & Sell A-EUR" />
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} />
 
                                 <FiatExchange
@@ -55,7 +55,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
                                 {orders.orders && (
                                     <MatchOrdersButton

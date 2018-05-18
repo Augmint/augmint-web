@@ -92,7 +92,7 @@ class NewLoanPage extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={6}>
+                    <Pgrid.Column size={6 / 16}>
                         <Pblock
                             data-testid="selectedLoanProductBlock"
                             header={"Selected: loan product " + (this.state.product.id + 1)}
@@ -101,7 +101,7 @@ class NewLoanPage extends React.Component {
                         </Pblock>
                         <AccountInfo account={this.props.userAccount} />
                     </Pgrid.Column>
-                    <Pgrid.Column size={10}>
+                    <Pgrid.Column size={10 / 16}>
                         {!this.state.submitSucceeded && (
                             <NewLoanForm
                                 product={this.state.product}

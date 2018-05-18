@@ -26,7 +26,7 @@ class CollectLoanMain extends React.Component {
             <Psegment>
                 <Pheader header="Collect loans" />
                 <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={6}>
+                    <Pgrid.Column size={6 / 16}>
                         <Message info>
                             <p>
                                 When collecting a defaulted (not paid on time) loan the ETH held in contract escrow
@@ -39,7 +39,7 @@ class CollectLoanMain extends React.Component {
                             </p>
                         </Message>
                     </Pgrid.Column>
-                    <Pgrid.Column size={10}>
+                    <Pgrid.Column size={10 / 16}>
                         <CollectLoanButton loanManager={loanManager} loansToCollect={loanManager.loansToCollect} />
                         <LoansToCollectList
                             header="Loans to collect"
