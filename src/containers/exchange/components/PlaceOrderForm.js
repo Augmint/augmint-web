@@ -222,13 +222,7 @@ class PlaceOrderForm extends React.Component {
                                 data-testid="tokenAmountInput"
                                 style={{ borderRadius: theme.borderRadius.left }}
                                 labelAlignRight="A-EUR"
-                            >
-                                {/* <input
-                                    data-testid="tokenAmountInput"
-                                    style={{ borderRadius: theme.borderRadius.left }}
-                                /> */}
-                                {/* <StyleLabel align="right">A-EUR</StyleLabel> */}
-                            </Field>
+                            />
 
                             <label>
                                 {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
@@ -246,10 +240,7 @@ class PlaceOrderForm extends React.Component {
                                 data-testid="ethAmountInput"
                                 style={{ borderRadius: theme.borderRadius.left }}
                                 labelAlignRight="ETH"
-                            >
-                                {/* <input  />
-                                <StyleLabel align="right">ETH</StyleLabel> */}
-                            </Field>
+                            />
 
                             <label>Price (% of of published rate):</label>
                             <Field
@@ -265,13 +256,7 @@ class PlaceOrderForm extends React.Component {
                                 style={{ borderRadius: "0" }}
                                 labelAlignLeft={<PriceToolTip />}
                                 labelAlignRight="%"
-                            >
-                                {/* <StyleLabel align="left">
-                                    <PriceToolTip />
-                                </StyleLabel>
-                                <input data-testid="priceInput" style={{ borderRadius: "0" }} />
-                                <StyleLabel align="right">%</StyleLabel> */}
-                            </Field>
+                            />
 
                             <Button
                                 size="big"

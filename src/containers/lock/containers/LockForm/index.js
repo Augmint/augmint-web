@@ -88,12 +88,12 @@ class LockContainer extends React.Component {
                             />
                         )}
 
+                        <label>Amount to lock:</label>
                         <Field
                             name="lockAmount"
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
-                            label="Amount to lock:"
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
                                 Validations.required,
@@ -101,11 +101,9 @@ class LockContainer extends React.Component {
                                 this.lockAmountValidation,
                                 Validations.userTokenBalance
                             ]}
-                            labelposition="right"
-                        >
-                            <input style={{ borderRadius: theme.borderRadius.left }} />
-                            <StyleLabel align="right">A-EUR</StyleLabel>
-                        </Field>
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="A-EUR"
+                        />
 
                         <label>Select term:</label>
                         {(lockManager.isLoading || !lockManager.isLoaded) && <h5>Loading lock products...</h5>}
@@ -144,7 +142,7 @@ class LockContainer extends React.Component {
                                                     <TermTableCell>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell textAlign="right">
+                                                    <TermTableCell style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(
                                                                 this.props.lockAmount * product.perTermInterest * 100

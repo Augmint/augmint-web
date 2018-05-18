@@ -109,7 +109,6 @@ class TokenTransferForm extends React.Component {
                             type="number"
                             name="tokenAmount"
                             placeholder="Amount"
-                            labelposition="right"
                             onChange={this.onTokenAmountChange}
                             validate={[
                                 Validations.required,
@@ -118,14 +117,10 @@ class TokenTransferForm extends React.Component {
                             ]}
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isLoaded}
-                        >
-                            <input
-                                data-testid="transferAmountInput"
-                                style={{ borderRadius: theme.borderRadius.left }}
-                            />
-                            <StyleLabel align="right">A-EUR</StyleLabel>
-                        </Field>
-
+                            data-testid="transferAmountInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="A-EUR"
+                        />
                         <small>
                             Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
                             <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€
@@ -144,7 +139,6 @@ class TokenTransferForm extends React.Component {
                             placeholder="0x0..."
                             disabled={submitting || !augmintToken.isLoaded}
                         />
-
                         <Field
                             component={Form.Field}
                             as={Form.Input}
