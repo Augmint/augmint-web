@@ -41,8 +41,8 @@ export default class NotConnectedHome extends React.Component {
                 <Container>
                     <section style={{ textAlign: "center" }} className="key-features large-gap segment">
                         <header className="key-features__header">
-                            <Header style={{ textAlign: "center" }} as="h4" size="large">
-                                Augmint offers digital tokens pegged to a fiat currency.
+                            <Header textAlign="center" as="h1" size="large">
+                                Augmint offers digital tokens targeted to a fiat currency.
                                 <br />
                                 The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
                                 <br />
@@ -125,6 +125,7 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
                     </section>
+
                 </Container>
                 <section className="how-to-use segment">
                     <Rail className="noSmallScreen">
@@ -172,6 +173,7 @@ export default class NotConnectedHome extends React.Component {
                         </ThemeProvider>
 
                         <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
@@ -202,6 +204,7 @@ export default class NotConnectedHome extends React.Component {
                         </ThemeProvider>
 
                         <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
@@ -257,6 +260,7 @@ export default class NotConnectedHome extends React.Component {
                         </ThemeProvider>
 
                         <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
