@@ -9,7 +9,6 @@ import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form
 import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
-import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import Button from "components/augmint-ui/button";
 import RadioInput from "components/augmint-ui/RadioInput";
 
@@ -79,7 +78,7 @@ class LockContainer extends React.Component {
                 )}
 
                 {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.onSubmit)}>
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.onSubmit)}>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}

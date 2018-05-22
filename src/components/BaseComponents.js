@@ -161,7 +161,7 @@ export const formField = ({
                     {...input}
                     type={type}
                     placeholder={placeholder}
-                    error={touched && error ? true : false}
+                    error={touched && error ? "true" : "false"}
                 />
                 {labelAlignRight && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
             </StyledContainer>

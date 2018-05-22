@@ -2,24 +2,6 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import { remCalc } from "styles/theme";
 
-const BaseButton = `
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${theme.colors.white};
-    color: ${theme.colors.primary};
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 200;
-    margin: 0 .25em 0 0;
-    padding: 0 14px;
-    border-radius: 4px;
-    height: 42px;
-    line-height: 42px;
-    font-size: 13px;
-    letter-spacing: normal;
-`;
-
 export const StyledContainer = styled.div`
     display: inline-flex;
     margin: 0 0 ${remCalc(16)};

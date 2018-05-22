@@ -6,7 +6,6 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import Button from "components/augmint-ui/button";
-import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -92,7 +91,7 @@ class TokenTransferForm extends React.Component {
                     </EthSubmissionSuccessPanel>
                 )}
                 {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}

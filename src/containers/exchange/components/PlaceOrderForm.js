@@ -5,7 +5,6 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
-import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
@@ -200,7 +199,7 @@ class PlaceOrderForm extends React.Component {
 
                 {!submitSucceeded &&
                     this.props.rates.isLoaded && (
-                        <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                        <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                             <EthSubmissionErrorPanel
                                 error={error}
                                 header="Place Order failed"

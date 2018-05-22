@@ -46,7 +46,7 @@ class Subscribe extends React.Component {
             <Pblock className="subscribe">
                 {submitSucceeded && <SuccessPanel header="Successful subscription" onDismiss={() => reset()} />}
                 {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                         {error && (
                             <ErrorPanel
                                 content={error}
