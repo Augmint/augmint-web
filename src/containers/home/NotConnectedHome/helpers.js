@@ -32,6 +32,7 @@ import gycsado from "assets/images/team/gycsado.jpg";
 import aszabo from "assets/images/team/aszabo.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
+import dkovacs from "assets/images/team/dkovacs.jpg";
 
 import decent from "assets/images/decent.png";
 import euedge from "assets/images/euedge.png";
@@ -322,6 +323,16 @@ export const teamMembers = [
         linedinUrl: "https://www.linkedin.com/in/p%C3%A9ter-kolcza-0b04bb8/",
         description:
             "Peter has 10+ years of experience in building enterprise solutions for financial institutions in the areas of loans and data quality. He performs best when complex problems should be solved: when technology meets finance, tax, business and complience."
+    },
+    {
+        pk: "team-14",
+        firstName: "David",
+        lastName: "Kovacs",
+        imgSrc: dkovacs,
+        title: "Project management",
+        linedinUrl: "https://www.linkedin.com/in/kovacsd/",
+        description:
+            "David’s background is in Project Management - he has lived in several countries, having most recently spent 2 years in San Francisco in the tech startup scene. Outside of work, he is a triathlete and ultra runner."
     }
 ];
 
