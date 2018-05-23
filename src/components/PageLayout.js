@@ -1,15 +1,26 @@
 import React from "react";
 import { Container, Divider, Header, Segment, Grid } from "semantic-ui-react";
 
+import { FeatureContext } from "modules/services/featureService";
+
 export function Pheader(props) {
-    const { children, header, ...other } = props;
-    return (
-        <Container {...other}>
-            {header && <Header as="h1">{header}</Header>}
-            {children}
-            <Divider />
-        </Container>
-    );
+    const { children, header, className, ...other } = props;
+    return <FeatureContext.Consumer>
+            {features => {
+                if (features.dashboard) {
+                    return <Container {...Object.assign({}, { ...other }, { className: `${className} dashhead` })}>
+                            {header && <Header as="h1">{header}</Header>}
+                            {children}
+                        </Container>;
+                } else {
+                    return <Container {...other}>
+                            {header && <Header as="h1">{header}</Header>}
+                            {children}
+                            <Divider />
+                        </Container>;
+                }
+            }}
+        </FeatureContext.Consumer>;
 }
 
 Pheader.defaultProps = {
@@ -67,11 +78,41 @@ Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid.Row;
 
 export function Pblock(props) {
+    return (
+        <FeatureContext.Consumer>
+            {
+                features => {
+                    const BlockEl = features.dashboard ? DashBlock : LegacyPblock;
+                    return (
+                        <BlockEl {...props} />
+                    );
+                }
+            }
+        </FeatureContext.Consumer>
+    );
+}
+
+function LegacyPblock(props) {
     const { children, header, ...other } = props;
     return (
         <Segment basic {...other}>
             <Header as="h2" content={header} />
             {children}
+        </Segment>
+    );
+}
+
+function DashBlock(props) {
+    const { children, header, className, ...other } = props;
+    const rest = Object.assign({}, { ...other }, { className: `${className} dashblock` })
+    return (
+        <Segment basic {...rest} >
+            <div className="dashblock__head">
+                <Header as="h2" content={header} />
+            </div>
+            <div className="dashblock__content">
+                {children}
+            </div>
         </Segment>
     );
 }

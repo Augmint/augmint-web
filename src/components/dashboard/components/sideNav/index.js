@@ -84,31 +84,31 @@ export default props => (
         <img alt="Augmint" src={AugmintLogo} />
         <SideNavUl>
             <SideNavLi>
-                <SideNavLink to="account" activeClassName="active">
+                <SideNavLink to="/account" activeClassName="active">
                     <Icon name="account"/>
                     <span>Account</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="exchange" activeClassName="active">
+                <SideNavLink to="/exchange" activeClassName="active">
                     <Icon name="exchange"/>
                     <span>Buy/Sell</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="loan" activeClassName="active">
+                <SideNavLink to="/loan/new" activeClassName="active">
                     <Icon name="loan"/>
                     <span>Loan</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="lock" activeClassName="active">
+                <SideNavLink to="/lock" activeClassName="active">
                     <Icon name="lock"/>
                     <span>Lock</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="reserves" activeClassName="active">
+                <SideNavLink to="/reserves" activeClassName="active">
                     <Icon name="reserves"/>
                     <span>Reserves</span>
                 </SideNavLink>

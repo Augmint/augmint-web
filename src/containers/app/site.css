@@ -102,3 +102,39 @@
 .ui.basic.button, .ui.basic.buttons .button {
     background: #fff!important;
 }
+
+/* TODO: clean up f_dashboard temporary styles */
+.ui.basic.segment.dashblock {
+    background: white;
+    border: 1px solid #051d2d;
+    border-radius: 5px;
+    color: #051d2d;
+    overflow: hidden;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+.dashhead {
+    position: absolute;
+    top: -50px;
+    z-index: 1000;
+    width: 60%!important;
+    left: 24px;
+}
+
+.dashhead h1 {
+    color: #ffad00!important;
+}
+
+.dashblock__head {
+    background: #051d2d;
+    padding: 10px 20px;
+}
+
+.dashblock__head h2 {
+    font-size: 24px!important;
+}
+
+.dashblock__content {
+    padding: 10px 20px;
+}
