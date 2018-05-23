@@ -44,7 +44,8 @@ export default class ToolTip extends React.Component {
                     hidden={hidden}
                     style={{
                         top: `${top}px`,
-                        left: `${left}px`
+                        left: `${left}px`,
+                        visibility: "hidden"
                     }}
                     right
                 >
