@@ -190,7 +190,7 @@ export const founders = [
         firstName: "Peter",
         lastName: "Petrovics",
         imgSrc: petrovics,
-        title: "Founder, technologist",
+        title: "Co-Founder, technologist",
         linedinUrl: "https://www.linkedin.com/in/petrovics",
         githubUrl: "https://github.com/szerintedmi",
         description:
@@ -201,7 +201,7 @@ export const founders = [
         firstName: "Karoly",
         lastName: "Szabo",
         imgSrc: kszabo,
-        title: "Founder, economist",
+        title: "Co-Founder, economist",
         githubUrl: "https://github.com/krosza",
         description:
             "Károly is an entrepreneur with 30+ years management and financial experience. He managed and set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian banks."
