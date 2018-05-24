@@ -7,6 +7,8 @@ import { Form, Validations, Parsers } from "components/BaseComponents";
 import { subscribe, SUBSCRIBE_SUCCESS } from "modules/reducers/subscriptions";
 import { Pblock } from "components/PageLayout";
 
+import { StyledField } from "./subscribeStyles";
+
 class Subscribe extends React.Component {
     constructor(props) {
         super(props);
@@ -57,7 +59,7 @@ class Subscribe extends React.Component {
                             />
                         )}
 
-                        <Field
+                        <StyledField
                             component={Form.Field}
                             as={Form.Input}
                             name="email"
