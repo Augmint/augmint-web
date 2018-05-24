@@ -18,7 +18,7 @@ const BaseHeader = `
 
 const HeaderH5 = `
     font-size: ${theme.typography.fontSizes.h5};
-    line-height: $${remCalc(15)};
+    line-height: ${remCalc(15)};
 `;
 
 const HeaderH4 = `
