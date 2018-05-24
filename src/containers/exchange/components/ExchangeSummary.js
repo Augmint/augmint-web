@@ -13,21 +13,21 @@ export default class ExchangeSummary extends React.Component {
             >
                 <ConnectionStatus contract={rates} />
 
-                <h4>
+                <p>
                     1 ETH = {rates.info.ethFiatRate} A-EUR<br />
                     1 A-EUR = {rates.info.fiatEthRate} ETH
-                </h4>
+                </p>
 
                 {exchange.isConnected &&
                 !exchange.isLoading &&
                 exchange.info.buyOrderCount + exchange.info.sellOrderCount > 0 ? (
-                    <h4>
+                    <p>
                         {exchange.info.buyOrderCount} buy A-EUR | {exchange.info.sellOrderCount} sell A-EUR
-                    </h4>
+                    </p>
                 ) : (
-                    <h4>
+                    <p>
                         No open orders. Place one. <NoOrdersToolTip />
-                    </h4>
+                    </p>
                 )}
             </Pblock>
         );
