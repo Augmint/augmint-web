@@ -77,6 +77,13 @@ class App extends React.Component {
                 };
             });
         });
+
+        const script = document.createElement("script");
+
+        script.src = "//survey.survicate.com/workspaces/cbfbf11235623929fc504d64bdcca490/web_surveys.js";
+        script.async = true;
+
+        document.body.appendChild(script);
     }
 
     render() {
