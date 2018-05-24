@@ -131,10 +131,29 @@
     padding: 10px 20px;
 }
 
+.dashblock__head .ui.massive.tabular.menu {
+    margin: -10px 0 -10px -20px;
+}
+
+.dashblock__head .ui.massive.tabular.menu .active.item {
+    border: none;
+}
+
+.dashblock__head .ui.massive.tabular.menu .ui.tabular.menu .item:hover {
+    color: rgba(255,255,255,.8);
+}
+
 .dashblock__head h2 {
     font-size: 24px!important;
 }
 
 .dashblock__content {
     padding: 10px 20px;
+}
+
+.dashblock__content h1.ui.header,
+.dashblock__content h2.ui.header,
+.dashblock__content h3.ui.header,
+.dashblock__content h4.ui.header {
+    color: #051d2d;
 }
