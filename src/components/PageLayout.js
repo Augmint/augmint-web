@@ -104,12 +104,16 @@ function LegacyPblock(props) {
 
 function DashBlock(props) {
     const { children, header, className, ...other } = props;
-    const rest = Object.assign({}, { ...other }, { className: `${className} dashblock` })
+    const newClassName = className ? `${className} dashblock` : `dashblock`;
+    const rest = Object.assign({}, { ...other }, { className: newClassName });
+
     return (
         <Segment basic {...rest} >
-            <div className="dashblock__head">
-                <Header as="h2" content={header} />
-            </div>
+            {(header) ? 
+                <div className="dashblock__head">
+                    <Header as="h2" content={header} />
+                </div> : null
+            }
             <div className="dashblock__content">
                 {children}
             </div>
