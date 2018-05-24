@@ -71,6 +71,7 @@ export default class AppMenu extends React.Component {
                                     isActive={() => currentLocation === "/account"}
                                     to="/account"
                                     data-testid="myAccountMenuLink"
+                                    className="hideMobile"
                                 >
                                     My Account
                                 </AppMenuItem>
@@ -80,6 +81,7 @@ export default class AppMenu extends React.Component {
                                     isActive={() => currentLocation === "/exchange"}
                                     to="/exchange"
                                     data-testid="exchangeMenuLink"
+                                    className="hideMobile"
                                 >
                                     Buy/Sell A-EUR
                                 </AppMenuItem>
@@ -89,6 +91,7 @@ export default class AppMenu extends React.Component {
                                     isActive={() => currentLocation === "/lock"}
                                     to="/lock"
                                     data-testid="lockMenuLink"
+                                    className="hideMobile"
                                 >
                                     Lock A-Euro
                                 </AppMenuItem>
@@ -98,6 +101,7 @@ export default class AppMenu extends React.Component {
                                     isActive={() => currentLocation === "/loan/new"}
                                     to="/loan/new"
                                     data-testid="getLoanMenuLink"
+                                    className="hideMobile"
                                 >
                                     Get A-EUR Loan
                                 </AppMenuItem>
@@ -107,6 +111,7 @@ export default class AppMenu extends React.Component {
                                     isActive={() => currentLocation === "/reserves"}
                                     to="/reserves"
                                     data-testid="reservesMenuLink"
+                                    className="hideMobile"
                                 >
                                     Reserves
                                 </AppMenuItem>

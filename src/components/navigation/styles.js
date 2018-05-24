@@ -37,6 +37,11 @@ export const StyleNavItem = styled.li`
     display: flex;
     ${media.tablet`
       text-align: center;
+
+      & .hideMobile {
+          display: none;
+          visibility: hidden;
+      }
     `} & + li {
         margin-left: 8px;
         ${media.tablet`
