@@ -68,7 +68,7 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { lockProducts, lockManager } = this.props;
+        const { lockProducts, lockManager, dashboard } = this.props;
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
 
         return (
@@ -132,7 +132,7 @@ class LockContainer extends React.Component {
                                         .map(product => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
@@ -140,15 +140,15 @@ class LockContainer extends React.Component {
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
-                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>{product.minimumLockAmount} A€</TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>{product.maxLockAmount} A€</TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell textAlign="right">
+                                                    <TermTableCell {...{dashboard}} textAlign="right">
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(
                                                                 this.props.lockAmount * product.perTermInterest * 100
