@@ -32,7 +32,7 @@ export default class ToolTip extends React.Component {
         const { top, left, hidden } = this.state;
         const { children, header, icon, ...other } = this.props;
         return (
-            <div>
+            <div style={{ display: "inline-block", marginRight: 5 }}>
                 <Icon
                     color="grey"
                     name={icon ? icon : "help circle"}
