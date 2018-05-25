@@ -14,6 +14,8 @@ import LockForm from "./containers/LockForm";
 
 import { FeatureContext } from "modules/services/featureService";
 
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+
 import { StyledButtonContainer } from "./styles";
 
 class LockContainer extends React.Component {
@@ -29,7 +31,9 @@ class LockContainer extends React.Component {
         return (
             <Psegment>
                 <EthereumState>
-                    <Pheader header="Lock A-EUR" />
+                    <TopNavTitlePortal>
+                        <Pheader header="Lock A-EUR" />
+                    </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row columns={2}>
                             <Pgrid.Column>

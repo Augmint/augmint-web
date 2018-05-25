@@ -114,18 +114,6 @@
     margin-bottom: 40px;
 }
 
-.dashhead {
-    position: absolute;
-    top: -50px;
-    z-index: 1000;
-    width: 60%!important;
-    left: 24px;
-}
-
-.dashhead h1 {
-    color: #ffad00!important;
-}
-
 .dashblock__head {
     background: #051d2d;
     padding: 10px 20px;

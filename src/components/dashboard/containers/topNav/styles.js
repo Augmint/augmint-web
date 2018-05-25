@@ -8,6 +8,8 @@ import { BaseUl, BaseLi } from "components/augmint-ui/list";
 const TOP_NAV_HEIGHT = '60px';
 
 export const StyledTopNav = styled.nav`
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     border-bottom: 1px solid #ccc;
     height: ${TOP_NAV_HEIGHT}
@@ -15,6 +17,15 @@ export const StyledTopNav = styled.nav`
     background-color: ${theme.colors.white};
     z-index: 103;
     top: 0;
+`;
+
+export const TitleWrapper = styled.div`
+    margin-left: 200px;
+    max-width: 60%;
+
+    h1.ui.header {
+        color: ${theme.colors.secondary};
+    }
 `;
 
 export const StyledTopNavUl = BaseUl.extend`

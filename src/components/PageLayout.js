@@ -5,22 +5,14 @@ import { FeatureContext } from "modules/services/featureService";
 
 export function Pheader(props) {
     const { children, header, className, ...other } = props;
-    return <FeatureContext.Consumer>
-            {features => {
-                if (features.dashboard) {
-                    return <Container {...Object.assign({}, { ...other }, { className: `${className} dashhead` })}>
-                            {header && <Header as="h1">{header}</Header>}
-                            {children}
-                        </Container>;
-                } else {
-                    return <Container {...other}>
-                            {header && <Header as="h1">{header}</Header>}
-                            {children}
-                            <Divider />
-                        </Container>;
-                }
-            }}
-        </FeatureContext.Consumer>;
+    return <Container {...other}>
+        {header && <Header as="h1">{header}</Header>}
+        {children}
+        <FeatureContext.Consumer>
+            {features => (features.dashboard ? null : <Divider />)}
+        </FeatureContext.Consumer>
+
+    </Container>;
 }
 
 Pheader.defaultProps = {
@@ -109,7 +101,7 @@ function DashBlock(props) {
 
     return (
         <Segment basic {...rest} >
-            {(header) ? 
+            {(header) ?
                 <div className="dashblock__head">
                     <Header as="h2" content={header} />
                 </div> : null
