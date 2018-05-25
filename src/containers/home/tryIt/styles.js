@@ -17,3 +17,10 @@ export const DesktopView = styled.div`
       visibility: hidden;
     `};
 `;
+
+export const StoreBadge = styled.img`
+    max-height: 40px;
+    min-height: 40px;
+    padding: 0 6px;
+    width: auto;
+`;
