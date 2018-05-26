@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import Container from "components/augmint-ui/container";
 import Segment from "components/augmint-ui/segment";
 import List from "components/augmint-ui/list";
@@ -72,16 +73,16 @@ export function AppFooter(props) {
                         </a>
                     </List.Item>
                     <List.Item>
-                        <a href="/manifesto">MANIFESTO</a>
+                        <NavLink to="/manifesto">MANIFESTO</NavLink>
                     </List.Item>
                     <List.Item>
-                        <a href="/disclaimer">DISCLAIMER</a>
+                        <NavLink to="/disclaimer">DISCLAIMER</NavLink>
                     </List.Item>
                     {isConnected ? (
                         <List.Item>
-                            <a href="/under-the-hood" data-testid="underTheHoodLink">
+                            <NavLink to="/under-the-hood" data-testid="underTheHoodLink">
                                 UNDER THE HOOD
-                            </a>
+                            </NavLink>
                         </List.Item>
                     ) : null}
                     <List.Item>
