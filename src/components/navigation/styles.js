@@ -37,6 +37,7 @@ export const StyleNavItem = styled.li`
     display: flex;
     ${media.tablet`
       text-align: center;
+
     `} & + li {
         margin-left: 8px;
         ${media.tablet`
