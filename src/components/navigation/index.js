@@ -43,7 +43,7 @@ export default class AppMenu extends React.Component {
 
         const currentLocation = location.pathname;
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit"].indexOf(currentLocation) > -1;
+            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/bootstrap-test", "/tryit"].indexOf(currentLocation) > -1;
 
         return (
             <div>
@@ -109,6 +109,15 @@ export default class AppMenu extends React.Component {
                                     data-testid="reservesMenuLink"
                                 >
                                     Reserves
+                                </AppMenuItem>
+                            )}
+                            {isConnected && (
+                                <AppMenuItem
+                                    isActive={() => currentLocation === "/bootstrap-test"}
+                                    to="/bootstrap-test"
+                                    data-testid="bootstrapTest"
+                                >
+                                    Bootstrap Test
                                 </AppMenuItem>
                             )}
                         </StyleNavList>
