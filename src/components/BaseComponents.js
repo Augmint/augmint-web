@@ -1,3 +1,4 @@
+/* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import BigNumber from "bignumber.js";
 import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
