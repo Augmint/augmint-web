@@ -26,8 +26,8 @@ class AccountHome extends React.Component {
                     <Pheader header="My Account" />
 
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={this.props.userAccount} header="Overview" />
 
                                 <TokenTransferForm />
@@ -38,7 +38,7 @@ class AccountHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <LoanList
                                     header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}

@@ -13,6 +13,8 @@ import {
     LEGACY_LOCKERS_RELEASE_SUCCESS
 } from "modules/reducers/legacyLockers";
 
+const styleP = { margin: "1rem 0" };
+
 class LegacyLockers extends React.Component {
     constructor(props) {
         super(props);
@@ -61,11 +63,11 @@ class LegacyLockers extends React.Component {
             .filter(contract => contract.locks.length > 0 && !contract.isDismissed)
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
-                    <p>
+                    <p style={styleP}>
                         {contract.locks.length} locks in legacy Lock contract <small> {contract.address} </small>
                     </p>
 
-                    <p>
+                    <p style={styleP}>
                         <Button
                             type="submit"
                             data-testid={`dismissLegacyLockerButton-${contractIndex}`}
@@ -77,13 +79,15 @@ class LegacyLockers extends React.Component {
 
                     {contract.locks.map((lock, lockIndex) => (
                         <MyListGroup.Row key={`ordersDiv-${contractIndex}-${lock.id}`}>
-                            <p>
+                            <p style={styleP}>
                                 Lock id: {lock.id} Amount locked: {lock.amountLocked} A€ (+ {lock.interestEarned} A€
                                 premium)
                             </p>
 
                             {lock.isSubmitted ? (
-                                <p>Release funds submitted, wait for transaction confirmations then refresh page</p>
+                                <p style={styleP}>
+                                    Release funds submitted, wait for transaction confirmations then refresh page
+                                </p>
                             ) : lock.isReleasebale ? (
                                 <Button
                                     type="submit"
@@ -95,7 +99,7 @@ class LegacyLockers extends React.Component {
                                     {submitting ? "Submitting legacy funds release..." : "Release funds"}
                                 </Button>
                             ) : (
-                                <p>This lock will be releaseable on {lock.lockedUntilText}</p>
+                                <p style={styleP}>This lock will be releaseable on {lock.lockedUntilText}</p>
                             )}
                         </MyListGroup.Row>
                     ))}
@@ -106,7 +110,7 @@ class LegacyLockers extends React.Component {
             <Psegment>
                 <Container>
                     <InfoPanel header="You have locked funds in an older version of Augmint Locker contract">
-                        <p>
+                        <p style={styleP}>
                             Augmint Locker version in use on {network.name} network at {lockerContract.address}.
                             <br />
                             You can release your funds in the old locker contract when the lock expired.<br />

@@ -7,11 +7,11 @@ import { RepayHelp } from "./components/RepayHelp";
 class LoanSelector extends React.Component {
     render() {
         return (
-            <Pgrid columns={2}>
-                <Pgrid.Column width={6}>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={6 / 16}>
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column width={10}>
+                <Pgrid.Column size={10 / 16}>
                     <LoanList
                         header="Select your loan to repay"
                         noItemMessage={<p>None of your loans is due currently.</p>}
@@ -21,7 +21,7 @@ class LoanSelector extends React.Component {
                         }}
                     />
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }
