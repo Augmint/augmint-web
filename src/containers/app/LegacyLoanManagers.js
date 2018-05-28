@@ -15,6 +15,8 @@ import {
     LEGACY_LOANMANAGERS_COLLECT_SUCCESS
 } from "modules/reducers/legacyLoanManagers";
 
+const styleP = { margin: "1rem 0" };
+
 class LegacyLoanManagers extends React.Component {
     constructor(props) {
         super(props);
@@ -83,11 +85,11 @@ class LegacyLoanManagers extends React.Component {
             .filter(contract => contract.loans.length > 0 && !contract.isDismissed)
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
-                    <p>
+                    <p style={styleP}>
                         {contract.loans.length} loans in legacy Loan contract: <small> {contract.address} </small>
                     </p>
 
-                    <p>
+                    <p style={styleP}>
                         <Button
                             type="submit"
                             data-testid={`dismissLegacyLoanManagerButton-${contractIndex}`}
@@ -99,20 +101,22 @@ class LegacyLoanManagers extends React.Component {
 
                     {contract.loans.map((loan, loanIndex) => (
                         <MyListGroup.Row key={`loansDiv-${contractIndex}-${loan.id}`}>
-                            <p>
+                            <p style={styleP}>
                                 Loan id: {loan.id} Repayment amount: {loan.repaymentAmount} A€
                             </p>
                             {loan.isRepayable ? (
-                                <p>This loan is due on {loan.maturityText}</p>
+                                <p style={styleP}>This loan is due on {loan.maturityText}</p>
                             ) : (
-                                <p>This loan wasn't repayed on time ( before {loan.maturityText})</p>
+                                <p style={styleP}>This loan wasn't repayed on time ( before {loan.maturityText})</p>
                             )}
 
                             {loan.isSubmitted ? (
-                                <p>Loan transaction submitted, wait for confirmations then refresh page</p>
+                                <p style={styleP}>
+                                    Loan transaction submitted, wait for confirmations then refresh page
+                                </p>
                             ) : loan.isRepayable ? (
                                 contract.userTokenBalance < loan.repaymentAmount ? (
-                                    <p>
+                                    <p style={styleP}>
                                         You have insufficient balance in old token contract to repay this loan. Your
                                         balance: {contract.userTokenBalance} A€ in token contract at
                                         <small>{contract.tokenAddress}</small>
@@ -141,7 +145,7 @@ class LegacyLoanManagers extends React.Component {
                                     {submitting ? "Submitting tx..." : "Collection"}
                                 </Button>
                             ) : (
-                                <p>Unexpected loan status: {loan.status}</p>
+                                <p style={styleP}>Unexpected loan status: {loan.status}</p>
                             )}
                         </MyListGroup.Row>
                     ))}
@@ -152,7 +156,7 @@ class LegacyLoanManagers extends React.Component {
             <Psegment>
                 <Container>
                     <InfoPanel header="You have loan(s) in an older version of Augmint LoanManager contract">
-                        <p>
+                        <p style={styleP}>
                             Augmint LoanManager version in use on {network.name} network at{" "}
                             {loanManagerContract.address}.
                             <br />

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 
 export function SignTest(props) {

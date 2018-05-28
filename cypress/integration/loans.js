@@ -73,7 +73,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 8.14); // interest
+            cy.assertUserAEurBalanceOnUI((this.startingAeurBalance - 8.14).toFixed(2)); // interest
 
             // TODO loan removed, status etc.
             //cy.get("[data-testid=myAccountMenuLink]").click();

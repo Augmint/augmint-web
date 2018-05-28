@@ -1,7 +1,7 @@
 import React from "react";
 import store from "modules/store";
 import { Pblock } from "components/PageLayout";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { SubmissionError, reduxForm } from "redux-form";
 import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";

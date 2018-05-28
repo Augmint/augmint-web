@@ -5,9 +5,11 @@ const BaseLabel = `
     background-color: ${theme.colors.lightGrey};
     color: rgba(0,0,0,.6);
     padding: 12px;
+    white-space:nowrap;
 `;
 
 export const StyleLabel = styled.label`
     ${BaseLabel};
-    border-radius: ${props => (props.align === "right" ? "0 5px 5px 0" : "")};
+    border-radius: ${props =>
+        props.align === "right" ? theme.borderRadius.right : props.align === "left" ? theme.borderRadius.left : ""};
 `;

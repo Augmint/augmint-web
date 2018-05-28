@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { matchOrders, MATCH_ORDERS_SUCCESS } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 //import { LoadingPanel } from "components/MsgPanels";

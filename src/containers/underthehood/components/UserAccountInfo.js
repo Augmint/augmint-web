@@ -1,7 +1,7 @@
 import React from "react";
 import store from "modules/store";
 import { fetchUserBalance } from "modules/reducers/userBalances";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 
 export function UserAccountInfo(props) {

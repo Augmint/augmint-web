@@ -7,6 +7,18 @@ const BaseHeader = `
     font-family: ${theme.typography.fontFamilies.default};
     font-weight: 200;
     padding: 0;
+
+    &.opacLightGrey {
+      color: ${theme.colors.opacLightGrey}
+    }
+    & i {
+      margin: 0 10px;
+    }
+`;
+
+const HeaderH5 = `
+    font-size: ${theme.typography.fontSizes.h5};
+    line-height: ${remCalc(15)};
 `;
 
 const HeaderH4 = `
@@ -27,9 +39,15 @@ const HeaderH2 = `
     margin-bottom: ${remCalc(50)};
 `;
 
-export const StyledHeaderH3 = styled.h3`
+const HeaderH1 = `
+    font-size: ${theme.typography.fontSizes.h1};
+    line-height: ${theme.typography.fontSizes.h1};
+    margin-bottom: ${remCalc(14)};
+`;
+
+export const StyledHeaderH1 = styled.h1`
     ${BaseHeader};
-    ${HeaderH3};
+    ${HeaderH1};
 `;
 
 export const StyledHeaderH2 = styled.h2`
@@ -37,7 +55,17 @@ export const StyledHeaderH2 = styled.h2`
     ${HeaderH2};
 `;
 
+export const StyledHeaderH3 = styled.h3`
+    ${BaseHeader};
+    ${HeaderH3};
+`;
+
 export const StyledHeaderH4 = styled.h4`
     ${BaseHeader};
     ${HeaderH4};
+`;
+
+export const StyledHeaderH5 = styled.h5`
+    ${BaseHeader};
+    ${HeaderH5};
 `;

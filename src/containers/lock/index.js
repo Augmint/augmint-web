@@ -25,14 +25,14 @@ class LockContainer extends React.Component {
         const { userAccount, lockManager, lockProducts } = this.props;
 
         return (
-            <Pcontainer>
+            <Pcontainer style={{ margin: "2em auto" }}>
                 <EthereumState>
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} header="Balance" />
                             </Pgrid.Column>
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <StyledButtonContainer>
                                     <Button to="/exchange">Buy A€</Button>
                                 </StyledButtonContainer>
