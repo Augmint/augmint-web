@@ -2,7 +2,6 @@
 Wrapper for the whole App
     main navigation
 */
-import "semantic/dist/semantic.min.css";
 import "./site.css";
 import "assets/fontawesome/css/fontawesome-all.css";
 
