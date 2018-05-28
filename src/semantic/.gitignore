@@ -1,0 +1,17 @@
+/*
+!/.gitignore
+# Semantic custom files and dist.
+src/**
+!/src/theme.config
+
+src/themes/**
+!/src/themes/**
+/src/themes/**
+!/src/themes/dcm/
+
+dist/**
+!/dist/themes/**
+/dist/**
+!/dist/themes/dcm/
+!/dist/themes/default/
+!/dist/semantic.min.css
