@@ -2,9 +2,7 @@ import styled from "styled-components";
 import theme from "styles/theme";
 
 const BaseIcon = `
-    height: 1rem;
     text-align: center;
-    width: 1.18rem;
 
     &.disabled {
         opacity: .45;

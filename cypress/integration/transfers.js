@@ -19,7 +19,7 @@ describe("Transfers", function() {
             .should("have.value", amount.toString());
 
         cy
-            .get("[data-testid=transferNarrativeField] > input")
+            .get("[data-testid=transferNarrativeField]")
             .type(narrative)
             .should("have.value", narrative);
 
@@ -29,7 +29,7 @@ describe("Transfers", function() {
             .should("equal", fee.toString());
 
         cy
-            .get("[data-testid=transferToAddressField] > input")
+            .get("[data-testid=transferToAddressField]")
             .type(toAddress)
             .should("have.value", toAddress);
 

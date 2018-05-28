@@ -17,7 +17,6 @@ import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
-import AboutUs from "containers/home/aboutUs";
 import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
@@ -117,7 +116,6 @@ class App extends React.Component {
 
                         <Route exact path="/concept" component={Concept} />
                         <Route exact path="/tryit" component={TryIt} />
-                        <Route exact path="/aboutus" component={AboutUs} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
                         <Route exact path="/contact" component={Contact} />
                         <Route exact path="/manifesto" component={Manifesto} />
