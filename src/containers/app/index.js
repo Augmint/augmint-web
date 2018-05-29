@@ -85,9 +85,13 @@ class App extends React.Component {
     }
 
     render() {
+        const mainPath = (this.props.location.pathname.split('/').length > 0)
+            ? this.props.location.pathname.split('/')[1]
+            : '';
+
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit", "/loan"].indexOf(
-                this.props.location.pathname
+            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(
+                mainPath
             ) > -1;
         return (
             <FeatureContext.Consumer>

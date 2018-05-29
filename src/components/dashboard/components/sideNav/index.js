@@ -42,7 +42,7 @@ export const SideNavLi = BaseLi.extend`
     width: 100%;
 `;
 
-export const SideNavLink = styled(NavLink)`
+export const SideNavLink = styled(NavLink) `
     display: flex;
     align-items: center;
     padding: 5px 10px;
@@ -81,35 +81,37 @@ export const SideNavLink = styled(NavLink)`
 
 export default props => (
     <SideNav>
-        <img alt="Augmint" src={AugmintLogo} />
+        <NavLink to="/">
+            <img alt="Augmint" src={AugmintLogo} />
+        </NavLink>
         <SideNavUl>
             <SideNavLi>
-                <SideNavLink to="account" activeClassName="active">
-                    <Icon name="account"/>
+                <SideNavLink to="/account" activeClassName="active">
+                    <Icon name="account" />
                     <span>Account</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="exchange" activeClassName="active">
-                    <Icon name="exchange"/>
+                <SideNavLink to="/exchange" activeClassName="active">
+                    <Icon name="exchange" />
                     <span>Buy/Sell</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="loan" activeClassName="active">
-                    <Icon name="loan"/>
+                <SideNavLink to="/loan/new" activeClassName="active">
+                    <Icon name="loan" />
                     <span>Loan</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="lock" activeClassName="active">
-                    <Icon name="lock"/>
+                <SideNavLink to="/lock" activeClassName="active">
+                    <Icon name="lock" />
                     <span>Lock</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="reserves" activeClassName="active">
-                    <Icon name="reserves"/>
+                <SideNavLink to="/reserves" activeClassName="active">
+                    <Icon name="reserves" />
                     <span>Reserves</span>
                 </SideNavLink>
             </SideNavLi>

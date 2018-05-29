@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 import { Table } from "semantic-ui-react";
 
-import theme from "../../../../styles/theme";
+import { ifProp } from "styled-tools";
+
+import theme from "styles/theme";
 
 export const TermTable = styled(Table)`
     background-color: transparent !important;
@@ -15,7 +17,7 @@ export const TermTableRow = styled(Table.Row)``;
 
 export const TermTableCell = styled(Table.Cell)`
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: ${theme.colors.white};
+    color: ${ifProp("dashboard", theme.colors.primary, theme.colors.white)};
 
     &:first-child {
         width: 40px;
