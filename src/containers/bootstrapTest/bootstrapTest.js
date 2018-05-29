@@ -36,27 +36,9 @@ import {
     }
   
  ];
-
-
-
-const MyHeader = (props) => (
-    <Table>
-        <thead>
-            <tr>
-                <th scope="col">TO</th>
-                <th scope="col">FROM</th>
-                <th scope="col">DATE/TIME</th>
-                <th scope="col">AMOUNT</th>
-                <th scope="col">DESCRIPTION</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </Table>
-)
  
 
-const MyTableComponent = (props) => (
+const MyTableComponent = (props) => ( 
     <Table>
         <thead>
             <tr>
@@ -99,15 +81,12 @@ const MyTableComponent = (props) => (
         </tbody>
     </Table>
 );
-const compose = () => {
-    const element = MyHeader()
-    ReactDOM.render(element, document.getElementById('root'));
-}
+
 
 export default class BootstrapTest extends React.Component {
   
     render() {
-        return compose()
+        return MyTableComponent()
 
     }
 }
