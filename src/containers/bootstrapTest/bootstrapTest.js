@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import {
     Table,
     Tr,
@@ -37,7 +36,7 @@ import {
   
  ];
  
-
+/* 
 const MyTableComponent = (props) => ( 
     <Table>
         <thead>
@@ -82,11 +81,48 @@ const MyTableComponent = (props) => (
     </Table>
 );
 
-
+ */
 export default class BootstrapTest extends React.Component {
   
     render() {
-        return MyTableComponent()
+
+        function myHeader () {
+            const skeleton =     
+            <Table>
+                <thead>
+                    <tr>
+                        <th scope="col">TO</th>
+                        <th scope="col">FROM</th>
+                        <th scope="col">DATE/TIME</th>
+                        <th scope="col">AMOUNT</th>
+                        <th scope="col">DESCRIPTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </Table>
+        return skeleton
+    
+        }
+        
+        function transactioner (list) {
+            let transactions = [];
+            for (var i = 0; i < list.length; i++){
+                transactions.push(
+                    <Tr>
+                        <td>{list[i].to}</td>
+                        <td>{list[i].from}</td>
+                        <td>{list[i].dateTime}</td>
+                        <td>{list[i].amount}</td>
+                        <td>{list[i].description}</td>
+                    </Tr>   
+                )
+            }
+            console.log(transactions)
+            return transactions;
+        }
+
+        return transactioner(transactionHistory)
 
     }
 }
