@@ -48,6 +48,12 @@ export default function Icon(props) {
         case "help circle":
             className += " fas fa-question-circle";
             break;
+        case "question":
+            className += " fas fa-question";
+            break;
+        case "github":
+            className += " fab fa-github";
+            break;
         default:
             break;
     }

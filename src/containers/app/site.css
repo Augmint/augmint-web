@@ -7,11 +7,15 @@
  */
 
 #fakebody {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+#fakebody.noScroll {
+    overflow: hidden;
 }
 
 .Site {
@@ -76,31 +80,34 @@
     background: #ccc;
 }
 
-.ui.form .field>label {
+.ui.form .field > label {
     color: white;
 }
 
-.ui.statistic>.label, .ui.statistics .statistic>.label {
+.ui.statistic > .label,
+.ui.statistics .statistic > .label {
     color: #ffad00;
 }
 
-.ui.statistic>.label, .ui.statistics .statistic>.value {
+.ui.statistic > .label,
+.ui.statistics .statistic > .value {
     color: #fff;
 }
 
 .menu .ui.button {
     font-weight: 200;
-    font-size: 14px!important;
+    font-size: 14px !important;
     text-transform: uppercase;
-    background-color: #fff; 
+    background-color: #fff;
 }
 
 .ui.modal p {
     color: #051d2d;
 }
 
-.ui.basic.button, .ui.basic.buttons .button {
-    background: #fff!important;
+.ui.basic.button,
+.ui.basic.buttons .button {
+    background: #fff !important;
 }
 
 /* TODO: clean up f_dashboard temporary styles */

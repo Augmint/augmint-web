@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import { LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
 import { Disclaimer } from "./Disclaimer";
