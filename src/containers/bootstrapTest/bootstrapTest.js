@@ -36,7 +36,7 @@ import {
   
  ];
  
-/* 
+
 const MyTableComponent = (props) => ( 
     <Table>
         <thead>
@@ -81,7 +81,7 @@ const MyTableComponent = (props) => (
     </Table>
 );
 
- */
+
 export default class BootstrapTest extends React.Component {
   
     render() {
@@ -122,7 +122,7 @@ export default class BootstrapTest extends React.Component {
             return transactions;
         }
 
-        return transactioner(transactionHistory)
+        return MyTableComponent()
 
     }
 }
