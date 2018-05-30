@@ -1,28 +1,31 @@
 import React from "react";
-
+// COULD use moment js
+import moment from "moment";
 import { Table, Tr, } from 'styled-table-component';
-import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "./styles";
+import { StyleTd } from "./styles";
 
 export class BootstrapTable extends React.Component {
     render() {
-        const { mockData, datakeys, unit, data, headerdata, extraClass, testid } = this.props;
-        console.log(mockData);
+        const { mockData, extraClass } = this.props;
 
         return (
             <div className={extraClass}>
-                <Table striped>
+                <Table responsive>
                     <thead>
                         <Tr>
                             {Object.keys(mockData[0]).map((key, i) => <th key={"th_" + i} scope="col">{key}</th>)}
                         </Tr>
                     </thead>
-                    <tbody>
-                        {mockData.map((rowData, rowIndex) => (
+                    <tbody> 
+                        {mockData.map((rowData, rowIndex) => ( 
                             <Tr key={"row_" + rowIndex}>
-                                {Object.keys(rowData).map((key, i) => (
-                                    <td key={"row_" + rowIndex + "_cell_" + i}>
-                                        {rowData[key]}
-                                    </td>
+                                {Object.keys(rowData).map((key, i) => ( 
+                                    <StyleTd key={"row_" + rowIndex + "_cell_" + i}>
+                                        {key === "dateTime" 
+                                            ? (moment.unix(rowData[key]).format('dddd, MMMM Do, YYYY h:mm:ss A'))
+                                            : rowData[key]
+                                        }
+                                    </StyleTd>
                                 ))}
                             </Tr>
                         ))}
@@ -32,6 +35,7 @@ export class BootstrapTable extends React.Component {
         );
     }
 }
+
 
 BootstrapTable.defaultProps = {mockData: [
         {

@@ -2,15 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-// import loanManagerProvider from "modules/loanManagerProvider";
-// import lockManagerProvider from "modules/lockManagerProvider";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
-import { Table } from "components/augmint-ui/basicTable";
 import { BootstrapTable } from "components/augmint-ui/bootstrapTable";
-// import BootstrapTableCustom from "./components/BootstrapTableCustom";
 
-class BootstrapTest extends React.Component { // btw why there is no constructor?
+class BootstrapTest extends React.Component { 
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
@@ -23,7 +19,7 @@ class BootstrapTest extends React.Component { // btw why there is no constructor
                     <Pgrid columns={1}>
                         <Pheader header="Transaction History" />
                         <Pgrid.Column>
-                            <BootstrapTable></BootstrapTable>
+                            <BootstrapTable></BootstrapTable> {/* COULD BE SEPARATED to TransactionHistory.js component */}
                         </Pgrid.Column>
                     </Pgrid>
                 </Psegment>
@@ -32,7 +28,7 @@ class BootstrapTest extends React.Component { // btw why there is no constructor
     }
 }
 
-const mapStateToProps = state => ({ // CHECK this later
+const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(BootstrapTest);
