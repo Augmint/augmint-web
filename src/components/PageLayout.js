@@ -12,7 +12,7 @@ import { FeatureContext } from "modules/services/featureService";
 export function Pheader(props) {
     const { children, header, className, ...other } = props;
     return <Container {...other}>
-        {header && <Header as="h1">{header}</Header>}
+        {header && <Header className={className} as="h1">{header}</Header>}
         {children}
         <FeatureContext.Consumer>
             {features => (features.dashboard ? null : <Divider />)}

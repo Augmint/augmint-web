@@ -3,7 +3,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 import Icon from "components/augmint-ui/icon";
-import { BaseUl, BaseLi } from "components/augmint-ui/list";
 
 import styled from 'styled-components';
 import theme from "styles/theme";
@@ -30,14 +29,16 @@ export const SideNav = styled.nav`
     }
 `;
 
-export const SideNavUl = BaseUl.extend`
+export const SideNavUl = styled.ul`
     flex-direction: column;
     align-items: baseline;
     align-self: flex-start;
     width: 100%;
+    list-style: none;
+    padding: 0;
 `;
 
-export const SideNavLi = BaseLi.extend`
+export const SideNavLi = styled.li`
     margin-bottom: 10px;
     width: 100%;
 `;

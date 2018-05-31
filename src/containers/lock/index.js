@@ -12,9 +12,8 @@ import AccountInfo from "components/AccountInfo";
 import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
 
-import { FeatureContext } from "modules/services/featureService";
-
 import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 import { StyledButtonContainer } from "./styles";
 
@@ -31,8 +30,14 @@ class LockContainer extends React.Component {
         return (
             <Psegment>
                 <EthereumState>
-                    <TopNavTitlePortal>
-                        <Pheader header="Lock A-EUR" />
+                <TopNavTitlePortal>
+                        <FeatureContext>
+                            {
+                                features => features.dashboard ?
+                                    <Pheader className="secondaryColor" header="Lock A-EUR" /> :
+                                    <Pheader header="Lock A-EUR" />
+                            }
+                        </FeatureContext>
                     </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row wrap={false}>

@@ -16,6 +16,7 @@ import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
 
 import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -30,7 +31,9 @@ class ExchangeHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Buy & Sell A-EUR" />
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Buy & Sell A-EUR" /> : <Pheader header="Buy & Sell A-EUR" />}
+                        </FeatureContext>
                     </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
@@ -42,7 +45,22 @@ class ExchangeHome extends React.Component {
                                     userAccountAddress={userAccount.address}
                                     network={network}
                                 />
-
+                                <FeatureContext>
+                                    {
+                                        features => features.dashboard ? 
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                        /> :
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                            header="A€ &harr; ETH on Augmint"
+                                        />
+                            }
+                                </FeatureContext>
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}

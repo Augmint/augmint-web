@@ -11,6 +11,10 @@ const BaseHeader = `
     &.opacLightGrey {
       color: ${theme.colors.opacLightGrey}
     }
+
+    &.secondaryColor {
+        color: ${theme.colors.secondary};
+    }
     & i {
       margin: 0 10px;
     }

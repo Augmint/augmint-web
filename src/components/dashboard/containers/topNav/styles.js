@@ -3,8 +3,6 @@ import theme from "styles/theme";
 
 import { Link } from "react-router-dom";
 
-import { BaseUl, BaseLi } from "components/augmint-ui/list";
-
 const TOP_NAV_HEIGHT = '60px';
 
 export const StyledTopNav = styled.nav`
@@ -28,11 +26,16 @@ export const TitleWrapper = styled.div`
     }
 `;
 
-export const StyledTopNavUl = BaseUl.extend`
+export const StyledTopNavUl = styled.ul`
+    display: flex;
     justify-content: flex-end;
+    margin: 0;
 `;
 
-export const StyledTopNavLi = BaseLi.extend`
+export const StyledTopNavLi = styled.li`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: ${TOP_NAV_HEIGHT};
 `;
 

@@ -13,6 +13,7 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 
 import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -26,7 +27,9 @@ class AccountHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="My Account" />
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="My Account" /> : <Pheader header="My Account" />}
+                        </FeatureContext>
                     </TopNavTitlePortal>
 
                     <Pgrid>
