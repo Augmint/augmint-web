@@ -4,7 +4,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { repayLoan, LOANTRANSACTIONS_REPAY_SUCCESS } from "modules/reducers/loanTransactions";
 import LoanDetails from "containers/loan/components/LoanDetails";
@@ -98,12 +98,13 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Pgrid columns={2}>
-                <Pgrid.Column width={6}>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={6 / 17}>
                     <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column width={10}>
+                <Pgrid.Column size={1 / 17} />
+                <Pgrid.Column size={10 / 17}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
@@ -156,7 +157,7 @@ class RepayLoanPage extends React.Component {
                         />
                     )}
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }

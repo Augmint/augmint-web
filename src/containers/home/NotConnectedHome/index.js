@@ -1,14 +1,18 @@
 import React from "react";
 
-import { Header, Container, Grid, Segment, Rail, Responsive, Image } from "semantic-ui-react";
-
+import Grid from "styled-components-grid";
+import { ThemeProvider } from "styled-components";
+import Container from "components/augmint-ui/container";
+import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
+import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
 import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
 import { Member } from "./member.js";
 
+import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
 import slackIcon from "assets/images/slack-icon.svg";
@@ -33,11 +37,11 @@ export default class NotConnectedHome extends React.Component {
 
     render() {
         return (
-            <Segment basic as="article">
+            <article>
                 <Container>
-                    <Segment basic textAlign="center" as="section" className="key-features large-gap">
+                    <section style={{ textAlign: "center" }} className="key-features large-gap segment">
                         <header className="key-features__header">
-                            <Header textAlign="center" as="h1" size="large">
+                            <Header textAlign="center" as="h4" size="large" style={{ lineHeight: "31px" }}>
                                 Augmint offers digital tokens targeted to a fiat currency.
                                 <br />
                                 The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
@@ -51,65 +55,79 @@ export default class NotConnectedHome extends React.Component {
                             <BalanceIcon />
                         </div>
 
-                        <Grid columns="equal" style={{ justifyContent: "space-evenly" }}>
-                            {keyFeatures.map(feature => (
-                                <Grid.Column mobile="16" computer="5" textAlign="center" key={feature.title}>
-                                    <Segment style={styles.keyFeaturesSegment} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h3" style={styles.keyFeaturesHeader}>
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac" style={styles.howToUseText}>
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                    </Segment>
-                    <Segment basic textAlign="center" as="section" className="advantages">
-                        <Header textAlign="left" as="h2">
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
+                                {keyFeatures.map(feature => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        style={{ textAlign: "center" }}
+                                        key={feature.title}
+                                    >
+                                        <div style={styles.keyFeaturesSegment} className="segment">
+                                            {feature.image}
+                                        </div>
+                                        <Header as="h3" style={styles.keyFeaturesHeader}>
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac" style={styles.howToUseText}>
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+                    </section>
+                    <section style={{ textAlign: "center" }} className="advantages segment">
+                        <Header style={{ textAlign: "left" }} as="h2">
                             Great for business
                         </Header>
 
-                        <Grid columns="equal" style={{ justifyContent: "space-evenly" }}>
-                            {keyBenefits.filter(item => item.type === "business").map(item => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
-                                    <div className="list-item">
-                                        <p className="opac" style={styles.howToUseText}>
-                                            {item.text}
-                                        </p>
-                                    </div>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
+                                {keyBenefits.filter(item => item.type === "business").map(item => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        style={{ textAlign: "left" }}
+                                        key={item.pk}
+                                    >
+                                        <div className="list-item">
+                                            <p className="opac" style={styles.howToUseText}>
+                                                {item.text}
+                                            </p>
+                                        </div>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
 
-                        <Header textAlign="left" as="h2" style={{ marginTop: "100px" }}>
+                        <Header as="h2" style={{ marginTop: "100px", textAlign: "left" }}>
                             And for individuals
                         </Header>
 
-                        <Grid columns="equal" style={{ justifyContent: "space-evenly" }}>
-                            {keyBenefits.filter(item => item.type === "individual").map(item => (
-                                <Grid.Column mobile="16" computer="5" textAlign="left" key={item.pk}>
-                                    <div className="list-item">
-                                        <p className="opac" style={styles.howToUseText}>
-                                            {item.text}
-                                        </p>
-                                    </div>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                    </Segment>
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
+                                {keyBenefits.filter(item => item.type === "individual").map(item => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        style={{ textAlign: "left" }}
+                                        key={item.pk}
+                                    >
+                                        <div className="list-item">
+                                            <p className="opac" style={styles.howToUseText}>
+                                                {item.text}
+                                            </p>
+                                        </div>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+                    </section>
                 </Container>
-                <Segment basic as="section" className="how-to-use">
-                    <Responsive
-                        as={Rail}
-                        minWidth={768}
-                        attached
-                        internal
-                        position="left"
-                        style={{ width: "160px", position: "sticky", zIndex: "2", top: "200px", marginLeft: "-300px" }}
-                    >
+                <section className="how-to-use segment">
+                    <Rail className="noSmallScreen">
                         <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
                             <div style={styles.howItWorksRail}>
                                 <div style={styles.howItWorksRailBox}>
@@ -123,157 +141,181 @@ export default class NotConnectedHome extends React.Component {
                                 </div>
                             </div>
                         </a>
-                    </Responsive>
+                    </Rail>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac loans" style={styles.howToUseText}>
                             Use your cryptocurrencies without<br />losing them. Get a loan and spend easily.
                         </p>
-                        <Grid columns="equal" style={{ justifyContent: "space-around" }}>
-                            {howItWorks.filter(feature => feature.type === "loan").map(feature => (
-                                <Grid.Column
-                                    mobile="16"
-                                    computer="5"
-                                    textAlign="left"
-                                    key={feature.pk}
-                                    style={{ padding: 50, paddingBottom: 0 }}
-                                >
-                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h4" style={styles.howToUseHeader}>
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac" style={styles.howToUseText}>
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
+                                {howItWorks.filter(feature => feature.type === "loan").map(feature => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={feature.pk}
+                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
+                                            {feature.image}
+                                        </div>
+                                        <Header as="h4" style={styles.howToUseHeader}>
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac" style={styles.howToUseText}>
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                         <Header as="h2">Buy and sell A-Euro</Header>
-                        <Grid columns="equal" style={{ justifyContent: "space-around" }}>
-                            {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
-                                <Grid.Column
-                                    mobile="16"
-                                    computer="5"
-                                    textAlign="left"
-                                    key={feature.pk}
-                                    style={{ padding: 50, paddingBottom: 0 }}
-                                >
-                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h4" style={styles.howToUseHeader}>
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac" style={styles.howToUseText}>
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
+                                {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={feature.pk}
+                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
+                                            {feature.image}
+                                        </div>
+                                        <Header as="h4" style={styles.howToUseHeader}>
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac" style={styles.howToUseText}>
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                         <Header as="h2">How to use your A-Euro</Header>
-                        <Grid columns="equal" className="margin">
-                            {howItWorks.filter(feature => feature.type === "use").map(feature => (
-                                <Grid.Column
-                                    mobile="16"
-                                    computer="5"
-                                    textAlign="left"
-                                    key={feature.pk}
-                                    style={{ padding: 50, paddingBottom: 0 }}
-                                >
-                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h4" style={styles.howToUseHeader}>
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac" style={styles.howToUseText}>
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
+
+                        <ThemeProvider theme={theme}>
+                            <Grid className="margin grid">
+                                {howItWorks.filter(feature => feature.type === "use").map(feature => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={feature.pk}
+                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
+                                            {feature.image}
+                                        </div>
+                                        <Header as="h4" style={styles.howToUseHeader}>
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac" style={styles.howToUseText}>
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+
                         <Header as="h2">Earn more with A-Euro, get premium by locking</Header>
-                        <Grid columns="equal" style={{ justifyContent: "space-around" }}>
-                            {howItWorks.filter(feature => feature.type === "lock").map(feature => (
-                                <Grid.Column
-                                    mobile="16"
-                                    computer="5"
-                                    textAlign="left"
-                                    key={feature.pk}
-                                    style={{ padding: 50, paddingBottom: 0 }}
-                                >
-                                    <Segment className="home-image" style={styles.howItWorksImage} basic>
-                                        {feature.image}
-                                    </Segment>
-                                    <Header as="h4" style={styles.howToUseHeader}>
-                                        {feature.title}
-                                    </Header>
-                                    <p className="opac" style={styles.howToUseText}>
-                                        {feature.text}
-                                    </p>
-                                </Grid.Column>
-                            ))}
-                        </Grid>
-                        <Segment basic style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
+                                {howItWorks.filter(feature => feature.type === "lock").map(feature => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={feature.pk}
+                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <div className="home-image segment" style={styles.howItWorksImage}>
+                                            {feature.image}
+                                        </div>
+                                        <Header as="h4" style={styles.howToUseHeader}>
+                                            {feature.title}
+                                        </Header>
+                                        <p className="opac" style={styles.howToUseText}>
+                                            {feature.text}
+                                        </p>
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+
+                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
-                        </Segment>
+                        </div>
                     </Container>
-                </Segment>
-                <Segment basic textAlign="left" as="section" className="team">
+                </section>
+                <section style={{ textAlign: "left" }} className="team segment">
                     <Container>
                         <Header as="h2">Team</Header>
-                        <Grid columns="equal" style={{ marginBottom: 75 }}>
-                            {founders.map(member => <Member member={member} key={member.pk} />)}
-                        </Grid>
-                        <Grid columns="equal">
-                            {teamMembers.map(member => <Member member={member} key={member.pk} />)}
-                        </Grid>
+
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid" style={{ marginBottom: 75 }}>
+                                {founders.map(member => <Member member={member} key={member.pk} />)}
+                            </Grid>
+                        </ThemeProvider>
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid">
+                                {teamMembers.map(member => <Member member={member} key={member.pk} />)}
+                            </Grid>
+                        </ThemeProvider>
                     </Container>
-                </Segment>
-                <Segment basic textAlign="left" as="section" className="partner" style={{ marginTop: 50 }}>
+                </section>
+                <section className="partner segment" style={{ marginTop: 50, textAlign: "center" }}>
                     <Container>
-                        <Grid columns="equal">
-                            {partners.map(partner => (
-                                <Grid.Column mobile="16" computer="8" textAlign="left" key={partner.pk}>
-                                    <Image src={partner.imgSrc} avatar floated="left" />
-                                    <Header as="h3">{partner.name}</Header>
-                                    {partner.description && (
-                                        <p
-                                            className="description"
-                                            dangerouslySetInnerHTML={{ __html: partner.description }}
-                                            style={{ marginBottom: 3 }}
-                                        />
-                                    )}
-                                    {partner.slackUrl && (
-                                        <a href={partner.slackUrl} target="_blank">
-                                            <img
-                                                alt="slack icon"
-                                                src={slackIcon}
-                                                style={{ height: 14, marginRight: 10, width: 14 }}
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid">
+                                {partners.map(partner => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                        style={{ textAlign: "left" }}
+                                        key={partner.pk}
+                                    >
+                                        <img src={partner.imgSrc} alt={partner.pk} />
+                                        <Header as="h3">{partner.name}</Header>
+                                        {partner.description && (
+                                            <p
+                                                className="description"
+                                                dangerouslySetInnerHTML={{ __html: partner.description }}
+                                                style={{ marginBottom: 3 }}
                                             />
-                                            {partner.slackText || "Join our slack."}
-                                        </a>
-                                    )}
-                                </Grid.Column>
-                            ))}
-                        </Grid>
+                                        )}
+                                        {partner.slackUrl && (
+                                            <a href={partner.slackUrl} target="_blank">
+                                                <img
+                                                    alt="slack icon"
+                                                    src={slackIcon}
+                                                    style={{ height: 14, marginRight: 10, width: 14 }}
+                                                />
+                                                {partner.slackText || "Join our slack."}
+                                            </a>
+                                        )}
+                                    </Grid.Unit>
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
                     </Container>
-                </Segment>
-            </Segment>
+                </section>
+            </article>
         );
     }
 }

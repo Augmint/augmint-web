@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Image } from "semantic-ui-react";
-
 import stableSVG from "assets/images/stable.svg";
 import decentralizedSVG from "assets/images/decentralized.svg";
 import secureSVG from "assets/images/secure.svg";
@@ -37,7 +35,7 @@ import premiumSVG from "assets/images/premium.svg";
 import augmintSVG from "assets/images/logo/augmint.svg";
 
 export const BalanceIcon = () => (
-    <Image centered>
+    <div>
         <svg xmlns="http://www.w3.org/2000/svg" width="393" height="148" viewBox="0 0 393 148">
             <defs>
                 <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="70.821%">
@@ -59,43 +57,43 @@ export const BalanceIcon = () => (
                 />
             </g>
         </svg>
-    </Image>
+    </div>
 );
 
-export const StableIcon = () => <Image centered src={stableSVG} />;
+export const StableIcon = () => <img alt="stable icon" src={stableSVG} />;
 
-export const DecentralizedIcon = () => <Image centered src={decentralizedSVG} />;
+export const DecentralizedIcon = () => <img alt="decentralized icon" src={decentralizedSVG} />;
 
-export const SecureIcon = () => <Image centered src={secureSVG} />;
+export const SecureIcon = () => <img alt="secure icon" src={secureSVG} />;
 
-export const DownArrowIcon = () => <Image centered src={downArrowSVG} />;
+export const DownArrowIcon = () => <img alt="down arrow icon" src={downArrowSVG} />;
 
-export const InterchangeIcon = () => <Image src={interchangeSVG} className="interchange-icon" />;
+export const InterchangeIcon = () => <img alt="interchange icon" src={interchangeSVG} className="interchange-icon" />;
 
-export const DepositIcon = () => <Image src={depositSVG} />;
+export const DepositIcon = () => <img alt="deposit icon" src={depositSVG} />;
 
-export const SpendIcon = () => <Image src={spendEuroSVG} />;
+export const SpendIcon = () => <img alt="spend icon" src={spendEuroSVG} />;
 
-export const GetDepositIcon = () => <Image src={getDepositSVG} />;
+export const GetDepositIcon = () => <img alt="get deposit icon" src={getDepositSVG} />;
 
-export const ExchangeIcon = () => <Image src={exchangeSVG} />;
+export const ExchangeIcon = () => <img alt="exchange icon" src={exchangeSVG} />;
 
-export const PartnersIcon = () => <Image src={partnersSVG} />;
+export const PartnersIcon = () => <img alt="partners icon" src={partnersSVG} />;
 
-export const EtherDeltaIcon = () => <Image src={ethDSVG} />;
+export const EtherDeltaIcon = () => <img alt="ether delta icon" src={ethDSVG} />;
 
-export const AtmIcon = () => <Image src={atmSVG} />;
+export const AtmIcon = () => <img alt="atm icon" src={atmSVG} />;
 
-export const ShopIcon = () => <Image src={shopSVG} />;
+export const ShopIcon = () => <img alt="shop icon" src={shopSVG} />;
 
-export const TransferIcon = () => <Image src={transferSVG} />;
+export const TransferIcon = () => <img alt="transfer icon" src={transferSVG} />;
 
-export const InvestIcon = () => <Image src={investSVG} />;
+export const InvestIcon = () => <img alt="invert icon" src={investSVG} />;
 
-export const LockIcon = () => <Image src={lockSVG} />;
+export const LockIcon = () => <img alt="lock icon" src={lockSVG} />;
 
-export const WaitIcon = () => <Image src={waitSVG} />;
+export const WaitIcon = () => <img alt="wait icon" src={waitSVG} />;
 
-export const PremiumIcon = () => <Image src={premiumSVG} />;
+export const PremiumIcon = () => <img alt="premium icon" src={premiumSVG} />;
 
-export const AugmintIcon = () => <Image src={augmintSVG} className="augmint" />;
+export const AugmintIcon = () => <img alt="augmint icon" src={augmintSVG} className="augmint" />;

@@ -1,6 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Segment, Container, List, Image } from "semantic-ui-react";
+import Container from "components/augmint-ui/container";
+import Segment from "components/augmint-ui/segment";
+import List from "components/augmint-ui/list";
+import Icon from "components/augmint-ui/icon";
 import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
@@ -15,7 +18,8 @@ const segmentStyle = {
     backgroundPosition: "top",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
-    minHeight: 500
+    minHeight: 500,
+    textAlign: "center"
 };
 
 export function AppFooter(props) {
@@ -25,63 +29,65 @@ export function AppFooter(props) {
             "We're a group of developers, entrepeneurs, economists and technologists. We have an open governance structure - anyone can join at any time.";
 
     return (
-        <Segment basic textAlign="center" className="footer" style={segmentStyle}>
-            <Container fluid>
-                <Segment basic as="h5" className="title">
-                    {community}
-                </Segment>
-                <Segment basic as="p" className="description">
-                    {description}
-                </Segment>
-                <Segment basic className="chat-container">
-                    <Segment
-                        basic
+        <Segment className="footer" style={segmentStyle}>
+            <Container>
+                <h5 className="title">{community}</h5>
+                <p className="description">{description}</p>
+                <Segment className="chat-container">
+                    <a
                         className="join-discord"
-                        size="tiny"
-                        as="a"
                         href="https://discord.gg/PwDmsnu"
+                        rel="noopener noreferrer"
                         target="_blank"
+                        style={{ display: "flex", alignItems: "center" }}
                     >
-                        <Image src={discordLogo} />
+                        <img src={discordLogo} alt="discord logo" />
                         Talk to us on Discord
-                    </Segment>
-                    <Segment
-                        basic
+                    </a>
+                    <a
                         className="join-telegram"
-                        size="tiny"
-                        as="a"
                         href="https://t.me/augmint"
+                        rel="noopener noreferrer"
                         target="_blank"
+                        style={{ display: "flex", alignItems: "center" }}
                     >
-                        <Image src={telegramLogo} />
+                        <img src={telegramLogo} alt="telegram logo" />
                         Talk to us on Telegram
-                    </Segment>
+                    </a>
                 </Segment>
 
-                <List horizontal inverted divided link className="contact-list" style={{ marginTop: 40 }}>
+                <List className="contact-list" style={{ marginTop: 40 }}>
                     <List.Item>
-                        <List.Icon name="github" size="large" verticalAlign="middle" />
-                        <List.Content as="a" href="https://github.com/Augmint" target="_blank">
+                        <Icon name="github" style={{ marginRight: 5 }} />
+                        <a href="https://github.com/Augmint" target="_blank" rel="noopener noreferrer">
                             GITHUB
-                        </List.Content>
+                        </a>
                     </List.Item>
-                    <List.Item
-                        as="a"
-                        href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
-                        target="_blank"
-                        content="WHITEPAPER"
-                    />
-                    <List.Item as={NavLink} to="/manifesto" content="MANIFESTO" />
-                    <List.Item as={NavLink} to="/disclaimer" content="DISCLAIMER" />
+                    <List.Item>
+                        <a
+                            href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            WHITEPAPER
+                        </a>
+                    </List.Item>
+                    <List.Item>
+                        <NavLink to="/manifesto">MANIFESTO</NavLink>
+                    </List.Item>
+                    <List.Item>
+                        <NavLink to="/disclaimer">DISCLAIMER</NavLink>
+                    </List.Item>
                     {isConnected ? (
-                        <List.Item
-                            as={NavLink}
-                            to="/under-the-hood"
-                            data-testid="underTheHoodLink"
-                            content="UNDER THE HOOD"
-                        />
-                    ) : null};
-                    <List.Item as="a" href="/contact" content="CONTACT" />
+                        <List.Item>
+                            <NavLink to="/under-the-hood" data-testid="underTheHoodLink">
+                                UNDER THE HOOD
+                            </NavLink>
+                        </List.Item>
+                    ) : null}
+                    <List.Item>
+                        <a href="/contact">CONTACT</a>
+                    </List.Item>
                 </List>
                 <Subscribe />
                 <div className="partner">
