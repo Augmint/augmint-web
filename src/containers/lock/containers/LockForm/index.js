@@ -122,14 +122,14 @@ class LockContainer extends React.Component {
                                     lockProducts
                                         .filter(product => product.isActive)
                                         .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
-                                        .map(product => {
+                                        .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
                                                     <TermTableCell>
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
-                                                            defaultChecked={product.id === this.props.productId}
+                                                            checked={!index}
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
