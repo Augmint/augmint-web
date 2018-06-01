@@ -110,17 +110,15 @@ class App extends React.Component {
                                     />
                                 )}
                             {showDash ? <SideNav /> : null}
-                            <EthereumTxStatus />
 
-                            <LegacyLoanManagers />
-
-                            <LegacyLockers />
-
-                            <LegacyExchanges />
-
-                            <LegacyTokens />
 
                             <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
+                                <EthereumTxStatus />
+                                <LegacyLoanManagers />
+                                <LegacyLockers />
+                                <LegacyExchanges />
+                                <LegacyTokens />
+
                                 <Switch>
                                     <Route exact path="/" component={NotConnectedHome} />
                                     <Route exact path="/account" component={AccountHome} />
