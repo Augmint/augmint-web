@@ -61,12 +61,6 @@ class ExchangeHome extends React.Component {
                                         />
                             }
                                 </FeatureContext>
-                                <PlaceOrderForm
-                                    orders={orders}
-                                    exchange={exchange}
-                                    rates={rates}
-                                    header="A€ &harr; ETH on Augmint"
-                                />
 
                                 <MyOrders
                                     testid="myOrdersBlock"
