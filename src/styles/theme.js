@@ -13,6 +13,7 @@ const theme = {
         opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
         secondary: "#ffad00",
+        secondaryDark: "#d99300",
         lightCyan: "#f8ffff",
         darkCyan: "#276f86",
         red: "red",
@@ -51,7 +52,7 @@ const theme = {
 export default theme;
 
 export function remCalc(pixelSize) {
-    const remCorrection = 16 / 14;
+    const remCorrection = 16 / 16;
 
     return pixelSize / 16 * remCorrection + "rem";
 }
