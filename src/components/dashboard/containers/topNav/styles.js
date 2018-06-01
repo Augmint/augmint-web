@@ -2,8 +2,12 @@ import styled from 'styled-components';
 import theme from "styles/theme";
 
 import { Link } from "react-router-dom";
+import { StyledHeaderH1 } from 'components/augmint-ui/header/styles';
+
+import { remCalc } from "styles/theme";
 
 const TOP_NAV_HEIGHT = '60px';
+
 
 export const StyledTopNav = styled.nav`
     display: flex;
@@ -21,8 +25,9 @@ export const TitleWrapper = styled.div`
     margin-left: 200px;
     max-width: 60%;
 
-    h1.ui.header {
-        color: ${theme.colors.secondary};
+    ${StyledHeaderH1} {
+        font-size: ${remCalc('28')};
+        margin: 0;
     }
 `;
 

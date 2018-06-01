@@ -57,6 +57,11 @@ export const StyledHeaderH1 = styled.h1`
 export const StyledHeaderH2 = styled.h2`
     ${BaseHeader};
     ${HeaderH2};
+
+    .Site__dash & {
+        font-size: ${remCalc(24)};
+        margin: 0;
+    }
 `;
 
 export const StyledHeaderH3 = styled.h3`

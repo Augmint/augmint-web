@@ -109,12 +109,12 @@ class LockContainer extends React.Component {
                         <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}} />
+                                    <TermTableHeadCell {...{dashboard}} />
+                                    <TermTableHeadCell {...{dashboard}}>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}}>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}}>Interest p.a.</TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }} {...{dashboard}}>You earn</TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
@@ -141,7 +141,7 @@ class LockContainer extends React.Component {
                                                     <TermTableCell {...{dashboard}}>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}} textAlign="right">
+                                                    <TermTableCell {...{dashboard}} style={{ textAlign: "right" }}>
 
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(

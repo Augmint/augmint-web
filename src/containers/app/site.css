@@ -27,6 +27,7 @@
 .Site__dash {
     background: #f8f8f8;
     padding-top: 50px;
+    width: auto;
 }
 
 .Site-header,
@@ -42,6 +43,7 @@
 
 .Site-content.Site-content__dash {
     padding-left: 180px;
+    width: auto;
 
 }
 .Site-content::after {
