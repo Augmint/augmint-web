@@ -2,7 +2,6 @@
 Wrapper for the whole App
     main navigation
 */
-import "semantic/dist/semantic.min.css";
 import "./site.css";
 import "assets/fontawesome/css/fontawesome-all.css";
 
@@ -12,6 +11,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
+import { injectGlobal } from "styled-components";
+import theme from "styles/theme";
 
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -35,6 +36,32 @@ import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
+
+injectGlobal`
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-width: 320px;
+    background: ${theme.colors.primary};
+    font-family: ${theme.typography.fontFamilies.default};
+    color: ${theme.colors.white};
+    font-smoothing: antialiased;
+}
+
+a {
+  color: ${theme.colors.secondary};
+}
+
+a:hover {
+  color: ${theme.colors.secondaryDark};
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
+`;
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
