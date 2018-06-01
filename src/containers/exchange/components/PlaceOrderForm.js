@@ -48,7 +48,7 @@ class PlaceOrderForm extends React.Component {
             this.setState({ lastChangedAmountField: "tokenAmount" });
             tokenAmount = parseFloat(e.target.value);
             price = this.parsePrice(this.props.price);
-            const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+            const ethValue = tokenAmount / (this.props.rates.info.ethFiatRate * price);
             this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
         } catch (error) {
             this.props.change("ethAmount", "");
