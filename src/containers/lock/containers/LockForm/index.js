@@ -129,7 +129,7 @@ class LockContainer extends React.Component {
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
-                                                            checked={!index}
+                                                            defaultChecked={!index}
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
@@ -174,6 +174,5 @@ const selector = formValueSelector("LockForm");
 LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
 
 export default reduxForm({
-    form: "LockForm",
-    initialValues: { productId: 0 }
+    form: "LockForm"
 })(LockContainer);
