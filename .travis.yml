@@ -3,7 +3,7 @@ cache:
   directories:
     - "node_modules"
     - "augmint-contracts/node_modules"
-    - ".cache"  # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
+    - "~/.cache"  # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
     - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
     - yarn global add greenkeeper-lockfile@1
