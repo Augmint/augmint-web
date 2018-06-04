@@ -42,7 +42,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
-        console.debug("onTokenAmountChange ", e);
         let tokenAmount, price;
         try {
             this.setState({ lastChangedAmountField: "tokenAmount" });
@@ -102,7 +101,6 @@ class PlaceOrderForm extends React.Component {
 
         try {
             price = this.parsePrice(values.price);
-            console.debug(values.price, price);
             if (orderDirection === TOKEN_BUY) {
                 amount = parseFloat(values.ethAmount);
             } else {
