@@ -7,12 +7,11 @@ const systemFeatures = {};
 
 function setFeatureCookie(param) {
     // validate
-    // turn to boolean ?
     const flag = param.split('=');
     document.cookie = `${flag[0]}=${flag[1]}`;
 }
 
-export function getFeaturesFromUrl() {
+function getFeaturesFromUrl() {
     const urlParams = window.location.search.substr(1);
 
     if (urlParams.includes(FEATURE_PREFIX)) {
