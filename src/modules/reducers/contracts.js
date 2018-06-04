@@ -1,10 +1,10 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import TokenAEur from "abiniser/abis/TokenAEur_ABI_4b49e7e6d1a9a2de81a4d2d088acbc04.json";
-import Rates from "abiniser/abis/Rates_ABI_cc8bc64cd780f047eca819e6cd3b8af9.json";
-import LockManager from "abiniser/abis/Locker_ABI_66e3e89133d9bbd91baac5552f21f7e1.json";
-import LoanManager from "abiniser/abis/LoanManager_ABI_291572b8d2ffe95dca1733ebc1472e08.json";
-import Exchange from "abiniser/abis/Exchange_ABI_3c157a5256a2093da587f166d4dbd537.json";
+import TokenAEur from "abiniser/abis/TokenAEur_ABI_962b41ca272a86b1f556fc47e0f7954f.json";
+import Rates from "abiniser/abis/Rates_ABI_73a17ebb0acc71773371c6a8e1c8e6ce.json";
+import LockManager from "abiniser/abis/Locker_ABI_619ff7809b73aead28176fe6317953c3.json";
+import LoanManager from "abiniser/abis/LoanManager_ABI_ec709c3341045caa3a75374b8cfc7286.json";
+import Exchange from "abiniser/abis/Exchange_ABI_b2a23202a9a0f04755a186896c2b56eb.json";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
 export const CONTRACTS_CONNECT_SUCCESS = "contracts/CONTRACTS_CONNECT_SUCCESS";

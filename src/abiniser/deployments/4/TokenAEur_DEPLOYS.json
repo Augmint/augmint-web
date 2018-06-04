@@ -1,6 +1,6 @@
 {
   "contractName": "TokenAEur",
-  "latestAbiHash": "4b49e7e6d1a9a2de81a4d2d088acbc04",
+  "latestAbiHash": "962b41ca272a86b1f556fc47e0f7954f",
   "deployedAbis": {
     "27721a2c77dc40da7639abd46791c3d7": {
       "latestDeployedAddress": "0x95aa79d7410eb60f49bfd570b445836d402bd7b1",
@@ -69,6 +69,24 @@
           "deployedBytecodeHash": "03b0c0d8c49d83af34516ac82bc0b2a9",
           "sourceHash": "61dded7836f4431e621382340f32670c",
           "source": "/* Augmint Crypto Euro token (ACE) implementation */\npragma solidity ^0.4.23;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(TransferFeeInterface _feeAccount)\n    public AugmintToken(\"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
+        }
+      }
+    },
+    "962b41ca272a86b1f556fc47e0f7954f": {
+      "latestDeployedAddress": "0x0da47c59d0c3166ddc2984d72b8c8fac82275056",
+      "deployments": {
+        "0x0da47c59d0c3166ddc2984d72b8c8fac82275056": {
+          "generatedAt": "2018-06-04T12:49:52.520Z",
+          "truffleContractFileUpdatedAt": "2018-06-04T12:49:10.456Z",
+          "deployTransactionHash": "0x310e7319d0c6c1809656d2d657c68d12d6231e428d488280410dfc18fd720eca",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "699a73688b7440a29431472c956c52ef",
+          "deployedBytecodeHash": "dc1bc9565dbd19b63734454b17413e3f",
+          "sourceHash": "b0939983ed3409574d7f6dfeeaa213c3",
+          "source": "/* Augmint Crypto Euro token (ACE) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
         }
       }
     }

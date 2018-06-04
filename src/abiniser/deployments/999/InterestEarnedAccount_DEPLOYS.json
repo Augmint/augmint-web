@@ -1,6 +1,6 @@
 {
   "contractName": "InterestEarnedAccount",
-  "latestAbiHash": "72a73972d565bb24463e7368fd263af4",
+  "latestAbiHash": "11b039ce783db308e1a9b5f46f05824f",
   "deployedAbis": {
     "2282749a57fa5c7d61cf33b2f04daf2b": {
       "latestDeployedAddress": "0xbbecff5db2f9cccc936895121802fc15053344c6",
@@ -32,7 +32,7 @@
       }
     },
     "72a73972d565bb24463e7368fd263af4": {
-      "latestDeployedAddress": "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4",
+      "latestDeployedAddress": "0xc3f2a0508dbacc3ffd9846a166dcb257029b59a0",
       "deployments": {
         "0xbbecff5db2f9cccc936895121802fc15053344c6": {
           "generatedAt": "2018-04-26T01:54:21.116Z",
@@ -59,6 +59,37 @@
           "deployedBytecodeHash": "f7581b87c6854d5aec16c65f738876d8",
           "sourceHash": "080bdccd163b74b49fb908b443c45199",
           "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity ^0.4.23;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
+        },
+        "0xc3f2a0508dbacc3ffd9846a166dcb257029b59a0": {
+          "generatedAt": "2018-05-31T23:56:48.479Z",
+          "truffleContractFileUpdatedAt": "2018-05-31T23:54:28.738Z",
+          "deployTransactionHash": "0x3a9a6a75ba6d42ac8b581fd9a560317a22309f425e0d0e1faad5243b571edb7f",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "b1f4223998740495884af010a7935166",
+          "deployedBytecodeHash": "056bca4e150103c5c45b9eff68e5f952",
+          "sourceHash": "9a624a36ae15529e7434fd305f347c8b",
+          "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
+        }
+      }
+    },
+    "11b039ce783db308e1a9b5f46f05824f": {
+      "latestDeployedAddress": "0x1efb52b6aacc403cc9d762282b2aec1b066931c5",
+      "deployments": {
+        "0x1efb52b6aacc403cc9d762282b2aec1b066931c5": {
+          "generatedAt": "2018-06-04T12:57:19.291Z",
+          "truffleContractFileUpdatedAt": "2018-06-04T12:57:11.768Z",
+          "deployTransactionHash": "0xe1cde36736ee610b356b40178b5908c8912d64ea6bf07d231df64a87a36cffb5",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "a2eb5944fe25fe72d5f5948c924a77e1",
+          "deployedBytecodeHash": "f7e6478975d25a023acd5a16ff307a5b",
+          "sourceHash": "1d71a7b664ac13b66b772f24e48edb32",
+          "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
         }
       }
     }
