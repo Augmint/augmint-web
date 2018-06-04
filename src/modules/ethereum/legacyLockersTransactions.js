@@ -8,13 +8,14 @@ const LEGACY_LOCKER_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
+    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
 
     // rinkeby
     4: [
-        "0xfb6b4803c590e564a3e6810289ab638b353a1367",
         // too old version, no CHUNK_SIZE(), didn't bother to make compatible: "0x617cf9ba5c9cbecdd66412bc1d073b002aa26426",
-        "0xf98ae1fb568b267a7632bf54579a153c892e2ec2"
+        "0xfb6b4803c590e564a3e6810289ab638b353a1367", // (oldToken2?)
+        "0xf98ae1fb568b267a7632bf54579a153c892e2ec2", // oldLocker1 (oldToken3)
+        "0xd0B6136C2E35c288A903E836feB9535954E4A9e9" // oldLocker2 (oldToken4)
     ]
 };
 
