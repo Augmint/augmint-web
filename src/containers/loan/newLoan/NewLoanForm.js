@@ -5,8 +5,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
-import { Label } from "semantic-ui-react";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
@@ -130,6 +129,7 @@ class NewLoanForm extends React.Component {
                 )}
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
+                        <label>Loan amount:</label>
                         <Field
                             component={Form.Field}
                             as={Form.Input}
@@ -144,19 +144,18 @@ class NewLoanForm extends React.Component {
                             ]}
                             normalize={Normalizations.twoDecimals}
                             onChange={this.onLoanTokenAmountChange}
-                            labelposition="right"
                             placeholder="pay out"
-                        >
-                            <Label basic>
-                                Loan amount{": "}
+                            data-testid="loanTokenAmountInput"
+                            style={{ borderRadius: "0" }}
+                            labelAlignLeft={
                                 <ToolTip>
                                     Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate{" "}
                                 </ToolTip>
-                            </Label>
+                            }
+                            labelAlignRight="A-EUR"
+                        />
 
-                            <input data-testid="loanTokenAmountInput" />
-                            <Label>A-EUR</Label>
-                        </Field>
+                        <label>Repayment amount:</label>
                         <Field
                             component={Form.Field}
                             as={Form.Input}
@@ -167,17 +166,17 @@ class NewLoanForm extends React.Component {
                             validate={[Validations.required, Validations.tokenAmount]}
                             normalize={Normalizations.twoDecimals}
                             onChange={this.onRepaymentAmountAmountChange}
-                            labelposition="right"
-                        >
-                            <Label basic>
-                                Repayment amount{": "}
+                            data-testid="repaymentAmountInput"
+                            style={{ borderRadius: "0" }}
+                            labelAlignLeft={
                                 <ToolTip>
                                     Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
                                 </ToolTip>
-                            </Label>
-                            <input data-testid="repaymentAmountInput" />
-                            <Label>A-EUR</Label>
-                        </Field>
+                            }
+                            labelAlignRight="A-EUR"
+                        />
+
+                        <label>Collateral:</label>
                         <Field
                             component={Form.Field}
                             as={Form.Input}
@@ -188,19 +187,17 @@ class NewLoanForm extends React.Component {
                             validate={[Validations.required, Validations.ethAmount, Validations.ethUserBalance]}
                             normalize={Normalizations.fiveDecimals}
                             onChange={this.onEthAmountChange}
-                            labelposition="right"
-                        >
-                            <Label basic>
-                                Collateral:{" "}
+                            data-testid="ethAmountInput"
+                            style={{ borderRadius: "0" }}
+                            labelAlignLeft={
                                 <ToolTip>
                                     ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 / Coverage
                                     ratio)
                                     <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                                 </ToolTip>
-                            </Label>
-                            <input data-testid="ethAmountInput" />
-                            <Label>ETH</Label>
-                        </Field>
+                            }
+                            labelAlignRight="ETH"
+                        />
                         <Button
                             size="big"
                             data-testid="submitBtn"

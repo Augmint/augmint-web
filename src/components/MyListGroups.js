@@ -14,7 +14,7 @@ export function MyListGroup(props) {
 export function MyListGroupRow(props) {
     const { children, header, style, ...other } = props;
     return (
-        <Grid style={style} wrap={false} {...other}>
+        <Grid style={style} wrap={false} valign="center" {...other}>
             {header && <h3>{header}</h3>}
             {children}
         </Grid>

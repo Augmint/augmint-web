@@ -1,9 +1,17 @@
-/* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import BigNumber from "bignumber.js";
 import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
-import { Form as SemanticForm } from "semantic-ui-react";
 import store from "modules/store";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
+import {
+    StyledContainer,
+    StyledInput,
+    StyledLabel,
+    StyledFormField,
+    StyledError
+} from "components/augmint-ui/baseComponents/styles";
+
+import { FeatureContext } from "modules/services/featureService";
 
 export const Validations = {
     required: value => {
@@ -130,39 +138,55 @@ export const Normalizations = {
     }
 };
 
-export const semanticFormField = ({
+export const formField = ({
+    children,
     input,
     type,
     label,
+    labelAlignLeft,
+    labelAlignRight,
+    oneLine,
     placeholder,
     meta: { touched, error, warning },
-    as: As = SemanticForm.Input,
     ...props
 }) => {
     return (
-        <SemanticForm.Field>
-            <As
-                {...props}
-                {...input}
-                value={input.value}
-                type={type}
-                label={label}
-                placeholder={placeholder}
-                error={touched && error ? true : false}
-            />
-            {touched &&
-                ((error && <span style={{ color: "red" }}>{error}</span>) ||
-                    (warning && (
-                        <span>
-                            <i>{warning}</i>
-                        </span>
-                    )))}
-        </SemanticForm.Field>
+        <FeatureContext>
+            {
+                features => {
+                    const dashboard = features.dashboard;
+                    return <StyledFormField className={touched && error ? "error" : ""} {...{ dashboard }}>
+                        {children}
+                        {label && <StyledLabel>{label}</StyledLabel>}
+                        <StyledContainer className={oneLine ? "oneLine" : ""}>
+                            {labelAlignLeft && <StyleLabel align="left">{labelAlignLeft}</StyleLabel>}
+                            <StyledInput
+                                {...props}
+                                value={input.value}
+                                {...input}
+                                type={type}
+                                placeholder={placeholder}
+                                error={touched && error ? "true" : "false"}
+                                {...{ dashboard }}
+                            />
+                            {labelAlignRight && <StyleLabel align="right" {...{ dashboard }}>{labelAlignRight}</StyleLabel>}
+                        </StyledContainer>
+                        {touched &&
+                            ((error && <StyledError>{error}</StyledError>) ||
+                                (warning && (
+                                    <span>
+                                        <i>{warning}</i>
+                                    </span>
+                                )))}
+                    </StyledFormField>
+                }
+            }
+        </FeatureContext>
     );
 };
 
-export const Form = ({ size = "large", ...other }) => {
-    return <SemanticForm size={size} {...other} />;
+export const Form = ({ ...other }) => {
+    return <form {...other} />;
 };
 
-Form.Field = semanticFormField;
+Form.Field = formField;

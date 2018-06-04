@@ -1,36 +1,47 @@
 import styled from "styled-components";
 
-import { Table } from "semantic-ui-react";
+import theme from "styles/theme";
 
-import theme from "../../../../styles/theme";
+import { ifProp } from "styled-tools";
 
-export const TermTable = styled(Table)`
+export const TermTable = styled.table`
     background-color: transparent !important;
     margin-top: 0 !important;
+    background-color: transparent;
+    border-spacing: 0;
+    margin-bottom: 16px;
+    margin-top: 0;
+    table-layout: fixed;
+    width: 100%;
 `;
 
-export const TermTableBody = styled(Table.Body)``;
+export const TermTableBody = styled.tbody``;
 
-export const TermTableRow = styled(Table.Row)``;
+export const TermTableRow = styled.tr``;
 
-export const TermTableCell = styled(Table.Cell)`
+
+export const TermTableCell = styled.td`
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: ${theme.colors.white};
+    color: ${ifProp("dashboard", theme.colors.primary, theme.colors.white)};
+    border-bottom: 1px solid ${ifProp("dashboard", theme.colors.opacExtraLighterGrey, theme.colors.opacLightWhite)};
+    padding: 1rem;
 
     &:first-child {
         width: 40px;
     }
 `;
 
-export const TermTableHeadCell = styled(Table.HeaderCell)`
-    background-color: transparent !important;
-    color: ${theme.colors.white}!important;
+export const TermTableHeadCell = styled.th`
+    background-color: transparent;
+    color: ${ifProp("dashboard", theme.colors.primary, theme.colors.white)};
+    padding: 1rem;
+    text-align: left;
 
     &:first-child {
         width: 40px;
     }
 `;
 
-export const TermTableHeader = styled(Table.Header)`
+export const TermTableHeader = styled.thead`
     background-color: transparent;
 `;

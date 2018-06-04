@@ -15,15 +15,12 @@ describe("Loans", function() {
         cy.get("[data-testid=submitBtn]").click();
         cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New loan submitted");
 
-        return cy
-            .get("[data-testid=EthConfirmationReceivedPanel]")
-            .within(() => {
-                cy.contains("New loan");
-                cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
-                cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
-                cy.contains("Collateral in escrow: " + ethAmount + " ETH");
-            })
-            .as("@submissionSuccess");
+        return cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
+            cy.contains("New loan");
+            cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
+            cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
+            cy.contains("Collateral in escrow: " + ethAmount + " ETH");
+        });
     };
 
     beforeEach(function() {
@@ -73,7 +70,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 8.14); // interest
+            cy.assertUserAEurBalanceOnUI((this.startingAeurBalance - 8.14).toFixed(2)); // interest
 
             // TODO loan removed, status etc.
             //cy.get("[data-testid=myAccountMenuLink]").click();

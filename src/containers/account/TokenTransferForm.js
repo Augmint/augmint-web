@@ -6,7 +6,6 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import Button from "components/augmint-ui/button";
-import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -16,6 +15,8 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./components/AccountToolTips.js";
+
+import theme from "styles/theme";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
@@ -90,7 +91,7 @@ class TokenTransferForm extends React.Component {
                     </EthSubmissionSuccessPanel>
                 )}
                 {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
@@ -107,7 +108,6 @@ class TokenTransferForm extends React.Component {
                             type="number"
                             name="tokenAmount"
                             placeholder="Amount"
-                            labelposition="right"
                             onChange={this.onTokenAmountChange}
                             validate={[
                                 Validations.required,
@@ -116,14 +116,17 @@ class TokenTransferForm extends React.Component {
                             ]}
                             normalize={Normalizations.twoDecimals}
                             disabled={submitting || !augmintToken.isLoaded}
-                        >
-                            <input data-testid="transferAmountInput" />
-                            <StyleLabel align="right">A-EUR</StyleLabel>
-                        </Field>
-
-                        <small>
-                            Fee: <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€
+                            data-testid="transferAmountInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="A-EUR"
+                        />
+                        <small style={{ display: "flex" }}>
+                            Fee:
+                            <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
+                            <span data-testid="transferFeeAmount" style={{ margin: "0 5px" }}>
+                                {this.state.feeAmount}
+                            </span>
+                            A€
                         </small>
 
                         <Field
@@ -139,7 +142,6 @@ class TokenTransferForm extends React.Component {
                             placeholder="0x0..."
                             disabled={submitting || !augmintToken.isLoaded}
                         />
-
                         <Field
                             component={Form.Field}
                             as={Form.Input}
