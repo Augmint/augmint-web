@@ -64,7 +64,7 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { lockProducts, lockManager } = this.props;
+        const { lockProducts, lockManager, dashboard } = this.props;
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
 
         return (
@@ -109,12 +109,12 @@ class LockContainer extends React.Component {
                         <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell>Interest p.a.</TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}} />
+                                    <TermTableHeadCell {...{dashboard}} />
+                                    <TermTableHeadCell {...{dashboard}}>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}}>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{dashboard}}>Interest p.a.</TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }} {...{dashboard}}>You earn</TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
@@ -122,26 +122,27 @@ class LockContainer extends React.Component {
                                     lockProducts
                                         .filter(product => product.isActive)
                                         .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
-                                        .map(product => {
+                                        .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
-                                                            defaultChecked={product.id === this.props.productId}
+                                                            defaultChecked={!index}
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
-                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>{product.minimumLockAmount} A€</TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>{product.maxLockAmount} A€</TermTableCell>
+                                                    <TermTableCell {...{dashboard}}>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell style={{ textAlign: "right" }}>
+                                                    <TermTableCell {...{dashboard}} style={{ textAlign: "right" }}>
+
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(
                                                                 this.props.lockAmount * product.perTermInterest * 100
@@ -174,6 +175,5 @@ const selector = formValueSelector("LockForm");
 LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
 
 export default reduxForm({
-    form: "LockForm",
-    initialValues: { productId: 0 }
+    form: "LockForm"
 })(LockContainer);

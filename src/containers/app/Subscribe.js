@@ -2,7 +2,7 @@ import React from "react";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { ErrorPanel, SuccessPanel } from "components/MsgPanels";
-import { reduxForm, SubmissionError, Field } from "redux-form";
+import { reduxForm, SubmissionError } from "redux-form";
 import { Form, Validations, Parsers } from "components/BaseComponents";
 import { subscribe, SUBSCRIBE_SUCCESS } from "modules/reducers/subscriptions";
 import { Pblock } from "components/PageLayout";

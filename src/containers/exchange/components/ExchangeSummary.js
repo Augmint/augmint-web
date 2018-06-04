@@ -10,19 +10,19 @@ export default class ExchangeSummary extends React.Component {
             <Pblock loading={rates.isLoading} {...other}>
                 <ConnectionStatus contract={rates} />
 
-                {rates.isLoaded ? <h4>1 ETH = {rates.info.ethFiatRate} A-EUR</h4> : <h5>Loading ETH/EUR rates...</h5>}
+                {rates.isLoaded ? <p>1 ETH = {rates.info.ethFiatRate} A-EUR</p> : <h5>Loading ETH/EUR rates...</h5>}
 
                 <ConnectionStatus contract={exchange} />
 
                 {exchange.isLoaded && !exchange.isLoading ? (
                     exchange.info.buyOrderCount + exchange.info.sellOrderCount > 0 ? (
-                        <h4>
+                        <p>
                             {exchange.info.buyOrderCount} buy A-EUR | {exchange.info.sellOrderCount} sell A-EUR
-                        </h4>
+                        </p>
                     ) : (
-                        <h4>
+                        <p>
                             No open orders. Place one. <NoOrdersToolTip />
-                        </h4>
+                        </p>
                     )
                 ) : (
                     <h5>Loading orders...</h5>
