@@ -12,6 +12,9 @@ import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
+
 class AccountHome extends React.Component {
     componentDidMount() {
         connectWeb3();
@@ -23,11 +26,15 @@ class AccountHome extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="My Account" />
+                    <TopNavTitlePortal>
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="My Account" /> : <Pheader header="My Account" />}
+                        </FeatureContext>
+                    </TopNavTitlePortal>
 
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={this.props.userAccount} header="Overview" />
 
                                 <TokenTransferForm />
@@ -38,7 +45,7 @@ class AccountHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <LoanList
                                     header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}

@@ -1,7 +1,6 @@
 import React from "react";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import Button from "../../../components/augmint-ui/button";
-import { Link } from "react-router-dom";
+import Button from "components/augmint-ui/button";
 import { LoanRepayLink } from "./LoanRepayLink";
 
 export default function LoanListDetails(props) {
@@ -21,12 +20,10 @@ export default function LoanListDetails(props) {
                 <Col>
                     <Button
                         content="Details"
-                        as={Link}
                         key={"selectlink-" + loan.id}
                         to={`/loan/${loan.id}`}
                         labelposition="right"
                         icon="right chevron"
-                        basic
                     />
                     <LoanRepayLink loan={loan} />
                 </Col>

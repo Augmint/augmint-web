@@ -94,21 +94,7 @@ _NB: If you are using Metamask on local chain and you restart the local chain th
 
 ## UI development
 
-UI is built with [semantic-ui](https://www.semantic-ui.com) and [semantic-ui-react](https://react.semantic-ui.com).
-
-_NB: we are transitioning from semantic-ui to a more suitable framework_
-
-To customize it you need to edit dcm theme in [src/semantic/themes/dcm](src/semantic/themes/dcm) folder.
-
-### css build
-
-```
-cd src/semantic
-gulp build-css
-gulp build-assets
-```
-
-You can also use `gulp watch`
+UI is built with [styled-components](https://www.styled-components.com/).
 
 ## Tests
 
@@ -116,8 +102,8 @@ You can also use `gulp watch`
 
 _Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
 
-*   Start interactive: `yarn cypress:open`
-*   Start command line: `yarn cypress:run`
+* Start interactive: `yarn cypress:open`
+* Start command line: `yarn cypress:run`
 
 ## Non ganache launches/deploys
 
