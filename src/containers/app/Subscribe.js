@@ -1,11 +1,13 @@
 import React from "react";
-import Button from "../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { ErrorPanel, SuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import { Form, Validations, Parsers } from "components/BaseComponents";
 import { subscribe, SUBSCRIBE_SUCCESS } from "modules/reducers/subscriptions";
 import { Pblock } from "components/PageLayout";
+
+import { StyledField } from "./subscribeStyles";
 
 class Subscribe extends React.Component {
     constructor(props) {
@@ -46,7 +48,7 @@ class Subscribe extends React.Component {
             <Pblock className="subscribe">
                 {submitSucceeded && <SuccessPanel header="Successful subscription" onDismiss={() => reset()} />}
                 {!submitSucceeded && (
-                    <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                         {error && (
                             <ErrorPanel
                                 content={error}
@@ -57,7 +59,7 @@ class Subscribe extends React.Component {
                             />
                         )}
 
-                        <Field
+                        <StyledField
                             component={Form.Field}
                             as={Form.Input}
                             name="email"
@@ -66,6 +68,7 @@ class Subscribe extends React.Component {
                             placeholder="EMAIL ADDRESS"
                             parse={Parsers.trim}
                             disabled={submitting}
+                            oneLine={true}
                         />
                         <Button
                             loading={submitting}

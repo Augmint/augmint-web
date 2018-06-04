@@ -13,7 +13,10 @@ import { TotalSupply } from "./components/TotalSupply";
 import { LtdStats } from "./components/LtdStats";
 import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
-import Button from "../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
+
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -33,15 +36,23 @@ class AugmintToken extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pgrid columns={1}>
+                    <TopNavTitlePortal>
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Reserves" /> : null}
+                        </FeatureContext>
+                    </TopNavTitlePortal>
+                    <Pgrid.Row>
                         <Pgrid.Column>
                             <TotalSupply
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
                             />
                         </Pgrid.Column>
-
-                        <Pheader header="Reserves" />
+                        <TopNavTitlePortal>
+                            <FeatureContext>
+                                {features => features.dashboard ? null : <Pheader header="Reserves" style={{ width: "100%" }} />}
+                            </FeatureContext>
+                        </TopNavTitlePortal>
                         <Pgrid.Column>
                             <ReserveStats
                                 augmintToken={this.props.augmintToken}
@@ -50,7 +61,7 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Loans & Locks" />
+                        <Pheader header="Loans & Locks" style={{ width: "100%" }} />
                         <Pgrid.Column>
                             <LtdStats
                                 monetarySupervisor={this.props.monetarySupervisor}
@@ -67,14 +78,14 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Earnings" />
+                        <Pheader header="Earnings" style={{ marginTop: "1em", width: "100%" }} />
                         <Pgrid.Column>
                             <EarningStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 augmintToken={this.props.augmintToken}
                             />
                         </Pgrid.Column>
-                    </Pgrid>
+                    </Pgrid.Row>
                 </Psegment>
             </EthereumState>
         );

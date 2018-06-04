@@ -37,6 +37,7 @@ export const StyleNavItem = styled.li`
     display: flex;
     ${media.tablet`
       text-align: center;
+
     `} & + li {
         margin-left: 8px;
         ${media.tablet`
@@ -92,14 +93,15 @@ export const HamburgerMenu = styled.img`
 `;
 
 export const StyledNavContainer = styled.div`
+    align-items: flex-start;
+    background-color: ${theme.colors.primary};
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    padding: 15px;
     position: fixed;
     width: 100%;
-    padding: 15px;
     z-index: 3;
-    background-color: ${theme.colors.primary};
 
     &.opened {
         ${mediaopacity.handheld`opacity: .95`} height: 100%;

@@ -7,10 +7,13 @@ import lockManagerProvider from "modules/lockManagerProvider";
 
 import { EthereumState } from "containers/app/EthereumState";
 
-import { Pcontainer, Pgrid } from "components/PageLayout";
+import { Psegment, Pgrid, Pheader } from "components/PageLayout";
 import AccountInfo from "components/AccountInfo";
 import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
+
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 import { StyledButtonContainer } from "./styles";
 
@@ -25,24 +28,40 @@ class LockContainer extends React.Component {
         const { userAccount, lockManager, lockProducts } = this.props;
 
         return (
-            <Pcontainer>
+            <Psegment>
                 <EthereumState>
+                <TopNavTitlePortal>
+                        <FeatureContext>
+                            {
+                                features => features.dashboard ?
+                                    <Pheader className="secondaryColor" header="Lock A-EUR" /> :
+                                    <Pheader header="Lock A-EUR" />
+                            }
+                        </FeatureContext>
+                    </TopNavTitlePortal>
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} header="Balance" />
                             </Pgrid.Column>
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <StyledButtonContainer>
                                     <Button to="/exchange">Buy A€</Button>
                                 </StyledButtonContainer>
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
-
-                    <LockForm lockManager={lockManager} lockProducts={lockProducts} />
+                    <Pgrid>
+                        <Pgrid.Row columns={1}>
+                            <Pgrid.Column>
+                                <FeatureContext.Consumer>
+                                    {features => <LockForm lockManager={lockManager} lockProducts={lockProducts} dashboard={features.dashboard} />}
+                                </FeatureContext.Consumer>
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                    </Pgrid>
                 </EthereumState>
-            </Pcontainer>
+            </Psegment>
         );
     }
 }
