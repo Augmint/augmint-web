@@ -1,12 +1,12 @@
 import { default as Web3 } from "web3";
 
-import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_6b1597192b36a746724929ec9ee7b6b8.json";
+import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_962b41ca272a86b1f556fc47e0f7954f.json";
 import TokenAEurDeploys from "../../src/abiniser/deployments/999/TokenAEur_DEPLOYS.json";
 
-import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_a552ee1f90ae83cb91d07311ae8eab1e.json";
+import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_54d27fedd8bf3010ad5509866a42c053.json";
 import MonetarySupervisorDeploys from "../../src/abiniser/deployments/999/MonetarySupervisor_DEPLOYS.json";
 
-import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_33995f203f6c629e9916d82dd78e875f.json";
+import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_fe74b7986dafb00f221486e790fc70ec.json";
 import AugmintReservesDeploys from "../../src/abiniser/deployments/999/AugmintReserves_DEPLOYS.json";
 
 let accounts = null;
