@@ -1,4 +1,3 @@
-/* Base wrapper compenents to use semantic-ui-react & redux-form components together */
 import React from "react";
 import BigNumber from "bignumber.js";
 import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
@@ -11,6 +10,8 @@ import {
     StyledFormField,
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
+
+import { FeatureContext } from "modules/services/featureService";
 
 export const Validations = {
     required: value => {
@@ -150,29 +151,37 @@ export const formField = ({
     ...props
 }) => {
     return (
-        <StyledFormField className={touched && error ? "error" : ""}>
-            {children}
-            {label && <StyledLabel>{label}</StyledLabel>}
-            <StyledContainer className={oneLine ? "oneLine" : ""}>
-                {labelAlignLeft && <StyleLabel align="left">{labelAlignLeft}</StyleLabel>}
-                <StyledInput
-                    {...props}
-                    value={input.value}
-                    {...input}
-                    type={type}
-                    placeholder={placeholder}
-                    error={touched && error ? "true" : "false"}
-                />
-                {labelAlignRight && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
-            </StyledContainer>
-            {touched &&
-                ((error && <StyledError>{error}</StyledError>) ||
-                    (warning && (
-                        <span>
-                            <i>{warning}</i>
-                        </span>
-                    )))}
-        </StyledFormField>
+        <FeatureContext>
+            {
+                features => {
+                    const dashboard = features.dashboard;
+                    return <StyledFormField className={touched && error ? "error" : ""} {...{ dashboard }}>
+                        {children}
+                        {label && <StyledLabel>{label}</StyledLabel>}
+                        <StyledContainer className={oneLine ? "oneLine" : ""}>
+                            {labelAlignLeft && <StyleLabel align="left">{labelAlignLeft}</StyleLabel>}
+                            <StyledInput
+                                {...props}
+                                value={input.value}
+                                {...input}
+                                type={type}
+                                placeholder={placeholder}
+                                error={touched && error ? "true" : "false"}
+                                {...{ dashboard }}
+                            />
+                            {labelAlignRight && <StyleLabel align="right" {...{ dashboard }}>{labelAlignRight}</StyleLabel>}
+                        </StyledContainer>
+                        {touched &&
+                            ((error && <StyledError>{error}</StyledError>) ||
+                                (warning && (
+                                    <span>
+                                        <i>{warning}</i>
+                                    </span>
+                                )))}
+                    </StyledFormField>
+                }
+            }
+        </FeatureContext>
     );
 };
 

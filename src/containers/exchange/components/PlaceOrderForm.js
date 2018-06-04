@@ -42,13 +42,12 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
-        console.debug("onTokenAmountChange ", e);
         let tokenAmount, price;
         try {
             this.setState({ lastChangedAmountField: "tokenAmount" });
             tokenAmount = parseFloat(e.target.value);
             price = this.parsePrice(this.props.price);
-            const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+            const ethValue = tokenAmount / (this.props.rates.info.ethFiatRate * price);
             this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
         } catch (error) {
             this.props.change("ethAmount", "");
@@ -102,7 +101,6 @@ class PlaceOrderForm extends React.Component {
 
         try {
             price = this.parsePrice(values.price);
-            console.debug(values.price, price);
             if (orderDirection === TOKEN_BUY) {
                 amount = parseFloat(values.ethAmount);
             } else {

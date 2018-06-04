@@ -7,15 +7,18 @@ import Segment from "components/augmint-ui/segment";
 
 import theme from "styles/theme";
 
+import { FeatureContext } from "modules/services/featureService";
+
 export function Pheader(props) {
-    const { children, header, ...other } = props;
-    return (
-        <Container {...other}>
-            {header && <Header as="h1">{header}</Header>}
-            {children}
-            <Divider />
-        </Container>
-    );
+    const { children, header, className, ...other } = props;
+    return <Container {...other}>
+        {header && <Header className={className} as="h1">{header}</Header>}
+        {children}
+        <FeatureContext.Consumer>
+            {features => (features.dashboard ? null : <Divider />)}
+        </FeatureContext.Consumer>
+
+    </Container>;
 }
 
 Pheader.defaultProps = {
@@ -67,11 +70,45 @@ Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid;
 
 export function Pblock(props) {
+    return (
+        <FeatureContext.Consumer>
+            {
+                features => {
+                    const BlockEl = features.dashboard ? DashBlock : LegacyPblock;
+                    return (
+                        <BlockEl {...props} />
+                    );
+                }
+            }
+        </FeatureContext.Consumer>
+    );
+}
+
+function LegacyPblock(props) {
     const { children, header, ...other } = props;
     return (
         <Segment {...other}>
             <Header as="h2" content={header} />
             {children}
+        </Segment>
+    );
+}
+
+function DashBlock(props) {
+    const { children, header, className, ...other } = props;
+    const newClassName = className ? `${className} dashblock` : `dashblock`;
+    const rest = Object.assign({}, { ...other }, { className: newClassName });
+
+    return (
+        <Segment basic {...rest} >
+            {(header) ?
+                <div className="dashblock__head">
+                    <Header as="h2" content={header} />
+                </div> : null
+            }
+            <div className="dashblock__content">
+                {children}
+            </div>
         </Segment>
     );
 }
