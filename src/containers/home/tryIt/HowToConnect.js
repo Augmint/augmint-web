@@ -21,12 +21,14 @@ export function HowToConnect(props) {
                             <a
                                 href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 <StoreBadge src={appStoreSVG} />
                             </a>
                             <a
                                 href="https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 <StoreBadge src={googlePlayPNG} />
                             </a>

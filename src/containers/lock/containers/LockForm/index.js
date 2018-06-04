@@ -122,14 +122,14 @@ class LockContainer extends React.Component {
                                     lockProducts
                                         .filter(product => product.isActive)
                                         .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
-                                        .map(product => {
+                                        .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
                                                     <TermTableCell {...{dashboard}}>
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
-                                                            defaultChecked={product.id === this.props.productId}
+                                                            defaultChecked={!index}
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
@@ -175,6 +175,5 @@ const selector = formValueSelector("LockForm");
 LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
 
 export default reduxForm({
-    form: "LockForm",
-    initialValues: { productId: 0 }
+    form: "LockForm"
 })(LockContainer);
