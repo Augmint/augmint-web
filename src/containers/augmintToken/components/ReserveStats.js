@@ -1,10 +1,11 @@
 import React from "react";
-import { Statistic, Segment } from "semantic-ui-react";
 import { ConnectionStatus } from "components/MsgPanels";
+import Segment from "components/augmint-ui/segment";
+import Statistic from "components/augmint-ui/statistic";
 
 export class ReserveStats extends React.Component {
     render() {
-        const { augmintToken, monetarySupervisor, size, showDetails } = this.props;
+        const { augmintToken, monetarySupervisor, showDetails } = this.props;
         const { ethFiatRate } = this.props.rates.info;
         const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { decimals } = augmintToken.info;
@@ -17,13 +18,16 @@ export class ReserveStats extends React.Component {
                 : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
 
-                <Statistic.Group widths="2" size={size}>
-                    <Statistic style={{ padding: "1em" }}>
-                        <Statistic.Label>ETH reserve</Statistic.Label>
-                        <Statistic.Value data-testid="reserveEthBalance">{reserveEthBalance} ETH</Statistic.Value>
+                <Statistic.Group>
+                    <Statistic
+                        data-testid="reserveEthBalance"
+                        style={{ padding: "1em" }}
+                        label="ETH reserve"
+                        value={reserveEthBalance + " ETH"}
+                    >
                         {showDetails && (
                             <p data-testid="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>
                                 ({reserveEthBalanceInFiat} EUR)
@@ -31,10 +35,12 @@ export class ReserveStats extends React.Component {
                         )}
                     </Statistic>
 
-                    <Statistic data-testid="reserveTokenBalance" style={{ padding: "1em" }}>
-                        <Statistic.Label>A-EUR reserve</Statistic.Label>
-                        <Statistic.Value>{reserveTokenBalance} A-EUR</Statistic.Value>
-                    </Statistic>
+                    <Statistic
+                        data-testid="reserveTokenBalance"
+                        style={{ padding: "1em" }}
+                        label="A-EUR reserve"
+                        value={reserveTokenBalance + " A-EUR"}
+                    />
                 </Statistic.Group>
             </Segment>
         );
@@ -42,7 +48,6 @@ export class ReserveStats extends React.Component {
 }
 
 ReserveStats.defaultProps = {
-    size: "small",
     showInFiat: true,
     showDetails: true
 };

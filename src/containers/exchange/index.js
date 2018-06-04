@@ -15,6 +15,9 @@ import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
 
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
+
 class ExchangeHome extends React.Component {
     componentDidMount() {
         connectWeb3();
@@ -27,10 +30,14 @@ class ExchangeHome extends React.Component {
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Buy & Sell A-EUR" />
+                    <TopNavTitlePortal>
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Buy & Sell A-EUR" /> : <Pheader header="Buy & Sell A-EUR" />}
+                        </FeatureContext>
+                    </TopNavTitlePortal>
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} />
 
                                 <FiatExchange
@@ -38,13 +45,22 @@ class ExchangeHome extends React.Component {
                                     userAccountAddress={userAccount.address}
                                     network={network}
                                 />
-
-                                <PlaceOrderForm
-                                    orders={orders}
-                                    exchange={exchange}
-                                    rates={rates}
-                                    header="A€ &harr; ETH on Augmint"
-                                />
+                                <FeatureContext>
+                                    {
+                                        features => features.dashboard ? 
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                        /> :
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                            header="A€ &harr; ETH on Augmint"
+                                        />
+                            }
+                                </FeatureContext>
 
                                 <MyOrders
                                     testid="myOrdersBlock"
@@ -55,7 +71,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
                                 {orders.orders && (
                                     <MatchOrdersButton

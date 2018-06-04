@@ -13,6 +13,8 @@ import {
     LEGACY_EXCHANGES_CANCEL_ORDER_SUCCESS
 } from "modules/reducers/legacyExchanges";
 
+const styleP = { margin: "1rem 0" };
+
 class LegacyExchanges extends React.Component {
     constructor(props) {
         super(props);
@@ -61,12 +63,12 @@ class LegacyExchanges extends React.Component {
             .filter(contract => contract.userOrders.length > 0 && !contract.isDismissed)
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
-                    <p>
+                    <p style={styleP}>
                         {contract.userOrders.length} orders in legacy Exchange contract{" "}
                         <small> {contract.address} </small>
                     </p>
 
-                    <p>
+                    <p style={styleP}>
                         <Button
                             type="submit"
                             data-testid={`dismissLegacyExchangeButton-${contractIndex}`}
@@ -78,12 +80,14 @@ class LegacyExchanges extends React.Component {
 
                     {contract.userOrders.map((order, orderIndex) => (
                         <MyListGroup.Row key={`ordersDiv-${contractIndex}-${order.id}`}>
-                            <p>
+                            <p style={styleP}>
                                 Order id: {order.id} Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
                             </p>
 
                             {order.isSubmitted ? (
-                                <p>Cancel submitted, wait for transaction confirmations then refresh page</p>
+                                <p style={styleP}>
+                                    Cancel submitted, wait for transaction confirmations then refresh page
+                                </p>
                             ) : (
                                 <Button
                                     type="submit"
@@ -104,7 +108,7 @@ class LegacyExchanges extends React.Component {
             <Psegment>
                 <Container>
                     <InfoPanel header="You have orders in an older version of Augmint Exchange contract">
-                        <p>
+                        <p style={styleP}>
                             Augmint Exchange version in use on {network.name} network at {exchangeContract.address}.
                             <br />
                             You can cancel your orders on the old exchange.<br />
