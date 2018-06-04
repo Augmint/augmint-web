@@ -24,6 +24,12 @@
     height: 100%; /* 1, 3 */
 }
 
+.Site__dash {
+    background: #f8f8f8;
+    padding-top: 50px;
+    width: auto;
+}
+
 .Site-header,
 .Site-footer {
     flex: none; /* 2 */
@@ -33,6 +39,12 @@
     flex: 1 0 auto; /* 2 */
     /* padding: var(--space) var(--space) 0; */
     width: 100%;
+}
+
+.Site-content.Site-content__dash {
+    padding-left: 180px;
+    width: auto;
+
 }
 .Site-content::after {
     content: "\00a0"; /* &nbsp; */
@@ -98,4 +110,28 @@
 .ui.basic.button,
 .ui.basic.buttons .button {
     background: #fff !important;
+}
+
+/* TODO: clean up f_dashboard temporary styles */
+.segment.dashblock {
+    background: white;
+    border: 1px solid #051d2d;
+    border-radius: 5px;
+    color: #051d2d;
+    overflow: hidden;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+.dashblock__head {
+    background: #051d2d;
+    padding: 10px 20px;
+}
+
+.dashblock__head h2 {
+    font-size: 24px!important;
+}
+
+.dashblock__content {
+    padding: 10px 20px;
 }

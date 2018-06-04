@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import theme from "styles/theme";
 import { remCalc } from "styles/theme";
+import { ifProp } from "styled-tools";
 
 export const StyledContainer = styled.div`
     display: inline-flex;
@@ -28,6 +29,9 @@ export const StyledInput = styled.input`
     border-radius: ${theme.borderRadius.all}
     padding: ${remCalc(10)} ${remCalc(16)};
     width: 100%;
+    border: 1px solid ${ifProp("dashboard", theme.colors.opacGrey, "transparent")};
+    border-right: none;
+    
 `;
 
 export const StyledLabel = styled.label`
