@@ -2,7 +2,6 @@
 Wrapper for the whole App
     main navigation
 */
-import "semantic/dist/semantic.min.css";
 import "./site.css";
 import "assets/fontawesome/css/fontawesome-all.css";
 
@@ -12,6 +11,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
+import { injectGlobal } from "styled-components";
+import theme from "styles/theme";
+
+import { FeatureContext } from "modules/services/featureService";
 
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
@@ -29,12 +32,41 @@ import AppMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
 
+import TopNav from "components/dashboard/containers/topNav";
+import SideNav from "components/dashboard/components/sideNav";
+
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
+
+injectGlobal`
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-width: 320px;
+    background: ${theme.colors.primary};
+    font-family: ${theme.typography.fontFamilies.default};
+    color: ${theme.colors.white};
+    font-smoothing: antialiased;
+}
+
+a {
+  color: ${theme.colors.secondary};
+}
+
+a:hover {
+  color: ${theme.colors.secondaryDark};
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
+`;
 
 class ScrollToTop extends React.Component {
     componentDidUpdate(prevProps) {
@@ -86,49 +118,70 @@ class App extends React.Component {
     }
 
     render() {
+        const mainPath = (this.props.location.pathname.split('/').length > 0)
+            ? this.props.location.pathname.split('/')[1]
+            : '';
+
+        const showConnection =
+            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(
+                mainPath
+            ) > -1;
         return (
-            <div className="Site">
-                <ScrollToTop />
-                <AppMenu
-                    web3Connect={this.props.web3Connect}
-                    location={this.props.location}
-                    showMenu={this.state.showMobileMenu}
-                    toggleMenu={this.toggleMenu}
-                />
+            <FeatureContext.Consumer>
+                {features => {
+                    const showDash = features.dashboard && showConnection;
+                    return (
+                        <div className={showDash ? "Site Site__dash" : "Site"}>
+                            <ScrollToTop />
+                            {showDash ? (
+                                <TopNav web3Connect={this.props.web3Connect} />
+                            ) : (
+                                    <AppMenu
+                                        web3Connect={this.props.web3Connect}
+                                        location={this.props.location}
+                                        showMenu={this.state.showMobileMenu}
+                                        toggleMenu={this.toggleMenu}
+                                    />
+                                )}
+                            {showDash ? <SideNav /> : null}
 
-                <EthereumTxStatus />
 
-                <LegacyLoanManagers />
+                            <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
+                                <EthereumTxStatus />
+                                <LegacyLoanManagers />
+                                <LegacyLockers />
+                                <LegacyExchanges />
+                                <LegacyTokens />
 
-                <LegacyLockers />
+                                <Switch>
+                                    <Route exact path="/" component={NotConnectedHome} />
+                                    <Route exact path="/account" component={AccountHome} />
+                                    <Route exact path="/exchange" component={ExchangeHome} />
+                                    <Route exact path="/reserves" component={AugmintToken} />
+                                    <Route path="/loan" component={LoanMain} />
 
-                <LegacyExchanges />
+                                    <Route exact path="/concept" component={Concept} />
+                                    <Route exact path="/tryit" component={TryIt} />
+                                    <Route exact path="/under-the-hood" component={UnderTheHood} />
+                                    <Route exact path="/contact" component={Contact} />
+                                    <Route exact path="/manifesto" component={Manifesto} />
+                                    <Route exact path="/disclaimer" component={Disclaimer} />
+                                    <Route exact path="/roadmap" component={Roadmap} />
+                                    <Route exact path="/lock" component={LockContainer} />
+                                    <Route component={PageNotFound} />
+                                </Switch>
+                            </div>
+                            {showDash ? null : (
+                                <div className="Site-footer">
+                                    <AppFooter web3Connect={this.props.web3Connect} />
+                                </div>
+                            )}
+                        </div>
 
-                <LegacyTokens />
 
-                <div className="Site-content">
-                    <Switch>
-                        <Route exact path="/" component={NotConnectedHome} />
-                        <Route exact path="/account" component={AccountHome} />
-                        <Route exact path="/exchange" component={ExchangeHome} />
-                        <Route exact path="/reserves" component={AugmintToken} />
-                        <Route path="/loan" component={LoanMain} />
-
-                        <Route exact path="/concept" component={Concept} />
-                        <Route exact path="/tryit" component={TryIt} />
-                        <Route exact path="/under-the-hood" component={UnderTheHood} />
-                        <Route exact path="/contact" component={Contact} />
-                        <Route exact path="/manifesto" component={Manifesto} />
-                        <Route exact path="/disclaimer" component={Disclaimer} />
-                        <Route exact path="/roadmap" component={Roadmap} />
-                        <Route exact path="/lock" component={LockContainer} />
-                        <Route component={PageNotFound} />
-                    </Switch>
-                </div>
-                <div className="Site-footer">
-                    <AppFooter web3Connect={this.props.web3Connect} />
-                </div>
-            </div>
+                    );
+                }}
+            </FeatureContext.Consumer>
         );
     }
 }
