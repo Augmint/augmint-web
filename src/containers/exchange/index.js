@@ -6,12 +6,17 @@ import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AccountInfo from "components/AccountInfo";
+import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
+import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
 import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
+
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -21,42 +26,52 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { orders, userAccount, exchange, rates, trades } = this.props;
+        const { network, orders, userAccount, exchange, rates, trades } = this.props;
         return (
             <EthereumState>
                 <Psegment>
-                    <Pheader header="Buy & Sell A-EUR" />
+                    <TopNavTitlePortal>
+                        <FeatureContext>
+                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Buy & Sell A-EUR" /> : <Pheader header="Buy & Sell A-EUR" />}
+                        </FeatureContext>
+                    </TopNavTitlePortal>
                     <Pgrid>
-                        <Pgrid.Row columns={2}>
-                            <Pgrid.Column>
+                        <Pgrid.Row wrap={false}>
+                            <Pgrid.Column size={1 / 2}>
                                 <AccountInfo account={userAccount} />
 
-                                {/* {rates.isLoading || !rates.isLoaded ? (
-                                    <h5>Loading rates...</h5>
-                                ) : ( */}
-                                <PlaceOrderForm //rates.info &&
-                                    // initialValues={{
-                                    //     price: rates.info.ethFiatRate
-                                    // }}
-                                    orders={orders}
-                                    exchange={exchange}
-                                    rates={rates}
+                                <FiatExchange
+                                    header="€ &harr; A€ on partner exchange"
+                                    userAccountAddress={userAccount.address}
+                                    network={network}
                                 />
-                                {/* )} */}
+                                <FeatureContext>
+                                    {
+                                        features => features.dashboard ? 
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                        /> :
+                                        <PlaceOrderForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            rates={rates}
+                                            header="A€ &harr; ETH on Augmint"
+                                        />
+                            }
+                                </FeatureContext>
 
-                                <OrderBook
+                                <MyOrders
                                     testid="myOrdersBlock"
                                     orders={orders}
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
-                                    header="My orders"
-                                    filter={item => {
-                                        return item.maker.toLowerCase() === userAccount.address.toLowerCase();
-                                    }}
+                                    header="My open orders"
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column>
+                            <Pgrid.Column size={1 / 2}>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
                                 {orders.orders && (
                                     <MatchOrdersButton
@@ -70,7 +85,7 @@ class ExchangeHome extends React.Component {
                                     orders={orders}
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
-                                    header="All orders"
+                                    header="Order book"
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
@@ -78,7 +93,7 @@ class ExchangeHome extends React.Component {
                             <TradeHistory
                                 trades={trades}
                                 userAccountAddress={userAccount.address}
-                                header="Trades history"
+                                header="My trade history"
                             />
                         </Pgrid.Row>
                     </Pgrid>
@@ -89,6 +104,7 @@ class ExchangeHome extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    network: state.web3Connect.network,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,

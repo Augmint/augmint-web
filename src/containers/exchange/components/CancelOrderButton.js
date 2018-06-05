@@ -6,11 +6,14 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Header } from "semantic-ui-react";
-import Button from "../../../components/augmint-ui/button";
-import Icon from "../../../components/augmint-ui/icon";
+import Button from "components/augmint-ui/button";
+import Icon from "components/augmint-ui/icon";
+import Header from "components/augmint-ui/header";
+import Modal from "components/augmint-ui/modal";
 import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
+
+import theme from "styles/theme";
 
 class CancelOrderButton extends React.Component {
     async submitCancel(values) {
@@ -56,71 +59,83 @@ class CancelOrderButton extends React.Component {
     render() {
         const { order, label = "Cancel" } = this.props;
         const { submitting, error, confirmOpen } = this.state;
-        const CancelButton = (
-            <a
-                href={`#cancelOrder-${order.id}`}
-                data-testid={`cancelOrderButton-${order.id}`}
-                onClick={event => {
-                    event.preventDefault();
-                    this.setState({ confirmOpen: true });
-                    return false;
-                }}
-            >
-                {label}
-            </a>
-        );
+
         return (
-            <Modal
-                size="small"
-                open={confirmOpen}
-                closeOnDimmerClick={false}
-                onClose={this.handleClose}
-                trigger={CancelButton}
-            >
-                <Header icon="question" content="Cancel your order" />
-
-                <Modal.Content>
-                    {error && (
-                        <EthSubmissionErrorPanel
-                            onDismiss={() => {
-                                this.setState({ error: null });
-                            }}
-                            error={error}
-                            header="Order cancel failed."
-                        >
-                            <p>Error cancelling the order.</p>
-                        </EthSubmissionErrorPanel>
-                    )}
-                    <p>Order id: {order.id}</p>
-                    {order.direction === TOKEN_SELL && (
-                        <p>
-                            Sell {order.amount} A-EUR @{order.price * 100}% EUR/ETH rate
-                        </p>
-                    )}
-                    {order.direction === TOKEN_BUY && (
-                        <p>
-                            Buy A-EUR for {order.amount} ETH @{order.price * 100}% EUR/ETH rate
-                        </p>
-                    )}
-                    <p>Are you sure you want to cancel your order?</p>
-                </Modal.Content>
-
-                <Modal.Actions>
-                    <Button className="grey" onClick={this.handleClose}>
-                        <Icon name="close" style={{ marginRight: "6px" }} />Close
-                    </Button>
-
-                    <Button
-                        data-testid={`confirmCancelOrderButton-${order.id}`}
-                        id={`ConfirmCancelOrderButton-${order.id}`}
-                        disabled={submitting}
-                        onClick={this.submitCancel}
-                        content={submitting ? "Submitting..." : "Submit order cancellation"}
+            <div style={{ display: "inline-block" }}>
+                <a
+                    href={`#cancelOrder-${order.id}`}
+                    data-testid={`cancelOrderButton-${order.id}`}
+                    onClick={event => {
+                        event.preventDefault();
+                        this.setState({ confirmOpen: true });
+                        return false;
+                    }}
+                >
+                    {label}
+                </a>
+                {this.state.confirmOpen && (
+                    <Modal
+                        size="small"
+                        open={confirmOpen}
+                        closeOnDimmerClick={false}
+                        onClose={this.handleClose}
+                        onCloseRequest={this.handleClose}
                     >
-                        <Icon name="trash" style={{ marginRight: "6px" }} />
-                    </Button>
-                </Modal.Actions>
-            </Modal>
+                        <Header
+                            icon="question"
+                            content="Cancel your order"
+                            className="opacLightGrey"
+                            style={{
+                                borderBottom: "1px solid",
+                                borderBottomColor: theme.colors.opacGrey,
+                                padding: "20px"
+                            }}
+                        />
+
+                        <Modal.Content>
+                            {error && (
+                                <EthSubmissionErrorPanel
+                                    onDismiss={() => {
+                                        this.setState({ error: null });
+                                    }}
+                                    error={error}
+                                    header="Order cancel failed."
+                                >
+                                    <p>Error cancelling the order.</p>
+                                </EthSubmissionErrorPanel>
+                            )}
+                            <p>Order id: {order.id}</p>
+                            {order.direction === TOKEN_SELL && (
+                                <p>
+                                    Sell {order.amount} A-EUR @{order.price * 100}% EUR/ETH rate
+                                </p>
+                            )}
+                            {order.direction === TOKEN_BUY && (
+                                <p>
+                                    Buy A-EUR for {order.amount} ETH @{order.price * 100}% EUR/ETH rate
+                                </p>
+                            )}
+                            <p>Are you sure you want to cancel your order?</p>
+                        </Modal.Content>
+
+                        <Modal.Actions>
+                            <Button className="grey" onClick={this.handleClose}>
+                                <Icon name="close" style={{ marginRight: "6px" }} />Close
+                            </Button>
+
+                            <Button
+                                data-testid={`confirmCancelOrderButton-${order.id}`}
+                                id={`ConfirmCancelOrderButton-${order.id}`}
+                                disabled={submitting}
+                                onClick={this.submitCancel}
+                                content={submitting ? "Submitting..." : "Submit order cancellation"}
+                            >
+                                <Icon name="trash" style={{ marginRight: "6px" }} />
+                            </Button>
+                        </Modal.Actions>
+                    </Modal>
+                )}
+            </div>
         );
     }
 }

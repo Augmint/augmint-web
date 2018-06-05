@@ -3,7 +3,7 @@ import store from "modules/store";
 import { setupWeb3 } from "modules/reducers/web3Connect";
 import { ErrorPanel } from "components/MsgPanels";
 import stringifier from "stringifier";
-import Button from "../../../components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 
 const stringifyInfo = stringifier({ maxDepth: 3, indent: "   " });

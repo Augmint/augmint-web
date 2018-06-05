@@ -3,8 +3,8 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Menu, Label } from "semantic-ui-react";
-import Button from "../../../components/augmint-ui/button";
+import { Menu } from "components/augmint-ui/menu";
+import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
@@ -13,6 +13,8 @@ import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
+
+import theme from "styles/theme";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -35,18 +37,17 @@ class PlaceOrderForm extends React.Component {
         }
     }
 
-    onOrderDirectionChange(e, { name, index }) {
-        this.setState({ orderDirection: index });
+    onOrderDirectionChange(e) {
+        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
     }
 
     onTokenAmountChange(e) {
-        console.debug("onTokenAmountChange ", e);
         let tokenAmount, price;
         try {
             this.setState({ lastChangedAmountField: "tokenAmount" });
             tokenAmount = parseFloat(e.target.value);
             price = this.parsePrice(this.props.price);
-            const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+            const ethValue = tokenAmount / (this.props.rates.info.ethFiatRate * price);
             this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
         } catch (error) {
             this.props.change("ethAmount", "");
@@ -100,7 +101,6 @@ class PlaceOrderForm extends React.Component {
 
         try {
             price = this.parsePrice(values.price);
-            console.debug(values.price, price);
             if (orderDirection === TOKEN_BUY) {
                 amount = parseFloat(values.ethAmount);
             } else {
@@ -135,6 +135,7 @@ class PlaceOrderForm extends React.Component {
 
     render() {
         const {
+            header: mainHeader,
             rates,
             exchange,
             error,
@@ -158,24 +159,27 @@ class PlaceOrderForm extends React.Component {
         }
 
         const header = (
-            <Menu size="massive" tabular>
-                <Menu.Item
-                    active={orderDirection === TOKEN_BUY}
-                    index={TOKEN_BUY}
-                    onClick={this.onOrderDirectionChange}
-                    data-testid="buyMenuLink"
-                >
-                    Buy A-EUR
-                </Menu.Item>
-                <Menu.Item
-                    active={orderDirection === TOKEN_SELL}
-                    index={TOKEN_SELL}
-                    onClick={this.onOrderDirectionChange}
-                    data-testid="sellMenuLink"
-                >
-                    Sell A-EUR
-                </Menu.Item>
-            </Menu>
+            <div>
+                {mainHeader}
+                <Menu size="massive" tabular>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_BUY}
+                        data-index={TOKEN_BUY}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="buyMenuLink"
+                    >
+                        Buy A-EUR
+                    </Menu.Item>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_SELL}
+                        data-index={TOKEN_SELL}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="sellMenuLink"
+                    >
+                        Sell A-EUR
+                    </Menu.Item>
+                </Menu>
+            </div>
         );
 
         return (
@@ -193,7 +197,7 @@ class PlaceOrderForm extends React.Component {
 
                 {!submitSucceeded &&
                     this.props.rates.isLoaded && (
-                        <Form error={error ? true : false} onSubmit={handleSubmit(this.handleSubmit)}>
+                        <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
                             <EthSubmissionErrorPanel
                                 error={error}
                                 header="Place Order failed"
@@ -212,48 +216,44 @@ class PlaceOrderForm extends React.Component {
                                 onChange={this.onTokenAmountChange}
                                 validate={tokenAmountValidations}
                                 normalize={Normalizations.twoDecimals}
-                                labelPosition="right"
-                            >
-                                <input data-testid="tokenAmountInput" />
-                                <Label>A-EUR</Label>
-                            </Field>
+                                data-testid="tokenAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                                labelAlignRight="A-EUR"
+                            />
 
+                            <label>
+                                {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
+                                {orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "}
+                            </label>
                             <Field
                                 name="ethAmount"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label={`${this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "} ${
-                                    orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "
-                                }`}
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
                                 normalize={Normalizations.fiveDecimals}
-                                labelPosition="right"
-                            >
-                                <input data-testid="ethAmountInput" />
-                                <Label>ETH</Label>
-                            </Field>
+                                data-testid="ethAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                                labelAlignRight="ETH"
+                            />
 
+                            <label>Price (% of of published rate):</label>
                             <Field
                                 name="price"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
-                                label="Price (% of of published rate): "
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onPriceChange}
                                 validate={Validations.price}
                                 normalize={Normalizations.twoDecimals}
-                                labelPosition="right"
-                            >
-                                <Label>
-                                    <PriceToolTip />
-                                </Label>
-                                <input data-testid="priceInput" />
-                                <Label>%</Label>
-                            </Field>
+                                data-testid="priceInput"
+                                style={{ borderRadius: "0" }}
+                                labelAlignLeft={<PriceToolTip />}
+                                labelAlignRight="%"
+                            />
 
                             <Button
                                 size="big"

@@ -1,20 +1,33 @@
 import React from "react";
-import { Segment, Image } from "semantic-ui-react";
+import Button from "components/augmint-ui/button";
+
+import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 
 import discordSVG from "assets/images/Discord-Logo.svg";
 
+const style = {
+    all: "initial",
+    color: theme.colors.secondary,
+    cursor: "pointer",
+    fontFamily: theme.typography.fontFamilies.default,
+    display: "flex",
+    fontSize: remCalc(18),
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+    padding: 0
+};
+
 export function DiscordButton(props) {
     return (
-        <Segment
-            basic
-            className="discord"
-            size="small"
-            href="https://discord.gg/PwDmsnu"
-            target="_blank"
-            style={{ color: "#ffad00", display: "block", fontSize: 18, lineHeight: 1.29, margin: 0, padding: 0 }}
-        >
-            <Image src={discordSVG} style={{ display: "inline-block", marginRight: 20, maxWidth: 40 }} />
+        <Button style={style} href="https://discord.gg/PwDmsnu" target="_blank">
+            <img
+                alt="discord icon"
+                src={discordSVG}
+                style={{ display: "inline-block", marginRight: 20, maxWidth: 40 }}
+            />
             Ask for help on our Discord
-        </Segment>
+        </Button>
     );
 }

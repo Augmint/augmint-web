@@ -6,7 +6,7 @@ import { MyListGroup } from "components/MyListGroups";
 import { EthSubmissionSuccessPanel, EthSubmissionErrorPanel } from "components/MsgPanels";
 import Button from "components/augmint-ui/button";
 import { InfoPanel } from "components/MsgPanels";
-import { Container } from "semantic-ui-react";
+import Container from "components/augmint-ui/container";
 import {
     dismissLegacyBalance,
     convertLegacyBalance,

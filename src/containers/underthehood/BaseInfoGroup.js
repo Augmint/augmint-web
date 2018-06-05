@@ -5,6 +5,7 @@ import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
 import ContractConnectionsInfo from "./components/ContractConnectionsInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
 import { SystemInfo } from "./components/SystemInfo";
+import HWWallets from "./components/HWWallets";
 import { ArrayDump } from "./components/ArrayDump";
 import { Pgrid } from "components/PageLayout";
 
@@ -15,19 +16,22 @@ class BaseInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid columns={3}>
-                <Pgrid.Column>
+            <Pgrid.Row wrap={false}>
+                <Pgrid.Column size={10 / 32}>
                     <Web3ConnectionInfo web3Connect={this.props.web3Connect} />
                     <ContractConnectionsInfo contracts={this.props.contracts} />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <UserAccountInfo userBalances={this.props.userBalances} />
                     <SystemInfo />
                 </Pgrid.Column>
-                <Pgrid.Column>
+                <Pgrid.Column size={1 / 32} />
+                <Pgrid.Column size={10 / 32}>
                     <ArrayDump header="Accounts" items={this.props.accounts} />
+                    <HWWallets />
                 </Pgrid.Column>
-            </Pgrid>
+            </Pgrid.Row>
         );
     }
 }
