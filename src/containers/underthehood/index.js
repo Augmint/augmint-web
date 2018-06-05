@@ -5,6 +5,7 @@ import AugmintInfoGroup from "./AugmintInfoGroup";
 import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import LocksInfoGroup from "./LocksInfoGroup";
+import StabilityBoardInfoGroup from "./StabilityBoardInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "components/augmint-ui/menu";
@@ -80,6 +81,15 @@ export default class underTheHood extends React.Component {
                                 >
                                     Exchange
                                 </Menu.Item>
+
+                                <Menu.Item
+                                    data-testid="stabilityBoardInfoLink"
+                                    active={selectedGroup === "stabilityBoard"}
+                                    name="stabilityBoard"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Stability Board
+                                </Menu.Item>
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
@@ -87,6 +97,7 @@ export default class underTheHood extends React.Component {
                             {selectedGroup === "loans" && <LoansInfoGroup />}
                             {selectedGroup === "locks" && <LocksInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
+                            {selectedGroup === "stabilityBoard" && <StabilityBoardInfoGroup />}
                         </Pgrid.Column>
                     </Pgrid.Row>
                 </Psegment>

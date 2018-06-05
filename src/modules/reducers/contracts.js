@@ -5,6 +5,7 @@ import Rates from "abiniser/abis/Rates_ABI_73a17ebb0acc71773371c6a8e1c8e6ce.json
 import LockManager from "abiniser/abis/Locker_ABI_619ff7809b73aead28176fe6317953c3.json";
 import LoanManager from "abiniser/abis/LoanManager_ABI_ec709c3341045caa3a75374b8cfc7286.json";
 import Exchange from "abiniser/abis/Exchange_ABI_b2a23202a9a0f04755a186896c2b56eb.json";
+import StabilityBoardSigner from "abiniser/abis/StabilityBoardSigner_ABI_19ab69b650e28b2dd211d3851893f91f.json";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
 export const CONTRACTS_CONNECT_SUCCESS = "contracts/CONTRACTS_CONNECT_SUCCESS";
@@ -18,7 +19,8 @@ const initialState = {
         monetarySupervisor: null,
         loanManager: null,
         lockManager: null,
-        exchange: null
+        exchange: null,
+        stabilityBoardSigner: null
     },
     error: null,
     isLoading: false,
@@ -68,6 +70,7 @@ export const connectContracts = () => {
             const lockManager = SolidityContract.connectLatest(web3, LockManager);
             const loanManager = SolidityContract.connectLatest(web3, LoanManager);
             const exchange = SolidityContract.connectLatest(web3, Exchange);
+            const stabilityBoardSigner = SolidityContract.connectLatest(web3, StabilityBoardSigner);
 
             const [feeAccountAddress, lockManagerMonetarySupervisorAddress] = await Promise.all([
                 augmintToken.web3ContractInstance.methods.feeAccount().call(),
@@ -92,7 +95,8 @@ export const connectContracts = () => {
                 monetarySupervisor,
                 lockManager,
                 loanManager,
-                exchange
+                exchange,
+                stabilityBoardSigner
             };
 
             return dispatch({
