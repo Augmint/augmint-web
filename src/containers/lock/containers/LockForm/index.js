@@ -20,11 +20,27 @@ class LockContainer extends React.Component {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.lockAmountValidation = this.lockAmountValidation.bind(this);
+        this.defaultProductId = this.defaultProductId.bind(this);
+    }
+
+    defaultProductId() {
+        let productId = this.defaultId;
+
+        if (!productId) {
+            productId = this.props.lockProducts
+                .filter(product => product.isActive)
+                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)[0].id;
+            this.setState({
+                defaultId: productId
+            });
+        }
+        return productId;
     }
 
     lockAmountValidation(value, allValues) {
-        const minValue = this.props.lockProducts[allValues.productId].minimumLockAmount;
-        const maxValue = this.props.lockProducts[allValues.productId].maxLockAmount;
+        const productId = allValues.productId || this.defaultProductId();
+        const minValue = this.props.lockProducts[productId].minimumLockAmount;
+        const maxValue = this.props.lockProducts[productId].maxLockAmount;
         const val = parseFloat(value);
 
         if (val < minValue) {
@@ -37,7 +53,8 @@ class LockContainer extends React.Component {
     }
 
     async onSubmit(values) {
-        let amount;
+        let amount,
+            productId = this.props.productId ? this.props.productId : this.defaultProductId();
         try {
             amount = parseFloat(values.lockAmount);
         } catch (error) {
@@ -49,7 +66,7 @@ class LockContainer extends React.Component {
             });
         }
 
-        const res = await store.dispatch(newLock(this.props.productId, amount));
+        const res = await store.dispatch(newLock(productId, amount));
         if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
             console.error(res);
             throw new SubmissionError({
@@ -109,12 +126,14 @@ class LockContainer extends React.Component {
                         <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
-                                    <TermTableHeadCell {...{dashboard}} />
-                                    <TermTableHeadCell {...{dashboard}} />
-                                    <TermTableHeadCell {...{dashboard}}>Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell {...{dashboard}}>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell {...{dashboard}}>Interest p.a.</TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }} {...{dashboard}}>You earn</TermTableHeadCell>
+                                    <TermTableHeadCell {...{ dashboard }} />
+                                    <TermTableHeadCell {...{ dashboard }} />
+                                    <TermTableHeadCell {...{ dashboard }}>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{ dashboard }}>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell {...{ dashboard }}>Interest p.a.</TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }} {...{ dashboard }}>
+                                        You earn
+                                    </TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
@@ -125,7 +144,7 @@ class LockContainer extends React.Component {
                                         .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell {...{ dashboard }}>
                                                         <Field
                                                             name="productId"
                                                             val={product.id}
@@ -133,16 +152,19 @@ class LockContainer extends React.Component {
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell {...{ dashboard }}>
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>{product.maxLockAmount} A€</TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell {...{ dashboard }}>
+                                                        {product.minimumLockAmount} A€
+                                                    </TermTableCell>
+                                                    <TermTableCell {...{ dashboard }}>
+                                                        {product.maxLockAmount} A€
+                                                    </TermTableCell>
+                                                    <TermTableCell {...{ dashboard }}>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}} style={{ textAlign: "right" }}>
-
+                                                    <TermTableCell {...{ dashboard }} style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(
                                                                 this.props.lockAmount * product.perTermInterest * 100
