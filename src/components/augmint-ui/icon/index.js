@@ -15,6 +15,7 @@ export default function Icon(props) {
             break;
         case "close":
             className += " fas fa-times";
+            break;
         case "connect":
             className += " fas fa-plug";
             break;
