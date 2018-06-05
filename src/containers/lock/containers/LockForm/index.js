@@ -20,18 +20,27 @@ class LockContainer extends React.Component {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.lockAmountValidation = this.lockAmountValidation.bind(this);
+        this.defaultProductId = this.defaultProductId.bind(this);
+    }
+
+    defaultProductId() {
+        let productId = this.defaultId;
+
+        if (!productId) {
+            productId = this.props.lockProducts
+                .filter(product => product.isActive)
+                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)[0].id;
+            this.setState({
+                defaultId: productId
+            });
+        }
+        return productId;
     }
 
     lockAmountValidation(value, allValues) {
-        const sortedActivLocks = this.props.lockProducts
-            .filter(product => product.isActive)
-            .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs);
-        const minValue = allValues.productId
-            ? this.props.lockProducts[allValues.productId].minimumLockAmount
-            : sortedActivLocks[0].minimumLockAmount;
-        const maxValue = allValues.productId
-            ? this.props.lockProducts[allValues.productId].maxLockAmount
-            : sortedActivLocks[0].maxLockAmount;
+        const productId = allValues.productId || this.defaultProductId();
+        const minValue = this.props.lockProducts[productId].minimumLockAmount;
+        const maxValue = this.props.lockProducts[productId].maxLockAmount;
         const val = parseFloat(value);
 
         if (val < minValue) {
@@ -44,11 +53,8 @@ class LockContainer extends React.Component {
     }
 
     async onSubmit(values) {
-        const sortedActivLocks = this.props.lockProducts
-            .filter(product => product.isActive)
-            .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs);
         let amount,
-            productId = this.props.productId ? this.props.productId : sortedActivLocks[0].id;
+            productId = this.props.productId ? this.props.productId : this.defaultProductId();
         try {
             amount = parseFloat(values.lockAmount);
         } catch (error) {
