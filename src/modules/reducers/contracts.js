@@ -1,6 +1,6 @@
 import store from "modules/store";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import TokenAEur from "abiniser/abis/TokenAEur_ABI_962b41ca272a86b1f556fc47e0f7954f.json";
+import TokenAEur from "abiniser/abis/TokenAEur_ABI_9aa81519ec45a52d3f8f1a1a83d25c74.json";
 import Rates from "abiniser/abis/Rates_ABI_73a17ebb0acc71773371c6a8e1c8e6ce.json";
 import LockManager from "abiniser/abis/Locker_ABI_619ff7809b73aead28176fe6317953c3.json";
 import LoanManager from "abiniser/abis/LoanManager_ABI_ec709c3341045caa3a75374b8cfc7286.json";
