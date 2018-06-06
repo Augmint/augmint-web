@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
+import lockManagerProvider from "modules/lockManagerProvider";
 import ratesProvider from "modules/ratesProvider";
 import newLoanMain from "./newLoan/";
 import repayLoanMain from "./repayLoan";
@@ -17,6 +18,7 @@ export default class LoanMain extends React.Component {
         ratesProvider();
         augmintTokenProvider();
         loanManagerProvider();
+        lockManagerProvider();
     }
 
     render() {
