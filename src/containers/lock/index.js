@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
+import loanManagerProvider from "modules/loanManagerProvider";
 
 import { EthereumState } from "containers/app/EthereumState";
 
@@ -12,7 +13,7 @@ import AccountInfo from "components/AccountInfo";
 import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
 
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { FeatureContext } from "modules/services/featureService";
 
 import { StyledButtonContainer } from "./styles";
@@ -22,6 +23,7 @@ class LockContainer extends React.Component {
         connectWeb3();
         augmintTokenProvider();
         lockManagerProvider();
+        loanManagerProvider();
     }
 
     render() {
@@ -30,12 +32,14 @@ class LockContainer extends React.Component {
         return (
             <Psegment>
                 <EthereumState>
-                <TopNavTitlePortal>
+                    <TopNavTitlePortal>
                         <FeatureContext>
-                            {
-                                features => features.dashboard ?
-                                    <Pheader className="secondaryColor" header="Lock A-EUR" /> :
+                            {features =>
+                                features.dashboard ? (
+                                    <Pheader className="secondaryColor" header="Lock A-EUR" />
+                                ) : (
                                     <Pheader header="Lock A-EUR" />
+                                )
                             }
                         </FeatureContext>
                     </TopNavTitlePortal>
@@ -55,7 +59,13 @@ class LockContainer extends React.Component {
                         <Pgrid.Row columns={1}>
                             <Pgrid.Column>
                                 <FeatureContext.Consumer>
-                                    {features => <LockForm lockManager={lockManager} lockProducts={lockProducts} dashboard={features.dashboard} />}
+                                    {features => (
+                                        <LockForm
+                                            lockManager={lockManager}
+                                            lockProducts={lockProducts}
+                                            dashboard={features.dashboard}
+                                        />
+                                    )}
                                 </FeatureContext.Consumer>
                             </Pgrid.Column>
                         </Pgrid.Row>
