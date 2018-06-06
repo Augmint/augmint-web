@@ -1,6 +1,6 @@
 import React from "react";
 import store from "modules/store";
-import { fetchScripts } from "modules/reducers/stabilityBoardSigner";
+import { fetchScripts } from "modules/reducers/stabilityBoardProxy";
 import { Pblock } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import { ArrayDump } from "./ArrayDump";

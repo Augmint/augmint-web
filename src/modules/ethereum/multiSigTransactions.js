@@ -1,4 +1,4 @@
-/* MultiSig ethereum functions for StabilityBoardSigner and PreTokenSigner contracts
+/* MultiSig ethereum functions for StabilityBoardProxy and PreTokenProxy contracts
 Use only from reducers.  */
 import store from "modules/store";
 import { SCRIPT_STATES } from "utils/constants";
