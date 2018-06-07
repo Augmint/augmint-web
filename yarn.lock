@@ -18,9 +18,9 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@ledgerhq/hw-app-eth@4.13.0":
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-4.13.0.tgz#8a999263f2dd212e43bb1145018003f4bad52d33"
+"@ledgerhq/hw-app-eth@4.14.0":
+  version "4.14.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-4.14.0.tgz#dd6b29024827348702cfe22bb1611e1c97923717"
   dependencies:
     "@ledgerhq/hw-transport" "^4.13.0"
 
@@ -30,12 +30,6 @@
   dependencies:
     "@ledgerhq/hw-transport" "^4.13.0"
     u2f-api "0.2.7"
-
-"@ledgerhq/hw-transport@^4.12.0":
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.12.0.tgz#1cbfb2462728e46297d8ed215b60ac7e3089ba92"
-  dependencies:
-    events "^2.0.0"
 
 "@ledgerhq/hw-transport@^4.13.0":
   version "4.13.0"
