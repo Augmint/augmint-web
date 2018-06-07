@@ -9,7 +9,7 @@ const LEGACY_LOANMANAGER_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
+    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
 
     // rinkeby
     4: [
