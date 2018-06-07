@@ -6,6 +6,7 @@ import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import LocksInfoGroup from "./LocksInfoGroup";
 import StabilityBoardInfoGroup from "./StabilityBoardInfoGroup";
+import PreTokenInfoGroup from "./PreTokenInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "components/augmint-ui/menu";
@@ -90,6 +91,15 @@ export default class underTheHood extends React.Component {
                                 >
                                     Stability Board
                                 </Menu.Item>
+
+                                <Menu.Item
+                                    data-testid="preTokenInfoLink"
+                                    active={selectedGroup === "preToken"}
+                                    name="preToken"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    PreToken
+                                </Menu.Item>
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
@@ -98,6 +108,7 @@ export default class underTheHood extends React.Component {
                             {selectedGroup === "locks" && <LocksInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                             {selectedGroup === "stabilityBoard" && <StabilityBoardInfoGroup />}
+                            {selectedGroup === "preToken" && <PreTokenInfoGroup />}
                         </Pgrid.Column>
                     </Pgrid.Row>
                 </Psegment>
