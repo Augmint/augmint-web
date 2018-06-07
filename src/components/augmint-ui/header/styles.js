@@ -15,6 +15,11 @@ const BaseHeader = `
     &.secondaryColor {
         color: ${theme.colors.secondary};
     }
+
+    &.tertiaryColor {
+        color: ${theme.colors.primary};
+    }
+
     & i {
       margin: 0 10px;
     }
