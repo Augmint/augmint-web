@@ -50,9 +50,7 @@ class AugmintToken extends React.Component {
                                             monetarySupervisor={this.props.monetarySupervisor}
                                         />
                                     </Pgrid.Column>
-                                    <TopNavTitlePortal>
-                                        {!dashboard && <Pheader header="Reserves" style={{ width: "100%" }} />}
-                                    </TopNavTitlePortal>
+                                    {!dashboard && <Pheader header="Reserves" style={{ width: "100%" }} />}
                                     <Pgrid.Column>
                                         <ReserveStats
                                             augmintToken={this.props.augmintToken}
