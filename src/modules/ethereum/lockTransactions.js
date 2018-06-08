@@ -166,7 +166,7 @@ function parseLocks(locksArray) {
             const currentTime = moment()
                 .utc()
                 .unix();
-            const isActive = bn_isActive === "1";
+            const isActive = bn_isActive.toString() === "1";
             const isReleasebale = lockedUntil <= currentTime && isActive;
 
             let lockStateText;
