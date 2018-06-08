@@ -8,7 +8,7 @@ const LEGACY_LOCKER_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
+    999: ["0xe6a48098a0a318ccec66bcd8297417e0d74585dc"],
 
     // rinkeby
     4: [
