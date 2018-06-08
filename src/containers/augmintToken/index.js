@@ -15,7 +15,6 @@ import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
 import Button from "components/augmint-ui/button";
 
-import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { FeatureContext } from "modules/services/featureService";
 
 class AugmintToken extends React.Component {
@@ -40,9 +39,7 @@ class AugmintToken extends React.Component {
                     return (
                         <EthereumState>
                             <Psegment>
-                                <TopNavTitlePortal>
-                                    {dashboard && <Pheader className="secondaryColor" header="Reserves" />}
-                                </TopNavTitlePortal>
+                                {dashboard && <Pheader className="secondaryColor" header="Reserves" />}
                                 <Pgrid.Row>
                                     <Pgrid.Column>
                                         <TotalSupply
@@ -50,9 +47,7 @@ class AugmintToken extends React.Component {
                                             monetarySupervisor={this.props.monetarySupervisor}
                                         />
                                     </Pgrid.Column>
-                                    <TopNavTitlePortal>
-                                        {!dashboard && <Pheader header="Reserves" style={{ width: "100%" }} />}
-                                    </TopNavTitlePortal>
+                                    {!dashboard && <Pheader header="Reserves" style={{ width: "100%" }} />}
                                     <Pgrid.Column>
                                         <ReserveStats
                                             augmintToken={this.props.augmintToken}
