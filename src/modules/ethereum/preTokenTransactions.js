@@ -34,12 +34,13 @@ export async function fetchAccountInfoTx(userAccount) {
     //     uint32 valuationCap; // in USD (no decimals)
     // }
 
-    const agreement = await preToken.methods.agreements(userAccount).call();
+    const agreementHash = await preToken.methods.agreementOwners(userAccount).call();
+    const agreement = await preToken.methods.agreements(agreementHash).call();
 
     const accountInfo = {
         userAccount,
+        agreementHash,
         balance: agreement.balance,
-        agreementHash: agreement.agreementHash,
         discount: agreement.discount / PPM_DIV,
         valuationCap: agreement.valuationCap
     };
