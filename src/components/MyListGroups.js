@@ -29,10 +29,11 @@ export function MyListGroupColumn(props) {
         <Grid.Unit style={style} size={width} {...other}>
             {header && 
                 <FeatureContext>
-                    {features => features.dashboard 
-                        ? <Header as="h3" className="tertiaryColor">{header}</Header>
-                        : <Header as="h3">{header}</Header>
-                    }
+                    {features => {
+                        const dashboard = features.dashboard;
+                        
+                        return <Header as="h3" className={ dashboard ? "tertiaryColor" : "" }>{header}</Header>
+                    }}
                 </FeatureContext>}
             {children}
         </Grid.Unit>
