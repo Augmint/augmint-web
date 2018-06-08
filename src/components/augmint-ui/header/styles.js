@@ -12,6 +12,10 @@ const BaseHeader = `
       color: ${theme.colors.opacLightGrey}
     }
 
+    &.primaryColor {
+        color: ${theme.colors.primary};
+    }
+
     &.secondaryColor {
         color: ${theme.colors.secondary};
     }
