@@ -17,7 +17,6 @@ const BaseLabel = `
     `;
 
 const BaseValue = `
-    color: ${theme.colors.white};
     font-size: ${remCalc(42)};
     font-weight: 400;
     line-height: ${remCalc(42)};
@@ -51,6 +50,10 @@ export const StyledContainer = styled.div`
     text-size-adjust: 100%;
     min-width: 33.33%;
     min-width: calc(100% / 3);
+
+    &.dashboard {
+        color: ${theme.colors.primary};
+    }
 `;
 
 export const StyledGroup = styled.div`
