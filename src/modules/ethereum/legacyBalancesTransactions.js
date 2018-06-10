@@ -11,7 +11,7 @@ const ACCEPTED_LEGACY_AEUR_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0xe6a48098a0a318ccec66bcd8297417e0d74585dc"],
+    999: ["0x7f3abcd33ffe83ba7426ee6ec45014364fe1cab4"],
 
     // rinkeby
     4: [

@@ -50,7 +50,7 @@
       }
     },
     "fe74b7986dafb00f221486e790fc70ec": {
-      "latestDeployedAddress": "0x8cfef73cf8cfbb78868ff8c37525e95adfabbf09",
+      "latestDeployedAddress": "0x6386f25d2029ea3164838bf6494ed85c01fc1b03",
       "deployments": {
         "0x8cfef73cf8cfbb78868ff8c37525e95adfabbf09": {
           "generatedAt": "2018-06-04T12:49:52.498Z",
@@ -64,6 +64,19 @@
           "deployedBytecodeHash": "72ac9e6702f78ef862f370d8c8df7c71",
           "sourceHash": "c7efcf3ab406e57912d53f6c60404d94",
           "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is SystemAccount {\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function burn(AugmintTokenInterface augmintToken, uint amount) external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.burn(amount);\n    }\n\n}\n"
+        },
+        "0x6386f25d2029ea3164838bf6494ed85c01fc1b03": {
+          "generatedAt": "2018-06-10T08:34:44.824Z",
+          "truffleContractFileUpdatedAt": "2018-06-10T08:33:25.124Z",
+          "deployTransactionHash": "0xb8d91b5ead336188b26d421e0f8a77d6daf93c093975f03d051a0633116cc666",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "4974a3c7784d990daf85675b5b7a0e17",
+          "deployedBytecodeHash": "d4f59c0df09ee0b51006f4945892828c",
+          "sourceHash": "d5753af67c3f621da910f47d3d749db3",
+          "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is SystemAccount {\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function burn(AugmintTokenInterface augmintToken, uint amount) external restrict(\"MonetarySupervisor\") {\n        augmintToken.burn(amount);\n    }\n\n}\n"
         }
       }
     }
