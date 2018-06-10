@@ -50,7 +50,7 @@
       }
     },
     "11b039ce783db308e1a9b5f46f05824f": {
-      "latestDeployedAddress": "0xdd1b8dfd9094e319a0eb83c32b47331946cb761f",
+      "latestDeployedAddress": "0xdf8c338a89f827a6d62804905ed415b6a382f92e",
       "deployments": {
         "0xdd1b8dfd9094e319a0eb83c32b47331946cb761f": {
           "generatedAt": "2018-06-04T12:49:52.515Z",
@@ -64,6 +64,19 @@
           "deployedBytecodeHash": "f7e6478975d25a023acd5a16ff307a5b",
           "sourceHash": "1d71a7b664ac13b66b772f24e48edb32",
           "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisorContract\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
+        },
+        "0xdf8c338a89f827a6d62804905ed415b6a382f92e": {
+          "generatedAt": "2018-06-10T08:34:44.848Z",
+          "truffleContractFileUpdatedAt": "2018-06-10T08:33:25.605Z",
+          "deployTransactionHash": "0x6a303a203866d5f5aef9cbd49cf07bfe98bdd3a10a908923b90b7319b184daaf",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "1a57f465af930a1cc7070876d2a6bde3",
+          "deployedBytecodeHash": "62cba71783fcbe9a394e7ef9880058da",
+          "sourceHash": "3ae3310cda808efba999807e54bf8c9b",
+          "source": "/* Contract to hold earned interest from loans repaid\n   premiums for locks are being accrued (i.e. transferred) to Locker */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract InterestEarnedAccount is SystemAccount {\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function transferInterest(AugmintTokenInterface augmintToken, address locker, uint interestAmount)\n    external restrict(\"MonetarySupervisor\") {\n        augmintToken.transfer(locker, interestAmount);\n    }\n\n}\n"
         }
       }
     }
