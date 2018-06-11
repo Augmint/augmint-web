@@ -111,14 +111,11 @@ class App extends React.Component {
     }
 
     render() {
-        const mainPath = (this.props.location.pathname.split('/').length > 0)
-            ? this.props.location.pathname.split('/')[1]
-            : '';
+        const mainPath =
+            this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(
-                mainPath
-            ) > -1;
+            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(mainPath) > -1;
         return (
             <FeatureContext.Consumer>
                 {features => {
@@ -126,18 +123,16 @@ class App extends React.Component {
                     return (
                         <div className={showDash ? "Site Site__dash" : "Site"}>
                             <ScrollToTop />
-                            {showDash ? (
-                                <TopNav web3Connect={this.props.web3Connect} />
-                            ) : (
-                                    <AppMenu
-                                        web3Connect={this.props.web3Connect}
-                                        location={this.props.location}
-                                        showMenu={this.state.showMobileMenu}
-                                        toggleMenu={this.toggleMenu}
-                                    />
-                                )}
+                            <TopNav web3Connect={this.props.web3Connect} className={!showDash && "hide"} />
+                            {showDash ? null : (
+                                <AppMenu
+                                    web3Connect={this.props.web3Connect}
+                                    location={this.props.location}
+                                    showMenu={this.state.showMobileMenu}
+                                    toggleMenu={this.toggleMenu}
+                                />
+                            )}
                             {showDash ? <SideNav /> : null}
-
 
                             <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
                                 <EthereumTxStatus />
@@ -170,8 +165,6 @@ class App extends React.Component {
                                 </div>
                             )}
                         </div>
-
-
                     );
                 }}
             </FeatureContext.Consumer>
