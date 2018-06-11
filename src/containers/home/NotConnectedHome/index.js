@@ -44,7 +44,7 @@ export default class NotConnectedHome extends React.Component {
                             <Header textAlign="center" as="h4" size="large" style={{ lineHeight: "31px" }}>
                                 Augmint offers digital tokens targeted to a fiat currency.
                                 <br />
-                                The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
+                                The first Augmint token is <nobr>A-Euro</nobr>, targeted to Euro.
                                 <br />
                                 Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
