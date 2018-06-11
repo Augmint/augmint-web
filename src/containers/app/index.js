@@ -115,8 +115,8 @@ class App extends React.Component {
             this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(mainPath) > -1;
-        const hideMsgPanel = ["", "concept", "roadmap", "manifesto", "disclaimer", "contact"].indexOf(mainPath) > -1;
+            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan", "under-the-hood"].indexOf(mainPath) >
+            -1;
         return (
             <FeatureContext.Consumer>
                 {features => {
@@ -137,13 +137,15 @@ class App extends React.Component {
                             {showDash ? <SideNav /> : null}
 
                             <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
-                                <div className={hideMsgPanel && " hideMsgPanel"}>
-                                    <EthereumTxStatus />
-                                    <LegacyLoanManagers />
-                                    <LegacyLockers />
-                                    <LegacyExchanges />
-                                    <LegacyTokens />
-                                </div>
+                                {showConnection && (
+                                    <div>
+                                        <EthereumTxStatus />
+                                        <LegacyLoanManagers />
+                                        <LegacyLockers />
+                                        <LegacyExchanges />
+                                        <LegacyTokens />
+                                    </div>
+                                )}
 
                                 <Switch>
                                     <Route exact path="/" component={NotConnectedHome} />
