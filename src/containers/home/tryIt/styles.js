@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import theme from "styles/theme";
 
 import { media } from "styles/media";
 
@@ -23,4 +24,12 @@ export const StoreBadge = styled.img`
     min-height: 40px;
     padding: 0 6px;
     width: auto;
+`;
+
+export const StyledP = styled.p`
+    color: ${theme.colors.white};    
+
+    &.primaryColor {
+        color: ${theme.colors.primary};
+    }
 `;

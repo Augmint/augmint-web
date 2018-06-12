@@ -14,6 +14,7 @@ export function Theader(props) {
         children,
         header,
         subheader,
+        headerStyle,
         ...other
     } = props;
     return (
@@ -68,7 +69,7 @@ export function TblockSubHeader(props) {
 }
 
 export function Tblock(props) {
-    const { children, header } = props;
+    const { children, header, headerStyle } = props;
     return (
         <Grid wrap={false} style={{ padding: "14px 0" }} columns={2}>
             <Grid.Unit style={{ textAlign: "left" }} size={6}>
@@ -78,6 +79,7 @@ export function Tblock(props) {
                     style={{
                         fontSize: "1.4em"
                     }}
+                    className={headerStyle}
                 />
             </Grid.Unit>
             <Grid.Unit size={10} style={{ textAlign: "left" }}>
