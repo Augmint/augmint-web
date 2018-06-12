@@ -1,6 +1,6 @@
 {
   "contractName": "FeeAccount",
-  "latestAbiHash": "dd4594a936e439aa46ed5b06cb69eafa",
+  "latestAbiHash": "67db260db12738df3cced3511d34c65c",
   "deployedAbis": {
     "3bf67cdfa9f7a16596598e19aeb06b39": {
       "latestDeployedAddress": "0xf5efcaa78f5656f7ddc971bc5d51a08b5f161573",
@@ -20,7 +20,7 @@
       }
     },
     "dd4594a936e439aa46ed5b06cb69eafa": {
-      "latestDeployedAddress": "0xbed57eb0b4232da0cddd3c9c27490fc0759e0a01",
+      "latestDeployedAddress": "0x61fd2df116a3c1d1e0c50552d820c90e2c6c951b",
       "deployments": {
         "0xb0a2a8e846b66c7384f52635cecef5280f766c8b": {
           "generatedAt": "2018-04-26T01:54:21.110Z",
@@ -47,6 +47,37 @@
           "deployedBytecodeHash": "aaa8149858e7a4fda67a0feeaf2846c5",
           "sourceHash": "fe888fa25a5c364abea5c0856f1ebd5b",
           "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity ^0.4.23;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(uint transferFeePt, uint transferFeeMin, uint transferFeeMax) public {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"MonetaryBoard\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoFeeTransferContracts\"] && !permissions[to][\"NoFeeTransferContracts\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
+        },
+        "0x61fd2df116a3c1d1e0c50552d820c90e2c6c951b": {
+          "generatedAt": "2018-05-31T23:56:48.472Z",
+          "truffleContractFileUpdatedAt": "2018-05-31T23:54:54.499Z",
+          "deployTransactionHash": "0xad8bd77bee37305919c9f195ab469be16189670c89ca41448013a62136d9513a",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "70ab69343e4905fd08b47547aba2847a",
+          "deployedBytecodeHash": "eceb8d093a256a88355a8a19255fd132",
+          "sourceHash": "fcfc3451f85f07051e276314b1ad3381",
+          "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity 0.4.24;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(uint transferFeePt, uint transferFeeMin, uint transferFeeMax) public {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"StabilityBoardSignerContract\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoFeeTransferContracts\"] && !permissions[to][\"NoFeeTransferContracts\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
+        }
+      }
+    },
+    "67db260db12738df3cced3511d34c65c": {
+      "latestDeployedAddress": "0xf5efcaa78f5656f7ddc971bc5d51a08b5f161573",
+      "deployments": {
+        "0xf5efcaa78f5656f7ddc971bc5d51a08b5f161573": {
+          "generatedAt": "2018-06-06T15:25:31.738Z",
+          "truffleContractFileUpdatedAt": "2018-06-06T15:25:22.673Z",
+          "deployTransactionHash": "0xd45698a4e48954fbc09931ff1d23159c4015aaeee21b39ca71d010598cf53e4a",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "1db7295608dc7f030b9c01818f4afe93",
+          "deployedBytecodeHash": "1a57c03530d204909d1075b452099e77",
+          "sourceHash": "653a2a034144713dc046880dafd503c9",
+          "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity 0.4.24;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(address permissionGranterContract, uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    public SystemAccount(permissionGranterContract) {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"StabilityBoard\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoTransferFee\"] && !permissions[to][\"NoTransferFee\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
         }
       }
     }

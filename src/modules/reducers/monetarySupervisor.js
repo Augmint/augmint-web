@@ -18,7 +18,7 @@ const initialState = {
         interestEarnedAccount: null,
         augmintReserves: null,
 
-        issuedByMonetaryBoard: "?",
+        issuedByStabilityBoard: "?",
 
         totalLoanAmount: "?",
         totalLockedAmount: "?",
@@ -95,7 +95,7 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
         interestEarnedAccountAddress,
         augmintReservesAddress,
 
-        bn_issuedByMonetaryBoard,
+        bn_issuedByStabilityBoard,
 
         bn_totalLoanAmount,
         bn_totalLockedAmount,
@@ -109,7 +109,7 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
         monetarySupervisorInstance.methods.interestEarnedAccount().call(),
         monetarySupervisorInstance.methods.augmintReserves().call(),
 
-        monetarySupervisorInstance.methods.issuedByMonetaryBoard().call(),
+        monetarySupervisorInstance.methods.issuedByStabilityBoard().call(),
 
         monetarySupervisorInstance.methods.totalLoanAmount().call(),
         monetarySupervisorInstance.methods.totalLockedAmount().call(),
@@ -120,7 +120,7 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
         monetarySupervisorInstance.methods.getMaxLoanAmountAllowedByLtd().call()
     ]);
 
-    const issuedByMonetaryBoard = bn_issuedByMonetaryBoard / DECIMALS_DIV;
+    const issuedByStabilityBoard = bn_issuedByStabilityBoard / DECIMALS_DIV;
     const totalLoanAmount = bn_totalLoanAmount / DECIMALS_DIV;
     const totalLockedAmount = bn_totalLockedAmount / DECIMALS_DIV;
 
@@ -148,7 +148,7 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
         interestEarnedAccount: interestEarnedAccountAddress,
         augmintReserves: augmintReservesAddress,
 
-        issuedByMonetaryBoard,
+        issuedByStabilityBoard,
         totalLoanAmount,
         totalLockedAmount,
         ltdPercent,

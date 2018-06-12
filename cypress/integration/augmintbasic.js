@@ -32,7 +32,7 @@ describe("Augmint base", function() {
         cy.get("[data-testid=reservesMenuLink").click();
 
         cy.get("[data-testid=totalSupply]").should("not.contain", "?");
-        cy.get("[data-testid=issuedByMonetaryBoard]").should("not.contain", "?");
+        cy.get("[data-testid=issuedByStabilityBoard]").should("not.contain", "?");
         cy.get("[data-testid=reserveEthBalanceInFiat]").should("not.contain", "?");
         cy.get("[data-testid=reserveTokenBalance]").should("not.contain", "?");
 

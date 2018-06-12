@@ -1,0 +1,24 @@
+{
+  "contractName": "TokenAEur",
+  "latestAbiHash": "9aa81519ec45a52d3f8f1a1a83d25c74",
+  "deployedAbis": {
+    "9aa81519ec45a52d3f8f1a1a83d25c74": {
+      "latestDeployedAddress": "0x86a635eccefffa70ff8a6db29da9c8db288e40d0",
+      "deployments": {
+        "0x86a635eccefffa70ff8a6db29da9c8db288e40d0": {
+          "generatedAt": "2018-06-11T14:12:25.122Z",
+          "truffleContractFileUpdatedAt": "2018-06-11T14:02:33.932Z",
+          "deployTransactionHash": "0xfb18595275efce18c9f78ad93be17dd59372c2d81450d2e9a227a643d1b34427",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "3abfdb182b58136a9dcb25c1ece5ed54",
+          "deployedBytecodeHash": "c3636b199ceefdd5deb396f099915a87",
+          "sourceHash": "20cc69065a6935fc7519147f3fc5fa2c",
+          "source": "/* Augmint Crypto Euro token (A-EUR) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
+        }
+      }
+    }
+  }
+}
