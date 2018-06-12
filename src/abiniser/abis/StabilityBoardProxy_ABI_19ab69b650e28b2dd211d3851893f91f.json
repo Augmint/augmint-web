@@ -1,0 +1,338 @@
+{
+  "contractName": "StabilityBoardProxy",
+  "abiHash": "19ab69b650e28b2dd211d3851893f91f",
+  "generatedAt": "2018-06-06T15:25:31.847Z",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "activeSignersCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "scriptAddress",
+          "type": "address"
+        }
+      ],
+      "name": "cancelScript",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "scriptAddress",
+          "type": "address"
+        }
+      ],
+      "name": "execute",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isSigner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "signers",
+          "type": "address[]"
+        }
+      ],
+      "name": "removeSigners",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getScriptsCount",
+      "outputs": [
+        {
+          "name": "scriptsCount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "scriptAddresses",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "offset",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAllSigners",
+      "outputs": [
+        {
+          "name": "signersResult",
+          "type": "uint256[3][100]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "offset",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAllScripts",
+      "outputs": [
+        {
+          "name": "scriptsResult",
+          "type": "uint256[4][100]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "scripts",
+      "outputs": [
+        {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "name": "signCount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getAllSignersCount",
+      "outputs": [
+        {
+          "name": "allSignersCount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "allSigners",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "signers",
+          "type": "address[]"
+        }
+      ],
+      "name": "addSigners",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "CHUNK_SIZE",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "scriptAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sign",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "signer",
+          "type": "address"
+        }
+      ],
+      "name": "SignerAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "signer",
+          "type": "address"
+        }
+      ],
+      "name": "SignerRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "scriptAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "signer",
+          "type": "address"
+        }
+      ],
+      "name": "ScriptSigned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "scriptAddress",
+          "type": "address"
+        }
+      ],
+      "name": "ScriptApproved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "scriptAddress",
+          "type": "address"
+        }
+      ],
+      "name": "ScriptCancelled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "scriptAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "result",
+          "type": "bool"
+        }
+      ],
+      "name": "ScriptExecuted",
+      "type": "event"
+    }
+  ]
+}
