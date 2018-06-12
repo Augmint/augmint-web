@@ -7,7 +7,6 @@ import { ArrayDump } from "./ArrayDump";
 
 export function PreTokenTransferList(props) {
     const { transfers, userAccount, isLoading, isLoaded, error, loadError } = props.preTokenData;
-    console.log(props);
 
     const handleRefreshClick = e => {
         e.preventDefault();

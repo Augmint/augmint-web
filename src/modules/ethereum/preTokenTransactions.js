@@ -44,6 +44,6 @@ export async function fetchAccountInfoTx(userAccount) {
         discount: agreement.discount / PPM_DIV,
         valuationCap: agreement.valuationCap
     };
-    console.debug(accountInfo);
+
     return accountInfo;
 }

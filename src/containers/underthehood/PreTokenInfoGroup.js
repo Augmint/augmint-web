@@ -17,10 +17,10 @@ class PreTokenInfoGroup extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={16 / 32}>
+                    <Pgrid.Column size={1 / 2}>
                         <PreTokenInfo contractData={this.props.preTokenData} contract={this.props.preToken} />
                     </Pgrid.Column>
-                    <Pgrid.Column size={16 / 32}>
+                    <Pgrid.Column size={1 / 2}>
                         <PreTokenAccountInfo preTokenData={this.props.preTokenData} />
                         <PreTokenTransferList preTokenData={this.props.preTokenData} />
                     </Pgrid.Column>
