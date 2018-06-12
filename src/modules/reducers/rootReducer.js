@@ -21,6 +21,7 @@ import legacyExchanges from "modules/reducers/legacyExchanges";
 import legacyLockers from "modules/reducers/legacyLockers";
 import legacyLoanManagers from "modules/reducers/legacyLoanManagers";
 import stabilityBoardProxy from "modules/reducers/stabilityBoardProxy";
+import preToken from "modules/reducers/preToken";
 
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
@@ -49,5 +50,6 @@ export default combineReducers({
     legacyLockers,
     legacyLoanManagers,
     stabilityBoardProxy,
+    preToken,
     form: formReducer
 });

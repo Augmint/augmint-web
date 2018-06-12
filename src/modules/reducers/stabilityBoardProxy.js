@@ -65,6 +65,7 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 scripts: action.result
             };
+
         case FETCH_SIGNERS_DONE:
             return {
                 ...state,
