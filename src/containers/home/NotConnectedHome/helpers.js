@@ -42,7 +42,7 @@ export const keyFeatures = [
         image: <StableIcon />,
         title: "Stable",
         text:
-            "With tokens pegged to their respective fiat, Augmint has low volatility and offers the stability cryptocurrencies typically lack."
+            "With tokens targeted to their respective fiat, Augmint has low volatility and offers the stability cryptocurrencies typically lack."
     },
     {
         image: <DecentralizedIcon />,

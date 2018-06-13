@@ -92,6 +92,8 @@
 }
 
 .Site-footer .footer .subscribe {
+    background-color: transparent;
+    border: none;
     margin: 35px 0 0;
 }
 

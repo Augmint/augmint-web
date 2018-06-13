@@ -1,6 +1,7 @@
 import React from "react";
 import { Pblock } from "components/PageLayout";
 import Header from "components/augmint-ui/header";
+import { FeatureContext } from "modules/services/featureService";
 
 export default function FiatExchange(props) {
     const urlSuffix = `?address=${props.userAccountAddress}&currency=EUR`;
@@ -10,12 +11,22 @@ export default function FiatExchange(props) {
 
     return (
         <Pblock header={props.header}>
-            <Header as="h4">
-                Buy or Sell A-EUR for Euro on{" "}
-                <a href={mrCoinUrl} target="_blank">
-                    MrCoin.eu
-                </a>
-            </Header>
+            <FeatureContext>
+                {
+                    features => { 
+                        const dashboard = features.dashboard;
+
+                        return (
+                            <Header as="h4" className={ dashboard ? "tertiaryColor" : "" }>
+                                Buy or Sell A-EUR for Euro on{" "}
+                                <a href={mrCoinUrl} target="_blank">
+                                    MrCoin.eu
+                                </a>
+                            </Header>
+                        );
+                    }
+                }
+            </FeatureContext>
         </Pblock>
     );
 }

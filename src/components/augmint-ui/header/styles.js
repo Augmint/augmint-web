@@ -12,9 +12,18 @@ const BaseHeader = `
       color: ${theme.colors.opacLightGrey}
     }
 
+    &.primaryColor {
+        color: ${theme.colors.primary};
+    }
+
     &.secondaryColor {
         color: ${theme.colors.secondary};
     }
+
+    &.tertiaryColor {
+        color: ${theme.colors.primary};
+    }
+
     & i {
       margin: 0 10px;
     }

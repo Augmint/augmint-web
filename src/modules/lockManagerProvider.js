@@ -79,7 +79,7 @@ const onNewLock = (lockOwner, lockId, amountLocked, interestEarned, lockedUntil,
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
-    if (store.getState().loanManager.isConnected) {
+    if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
@@ -111,7 +111,7 @@ const onLockReleased = (lockOwner, lockId) => {
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
-    if (store.getState().loanManager.isConnected) {
+    if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
