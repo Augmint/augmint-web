@@ -25,12 +25,13 @@ class TryIt extends React.Component {
                     const dashboard = features.dashboard;
                     return (
                         <div>
-                            { dashboard  &&
-                                <TopNavTitlePortal>
-                                    {dashboard && <Header as="h1" className="secondaryColor" content="Try Augmint" />}
-                                </TopNavTitlePortal>
-                            }
-                            <Tsegment header={ dashboard ? "" : "Try Augmint" }>
+                            {dashboard &&
+                                isConnected && (
+                                    <TopNavTitlePortal>
+                                        <Tsegment.Header as="h1" className="secondaryColor" content="Try Augmint" />
+                                    </TopNavTitlePortal>
+                                )}
+                            <Tsegment header={dashboard ? "" : "Try Augmint"}>
                                 <Disclaimer />
                                 {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
                                 {!isLoading && error && <HowToConnect />}
