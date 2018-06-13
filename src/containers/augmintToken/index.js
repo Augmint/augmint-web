@@ -15,7 +15,7 @@ import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
 import Button from "components/augmint-ui/button";
 
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { FeatureContext } from "modules/services/featureService";
 
 class AugmintToken extends React.Component {
@@ -34,60 +34,69 @@ class AugmintToken extends React.Component {
 
     render() {
         return (
-            <EthereumState>
-                <Psegment>
-                    <TopNavTitlePortal>
-                        <FeatureContext>
-                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Reserves" /> : null}
-                        </FeatureContext>
-                    </TopNavTitlePortal>
-                    <Pgrid.Row>
-                        <Pgrid.Column>
-                            <TotalSupply
-                                augmintToken={this.props.augmintToken}
-                                monetarySupervisor={this.props.monetarySupervisor}
-                            />
-                        </Pgrid.Column>
-                        <TopNavTitlePortal>
-                            <FeatureContext>
-                                {features => features.dashboard ? null : <Pheader header="Reserves" style={{ width: "100%" }} />}
-                            </FeatureContext>
-                        </TopNavTitlePortal>
-                        <Pgrid.Column>
-                            <ReserveStats
-                                augmintToken={this.props.augmintToken}
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                rates={this.props.rates}
-                            />
-                        </Pgrid.Column>
+            <FeatureContext>
+                {features => {
+                    const dashboard = features.dashboard;
+                    return (
+                        <EthereumState>
+                            <Psegment>
+                                <TopNavTitlePortal>
+                                    {dashboard && <Pheader className="secondaryColor" header="Reserves" />}
+                                </TopNavTitlePortal>
+                                <Pgrid.Row>
+                                    <Pgrid.Column>
+                                        <TotalSupply
+                                            augmintToken={this.props.augmintToken}
+                                            monetarySupervisor={this.props.monetarySupervisor}
+                                        />
+                                    </Pgrid.Column>
+                                    {!dashboard && <Pheader header="Reserves" style={{ width: "100%" }} />}
+                                    <Pgrid.Column>
+                                        <ReserveStats
+                                            augmintToken={this.props.augmintToken}
+                                            monetarySupervisor={this.props.monetarySupervisor}
+                                            rates={this.props.rates}
+                                        />
+                                    </Pgrid.Column>
 
-                        <Pheader header="Loans & Locks" style={{ width: "100%" }} />
-                        <Pgrid.Column>
-                            <LtdStats
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                loanManager={this.props.loanManager}
-                                lockManager={this.props.lockManager}
-                            />
-                            <Button
-                                content="Loans to Collect"
-                                data-testid="loansToCollectButton"
-                                to="/loan/collect"
-                                icon="angle-right"
-                                labelposition="right"
-                                size="large"
-                            />
-                        </Pgrid.Column>
+                                    <Pheader
+                                        header="Loans & Locks"
+                                        className={dashboard && "primaryColor"}
+                                        style={{ width: "100%" }}
+                                    />
+                                    <Pgrid.Column>
+                                        <LtdStats
+                                            monetarySupervisor={this.props.monetarySupervisor}
+                                            loanManager={this.props.loanManager}
+                                            lockManager={this.props.lockManager}
+                                        />
+                                        <Button
+                                            content="Loans to Collect"
+                                            data-testid="loansToCollectButton"
+                                            to="/loan/collect"
+                                            icon="angle-right"
+                                            labelposition="right"
+                                            size="large"
+                                        />
+                                    </Pgrid.Column>
 
-                        <Pheader header="Earnings" style={{ marginTop: "1em", width: "100%" }} />
-                        <Pgrid.Column>
-                            <EarningStats
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                augmintToken={this.props.augmintToken}
-                            />
-                        </Pgrid.Column>
-                    </Pgrid.Row>
-                </Psegment>
-            </EthereumState>
+                                    <Pheader
+                                        header="Earnings"
+                                        className={dashboard && "primaryColor"}
+                                        style={{ marginTop: "1em", width: "100%" }}
+                                    />
+                                    <Pgrid.Column>
+                                        <EarningStats
+                                            monetarySupervisor={this.props.monetarySupervisor}
+                                            augmintToken={this.props.augmintToken}
+                                        />
+                                    </Pgrid.Column>
+                                </Pgrid.Row>
+                            </Psegment>
+                        </EthereumState>
+                    );
+                }}
+            </FeatureContext>
         );
     }
 }
@@ -108,4 +117,7 @@ const mapDispatchToProps = dispatch =>
         dispatch
     );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AugmintToken);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AugmintToken);

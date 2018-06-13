@@ -6,7 +6,14 @@ import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
 
-import { StyledTopNav, TitleWrapper, StyledTopNavUl, StyledTopNavLi, StyledTopNavLinkRight, StyledPrice } from "./styles";
+import {
+    StyledTopNav,
+    TitleWrapper,
+    StyledTopNavUl,
+    StyledTopNavLi,
+    StyledTopNavLinkRight,
+    StyledPrice
+} from "./styles";
 
 class TopNav extends React.Component {
     componentDidMount() {
@@ -16,8 +23,8 @@ class TopNav extends React.Component {
     render() {
         const { address } = this.props.userAccount;
         return (
-            <StyledTopNav>
-                <TitleWrapper id="page-title"></TitleWrapper>
+            <StyledTopNav className={this.props.className}>
+                <TitleWrapper id="page-title" />
                 <StyledTopNavUl>
                     <StyledTopNavLi>
                         <StyledPrice>

@@ -1,0 +1,24 @@
+{
+  "contractName": "StabilityBoardProxy",
+  "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
+  "deployedAbis": {
+    "19ab69b650e28b2dd211d3851893f91f": {
+      "latestDeployedAddress": "0x4686f017d456331ed2c1de66e134d8d05b24413d",
+      "deployments": {
+        "0x4686f017d456331ed2c1de66e134d8d05b24413d": {
+          "generatedAt": "2018-06-11T12:15:16.651Z",
+          "truffleContractFileUpdatedAt": "2018-06-11T11:45:49.733Z",
+          "deployTransactionHash": "0x1cc94aea1960571f64357e9f389007dbe3d1950deb692e3efaf6c66654f6283c",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "56131f88a46fe46a487da0a9bae573fc",
+          "deployedBytecodeHash": "2996d609801f2039ae49c17ac8bcad92",
+          "sourceHash": "4d60c55b8e4009873db939b37558d9dc",
+          "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract StabilityBoardProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
+        }
+      }
+    }
+  }
+}

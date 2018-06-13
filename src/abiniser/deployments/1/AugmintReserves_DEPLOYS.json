@@ -1,0 +1,24 @@
+{
+  "contractName": "AugmintReserves",
+  "latestAbiHash": "fe74b7986dafb00f221486e790fc70ec",
+  "deployedAbis": {
+    "fe74b7986dafb00f221486e790fc70ec": {
+      "latestDeployedAddress": "0x633cb544b2ef1bd9269b2111fd2b66fc05cd3477",
+      "deployments": {
+        "0x633cb544b2ef1bd9269b2111fd2b66fc05cd3477": {
+          "generatedAt": "2018-06-11T13:54:29.111Z",
+          "truffleContractFileUpdatedAt": "2018-06-11T13:35:00.862Z",
+          "deployTransactionHash": "0xbc3a1118ae2a9250b2bae34522a45a615f4fa645dbd62a1ab52612b6a3c3b003",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "4974a3c7784d990daf85675b5b7a0e17",
+          "deployedBytecodeHash": "d4f59c0df09ee0b51006f4945892828c",
+          "sourceHash": "d5753af67c3f621da910f47d3d749db3",
+          "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is SystemAccount {\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function burn(AugmintTokenInterface augmintToken, uint amount) external restrict(\"MonetarySupervisor\") {\n        augmintToken.burn(amount);\n    }\n\n}\n"
+        }
+      }
+    }
+  }
+}

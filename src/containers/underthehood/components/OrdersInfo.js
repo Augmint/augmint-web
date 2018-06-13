@@ -13,14 +13,16 @@ export function OrdersInfo(props) {
 
     return (
         <Pblock header="Orders">
-            {props.orders
-                ? [
-                      <h3>Sell</h3>,
-                      <ArrayDump key="sellOrdersDump" items={props.orders.sellOrders} />,
-                      <h3>Buy</h3>,
-                      <ArrayDump key="buyOrdersDump" items={props.orders.buyOrders} />
-                  ]
-                : "No orders loaded"}
+            {props.orders ? (
+                <div>
+                    <h3>Sell</h3>
+                    <ArrayDump key="sellOrdersDump" items={props.orders.sellOrders} />
+                    <h3>Buy</h3>
+                    <ArrayDump key="buyOrdersDump" items={props.orders.buyOrders} />
+                </div>
+            ) : (
+                "No orders loaded"
+            )}
             <Button
                 size="small"
                 type="submit"

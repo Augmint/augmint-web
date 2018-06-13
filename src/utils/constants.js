@@ -10,3 +10,5 @@ export const PPM_DIV = 1000000;
 
 /* also available via contracts getters  */
 export const EXCHANGE_CHUNK_SIZE = 100;
+
+export const SCRIPT_STATES = ["New", "Approved", "Done", "Cancelled", "Failed"];
