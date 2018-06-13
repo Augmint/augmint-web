@@ -124,16 +124,15 @@ class App extends React.Component {
                     return (
                         <div className={showDash ? "Site Site__dash" : "Site"}>
                             <ScrollToTop />
-                            {showDash ? (
-                                <TopNav web3Connect={this.props.web3Connect} />
-                            ) : (
+                            <TopNav web3Connect={this.props.web3Connect} className={!showDash && "hide"} />
+                            {!showDash &&
                                 <AppMenu
                                     web3Connect={this.props.web3Connect}
                                     location={this.props.location}
                                     showMenu={this.state.showMobileMenu}
                                     toggleMenu={this.toggleMenu}
                                 />
-                            )}
+                            }
                             {showDash ? <SideNav /> : null}
 
                             <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
