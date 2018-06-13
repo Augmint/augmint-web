@@ -115,7 +115,8 @@ class App extends React.Component {
             this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan"].indexOf(mainPath) > -1;
+            ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan", "under-the-hood"].indexOf(mainPath) >
+            -1;
         return (
             <FeatureContext.Consumer>
                 {features => {
@@ -124,22 +125,26 @@ class App extends React.Component {
                         <div className={showDash ? "Site Site__dash" : "Site"}>
                             <ScrollToTop />
                             <TopNav web3Connect={this.props.web3Connect} className={!showDash && "hide"} />
-                            {showDash ? null : (
+                            {showDash &&
                                 <AppMenu
                                     web3Connect={this.props.web3Connect}
                                     location={this.props.location}
                                     showMenu={this.state.showMobileMenu}
                                     toggleMenu={this.toggleMenu}
                                 />
-                            )}
+                            }
                             {showDash ? <SideNav /> : null}
 
                             <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
-                                <EthereumTxStatus />
-                                <LegacyLoanManagers />
-                                <LegacyLockers />
-                                <LegacyExchanges />
-                                <LegacyTokens />
+                                {showConnection && (
+                                    <div>
+                                        <EthereumTxStatus />
+                                        <LegacyLoanManagers />
+                                        <LegacyLockers />
+                                        <LegacyExchanges />
+                                        <LegacyTokens />
+                                    </div>
+                                )}
 
                                 <Switch>
                                     <Route exact path="/" component={NotConnectedHome} />

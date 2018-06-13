@@ -71,7 +71,7 @@ export default () => (
                                 Parameters for the new loans, the use of the reserves for market interventions are
                                 decided by transparent and open governance processes.
                             </p>
-                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be pegged to EUR.</p>
+                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be targeted to EUR.</p>
                         </div>
                     </Grid.Unit>
                 </Grid>
@@ -87,7 +87,7 @@ export default () => (
             <h5 className="segment">STABILITY</h5>
             <p>
                 There are multiple mechanisms to ensure the market expectation and the actual price is around parity to
-                the pegged currency.
+                the targeted currency.
             </p>
             <h5 className="segment">MARKET MECHANICS</h5>
             <p>
