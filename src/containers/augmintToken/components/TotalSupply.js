@@ -10,7 +10,7 @@ export class TotalSupply extends React.Component {
         const { isLoaded, isLoading, loadError } = this.props.augmintToken;
         const { totalSupply } = augmintToken.info;
 
-        const { issuedByMonetaryBoard } = monetarySupervisor.info;
+        const { issuedByStabilityBoard } = monetarySupervisor.info;
 
         return (
             <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
@@ -24,8 +24,8 @@ export class TotalSupply extends React.Component {
                         value={totalSupply + " A-EUR"}
                     >
                         {showDetails && (
-                            <p data-testid="issuedByMonetaryBoard" style={{ textAlign: "center" }}>
-                                {issuedByMonetaryBoard} A-EUR issued by Stability Board
+                            <p data-testid="issuedByStabilityBoard" style={{ textAlign: "center" }}>
+                                {issuedByStabilityBoard} A-EUR issued by Stability Board
                             </p>
                         )}
                     </Statistic>

@@ -6,17 +6,30 @@
       "latestDeployedAddress": "0xd217ac4354211cda27dd4027b5e223280f885ad3",
       "deployments": {
         "0xd217ac4354211cda27dd4027b5e223280f885ad3": {
-          "generatedAt": "2018-04-25T12:31:28.947Z",
-          "truffleContractFileUpdatedAt": "2018-04-20T18:26:53.869Z",
-          "deployTransactionHash": "0x5ae41091b30db214b7d2edaec2f51848e0e6dfbaba7c48eaf9ceb64218e089ae",
+          "generatedAt": "2018-06-04T12:57:19.236Z",
+          "truffleContractFileUpdatedAt": "2018-06-04T12:57:14.691Z",
+          "deployTransactionHash": "0x737edaecbaa92d4dcb7750dddd1bfa65a080dce09e88de3c7c09148136c72c23",
           "compiler": {
             "name": "solc",
-            "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
           },
-          "bytecodeHash": "9faa7fe7badb75808c09a3daae207bec",
-          "deployedBytecodeHash": "133cb797c7a10dbc9bd9679de5e56bec",
-          "sourceHash": "242df4d17574b24bb367e6aa59fadcad",
-          "source": "pragma solidity ^0.4.23;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration; // solhint-disable-line var-name-mixedcase\n\n    modifier restricted() {\n        if (msg.sender == owner) _;\n    }\n\n    constructor() public {\n        owner = msg.sender;\n    }\n\n    function setCompleted(uint completed) external restricted {\n        last_completed_migration = completed;\n    }\n\n    function upgrade(address newAddress) external restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n"
+          "bytecodeHash": "f0557c3c790f279d198ef1d54ea5f550",
+          "deployedBytecodeHash": "1c74c56a535b7d558a79121649239bdf",
+          "sourceHash": "16ee1835a27505e14d1b6990cdfa8c2c",
+          "source": "pragma solidity 0.4.24;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration; // solhint-disable-line var-name-mixedcase\n\n    modifier restricted() {\n        if (msg.sender == owner) _;\n    }\n\n    constructor() public {\n        owner = msg.sender;\n    }\n\n    function setCompleted(uint completed) external restricted {\n        last_completed_migration = completed;\n    }\n\n    function upgrade(address newAddress) external restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n"
+        },
+        "0x78ca328135c3eed65d66ef6e611ec8ed166fa5b2": {
+          "generatedAt": "2018-05-31T23:56:48.426Z",
+          "truffleContractFileUpdatedAt": "2018-05-31T23:54:54.559Z",
+          "deployTransactionHash": "0x3a2e51f26281565889c279bf31056ebce10d193d157dc91ebe8a24ac63ae9b7f",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "f0557c3c790f279d198ef1d54ea5f550",
+          "deployedBytecodeHash": "1c74c56a535b7d558a79121649239bdf",
+          "sourceHash": "16ee1835a27505e14d1b6990cdfa8c2c",
+          "source": "pragma solidity 0.4.24;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration; // solhint-disable-line var-name-mixedcase\n\n    modifier restricted() {\n        if (msg.sender == owner) _;\n    }\n\n    constructor() public {\n        owner = msg.sender;\n    }\n\n    function setCompleted(uint completed) external restricted {\n        last_completed_migration = completed;\n    }\n\n    function upgrade(address newAddress) external restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n"
         }
       }
     }
