@@ -4,7 +4,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import Header from "components/augmint-ui/header";
 import { Pheader, Pblock, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 import { LoanRepayLink } from "./components/LoanRepayLink";
