@@ -38,7 +38,11 @@ class TopNav extends React.Component {
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
                     <StyledTopNavLi>
-                        <StyledTopNavLinkRight title="Under the hood" to="/under-the-hood">
+                        <StyledTopNavLinkRight
+                            title="Under the hood"
+                            to="/under-the-hood"
+                            data-testid="underTheHoodLink"
+                        >
                             <Icon name="connect" />
                             <span>{this.props.web3Connect.network.name}</span>
                         </StyledTopNavLinkRight>
