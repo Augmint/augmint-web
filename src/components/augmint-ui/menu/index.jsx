@@ -16,7 +16,7 @@ export function Menu(props) {
             {features => {
                 const dashboard = features.dashboard;
                 return (
-                    <StyledMenu className={ dashboard ? _className = " dashboardColor" : _className } {...other}>
+                    <StyledMenu className={ dashboard ? _className + " dashboardColor" : _className } {...other}>
                         {children}
                     </StyledMenu>
                 );
