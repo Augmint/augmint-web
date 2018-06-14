@@ -20,7 +20,7 @@ const BaseButton = `
     line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid ${theme.colors.grey};
 
     &.dashboardColors {
       background-color: ${theme.colors.secondary};
