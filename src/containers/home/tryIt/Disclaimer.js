@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 import { FeatureContext } from "modules/services/featureService";
-import { StyledP } from "./styles";
+import { StyledP } from "components/augmint-ui/paragraph/styles";
 
 export function Disclaimer(props) {
     return (

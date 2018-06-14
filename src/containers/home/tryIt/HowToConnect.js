@@ -6,7 +6,8 @@ import { DiscordButton } from "components/LinkButtons";
 import Video from "components/augmint-ui/video";
 import Header from "components/augmint-ui/header";
 
-import { MobileView, DesktopView, StoreBadge, StyledP } from "./styles";
+import { MobileView, DesktopView, StoreBadge } from "./styles";
+import { StyledP } from "components/augmint-ui/paragraph/styles";
 
 import { FeatureContext } from "modules/services/featureService";
 
