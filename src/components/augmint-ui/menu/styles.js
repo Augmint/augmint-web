@@ -24,9 +24,9 @@ export const StyledMenuItem = styled.a`
     cursor: pointer;
     line-height: ${remCalc(18)};
     padding: ${remCalc(16)} ${remCalc(25)};
-
+    
     &.active,
-    &:hover {
+    &:hover:not(.buySell) {
       color: ${theme.colors.opacBlack};
     }
 
