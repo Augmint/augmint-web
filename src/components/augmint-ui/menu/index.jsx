@@ -1,6 +1,8 @@
 import React from "react";
 
-import { StyledMenu, StyledMenuItem } from "./styles";
+import { StyledMenu, StyledMenuItem, StyledMenuItemDashboard } from "./styles";
+
+import { FeatureContext } from "modules/services/featureService";
 
 export function Menu(props) {
     const { children, className, ...other } = props;
@@ -8,10 +10,18 @@ export function Menu(props) {
     if (className) {
         _className += className;
     }
+
     return (
-        <StyledMenu className={_className} {...other}>
-            {children}
-        </StyledMenu>
+        <FeatureContext>
+            {features => {
+                const dashboard = features.dashboard;
+                return (
+                    <StyledMenu className={ dashboard ? _className + " dashboardColor" : _className } {...other}>
+                        {children}
+                    </StyledMenu>
+                );
+            }}
+        </FeatureContext>
     );
 }
 
@@ -24,10 +34,15 @@ export function MenuItem(props) {
     if (active) {
         _className += " active ";
     }
+
     return (
-        <StyledMenuItem className={_className} {...other}>
-            {children}
-        </StyledMenuItem>
+        <FeatureContext>
+            {features =>
+                features.dashboard 
+                    ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard> 
+                    : <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
+            }
+        </FeatureContext>
     );
 }
 

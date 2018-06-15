@@ -4,11 +4,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import Header from "components/augmint-ui/header";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Pblock, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 import { LoanRepayLink } from "./components/LoanRepayLink";
 import CollectLoanButton from "./collectLoan/CollectLoanButton";
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import { FeatureContext } from "modules/services/featureService";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -53,38 +54,46 @@ class LoanDetailsPage extends React.Component {
 
     render() {
         return (
-            <Psegment>
-                <Pheader header="Loan details" />
-                {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
-                {!this.state.isLoading &&
-                    !this.state.isLoanFound && (
-                        <ErrorPanel>
-                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
-                        </ErrorPanel>
-                    )}
-
-                {this.state.isLoanFound && (
-                    <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
-                                <Header>
-                                    {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
-                                </Header>
-                                <LoanDetails loan={this.state.loan} />
-
-                                <LoanRepayLink loan={this.state.loan} size="large" />
-
-                                {this.state.loan.isCollectable && (
-                                    <CollectLoanButton
-                                        loanManager={this.props.loanManager}
-                                        loansToCollect={[{ id: this.state.loan.id }]}
-                                    />
+            <FeatureContext>
+                {features => {
+                    const dashboard = features.dashboard;
+                    return (
+                        <Psegment>
+                            <TopNavTitlePortal>
+                                    <Pheader className={ dashboard ? "secondaryColor" : "" } header="Loan details" />
+                            </TopNavTitlePortal>
+                            {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
+                            {!this.state.isLoading &&
+                                !this.state.isLoanFound && (
+                                    <ErrorPanel>
+                                        Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
+                                    </ErrorPanel>
                                 )}
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
-                )}
-            </Psegment>
+
+                            {this.state.isLoanFound && (
+                                <Pgrid>
+                                    <Pgrid.Row wrap={false}>
+                                        <Pgrid.Column size={1 / 2}>
+                                            <Pblock header={this.state.loan.loanStateText + "loan #" + this.state.loan.id} className={ dashboard ? "tertiaryColor" : "" } >
+                                                <LoanDetails loan={this.state.loan} />
+
+                                                <LoanRepayLink loan={this.state.loan} size="large" />
+
+                                                {this.state.loan.isCollectable && (
+                                                    <CollectLoanButton
+                                                        loanManager={this.props.loanManager}
+                                                        loansToCollect={[{ id: this.state.loan.id }]}
+                                                    />
+                                                )}
+                                            </Pblock>
+                                        </Pgrid.Column>
+                                    </Pgrid.Row>
+                                </Pgrid>
+                            )}
+                        </Psegment>
+                    );
+                }}
+            </FeatureContext>
         );
     }
 }
