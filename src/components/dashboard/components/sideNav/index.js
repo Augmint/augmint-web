@@ -4,11 +4,10 @@ import { NavLink } from "react-router-dom";
 
 import Icon from "components/augmint-ui/icon";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 import theme from "styles/theme";
 
 import AugmintLogo from "assets/images/logo/augmint.svg";
-
 
 export const SideNav = styled.nav`
     position: fixed;
@@ -43,7 +42,7 @@ export const SideNavLi = styled.li`
     width: 100%;
 `;
 
-export const SideNavLink = styled(NavLink) `
+export const SideNavLink = styled(NavLink)`
     display: flex;
     align-items: center;
     padding: 5px 10px;
@@ -52,7 +51,7 @@ export const SideNavLink = styled(NavLink) `
     opacity: 0.9;
     transition: opacity ${theme.transitions.fast};
     border-left: 3px solid transparent;
-    
+
     &:hover {
         color: ${theme.colors.secondary};
         opacity: 1;
@@ -69,7 +68,7 @@ export const SideNavLink = styled(NavLink) `
         font-size: 1.5rem;
         line-height: 1.5rem;
         width: 1.5rem;
-        height: 1.5rem
+        height: 1.5rem;
     }
 
     > span {
@@ -87,31 +86,31 @@ export default props => (
         </NavLink>
         <SideNavUl>
             <SideNavLi>
-                <SideNavLink to="/account" activeClassName="active">
+                <SideNavLink to="/account" activeClassName="active" data-testid="myAccountMenuLink">
                     <Icon name="account" />
                     <span>Account</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="/exchange" activeClassName="active">
+                <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                     <Icon name="exchange" />
                     <span>Buy/Sell</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="/loan/new" activeClassName="active">
+                <SideNavLink to="/loan/new" activeClassName="active" data-testid="getLoanMenuLink">
                     <Icon name="loan" />
                     <span>Loan</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="/lock" activeClassName="active">
+                <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink">
                     <Icon name="lock" />
                     <span>Lock</span>
                 </SideNavLink>
             </SideNavLi>
             <SideNavLi>
-                <SideNavLink to="/reserves" activeClassName="active">
+                <SideNavLink to="/reserves" activeClassName="active" data-testid="reservesMenuLink">
                     <Icon name="reserves" />
                     <span>Reserves</span>
                 </SideNavLink>

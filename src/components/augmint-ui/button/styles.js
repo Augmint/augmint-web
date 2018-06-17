@@ -13,13 +13,18 @@ const BaseButton = `
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 200;
-    margin: 0 .25em 0 0;
+    margin: 0 .95em 0 0;
     padding: 0 14px;
     border-radius: 4px;
     height: 42px;
     line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
+    border: 1px solid ${theme.colors.grey};
+
+    &.dashboardColors {
+      background-color: ${theme.colors.secondary};
+    }
 
     &[disabled] {
       color: ${theme.colors.primary};
@@ -86,7 +91,7 @@ const BaseButton = `
     }
 
     &[icon][labelposition="right"] {
-      padding-right: 50px;
+      padding-right: 60px;
     }
 
     &[icon] i {

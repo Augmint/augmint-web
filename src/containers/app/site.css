@@ -121,7 +121,6 @@
     border: 1px solid #051d2d;
     border-radius: 5px;
     color: #051d2d;
-    overflow: hidden;
     padding: 0;
     margin-bottom: 40px;
 }
@@ -137,4 +136,10 @@
 
 .dashblock__content {
     padding: 10px 20px;
+}
+
+.dashblock__head,
+.dashblock__content,
+.dashblock__content p {
+    overflow: hidden;
 }
