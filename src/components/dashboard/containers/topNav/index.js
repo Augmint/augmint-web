@@ -5,6 +5,8 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
+import AccountInfo from "components/AccountInfo";
+import { shortAccountAddresConverter } from "utils/converter";
 
 import {
     StyledTopNav,
@@ -12,7 +14,8 @@ import {
     StyledTopNavUl,
     StyledTopNavLi,
     StyledTopNavLinkRight,
-    StyledPrice
+    StyledPrice,
+    StyledAccount
 } from "./styles";
 
 class TopNav extends React.Component {
@@ -21,7 +24,7 @@ class TopNav extends React.Component {
         ratesProvider();
     }
     render() {
-        const { address } = this.props.userAccount;
+        const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
         return (
             <StyledTopNav className={this.props.className}>
                 <TitleWrapper id="page-title" />
@@ -31,13 +34,16 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLi>
+                    <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight title="Your account" to="account">
                             <Icon name="account" />
-                            <span>{address.substring(0, 8)}</span>
+                            <span>{shortAddress}</span>
                         </StyledTopNavLinkRight>
+                        <StyledAccount>
+                            <AccountInfo account={this.props.userAccount} header="" />
+                        </StyledAccount>
                     </StyledTopNavLi>
-                    <StyledTopNavLi>
+                    <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight
                             title="Under the hood"
                             to="/under-the-hood"

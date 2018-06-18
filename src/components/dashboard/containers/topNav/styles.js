@@ -40,11 +40,22 @@ export const StyledTopNavUl = styled.ul`
     margin: 0;
 `;
 
+export const StyledAccount = styled.div`
+    display: none;
+`;
+
 export const StyledTopNavLi = styled.li`
     display: flex;
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
+
+    &.account:hover ${StyledAccount} {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: ${TOP_NAV_HEIGHT};
+    }
 `;
 
 export const StyledTopNavLink = styled(Link)`
