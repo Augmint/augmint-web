@@ -68,7 +68,7 @@ export default class AppMenu extends React.Component {
                             </AppMenuItem>
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    <Button type="a" data-testid="useAEurButton" to="/account" color="primary">
+                    <Button type="a" data-testid="useAEurButton" to={ !showConnection && isConnected ? "/account" : "/tryit" } color="primary">
                         { !showConnection && isConnected ? "Account" : "Use A-EUR" }
                     </Button>
                     {showConnection && !isConnected && <div>Not connected</div>}
