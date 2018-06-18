@@ -66,60 +66,11 @@ export default class AppMenu extends React.Component {
                             <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
                                 Roadmap
                             </AppMenuItem>
-                            {isConnected && (
-                                <AppMenuItem
-                                    isActive={() => currentLocation === "/account"}
-                                    to="/account"
-                                    data-testid="myAccountMenuLink"
-                                >
-                                    My Account
-                                </AppMenuItem>
-                            )}
-                            {isConnected && (
-                                <AppMenuItem
-                                    isActive={() => currentLocation === "/exchange"}
-                                    to="/exchange"
-                                    data-testid="exchangeMenuLink"
-                                >
-                                    Buy/Sell A-EUR
-                                </AppMenuItem>
-                            )}
-                            {isConnected && (
-                                <AppMenuItem
-                                    isActive={() => currentLocation === "/lock"}
-                                    to="/lock"
-                                    data-testid="lockMenuLink"
-                                >
-                                    Lock A-Euro
-                                </AppMenuItem>
-                            )}
-                            {isConnected && (
-                                <AppMenuItem
-                                    isActive={() => currentLocation === "/loan/new"}
-                                    to="/loan/new"
-                                    data-testid="getLoanMenuLink"
-                                >
-                                    Get A-EUR Loan
-                                </AppMenuItem>
-                            )}
-                            {isConnected && (
-                                <AppMenuItem
-                                    isActive={() => currentLocation === "/reserves"}
-                                    to="/reserves"
-                                    data-testid="reservesMenuLink"
-                                >
-                                    Reserves
-                                </AppMenuItem>
-                            )}
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    {!showConnection &&
-                        !isConnected && (
-                            <Button type="a" data-testid="useAEurButton" to="/tryit" color="primary">
-                                Use A-EUR
-                            </Button>
-                        )}
-                    {isConnected && <div>Connected on {network.name}</div>}
+                    <Button type="a" data-testid="useAEurButton" to="/account" color="primary">
+                        { !showConnection && isConnected ? "Account" : "Use A-EUR" }
+                    </Button>
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
                 <StyledLogoContainer>
