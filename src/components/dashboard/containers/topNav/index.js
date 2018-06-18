@@ -40,7 +40,7 @@ class TopNav extends React.Component {
                             <span>{shortAddress}</span>
                         </StyledTopNavLinkRight>
                         <StyledAccount>
-                            <AccountInfo account={this.props.userAccount} header="" />
+                            <AccountInfo account={this.props.userAccount} header="" hideTestId="true" />
                         </StyledAccount>
                     </StyledTopNavLi>
                     <StyledTopNavLi className="account">

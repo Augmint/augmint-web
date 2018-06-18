@@ -9,7 +9,7 @@ import { shortAccountAddresConverter } from "utils/converter";
 
 export class AccountInfo extends React.Component {
     render() {
-        const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading } = this.props;
+        const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading, hideTestId } = this.props;
 
         function copyAddress() {
             const el = document.createElement("textarea");
@@ -25,7 +25,7 @@ export class AccountInfo extends React.Component {
 
         return (
             <Pblock
-                data-testid="accountInfoBlock"
+                data-testid={!hideTestId && "accountInfoBlock"}
                 className="accountInfo"
                 loading={
                     augmintToken.isLoading ||
@@ -43,10 +43,10 @@ export class AccountInfo extends React.Component {
                     </span>
                 </p>
                 <p>
-                    ETH: <span data-testid="userEthBalance">{account.ethBalance}</span>
+                    ETH: <span data-testid={!hideTestId && "userEthBalance"}>{account.ethBalance}</span>
                 </p>
                 <p>
-                    A-EUR: <span data-testid="userAEurBalance">{account.tokenBalance}</span>
+                    A-EUR: <span data-testid={!hideTestId && "userAEurBalance"}>{account.tokenBalance}</span>
                 </p>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </Pblock>
