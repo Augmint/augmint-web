@@ -1,13 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import theme from "styles/theme";
 
 import { Link } from "react-router-dom";
-import { StyledHeaderH1 } from 'components/augmint-ui/header/styles';
+import { StyledHeaderH1 } from "components/augmint-ui/header/styles";
 
 import { remCalc } from "styles/theme";
 
-const TOP_NAV_HEIGHT = '60px';
-
+const TOP_NAV_HEIGHT = "60px";
 
 export const StyledTopNav = styled.nav`
     display: flex;
@@ -19,6 +18,10 @@ export const StyledTopNav = styled.nav`
     background-color: ${theme.colors.white};
     z-index: 103;
     top: 0;
+
+    &.hide {
+      display: none;
+    }
 `;
 
 export const TitleWrapper = styled.div`
@@ -26,7 +29,7 @@ export const TitleWrapper = styled.div`
     max-width: 60%;
 
     ${StyledHeaderH1} {
-        font-size: ${remCalc('28')};
+        font-size: ${remCalc("28")};
         margin: 0;
     }
 `;
@@ -49,11 +52,11 @@ export const StyledTopNavLink = styled(Link)`
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
-    Width: ${TOP_NAV_HEIGHT};
+    width: ${TOP_NAV_HEIGHT};
     color: ${theme.colors.primary};
     transition: all ${theme.transitions.fast};
     transition-property: background-color, color;
-    
+
     > i {
         font-size: 1.5rem;
         height: 1.5rem;
@@ -64,21 +67,21 @@ export const StyledTopNavLink = styled(Link)`
         background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
     }
-    `;
-    
-    export const StyledTopNavLinkRight = StyledTopNavLink.extend`
+`;
+
+export const StyledTopNavLinkRight = StyledTopNavLink.extend`
     display: flex;
     flex-direction: column;
     font-size: 11px;
-    `;
-    
-    export const StyledPrice = styled.span`
+`;
+
+export const StyledPrice = styled.span`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
     padding: 0 20px;
-    
+
     > .price {
         font-size: 1.125rem;
         color: ${theme.colors.secondary};
