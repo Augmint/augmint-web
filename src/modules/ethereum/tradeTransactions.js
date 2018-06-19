@@ -2,7 +2,8 @@ import store from "modules/store";
 import ethers from "ethers";
 import moment from "moment";
 import BigNumber from "bignumber.js";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, DECIMALS } from "utils/constants";
+import { floatNumberConverter } from "utils/converter";
 
 export async function fetchTradesTx(account, fromBlock, toBlock) {
     try {
@@ -100,7 +101,7 @@ async function _formatTradeLog(event, account, eventLog, type) {
         ethAmount: ethAmount,
         ethAmountRounded: ethAmountRounded ? ethAmountRounded : "",
         price: price ? price : "",
-        pricePt: price ? price * 100 + " %" : "",
+        pricePt: price ? floatNumberConverter(price, DECIMALS) + " %" : "",
         type: event.name
     });
 
