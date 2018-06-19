@@ -39,8 +39,7 @@ export function MenuItem(props) {
         <FeatureContext>
             {features =>
                 features.dashboard && className!=="buySell"
-                    ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard> 
-                    // ? <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
+                    ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard>
                     : <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
             }
         </FeatureContext>
