@@ -148,7 +148,7 @@ class LockContainer extends React.Component {
                                                     <TermTableCell {...{ dashboard }}>
                                                         <Field
                                                             name="productId"
-                                                            data-testId={"selectLockProduct-" + product.id}
+                                                            data-testid={"selectLockProduct-" + product.id}
                                                             val={product.id}
                                                             defaultChecked={!index}
                                                             component={RadioInput}
