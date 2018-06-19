@@ -4,114 +4,135 @@
 import React from "react";
 import { connect } from "react-redux";
 import Container from "components/augmint-ui/container";
+import { StyledP } from "components/augmint-ui/paragraph/styles";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
 import { DiscordButton } from "components/LinkButtons";
 
+import { FeatureContext } from "modules/services/featureService";
+
 export class EthereumState extends React.Component {
     render() {
-        let msg = null;
-        const { web3Connect, contracts, augmintToken, children = null } = this.props;
-        const { network } = web3Connect;
+        return (
+            <FeatureContext.Consumer>
+                {features => {
+                    const allowMainnet = features.mainnet;
+                    const dashboard = features.dashboard;
 
-        const isConnecting = web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
+                    let msg = null;
+                    const { web3Connect, contracts, augmintToken, className, children = null } = this.props;
+                    const { network } = web3Connect;
 
-        const anyConnectionError = web3Connect.error || contracts.error || augmintToken.loadError;
+                    let _className = className;
+                    if (dashboard) {
+                         _className += " primaryColor";
+                    }
+                    
+                    const isConnecting =
+                        web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
 
-        if (isConnecting) {
-            msg = <LoadingPanel header="Connecting to Ethereum network..." />;
-        } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
-            msg = (
-                <WarningPanel header="Can't connect Ethereum network">
-                    <p>
-                        Please check our <Link to="/tryit">connection guide</Link> about how to connect to Ethereum
-                        network.
-                    </p>
+                    const anyConnectionError = web3Connect.error || contracts.error || augmintToken.loadError;
 
-                    {web3Connect.error && (
-                        <ErrorDetails header="Web3 connection error details:" details={web3Connect.error} />
-                    )}
-                </WarningPanel>
-            );
-        } else if (
-            web3Connect.isConnected &&
-            !contracts.isLoaded &&
-            network.id !== 999 &&
-            network.id !== 4 &&
-            network.id !== 1976 &&
-            network.id !== 4447
-        ) {
-            msg = (
-                <div>
-                    <WarningPanel header="Connected to Ethereum but not on Rinkeby" />
-                    <p>Augmint only works on Rinkeby test network currently</p>
-                    <p>
-                        Your browser seems to be connected to {web3Connect.network.name} network. (id:{" "}
-                        {web3Connect.network.id}).
-                    </p>
+                    if (isConnecting) {
+                        msg = <LoadingPanel header="Connecting to Ethereum network..." />;
+                    } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
+                        msg = (
+                            <WarningPanel header="Can't connect Ethereum network">
+                                <StyledP className={ _className }>
+                                    Please check our <Link to="/tryit">connection guide</Link> about how to connect to
+                                    Ethereum network.
+                                </StyledP>
 
-                    <p>Make sure you are connected to Rinkeby </p>
-                    <DiscordButton />
-                    <p>
-                        If you feel geeky you can{" "}
-                        <Link
-                            to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
-                            target="_blank"
-                        >
-                            install it locally
-                        </Link>.
-                    </p>
-                </div>
-            );
-        } else if (anyConnectionError) {
-            msg = (
-                <ErrorPanel header="Can't connect to Augmint contracts">
-                    <p>You seem to be connected to {network.name} but can't connect to Augmint contracts.</p>
-                    {network.id === 4 && (
-                        <p>
-                            It's an issue with our deployment, because you are on {network.name} and Augmint contracts
-                            should be deployed.
-                        </p>
-                    )}
-                    {network.id !== 4 && (
-                        <div>
-                            <p>Do you have all the contracts deployed?</p>
-                            <p>
-                                See local dev setup instructions on our{" "}
-                                <Link
-                                    to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
-                                    target="_blank"
-                                >
-                                    Github page
-                                </Link>
-                            </p>
-                        </div>
-                    )}
+                                {web3Connect.error && (
+                                    <ErrorDetails header="Web3 connection error details:" details={web3Connect.error} />
+                                )}
+                            </WarningPanel>
+                        );
+                    } else if (
+                        web3Connect.isConnected &&
+                        !contracts.isLoaded &&
+                        network.id !== 999 &&
+                        network.id !== 4 &&
+                        network.id !== 1976 &&
+                        network.id !== 4447 &&
+                        (network.id !== 1 || (network.id === 1 && !allowMainnet))
+                    ) {
+                        msg = (
+                            <div>
+                                <WarningPanel header="Connected to Ethereum but not on Rinkeby" />
+                                <StyledP className={ _className }>Augmint only works on Rinkeby test network currently</StyledP>
+                                <StyledP className={ _className }>
+                                    Your browser seems to be connected to {web3Connect.network.name} network. (id:{" "}
+                                    {web3Connect.network.id}).
+                                </StyledP>
 
-                    <ErrorDetails details={contracts.error} />
-                    <ErrorDetails details={augmintToken.loadError} />
-                </ErrorPanel>
-            );
-        } else if (!web3Connect.userAccount) {
-            msg = (
-                <WarningPanel header="Can't get user acccount">
-                    <p>Connected to Ethereum {network.name} network but can't get user account.</p>
-                    <p>If you are using Metamask make sure it's unlocked.</p>
-                </WarningPanel>
-            );
-        }
+                                <StyledP className={ _className }>Make sure you are connected to Rinkeby</StyledP>
+                                <DiscordButton />
+                                <StyledP className={ _className }>
+                                    If you feel geeky you can{" "}
+                                    <Link
+                                        to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
+                                        target="_blank"
+                                    >
+                                        install it locally
+                                    </Link>.
+                                </StyledP>
+                            </div>
+                        );
+                    } else if (anyConnectionError) {
+                        msg = (
+                            <ErrorPanel header="Can't connect to Augmint contracts">
+                                <StyledP className={ _className }>
+                                    You seem to be connected to {network.name} but can't connect to Augmint contracts.
+                                </StyledP>
+                                {network.id === 4 && (
+                                    <StyledP className={ _className }>
+                                        It's an issue with our deployment, because you are on {network.name} and Augmint
+                                        contracts should be deployed.
+                                    </StyledP>
+                                )}
+                                {network.id !== 4 && (
+                                    <div>
+                                        <StyledP className={ _className }>Do you have all the contracts deployed?</StyledP>
+                                        <StyledP className={ _className }>
+                                            See local dev setup instructions on our{" "}
+                                            <Link
+                                                to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
+                                                target="_blank"
+                                            >
+                                                Github page
+                                            </Link>
+                                        </StyledP>
+                                    </div>
+                                )}
 
-        if (msg) {
-            msg = (
-                <Tsegment>
-                    <Container>{msg}</Container>
-                </Tsegment>
-            );
-        } else {
-            msg = children;
-        }
-        return msg;
+                                <ErrorDetails details={contracts.error} />
+                                <ErrorDetails details={augmintToken.loadError} />
+                            </ErrorPanel>
+                        );
+                    } else if (!web3Connect.userAccount) {
+                        msg = (
+                            <WarningPanel header="Can't get user acccount">
+                                <StyledP className={ _className }>Connected to Ethereum {network.name} network but can't get user account.</StyledP>
+                                <StyledP className={ _className }>If you are using Metamask make sure it's unlocked.</StyledP>
+                            </WarningPanel>
+                        );
+                    }
+
+                    if (msg) {
+                        msg = (
+                            <Tsegment>
+                                <Container>{msg}</Container>
+                            </Tsegment>
+                        );
+                    } else {
+                        msg = children;
+                    }
+                    return msg;
+                }}
+            </FeatureContext.Consumer>
+        );
     }
 }
 

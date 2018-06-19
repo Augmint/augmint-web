@@ -11,13 +11,14 @@ const ACCEPTED_LEGACY_AEUR_CONTRACTS = {
     1: [],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
+    999: ["0x7f3abcd33ffe83ba7426ee6ec45014364fe1cab4"],
 
     // rinkeby
     4: [
-        "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA", //https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
-        "0x95aa79d7410eb60f49bfd570b445836d402bd7b1",
-        "0x135893f1a6b3037bb45182841f18f69327366992"
+        // "0x95aa79d7410eb60f49bfd570b445836d402bd7b1", // oldToken1 - DROPPED support on UI to convert to latest (monetarySupervisor would need to be NoFeeTransferContract on Token instead of latest feeAccount)
+        "0xA35D9de06895a3A2E7eCaE26654b88Fe71C179eA", // oldToken2 https://github.com/Augmint/augmint-web/commit/1f66ee910f5186c38733e1196ac5d41260490d24
+        "0x135893f1a6b3037bb45182841f18f69327366992", // oldToken3
+        "0x6C90c10D7A33815C2BaeeD66eE8b848F1D95268e" // oldToken4
     ]
 };
 
