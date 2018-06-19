@@ -8,11 +8,13 @@ import { PriceToolTip } from "./ExchangeToolTips";
 import CancelOrderButton from "./CancelOrderButton";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
+import { DECIMALS } from "utils/constants";
+import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
     const { order, ethFiatRate } = props;
 
-    const price = order.price * 100;
+    const price = floatNumberConverter(order.price, DECIMALS);
     const actualRate = ethFiatRate * order.price;
     const actualValue =
         order.direction === TOKEN_SELL
