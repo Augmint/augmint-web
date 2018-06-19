@@ -18,11 +18,8 @@ const BaseDiv = `
 
 export const StyledDiv = styled.div`
     ${BaseDiv};
-    ${media.giant`
-      max-width: 933px;
-    `};
     ${media.desktop`
-      max-width: 723px;
+      max-width: 933px;
     `};
     ${media.tablet`
       margin-left: 1rem;
