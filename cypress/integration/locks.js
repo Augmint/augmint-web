@@ -35,7 +35,7 @@ describe("Locks", function() {
     it("Should release locked A-EUR", function() {        
         getLock(8, 50).then(() => {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
-                cy.contains("12. confirmation", { timeout: 11000 });
+                cy.contains("12. confirmation", { timeout: 20000 });
             });
             cy.get("[data-testid=myAccountMenuLink]").click().then(() => {
                 cy.get("[data-testid=LockListBlock] [data-testid=releaseLockButton]").first().click();
