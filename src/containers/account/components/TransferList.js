@@ -23,13 +23,6 @@ export default class TransferList extends React.Component {
                     >
                         <Row columns={1}>
                             <Col>
-                                <MoreInfoTip header="Transaction details">
-                                    blockNumber: {tx.blockNumber}
-                                    <br />blockHash: <small>{tx.blockHash}</small>
-                                    <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
-                                    <br />transactionIndex: {tx.transactionIndex}
-                                    <br />transaction hash: <small>{tx.transactionHash}</small>
-                                </MoreInfoTip>
                                 {tx.args.from.toLowerCase() === userAccountAddress.toLowerCase() ? (
                                     <AccountAddress
                                         address={tx.args.to}
@@ -45,6 +38,13 @@ export default class TransferList extends React.Component {
                                         shortAddress={true}
                                     />
                                 )}{" "}
+                                <MoreInfoTip header="Transaction details" icon="info">
+                                    blockNumber: {tx.blockNumber}
+                                    <br />blockHash: <small>{tx.blockHash}</small>
+                                    <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
+                                    <br />transactionIndex: {tx.transactionIndex}
+                                    <br />transaction hash: <small>{tx.transactionHash}</small>
+                                </MoreInfoTip>
                             </Col>
                         </Row>
                         <Row columns={3}>
