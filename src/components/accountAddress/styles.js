@@ -8,6 +8,10 @@ export const StyledClicked = styled.span`
 
 export const StyledHint = styled.span`
     display: none;
+    position: absolute;
+    background-color: ${theme.colors.lightGreen};
+    padding: 5px;
+    border-radius: 5px;
 
     &::after {
         content: "Click to copy!";
@@ -16,6 +20,7 @@ export const StyledHint = styled.span`
 
 export const StyledContainer = styled.div`
     cursor: pointer;
+    display: inline-block;
 
     &.clicked ${StyledClicked} {
         display: inline-block;
