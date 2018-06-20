@@ -4,25 +4,11 @@ import { Pblock } from "components/PageLayout";
 import { Link } from "react-router-dom";
 import { ConnectionStatus } from "components/MsgPanels";
 import Icon from "components/augmint-ui/icon";
-
-import { shortAccountAddresConverter } from "utils/converter";
+import AccountAddress from "components/accountAddress";
 
 export class AccountInfo extends React.Component {
     render() {
         const { header, showMyAccountLink, account, augmintToken, userBalancesIsLoading, hideTestId } = this.props;
-
-        function copyAddress() {
-            const el = document.createElement("textarea");
-            el.value = account.address;
-            el.setAttribute("readonly", "");
-            el.style.position = "absolute";
-            el.style.left = "-9999px";
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand("copy");
-            document.body.removeChild(el);
-        }
-
         return (
             <Pblock
                 data-testid={!hideTestId && "accountInfoBlock"}
@@ -37,10 +23,7 @@ export class AccountInfo extends React.Component {
                 <ConnectionStatus contract={augmintToken} />
 
                 <p>
-                    Account: {shortAccountAddresConverter(account.address)}
-                    <span onClick={copyAddress}>
-                        <Icon name="copy" style={{ paddingLeft: 5, cursor: "pointer" }} />
-                    </span>
+                    <AccountAddress account={account} showCopyIcon="true" />
                 </p>
                 <p>
                     ETH: <span data-testid={!hideTestId && "userEthBalance"}>{account.ethBalance}</span>

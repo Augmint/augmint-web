@@ -1,0 +1,37 @@
+import styled from "styled-components";
+import theme from "styles/theme";
+
+export const StyledClicked = styled.span`
+    color: ${theme.colors.darkGreen};
+    display: none;
+`;
+
+export const StyledHint = styled.span`
+    display: none;
+
+    &::after {
+        content: "Click to copy!";
+    }
+`;
+
+export const StyledContainer = styled.div`
+    cursor: pointer;
+
+    &.clicked ${StyledClicked} {
+        display: inline-block;
+        padding-right: 5px;
+    }
+
+    &:hover ${StyledHint} {
+        display: block;
+    }
+
+    &.clicked:hover ${StyledHint} {
+        display: block;
+
+        &::after {
+            color: ${theme.colors.darkGreen};
+            content: "Copied!";
+        }
+    }
+`;
