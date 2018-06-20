@@ -27,14 +27,14 @@ export default class Disclaimer extends React.Component {
     render() {
         return (
             !this.state.dismissed && (
-                <Modal showClose={true} onCloseRequest={this.close}>
+                <Modal onCloseRequest={this.close}>
                     <ModalContent>
                         <ModalHeader>
                             <h3 style={{marginTop: 0}}>
                                 Augmint beta test
                             </h3>
                         </ModalHeader>
-                        Augmint is in beta test. The tokens issued by Augmint contracts are not legal tender. Use them at your own risk. Do not participate unless you have read their <Link to="/disclaimer" onClick={this.close}>disclaimer</Link>.
+                        Augmint is in beta test. The tokens issued by Augmint contracts are not legal tender. Use them at your own risk. Do not participate unless you have read the <Link to="/disclaimer">disclaimer</Link>.
                     </ModalContent>
                     <ModalActions>
                         <Button onClick={this.close} data-testid="disclaimerCloseButton">
