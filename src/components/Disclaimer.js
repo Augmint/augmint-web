@@ -37,7 +37,7 @@ export default class Disclaimer extends React.Component {
                         Augmint is in beta test. The tokens issued by Augmint contracts are not legal tender. Use them at your own risk. Do not participate unless you have read their <Link to="/disclaimer" onClick={this.close}>disclaimer</Link>.
                     </ModalContent>
                     <ModalActions>
-                        <Button onClick={this.close}>
+                        <Button onClick={this.close} data-testid="disclaimerCloseButton">
                             Got it
                         </Button>
                     </ModalActions>
