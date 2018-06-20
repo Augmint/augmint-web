@@ -1,13 +1,12 @@
 import React from "react";
 import Icon from "components/augmint-ui/icon";
-import ToolTip from "components/ToolTip";
 
 import { shortAccountAddresConverter } from "utils/converter";
 import { StyledContainer, StyledClicked, StyledHint } from "./styles";
 
 export default function AccountAddress(props) {
-    const { account, showCopyIcon, title } = props;
-    const _title = title != undefined ? title : "Account: ";
+    const { account, showCopyIcon, title, shortAddress } = props;
+    const _title = title !== undefined ? title : "Account: ";
 
     function copyAddress(e) {
         let element = e.target;
@@ -36,7 +35,7 @@ export default function AccountAddress(props) {
 
     return (
         <StyledContainer onClick={copyAddress} onMouseLeave={removeClicked}>
-            {_title + account.address}
+            {_title + (shortAddress === true ? shortAccountAddresConverter(account.address) : account.address)}
             {showCopyIcon && (
                 <Icon name="copy" style={{ paddingLeft: 5 }} onClick={copyAddress} onMouseLeave={removeClicked} />
             )}

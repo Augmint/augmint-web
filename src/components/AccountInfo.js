@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { Link } from "react-router-dom";
 import { ConnectionStatus } from "components/MsgPanels";
-import Icon from "components/augmint-ui/icon";
 import AccountAddress from "components/accountAddress";
 
 export class AccountInfo extends React.Component {
