@@ -63,7 +63,8 @@ export const StyledTopNavLink = styled(Link)`
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
-    width: ${TOP_NAV_HEIGHT};
+    min-width: ${TOP_NAV_HEIGHT};
+    padding: 0 2px;
     color: ${theme.colors.primary};
     transition: all ${theme.transitions.fast};
     transition-property: background-color, color;
