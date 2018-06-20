@@ -25,6 +25,7 @@ class TopNav extends React.Component {
     }
     render() {
         const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
+        const { ethBalance, tokenBalance } = this.props.userAccount;
         return (
             <StyledTopNav className={this.props.className}>
                 <TitleWrapper id="page-title" />
@@ -35,6 +36,12 @@ class TopNav extends React.Component {
                         </StyledPrice>
                     </StyledTopNavLi>
                     <StyledTopNavLi className="account">
+                        <StyledPrice>
+                            <span className="price">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
+                        </StyledPrice>
+                        <StyledPrice>
+                            <span className="price">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
+                        </StyledPrice>
                         <StyledTopNavLinkRight title="Your account" to="account">
                             <Icon name="account" />
                             <span>{shortAddress}</span>
