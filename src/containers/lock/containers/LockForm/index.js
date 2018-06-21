@@ -169,12 +169,8 @@ class LockContainer extends React.Component {
                                                     <TermTableCell {...{ dashboard }} style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
                                                             `${Math.floor(
-                                                                // this.props.lockAmount * product.perTermInterest * 100
-                                                                this.props.lockAmount * product.interestRatePa * 100 / 365 * product.durationInDays
+                                                                this.props.lockAmount * product.perTermInterest * 100
                                                             ) / 100} A€`}
-                                                        {console.log(Math.floor(product.interestRatePa * 10000) / 100)}
-                                                        {console.log(product)}
-                                                        {/* {console.log(this.props.lockAmount)}*/}
                                                     </TermTableCell>
                                                 </TermTableRow>
                                             );
