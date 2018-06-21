@@ -15,9 +15,10 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Discount rate: <DiscountRateToolTip discountRate={prod.discountRate} />
+                    Interest p.a.: <DiscountRateToolTip discountRate={prod.discountRate} />
                 </Col>
-                <Col>{prod.discountRate * 100}%</Col>
+                <Col>{Math.floor((100 - (prod.discountRate * 100)) * 100) / 100}%</Col>
+                {console.log(prod.discountRate)}
             </Row>
             <Row>
                 <Col>
