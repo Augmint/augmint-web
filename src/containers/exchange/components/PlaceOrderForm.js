@@ -161,12 +161,13 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu size="massive" tabular>
+                <Menu>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyMenuLink"
+                        className={"buySell"}
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -175,6 +176,7 @@ class PlaceOrderForm extends React.Component {
                         data-index={TOKEN_SELL}
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellMenuLink"
+                        className={"buySell"}
                     >
                         Sell A-EUR
                     </Menu.Item>
