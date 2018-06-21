@@ -7,7 +7,6 @@ import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
-import { Disclaimer } from "./Disclaimer";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 import { FeatureContext } from "modules/services/featureService";
@@ -32,7 +31,6 @@ class TryIt extends React.Component {
                                     </TopNavTitlePortal>
                                 )}
                             <Tsegment header={dashboard ? "" : "Try Augmint"}>
-                                <Disclaimer />
                                 {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
                                 {!isLoading && error && <HowToConnect />}
                                 {!isLoading && isConnected && <TryItConnected />}
