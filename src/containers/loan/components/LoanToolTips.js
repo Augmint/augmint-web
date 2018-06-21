@@ -28,7 +28,7 @@ export function LoanCollateralRatioToolTip(props) {
         <ToolTip header="Loan/collateral ratio">
             A-EUR loan amount / EUR value of ETH collateral.<br />
             I.e. How much A-EUR loan can you get for your ETH<br />
-            E.g. 1ETH worth 200 EUR and the Loan Coverage ratio is {props.loanCollateralRatio * 100}% then you can get ~{Math.round(
+            E.g. 1ETH worth 200 EUR and the Loan/Collateral ratio is {props.collateralRatio}% then you can get ~{Math.round(
                 props.loanCollateralRatio * 20000
             ) / 100}{" "}
             A-EUR for 1 ETH placed in escrow.

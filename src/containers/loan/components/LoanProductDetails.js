@@ -4,7 +4,8 @@ import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "co
 import { LoanInterestRatePaToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
 
 export default function LoanProductDetails(props) {
-    let prod = props.product;
+    const prod = props.product;
+    const collateralRatio = Number((prod.collateralRatio * 100).toFixed(2));
     return (
         <MyGridTable>
             <Row>
@@ -21,9 +22,9 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Loan/collateral ratio: <LoanCollateralRatioToolTip loanCollateralRatio={prod.loanCollateralRatio} />
+                    Loan/collateral ratio: <LoanCollateralRatioToolTip collateralRatio={collateralRatio} />
                 </Col>
-                <Col>{prod.collateralRatio * 100}%</Col>
+                <Col>{collateralRatio}%</Col>
             </Row>
             <Row>
                 <Col>Min / max payout:</Col>
