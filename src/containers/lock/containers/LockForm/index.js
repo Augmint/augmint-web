@@ -119,6 +119,7 @@ class LockContainer extends React.Component {
                             ]}
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            data-testid="lockAmountInput"
                         />
 
                         <label>Select term:</label>
@@ -147,6 +148,7 @@ class LockContainer extends React.Component {
                                                     <TermTableCell {...{ dashboard }}>
                                                         <Field
                                                             name="productId"
+                                                            data-testid={"selectLockProduct-" + product.id}
                                                             val={product.id}
                                                             defaultChecked={!index}
                                                             component={RadioInput}

@@ -39,7 +39,6 @@ export const StyledModalContent = styled.div`
     font-size: ${remCalc(14)};
     line-height: 1.4;
     padding: ${remCalc(21)};
-    width: 100%;
 `;
 
 export const StyledModalActions = styled.div`

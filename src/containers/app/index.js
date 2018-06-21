@@ -34,6 +34,7 @@ import { AppFooter } from "containers/app/AppFooter";
 
 import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
+import DisclaimerModal from "components/Disclaimer";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
@@ -124,6 +125,9 @@ class App extends React.Component {
                     return (
                         <div className={showDash ? "Site Site__dash" : "Site"}>
                             <ScrollToTop />
+                            {showDash &&
+                                <DisclaimerModal />
+                            }
                             <TopNav web3Connect={this.props.web3Connect} className={!showDash && "hide"} />
                             {!showDash &&
                                 <AppMenu

@@ -33,6 +33,7 @@ import aszabo from "assets/images/team/aszabo.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
 import dkovacs from "assets/images/team/dkovacs.jpg";
+import aridovics from "assets/images/team/aridovics.jpg";
 
 import decent from "assets/images/decent.png";
 import euedge from "assets/images/euedge.png";
@@ -191,7 +192,7 @@ export const founders = [
         lastName: "Petrovics",
         imgSrc: petrovics,
         title: "Co-Founder, technologist",
-        linedinUrl: "https://www.linkedin.com/in/petrovics",
+        linkedinUrl: "https://www.linkedin.com/in/petrovics",
         githubUrl: "https://github.com/szerintedmi",
         description:
             "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook."
@@ -215,7 +216,7 @@ export const teamMembers = [
         lastName: "Elek",
         imgSrc: emarton,
         title: "Marketing, PR strategy",
-        linedinUrl: "https://www.linkedin.com/in/marton-elek",
+        linkedinUrl: "https://www.linkedin.com/in/marton-elek",
         description:
             "Network building specialist with creative marketing and PR strategy skills. 25 years startup building experience with focus on UX  and conscious branding"
     },
@@ -225,7 +226,7 @@ export const teamMembers = [
         lastName: "Debreczeni",
         imgSrc: bdebreczeni,
         title: "Cryptocurrency specialist, Shinrai founder",
-        linedinUrl: "https://www.linkedin.com/in/bdebreczeni",
+        linkedinUrl: "https://www.linkedin.com/in/bdebreczeni",
         description:
             "Pioneer of decentralised cryptocurrencies, active member of blockchain community, officer of the Hungarian Blockchain Society and organizer of blockchain meetups."
     },
@@ -235,7 +236,7 @@ export const teamMembers = [
         lastName: "Szathmáry",
         imgSrc: vszatmahry,
         title: "Blockchain expert / development",
-        linedinUrl: "https://www.linkedin.com/in/phraktle",
+        linkedinUrl: "https://www.linkedin.com/in/phraktle",
         githubUrl: "https://github.com/phraktle",
         description:
             "Software developer, entrepreneur, angel investor. Founder of decent.org, a non-profit organization researching and promoting decentralized technologies. 20 years of experience in building startups."
@@ -246,7 +247,7 @@ export const teamMembers = [
         lastName: "Jackson",
         imgSrc: bjackson,
         title: "Blockchain developer",
-        linedinUrl: "https://www.linkedin.com/in/ben-jackson-0686a896",
+        linkedinUrl: "https://www.linkedin.com/in/ben-jackson-0686a896",
         githubUrl: "https://github.com/BYossarian",
         description:
             "Software developer, and former mathematician, who loves the wild west of decentralised technologies."
@@ -257,7 +258,7 @@ export const teamMembers = [
         lastName: "Hume",
         imgSrc: thume,
         title: "Branding & Visual",
-        linedinUrl: "https://www.linkedin.com/in/tom-hume-31b64014a",
+        linkedinUrl: "https://www.linkedin.com/in/tom-hume-31b64014a",
         portfolio: "http://studiojubilee.com",
         description:
             "Partner of <a href='http://studiojubilee.com' target='_blank'>Studio Jubilee</a>, a design practice focused on branding, digital design, and strategy. <a href='http://studiojubilee.com' target='_blank'>Studio Jubilee</a> works with innovative startups and global brands."
@@ -268,7 +269,7 @@ export const teamMembers = [
         lastName: "Heves",
         imgSrc: lheves,
         title: "Frontend, UX developer",
-        linedinUrl: "https://www.linkedin.com/in/lheves",
+        linkedinUrl: "https://www.linkedin.com/in/lheves",
         githubUrl: "https://github.com/reyrodrigez",
         description:
             "Laci has 8+ years of experience building medium and large sized websites and applications . He helps in building the frontend but also  making sure users have a great experience using Augmint."
@@ -279,7 +280,7 @@ export const teamMembers = [
         lastName: "Kontra",
         imgSrc: vkontra,
         title: "Financial expert",
-        linedinUrl: "https://www.linkedin.com/in/veronika-kontra-321328143",
+        linkedinUrl: "https://www.linkedin.com/in/veronika-kontra-321328143",
         description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis."
     },
     {
@@ -288,7 +289,7 @@ export const teamMembers = [
         lastName: "Csado",
         imgSrc: gycsado,
         title: "Frontend developer",
-        linedinUrl: "https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb",
+        linkedinUrl: "https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb",
         githubUrl: "https://github.com/gyurka00",
         description:
             "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from EU Edge.</a>"
@@ -299,7 +300,7 @@ export const teamMembers = [
         lastName: "Szabo",
         imgSrc: aszabo,
         title: "Technical project manager",
-        linedinUrl: "https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853",
+        linkedinUrl: "https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853",
         description:
             "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from EU Edge.</a>"
     },
@@ -309,7 +310,7 @@ export const teamMembers = [
         lastName: "Nadrai",
         imgSrc: tnadrai,
         title: "Full stack developer",
-        linedinUrl: "https://www.linkedin.com/in/nadrai/",
+        linkedinUrl: "https://www.linkedin.com/in/nadrai/",
         githubUrl: "https://github.com/CryppTom",
         description:
             "Tamas has 8+ years experience in software development and testing. He is a blockchain and cryptocurrency enthusiast since 2017."
@@ -320,7 +321,7 @@ export const teamMembers = [
         lastName: "Kolcza",
         imgSrc: pkolcza,
         title: "IT consultant, backend developer",
-        linedinUrl: "https://www.linkedin.com/in/p%C3%A9ter-kolcza-0b04bb8/",
+        linkedinUrl: "https://www.linkedin.com/in/p%C3%A9ter-kolcza-0b04bb8/",
         description:
             "Peter has 10+ years of experience in building enterprise solutions for financial institutions in the areas of loans and data quality. He performs best when complex problems should be solved: when technology meets finance, tax, business and complience."
     },
@@ -330,9 +331,19 @@ export const teamMembers = [
         lastName: "Kovacs",
         imgSrc: dkovacs,
         title: "Project management",
-        linedinUrl: "https://www.linkedin.com/in/kovacsd/",
+        linkedinUrl: "https://www.linkedin.com/in/kovacsd/",
         description:
             "David’s background is in Project Management - he has lived in several countries, having most recently spent 2 years in San Francisco in the tech startup scene. Outside of work, he is a triathlete and ultra runner."
+    },
+    {
+        pk: "team-15",
+        firstName: "Adam",
+        lastName: "Ridovics",
+        imgSrc: aridovics,
+        title: "Frontend developer, designer",
+        linkedinUrl: "https://www.linkedin.com/in/adamridovics/",
+        description:
+            "Frontend developer, creative & designer with years of experience in visual communication, ui, ux & product design and building & managing products/startups from the ground up."
     }
 ];
 
