@@ -10,15 +10,14 @@ export default function LoanProductDetails(props) {
             <Row>
                 <Col>Repay:</Col>
                 <Col>
-                    in {prod.termText}, before {moment.unix(prod.term + moment.utc().unix()).format("D MMM YYYY")}
+                    in {prod.termText}, before {moment.unix(prod.termInSecs + moment.utc().unix()).format("D MMM YYYY")}
                 </Col>
             </Row>
             <Row>
                 <Col>
                     Interest p.a.: <DiscountRateToolTip discountRate={prod.discountRate} />
                 </Col>
-                <Col>{Math.floor((100 - (prod.discountRate * 100)) * 100) / 100}%</Col>
-                {console.log(prod.discountRate)}
+                <Col>{Math.round(prod.interestRatePa * 10000) / 100}%</Col>
             </Row>
             <Row>
                 <Col>
