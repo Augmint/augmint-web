@@ -1,7 +1,19 @@
 import React from "react";
 import ToolTip from "components/ToolTip";
 
+export function LoanInterestRatePaToolTip(props) {
+    return (
+        <ToolTip header="Loan Interest per Annum">
+            The annualised interest rate of the loan. It's calculated using a simple (non-compound) method and with a
+            365 day year.<br />
+            Note: For small loan amounts the actual interest percent can slightly differ than displayed (~0.01 A-EUR
+            difference in interest amount due to rounding )
+        </ToolTip>
+    );
+}
+
 export function DiscountRateToolTip(props) {
+    // not shown on UI anymore, kept for future reference
     return (
         <ToolTip header="Discount Rate">
             Disbursed A-EUR amount / amount due on maturity.<br />

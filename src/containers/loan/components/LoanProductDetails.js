@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import { DiscountRateToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
+import { LoanInterestRatePaToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
 
 export default function LoanProductDetails(props) {
     let prod = props.product;
@@ -15,7 +15,7 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Interest p.a.: <DiscountRateToolTip discountRate={prod.discountRate} />
+                    Interest p.a.: <LoanInterestRatePaToolTip interestRatePa={prod.interestRatePa} />
                 </Col>
                 <Col>{Math.round(prod.interestRatePa * 10000) / 100}%</Col>
             </Row>
