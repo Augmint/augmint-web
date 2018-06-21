@@ -24,16 +24,22 @@
   dependencies:
     "@ledgerhq/hw-transport" "^4.13.0"
 
-"@ledgerhq/hw-transport-u2f@4.13.0":
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.13.0.tgz#8a9e9bbb58f32b1b4fcc8ac6a83ea44e2e4ac94a"
+"@ledgerhq/hw-transport-u2f@4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.15.0.tgz#642f754522f1ee0f95c8cf3e7b71e56fbc6267d5"
   dependencies:
-    "@ledgerhq/hw-transport" "^4.13.0"
+    "@ledgerhq/hw-transport" "^4.15.0"
     u2f-api "0.2.7"
 
 "@ledgerhq/hw-transport@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.13.0.tgz#463043200c96c91379318052ad4dbe8c80d95cf5"
+  dependencies:
+    events "^2.0.0"
+
+"@ledgerhq/hw-transport@^4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.15.0.tgz#ec99436c2662e70fb6f9c72f7bb5d1f3a051c4e3"
   dependencies:
     events "^2.0.0"
 
@@ -3868,11 +3874,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^2.5.0:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.4.tgz#fc3b1ac05d2ae3abedec84eba846511b0d4fcc4f"
-
-hoist-non-react-statics@^2.5.4:
+hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.4.tgz#fc3b1ac05d2ae3abedec84eba846511b0d4fcc4f"
 
