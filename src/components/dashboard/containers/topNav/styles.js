@@ -79,11 +79,11 @@ export const StyledTopNavLink = styled(Link)`
         background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
     }
-    &:hover span {
+    &:hover .price {
         color: ${theme.colors.white};
     }
 
-    &:hover i {
+    &:hover .accountIcon {
         color: ${theme.colors.white};
     }
 `;
