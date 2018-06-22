@@ -17,10 +17,6 @@ export const howToUseHeader = {
     textAlign: "center"
 };
 
-export const howToUseText = {
-    textAlign: "justify"
-};
-
 export const useAEurButton = {
     backgroundColor: "white",
     borderTopRightRadius: "14px",
