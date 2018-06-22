@@ -75,15 +75,12 @@ export const StyledTopNavLink = styled(Link)`
         width: 1.5rem;
     }
 
-    &:hover {
+    &.accountDetails {
         background-color: ${theme.colors.secondary};
-        color: ${theme.colors.white};
-    }
-    &:hover .price {
-        color: ${theme.colors.white};
     }
 
-    &:hover .accountIcon {
+    &:hover {
+        background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
     }
 `;
@@ -104,6 +101,11 @@ export const StyledPrice = styled.span`
     > .price {
         font-size: 1.125rem;
         color: ${theme.colors.secondary};
+    }
+
+    > .accountDetailsInfo {
+        font-size: 1.125rem;
+        color: ${theme.colors.white};
     }
 
     > .last-update {

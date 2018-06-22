@@ -31,7 +31,7 @@ const BaseIcon = `
     }
 
     &.accountIcon {
-        color: ${theme.colors.secondary};
+        color: ${theme.colors.white};
     }
 `;
 

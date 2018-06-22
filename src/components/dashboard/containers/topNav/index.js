@@ -35,17 +35,17 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLinkRight title="Your account" to="account">
+                    <StyledTopNavLinkRight title="Your account" to="account" className="accountDetails">
                         <StyledTopNavLi className="account">
                             <Icon name="account"  className="accountIcon" style={{ fontSize: "1.5rem", height: "1.5rem", width: "1.5rem", paddingLeft: "20px" }}/>
                             <StyledPrice>
-                                <span className="price">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
+                                <span className="accountDetailsInfo">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
                             </StyledPrice>
                             <StyledPrice>
-                                <span className="price">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
+                                <span className="accountDetailsInfo">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
                             </StyledPrice>
                             <StyledPrice>
-                                <span className="price">{shortAddress}</span>
+                                <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
                             <StyledAccount>
                                 <AccountInfo account={this.props.userAccount} header="" />
