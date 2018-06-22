@@ -11,6 +11,7 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 import RadioInput from "components/augmint-ui/RadioInput";
+import ToolTip from "components/ToolTip";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 import theme from "styles/theme";
@@ -131,7 +132,15 @@ class LockContainer extends React.Component {
                                     <TermTableHeadCell {...{ dashboard }} />
                                     <TermTableHeadCell {...{ dashboard }}>Min lock</TermTableHeadCell>
                                     <TermTableHeadCell {...{ dashboard }}>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell {...{ dashboard }}>Interest p.a.</TermTableHeadCell>
+                                    <TermTableHeadCell {...{ dashboard }}>
+                                        Interest p.a.
+                                        <ToolTip header="Lock Interest per Annum">
+                                            The annualised interest rate of the lock. It's calculated using a simple
+                                            (non-compound) method and with a 365 day year.<br />
+                                            Note: For small lock amounts the actual interest percent can slightly differ
+                                            than displayed (~0.01 A-EUR difference in interest amount due to rounding )
+                                        </ToolTip>
+                                    </TermTableHeadCell>
                                     <TermTableHeadCell style={{ textAlign: "right" }} {...{ dashboard }}>
                                         You earn
                                     </TermTableHeadCell>

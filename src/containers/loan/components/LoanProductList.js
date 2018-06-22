@@ -23,7 +23,7 @@ export default function LoanProductList(props) {
                 <MyListGroup.Row
                     wrap={true}
                     header={`Product ${prod.id + 1} - Repay in ${prod.termText}${
-                        prod.term <= 172800 ? " (for testing)" : ""
+                        prod.termInDays < 5 ? " (for testing)" : ""
                     }`}
                     key={prod.id}
                 >
