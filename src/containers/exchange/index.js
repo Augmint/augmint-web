@@ -25,7 +25,8 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { network, orders, userAccount, exchange, rates, trades } = this.props;
+        const { orders, exchange, rates, trades } = this.props;
+        const userAccount = this.props.userAccount;
         return (
             <EthereumState>
                 <Psegment>
@@ -45,8 +46,7 @@ class ExchangeHome extends React.Component {
                             <Pgrid.Column size={1 / 2}>
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
-                                    userAccountAddress={userAccount.address}
-                                    network={network}
+                                    web3Connect={this.props.web3Connect}
                                 />
                                 <FeatureContext>
                                     {features =>
@@ -105,7 +105,7 @@ class ExchangeHome extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    network: state.web3Connect.network,
+    web3Connect: state.web3Connect,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,
