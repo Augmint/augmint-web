@@ -9,7 +9,6 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import { EthereumState } from "containers/app/EthereumState";
 
 import { Psegment, Pgrid, Pheader } from "components/PageLayout";
-import AccountInfo from "components/AccountInfo";
 import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
 
@@ -27,7 +26,7 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { userAccount, lockManager, lockProducts } = this.props;
+        const { lockManager, lockProducts } = this.props;
 
         return (
             <Psegment>
@@ -45,10 +44,7 @@ class LockContainer extends React.Component {
                     </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
-                                <AccountInfo account={userAccount} header="Balance" />
-                            </Pgrid.Column>
-                            <Pgrid.Column size={1 / 2}>
+                            <Pgrid.Column>
                                 <StyledButtonContainer>
                                     <Button to="/exchange">Buy A€</Button>
                                 </StyledButtonContainer>
@@ -78,7 +74,6 @@ class LockContainer extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        userAccount: state.userBalances.account,
         lockManager: state.lockManager,
         lockProducts: state.lockManager.products
     };

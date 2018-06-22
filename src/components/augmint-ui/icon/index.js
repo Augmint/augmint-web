@@ -55,6 +55,9 @@ export default function Icon(props) {
         case "github":
             className += " fab fa-github";
             break;
+        case "copy":
+            className += " far fa-copy";
+            break;
         default:
             break;
     }

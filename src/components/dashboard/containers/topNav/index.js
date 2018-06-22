@@ -5,6 +5,8 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
+import AccountInfo from "components/AccountInfo";
+import { shortAccountAddresConverter } from "utils/converter";
 
 import {
     StyledTopNav,
@@ -12,7 +14,8 @@ import {
     StyledTopNavUl,
     StyledTopNavLi,
     StyledTopNavLinkRight,
-    StyledPrice
+    StyledPrice,
+    StyledAccount
 } from "./styles";
 
 class TopNav extends React.Component {
@@ -21,7 +24,8 @@ class TopNav extends React.Component {
         ratesProvider();
     }
     render() {
-        const { address } = this.props.userAccount;
+        const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
+        const { ethBalance, tokenBalance } = this.props.userAccount;
         return (
             <StyledTopNav className={this.props.className}>
                 <TitleWrapper id="page-title" />
@@ -31,13 +35,24 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLi>
-                        <StyledTopNavLinkRight title="Your account" to="account">
-                            <Icon name="account" />
-                            <span>{address.substring(0, 8)}</span>
-                        </StyledTopNavLinkRight>
-                    </StyledTopNavLi>
-                    <StyledTopNavLi>
+                    <StyledTopNavLinkRight title="Your account" to="account" className="accountDetails">
+                        <StyledTopNavLi className="account">
+                            <Icon name="account"  className="accountIcon" style={{ fontSize: "1.5rem", height: "1.5rem", width: "1.5rem", paddingLeft: "20px" }}/>
+                            <StyledPrice>
+                                <span className="accountDetailsInfo">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
+                            </StyledPrice>
+                            <StyledPrice>
+                                <span className="accountDetailsInfo">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
+                            </StyledPrice>
+                            <StyledPrice>
+                                <span className="accountDetailsInfo">{shortAddress}</span>
+                            </StyledPrice>
+                            <StyledAccount>
+                                <AccountInfo account={this.props.userAccount} header="" />
+                            </StyledAccount>
+                        </StyledTopNavLi>
+                    </StyledTopNavLinkRight>
+                    <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight
                             title="Under the hood"
                             to="/under-the-hood"

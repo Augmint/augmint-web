@@ -5,7 +5,6 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import AccountInfo from "components/AccountInfo";
 import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
@@ -45,8 +44,6 @@ class ExchangeHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
                             <Pgrid.Column size={1 / 2}>
-                                <AccountInfo account={userAccount} />
-
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
                                     web3Connect={this.props.web3Connect}

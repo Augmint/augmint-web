@@ -29,6 +29,10 @@ const BaseIcon = `
     &[color="grey"] {
       color: ${theme.colors.mediumGrey};
     }
+
+    &.accountIcon {
+        color: ${theme.colors.white};
+    }
 `;
 
 export const StyledIcon = styled.i`
