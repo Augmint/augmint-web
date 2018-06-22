@@ -88,7 +88,7 @@ function parseProducts(productsArray) {
                 discountRate,
                 bn_collateralRatio,
                 collateralRatio: bn_collateralRatio / PPM_DIV,
-                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV,
+                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV * 1.1,
                 maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
                 bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
