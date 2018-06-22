@@ -112,3 +112,10 @@ export const StyledPrice = styled.span`
         font-size: 0.75rem;
     }
 `;
+
+export const StyledSeparator = styled.div`
+    background-color: ${theme.colors.white};
+    padding: 0px;
+    height: 24px;
+    width: 2px; 
+`;
