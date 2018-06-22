@@ -15,7 +15,7 @@ import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
 
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { FeatureContext } from "modules/services/featureService";
 
 class ExchangeHome extends React.Component {
@@ -26,13 +26,20 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { network, orders, userAccount, exchange, rates, trades } = this.props;
+        const { orders, exchange, rates, trades } = this.props;
+        const { userAccount } = this.props.web3Connect;
         return (
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
                         <FeatureContext>
-                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Buy & Sell A-EUR" /> : <Pheader header="Buy & Sell A-EUR" />}
+                            {features =>
+                                features.dashboard ? (
+                                    <Pheader className="secondaryColor" header="Buy & Sell A-EUR" />
+                                ) : (
+                                    <Pheader header="Buy & Sell A-EUR" />
+                                )
+                            }
                         </FeatureContext>
                     </TopNavTitlePortal>
                     <Pgrid>
@@ -42,31 +49,28 @@ class ExchangeHome extends React.Component {
 
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
-                                    userAccountAddress={userAccount.address}
-                                    network={network}
+                                    web3Connect={this.props.web3Connect}
                                 />
                                 <FeatureContext>
-                                    {
-                                        features => features.dashboard ? 
-                                        <PlaceOrderForm
-                                            orders={orders}
-                                            exchange={exchange}
-                                            rates={rates}
-                                        /> :
-                                        <PlaceOrderForm
-                                            orders={orders}
-                                            exchange={exchange}
-                                            rates={rates}
-                                            header="A€ &harr; ETH on Augmint"
-                                        />
-                            }
+                                    {features =>
+                                        features.dashboard ? (
+                                            <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
+                                        ) : (
+                                            <PlaceOrderForm
+                                                orders={orders}
+                                                exchange={exchange}
+                                                rates={rates}
+                                                header="A€ &harr; ETH on Augmint"
+                                            />
+                                        )
+                                    }
                                 </FeatureContext>
 
                                 <MyOrders
                                     testid="myOrdersBlock"
                                     orders={orders}
                                     rates={rates}
-                                    userAccountAddress={userAccount.address}
+                                    userAccountAddress={userAccount}
                                     header="My open orders"
                                 />
                             </Pgrid.Column>
@@ -84,17 +88,13 @@ class ExchangeHome extends React.Component {
                                     testid="allOrdersBlock"
                                     orders={orders}
                                     rates={rates}
-                                    userAccountAddress={userAccount.address}
+                                    userAccountAddress={userAccount}
                                     header="Order book"
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
                         <Pgrid.Row>
-                            <TradeHistory
-                                trades={trades}
-                                userAccountAddress={userAccount.address}
-                                header="My trade history"
-                            />
+                            <TradeHistory trades={trades} userAccountAddress={userAccount} header="My trade history" />
                         </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
@@ -104,8 +104,7 @@ class ExchangeHome extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    network: state.web3Connect.network,
-    userAccount: state.userBalances.account,
+    web3Connect: state.web3Connect,
     exchange: state.exchange,
     orders: state.orders,
     rates: state.rates,
