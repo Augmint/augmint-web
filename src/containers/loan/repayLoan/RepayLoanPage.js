@@ -8,7 +8,6 @@ import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { repayLoan, LOANTRANSACTIONS_REPAY_SUCCESS } from "modules/reducers/loanTransactions";
 import LoanDetails from "containers/loan/components/LoanDetails";
-import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";
 import {
     EthSubmissionErrorPanel,
@@ -100,7 +99,6 @@ class RepayLoanPage extends React.Component {
         return (
             <Pgrid.Row wrap={false}>
                 <Pgrid.Column size={6 / 17}>
-                    <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
                 </Pgrid.Column>
                 <Pgrid.Column size={1 / 17} />
@@ -127,7 +125,9 @@ class RepayLoanPage extends React.Component {
 
                                     {this.state.loan.isRepayable &&
                                         !this.state.loan.isDue && (
-                                            <p>This loan is not due soon but you can repay early without any extra fee.</p>
+                                            <p>
+                                                This loan is not due soon but you can repay early without any extra fee.
+                                            </p>
                                         )}
                                     {this.state.loan.isRepayable && (
                                         <Button
