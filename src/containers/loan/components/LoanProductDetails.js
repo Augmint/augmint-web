@@ -1,29 +1,30 @@
 import React from "react";
 import moment from "moment";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import { DiscountRateToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
+import { LoanInterestRatePaToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
 
 export default function LoanProductDetails(props) {
-    let prod = props.product;
+    const prod = props.product;
+    const collateralRatio = Number((prod.collateralRatio * 100).toFixed(2));
     return (
         <MyGridTable>
             <Row>
                 <Col>Repay:</Col>
                 <Col>
-                    in {prod.termText}, before {moment.unix(prod.term + moment.utc().unix()).format("D MMM YYYY")}
+                    in {prod.termText}, before {moment.unix(prod.termInSecs + moment.utc().unix()).format("D MMM YYYY")}
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    Discount rate: <DiscountRateToolTip discountRate={prod.discountRate} />
+                    Interest p.a.: <LoanInterestRatePaToolTip interestRatePa={prod.interestRatePa} />
                 </Col>
-                <Col>{prod.discountRate * 100}%</Col>
+                <Col>{Math.round(prod.interestRatePa * 10000) / 100}%</Col>
             </Row>
             <Row>
                 <Col>
-                    Loan/collateral ratio: <LoanCollateralRatioToolTip loanCollateralRatio={prod.loanCollateralRatio} />
+                    Loan/collateral ratio: <LoanCollateralRatioToolTip collateralRatio={collateralRatio} />
                 </Col>
-                <Col>{prod.collateralRatio * 100}%</Col>
+                <Col>{collateralRatio}%</Col>
             </Row>
             <Row>
                 <Col>Min / max payout:</Col>

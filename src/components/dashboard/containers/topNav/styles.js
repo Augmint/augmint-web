@@ -40,11 +40,22 @@ export const StyledTopNavUl = styled.ul`
     margin: 0;
 `;
 
+export const StyledAccount = styled.div`
+    display: none;
+`;
+
 export const StyledTopNavLi = styled.li`
     display: flex;
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
+
+    &.account:hover ${StyledAccount} {
+        display: block;
+        position: absolute;
+        right: 64px;
+        top: ${TOP_NAV_HEIGHT};
+    }
 `;
 
 export const StyledTopNavLink = styled(Link)`
@@ -52,7 +63,8 @@ export const StyledTopNavLink = styled(Link)`
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
-    width: ${TOP_NAV_HEIGHT};
+    min-width: ${TOP_NAV_HEIGHT};
+    padding: 0 2px;
     color: ${theme.colors.primary};
     transition: all ${theme.transitions.fast};
     transition-property: background-color, color;
@@ -61,6 +73,10 @@ export const StyledTopNavLink = styled(Link)`
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;
+    }
+
+    &.accountDetails {
+        background-color: ${theme.colors.secondary};
     }
 
     &:hover {
@@ -85,6 +101,11 @@ export const StyledPrice = styled.span`
     > .price {
         font-size: 1.125rem;
         color: ${theme.colors.secondary};
+    }
+
+    > .accountDetailsInfo {
+        font-size: 1.125rem;
+        color: ${theme.colors.white};
     }
 
     > .last-update {

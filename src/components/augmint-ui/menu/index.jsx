@@ -38,8 +38,8 @@ export function MenuItem(props) {
     return (
         <FeatureContext>
             {features =>
-                features.dashboard 
-                    ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard> 
+                features.dashboard && className!=="buySell"
+                    ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard>
                     : <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
             }
         </FeatureContext>
