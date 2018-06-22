@@ -35,21 +35,23 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className="account">
-                        <StyledPrice>
-                            <span className="price">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
-                        </StyledPrice>
-                        <StyledPrice>
-                            <span className="price">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
-                        </StyledPrice>
-                        <StyledTopNavLinkRight title="Your account" to="account">
-                            <Icon name="account" />
-                            <span>{shortAddress}</span>
-                        </StyledTopNavLinkRight>
-                        <StyledAccount>
-                            <AccountInfo account={this.props.userAccount} header="" />
-                        </StyledAccount>
-                    </StyledTopNavLi>
+                    <StyledTopNavLinkRight title="Your account" to="account">
+                        <StyledTopNavLi className="account">
+                            <Icon name="account"  className="accountIcon" style={{ fontSize: "1.5rem", height: "1.5rem", width: "1.5rem", paddingLeft: "20px" }}/>
+                            <StyledPrice>
+                                <span className="price">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
+                            </StyledPrice>
+                            <StyledPrice>
+                                <span className="price">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
+                            </StyledPrice>
+                            <StyledPrice>
+                                <span className="price">{shortAddress}</span>
+                            </StyledPrice>
+                            <StyledAccount>
+                                <AccountInfo account={this.props.userAccount} header="" />
+                            </StyledAccount>
+                        </StyledTopNavLi>
+                    </StyledTopNavLinkRight>
                     <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight
                             title="Under the hood"

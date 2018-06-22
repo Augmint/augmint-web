@@ -53,7 +53,7 @@ export const StyledTopNavLi = styled.li`
     &.account:hover ${StyledAccount} {
         display: block;
         position: absolute;
-        right: 0;
+        right: 64px;
         top: ${TOP_NAV_HEIGHT};
     }
 `;
@@ -77,6 +77,13 @@ export const StyledTopNavLink = styled(Link)`
 
     &:hover {
         background-color: ${theme.colors.secondary};
+        color: ${theme.colors.white};
+    }
+    &:hover span {
+        color: ${theme.colors.white};
+    }
+
+    &:hover i {
         color: ${theme.colors.white};
     }
 `;
