@@ -27,7 +27,7 @@ class ExchangeHome extends React.Component {
     }
     render() {
         const { orders, exchange, rates, trades } = this.props;
-        const { userAccount } = this.props.web3Connect;
+        const userAccount = this.props.userAccount;
         return (
             <EthereumState>
                 <Psegment>
@@ -70,7 +70,7 @@ class ExchangeHome extends React.Component {
                                     testid="myOrdersBlock"
                                     orders={orders}
                                     rates={rates}
-                                    userAccountAddress={userAccount}
+                                    userAccountAddress={userAccount.address}
                                     header="My open orders"
                                 />
                             </Pgrid.Column>
@@ -88,13 +88,17 @@ class ExchangeHome extends React.Component {
                                     testid="allOrdersBlock"
                                     orders={orders}
                                     rates={rates}
-                                    userAccountAddress={userAccount}
+                                    userAccountAddress={userAccount.address}
                                     header="Order book"
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
                         <Pgrid.Row>
-                            <TradeHistory trades={trades} userAccountAddress={userAccount} header="My trade history" />
+                            <TradeHistory
+                                trades={trades}
+                                userAccountAddress={userAccount.address}
+                                header="My trade history"
+                            />
                         </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
@@ -105,6 +109,7 @@ class ExchangeHome extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
+    userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,
     rates: state.rates,
