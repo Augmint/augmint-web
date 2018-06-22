@@ -32,6 +32,10 @@ const BaseIcon = `
 
     &.accountIcon {
         color: ${theme.colors.white};
+        font-size: 1.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+        padding-left: 20px;
     }
 `;
 

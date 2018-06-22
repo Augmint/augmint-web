@@ -15,7 +15,8 @@ import {
     StyledTopNavLi,
     StyledTopNavLinkRight,
     StyledPrice,
-    StyledAccount
+    StyledAccount,
+    StyledSeparator
 } from "./styles";
 
 class TopNav extends React.Component {
@@ -37,13 +38,17 @@ class TopNav extends React.Component {
                     </StyledTopNavLi>
                     <StyledTopNavLinkRight title="Your account" to="account" className="accountDetails">
                         <StyledTopNavLi className="account">
-                            <Icon name="account"  className="accountIcon" style={{ fontSize: "1.5rem", height: "1.5rem", width: "1.5rem", paddingLeft: "20px" }}/>
+                            <Icon name="account"  className="accountIcon" />
                             <StyledPrice>
                                 <span className="accountDetailsInfo">{ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH</span>
                             </StyledPrice>
+                            <StyledSeparator>
+                            </StyledSeparator>
                             <StyledPrice>
                                 <span className="accountDetailsInfo">{tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€</span>
                             </StyledPrice>
+                            <StyledSeparator>
+                            </StyledSeparator>
                             <StyledPrice>
                                 <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
