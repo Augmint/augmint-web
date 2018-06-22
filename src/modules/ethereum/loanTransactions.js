@@ -6,7 +6,7 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "../../utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, MIN_LOAN_AMOUNT_ADJUSTMENT } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
@@ -88,7 +88,7 @@ function parseProducts(productsArray) {
                 discountRate,
                 bn_collateralRatio,
                 collateralRatio: bn_collateralRatio / PPM_DIV,
-                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV * 1.1,
+                minDisbursedAmountInToken: (bn_minDisbursedAmount / DECIMALS_DIV) * MIN_LOAN_AMOUNT_ADJUSTMENT,
                 maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
                 bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
