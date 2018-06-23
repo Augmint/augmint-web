@@ -12,3 +12,7 @@ export const PPM_DIV = 1000000;
 export const EXCHANGE_CHUNK_SIZE = 100;
 
 export const SCRIPT_STATES = ["New", "Approved", "Done", "Cancelled", "Failed"];
+
+// rational: it's to avoid loan tx to fail on min loan amount because of an ETH/EUR rate change
+// in the background right when sending the tx from the UI
+export const MIN_LOAN_AMOUNT_ADJUSTMENT = 1.25;
