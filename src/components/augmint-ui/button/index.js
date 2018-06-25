@@ -2,7 +2,6 @@ import React from "react";
 import Icon from "../icon";
 
 import { StyledLink, StyledA, StyledButton } from "./styles";
-// import { FeatureContext } from "modules/services/featureService";
 
 export default function Button(props) {
     const { children, to, type, content, icon, className } = props;
