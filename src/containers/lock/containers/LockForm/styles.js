@@ -22,8 +22,8 @@ export const TermTableRow = styled.tr``;
 
 export const TermTableCell = styled.td`
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: ${ifProp("dashboard", theme.colors.primary, theme.colors.white)};
-    border-bottom: 1px solid ${ifProp("dashboard", theme.colors.opacExtraLighterGrey, theme.colors.opacLightWhite)};
+    color: ${theme.colors.primary};
+    border-bottom: 1px solid ${theme.colors.opacExtraLighterGrey};
     padding: 1rem;
 
     &:first-child {
@@ -33,7 +33,7 @@ export const TermTableCell = styled.td`
 
 export const TermTableHeadCell = styled.th`
     background-color: transparent;
-    color: ${ifProp("dashboard", theme.colors.primary, theme.colors.white)};
+    color: ${theme.colors.primary};
     padding: 1rem;
     text-align: left;
 
