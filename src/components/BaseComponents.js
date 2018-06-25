@@ -11,8 +11,6 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
-// import { FeatureContext } from "modules/services/featureService";
-
 export const Validations = {
     required: value => {
         return value || (value && value.toString().trim() === "") ? undefined : "Required";

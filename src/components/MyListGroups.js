@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "styled-components-grid";
 import Header from "./augmint-ui/header";
-import { FeatureContext } from "modules/services/featureService";
 
 export function MyListGroup(props) {
     const { children, style = { margin: "0em 0em" }, ...other } = props;
@@ -27,14 +26,7 @@ export function MyListGroupColumn(props) {
     const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, width, ...other } = props;
     return (
         <Grid.Unit style={style} size={width} {...other}>
-            {header && 
-                <FeatureContext>
-                    {features => {
-                        const dashboard = features.dashboard;
-                        
-                        return <Header as="h3" className={ dashboard ? "tertiaryColor" : "" }>{header}</Header>
-                    }}
-                </FeatureContext>}
+            <Header as="h3" className={ "tertiaryColor" }>{header}</Header>
             {children}
         </Grid.Unit>
     );
