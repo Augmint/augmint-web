@@ -2,8 +2,6 @@ import React from "react";
 
 import { StyledMenu, StyledMenuItem, StyledMenuItemDashboard } from "./styles";
 
-// import { FeatureContext } from "modules/services/featureService";
-
 export function Menu(props) {
     const { children, className, ...other } = props;
     let _className = " menu ";
