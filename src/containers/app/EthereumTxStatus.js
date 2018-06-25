@@ -9,6 +9,7 @@ import { MyListGroup } from "components/MyListGroups";
 import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/MsgPanels";
 import Container from "components/augmint-ui/container";
 import { dismissTx } from "modules/reducers/submittedTransactions";
+import HashURL from "components/hash";
 
 class EthereumTxStatus extends React.Component {
     constructor(props) {
@@ -75,7 +76,9 @@ class EthereumTxStatus extends React.Component {
                                 <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
-                                        <small>Tx hash: {tx.transactionHash}</small>
+                                        <small>
+                                            <HashURL hash={tx.transactionHash} />
+                                        </small>
                                     </p>
                                 </LoadingPanel>
                             )}
@@ -94,7 +97,7 @@ class EthereumTxStatus extends React.Component {
                                             <small>
                                                 Gas used: {gasUsed}
                                                 <br />
-                                                Tx hash: {tx.transactionHash}
+                                                <HashURL hash={tx.transactionHash} />
                                             </small>
                                         </p>
                                     </LoadingPanel>
@@ -116,7 +119,7 @@ class EthereumTxStatus extends React.Component {
                                         <small>
                                             Gas used: {gasUsed}
                                             <br />
-                                            Tx hash: {tx.transactionHash}
+                                            <HashURL hash={tx.transactionHash} />
                                         </small>
                                     </p>
                                 </SuccessPanel>

@@ -3,6 +3,7 @@ import Button from "./augmint-ui/button";
 import Icon from "./augmint-ui/icon";
 import Container from "./augmint-ui/container";
 import Message from "./augmint-ui/message";
+import HashURL from "components/hash";
 
 export default class MsgPanel extends React.Component {
     constructor(props) {
@@ -103,7 +104,7 @@ export class EthSubmissionErrorPanel extends React.Component {
                 {error && error.message}
                 {receipt && (
                     <div>
-                        <p>Tx hash: {receipt.transactionHash}</p>
+                        <HashURL hash={receipt.transactionHash} />
                         <p>Gas used: {receipt.gasUsed}</p>
                     </div>
                 )}
@@ -128,11 +129,8 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 {children}
                 <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
                 <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
-                <p>
-                    <small>
-                        Tx hash: <span data-testid="transactionHash">{result.transactionHash}</span>
-                        <br />
-                    </small>
+                <p data-testid="transactionHash">
+                    <HashURL hash={result.transactionHash} />
                 </p>
             </MsgPanel>
         );
