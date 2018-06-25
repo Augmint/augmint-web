@@ -36,8 +36,8 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLinkRight title="Your account" to="/account" className="accountDetails">
-                        <StyledTopNavLi className="account">
+                    <StyledTopNavLi className="account">
+                        <StyledTopNavLinkRight title="Your account" to="/account" className="accountDetails">
                             <Icon name="account" className="accountIcon" />
                             <StyledPrice>
                                 <span className="accountDetailsInfo">
@@ -54,11 +54,11 @@ class TopNav extends React.Component {
                             <StyledPrice>
                                 <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
-                            <StyledAccount>
-                                <AccountInfo account={this.props.userAccount} header="" />
-                            </StyledAccount>
-                        </StyledTopNavLi>
-                    </StyledTopNavLinkRight>
+                        </StyledTopNavLinkRight>
+                        <StyledAccount>
+                            <AccountInfo account={this.props.userAccount} header="" />
+                        </StyledAccount>
+                    </StyledTopNavLi>
                     <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight
                             title="Under the hood"
