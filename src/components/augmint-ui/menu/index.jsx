@@ -1,6 +1,8 @@
 import React from "react";
 
-import { StyledMenu, StyledMenuItem } from "./styles";
+import { StyledMenu, StyledMenuItem, StyledMenuItemDashboard } from "./styles";
+
+// import { FeatureContext } from "modules/services/featureService";
 
 export function Menu(props) {
     const { children, className, ...other } = props;
@@ -26,7 +28,11 @@ export function MenuItem(props) {
         _className += " active ";
     }
 
-    return <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
+    return (
+        className!=="buySell"
+            ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard>
+            : <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
+    );
 }
 
 Menu.Item = MenuItem;
