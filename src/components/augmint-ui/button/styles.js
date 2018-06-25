@@ -22,10 +22,6 @@ const BaseButton = `
     letter-spacing: normal;
     border: 1px solid ${theme.colors.grey};
 
-    &.dashboardColors {
-      background-color: ${theme.colors.secondary};
-    }
-
     &[disabled] {
       color: ${theme.colors.primary};
       cursor: default;
