@@ -38,7 +38,7 @@ export default class AppMenu extends React.Component {
     }
 
     render() {
-        const { isConnected, network } = this.props.web3Connect;
+        const { isConnected } = this.props.web3Connect;
         const { location } = this.props;
 
         const currentLocation = location.pathname;
@@ -68,7 +68,12 @@ export default class AppMenu extends React.Component {
                             </AppMenuItem>
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    <Button type="a" data-testid="useAEurButton" to={ !showConnection && isConnected ? "/account" : "/tryit" } color="primary">
+                    <Button
+                        type="a"
+                        data-testid="useAEurButton"
+                        to={!showConnection && isConnected ? "/account" : "/tryit"}
+                        color="primary"
+                    >
                         My Account
                     </Button>
                     {showConnection && !isConnected && <div>Not connected</div>}

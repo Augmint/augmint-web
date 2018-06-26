@@ -5,8 +5,6 @@ import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/ToolTip";
 import AccountAddress from "components/accountAddress";
 
-import { shortAccountAddresConverter } from "utils/converter";
-
 export default class TransferList extends React.Component {
     render() {
         const { filter, header, noItemMessage, userAccountAddress } = this.props;
