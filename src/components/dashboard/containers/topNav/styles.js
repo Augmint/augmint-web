@@ -77,6 +77,7 @@ export const StyledTopNavLink = styled(Link)`
 
     &.accountDetails {
         background-color: ${theme.colors.secondary};
+        flex-direction: row;
     }
 
     &:hover {
@@ -117,5 +118,5 @@ export const StyledSeparator = styled.div`
     background-color: ${theme.colors.white};
     padding: 0px;
     height: 24px;
-    width: 2px; 
+    width: 2px;
 `;
