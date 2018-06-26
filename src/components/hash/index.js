@@ -6,7 +6,7 @@ export default function HashURL(props) {
     const { hash, title } = props;
     let web3 = store.getState().web3Connect;
     const url = process.env["REACT_APP_TRANSACTION_LINK_NETWORK_" + web3.network.id];
-    const _title = title !== undefined ? title : "Click here to see the transaction.";
+    const _title = title !== undefined ? title : "Transaction.";
 
     return (
         <a href={url + hash} target="_blank">
