@@ -1,7 +1,19 @@
 import React from "react";
 import ToolTip from "components/ToolTip";
 
+export function LoanInterestRatePaToolTip(props) {
+    return (
+        <ToolTip header="Loan Interest per Annum">
+            The annualised interest rate of the loan. It's calculated using a simple (non-compound) method and with a
+            365 day year.<br />
+            Note: For small loan amounts the actual interest percent can slightly differ than displayed (~0.01 A-EUR
+            difference in interest amount due to rounding )
+        </ToolTip>
+    );
+}
+
 export function DiscountRateToolTip(props) {
+    // not shown on UI anymore, kept for future reference
     return (
         <ToolTip header="Discount Rate">
             Disbursed A-EUR amount / amount due on maturity.<br />
@@ -16,7 +28,7 @@ export function LoanCollateralRatioToolTip(props) {
         <ToolTip header="Loan/collateral ratio">
             A-EUR loan amount / EUR value of ETH collateral.<br />
             I.e. How much A-EUR loan can you get for your ETH<br />
-            E.g. 1ETH worth 200 EUR and the Loan Coverage ratio is {props.loanCollateralRatio * 100}% then you can get ~{Math.round(
+            E.g. 1ETH worth 200 EUR and the Loan/Collateral ratio is {props.collateralRatio}% then you can get ~{Math.round(
                 props.loanCollateralRatio * 20000
             ) / 100}{" "}
             A-EUR for 1 ETH placed in escrow.

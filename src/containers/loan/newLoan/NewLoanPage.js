@@ -6,7 +6,6 @@ import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
 import { newLoan, LOANTRANSACTIONS_NEWLOAN_CREATED } from "modules/reducers/loanTransactions";
 import LoanProductDetails from "containers/loan/components/LoanProductDetails";
-import AccountInfo from "components/AccountInfo";
 import NewLoanForm from "./NewLoanForm";
 import NewLoanSuccess from "./NewLoanSuccess";
 
@@ -99,7 +98,6 @@ class NewLoanPage extends React.Component {
                         >
                             <LoanProductDetails product={this.state.product} />
                         </Pblock>
-                        <AccountInfo account={this.props.userAccount} />
                     </Pgrid.Column>
                     <Pgrid.Column size={10 / 16}>
                         {!this.state.submitSucceeded && (

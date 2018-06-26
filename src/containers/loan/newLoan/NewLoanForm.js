@@ -149,7 +149,9 @@ class NewLoanForm extends React.Component {
                             style={{ borderRadius: "0" }}
                             labelAlignLeft={
                                 <ToolTip>
-                                    Disbursed loan amount (paid out) = Repayable loan amount x Discount Rate{" "}
+                                    Disbursed loan amount (paid out) = Repayable loan amount - Interest amount<br />
+                                    Interest amount = Disbursed loan amount x Interest rate per annum / 365 x Loan term
+                                    in days
                                 </ToolTip>
                             }
                             labelAlignRight="A-EUR"
@@ -170,7 +172,9 @@ class NewLoanForm extends React.Component {
                             style={{ borderRadius: "0" }}
                             labelAlignLeft={
                                 <ToolTip>
-                                    Loan A-EUR amount to be paid back = Disbursed amount x ( 1 / Discount Rate )
+                                    Loan A-EUR amount to be paid back = Disbursed loan amount + Interest amount<br />
+                                    Interest amount = Disbursed loan amount x Interest rate per annum / 365 x Loan term
+                                    in days
                                 </ToolTip>
                             }
                             labelAlignRight="A-EUR"

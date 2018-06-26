@@ -17,7 +17,6 @@ export class EthereumState extends React.Component {
         return (
             <FeatureContext.Consumer>
                 {features => {
-                    const allowMainnet = features.mainnet;
                     const dashboard = features.dashboard;
 
                     let msg = null;
@@ -26,9 +25,9 @@ export class EthereumState extends React.Component {
 
                     let _className = className;
                     if (dashboard) {
-                         _className += " primaryColor";
+                        _className += " primaryColor";
                     }
-                    
+
                     const isConnecting =
                         web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
 
@@ -39,7 +38,7 @@ export class EthereumState extends React.Component {
                     } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
                         msg = (
                             <WarningPanel header="Can't connect Ethereum network">
-                                <StyledP className={ _className }>
+                                <StyledP className={_className}>
                                     Please check our <Link to="/tryit">connection guide</Link> about how to connect to
                                     Ethereum network.
                                 </StyledP>
@@ -56,20 +55,24 @@ export class EthereumState extends React.Component {
                         network.id !== 4 &&
                         network.id !== 1976 &&
                         network.id !== 4447 &&
-                        (network.id !== 1 || (network.id === 1 && !allowMainnet))
+                        network.id !== 1
                     ) {
                         msg = (
                             <div>
-                                <WarningPanel header="Connected to Ethereum but not on Rinkeby" />
-                                <StyledP className={ _className }>Augmint only works on Rinkeby test network currently</StyledP>
-                                <StyledP className={ _className }>
+                                <WarningPanel header="Connected to Ethereum but not on Mainnet or Rinkeby" />
+                                <StyledP className={_className}>
+                                    Augmint only works in beta on Mainnet and Rinkeby test network currently
+                                </StyledP>
+                                <StyledP className={_className}>
                                     Your browser seems to be connected to {web3Connect.network.name} network. (id:{" "}
                                     {web3Connect.network.id}).
                                 </StyledP>
 
-                                <StyledP className={ _className }>Make sure you are connected to Rinkeby</StyledP>
+                                <StyledP className={_className}>
+                                    Make sure you are connected to Mainnet or Rinkeby
+                                </StyledP>
                                 <DiscordButton />
-                                <StyledP className={ _className }>
+                                <StyledP className={_className}>
                                     If you feel geeky you can{" "}
                                     <Link
                                         to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
@@ -83,19 +86,21 @@ export class EthereumState extends React.Component {
                     } else if (anyConnectionError) {
                         msg = (
                             <ErrorPanel header="Can't connect to Augmint contracts">
-                                <StyledP className={ _className }>
+                                <StyledP className={_className}>
                                     You seem to be connected to {network.name} but can't connect to Augmint contracts.
                                 </StyledP>
                                 {network.id === 4 && (
-                                    <StyledP className={ _className }>
+                                    <StyledP className={_className}>
                                         It's an issue with our deployment, because you are on {network.name} and Augmint
                                         contracts should be deployed.
                                     </StyledP>
                                 )}
                                 {network.id !== 4 && (
                                     <div>
-                                        <StyledP className={ _className }>Do you have all the contracts deployed?</StyledP>
-                                        <StyledP className={ _className }>
+                                        <StyledP className={_className}>
+                                            Do you have all the contracts deployed?
+                                        </StyledP>
+                                        <StyledP className={_className}>
                                             See local dev setup instructions on our{" "}
                                             <Link
                                                 to="https://github.com/Augmint/augmint-core/blob/master/docs/developmentEnvironment.md"
@@ -114,8 +119,12 @@ export class EthereumState extends React.Component {
                     } else if (!web3Connect.userAccount) {
                         msg = (
                             <WarningPanel header="Can't get user acccount">
-                                <StyledP className={ _className }>Connected to Ethereum {network.name} network but can't get user account.</StyledP>
-                                <StyledP className={ _className }>If you are using Metamask make sure it's unlocked.</StyledP>
+                                <StyledP className={_className}>
+                                    Connected to Ethereum {network.name} network but can't get user account.
+                                </StyledP>
+                                <StyledP className={_className}>
+                                    If you are using Metamask make sure it's unlocked.
+                                </StyledP>
                             </WarningPanel>
                         );
                     }

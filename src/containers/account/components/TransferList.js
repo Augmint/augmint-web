@@ -3,6 +3,9 @@ import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/ToolTip";
+import AccountAddress from "components/accountAddress";
+
+import { shortAccountAddresConverter } from "utils/converter";
 
 export default class TransferList extends React.Component {
     render() {
@@ -20,10 +23,22 @@ export default class TransferList extends React.Component {
                     >
                         <Row columns={1}>
                             <Col>
-                                {tx.args.from.toLowerCase() === userAccountAddress.toLowerCase()
-                                    ? "To: " + tx.args.to
-                                    : "From: " + tx.args.from}{" "}
-                                <MoreInfoTip header="Transaction details">
+                                {tx.args.from.toLowerCase() === userAccountAddress.toLowerCase() ? (
+                                    <AccountAddress
+                                        address={tx.args.to}
+                                        showCopyIcon="true"
+                                        title="To:"
+                                        shortAddress={true}
+                                    />
+                                ) : (
+                                    <AccountAddress
+                                        address={tx.args.from}
+                                        showCopyIcon="true"
+                                        title="From:"
+                                        shortAddress={true}
+                                    />
+                                )}{" "}
+                                <MoreInfoTip header="Transaction details" icon="info">
                                     blockNumber: {tx.blockNumber}
                                     <br />blockHash: <small>{tx.blockHash}</small>
                                     <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}

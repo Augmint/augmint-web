@@ -6,7 +6,7 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "../../utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, MIN_LOAN_AMOUNT_ADJUSTMENT } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
@@ -73,17 +73,22 @@ function parseProducts(productsArray) {
             bn_isActive
         ] = product;
 
-        const term = parseInt(bn_term, 10);
-        if (term > 0) {
+        const termInSecs = parseInt(bn_term, 10);
+        const termInDays = termInSecs / 60 / 60 / 24;
+        const discountRate = bn_discountRate / PPM_DIV;
+        const interestRatePa = ((1 / discountRate - 1) / termInDays) * 365;
+        if (termInSecs > 0) {
             parsed.push({
                 id: parseInt(bn_id, 10),
-                term,
-                termText: moment.duration(term, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
+                termInSecs,
+                termInDays,
+                termText: moment.duration(termInSecs, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
                 bn_discountRate,
-                discountRate: bn_discountRate / PPM_DIV,
+                interestRatePa,
+                discountRate,
                 bn_collateralRatio,
                 collateralRatio: bn_collateralRatio / PPM_DIV,
-                minDisbursedAmountInToken: bn_minDisbursedAmount / DECIMALS_DIV,
+                minDisbursedAmountInToken: (bn_minDisbursedAmount / DECIMALS_DIV) * MIN_LOAN_AMOUNT_ADJUSTMENT,
                 maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
                 bn_defaultingFeePt,
                 defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
@@ -187,7 +192,9 @@ export async function collectLoansTx(loanManagerInstance, loansToCollect) {
         const loanCollectedEventsCount =
             typeof receipt.events.LoanCollected === "undefined"
                 ? 0
-                : Array.isArray(receipt.events.LoanCollected) ? receipt.events.LoanCollected.length : 1;
+                : Array.isArray(receipt.events.LoanCollected)
+                    ? receipt.events.LoanCollected.length
+                    : 1;
 
         if (loanCollectedEventsCount !== loansToCollect.length) {
             throw new EthereumTransactionError(
