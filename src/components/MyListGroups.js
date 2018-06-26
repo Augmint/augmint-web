@@ -26,7 +26,7 @@ export function MyListGroupColumn(props) {
     const { children, header, style = { padding: "0.5em 0", margin: "0em 0" }, width, ...other } = props;
     return (
         <Grid.Unit style={style} size={width} {...other}>
-            <Header as="h3" className={ "tertiaryColor" }>{header}</Header>
+            {header && <Header as="h3" className={ "tertiaryColor" }>{header}</Header>}
             {children}
         </Grid.Unit>
     );

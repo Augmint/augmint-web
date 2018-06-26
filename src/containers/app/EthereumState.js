@@ -16,7 +16,7 @@ export class EthereumState extends React.Component {
         const { web3Connect, contracts, augmintToken, className, children = null } = this.props;
         const { network } = web3Connect;
 
-        let _className = className + "primaryColor";
+        let _className = className + " primaryColor";
 
         const isConnecting =
             web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
