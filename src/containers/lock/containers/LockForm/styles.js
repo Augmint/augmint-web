@@ -2,8 +2,6 @@ import styled from "styled-components";
 
 import theme from "styles/theme";
 
-import { ifProp } from "styled-tools";
-
 export const TermTable = styled.table`
     background-color: transparent !important;
     margin-top: 0 !important;
