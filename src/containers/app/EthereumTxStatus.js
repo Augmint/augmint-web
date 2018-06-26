@@ -76,9 +76,7 @@ class EthereumTxStatus extends React.Component {
                                 <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
-                                        <small>
-                                            <HashURL hash={tx.transactionHash} />
-                                        </small>
+                                        <HashURL hash={tx.transactionHash} />
                                     </p>
                                 </LoadingPanel>
                             )}

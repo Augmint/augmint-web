@@ -15,7 +15,7 @@ describe("Locks", function() {
 
         return cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
             cy.contains("New lock");
-            cy.contains("Transaction.");
+            cy.contains("View on Etherscan.");
             cy.get("[data-testid=msgPanelOkButton]").click();
         });
     };
