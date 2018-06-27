@@ -43,12 +43,11 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "eslint:src": "./node_modules/.bin/eslint ./src/",
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
     "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
-    "precommit": "yarn eslint:src && pretty-quick --staged"
+    "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
     "cypress": "3.0.1",
