@@ -1,8 +1,7 @@
 import React from "react";
 import Icon from "components/augmint-ui/icon";
-import Header from "components/augmint-ui/header";
 
-import { StyledToolTip, StyledContent } from "./styles";
+import { StyledToolTip, StyledContent, StyledHeader } from "./styles";
 
 export default function ToolTip(props) {
     const { id, children, header, icon, html, ...other } = props;
@@ -16,10 +15,10 @@ export default function ToolTip(props) {
                 type="info"
                 multiline={true}
                 html={html}
-                className="customeTheme"
+                className="customTheme"
                 delayHide={200}
             >
-                {header && <div>{header}</div>}
+                {header && <StyledHeader as="h5">{header}</StyledHeader>}
                 <StyledContent>{children}</StyledContent>
             </StyledToolTip>
         </div>
