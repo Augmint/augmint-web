@@ -68,7 +68,12 @@ export default class SiteMenu extends React.Component {
                             </SiteMenuItem>
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    <Button type="a" data-testid="useAEurButton" to={ !showConnection && isConnected ? "/account" : "/tryit" } color="primary">
+                    <Button
+                        type="a"
+                        data-testid="useAEurButton"
+                        to={!showConnection && isConnected ? "/account" : "/tryit"}
+                        color="primary"
+                    >
                         My Account
                     </Button>
                     {showConnection && !isConnected && <div>Not connected</div>}
