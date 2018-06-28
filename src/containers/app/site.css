@@ -67,6 +67,12 @@
     */
 }
 
+@media (max-width: 768px) {
+    .Site-content.App-content {
+        padding-left: 0px;
+    }
+}
+
 .Site-content--full {
     padding: 0;
 }
