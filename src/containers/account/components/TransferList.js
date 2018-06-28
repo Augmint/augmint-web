@@ -6,8 +6,6 @@ import { MoreInfoTip } from "components/toolTip";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 
-import { shortAccountAddresConverter } from "utils/converter";
-
 export default class TransferList extends React.Component {
     render() {
         const { filter, header, noItemMessage, userAccountAddress } = this.props;

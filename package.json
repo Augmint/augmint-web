@@ -45,11 +45,15 @@
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
+    "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
     "cypress": "3.0.1",
-    "eslint-plugin-cypress": "2.0.1"
+    "eslint-plugin-cypress": "2.0.1",
+    "husky": "0.14.3",
+    "prettier": "1.13.6",
+    "pretty-quick": "1.6.0"
   },
   "greenkeeper": {
     "ignore": [
