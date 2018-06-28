@@ -16,13 +16,21 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Interest p.a.: <LoanInterestRatePaToolTip interestRatePa={prod.interestRatePa} />
+                    Interest p.a.:{" "}
+                    <LoanInterestRatePaToolTip
+                        interestRatePa={prod.interestRatePa}
+                        id={"Loan_interest_rate_pa_tooltip"}
+                    />
                 </Col>
                 <Col>{Math.round(prod.interestRatePa * 10000) / 100}%</Col>
             </Row>
             <Row>
                 <Col>
-                    Loan/collateral ratio: <LoanCollateralRatioToolTip collateralRatio={collateralRatio} />
+                    Loan/collateral ratio:{" "}
+                    <LoanCollateralRatioToolTip
+                        collateralRatio={collateralRatio}
+                        id={"loan_collateral_ratio_tooltip"}
+                    />
                 </Col>
                 <Col>{collateralRatio}%</Col>
             </Row>
@@ -34,7 +42,7 @@ export default function LoanProductDetails(props) {
             </Row>
             <Row>
                 <Col>
-                    Defaulting fee: <DefaultingFeeTooltip />
+                    Defaulting fee: <DefaultingFeeTooltip id={"defaulting_fee_tooltip"} />
                 </Col>
                 <Col>{prod.defaultingFeePt * 100} %</Col>
             </Row>

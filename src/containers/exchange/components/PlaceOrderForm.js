@@ -86,7 +86,7 @@ class PlaceOrderForm extends React.Component {
         } else {
             const tokenAmount = parseFloat(this.props.tokenAmount);
             if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
-                const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
                 this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
             } else {
                 // tokenAmount is not entered yet
@@ -253,7 +253,7 @@ class PlaceOrderForm extends React.Component {
                                 normalize={Normalizations.twoDecimals}
                                 data-testid="priceInput"
                                 style={{ borderRadius: "0" }}
-                                labelAlignLeft={<PriceToolTip />}
+                                labelAlignLeft={<PriceToolTip id={"place_order_form"} />}
                                 labelAlignRight="%"
                             />
 
