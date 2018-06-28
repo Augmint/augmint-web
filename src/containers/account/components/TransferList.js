@@ -2,7 +2,7 @@ import React from "react";
 import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
-import { MoreInfoTip } from "components/ToolTip";
+import { MoreInfoTip } from "components/toolTip";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 
@@ -37,7 +37,7 @@ export default class TransferList extends React.Component {
                                         shortAddress={true}
                                     />
                                 )}{" "}
-                                <MoreInfoTip header="Transaction details" icon="info">
+                                <MoreInfoTip header="Transaction details" icon="info" id={"transfer-" + index}>
                                     blockNumber: {tx.blockNumber}
                                     <br />blockHash: <small>{tx.blockHash}</small>
                                     <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}

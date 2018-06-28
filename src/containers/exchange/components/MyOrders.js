@@ -3,7 +3,7 @@ import React from "react";
 import { Pblock } from "components/PageLayout";
 import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTable } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
-import { MoreInfoTip } from "components/ToolTip";
+import { MoreInfoTip } from "components/toolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
 import CancelOrderButton from "./CancelOrderButton";
 
@@ -38,7 +38,7 @@ const OrderItem = props => {
             <Col width={2}>{price} %</Col>
 
             <Col width={2}>
-                <MoreInfoTip>
+                <MoreInfoTip id={"my_order_more_info-" + order.id}>
                     {order.direction === TOKEN_SELL && (
                         <p>
                             Sell {order.amount} A€ @{price}% of current {ethFiatRate} A€/ETH = <br />
@@ -85,7 +85,7 @@ const OrderList = props => {
                     </Col>
 
                     <Col width={2}>
-                        <strong>Price</strong> <PriceToolTip />
+                        <strong>Price</strong> <PriceToolTip id={"myOrders"} />
                     </Col>
 
                     <Col width={2} />
