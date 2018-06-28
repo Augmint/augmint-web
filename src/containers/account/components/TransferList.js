@@ -4,6 +4,7 @@ import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as C
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/ToolTip";
 import AccountAddress from "components/accountAddress";
+import HashURL from "components/hash";
 
 export default class TransferList extends React.Component {
     render() {
@@ -41,7 +42,8 @@ export default class TransferList extends React.Component {
                                     <br />blockHash: <small>{tx.blockHash}</small>
                                     <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
                                     <br />transactionIndex: {tx.transactionIndex}
-                                    <br />transaction hash: <small>{tx.transactionHash}</small>
+                                    <br />
+                                    <HashURL hash={tx.transactionHash} />
                                 </MoreInfoTip>
                             </Col>
                         </Row>
