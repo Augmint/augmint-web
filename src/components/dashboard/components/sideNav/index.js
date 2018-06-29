@@ -147,7 +147,6 @@ export const SideNavLink = styled(NavLink)`
 `;
 
 
-// export default props => (
 export default class SiteNav extends React.Component {
     constructor(props) {
         super(props);
@@ -160,7 +159,6 @@ export default class SiteNav extends React.Component {
     render() {
 
         return(
-            // <SideNav className={this.props.showMenu ? "show" : "hidden"}>
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
                     src={this.props.showMenu ? close : hamburgerMenu}
