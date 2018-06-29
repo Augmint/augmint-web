@@ -53,7 +53,7 @@
     content: "\00a0"; /* &nbsp; */
     display: block;
     /* margin-top: var(--space); */
-    height: 0px;
+    height: 0;
     visibility: hidden;
 }
 @media (--break-lg) {
@@ -65,6 +65,12 @@
          margin-top: var(--space-lg);
     }
     */
+}
+
+@media (max-width: 768px) {
+    .Site-content.App-content {
+        padding-left: 0;
+    }
 }
 
 .Site-content--full {

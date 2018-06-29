@@ -26,7 +26,7 @@ import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
 import Roadmap from "containers/roadmap";
-import AppMenu from "components/navigation";
+import SiteMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
 
@@ -124,14 +124,17 @@ class App extends React.Component {
                 }
                 <TopNav web3Connect={this.props.web3Connect} className={!showConnection && "hide"} />
                 {!showConnection &&
-                    <AppMenu
+                    <SiteMenu
                         web3Connect={this.props.web3Connect}
                         location={this.props.location}
                         showMenu={this.state.showMobileMenu}
                         toggleMenu={this.toggleMenu}
                     />
                 }
-                {showConnection ? <SideNav /> : null}
+                {showConnection 
+                    ? <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} /> 
+                    : null
+                }
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
                     {showConnection && (
