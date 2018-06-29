@@ -2,22 +2,15 @@ import React from "react";
 import Grid from "styled-components-grid";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
-import Divider from "components/augmint-ui/divider";
 import Segment from "components/augmint-ui/segment";
 
 import theme from "styles/theme";
-
-import { FeatureContext } from "modules/services/featureService";
 
 export function Pheader(props) {
     const { children, header, className, ...other } = props;
     return <Container {...other}>
         {header && <Header className={className} as="h1">{header}</Header>}
         {children}
-        <FeatureContext.Consumer>
-            {features => (features.dashboard ? null : <Divider />)}
-        </FeatureContext.Consumer>
-
     </Container>;
 }
 
@@ -70,28 +63,7 @@ Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid;
 
 export function Pblock(props) {
-    return (
-        <FeatureContext.Consumer>
-            {
-                features => {
-                    const BlockEl = features.dashboard ? DashBlock : LegacyPblock;
-                    return (
-                        <BlockEl {...props} />
-                    );
-                }
-            }
-        </FeatureContext.Consumer>
-    );
-}
-
-function LegacyPblock(props) {
-    const { children, header, ...other } = props;
-    return (
-        <Segment {...other}>
-            <Header as="h2" content={header} />
-            {children}
-        </Segment>
-    );
+    return <DashBlock {...props} />
 }
 
 function DashBlock(props) {

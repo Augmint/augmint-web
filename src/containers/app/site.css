@@ -24,7 +24,7 @@
     height: 100%; /* 1, 3 */
 }
 
-.Site__dash {
+.App {
     background: #f8f8f8;
     padding-top: 50px;
     width: auto;
@@ -45,7 +45,7 @@
     display: none;
 }
 
-.Site-content.Site-content__dash {
+.Site-content.App-content {
     padding-left: 180px;
     width: auto;
 }
