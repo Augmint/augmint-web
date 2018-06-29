@@ -39,10 +39,9 @@ describe("Locks", function() {
                     cy.get("[data-testid=LockListBlock] [data-testid=releaseLockButton]")
                         .first()
                         .click();
-                    cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("Funds release transaction submitted");
                     cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]", {
                         timeout: 20000
-                    }).click();
+                    });
                 });
         });
     });
