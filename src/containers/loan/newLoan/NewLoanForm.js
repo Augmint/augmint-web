@@ -10,7 +10,7 @@ import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
-import ToolTip from "components/ToolTip";
+import ToolTip from "components/toolTip";
 import { ONE_ETH_IN_WEI, PPM_DIV } from "utils/constants";
 
 const ETH_DECIMALS = 5;
@@ -148,7 +148,7 @@ class NewLoanForm extends React.Component {
                             data-testid="loanTokenAmountInput"
                             style={{ borderRadius: "0" }}
                             labelAlignLeft={
-                                <ToolTip>
+                                <ToolTip id={"loan_amount"}>
                                     Disbursed loan amount (paid out) = Repayable loan amount - Interest amount<br />
                                     Interest amount = Disbursed loan amount x Interest rate per annum / 365 x Loan term
                                     in days
@@ -171,7 +171,7 @@ class NewLoanForm extends React.Component {
                             data-testid="repaymentAmountInput"
                             style={{ borderRadius: "0" }}
                             labelAlignLeft={
-                                <ToolTip>
+                                <ToolTip id={"repayment_amount"}>
                                     Loan A-EUR amount to be paid back = Disbursed loan amount + Interest amount<br />
                                     Interest amount = Disbursed loan amount x Interest rate per annum / 365 x Loan term
                                     in days
@@ -194,7 +194,7 @@ class NewLoanForm extends React.Component {
                             data-testid="ethAmountInput"
                             style={{ borderRadius: "0" }}
                             labelAlignLeft={
-                                <ToolTip>
+                                <ToolTip id={"collateral"}>
                                     ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 / Coverage
                                     ratio)
                                     <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )

@@ -15,7 +15,7 @@ describe("Locks", function() {
 
         return cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
             cy.contains("New lock");
-            cy.contains("Tx hash:");
+            cy.contains("View on Etherscan.");
             cy.get("[data-testid=msgPanelOkButton]").click();
         });
     };
@@ -39,8 +39,9 @@ describe("Locks", function() {
                     cy.get("[data-testid=LockListBlock] [data-testid=releaseLockButton]")
                         .first()
                         .click();
-                    cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("Funds release transaction submitted");
-                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]", {
+                        timeout: 20000
+                    });
                 });
         });
     });
