@@ -1,25 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Pgrid, Pblock } from "components/PageLayout";
+import { Pgrid } from "components/PageLayout";
 import store from "modules/store";
 import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
 import { newLoan, LOANTRANSACTIONS_NEWLOAN_CREATED } from "modules/reducers/loanTransactions";
-import LoanProductDetails from "containers/loan/components/LoanProductDetails";
 import NewLoanForm from "./NewLoanForm";
 import NewLoanSuccess from "./NewLoanSuccess";
-
-// TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
-//import { push } from 'react-router-redux'
-//import { Route, Redirect } from 'react-router-dom';
 
 class NewLoanPage extends React.Component {
     constructor(props) {
         super(props);
-        const productId = this.props.match.params.loanProductId;
         this.state = {
-            product: null,
-            productId: productId,
+            products: props.loanManager.products,
+            productId: 0,
             isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,18 +85,9 @@ class NewLoanPage extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={6 / 16}>
-                        <Pblock
-                            data-testid="selectedLoanProductBlock"
-                            header={"Selected: loan product " + (this.state.product.id + 1)}
-                        >
-                            <LoanProductDetails product={this.state.product} />
-                        </Pblock>
-                    </Pgrid.Column>
-                    <Pgrid.Column size={10 / 16}>
+                    <Pgrid.Column>
                         {!this.state.submitSucceeded && (
                             <NewLoanForm
-                                product={this.state.product}
                                 rates={this.props.rates}
                                 loanManager={this.props.loanManager}
                                 onSubmit={this.handleSubmit}
