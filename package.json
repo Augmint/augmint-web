@@ -10,7 +10,7 @@
     "bignumber.js": "5.0.0",
     "del": "3.0.0",
     "ethereumjs-util": "5.2.0",
-    "ethers": "3.0.24",
+    "ethers": "3.0.25",
     "hdkey": "0.8.0",
     "moment": "2.22.2",
     "parse": "1.11.1",
