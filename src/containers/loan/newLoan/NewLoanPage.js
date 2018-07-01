@@ -13,7 +13,6 @@ class NewLoanPage extends React.Component {
         super(props);
         this.state = {
             products: props.loanManager.products,
-            productId: 0,
             isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,37 +20,22 @@ class NewLoanPage extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.products !== this.props.products) {
-            this.setProduct(); // needed when landing from on URL directly
+            this.setState({
+                isLoading: false
+            });
         }
     }
 
     componentDidMount() {
-        this.setProduct(); // needed when landing from Link within App
-    }
-
-    setProduct() {
-        // workaround b/c landing directly on URL and from LoanSelector triggers different events.
-        if (this.props.products == null) {
-            return;
-        } // not loaded yet
-        let isProductFound;
-        let product = this.props.products[this.state.productId];
-        if (typeof product === "undefined") {
-            isProductFound = false;
-        } else {
-            isProductFound = true;
-        }
         this.setState({
-            isLoading: false,
-            product: product,
-            isProductFound: isProductFound
+            isLoading: false
         });
     }
 
     async handleSubmit(values) {
         // e.preventDefault(); // not needed with redux-form?
         // TODO: add productId to Form and change state ref here to values.prodcutId ?
-        const res = await store.dispatch(newLoan(this.state.productId, values.ethAmount));
+        const res = await store.dispatch(newLoan(values.productId, values.ethAmount));
         if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: res.error
@@ -68,17 +52,8 @@ class NewLoanPage extends React.Component {
     render() {
         let msg;
         if (this.state.isLoading) {
-            msg = <LoadingPanel>Fetching data (loan product id: {this.state.productId})...</LoadingPanel>;
-        } else if (!this.state.isProductFound) {
-            msg = <ErrorPanel>Can't find this loan product (loan product id: {this.state.productId}) </ErrorPanel>;
-        } else if (!this.state.product.isActive) {
-            msg = (
-                <ErrorPanel>
-                    This loan product is not active currently (loan product id: {this.state.productId}){" "}
-                </ErrorPanel>
-            );
+            msg = <LoadingPanel>Fetching data...</LoadingPanel>;
         }
-
         if (msg) {
             return msg;
         }

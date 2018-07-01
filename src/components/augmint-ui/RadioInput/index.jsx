@@ -17,7 +17,7 @@ export default function RadioInput(props) {
                     {...other}
                 />
                 <label for={id}>
-                    <div>{label}</div>
+                    <div data-testid={"label-" + id}>{label}</div>
                 </label>
             </StyledContainer>
         );

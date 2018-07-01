@@ -25,7 +25,8 @@ const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
-        this.products = this.props.loanManager.products
+        this.products = this.props.loanManager.products;
+        this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
             .sort((p1, p2) => p1.termInSecs < p2.termInSecs);
         this.product = props.loanManager.products[this.defaultProductId()];
@@ -54,14 +55,12 @@ class NewLoanForm extends React.Component {
     }
 
     defaultProductId() {
-        let productId = this.defaultId;
+        let productId = this.activeProducts[0].id;
 
-        if (!productId) {
-            productId = this.products[0].id;
-            this.setState({
-                defaultId: productId
-            });
-        }
+        this.setState({
+            productId: productId
+        });
+
         return productId;
     }
 
@@ -162,6 +161,7 @@ class NewLoanForm extends React.Component {
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_UP);
         this.setState({
+            productId: e.target.value,
             product: product,
             minToken: Validations.minTokenAmount(product.minDisbursedAmountInToken),
             maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
@@ -238,8 +238,8 @@ class NewLoanForm extends React.Component {
                         />
                         <Pgrid>
                             <Pgrid.Row halign="center">
-                                {this.products &&
-                                    this.products.map((product, index) => {
+                                {this.activeProducts &&
+                                    this.activeProducts.map((product, index) => {
                                         return (
                                             <Pgrid.Column
                                                 size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}
@@ -262,7 +262,9 @@ class NewLoanForm extends React.Component {
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div>Repayment amount: {this.state.repaymentAmount || 0} A-EUR</div>
+                        <div data-testid="repaymentAmount">
+                            Repayment amount: {this.state.repaymentAmount || 0} A-EUR
+                        </div>
                         <LoanProductDetails product={this.state.product} />
                         <Button
                             size="big"
