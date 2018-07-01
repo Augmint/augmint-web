@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
 import store from "modules/store";
-import { ErrorPanel, LoadingPanel } from "components/MsgPanels";
+import { LoadingPanel } from "components/MsgPanels";
 import { SubmissionError } from "redux-form";
 import { newLoan, LOANTRANSACTIONS_NEWLOAN_CREATED } from "modules/reducers/loanTransactions";
 import NewLoanForm from "./NewLoanForm";

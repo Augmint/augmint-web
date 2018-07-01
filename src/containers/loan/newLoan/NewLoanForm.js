@@ -33,6 +33,7 @@ class NewLoanForm extends React.Component {
         this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onSelectedLoanChange = this.onSelectedLoanChange.bind(this);
+        this.defaultProductId = this.onSelectedLoanChange.bind(this);
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
 
@@ -57,9 +58,7 @@ class NewLoanForm extends React.Component {
     defaultProductId() {
         let productId = this.activeProducts[0].id;
 
-        this.setState({
-            productId: productId
-        });
+        this.props.change("productId", productId);
 
         return productId;
     }

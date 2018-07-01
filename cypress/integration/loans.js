@@ -36,7 +36,9 @@ describe("Loans", function() {
             cy.get("[data-testid=reservesMenuLink").click();
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
-            cy.get("[data-testid=collectLoanButton]").click();
+            cy.get("[data-testid=collectLoanButton]")
+                .should("be.visible")
+                .click();
 
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
             cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
