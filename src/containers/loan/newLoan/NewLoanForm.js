@@ -186,59 +186,78 @@ class NewLoanForm extends React.Component {
                 )}
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
-                        <label>
-                            A-EUR amount to loan
-                            <ToolTip id={"loan_amount"}>
-                                Disbursed loan amount (paid out) = Repayable loan amount - Interest amount<br />
-                                Interest amount = Disbursed loan amount x Interest rate per annum / 365 x Loan term in
-                                days
-                            </ToolTip>
-                        </label>
-                        <Field
-                            component={Form.Field}
-                            as={Form.Input}
-                            name="loanTokenAmount"
-                            type="number"
-                            disabled={submitting || !loanManager.isLoaded}
-                            validate={[
-                                Validations.required,
-                                Validations.tokenAmount,
-                                this.state.maxLoanAmount,
-                                this.state.minToken
-                            ]}
-                            normalize={Normalizations.twoDecimals}
-                            onChange={this.onLoanTokenAmountChange}
-                            placeholder="pay out"
-                            data-testid="loanTokenAmountInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="A-EUR"
-                        />
+                        <Pgrid>
+                            <Pgrid.Row halign="justify">
+                                <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
+                                    <label>
+                                        A-EUR amount to loan
+                                        <ToolTip id={"loan_amount"}>
+                                            Disbursed loan amount (paid out) = Repayable loan amount - Interest amount<br />
+                                            Interest amount = Disbursed loan amount x Interest rate per annum / 365 x
+                                            Loan term in days
+                                        </ToolTip>
+                                    </label>
+                                    <Field
+                                        component={Form.Field}
+                                        as={Form.Input}
+                                        name="loanTokenAmount"
+                                        type="number"
+                                        disabled={submitting || !loanManager.isLoaded}
+                                        validate={[
+                                            Validations.required,
+                                            Validations.tokenAmount,
+                                            this.state.maxLoanAmount,
+                                            this.state.minToken
+                                        ]}
+                                        normalize={Normalizations.twoDecimals}
+                                        onChange={this.onLoanTokenAmountChange}
+                                        placeholder="pay out"
+                                        data-testid="loanTokenAmountInput"
+                                        style={{ borderRadius: theme.borderRadius.left }}
+                                        labelAlignRight="A-EUR"
+                                    />
+                                </Pgrid.Column>
+                                <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
+                                    <label>
+                                        ETH amount to collateral
+                                        <ToolTip id={"collateral"}>
+                                            ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 /
+                                            Coverage ratio)
+                                            <br />( ETH/EUR Rate ={" "}
+                                            {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
+                                        </ToolTip>
+                                    </label>
+                                    <Field
+                                        component={Form.Field}
+                                        as={Form.Input}
+                                        name="ethAmount"
+                                        type="number"
+                                        placeholder="amount taken to escrow"
+                                        disabled={submitting || !loanManager.isLoaded}
+                                        validate={[
+                                            Validations.required,
+                                            Validations.ethAmount,
+                                            Validations.ethUserBalance
+                                        ]}
+                                        normalize={Normalizations.fiveDecimals}
+                                        onChange={this.onEthAmountChange}
+                                        data-testid="ethAmountInput"
+                                        style={{ borderRadius: theme.borderRadius.left }}
+                                        labelAlignRight="ETH"
+                                    />
+                                </Pgrid.Column>
+                            </Pgrid.Row>
+                        </Pgrid>
 
-                        <label>
-                            ETH amount to collateral
-                            <ToolTip id={"collateral"}>
-                                ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 / Coverage ratio)
-                                <br />( ETH/EUR Rate = {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
-                            </ToolTip>
-                        </label>
-                        <Field
-                            component={Form.Field}
-                            as={Form.Input}
-                            name="ethAmount"
-                            type="number"
-                            placeholder="amount taken to escrow"
-                            disabled={submitting || !loanManager.isLoaded}
-                            validate={[Validations.required, Validations.ethAmount, Validations.ethUserBalance]}
-                            normalize={Normalizations.fiveDecimals}
-                            onChange={this.onEthAmountChange}
-                            data-testid="ethAmountInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="ETH"
-                        />
                         <Pgrid>
                             <Pgrid.Row halign="center">
                                 {this.activeProducts &&
                                     this.activeProducts.map((product, index) => {
+                                        let label = (
+                                            <div>
+                                                Repay in <h4 style={{ margin: 0 }}>{product.termText}</h4>
+                                            </div>
+                                        );
                                         return (
                                             <Pgrid.Column
                                                 size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}
@@ -252,7 +271,7 @@ class NewLoanForm extends React.Component {
                                                     defaultChecked={!index}
                                                     component={RadioInput}
                                                     isButtonStyle={true}
-                                                    label={"Repay in " + product.termText}
+                                                    label={label}
                                                     onChange={this.onSelectedLoanChange}
                                                 />
                                             </Pgrid.Column>
@@ -261,19 +280,21 @@ class NewLoanForm extends React.Component {
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div data-testid="repaymentAmount">
-                            Repayment amount: {this.state.repaymentAmount || 0} A-EUR
+                        <LoanProductDetails
+                            product={this.state.product}
+                            repaymentAmount={this.state.repaymentAmount || 0}
+                        />
+                        <div style={{ textAlign: "right", width: "100%" }}>
+                            <Button
+                                size="big"
+                                data-testid="submitBtn"
+                                loading={submitting}
+                                disabled={pristine}
+                                type="submit"
+                            >
+                                {submitting ? "Submitting..." : "Get loan"}
+                            </Button>
                         </div>
-                        <LoanProductDetails product={this.state.product} />
-                        <Button
-                            size="big"
-                            data-testid="submitBtn"
-                            loading={submitting}
-                            disabled={pristine}
-                            type="submit"
-                        >
-                            {submitting ? "Submitting..." : "Get loan"}
-                        </Button>
                     </Form>
                 )}
             </div>
