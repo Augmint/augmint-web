@@ -67,7 +67,7 @@ export const StyledHeaderH2 = styled.h2`
     ${BaseHeader};
     ${HeaderH2};
 
-    .Site__dash & {
+    .App & {
         font-size: ${remCalc(24)};
         margin: 0;
     }

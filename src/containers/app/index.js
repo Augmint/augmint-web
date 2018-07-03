@@ -14,8 +14,6 @@ import ReactGA from "react-ga";
 import { injectGlobal } from "styled-components";
 import theme from "styles/theme";
 
-import { FeatureContext } from "modules/services/featureService";
-
 import AccountHome from "containers/account";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
@@ -28,7 +26,7 @@ import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
 import Roadmap from "containers/roadmap";
-import AppMenu from "components/navigation";
+import SiteMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
 
@@ -119,64 +117,60 @@ class App extends React.Component {
             ["account", "exchange", "loan", "reserves", "lock", "tryit", "loan", "under-the-hood"].indexOf(mainPath) >
             -1;
         return (
-            <FeatureContext.Consumer>
-                {features => {
-                    const showDash = features.dashboard && showConnection;
-                    return (
-                        <div className={showDash ? "Site Site__dash" : "Site"}>
-                            <ScrollToTop />
-                            {showDash &&
-                                <DisclaimerModal />
-                            }
-                            <TopNav web3Connect={this.props.web3Connect} className={!showDash && "hide"} />
-                            {!showDash &&
-                                <AppMenu
-                                    web3Connect={this.props.web3Connect}
-                                    location={this.props.location}
-                                    showMenu={this.state.showMobileMenu}
-                                    toggleMenu={this.toggleMenu}
-                                />
-                            }
-                            {showDash ? <SideNav /> : null}
+            <div className={showConnection ? "Site App" : "Site"}>
+                <ScrollToTop />
+                {showConnection &&
+                    <DisclaimerModal />
+                }
+                <TopNav web3Connect={this.props.web3Connect} className={!showConnection && "hide"} />
+                {!showConnection &&
+                    <SiteMenu
+                        web3Connect={this.props.web3Connect}
+                        location={this.props.location}
+                        showMenu={this.state.showMobileMenu}
+                        toggleMenu={this.toggleMenu}
+                    />
+                }
+                {showConnection 
+                    ? <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} /> 
+                    : null
+                }
 
-                            <div className={showDash ? "Site-content Site-content__dash" : "Site-content"}>
-                                {showConnection && (
-                                    <div>
-                                        <EthereumTxStatus />
-                                        <LegacyLoanManagers />
-                                        <LegacyLockers />
-                                        <LegacyExchanges />
-                                        <LegacyTokens />
-                                    </div>
-                                )}
-
-                                <Switch>
-                                    <Route exact path="/" component={NotConnectedHome} />
-                                    <Route exact path="/account" component={AccountHome} />
-                                    <Route exact path="/exchange" component={ExchangeHome} />
-                                    <Route exact path="/reserves" component={AugmintToken} />
-                                    <Route path="/loan" component={LoanMain} />
-
-                                    <Route exact path="/concept" component={Concept} />
-                                    <Route exact path="/tryit" component={TryIt} />
-                                    <Route exact path="/under-the-hood" component={UnderTheHood} />
-                                    <Route exact path="/contact" component={Contact} />
-                                    <Route exact path="/manifesto" component={Manifesto} />
-                                    <Route exact path="/disclaimer" component={Disclaimer} />
-                                    <Route exact path="/roadmap" component={Roadmap} />
-                                    <Route exact path="/lock" component={LockContainer} />
-                                    <Route component={PageNotFound} />
-                                </Switch>
-                            </div>
-                            {showDash ? null : (
-                                <div className="Site-footer">
-                                    <AppFooter web3Connect={this.props.web3Connect} />
-                                </div>
-                            )}
+                <div className={showConnection ? "Site-content App-content" : "Site-content"}>
+                    {showConnection && (
+                        <div>
+                            <EthereumTxStatus />
+                            <LegacyLoanManagers />
+                            <LegacyLockers />
+                            <LegacyExchanges />
+                            <LegacyTokens />
                         </div>
-                    );
-                }}
-            </FeatureContext.Consumer>
+                    )}
+
+                    <Switch>
+                        <Route exact path="/" component={NotConnectedHome} />
+                        <Route exact path="/account" component={AccountHome} />
+                        <Route exact path="/exchange" component={ExchangeHome} />
+                        <Route exact path="/reserves" component={AugmintToken} />
+                        <Route path="/loan" component={LoanMain} />
+
+                        <Route exact path="/concept" component={Concept} />
+                        <Route exact path="/tryit" component={TryIt} />
+                        <Route exact path="/under-the-hood" component={UnderTheHood} />
+                        <Route exact path="/contact" component={Contact} />
+                        <Route exact path="/manifesto" component={Manifesto} />
+                        <Route exact path="/disclaimer" component={Disclaimer} />
+                        <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/lock" component={LockContainer} />
+                        <Route component={PageNotFound} />
+                    </Switch>
+                </div>
+                {showConnection ? null : (
+                    <div className="Site-footer">
+                        <AppFooter web3Connect={this.props.web3Connect} />
+                    </div>
+                )}
+            </div>
         );
     }
 }

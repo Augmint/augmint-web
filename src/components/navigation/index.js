@@ -20,7 +20,7 @@ import augmintLogo3x from "assets/images/logo/logo@3x.png";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
 
-function AppMenuItem(props) {
+function SiteMenuItem(props) {
     return (
         <StyleNavItem>
             <StyleNavLink {...props}>{props.children}</StyleNavLink>
@@ -28,7 +28,7 @@ function AppMenuItem(props) {
     );
 }
 
-export default class AppMenu extends React.Component {
+export default class SiteMenu extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
@@ -57,15 +57,15 @@ export default class AppMenu extends React.Component {
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
                         <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
-                            <AppMenuItem isActive={() => currentLocation === "/"} to="/">
+                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
                                 Home
-                            </AppMenuItem>
-                            <AppMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
+                            </SiteMenuItem>
+                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
                                 Concept
-                            </AppMenuItem>
-                            <AppMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
+                            </SiteMenuItem>
+                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
                                 Roadmap
-                            </AppMenuItem>
+                            </SiteMenuItem>
                         </StyleNavList>
                     </StyledNavLeftSide>
                     <Button
