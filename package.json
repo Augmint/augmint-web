@@ -10,7 +10,7 @@
     "bignumber.js": "5.0.0",
     "del": "3.0.0",
     "ethereumjs-util": "5.2.0",
-    "ethers": "3.0.24",
+    "ethers": "3.0.25",
     "hdkey": "0.8.0",
     "moment": "2.22.2",
     "parse": "1.11.1",
@@ -52,7 +52,7 @@
     "cypress": "3.0.2",
     "eslint-plugin-cypress": "2.0.1",
     "husky": "0.14.3",
-    "prettier": "1.13.6",
+    "prettier": "1.13.7",
     "pretty-quick": "1.6.0"
   },
   "greenkeeper": {
