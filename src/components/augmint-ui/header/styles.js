@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import { media } from "styles/media";
 import { remCalc } from "styles/theme";
 
 const BaseHeader = `
@@ -53,7 +54,8 @@ const HeaderH2 = `
 `;
 
 const HeaderH1 = `
-    font-size: ${theme.typography.fontSizes.h1};
+    // font-size: ${theme.typography.fontSizes.h1};
+    font-size: 2rem;
     line-height: ${theme.typography.fontSizes.h1};
     margin-bottom: ${remCalc(14)};
 `;

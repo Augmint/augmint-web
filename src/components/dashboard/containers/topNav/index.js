@@ -39,19 +39,19 @@ class TopNav extends React.Component {
                     <StyledTopNavLi className="account">
                         <StyledTopNavLinkRight title="Your account" to="/account" className="accountDetails">
                             <Icon name="account" className="accountIcon" />
-                            <StyledPrice>
+                            <StyledPrice className="accountInfoContainer">
                                 <span className="accountDetailsInfo">
                                     {ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH
                                 </span>
                             </StyledPrice>
                             <StyledSeparator />
-                            <StyledPrice>
+                            <StyledPrice className="accountInfoContainer">
                                 <span className="accountDetailsInfo">
                                     {tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€
                                 </span>
                             </StyledPrice>
                             <StyledSeparator />
-                            <StyledPrice>
+                            <StyledPrice className="accountInfoContainer">
                                 <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
