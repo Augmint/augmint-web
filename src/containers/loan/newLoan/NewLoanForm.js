@@ -41,7 +41,8 @@ class NewLoanForm extends React.Component {
             product: this.product,
             minToken: Validations.minTokenAmount(this.product.minDisbursedAmountInToken),
             maxLoanAmount: Validations.maxLoanAmount(this.product.maxLoanAmount),
-            repaymentAmount: 0
+            repaymentAmount: 0,
+            amountChanged: ""
         };
     }
 
@@ -84,6 +85,7 @@ class NewLoanForm extends React.Component {
 
     onLoanTokenAmountChange(e) {
         let val;
+        const amount = e ? e.target.value : this.state.loanTokenAmount;
         try {
             val = new BigNumber(e.target.value).mul(DECIMALS_DIV);
         } catch (error) {
@@ -107,15 +109,17 @@ class NewLoanForm extends React.Component {
 
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
         this.setState({
+            loanTokenAmount: amount,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
-            loanTokenAmount: e.target.value
+            amountChanged: "A-EURO"
         });
     }
 
     onEthAmountChange(e) {
         let val;
+        const amount = e ? e.target.value : this.state.ethAmount;
         try {
-            val = new BigNumber(e.target.value).mul(ONE_ETH_IN_WEI);
+            val = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
         } catch (error) {
             this.props.change("loanTokenAmount", "");
             this.setState({ repaymentAmount: "" });
@@ -137,35 +141,29 @@ class NewLoanForm extends React.Component {
             .round(0, BigNumber.ROUND_DOWN);
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
-        this.setState({ repaymentAmount: repaymentAmount / DECIMALS_DIV });
+        this.setState({
+            ethAmount: amount,
+            repaymentAmount: repaymentAmount / DECIMALS_DIV,
+            amountChanged: "ETH"
+        });
     }
 
     onSelectedLoanChange(e) {
         let product = this.products[e.target.value];
-        let val;
-        try {
-            val = new BigNumber(this.state.loanTokenAmount).mul(DECIMALS_DIV);
-        } catch (error) {
-            this.setState({
-                product: product,
-                minToken: Validations.minTokenAmount(product.minDisbursedAmountInToken),
-                maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
-                repaymentAmount: ""
-            });
-            return;
-        }
 
-        const repaymentAmount = val
-            .div(product.bn_discountRate)
-            .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_UP);
         this.setState({
             productId: e.target.value,
             product: product,
             minToken: Validations.minTokenAmount(product.minDisbursedAmountInToken),
-            maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
-            repaymentAmount: repaymentAmount / DECIMALS_DIV
+            maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount)
         });
+        if (this.state.amountChanged) {
+            if (this.state.amountChanged === "ETH") {
+                this.onEthAmountChange();
+            } else {
+                this.onLoanTokenAmountChange();
+            }
+        }
     }
 
     render() {
