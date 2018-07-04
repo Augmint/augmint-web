@@ -2,6 +2,7 @@ import React from "react";
 import { ConnectionStatus } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Statistic from "components/augmint-ui/statistic";
+import { Pgrid } from "components/PageLayout";
 
 export class EarningStats extends React.Component {
     render() {
@@ -15,28 +16,31 @@ export class EarningStats extends React.Component {
         return (
             <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
                 <ConnectionStatus contract={augmintToken} />
-                <Statistic.Group>
-                    <Statistic
-                        data-testid="feeAccountTokenBalance"
-                        style={{ padding: "1em" }}
-                        label="A-EUR fee account"
-                        value={feeAccountTokenBalance + " A-EUR"}
-                    />
-
-                    <Statistic
-                        data-testid="feeAccountTokenBalance"
-                        style={{ padding: "1em" }}
-                        label="ETH fee account"
-                        value={feeAccountEthBalance + " ETH"}
-                    />
-
-                    <Statistic
-                        data-testid="interestEarnedAccountTokenBalance"
-                        style={{ padding: "1em" }}
-                        label="Earned interest account"
-                        value={interestEarnedAccountTokenBalance + " A-EUR"}
-                    />
-                </Statistic.Group>
+                <Pgrid>
+                    <Pgrid.Row halign="justify">
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic
+                                data-testid="feeAccountTokenBalance"
+                                label="A-EUR fee account"
+                                value={feeAccountTokenBalance + " A€"}
+                            />
+                        </Pgrid.Column>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic
+                                data-testid="feeAccountTokenBalance"
+                                label="ETH fee account"
+                                value={feeAccountEthBalance + " ETH"}
+                            />
+                        </Pgrid.Column>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic
+                                data-testid="interestEarnedAccountTokenBalance"
+                                label="Earned interest account"
+                                value={interestEarnedAccountTokenBalance + " A€"}
+                            />
+                        </Pgrid.Column>
+                    </Pgrid.Row>
+                </Pgrid>
             </Segment>
         );
     }

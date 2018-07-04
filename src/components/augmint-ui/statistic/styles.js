@@ -22,6 +22,8 @@ const BaseValue = `
     line-height: ${remCalc(42)};
     margin-top: 0;
     text-size-adjust: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export const StyledLabel = styled.div`
