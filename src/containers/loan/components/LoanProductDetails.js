@@ -5,9 +5,18 @@ import { LoanInterestRatePaToolTip, LoanCollateralRatioToolTip, DefaultingFeeToo
 
 export default function LoanProductDetails(props) {
     const prod = props.product;
+    const repaymentAmount = props.repaymentAmount;
     const collateralRatio = Number((prod.collateralRatio * 100).toFixed(2));
     return (
         <MyGridTable>
+            <Row>
+                <Col>
+                    <strong>Repayment amount:</strong>
+                </Col>
+                <Col data-testid="repaymentAmount">
+                    <strong>{repaymentAmount || 0} A-EUR</strong>
+                </Col>
+            </Row>
             <Row>
                 <Col>Repay:</Col>
                 <Col>
@@ -35,7 +44,7 @@ export default function LoanProductDetails(props) {
                 <Col>{collateralRatio}%</Col>
             </Row>
             <Row>
-                <Col>Min / max payout:</Col>
+                <Col>Min / max loan:</Col>
                 <Col>
                     {prod.minDisbursedAmountInToken} A-EUR / {prod.maxLoanAmount} A-EUR
                 </Col>

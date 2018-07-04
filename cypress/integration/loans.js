@@ -2,13 +2,13 @@ describe("Loans", function() {
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.get("[data-testid=getLoanMenuLink]").click();
 
-        cy.get(`[data-testid=selectLoanProduct-${prodId}]`).click();
-        cy.get("[data-testid=selectedLoanProductBlock]").should("contain", "Selected: loan product " + (prodId + 1));
+        cy.get(`[data-testid=label-selectLoanProduct-${prodId}]`).click();
+
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy.get("[data-testid=loanTokenAmountInput]")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
-        cy.get("[data-testid=repaymentAmountInput]").should("have.value", repaymentAmount.toString());
+        cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=submitBtn]").click();
@@ -36,7 +36,9 @@ describe("Loans", function() {
             cy.get("[data-testid=reservesMenuLink").click();
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
-            cy.get("[data-testid=collectLoanButton]").click();
+            cy.get("[data-testid=collectLoanButton]")
+                .should("be.visible")
+                .click();
 
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
             cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
