@@ -151,19 +151,23 @@ class NewLoanForm extends React.Component {
     onSelectedLoanChange(e) {
         let product = this.products[e.target.value];
 
-        this.setState({
-            productId: e.target.value,
-            product: product,
-            minToken: Validations.minTokenAmount(product.minDisbursedAmountInToken),
-            maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount)
-        });
-        if (this.state.amountChanged) {
-            if (this.state.amountChanged === "ETH") {
-                this.onEthAmountChange();
-            } else {
-                this.onLoanTokenAmountChange();
+        this.setState(
+            {
+                productId: e.target.value,
+                product: product,
+                minToken: Validations.minTokenAmount(product.minDisbursedAmountInToken),
+                maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount)
+            },
+            () => {
+                if (this.state.amountChanged) {
+                    if (this.state.amountChanged === "ETH") {
+                        this.onEthAmountChange();
+                    } else {
+                        this.onLoanTokenAmountChange();
+                    }
+                }
             }
-        }
+        );
     }
 
     render() {
