@@ -291,6 +291,7 @@ class NewLoanForm extends React.Component {
                                 loading={submitting}
                                 disabled={pristine}
                                 type="submit"
+                                style={{ height: "auto", padding: "10px 55px" }}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}
                             </Button>
