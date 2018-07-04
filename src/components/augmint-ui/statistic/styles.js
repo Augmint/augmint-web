@@ -46,8 +46,8 @@ export const StyledContainer = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     font-size: ${remCalc(14)};
     line-height: ${remCalc(20)};
-    margin: 0 0 ${remCalc(28)};
-    padding: ${remCalc(14)};
+    margin: 0;
+    padding: 0;
     text-align: center;
     text-size-adjust: 100%;
     min-width: 33.33%;
@@ -67,7 +67,7 @@ export const StyledGroup = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     font-size: ${remCalc(14)};
     line-height: ${remCalc(20)};
-    margin: 0 0 ${remCalc(-28)};
+    margin: 0;
     text-align: center;
     text-size-adjust: 100%;
 

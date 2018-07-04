@@ -13,7 +13,7 @@ export class TotalSupply extends React.Component {
         const { issuedByStabilityBoard } = monetarySupervisor.info;
 
         return (
-            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)} style={{ padding: 0 }}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group className="centered">

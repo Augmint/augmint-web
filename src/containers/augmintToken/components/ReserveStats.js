@@ -19,7 +19,7 @@ export class ReserveStats extends React.Component {
                 : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
-            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)} style={{ padding: 0 }}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Pgrid>

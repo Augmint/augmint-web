@@ -13,7 +13,12 @@ export class LtdStats extends React.Component {
         const { lockCount } = this.props.lockManager.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment
+                vertical
+                textAlign="center"
+                loading={isLoading || (!isLoaded && !loadError)}
+                style={{ padding: 0 }}
+            >
                 <ConnectionStatus contract={monetarySupervisor} />
 
                 <Pgrid>

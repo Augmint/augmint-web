@@ -14,7 +14,7 @@ export class EarningStats extends React.Component {
         const { interestEarnedAccountTokenBalance } = monetarySupervisor.info;
 
         return (
-            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)} style={{ padding: 0 }}>
                 <ConnectionStatus contract={augmintToken} />
                 <Pgrid>
                     <Pgrid.Row halign="justify">
