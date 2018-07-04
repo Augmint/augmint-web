@@ -87,7 +87,7 @@ class NewLoanForm extends React.Component {
         let val;
         const amount = e ? e.target.value : this.state.loanTokenAmount;
         try {
-            val = new BigNumber(e.target.value).mul(DECIMALS_DIV);
+            val = new BigNumber(amount).mul(DECIMALS_DIV);
         } catch (error) {
             this.props.change("ethAmount", "");
             this.setState({ repaymentAmount: "" });
