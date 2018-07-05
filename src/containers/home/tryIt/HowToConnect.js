@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Tsegment } from "components/TextContent";
-import { Link } from "react-router-dom";
 import { DiscordButton } from "components/LinkButtons";
 import Video from "components/augmint-ui/video";
 import Header from "components/augmint-ui/header";
@@ -19,7 +18,9 @@ export function HowToConnect(props) {
                 <Tsegment>
                     <Tsegment.Row columns={1}>
                         <Tsegment.Column>
-                            <StyledP className={ "primaryColor" }>To use A-EUR on mobile you need a web3 capable browser such as Trust Wallet.</StyledP>
+                            <StyledP className={"primaryColor"}>
+                                To use A-EUR on mobile you need a web3 capable browser such as Trust Wallet.
+                            </StyledP>
                             <a
                                 href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
                                 target="_blank"
@@ -42,14 +43,18 @@ export function HowToConnect(props) {
                 <Tsegment>
                     <Tsegment.Row columns={1}>
                         <Tsegment.Column>
-                            <StyledP className={ "primaryColor" }>To use Augmint you need an Ethereum capable browser.</StyledP>
-                            <Header as="h4" className={ "tertiaryColor" }>
+                            <StyledP className={"primaryColor"}>
+                                To use Augmint you need an Ethereum capable browser.
+                            </StyledP>
+                            <Header as="h4" className={"tertiaryColor"}>
                                 1. Install{" "}
-                                <Link to="https://metamask.io/" target="_blank">
+                                <a href="https://metamask.io" target="_blank">
                                     <strong>MetaMask Chrome plugin</strong>
-                                </Link>
+                                </a>
                             </Header>
-                            <Header as="h4" className={ "tertiaryColor" }>2. Connect to Rinkeby test network</Header>
+                            <Header as="h4" className={"tertiaryColor"}>
+                                2. Connect to Rinkeby test network
+                            </Header>
                             <Video
                                 title="connect to rinkeby"
                                 src="https://www.youtube.com/embed/0APcMesrZ_U"
