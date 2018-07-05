@@ -28,7 +28,7 @@ export class ReserveStats extends React.Component {
                             <Statistic
                                 data-testid="reserveEthBalance"
                                 label="ETH reserve"
-                                value={reserveEthBalance + " ETH"}
+                                value={(reserveEthBalance > 0 ? Number(reserveEthBalance).toFixed(4) : 0) + " ETH"}
                             >
                                 {showDetails && (
                                     <p data-testid="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>

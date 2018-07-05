@@ -29,7 +29,9 @@ export class EarningStats extends React.Component {
                             <Statistic
                                 data-testid="feeAccountTokenBalance"
                                 label="ETH fee account"
-                                value={feeAccountEthBalance + " ETH"}
+                                value={
+                                    (feeAccountEthBalance > 0 ? Number(feeAccountEthBalance).toFixed(4) : 0) + " ETH"
+                                }
                             />
                         </Pgrid.Column>
                         <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
