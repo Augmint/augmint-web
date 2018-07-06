@@ -55,6 +55,7 @@ export const StyledTopNavUl = styled.ul`
     display: flex;
     justify-content: flex-end;
     margin: 0;
+    padding-left: 20px;
 `;
 
 export const StyledAccount = styled.div`
