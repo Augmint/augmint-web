@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import AccountInfo from "components/accountInfo";
 
 import { Link } from "react-router-dom";
 import { StyledHeaderH1 } from "components/augmint-ui/header/styles";
@@ -26,6 +27,9 @@ export const StyledTopNav = styled.nav`
 
     ${media.tablet`
         position: fixed;
+        &.hidden {
+            z-index: 105;
+        }
     `};
 `;
 
@@ -57,6 +61,14 @@ export const StyledAccount = styled.div`
     display: none;
 `;
 
+export const StyledAccountInfo = styled(AccountInfo)`
+    &:not(.opened) {
+        ${media.tablet`
+            display: none;
+        `};
+    }
+`;
+
 export const StyledTopNavLi = styled.li`
     display: flex;
     justify-content: center;
@@ -86,6 +98,11 @@ export const StyledTopNavLink = styled(Link)`
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;
+        &.opened {
+            ${media.tablet`
+                visibility: hidden;
+            `};
+        }
     }
 
     &.accountDetails {
@@ -122,25 +139,25 @@ export const StyledPrice = styled.span`
     &.accountInfoContainer {
         ${media.desktop`
             display: none;
-        `}
-    };
+        `};
+    }
 
     &:not(.accountInfoContainer) {
         ${media.tablet`
             display: none;
-        `}
+        `};
     }
-    
 
     > .price {
         color: ${theme.colors.secondary};
         ${media.tablet`
             display: none;
-        `}
+        `};
     }
 
     > .accountDetailsInfo {
         color: ${theme.colors.white};
+    }
 
     > .last-update {
         font-size: 0.75rem;
@@ -156,4 +173,21 @@ export const StyledSeparator = styled.div`
     ${media.desktop`
         display: none;
     `};
+`;
+
+export const CloseIcon = styled.img`
+    display: none;
+    visibility: hidden;
+    height: 32px;
+    width: 32px;
+
+    &.opened {
+        ${media.tablet`
+            display: block;
+            visibility: visible;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+        `};
+    }
 `;
