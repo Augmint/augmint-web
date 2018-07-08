@@ -2,10 +2,10 @@ import store from "modules/store";
 import { fetchLocksForAddressTx, releaseFundsTx } from "./lockTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
 
-/* List of old augmint token deploy addresses by network id */
+/* List of old Locker deploy addresses by network id */
 const LEGACY_LOCKER_CONTRACTS = {
-    // mainnet (no deploy yet)
-    1: [],
+    // mainnet
+    1: ["0x095c0F071Fd75875a6b5a1dEf3f3a993F591080c"], // initial locker, replaced by 0x26438D7c52cE617dFc75A2F02eE816557f01e5Bb
 
     // local ganache (migrations deploys it for manual testing)
     999: ["0xe6a48098a0a318ccec66bcd8297417e0d74585dc"],
