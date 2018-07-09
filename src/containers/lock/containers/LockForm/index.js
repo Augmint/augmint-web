@@ -128,22 +128,21 @@ class LockContainer extends React.Component {
                         <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
-                                    <TermTableHeadCell  />
-                                    <TermTableHeadCell  />
-                                    <TermTableHeadCell >Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell >Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell >
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell>
                                         Interest p.a.
                                         <ToolTip header="Lock Interest per Annum" id={"lock_interest"}>
                                             The annualised interest rate of the lock. It's calculated using a simple
                                             (non-compound) method and with a 365 day year.<br />
-                                            Note: For small lock amounts the actual interest percent can slightly differ
-                                            than displayed (~0.01 A-EUR difference in interest amount due to rounding )
+                                            <br />
+                                            Note: For small lock amounts the actual interest per annum can be slightly
+                                            higher than displayed (additonal 0.01 A-EUR in interest due to rounding)
                                         </ToolTip>
                                     </TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }}>
-                                        You earn
-                                    </TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
@@ -166,18 +165,14 @@ class LockContainer extends React.Component {
                                                     <TermTableCell>
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
-                                                    <TermTableCell>
-                                                        {product.minimumLockAmount} A€
-                                                    </TermTableCell>
-                                                    <TermTableCell>
-                                                        {product.maxLockAmount} A€
-                                                    </TermTableCell>
+                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
                                                     <TermTableCell>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
                                                     <TermTableCell style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
-                                                            `${Math.floor(
+                                                            `${Math.ceil(
                                                                 this.props.lockAmount * product.perTermInterest * 100
                                                             ) / 100} A€`}
                                                     </TermTableCell>

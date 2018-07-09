@@ -159,9 +159,10 @@ function parseLocks(locksArray) {
             const durationInSecs = parseInt(bn_durationInSecs, 10);
             const durationInDays = durationInSecs / 60 / 60 / 24;
             const durationText = moment.duration(durationInSecs, "seconds").humanize();
+            const interestEarned = bn_interestEarned / DECIMALS_DIV;
 
             const perTermInterest = bn_perTermInterest / 1000000;
-            const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
+            const interestRatePa = (interestEarned / amountLocked / durationInDays) * 365;
 
             const currentTime = moment()
                 .utc()
@@ -181,7 +182,7 @@ function parseLocks(locksArray) {
             parsed.push({
                 id: parseInt(bn_id, 10),
                 amountLocked,
-                interestEarned: bn_interestEarned / DECIMALS_DIV,
+                interestEarned,
                 lockedUntil,
                 lockedUntilText,
                 perTermInterest,
