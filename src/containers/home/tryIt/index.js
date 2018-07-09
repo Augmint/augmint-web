@@ -7,6 +7,7 @@ import Button from "components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import { StyledHeader } from "./styles";
 
 class TryIt extends React.Component {
     componentDidMount() {
@@ -17,12 +18,17 @@ class TryIt extends React.Component {
         const { isLoading, isConnected, error } = this.props.web3Connect;
         return (
             <div>
-                { isConnected && (
+                {isConnected && (
                     <TopNavTitlePortal>
-                        <Tsegment.Header as="h1" className="secondaryColor" content="Try Augmint" />
+                        <StyledHeader
+                            as="h1"
+                            className="secondaryColor"
+                            content="Try Augmint"
+                            style={{ margin: "16px 0" }}
+                        />
                     </TopNavTitlePortal>
                 )}
-                <Tsegment header={ "" }>
+                <Tsegment header={""}>
                     {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
                     {!isLoading && error && <HowToConnect />}
                     {!isLoading && isConnected && <TryItConnected web3Connect={this.props.web3Connect} />}
