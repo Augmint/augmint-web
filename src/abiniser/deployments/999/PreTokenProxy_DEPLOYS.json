@@ -6,15 +6,15 @@
             "latestDeployedAddress": "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463",
             "deployments": {
                 "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463": {
-                    "generatedAt": "2018-07-08T15:47:54.985Z",
-                    "truffleContractFileUpdatedAt": "2018-07-08T15:47:32.026Z",
-                    "deployTransactionHash": "0x17724062fa023d3a31f5e52aa483f682d0626addcf217648c3cecb84d913cbac",
+                    "generatedAt": "2018-07-09T11:28:14.652Z",
+                    "truffleContractFileUpdatedAt": "2018-07-09T11:27:44.876Z",
+                    "deployTransactionHash": "0xe726c2a001dd5b00c05f79f5802eb6a5cd3aa4e44aa8211edc1f07baa1f339ed",
                     "compiler": {
                         "name": "solc",
                         "version": "0.4.24+commit.e67f0147.Emscripten.clang"
                     },
-                    "bytecodeHash": "9c5756eba5d12433f15b0ba1c6e78424",
-                    "deployedBytecodeHash": "41bc836f0fad20e8f9a4afdd4d4725f3",
+                    "bytecodeHash": "88fae0005588b827884bf69a361d3b32",
+                    "deployedBytecodeHash": "81cb90a8c1b2941292dc3123438d0d24",
                     "sourceHash": "2d172fe41d2b97c827d6dca816138047",
                     "source":
                         "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
