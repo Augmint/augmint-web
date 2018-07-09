@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
-import { StyledAccountInfo, StyledAccountP } from "./styles";
+import { StyledAccountInfo, StyledAccountP, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
 
 export class AccountInfo extends React.Component {
@@ -15,7 +15,8 @@ export class AccountInfo extends React.Component {
             augmintToken,
             userBalancesIsLoading,
             hideTestId,
-            className
+            className,
+            toggleAccInfo
         } = this.props;
         return (
             <StyledAccountInfo
@@ -50,10 +51,15 @@ export class AccountInfo extends React.Component {
                     </p>
                 </StyledAccountP>
                 <StyledAccountP className="accInfoDetail">€/ETH {data.rates.info.ethFiatRate}</StyledAccountP>
-                <StyledAccountP className="accInfoDetail">
+                <StyledAccInfoLink
+                    title="Under the hood"
+                    to="/under-the-hood"
+                    data-testid="underTheHoodLink"
+                    onClick={() => toggleAccInfo(null, null, true)}
+                >
                     <Icon name="connect" />
                     {data.web3Connect.network.name}
-                </StyledAccountP>
+                </StyledAccInfoLink>
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
         );

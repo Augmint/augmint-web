@@ -32,10 +32,13 @@ class TopNav extends React.Component {
         ratesProvider();
     }
 
-    toggleAccInfo(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    toggleAccInfo(e, noScroll, isPropagate) {
+        if (!isPropagate) {
+            e.preventDefault();
+        }
         this.props.toggleAccInfo();
+        let fakebody = document.getElementById("fakebody");
+        noScroll ? fakebody.classList.add("noScroll") : fakebody.classList.remove("noScroll");
     }
 
     render() {
@@ -59,8 +62,7 @@ class TopNav extends React.Component {
                         <StyledTopNavLinkRight
                             title="Your account"
                             to={this.props.showAccInfo ? "" : "/account"}
-                            onTouchStart={this.toggleAccInfo}
-                            onClick={this.toggleAccInfo}
+                            onClick={e => this.toggleAccInfo(e, true)}
                             className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
                         >
                             <Icon
@@ -83,16 +85,16 @@ class TopNav extends React.Component {
                                 <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
-                        <StyledAccount>
+                        <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
                             <StyledAccountInfo
                                 data={accountInfoData}
                                 header=""
                                 className={this.props.showAccInfo ? "opened" : ""}
+                                toggleAccInfo={this.toggleAccInfo}
                             />
                             <CloseIcon
                                 src={close}
-                                onTouchStart={this.toggleAccInfo}
-                                onClick={this.toggleAccInfo}
+                                onClick={e => this.toggleAccInfo(e)}
                                 className={this.props.showAccInfo ? "opened" : ""}
                             />
                         </StyledAccount>

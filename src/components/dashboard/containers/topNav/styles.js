@@ -60,6 +60,9 @@ export const StyledTopNavUl = styled.ul`
 
 export const StyledAccount = styled.div`
     display: none;
+    &.opened {
+        display: block;
+    }
 `;
 
 export const StyledAccountInfo = styled(AccountInfo)`
