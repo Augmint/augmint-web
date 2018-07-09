@@ -54,7 +54,6 @@ export class AccountInfo extends React.Component {
                 <StyledAccInfoLink
                     title="Under the hood"
                     to="/under-the-hood"
-                    data-testid="underTheHoodLink"
                     onClick={() => toggleAccInfo(null, null, true)}
                 >
                     <Icon name="connect" />
