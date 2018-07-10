@@ -13,19 +13,14 @@ export class TotalSupply extends React.Component {
         const { issuedByStabilityBoard } = monetarySupervisor.info;
 
         return (
-            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)} style={{ padding: 0 }}>
                 <ConnectionStatus contract={augmintToken} />
 
                 <Statistic.Group className="centered">
-                    <Statistic
-                        data-testid="totalSupply"
-                        style={{ padding: "1em" }}
-                        label="Total supply"
-                        value={totalSupply + " A-EUR"}
-                    >
+                    <Statistic data-testid="totalSupply" label="Total supply" value={totalSupply + " A€"}>
                         {showDetails && (
                             <p data-testid="issuedByStabilityBoard" style={{ textAlign: "center" }}>
-                                {issuedByStabilityBoard} A-EUR issued by Stability Board
+                                {issuedByStabilityBoard} A€ issued by Stability Board
                             </p>
                         )}
                     </Statistic>
