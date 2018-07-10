@@ -59,4 +59,4 @@ Check the whole team on [augmint.cc](http://www.augmint.cc)
 
 ## Licence
 
-This project is licensed under the GNU General Public License v3.0 license - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU Affero General Public License v3.0 license - see the [LICENSE](LICENSE) file for details.

@@ -1,24 +1,25 @@
 {
-  "contractName": "PreTokenProxy",
-  "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
-  "deployedAbis": {
-    "19ab69b650e28b2dd211d3851893f91f": {
-      "latestDeployedAddress": "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463",
-      "deployments": {
-        "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463": {
-          "generatedAt": "2018-06-06T15:25:31.858Z",
-          "truffleContractFileUpdatedAt": "2018-06-06T15:25:10.656Z",
-          "deployTransactionHash": "0xd4af1e7be2eb71c259ae6b1109d9641253ba816136da791aee26854b32f3fc30",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "9fd82afe11a8ff7af3e815e243d31647",
-          "deployedBytecodeHash": "1846d508980d6136e1e81708c995e572",
-          "sourceHash": "2d172fe41d2b97c827d6dca816138047",
-          "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
+    "contractName": "PreTokenProxy",
+    "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
+    "deployedAbis": {
+        "19ab69b650e28b2dd211d3851893f91f": {
+            "latestDeployedAddress": "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463",
+            "deployments": {
+                "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463": {
+                    "generatedAt": "2018-07-09T11:28:14.652Z",
+                    "truffleContractFileUpdatedAt": "2018-07-09T11:27:44.876Z",
+                    "deployTransactionHash": "0xe726c2a001dd5b00c05f79f5802eb6a5cd3aa4e44aa8211edc1f07baa1f339ed",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "88fae0005588b827884bf69a361d3b32",
+                    "deployedBytecodeHash": "81cb90a8c1b2941292dc3123438d0d24",
+                    "sourceHash": "2d172fe41d2b97c827d6dca816138047",
+                    "source":
+                        "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
+                }
+            }
         }
-      }
     }
-  }
 }

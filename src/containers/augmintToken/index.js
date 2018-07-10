@@ -39,13 +39,13 @@ class AugmintToken extends React.Component {
                         <Pheader className="secondaryColor" header="Reserves" />}
                     </TopNavTitlePortal>
                     <Pgrid.Row>
-                        <Pgrid.Column>
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <TotalSupply
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
                             />
                         </Pgrid.Column>
-                        <Pgrid.Column>
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <ReserveStats
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
@@ -53,12 +53,8 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader
-                            header="Loans & Locks"
-                            className={"primaryColor"}
-                            style={{ width: "100%" }}
-                        />
-                        <Pgrid.Column>
+                        <Pheader header="Loans & Locks" className={"primaryColor"} style={{ width: "100%" }} />
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <LtdStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 loanManager={this.props.loanManager}
@@ -71,6 +67,7 @@ class AugmintToken extends React.Component {
                                 icon="angle-right"
                                 labelposition="right"
                                 size="large"
+                                style={{ marginBottom: "15px" }}
                             />
                         </Pgrid.Column>
 
@@ -79,7 +76,7 @@ class AugmintToken extends React.Component {
                             className={"primaryColor"}
                             style={{ marginTop: "1em", width: "100%" }}
                         />
-                        <Pgrid.Column>
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <EarningStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 augmintToken={this.props.augmintToken}

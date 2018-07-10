@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 import { media } from "styles/media";
+import Header from "components/augmint-ui/header";
+import { remCalc } from "styles/theme";
 
 export const MobileView = styled.div`
     display: none;
@@ -23,4 +25,10 @@ export const StoreBadge = styled.img`
     min-height: 40px;
     padding: 0 6px;
     width: auto;
+`;
+
+export const StyledHeader = styled(Header)`
+    ${media.phone`
+        font-size: ${remCalc(24)};
+    `};
 `;
