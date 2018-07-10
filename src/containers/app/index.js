@@ -144,7 +144,7 @@ class App extends React.Component {
                         toggleMenu={this.toggleMenu}
                     />
                 )}
-                {showConnection ? <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} /> : null}
+                {showConnection && <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />}
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
                     {showConnection && (
