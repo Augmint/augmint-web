@@ -2,29 +2,18 @@ import React from "react";
 import { connect } from "react-redux";
 import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
-import Button from "components/augmint-ui/button";
 import Message from "components/augmint-ui/message";
-
-export function SelectLoanButton(props) {
-    return (
-        <Button
-            labelposition="right"
-            content="Select"
-            icon="right chevron"
-            key={props.productId}
-            data-testid={`selectLoanProduct-${props.productId}`}
-            to={`/loan/new/${props.productId}`}
-        />
-    );
-}
 
 class LoanProductSelector extends React.Component {
     render() {
         return (
             <Pgrid>
-                <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={6 / 16}>
-                        <Message info>
+                <Pgrid.Row>
+                    <Pgrid.Column size={{ tablet: 1, desktop: 10 / 16 }}>
+                        <LoanProductList products={this.props.loanProducts} header="Get a new A-EUR loan" />
+                    </Pgrid.Column>
+                    <Pgrid.Column size={{ tablet: 1, desktop: 6 / 16 }}>
+                        <Message info style={{ margin: 0 }}>
                             <p>You can get A-EUR for placing your ETH in escrow (collateral).</p>
                             <p>
                                 <strong>Repayment</strong>
@@ -44,16 +33,6 @@ class LoanProductSelector extends React.Component {
                                 ETH account.
                             </p>
                         </Message>
-                    </Pgrid.Column>
-                    <Pgrid.Column size={10 / 16}>
-                        <LoanProductList
-                            products={this.props.loanProducts}
-                            header="Select type of loan"
-                            selectComponent={SelectLoanButton}
-                            filter={item => {
-                                return item.isActive;
-                            }}
-                        />
                     </Pgrid.Column>
                 </Pgrid.Row>
             </Pgrid>

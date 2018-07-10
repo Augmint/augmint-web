@@ -1,5 +1,4 @@
 import React from "react";
-import Icon from "components/augmint-ui/icon";
 import store from "modules/store";
 
 export default function HashURL(props) {
