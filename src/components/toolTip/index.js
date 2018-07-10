@@ -4,7 +4,7 @@ import Icon from "components/augmint-ui/icon";
 import { StyledToolTip, StyledContent, StyledHeader } from "./styles";
 
 export default function ToolTip(props) {
-    const { id, children, header, icon, html, ...other } = props;
+    const { id, children, header, icon, html } = props;
     return (
         <div style={{ display: "inline-block", marginRight: 5 }}>
             <Icon color="grey" name={icon ? icon : "help circle"} data-tip data-for={id} />
