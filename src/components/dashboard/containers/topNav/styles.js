@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import AccountInfo from "components/accountInfo";
 
 import { Link } from "react-router-dom";
 import { StyledHeaderH1 } from "components/augmint-ui/header/styles";
 
 import { remCalc } from "styles/theme";
+import { media } from "styles/media";
 
 const TOP_NAV_HEIGHT = "60px";
 
@@ -13,15 +15,22 @@ export const StyledTopNav = styled.nav`
     justify-content: space-between;
     width: 100%;
     border-bottom: 1px solid #ccc;
-    height: ${TOP_NAV_HEIGHT}
+    height: ${TOP_NAV_HEIGHT};
     position: absolute;
     background-color: ${theme.colors.white};
     z-index: 103;
     top: 0;
 
     &.hide {
-      display: none;
+        display: none;
     }
+
+    ${media.tablet`
+        position: fixed;
+        &.hidden {
+            z-index: 105;
+        }
+    `};
 `;
 
 export const TitleWrapper = styled.div`
@@ -29,19 +38,39 @@ export const TitleWrapper = styled.div`
     max-width: 60%;
 
     ${StyledHeaderH1} {
-        font-size: ${remCalc("28")};
+        font-size: ${remCalc("24")};
         margin: 0;
+
+        ${media.phone`
+            font-size: 1.1rem;
+        `};
     }
+
+    ${media.tablet`
+        margin-left: 80px;
+    `};
 `;
 
 export const StyledTopNavUl = styled.ul`
     display: flex;
     justify-content: flex-end;
     margin: 0;
+    padding-left: 20px;
 `;
 
 export const StyledAccount = styled.div`
     display: none;
+    &.opened {
+        display: block;
+    }
+`;
+
+export const StyledAccountInfo = styled(AccountInfo)`
+    &:not(.opened) {
+        ${media.tablet`
+            display: none;
+        `};
+    }
 `;
 
 export const StyledTopNavLi = styled.li`
@@ -73,6 +102,11 @@ export const StyledTopNavLink = styled(Link)`
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;
+        &.opened {
+            ${media.tablet`
+                visibility: hidden;
+            `};
+        }
     }
 
     &.accountDetails {
@@ -90,6 +124,12 @@ export const StyledTopNavLinkRight = StyledTopNavLink.extend`
     display: flex;
     flex-direction: column;
     font-size: 11px;
+
+    &:not(.accountDetails) {
+        ${media.tablet`
+            display: none;
+        `};
+    }
 `;
 
 export const StyledPrice = styled.span`
@@ -97,15 +137,29 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    padding: 0 20px;
+    padding: 0 14px;
+    font-size: 1rem;
+
+    &.accountInfoContainer {
+        ${media.desktop`
+            display: none;
+        `};
+    }
+
+    &:not(.accountInfoContainer) {
+        ${media.tablet`
+            display: none;
+        `};
+    }
 
     > .price {
-        font-size: 1.125rem;
         color: ${theme.colors.secondary};
+        ${media.tablet`
+            display: none;
+        `};
     }
 
     > .accountDetailsInfo {
-        font-size: 1.125rem;
         color: ${theme.colors.white};
     }
 
@@ -119,4 +173,25 @@ export const StyledSeparator = styled.div`
     padding: 0px;
     height: 24px;
     width: 2px;
+
+    ${media.desktop`
+        display: none;
+    `};
+`;
+
+export const CloseIcon = styled.img`
+    display: none;
+    visibility: hidden;
+    height: 32px;
+    width: 32px;
+
+    &.opened {
+        ${media.tablet`
+            display: block;
+            visibility: visible;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+        `};
+    }
 `;
