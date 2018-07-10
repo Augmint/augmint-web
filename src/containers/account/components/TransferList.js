@@ -43,7 +43,7 @@ export default class TransferList extends React.Component {
                                     <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
                                     <br />transactionIndex: {tx.transactionIndex}
                                     <br />
-                                    <HashURL hash={tx.transactionHash} />
+                                    <HashURL hash={tx.transactionHash} type={"tx/"} />
                                 </MoreInfoTip>
                             </Col>
                         </Row>

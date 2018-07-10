@@ -12,6 +12,7 @@ import {
     cancelLegacyExchangeOrder,
     LEGACY_EXCHANGES_CANCEL_ORDER_SUCCESS
 } from "modules/reducers/legacyExchanges";
+import HashURL from "components/hash";
 
 const styleP = { margin: "1rem 0" };
 
@@ -65,7 +66,9 @@ class LegacyExchanges extends React.Component {
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
                     <p style={styleP}>
                         {contract.userOrders.length} orders in legacy Exchange contract{" "}
-                        <small> {contract.address} </small>
+                        <small>
+                            <HashURL hash={contract.address} type={"address/"} />{" "}
+                        </small>
                     </p>
 
                     <p style={styleP}>
@@ -109,7 +112,12 @@ class LegacyExchanges extends React.Component {
                 <Container>
                     <InfoPanel header="You have orders in an older version of Augmint Exchange contract">
                         <p style={styleP}>
-                            Augmint Exchange version in use on {network.name} network at {exchangeContract.address}.
+                            Augmint Exchange version in use on{" "}
+                            <HashURL
+                                hash={exchangeContract.address}
+                                title={network.name + " network"}
+                                type={"address/"}
+                            />.
                             <br />
                             You can cancel your orders on the old exchange.<br />
                             <small>
@@ -150,4 +158,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { dismissLegacyExchange, cancelLegacyExchangeOrder };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegacyExchanges);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LegacyExchanges);
