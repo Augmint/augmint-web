@@ -82,9 +82,9 @@ class LegacyExchanges extends React.Component {
                     </p>
 
                     {contract.userOrders.map((order, orderIndex) => (
-                        <MyListGroup.Row key={`ordersDiv-${contractIndex}-${order.id}`}>
+                        <MyListGroup.Col key={`ordersDiv-${contractIndex}-${order.id}`}>
                             <p style={styleP}>
-                                Order id: {order.id} Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
+                                Order id: {order.id} <br />Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
                             </p>
 
                             {order.isSubmitted ? (
@@ -102,7 +102,7 @@ class LegacyExchanges extends React.Component {
                                     {submitting ? "Submitting order cancel..." : "Cancel order"}
                                 </Button>
                             )}
-                        </MyListGroup.Row>
+                        </MyListGroup.Col>
                     ))}
                 </MyListGroup.Col>
             ));

@@ -82,10 +82,10 @@ class LegacyLockers extends React.Component {
                     </p>
 
                     {contract.locks.map((lock, lockIndex) => (
-                        <MyListGroup.Row key={`ordersDiv-${contractIndex}-${lock.id}`}>
+                        <MyListGroup.Col key={`ordersDiv-${contractIndex}-${lock.id}`}>
                             <p style={styleP}>
-                                Lock id: {lock.id} Amount locked: {lock.amountLocked} A€ (+ {lock.interestEarned} A€
-                                premium)
+                                Lock id: {lock.id} <br />Amount locked: {lock.amountLocked} A€ (+ {lock.interestEarned}{" "}
+                                A€ premium)
                             </p>
 
                             {lock.isSubmitted ? (
@@ -105,7 +105,7 @@ class LegacyLockers extends React.Component {
                             ) : (
                                 <p style={styleP}>This lock will be releaseable on {lock.lockedUntilText}</p>
                             )}
-                        </MyListGroup.Row>
+                        </MyListGroup.Col>
                     ))}
                 </MyListGroup.Col>
             ));

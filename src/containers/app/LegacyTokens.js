@@ -60,11 +60,13 @@ class LegacyTokens extends React.Component {
 
         const balances = contractBalances
             ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map((item, index) => (
-                  <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
-                      Balance in legacy contract: {item.balance} A-EUR{" "}
-                      <small>
-                          <HashURL hash={item.contract} type={"address/"} />{" "}
-                      </small>
+                  <MyListGroup.Col key={`txRowDiv-${item.contract}`}>
+                      <p>
+                          Balance in legacy contract:<br /> {item.balance} A-EUR <br />
+                          <small>
+                              <HashURL hash={item.contract} type={"address/"} />{" "}
+                          </small>
+                      </p>
                       <Button
                           type="submit"
                           data-testid={`dismissLegacyBalanceButton-${index}`}
@@ -80,7 +82,7 @@ class LegacyTokens extends React.Component {
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
                       </Button>
-                  </MyListGroup.Row>
+                  </MyListGroup.Col>
               ))
             : null;
 

@@ -104,9 +104,9 @@ class LegacyLoanManagers extends React.Component {
                     </p>
 
                     {contract.loans.map((loan, loanIndex) => (
-                        <MyListGroup.Row key={`loansDiv-${contractIndex}-${loan.id}`}>
+                        <MyListGroup.Col key={`loansDiv-${contractIndex}-${loan.id}`}>
                             <p style={styleP}>
-                                Loan id: {loan.id} Repayment amount: {loan.repaymentAmount} A€
+                                Loan id: {loan.id} <br />Repayment amount: {loan.repaymentAmount} A€
                             </p>
                             {loan.isRepayable ? (
                                 <p style={styleP}>This loan is due on {loan.maturityText}</p>
@@ -151,7 +151,7 @@ class LegacyLoanManagers extends React.Component {
                             ) : (
                                 <p style={styleP}>Unexpected loan status: {loan.status}</p>
                             )}
-                        </MyListGroup.Row>
+                        </MyListGroup.Col>
                     ))}
                 </MyListGroup.Col>
             ));
