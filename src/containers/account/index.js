@@ -29,8 +29,8 @@ class AccountHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <TokenTransferForm />
 
                                 <TransferList
@@ -39,7 +39,7 @@ class AccountHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column size={1 / 2}>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <LoanList
                                     header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}

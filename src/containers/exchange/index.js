@@ -33,8 +33,8 @@ class ExchangeHome extends React.Component {
                         <Pheader className="secondaryColor" header="Buy & Sell A-EUR" />
                     </TopNavTitlePortal>
                     <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
                                     web3Connect={this.props.web3Connect}
@@ -50,7 +50,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column size={1 / 2}>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
                                 {orders.orders && (
                                     <MatchOrdersButton
