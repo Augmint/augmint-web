@@ -68,7 +68,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
-                        <Pgrid.Row>
+                        <Pgrid.Row style={{ padding: "0 1em" }}>
                             <TradeHistory
                                 trades={trades}
                                 userAccountAddress={userAccount.address}
