@@ -34,8 +34,26 @@ class AugmintToken extends React.Component {
     };
 
     render() {
+        console.log(this.props.loanManager);
         return (
             <EthereumState>
+                <div style={{ color: "black" }}>
+                    <h1>Total Supply: {this.props.augmintToken.info.totalSupply}</h1>
+                    <h1>
+                        Issued by Stability Board (Net): {this.props.monetarySupervisor.info.issuedByStabilityBoard}
+                    </h1>
+                    <h1>ETH Fees: {this.props.augmintToken.info.feeAccountEthBalance}</h1>
+                    <h1>A-EUR FEE:{this.props.augmintToken.info.feeAccountTokenBalance}</h1>
+                    <h1>Collateral in escrow:{this.props.loanManager.info.ethBalance}</h1>
+                    <br />
+                    <h1>ltdPercent: {this.props.monetarySupervisor.info.ltdPercent}</h1>
+                    <h1>maxLoanByLtd: {this.props.monetarySupervisor.info.maxLoanByLtd}</h1>
+                    <h1>maxLockByLtd: {this.props.monetarySupervisor.info.maxLockByLtd}</h1>
+                    <h1>reserveEthBalance: {this.props.monetarySupervisor.info.reserveEthBalance}</h1>
+                    <h1>reserveTokenBalance: {this.props.monetarySupervisor.info.reserveTokenBalance}</h1>
+                    <h1>totalLoanAmount: {this.props.monetarySupervisor.info.totalLoanAmount}</h1>
+                    <h1>totalLockedAmount: {this.props.monetarySupervisor.info.totalLockedAmount}</h1>
+                </div>
                 <Psegment style={{ padding: "2em 1em" }}>
                     <TopNavTitlePortal>
                         <Pheader className="secondaryColor" header="Reserves" />
