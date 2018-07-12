@@ -12,6 +12,7 @@ import {
     convertLegacyBalance,
     LEGACY_BALANCE_CONVERSION_SUCCESS
 } from "modules/reducers/legacyBalances";
+import HashURL from "components/hash";
 
 class LegacyTokens extends React.Component {
     constructor(props) {
@@ -59,8 +60,13 @@ class LegacyTokens extends React.Component {
 
         const balances = contractBalances
             ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map((item, index) => (
-                  <MyListGroup.Row key={`txRowDiv-${item.contract}`}>
-                      Balance in legacy contract: {item.balance} A-EUR <small>Contract address: {item.contract} </small>
+                  <MyListGroup.Col key={`txRowDiv-${item.contract}`}>
+                      <p>
+                          Balance in legacy contract:<br /> {item.balance} A-EUR <br />
+                          <small>
+                              <HashURL hash={item.contract} type={"address/"} />{" "}
+                          </small>
+                      </p>
                       <Button
                           type="submit"
                           data-testid={`dismissLegacyBalanceButton-${index}`}
@@ -76,7 +82,7 @@ class LegacyTokens extends React.Component {
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
                       </Button>
-                  </MyListGroup.Row>
+                  </MyListGroup.Col>
               ))
             : null;
 
@@ -85,8 +91,12 @@ class LegacyTokens extends React.Component {
                 <Container>
                     <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
                         <p>
-                            There is newer Augmint A-EUR Token version deployed to the {network.name} network at{" "}
-                            {augmintTokenContract.address}.
+                            There is newer Augmint A-EUR Token version deployed to the{" "}
+                            <HashURL
+                                hash={augmintTokenContract.address}
+                                title={network.name + " network"}
+                                type={"address/"}
+                            />.
                             <br />
                             You can convert your old A-EUR balance to the new contract.<br />
                             <small>
@@ -127,4 +137,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { dismissLegacyBalance, convertLegacyBalance };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegacyTokens);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LegacyTokens);
