@@ -14,6 +14,7 @@ import {
     LEGACY_LOANMANAGERS_REPAY_SUCCESS,
     LEGACY_LOANMANAGERS_COLLECT_SUCCESS
 } from "modules/reducers/legacyLoanManagers";
+import HashURL from "components/hash";
 
 const styleP = { margin: "1rem 0" };
 
@@ -86,7 +87,10 @@ class LegacyLoanManagers extends React.Component {
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
                     <p style={styleP}>
-                        {contract.loans.length} loans in legacy Loan contract: <small> {contract.address} </small>
+                        {contract.loans.length} loans in legacy Loan contract:{" "}
+                        <small>
+                            <HashURL hash={contract.address} type={"address/"} />{" "}
+                        </small>
                     </p>
 
                     <p style={styleP}>
@@ -100,9 +104,9 @@ class LegacyLoanManagers extends React.Component {
                     </p>
 
                     {contract.loans.map((loan, loanIndex) => (
-                        <MyListGroup.Row key={`loansDiv-${contractIndex}-${loan.id}`}>
+                        <MyListGroup.Col key={`loansDiv-${contractIndex}-${loan.id}`}>
                             <p style={styleP}>
-                                Loan id: {loan.id} Repayment amount: {loan.repaymentAmount} A€
+                                Loan id: {loan.id} <br />Repayment amount: {loan.repaymentAmount} A€
                             </p>
                             {loan.isRepayable ? (
                                 <p style={styleP}>This loan is due on {loan.maturityText}</p>
@@ -147,7 +151,7 @@ class LegacyLoanManagers extends React.Component {
                             ) : (
                                 <p style={styleP}>Unexpected loan status: {loan.status}</p>
                             )}
-                        </MyListGroup.Row>
+                        </MyListGroup.Col>
                     ))}
                 </MyListGroup.Col>
             ));
@@ -157,8 +161,12 @@ class LegacyLoanManagers extends React.Component {
                 <Container>
                     <InfoPanel header="You have loan(s) in an older version of Augmint LoanManager contract">
                         <p style={styleP}>
-                            Augmint LoanManager version in use on {network.name} network at{" "}
-                            {loanManagerContract.address}.
+                            Augmint LoanManager version in use on{" "}
+                            <HashURL
+                                hash={loanManagerContract.address}
+                                title={network.name + " network"}
+                                type={"address/"}
+                            />.
                             <br />
                             You can repay your loan in the old loan contract or collect and release leftover collateral
                             if it's defaulted .<br />
@@ -200,4 +208,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { dismissLegacyLoanManager, repayLegacyLoan, collectLegacyLoans };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegacyLoanManagers);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LegacyLoanManagers);
