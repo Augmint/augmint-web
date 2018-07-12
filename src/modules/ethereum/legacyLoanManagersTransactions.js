@@ -1,10 +1,10 @@
 import store from "modules/store";
-import { fetchLoansForAddressTx, collectLoansTx, repayLoanTx } from "./loanTransactions";
+import { fetchLoansForAddressTx, fetchLoansTx, collectLoansTx, repayLoanTx } from "./loanTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import { DECIMALS_DIV } from "../../utils/constants";
 
 /* List of old augmint token deploy addresses by network id */
-const LEGACY_LOANMANAGER_CONTRACTS = {
+export const LEGACY_LOANMANAGER_CONTRACTS = {
     // mainnet (no deploy yet)
     1: [],
 
@@ -57,6 +57,60 @@ export async function fetchActiveLegacyLoansForAddressTx(_userAccount) {
         userTokenBalance: balances[i] / DECIMALS_DIV,
         loans: loans.filter(loan => loan.isRepayable || loan.isCollectable)
     }));
+
+    return ret;
+}
+
+export async function fetchActiveLegacyLoansTx() {
+    const web3 = store.getState().web3Connect;
+    const legacyLoanManagerAddresses = LEGACY_LOANMANAGER_CONTRACTS[web3.network.id];
+
+    const legacyLoanManagerContracts = legacyLoanManagerAddresses.map(address =>
+        SolidityContract.connectAt(web3, "LoanManager", address)
+    );
+
+    const tokenAddressQueries = legacyLoanManagerContracts.map(contract =>
+        contract.web3ContractInstance.methods.augmintToken().call()
+    );
+
+    const loanQueries = legacyLoanManagerContracts.map(contract => fetchLoansTx(contract.web3ContractInstance));
+
+    const [legacyLoans, tokenAddresses] = await Promise.all([
+        Promise.all(loanQueries),
+        Promise.all(tokenAddressQueries)
+    ]);
+
+    const ret = legacyLoans.map((loans, i) => {
+        let outstandingLoansAmount = 0,
+            defaultedLoansAmount = 0,
+            collectedLoansAmount = 0;
+        loans.forEach(loan => {
+            switch (loan.state) {
+                case "Open":
+                    outstandingLoansAmount += loan.loanAmount;
+                    break;
+
+                case "Defaulted":
+                    defaultedLoansAmount += loan.loanAmount;
+                    break;
+
+                case "Collected":
+                    collectedLoansAmount += loan.loanAmount;
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        return {
+            address: legacyLoanManagerAddresses[i],
+            tokenAddress: tokenAddresses[i],
+            outstandingLoansAmount,
+            defaultedLoansAmount,
+            collectedLoansAmount,
+            totalCollectedAmount: defaultedLoansAmount + collectedLoansAmount
+        };
+    });
 
     return ret;
 }

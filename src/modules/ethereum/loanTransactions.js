@@ -6,7 +6,7 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, MIN_LOAN_AMOUNT_ADJUSTMENT } from "../../utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, MIN_LOAN_AMOUNT_ADJUSTMENT, LOAN_STATES } from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
@@ -227,7 +227,6 @@ export async function fetchLoansForAddressTx(loanManagerInstance, account) {
     ]);
     // const chunkSize = store.getState().loanManager.info.chunkSize;
     // const loanCount = await loanManager.getLoanCountForAddress(account);
-
     let loans = [];
 
     const queryCount = Math.ceil(loanCount / chunkSize);
@@ -240,7 +239,30 @@ export async function fetchLoansForAddressTx(loanManagerInstance, account) {
     return loans;
 }
 
-function parseLoans(loansArray) {
+export async function fetchLoansTx(loanManagerInstance) {
+    const [chunkSize, loanCount] = await Promise.all([
+        loanManagerInstance.methods
+            .CHUNK_SIZE()
+            .call()
+            .then(res => parseInt(res, 10)),
+        loanManagerInstance.methods
+            .getLoanCount()
+            .call()
+            .then(res => parseInt(res, 10))
+    ]);
+
+    let loans = [];
+
+    const queryCount = Math.ceil(loanCount / chunkSize);
+
+    for (let i = 0; i < queryCount; i++) {
+        const loansArray = await loanManagerInstance.methods.getLoans(i * chunkSize).call();
+        loans = loans.concat(parseLoans(loansArray));
+    }
+    return loans;
+}
+
+function parseLoans(loansArray, account) {
     const loans = loansArray.reduce((parsed, loan) => {
         const [
             bn_id,
@@ -269,9 +291,9 @@ function parseLoans(loansArray) {
             let isCollectable = false;
             let collateralStatus;
 
-            const state = parseInt(bn_state, 10);
+            const state = LOAN_STATES[parseInt(bn_state, 10)];
             switch (state) {
-                case 0:
+                case "Open":
                     if (maturity - currentTime < 24 * 60 * 60 * 2) {
                         /* consider it due 2 days before */
                         isDue = true;
@@ -283,16 +305,16 @@ function parseLoans(loansArray) {
                     }
                     collateralStatus = "in escrow";
                     break;
-                case 1:
+                case "Repaid":
                     loanStateText = "Repaid";
                     collateralStatus = "released";
                     break;
-                case 2:
+                case "Defaulted":
                     isCollectable = true;
                     collateralStatus = "in escrow";
                     loanStateText = "Defaulted (not yet collected)";
                     break;
-                case 3:
+                case "Collected":
                     loanStateText = "Defaulted and collected";
                     collateralStatus = "collected & leftover refunded";
                     break;

@@ -6,6 +6,7 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
+import metricsProvider from "modules/metricsProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { ReserveStats } from "./components/ReserveStats";
@@ -24,6 +25,7 @@ class AugmintToken extends React.Component {
         augmintTokenProvider();
         loanManagerProvider();
         lockManagerProvider();
+        metricsProvider();
     }
 
     handleAugmintTokenRefreshClick = e => {

@@ -16,3 +16,5 @@ export const SCRIPT_STATES = ["New", "Approved", "Done", "Cancelled", "Failed"];
 // rational: it's to avoid loan tx to fail on min loan amount because of an ETH/EUR rate change
 // in the background right when sending the tx from the UI
 export const MIN_LOAN_AMOUNT_ADJUSTMENT = 1.25;
+
+export const LOAN_STATES = ["Open", "Repaid", "Defaulted", "Collected"];
