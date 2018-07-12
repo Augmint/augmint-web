@@ -1,39 +1,38 @@
-import store from "modules/store";
 import { fetchActiveLegacyLoansTx } from "modules/ethereum/legacyLoanManagersTransactions";
 
-const ALL_LOAN_REFRESH_REQUESTED = "legacyLoanManagers/REFRESH_REQUESTED";
-const ALL_LOAN_REFRESH_ERROR = "legacyLoanManagers/REFRESH_ERROR";
-const ALL_LOAN_REFRESH_SUCCESS = "legacyLoanManagers/REFRESH_SUCCESS";
+const LOANS_DATA_REFRESH_REQUESTED = "loansData/REFRESH_REQUESTED";
+const LOANS_DATA_REFRESH_ERROR = "loansData/REFRESH_ERROR";
+const LOANS_DATA_REFRESH_SUCCESS = "loansData/REFRESH_SUCCESS";
 
 const initialState = {
     isLoading: false,
     isLoaded: false,
     loadError: null,
     error: null,
-    loans: [],
+    loansData: [],
     result: null,
     request: null
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case ALL_LOAN_REFRESH_REQUESTED:
+        case LOANS_DATA_REFRESH_REQUESTED:
             return {
                 ...state,
                 isLoading: true,
                 loadError: null
             };
 
-        case ALL_LOAN_REFRESH_SUCCESS:
+        case LOANS_DATA_REFRESH_SUCCESS:
             return {
                 ...state,
-                loans: action.result,
+                loansData: action.result,
                 isLoading: false,
                 isLoaded: true,
                 loadError: null
             };
 
-        case ALL_LOAN_REFRESH_ERROR:
+        case LOANS_DATA_REFRESH_ERROR:
             return {
                 ...state,
                 isLoading: false,
@@ -48,20 +47,20 @@ export default (state = initialState, action) => {
 export const fetchAllLoans = () => {
     return async dispatch => {
         dispatch({
-            type: ALL_LOAN_REFRESH_REQUESTED
+            type: LOANS_DATA_REFRESH_REQUESTED
         });
         try {
-            const loans = await fetchActiveLegacyLoansTx();
+            const loansData = await fetchActiveLegacyLoansTx();
             return dispatch({
-                type: ALL_LOAN_REFRESH_SUCCESS,
-                result: loans
+                type: LOANS_DATA_REFRESH_SUCCESS,
+                result: loansData
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
                 return Promise.reject(error);
             }
             return dispatch({
-                type: ALL_LOAN_REFRESH_ERROR,
+                type: LOANS_DATA_REFRESH_ERROR,
                 error: error
             });
         }
