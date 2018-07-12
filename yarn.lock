@@ -18,22 +18,28 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@ledgerhq/hw-app-eth@4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-4.15.0.tgz#16e520793d27d6daf9edfb6f08138aad14f2ce4f"
+"@ledgerhq/hw-app-eth@4.19.0":
+  version "4.19.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-4.19.0.tgz#2a76556172b4e9522a9b92357a48b39e10e003a6"
   dependencies:
-    "@ledgerhq/hw-transport" "^4.15.0"
+    "@ledgerhq/hw-transport" "^4.19.0"
 
-"@ledgerhq/hw-transport-u2f@4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.15.0.tgz#642f754522f1ee0f95c8cf3e7b71e56fbc6267d5"
+"@ledgerhq/hw-transport-u2f@4.19.0":
+  version "4.19.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.19.0.tgz#cfdd31c88e172c53d24e91201513a212b7933a41"
   dependencies:
-    "@ledgerhq/hw-transport" "^4.15.0"
+    "@ledgerhq/hw-transport" "^4.19.0"
     u2f-api "0.2.7"
 
 "@ledgerhq/hw-transport@^4.15.0":
   version "4.15.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.15.0.tgz#ec99436c2662e70fb6f9c72f7bb5d1f3a051c4e3"
+  dependencies:
+    events "^2.0.0"
+
+"@ledgerhq/hw-transport@^4.19.0":
+  version "4.19.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.19.0.tgz#19a804aee1bfc4abac1dc9a2a7a582e79273f991"
   dependencies:
     events "^2.0.0"
 

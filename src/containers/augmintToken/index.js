@@ -36,7 +36,7 @@ class AugmintToken extends React.Component {
     render() {
         return (
             <EthereumState>
-                <Psegment>
+                <Psegment style={{ padding: "2em 1em" }}>
                     <TopNavTitlePortal>
                         <Pheader className="secondaryColor" header="Reserves" />
                     </TopNavTitlePortal>
