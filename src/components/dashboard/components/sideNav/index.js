@@ -6,6 +6,7 @@ import Icon from "components/augmint-ui/icon";
 
 import styled from "styled-components";
 import theme from "styles/theme";
+import { remCalc } from "styles/theme";
 import { media, mediaopacity } from "styles/media";
 
 import AugmintLogo from "assets/images/logo/augmint.svg";
@@ -44,7 +45,7 @@ export const SideNav = styled.nav`
     height: 100%;
     z-index: 104;
     padding: 20px 0;
-    
+
     &.closed {
         ${media.tablet`
             width: 60px;
@@ -99,7 +100,7 @@ export const SideNavLi = styled.li`
         max-width: 150px;
         margin: auto;
         text-align: left;
-    `}
+    `};
 `;
 
 export const SideNavLink = styled(NavLink)`
@@ -124,7 +125,7 @@ export const SideNavLink = styled(NavLink)`
         align-items: center;
         ${media.tablet`
             border: none;
-        `}
+        `};
     }
 
     > i {
@@ -140,12 +141,11 @@ export const SideNavLink = styled(NavLink)`
         text-transform: uppercase;
         font-size: 12px;
         ${media.tablet`
-            font-size: 20px;
+            font-size: ${remCalc(20)};
             line-height: 2.4rem;
-        `}
+        `};
     }
 `;
-
 
 export default class SiteNav extends React.Component {
     constructor(props) {
@@ -157,8 +157,7 @@ export default class SiteNav extends React.Component {
     }
 
     render() {
-
-        return(
+        return (
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
                     src={this.props.showMenu ? close : hamburgerMenu}
@@ -167,7 +166,7 @@ export default class SiteNav extends React.Component {
                     className={this.props.showMenu ? "opened" : ""}
                 />
                 <NavLink to="/">
-                    <img alt="Augmint" src={AugmintLogo} className={this.props.showMenu ? "" : "hidden"}/>
+                    <img alt="Augmint" src={AugmintLogo} className={this.props.showMenu ? "" : "hidden"} />
                 </NavLink>
                 <SideNavUl className={this.props.showMenu ? "" : "hidden"}>
                     <SideNavLi>
@@ -202,6 +201,6 @@ export default class SiteNav extends React.Component {
                     </SideNavLi>
                 </SideNavUl>
             </SideNav>
-        )
+        );
     }
-};
+}

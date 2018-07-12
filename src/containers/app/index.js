@@ -90,15 +90,25 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
+        this.toggleAccInfo = this.toggleAccInfo.bind(this);
         this.state = {
-            showMobileMenu: false
+            showMobileMenu: false,
+            showAccInfo: false
         };
     }
+
+    toggleAccInfo() {
+        this.setState({
+            showAccInfo: !this.state.showAccInfo
+        });
+    }
+
     toggleMenu() {
         this.setState({
             showMobileMenu: !this.state.showMobileMenu
         });
     }
+
     componentDidMount() {
         this.props.history.listen((location, action) => {
             this.setState(state => {
@@ -119,22 +129,22 @@ class App extends React.Component {
         return (
             <div className={showConnection ? "Site App" : "Site"}>
                 <ScrollToTop />
-                {showConnection &&
-                    <DisclaimerModal />
-                }
-                <TopNav web3Connect={this.props.web3Connect} className={!showConnection && "hide"} />
-                {!showConnection &&
+                {showConnection && <DisclaimerModal />}
+                <TopNav
+                    web3Connect={this.props.web3Connect}
+                    toggleAccInfo={this.toggleAccInfo}
+                    showAccInfo={this.state.showAccInfo}
+                    className={!showConnection && "hide"}
+                />
+                {!showConnection && (
                     <SiteMenu
                         web3Connect={this.props.web3Connect}
                         location={this.props.location}
                         showMenu={this.state.showMobileMenu}
                         toggleMenu={this.toggleMenu}
                     />
-                }
-                {showConnection 
-                    ? <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} /> 
-                    : null
-                }
+                )}
+                {showConnection && <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />}
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
                     {showConnection && (
