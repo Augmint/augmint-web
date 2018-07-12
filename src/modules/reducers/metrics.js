@@ -1,8 +1,8 @@
 import { fetchActiveLegacyLoansTx } from "modules/ethereum/legacyLoanManagersTransactions";
 
-const LOANS_DATA_REFRESH_REQUESTED = "loansData/REFRESH_REQUESTED";
-const LOANS_DATA_REFRESH_ERROR = "loansData/REFRESH_ERROR";
-const LOANS_DATA_REFRESH_SUCCESS = "loansData/REFRESH_SUCCESS";
+const LOANS_DATA_REFRESH_REQUESTED = "metrics/REFRESH_REQUESTED";
+const LOANS_DATA_REFRESH_ERROR = "metrics/REFRESH_ERROR";
+const LOANS_DATA_REFRESH_SUCCESS = "metrics/REFRESH_SUCCESS";
 
 const initialState = {
     isLoading: false,
