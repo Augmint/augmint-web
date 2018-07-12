@@ -63,9 +63,10 @@ export async function fetchActiveLegacyLoansForAddressTx(_userAccount) {
 
 export async function fetchActiveLegacyLoansTx() {
     const web3 = store.getState().web3Connect;
-    const legacyLoanManagerAddresses = LEGACY_LOANMANAGER_CONTRACTS[web3.network.id];
+    const currentLoanManagerAddress = store.getState().contracts.latest.loanManager.address;
+    const loanManagerAddresses = [currentLoanManagerAddress, ...LEGACY_LOANMANAGER_CONTRACTS[web3.network.id]];
 
-    const legacyLoanManagerContracts = legacyLoanManagerAddresses.map(address =>
+    const legacyLoanManagerContracts = loanManagerAddresses.map(address =>
         SolidityContract.connectAt(web3, "LoanManager", address)
     );
 
@@ -103,7 +104,7 @@ export async function fetchActiveLegacyLoansTx() {
             }
         });
         return {
-            address: legacyLoanManagerAddresses[i],
+            address: loanManagerAddresses[i],
             tokenAddress: tokenAddresses[i],
             outstandingLoansAmount,
             defaultedLoansAmount,
