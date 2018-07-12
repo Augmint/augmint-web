@@ -12,6 +12,7 @@ import {
     releaseLegacyFunds,
     LEGACY_LOCKERS_RELEASE_SUCCESS
 } from "modules/reducers/legacyLockers";
+import HashURL from "components/hash";
 
 const styleP = { margin: "1rem 0" };
 
@@ -64,7 +65,10 @@ class LegacyLockers extends React.Component {
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
                     <p style={styleP}>
-                        {contract.locks.length} locks in legacy Lock contract <small> {contract.address} </small>
+                        {contract.locks.length} locks in legacy Lock contract{" "}
+                        <small>
+                            <HashURL hash={lockerContract.address} type={"address/"} />
+                        </small>
                     </p>
 
                     <p style={styleP}>
@@ -111,7 +115,12 @@ class LegacyLockers extends React.Component {
                 <Container>
                     <InfoPanel header="You have locked funds in an older version of Augmint Locker contract">
                         <p style={styleP}>
-                            Augmint Locker version in use on {network.name} network at {lockerContract.address}.
+                            Augmint Locker version in use on{" "}
+                            <HashURL
+                                hash={lockerContract.address}
+                                title={network.name + " network"}
+                                type={"address/"}
+                            />.
                             <br />
                             You can release your funds in the old locker contract when the lock expired.<br />
                             <small>
@@ -151,4 +160,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { dismissLegacyLocker, releaseLegacyFunds };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegacyLockers);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LegacyLockers);

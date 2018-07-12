@@ -76,7 +76,7 @@ class EthereumTxStatus extends React.Component {
                                 <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
-                                        <HashURL hash={tx.transactionHash} />
+                                        <HashURL hash={tx.transactionHash} type={"tx/"} />
                                     </p>
                                 </LoadingPanel>
                             )}
@@ -95,7 +95,7 @@ class EthereumTxStatus extends React.Component {
                                             <small>
                                                 Gas used: {gasUsed}
                                                 <br />
-                                                <HashURL hash={tx.transactionHash} />
+                                                <HashURL hash={tx.transactionHash} type={"tx/"} />
                                             </small>
                                         </p>
                                     </LoadingPanel>
@@ -117,7 +117,7 @@ class EthereumTxStatus extends React.Component {
                                         <small>
                                             Gas used: {gasUsed}
                                             <br />
-                                            <HashURL hash={tx.transactionHash} />
+                                            <HashURL hash={tx.transactionHash} type={"tx/"} />
                                         </small>
                                     </p>
                                 </SuccessPanel>
