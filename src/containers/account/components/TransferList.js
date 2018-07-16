@@ -1,85 +1,105 @@
 import React from "react";
-import { Pblock } from "components/PageLayout";
-import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
+import { TxDate, TxTitle, TxDetails, TxPrice } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
-import { MoreInfoTip } from "components/toolTip";
-import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
+import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 
 export default class TransferList extends React.Component {
     render() {
-        const { filter, header, noItemMessage, userAccountAddress } = this.props;
+        const { filter, header, noItemMessage, userAccount } = this.props;
         const { transfers, isLoading, error } = this.props.transfers;
-        const listItems =
-            transfers &&
-            transfers.filter(filter).map((tx, index) => (
-                <MyListGroup.Row
-                    key={`txRowDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
-                >
-                    <MyGridTable
-                        data-testid={`transferListItem-${tx.transactionHash}`}
-                        key={`txTableDiv-${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`}
-                    >
-                        <Row columns={1}>
-                            <Col>
-                                {tx.args.from.toLowerCase() === userAccountAddress.toLowerCase() ? (
-                                    <AccountAddress
-                                        address={tx.args.to}
-                                        showCopyIcon="true"
-                                        title="To:"
-                                        shortAddress={true}
-                                    />
-                                ) : (
-                                    <AccountAddress
-                                        address={tx.args.from}
-                                        showCopyIcon="true"
-                                        title="From:"
-                                        shortAddress={true}
-                                    />
-                                )}{" "}
-                                <MoreInfoTip header="Transaction details" icon="info" id={"transfer-" + index}>
-                                    blockNumber: {tx.blockNumber}
-                                    <br />blockHash: <small>{tx.blockHash}</small>
-                                    <br />Block timestamp: {tx.blockData.timestamp} {typeof tx.blockData.timestamp}
-                                    <br />transactionIndex: {tx.transactionIndex}
-                                    <br />
-                                    <HashURL hash={tx.transactionHash} type={"tx/"} />
-                                </MoreInfoTip>
-                            </Col>
-                        </Row>
-                        <Row columns={3}>
-                            <Col>Amount: {tx.signedAmount} A€</Col>
-                            <Col>Fee: {tx.senderFee} A€</Col>
-                            <Col>on {tx.blockTimeStampText}</Col>
-                        </Row>
 
-                        {tx.args.narrative && (
-                            <Row columns={1}>
-                                <Col>{tx.args.narrative}</Col>
-                            </Row>
-                        )}
-                    </MyGridTable>
-                </MyListGroup.Row>
-            ));
+        const transferItems =
+            transfers &&
+            transfers
+                .filter(filter)
+                .map((tx, index, all) => {
+                    tx.balance =
+                        index > 0
+                            ? Math.round(all[index - 1].balance * 100 - all[index - 1].signedAmount * 100) / 100
+                            : userAccount.tokenBalance;
+                    return tx;
+                })
+                .map(tx => {
+                    return {
+                        data: tx,
+                        key: `${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`,
+                        date: (
+                            <div>
+                                <TxDate>{tx.blockTimeStampText}</TxDate>
+                            </div>
+                        ),
+                        title: (
+                            <div>
+                                <TxTitle>{tx.direction < 0 ? "Outgoing transfer" : "Incoming transfer"}</TxTitle>
+                                <TxDetails data-testid="txDetails">
+                                    {tx.args.narrative} <HashURL hash={tx.transactionHash} title={"» Details"} />
+                                </TxDetails>
+                            </div>
+                        ),
+                        amount: (
+                            <div>
+                                <TxPrice className={`${tx.direction < 0 ? "minus" : "plus"}`} data-testid="txPrice">
+                                    {tx.direction < 0 ? "-" : "+"} {Math.abs(tx.signedAmount)} A€
+                                </TxPrice>
+                                <br />
+                                <TxPrice>
+                                    <small data-testid="txFee">
+                                        - {tx.senderFee}
+                                        <small> A€ fee</small>
+                                    </small>
+                                </TxPrice>
+                            </div>
+                        ),
+                        balance: (
+                            <div>
+                                <TxPrice>{tx.balance} A€</TxPrice>
+                            </div>
+                        )
+                    };
+                });
 
         return (
-            <Pblock loading={isLoading} header={header}>
+            <div style={{ color: "black" }}>
+                {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {transfers == null && !isLoading && <p>Connecting...</p>}
                 {isLoading && <p>Refreshing transaction list...</p>}
-                {transfers && (
-                    <MyListGroup data-testid="transferListDiv">
-                        {listItems.length === 0 ? noItemMessage : listItems}
-                    </MyListGroup>
+                {!transferItems ? (
+                    noItemMessage
+                ) : (
+                    <StyleTable>
+                        <StyleThead>
+                            <StyleTr>
+                                <StyleTh>Date</StyleTh>
+                                <StyleTh>Transaction</StyleTh>
+                                <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
+                                <StyleTh style={{ textAlign: "right" }}>Balance</StyleTh>
+                            </StyleTr>
+                        </StyleThead>
+                        <StyleTbody>
+                            {transferItems.map(tx => (
+                                <StyleTr
+                                    key={`txRow-${tx.key}`}
+                                    data-testid={`transferListItem-${tx.data.transactionHash}`}
+                                >
+                                    <StyleTd>{tx.date}</StyleTd>
+                                    <StyleTd>{tx.title}</StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }}>{tx.amount}</StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }}>{tx.balance}</StyleTd>
+                                </StyleTr>
+                            ))}
+                        </StyleTbody>
+                    </StyleTable>
                 )}
-            </Pblock>
+            </div>
         );
     }
 }
 
 TransferList.defaultProps = {
     transfers: null,
-    userAccountAddress: null,
+    userAccount: null,
     filter: () => {
         return true; // no filter passed
     },

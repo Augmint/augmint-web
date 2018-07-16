@@ -32,11 +32,6 @@ class AccountHome extends React.Component {
                         <Pgrid.Row>
                             <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <TokenTransferForm />
-
-                                <TransferList
-                                    transfers={this.props.userTransfers}
-                                    userAccountAddress={this.props.userAccount.address}
-                                />
                             </Pgrid.Column>
 
                             <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
@@ -47,6 +42,15 @@ class AccountHome extends React.Component {
                                 />
 
                                 <LockList header="My A-EUR Locks" locks={this.props.locks} />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+
+                        <Pgrid.Row>
+                            <Pgrid.Column>
+                                <TransferList
+                                    transfers={this.props.userTransfers}
+                                    userAccount={this.props.userAccount}
+                                />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

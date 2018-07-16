@@ -46,10 +46,9 @@ describe("Transfers", function() {
             .then(() => {
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
                 cy.get(`[data-testid=transferListItem-${this.txHash}]`).within(() => {
-                    cy.contains("To:" + toAddressShort);
-                    cy.contains("Amount: -" + amount);
-                    cy.contains("Fee: " + fee);
-                    cy.contains(narrative);
+                    cy.contains("[data-testid=txPrice]", "- " + amount);
+                    cy.contains("[data-testid=txFee]", fee);
+                    cy.contains("[data-testid=txDetails]", narrative);
                 });
             });
 
