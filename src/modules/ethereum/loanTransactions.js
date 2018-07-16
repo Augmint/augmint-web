@@ -291,8 +291,9 @@ function parseLoans(loansArray, account) {
             let isCollectable = false;
             let collateralStatus;
 
-            const state = LOAN_STATES[parseInt(bn_state, 10)];
-            switch (state) {
+            const state = parseInt(bn_state, 10);
+            const loanState = LOAN_STATES[state];
+            switch (loanState) {
                 case "Open":
                     if (maturity - currentTime < 24 * 60 * 60 * 2) {
                         /* consider it due 2 days before */
