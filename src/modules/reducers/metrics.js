@@ -1,4 +1,4 @@
-import { fetchActiveLegacyLoansTx } from "modules/ethereum/legacyLoanManagersTransactions";
+import { fetchActiveLegacyLoansTx } from "modules/ethereum/metricsTransaction";
 
 const LOANS_DATA_REFRESH_REQUESTED = "metrics/REFRESH_REQUESTED";
 const LOANS_DATA_REFRESH_ERROR = "metrics/REFRESH_ERROR";
