@@ -19,6 +19,7 @@ const theme = {
         red: "red",
         lightRed: "#fff6f6",
         darkRed: "#9f3a38",
+        green: "green",
         lightGreen: "#fcfff5",
         darkGreen: "#2c662d"
     },
@@ -54,5 +55,5 @@ export default theme;
 export function remCalc(pixelSize) {
     const remCorrection = 16 / 16;
 
-    return pixelSize / 16 * remCorrection + "rem";
+    return (pixelSize / 16) * remCorrection + "rem";
 }

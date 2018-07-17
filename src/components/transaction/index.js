@@ -17,9 +17,9 @@ export const TxDetails = styled.span`
 export const TxPrice = styled.span`
     white-space: nowrap;
     &.minus {
-        color: ${theme.colors.darkRed};
+        color: ${theme.colors.red};
     }
     &.plus {
-        color: ${theme.colors.darkGreen};
+        color: ${theme.colors.green};
     }
 `;
