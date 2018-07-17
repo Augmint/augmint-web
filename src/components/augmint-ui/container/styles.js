@@ -18,14 +18,14 @@ const BaseDiv = `
 
 export const StyledDiv = styled.div`
     ${BaseDiv};
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin: auto;
     ${media.desktop`
       max-width: 933px;
     `};
     ${media.tablet`
-      margin-left: 0;
-      margin-right: 0;
-      max-width: 100%;
+      max-width: 80%;
+    `};
+    ${media.phone`
+      max-width: 98%;
     `};
 `;
