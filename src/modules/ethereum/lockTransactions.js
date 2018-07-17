@@ -5,7 +5,7 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
-import { DECIMALS_DIV } from "utils/constants";
+import { DECIMALS_DIV, PPM_DIV } from "utils/constants";
 
 export async function fetchLockProductsTx() {
     const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
@@ -44,8 +44,8 @@ function parseProducts(productsArray) {
                 durationInDays <= 2 ? " (for testing)" : ""
             }`;
 
-            const perTermInterest = bn_perTermInterest / 1000000;
-            const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
+            const perTermInterest = bn_perTermInterest / PPM_DIV;
+            const interestRatePa = (perTermInterest / durationInDays) * 365;
             parsed.push({
                 id: index,
                 perTermInterest,
@@ -159,14 +159,15 @@ function parseLocks(locksArray) {
             const durationInSecs = parseInt(bn_durationInSecs, 10);
             const durationInDays = durationInSecs / 60 / 60 / 24;
             const durationText = moment.duration(durationInSecs, "seconds").humanize();
+            const interestEarned = bn_interestEarned / DECIMALS_DIV;
 
             const perTermInterest = bn_perTermInterest / 1000000;
-            const interestRatePa = (perTermInterest + 1) ** (365 / durationInDays) - 1;
+            const interestRatePa = (interestEarned / amountLocked / durationInDays) * 365;
 
             const currentTime = moment()
                 .utc()
                 .unix();
-            const isActive = bn_isActive === "1";
+            const isActive = bn_isActive.toString() === "1";
             const isReleasebale = lockedUntil <= currentTime && isActive;
 
             let lockStateText;
@@ -181,7 +182,7 @@ function parseLocks(locksArray) {
             parsed.push({
                 id: parseInt(bn_id, 10),
                 amountLocked,
-                interestEarned: bn_interestEarned / DECIMALS_DIV,
+                interestEarned,
                 lockedUntil,
                 lockedUntilText,
                 perTermInterest,

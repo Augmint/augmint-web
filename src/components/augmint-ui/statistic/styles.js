@@ -17,12 +17,13 @@ const BaseLabel = `
     `;
 
 const BaseValue = `
-    color: ${theme.colors.white};
     font-size: ${remCalc(42)};
     font-weight: 400;
     line-height: ${remCalc(42)};
     margin-top: 0;
     text-size-adjust: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export const StyledLabel = styled.div`
@@ -45,12 +46,16 @@ export const StyledContainer = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     font-size: ${remCalc(14)};
     line-height: ${remCalc(20)};
-    margin: 0 0 ${remCalc(28)};
-    padding: ${remCalc(14)};
+    margin: 0;
+    padding: 0;
     text-align: center;
     text-size-adjust: 100%;
     min-width: 33.33%;
     min-width: calc(100% / 3);
+
+    &.dashboard {
+        color: ${theme.colors.primary};
+    }
 `;
 
 export const StyledGroup = styled.div`
@@ -62,7 +67,7 @@ export const StyledGroup = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     font-size: ${remCalc(14)};
     line-height: ${remCalc(20)};
-    margin: 0 0 ${remCalc(-28)};
+    margin: 0;
     text-align: center;
     text-size-adjust: 100%;
 

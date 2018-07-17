@@ -2,6 +2,7 @@ import React from "react";
 import { ConnectionStatus } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Statistic from "components/augmint-ui/statistic";
+import { Pgrid } from "components/PageLayout";
 
 export class LtdStats extends React.Component {
     render() {
@@ -12,35 +13,41 @@ export class LtdStats extends React.Component {
         const { lockCount } = this.props.lockManager.info;
 
         return (
-            <Segment vertical textAlign="center" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment
+                vertical
+                textAlign="center"
+                loading={isLoading || (!isLoaded && !loadError)}
+                style={{ padding: 0 }}
+            >
                 <ConnectionStatus contract={monetarySupervisor} />
 
-                <Statistic.Group>
-                    <Statistic
-                        data-testid="totalSupply"
-                        style={{ padding: "1em" }}
-                        label="Total locked"
-                        value={totalLockedAmount + " A-EUR"}
-                    >
-                        {lockCount > 0 && <p>in {lockCount} locks (incl. released)</p>}
-                    </Statistic>
+                <Pgrid>
+                    <Pgrid.Row halign="justify">
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic data-testid="totalSupply" label="Total locked" value={totalLockedAmount + " A€"}>
+                                {lockCount > 0 && <p>in {lockCount} locks (incl. released)</p>}
+                            </Statistic>
+                        </Pgrid.Column>
 
-                    <Statistic
-                        data-testid="reserveEthBalance"
-                        style={{ padding: "1em" }}
-                        label="Total loans"
-                        value={totalLoanAmount + " A-EUR"}
-                    >
-                        {loanCount > 0 && <p>{loanCount} loans (incl. repaid&defaulted)</p>}
-                    </Statistic>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic
+                                data-testid="reserveEthBalance"
+                                label="Total loans"
+                                value={totalLoanAmount + " A€"}
+                            >
+                                {loanCount > 0 && <p>{loanCount} loans (incl. repaid&defaulted)</p>}
+                            </Statistic>
+                        </Pgrid.Column>
 
-                    <Statistic
-                        data-testid="reserveTokenBalance"
-                        style={{ padding: "1em" }}
-                        label="Total loans"
-                        value={totalLockedAmount === 0 ? "N/A " : `${(ltdPercent * 100).toFixed(2)} % `}
-                    />
-                </Statistic.Group>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 3 }}>
+                            <Statistic
+                                data-testid="reserveTokenBalance"
+                                label="Loan to Lock ratio"
+                                value={totalLockedAmount === 0 ? "N/A " : `${(ltdPercent * 100).toFixed(2)} % `}
+                            />
+                        </Pgrid.Column>
+                    </Pgrid.Row>
+                </Pgrid>
             </Segment>
         );
     }

@@ -71,7 +71,7 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(refreshLoanManager()); // to update loanCount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
-    if (store.getState().lockManager.isConnected) {
+    if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
@@ -93,7 +93,7 @@ const onLoanRepayed = (loanId, borrower) => {
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
-    if (store.getState().lockManager.isConnected) {
+    if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
@@ -115,7 +115,7 @@ const onLoanCollected = (loanId, borrower) => {
     store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
-    if (store.getState().lockManager.isConnected) {
+    if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;

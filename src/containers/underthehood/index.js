@@ -1,15 +1,19 @@
 import React from "react";
+import { connect } from "react-redux";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
 import AugmintInfoGroup from "./AugmintInfoGroup";
 import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import LocksInfoGroup from "./LocksInfoGroup";
+import StabilityBoardInfoGroup from "./StabilityBoardInfoGroup";
+import PreTokenInfoGroup from "./PreTokenInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "components/augmint-ui/menu";
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
 
-export default class underTheHood extends React.Component {
+class underTheHood extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,12 +31,18 @@ export default class underTheHood extends React.Component {
 
     render() {
         const { selectedGroup } = this.state;
+        const { isConnected } = this.props.web3Connect;
+        
         return (
             <div>
                 <EthereumState />
                 <Psegment>
-                    <Pheader header="Under the hood" />
-
+                    { isConnected && (
+                        <TopNavTitlePortal>
+                            <Pheader className= { "secondaryColor" } header="Under the hood" />
+                        </TopNavTitlePortal>
+                        )
+                    }
                     <Pgrid.Row>
                         <Pgrid.Column>
                             <Menu>
@@ -80,6 +90,24 @@ export default class underTheHood extends React.Component {
                                 >
                                     Exchange
                                 </Menu.Item>
+
+                                <Menu.Item
+                                    data-testid="stabilityBoardInfoLink"
+                                    active={selectedGroup === "stabilityBoard"}
+                                    name="stabilityBoard"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Stability Board
+                                </Menu.Item>
+
+                                <Menu.Item
+                                    data-testid="preTokenInfoLink"
+                                    active={selectedGroup === "preToken"}
+                                    name="preToken"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    PreToken
+                                </Menu.Item>
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
@@ -87,6 +115,8 @@ export default class underTheHood extends React.Component {
                             {selectedGroup === "loans" && <LoansInfoGroup />}
                             {selectedGroup === "locks" && <LocksInfoGroup />}
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
+                            {selectedGroup === "stabilityBoard" && <StabilityBoardInfoGroup />}
+                            {selectedGroup === "preToken" && <PreTokenInfoGroup />}
                         </Pgrid.Column>
                     </Pgrid.Row>
                 </Psegment>
@@ -94,3 +124,9 @@ export default class underTheHood extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    web3Connect: state.web3Connect,
+});
+
+export default connect(mapStateToProps)(underTheHood);

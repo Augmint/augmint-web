@@ -5,31 +5,34 @@
   "homepage": ".",
   "private": true,
   "dependencies": {
+    "@ledgerhq/hw-app-eth": "4.19.0",
+    "@ledgerhq/hw-transport-u2f": "4.20.0",
     "bignumber.js": "5.0.0",
     "del": "3.0.0",
-    "ethers": "3.0.17",
+    "ethereumjs-util": "5.2.0",
+    "ethers": "3.0.25",
+    "hdkey": "0.8.0",
     "moment": "2.22.2",
     "parse": "1.11.1",
-    "react": "16.4.0",
+    "react": "16.4.1",
     "react-copy-to-clipboard": "5.0.1",
-    "react-dom": "16.4.0",
+    "react-dom": "16.4.1",
     "react-ga": "2.5.3",
     "react-redux": "5.0.7",
-    "react-router-dom": "4.2.2",
+    "react-router-dom": "4.3.1",
     "react-router-redux": "5.0.0-alpha.9",
     "react-scripts": "1.1.4",
-    "react-scrollchor": "5.0.2",
+    "react-scrollchor": "6.0.0",
+    "react-tooltip": "3.6.1",
     "redux": "3.7.2",
-    "redux-form": "7.3.0",
+    "redux-form": "7.4.2",
     "redux-logger": "3.0.6",
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
     "stringifier": "1.3.0",
-    "styled-components": "3.3.0",
-    "styled-components-grid": "2.0.0",
-    "styled-system": "2.2.5",
-    "styled-tools": "0.5.0",
-    "styled-tooltip-component": "1.3.0",
+    "styled-components": "3.3.3",
+    "styled-components-grid": "2.1.0",
+    "styled-tools": "0.6.0",
     "web3": "1.0.0-beta.34"
   },
   "scripts": {
@@ -39,17 +42,22 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:runrecord":
-      "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
+    "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
+    "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "cypress": "3.0.1",
-    "eslint-plugin-cypress": "2.0.1"
+    "cypress": "3.0.2",
+    "eslint-plugin-cypress": "2.0.1",
+    "husky": "0.14.3",
+    "prettier": "1.13.7",
+    "pretty-quick": "1.6.0"
   },
   "greenkeeper": {
-    "ignore": ["bignumber.js"]
+    "ignore": [
+      "bignumber.js"
+    ]
   }
 }

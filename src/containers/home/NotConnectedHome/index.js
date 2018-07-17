@@ -44,7 +44,7 @@ export default class NotConnectedHome extends React.Component {
                             <Header textAlign="center" as="h4" size="large" style={{ lineHeight: "31px" }}>
                                 Augmint offers digital tokens targeted to a fiat currency.
                                 <br />
-                                The first Augmint token is <nobr>A-Euro</nobr>, pegged to Euro.
+                                The first Augmint token is <nobr>A-Euro</nobr>, targeted to Euro.
                                 <br />
                                 Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
@@ -70,7 +70,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h3" style={styles.keyFeaturesHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" style={styles.howToUseText}>
+                                        <p className="opac" >
                                             {feature.text}
                                         </p>
                                     </Grid.Unit>
@@ -93,7 +93,7 @@ export default class NotConnectedHome extends React.Component {
                                         key={item.pk}
                                     >
                                         <div className="list-item">
-                                            <p className="opac" style={styles.howToUseText}>
+                                            <p className="opac" >
                                                 {item.text}
                                             </p>
                                         </div>
@@ -116,7 +116,7 @@ export default class NotConnectedHome extends React.Component {
                                         key={item.pk}
                                     >
                                         <div className="list-item">
-                                            <p className="opac" style={styles.howToUseText}>
+                                            <p className="opac" >
                                                 {item.text}
                                             </p>
                                         </div>
@@ -144,7 +144,7 @@ export default class NotConnectedHome extends React.Component {
                     </Rail>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
-                        <p className="opac loans" style={styles.howToUseText}>
+                        <p className="opac loans" >
                             Use your cryptocurrencies without<br />losing them. Get a loan and spend easily.
                         </p>
 
@@ -163,7 +163,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" style={styles.howToUseText}>
+                                        <p className="opac" >
                                             {feature.text}
                                         </p>
                                     </Grid.Unit>
@@ -171,7 +171,7 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
 
-                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+                        <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
@@ -193,7 +193,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" style={styles.howToUseText}>
+                                        <p className="opac" >
                                             {feature.text}
                                         </p>
                                     </Grid.Unit>
@@ -201,7 +201,7 @@ export default class NotConnectedHome extends React.Component {
                             </Grid>
                         </ThemeProvider>
 
-                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
+                        <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
                             <Button type="a" to="/tryit" color="primary" className="try-now">
                                 Try now
                             </Button>
@@ -223,7 +223,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" style={styles.howToUseText}>
+                                        <p className="opac" >
                                             {feature.text}
                                         </p>
                                     </Grid.Unit>
@@ -248,7 +248,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" style={styles.howToUseText}>
+                                        <p className="opac" >
                                             {feature.text}
                                         </p>
                                     </Grid.Unit>

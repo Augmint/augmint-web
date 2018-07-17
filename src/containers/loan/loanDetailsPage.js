@@ -4,11 +4,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import LoanDetails from "./components/LoanDetails";
-import Header from "components/augmint-ui/header";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Pblock, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 import { LoanRepayLink } from "./components/LoanRepayLink";
 import CollectLoanButton from "./collectLoan/CollectLoanButton";
+import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -54,7 +54,9 @@ class LoanDetailsPage extends React.Component {
     render() {
         return (
             <Psegment>
-                <Pheader header="Loan details" />
+                <TopNavTitlePortal>
+                        <Pheader className={ "secondaryColor" } header="Loan details" />
+                </TopNavTitlePortal>
                 {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
                     !this.state.isLoanFound && (
@@ -67,19 +69,18 @@ class LoanDetailsPage extends React.Component {
                     <Pgrid>
                         <Pgrid.Row wrap={false}>
                             <Pgrid.Column size={1 / 2}>
-                                <Header>
-                                    {this.state.loan.loanStateText} loan #{this.state.loan.loanId}
-                                </Header>
-                                <LoanDetails loan={this.state.loan} />
+                                <Pblock header={this.state.loan.loanStateText + "loan #" + this.state.loan.id} className={ "tertiaryColor" } >
+                                    <LoanDetails loan={this.state.loan} />
 
-                                <LoanRepayLink loan={this.state.loan} size="large" />
+                                    <LoanRepayLink loan={this.state.loan} size="large" />
 
-                                {this.state.loan.isCollectable && (
-                                    <CollectLoanButton
-                                        loanManager={this.props.loanManager}
-                                        loansToCollect={[{ id: this.state.loan.id }]}
-                                    />
-                                )}
+                                    {this.state.loan.isCollectable && (
+                                        <CollectLoanButton
+                                            loanManager={this.props.loanManager}
+                                            loansToCollect={[{ id: this.state.loan.id }]}
+                                        />
+                                    )}
+                                </Pblock>
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

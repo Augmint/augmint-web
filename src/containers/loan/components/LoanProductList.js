@@ -1,7 +1,6 @@
 import React from "react";
-import { MyListGroup } from "components/MyListGroups";
 import { Pblock } from "components/PageLayout";
-import LoanProductDetails from "./LoanProductDetails";
+import NewLoanPage from "../newLoan/NewLoanPage";
 
 export default function LoanProductList(props) {
     let products = props.products;
@@ -18,31 +17,13 @@ export default function LoanProductList(props) {
         );
         if (filteredProducts.length === 0) {
             listItems = <span>No products</span>;
-        } else {
-            listItems = filteredProducts.map((prod, index) => (
-                <MyListGroup.Row
-                    wrap={true}
-                    header={`Product ${prod.id + 1} - Repay in ${prod.termText}${
-                        prod.term <= 172800 ? " (for testing)" : ""
-                    }`}
-                    key={prod.id}
-                >
-                    <MyListGroup.Col>
-                        <LoanProductDetails key={`loanProdDiv-${prod.id}`} product={prod} />
-                    </MyListGroup.Col>
-                    {props.selectComponent && (
-                        <MyListGroup.Col style={{ paddingBottom: "2rem" }}>
-                            <props.selectComponent productId={prod.id} />
-                        </MyListGroup.Col>
-                    )}
-                </MyListGroup.Row>
-            ));
         }
     }
 
     return (
         <Pblock header={props.header}>
-            <MyListGroup>{listItems}</MyListGroup>
+            {listItems}
+            {!listItems && <NewLoanPage />}
         </Pblock>
     );
 }

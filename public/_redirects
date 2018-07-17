@@ -1,1 +1,7 @@
+# Redirect domain aliases to primary domain
+https://www.augmint.cc/* https://www.augmint.org/:splat 301!
+https://augmint.cc/* https://www.augmint.org/:splat 301!
+
+/:folder/static/media/*  /static/media/:splat 200
+/:folder/:subfolder/static/media/* /static/media/:splat 200
 /*  /index.html  200

@@ -15,8 +15,7 @@ import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
 import Button from "components/augmint-ui/button";
 
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
-import { FeatureContext } from "modules/services/featureService";
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -35,25 +34,18 @@ class AugmintToken extends React.Component {
     render() {
         return (
             <EthereumState>
-                <Psegment>
+                <Psegment style={{ padding: "2em 1em" }}>
                     <TopNavTitlePortal>
-                        <FeatureContext>
-                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Reserves" /> : null}
-                        </FeatureContext>
+                        <Pheader className="secondaryColor" header="Reserves" />}
                     </TopNavTitlePortal>
                     <Pgrid.Row>
-                        <Pgrid.Column>
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <TotalSupply
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
                             />
                         </Pgrid.Column>
-                        <TopNavTitlePortal>
-                            <FeatureContext>
-                                {features => features.dashboard ? null : <Pheader header="Reserves" style={{ width: "100%" }} />}
-                            </FeatureContext>
-                        </TopNavTitlePortal>
-                        <Pgrid.Column>
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <ReserveStats
                                 augmintToken={this.props.augmintToken}
                                 monetarySupervisor={this.props.monetarySupervisor}
@@ -61,8 +53,8 @@ class AugmintToken extends React.Component {
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Loans & Locks" style={{ width: "100%" }} />
-                        <Pgrid.Column>
+                        <Pheader header="Loans & Locks" className={"primaryColor"} style={{ width: "100%" }} />
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <LtdStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 loanManager={this.props.loanManager}
@@ -75,11 +67,16 @@ class AugmintToken extends React.Component {
                                 icon="angle-right"
                                 labelposition="right"
                                 size="large"
+                                style={{ marginBottom: "15px" }}
                             />
                         </Pgrid.Column>
 
-                        <Pheader header="Earnings" style={{ marginTop: "1em", width: "100%" }} />
-                        <Pgrid.Column>
+                        <Pheader
+                            header="Earnings"
+                            className={"primaryColor"}
+                            style={{ marginTop: "1em", width: "100%" }}
+                        />
+                        <Pgrid.Column style={{ padding: 0 }}>
                             <EarningStats
                                 monetarySupervisor={this.props.monetarySupervisor}
                                 augmintToken={this.props.augmintToken}
@@ -108,4 +105,7 @@ const mapDispatchToProps = dispatch =>
         dispatch
     );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AugmintToken);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AugmintToken);

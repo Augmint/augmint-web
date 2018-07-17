@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import { media } from "styles/media";
 
-const BaseIcon = `
+export const StyledIcon = styled.i`
     text-align: center;
 
     &.disabled {
-        opacity: .45;
+        opacity: 0.45;
     }
 
     &.close {
@@ -14,7 +15,7 @@ const BaseIcon = `
         margin: 0;
         top: 10px;
         right: 10px;
-        opacity: .7;
+        opacity: 0.7;
         transition: opacity ${theme.transitions.fast};
     }
 
@@ -27,10 +28,18 @@ const BaseIcon = `
     }
 
     &[color="grey"] {
-      color: ${theme.colors.mediumGrey};
+        color: ${theme.colors.mediumGrey};
     }
-`;
 
-export const StyledIcon = styled.i`
-    ${BaseIcon};
+    &.accountIcon {
+        color: ${theme.colors.white};
+        font-size: 1.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+        padding-left: 14px;
+
+        ${media.desktop`
+            padding-left: 0;
+        `};
+    }
 `;

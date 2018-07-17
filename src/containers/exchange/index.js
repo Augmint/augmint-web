@@ -5,7 +5,6 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import AccountInfo from "components/AccountInfo";
 import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
@@ -15,8 +14,7 @@ import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
 
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
-import { FeatureContext } from "modules/services/featureService";
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -26,41 +24,22 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
     render() {
-        const { network, orders, userAccount, exchange, rates, trades } = this.props;
+        const { orders, exchange, rates, trades } = this.props;
+        const userAccount = this.props.userAccount;
         return (
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <FeatureContext>
-                            {features => features.dashboard ? <Pheader className="secondaryColor" header="Buy & Sell A-EUR" /> : <Pheader header="Buy & Sell A-EUR" />}
-                        </FeatureContext>
+                        <Pheader className="secondaryColor" header="Buy & Sell A-EUR" />
                     </TopNavTitlePortal>
                     <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
-                                <AccountInfo account={userAccount} />
-
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
-                                    userAccountAddress={userAccount.address}
-                                    network={network}
+                                    web3Connect={this.props.web3Connect}
                                 />
-                                <FeatureContext>
-                                    {
-                                        features => features.dashboard ? 
-                                        <PlaceOrderForm
-                                            orders={orders}
-                                            exchange={exchange}
-                                            rates={rates}
-                                        /> :
-                                        <PlaceOrderForm
-                                            orders={orders}
-                                            exchange={exchange}
-                                            rates={rates}
-                                            header="A€ &harr; ETH on Augmint"
-                                        />
-                            }
-                                </FeatureContext>
+                                <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
 
                                 <MyOrders
                                     testid="myOrdersBlock"
@@ -71,7 +50,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column size={1 / 2}>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <ExchangeSummary exchange={exchange} rates={rates} />
                                 {orders.orders && (
                                     <MatchOrdersButton
@@ -89,7 +68,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
-                        <Pgrid.Row>
+                        <Pgrid.Row style={{ padding: "0 1em" }}>
                             <TradeHistory
                                 trades={trades}
                                 userAccountAddress={userAccount.address}
@@ -104,7 +83,7 @@ class ExchangeHome extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    network: state.web3Connect.network,
+    web3Connect: state.web3Connect,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
     orders: state.orders,

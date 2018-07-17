@@ -46,7 +46,6 @@ export default class ReleaseLockButton extends React.Component {
     }
 
     render() {
-        const { lockId } = this.props;
         const { submitting, submitSucceeded, error } = this.state;
 
         return (
@@ -72,11 +71,7 @@ export default class ReleaseLockButton extends React.Component {
 
                 {!error &&
                     !submitSucceeded && (
-                        <Button
-                            data-testid={`releaseLockButton-${lockId}`}
-                            disabled={submitting}
-                            onClick={this.submitCancel}
-                        >
+                        <Button data-testid={`releaseLockButton`} disabled={submitting} onClick={this.submitCancel}>
                             {submitting ? "Submitting..." : "Release funds"}
                         </Button>
                     )}

@@ -3,12 +3,11 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { Pgrid } from "components/PageLayout";
+import { Pblock, Pgrid } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { repayLoan, LOANTRANSACTIONS_REPAY_SUCCESS } from "modules/reducers/loanTransactions";
 import LoanDetails from "containers/loan/components/LoanDetails";
-import AccountInfo from "components/AccountInfo";
 import { SubmissionError, reduxForm } from "redux-form";
 import {
     EthSubmissionErrorPanel,
@@ -100,7 +99,6 @@ class RepayLoanPage extends React.Component {
         return (
             <Pgrid.Row wrap={false}>
                 <Pgrid.Column size={6 / 17}>
-                    <AccountInfo account={this.props.userAccount} />
                     <RepayHelp />
                 </Pgrid.Column>
                 <Pgrid.Column size={1 / 17} />
@@ -115,38 +113,41 @@ class RepayLoanPage extends React.Component {
 
                     {!submitSucceeded &&
                         !this.state.isLoading && (
-                            <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                {loan.state !== 5 &&
-                                    loan.state !== 0 && (
-                                        <WarningPanel header="Can't repay">
-                                            This loan is in "{loan.loanStateText}" status.
-                                        </WarningPanel>
-                                    )}
-                                <h4>Selected Loan</h4>
-                                <LoanDetails loan={loan} />
+                            <Pblock header="Selected Loan">
+                                <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                    {loan.state !== 5 &&
+                                        loan.state !== 0 && (
+                                            <WarningPanel header="Can't repay">
+                                                This loan is in "{loan.loanStateText}" status.
+                                            </WarningPanel>
+                                        )}
+                                    <LoanDetails loan={loan} />
 
-                                {this.state.loan.isRepayable &&
-                                    !this.state.loan.isDue && (
-                                        <p>This loan is not due soon but you can repay early without any extra fee.</p>
+                                    {this.state.loan.isRepayable &&
+                                        !this.state.loan.isDue && (
+                                            <p>
+                                                This loan is not due soon but you can repay early without any extra fee.
+                                            </p>
+                                        )}
+                                    {this.state.loan.isRepayable && (
+                                        <Button
+                                            data-testid="confirmRepayButton"
+                                            size="big"
+                                            type="submit"
+                                            disabled={
+                                                this.props.submitting ||
+                                                !this.state.isLoanFound ||
+                                                !this.state.loan.isRepayable
+                                            }
+                                        >
+                                            {this.props.submitting
+                                                ? "Submitting..."
+                                                : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
+                                        </Button>
                                     )}
-                                {this.state.loan.isRepayable && (
-                                    <Button
-                                        data-testid="confirmRepayButton"
-                                        size="big"
-                                        type="submit"
-                                        disabled={
-                                            this.props.submitting ||
-                                            !this.state.isLoanFound ||
-                                            !this.state.loan.isRepayable
-                                        }
-                                    >
-                                        {this.props.submitting
-                                            ? "Submitting..."
-                                            : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
-                                    </Button>
-                                )}
-                                {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
-                            </Form>
+                                    {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
+                                </Form>
+                            </Pblock>
                         )}
 
                     {submitSucceeded && (

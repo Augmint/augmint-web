@@ -12,9 +12,18 @@ const BaseHeader = `
       color: ${theme.colors.opacLightGrey}
     }
 
+    &.primaryColor {
+        color: ${theme.colors.primary};
+    }
+
     &.secondaryColor {
         color: ${theme.colors.secondary};
     }
+
+    &.tertiaryColor {
+        color: ${theme.colors.primary};
+    }
+
     & i {
       margin: 0 10px;
     }
@@ -44,7 +53,7 @@ const HeaderH2 = `
 `;
 
 const HeaderH1 = `
-    font-size: ${theme.typography.fontSizes.h1};
+    font-size: ${remCalc(32)};
     line-height: ${theme.typography.fontSizes.h1};
     margin-bottom: ${remCalc(14)};
 `;
@@ -58,7 +67,7 @@ export const StyledHeaderH2 = styled.h2`
     ${BaseHeader};
     ${HeaderH2};
 
-    .Site__dash & {
+    .App & {
         font-size: ${remCalc(24)};
         margin: 0;
     }

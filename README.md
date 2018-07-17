@@ -12,9 +12,9 @@ Decentralised stable cryptocurrency on Ethereum
 
 ## Concept
 
-Augmint provides digital tokens, value of each token pegged to a fiat currency.
+Augmint provides digital tokens, value of each token targeted to a fiat currency.
 
-The first Augmint token will be A-EUR (Augmint Crypto Euro), pegged to EUR.
+The first Augmint token will be A-EUR (Augmint Crypto Euro), targeted to EUR.
 
 The value of 1 A-EUR is always closely around 1 EUR.
 
@@ -59,4 +59,4 @@ Check the whole team on [augmint.cc](http://www.augmint.cc)
 
 ## Licence
 
-This project is licensed under the GNU General Public License v3.0 license - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU Affero General Public License v3.0 license - see the [LICENSE](LICENSE) file for details.

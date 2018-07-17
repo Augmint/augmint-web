@@ -86,7 +86,7 @@ class PlaceOrderForm extends React.Component {
         } else {
             const tokenAmount = parseFloat(this.props.tokenAmount);
             if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
-                const ethValue = tokenAmount / this.props.rates.info.ethFiatRate * price;
+                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
                 this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
             } else {
                 // tokenAmount is not entered yet
@@ -161,12 +161,13 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu size="massive" tabular>
+                <Menu>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyMenuLink"
+                        className={"buySell"}
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -175,6 +176,7 @@ class PlaceOrderForm extends React.Component {
                         data-index={TOKEN_SELL}
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellMenuLink"
+                        className={"buySell"}
                     >
                         Sell A-EUR
                     </Menu.Item>
@@ -251,7 +253,7 @@ class PlaceOrderForm extends React.Component {
                                 normalize={Normalizations.twoDecimals}
                                 data-testid="priceInput"
                                 style={{ borderRadius: "0" }}
-                                labelAlignLeft={<PriceToolTip />}
+                                labelAlignLeft={<PriceToolTip id={"place_order_form"} />}
                                 labelAlignRight="%"
                             />
 

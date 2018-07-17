@@ -11,6 +11,7 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 import RadioInput from "components/augmint-ui/RadioInput";
+import ToolTip from "components/toolTip";
 
 import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 import theme from "styles/theme";
@@ -20,11 +21,27 @@ class LockContainer extends React.Component {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.lockAmountValidation = this.lockAmountValidation.bind(this);
+        this.defaultProductId = this.defaultProductId.bind(this);
+    }
+
+    defaultProductId() {
+        let productId = this.defaultId;
+
+        if (!productId) {
+            productId = this.props.lockProducts
+                .filter(product => product.isActive)
+                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)[0].id;
+            this.setState({
+                defaultId: productId
+            });
+        }
+        return productId;
     }
 
     lockAmountValidation(value, allValues) {
-        const minValue = this.props.lockProducts[allValues.productId].minimumLockAmount;
-        const maxValue = this.props.lockProducts[allValues.productId].maxLockAmount;
+        const productId = allValues.productId || this.defaultProductId();
+        const minValue = this.props.lockProducts[productId].minimumLockAmount;
+        const maxValue = this.props.lockProducts[productId].maxLockAmount;
         const val = parseFloat(value);
 
         if (val < minValue) {
@@ -37,7 +54,8 @@ class LockContainer extends React.Component {
     }
 
     async onSubmit(values) {
-        let amount;
+        let amount,
+            productId = this.props.productId ? this.props.productId : this.defaultProductId();
         try {
             amount = parseFloat(values.lockAmount);
         } catch (error) {
@@ -49,7 +67,7 @@ class LockContainer extends React.Component {
             });
         }
 
-        const res = await store.dispatch(newLock(this.props.productId, amount));
+        const res = await store.dispatch(newLock(productId, amount));
         if (res.type !== LOCKTRANSACTIONS_NEWLOCK_CREATED) {
             console.error(res);
             throw new SubmissionError({
@@ -64,7 +82,7 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { lockProducts, lockManager, dashboard } = this.props;
+        const { lockProducts, lockManager } = this.props;
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
 
         return (
@@ -102,6 +120,7 @@ class LockContainer extends React.Component {
                             ]}
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            data-testid="lockAmountInput"
                         />
 
                         <label>Select term:</label>
@@ -109,12 +128,21 @@ class LockContainer extends React.Component {
                         <TermTable>
                             <TermTableHeader>
                                 <TermTableRow>
-                                    <TermTableHeadCell {...{dashboard}} />
-                                    <TermTableHeadCell {...{dashboard}} />
-                                    <TermTableHeadCell {...{dashboard}}>Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell {...{dashboard}}>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell {...{dashboard}}>Interest p.a.</TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }} {...{dashboard}}>You earn</TermTableHeadCell>
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell />
+                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
+                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
+                                    <TermTableHeadCell>
+                                        Interest p.a.
+                                        <ToolTip header="Lock Interest per Annum" id={"lock_interest"}>
+                                            The annualised interest rate of the lock. It's calculated using a simple
+                                            (non-compound) method and with a 365 day year.<br />
+                                            <br />
+                                            Note: For small lock amounts the actual interest per annum can be slightly
+                                            higher than displayed (additonal 0.01 A-EUR in interest due to rounding)
+                                        </ToolTip>
+                                    </TermTableHeadCell>
+                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
                                 </TermTableRow>
                             </TermTableHeader>
                             <TermTableBody>
@@ -122,29 +150,29 @@ class LockContainer extends React.Component {
                                     lockProducts
                                         .filter(product => product.isActive)
                                         .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
-                                        .map(product => {
+                                        .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell>
                                                         <Field
                                                             name="productId"
+                                                            data-testid={"selectLockProduct-" + product.id}
                                                             val={product.id}
-                                                            defaultChecked={product.id === this.props.productId}
+                                                            defaultChecked={!index}
                                                             component={RadioInput}
                                                         />
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell>
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>{product.maxLockAmount} A€</TermTableCell>
-                                                    <TermTableCell {...{dashboard}}>
+                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>
-                                                    <TermTableCell {...{dashboard}} style={{ textAlign: "right" }}>
-
+                                                    <TermTableCell style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
-                                                            `${Math.floor(
+                                                            `${Math.ceil(
                                                                 this.props.lockAmount * product.perTermInterest * 100
                                                             ) / 100} A€`}
                                                     </TermTableCell>
@@ -175,6 +203,5 @@ const selector = formValueSelector("LockForm");
 LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
 
 export default reduxForm({
-    form: "LockForm",
-    initialValues: { productId: 0 }
+    form: "LockForm"
 })(LockContainer);

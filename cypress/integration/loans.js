@@ -2,14 +2,13 @@ describe("Loans", function() {
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
         cy.get("[data-testid=getLoanMenuLink]").click();
 
-        cy.get(`[data-testid=selectLoanProduct-${prodId}]`).click();
-        cy.get("[data-testid=selectedLoanProductBlock]").should("contain", "Selected: loan product " + (prodId + 1));
+        cy.get(`[data-testid=label-selectLoanProduct-${prodId}]`).click();
+
         // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
-        cy
-            .get("[data-testid=loanTokenAmountInput]")
+        cy.get("[data-testid=loanTokenAmountInput]")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
-        cy.get("[data-testid=repaymentAmountInput]").should("have.value", repaymentAmount.toString());
+        cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
         cy.get("[data-testid=submitBtn]").click();
@@ -30,14 +29,16 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(7, 50, 50.01, 0.05062).then(res => {
+        getLoan(8, 50, 50.01, 0.05062).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
             cy.get("[data-testid=reservesMenuLink").click();
             // // TODO: check reserves
             cy.get("[data-testid=loansToCollectButton]").click();
-            cy.get("[data-testid=collectLoanButton]").click();
+            cy.get("[data-testid=collectLoanButton]")
+                .should("be.visible")
+                .click();
 
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
             cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
@@ -45,18 +46,16 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy
-                .get("[data-testid=loansToCollectBlock]", { timeout: 8000 }) // increase timeout b/c of occassional Travis timeouts
+            cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }) // increase timeout b/c of occassional Travis timeouts
                 .should("contain", "No defaulted and uncollected loan.");
         });
     });
 
     it("Should repay a loan", function() {
-        getLoan(0, 50, 58.14, 0.10593).then(() => {
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
+        getLoan(0, 51, 59.68, 0.10873).then(() => {
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
-            cy
-                .contains("this loan's page")
+            cy.contains("this loan's page")
                 .click()
                 .then(() => {
                     cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
@@ -70,7 +69,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.assertUserAEurBalanceOnUI((this.startingAeurBalance - 8.14).toFixed(2)); // interest
+            cy.assertUserAEurBalanceOnUI((this.startingAeurBalance - 8.68).toFixed(2)); // interest
 
             // TODO loan removed, status etc.
             //cy.get("[data-testid=myAccountMenuLink]").click();

@@ -15,6 +15,7 @@ export default function Icon(props) {
             break;
         case "close":
             className += " fas fa-times";
+            break;
         case "connect":
             className += " fas fa-plug";
             break;
@@ -53,6 +54,9 @@ export default function Icon(props) {
             break;
         case "github":
             className += " fab fa-github";
+            break;
+        case "copy":
+            className += " far fa-copy";
             break;
         default:
             break;

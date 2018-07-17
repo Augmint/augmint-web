@@ -3,9 +3,9 @@ import React from "react";
 import { StyledContainer, StyledLabel, StyledValue, StyledGroup } from "./styles";
 
 export default function Statistic(props) {
-    const { label, value, children, ...other } = props;
+    const { label, value, children, className, ...other } = props;
     return (
-        <StyledContainer {...other}>
+        <StyledContainer {...other} className={className + " dashboard"}>
             {label && <StyledLabel>{label}</StyledLabel>}
             {value && <StyledValue>{value}</StyledValue>}
             {children}

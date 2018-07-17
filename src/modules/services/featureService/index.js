@@ -3,7 +3,9 @@ import React from "react";
 const FEATURE_PREFIX = "f_";
 
 // set deterministic flags
-const systemFeatures = {};
+const systemFeatures = {
+    dashboard: true
+};
 
 function setFeatureCookie(param) {
     // validate

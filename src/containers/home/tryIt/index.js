@@ -6,7 +6,8 @@ import { Tsegment } from "components/TextContent";
 import Button from "components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
-import { Disclaimer } from "./Disclaimer";
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import { StyledHeader } from "./styles";
 
 class TryIt extends React.Component {
     componentDidMount() {
@@ -16,24 +17,35 @@ class TryIt extends React.Component {
     render() {
         const { isLoading, isConnected, error } = this.props.web3Connect;
         return (
-            <Tsegment header="Try Augmint">
-                <Disclaimer />
-                {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
-                {!isLoading && error && <HowToConnect />}
-                {!isLoading && isConnected && <TryItConnected />}
-
-                <Tsegment.Row columns={1}>
-                    <Tsegment.Column>
-                        <Button
-                            content="Read more about the concept"
-                            to="/concept#"
-                            icon="angle-right"
-                            labelposition="right"
-                            size="large"
+            <div>
+                {isConnected && (
+                    <TopNavTitlePortal>
+                        <StyledHeader
+                            as="h1"
+                            className="secondaryColor"
+                            content="Try Augmint"
+                            style={{ margin: "16px 0" }}
                         />
-                    </Tsegment.Column>
-                </Tsegment.Row>
-            </Tsegment>
+                    </TopNavTitlePortal>
+                )}
+                <Tsegment header={""}>
+                    {isLoading && <LoadingPanel header="Trying to connect to Ethereum network..." />}
+                    {!isLoading && error && <HowToConnect />}
+                    {!isLoading && isConnected && <TryItConnected web3Connect={this.props.web3Connect} />}
+
+                    <Tsegment.Row columns={1}>
+                        <Tsegment.Column>
+                            <Button
+                                content="Read more about the concept"
+                                to="/concept#"
+                                icon="angle-right"
+                                labelposition="right"
+                                size="large"
+                            />
+                        </Tsegment.Column>
+                    </Tsegment.Row>
+                </Tsegment>
+            </div>
         );
     }
 }

@@ -21,7 +21,7 @@ export default class SolidityContract {
         let startBlock;
         switch (connection.network.name) {
             case "Main":
-                startBlock = 4992980;
+                startBlock = 5770234;
                 break;
             case "Rinkeby":
                 startBlock = 1661751;

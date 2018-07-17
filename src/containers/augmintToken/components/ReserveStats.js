@@ -2,6 +2,7 @@ import React from "react";
 import { ConnectionStatus } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Statistic from "components/augmint-ui/statistic";
+import { Pgrid } from "components/PageLayout";
 
 export class ReserveStats extends React.Component {
     render() {
@@ -18,30 +19,33 @@ export class ReserveStats extends React.Component {
                 : parseFloat((ethFiatRate * reserveEthBalance).toFixed(decimals));
 
         return (
-            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)}>
+            <Segment className="vertical" loading={isLoading || (!isLoaded && !loadError)} style={{ padding: 0 }}>
                 <ConnectionStatus contract={augmintToken} />
 
-                <Statistic.Group>
-                    <Statistic
-                        data-testid="reserveEthBalance"
-                        style={{ padding: "1em" }}
-                        label="ETH reserve"
-                        value={reserveEthBalance + " ETH"}
-                    >
-                        {showDetails && (
-                            <p data-testid="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>
-                                ({reserveEthBalanceInFiat} EUR)
-                            </p>
-                        )}
-                    </Statistic>
-
-                    <Statistic
-                        data-testid="reserveTokenBalance"
-                        style={{ padding: "1em" }}
-                        label="A-EUR reserve"
-                        value={reserveTokenBalance + " A-EUR"}
-                    />
-                </Statistic.Group>
+                <Pgrid>
+                    <Pgrid.Row halign="justify">
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
+                            <Statistic
+                                data-testid="reserveEthBalance"
+                                label="ETH reserve"
+                                value={(reserveEthBalance > 0 ? Number(reserveEthBalance).toFixed(4) : 0) + " ETH"}
+                            >
+                                {showDetails && (
+                                    <p data-testid="reserveEthBalanceInFiat" style={{ textAlign: "center" }}>
+                                        ({reserveEthBalanceInFiat} EUR)
+                                    </p>
+                                )}
+                            </Statistic>
+                        </Pgrid.Column>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
+                            <Statistic
+                                data-testid="reserveTokenBalance"
+                                label="A-EUR reserve"
+                                value={reserveTokenBalance + " A€"}
+                            />
+                        </Pgrid.Column>
+                    </Pgrid.Row>
+                </Pgrid>
             </Segment>
         );
     }
