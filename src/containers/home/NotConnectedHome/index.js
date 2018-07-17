@@ -70,9 +70,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h3" style={styles.keyFeaturesHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" >
-                                            {feature.text}
-                                        </p>
+                                        <p className="opac">{feature.text}</p>
                                     </Grid.Unit>
                                 ))}
                             </Grid>
@@ -93,9 +91,7 @@ export default class NotConnectedHome extends React.Component {
                                         key={item.pk}
                                     >
                                         <div className="list-item">
-                                            <p className="opac" >
-                                                {item.text}
-                                            </p>
+                                            <p className="opac">{item.text}</p>
                                         </div>
                                     </Grid.Unit>
                                 ))}
@@ -116,9 +112,7 @@ export default class NotConnectedHome extends React.Component {
                                         key={item.pk}
                                     >
                                         <div className="list-item">
-                                            <p className="opac" >
-                                                {item.text}
-                                            </p>
+                                            <p className="opac">{item.text}</p>
                                         </div>
                                     </Grid.Unit>
                                 ))}
@@ -144,7 +138,7 @@ export default class NotConnectedHome extends React.Component {
                     </Rail>
                     <Container>
                         <Header as="h2">Augmint loans</Header>
-                        <p className="opac loans" >
+                        <p className="opac loans">
                             Use your cryptocurrencies without<br />losing them. Get a loan and spend easily.
                         </p>
 
@@ -163,9 +157,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" >
-                                            {feature.text}
-                                        </p>
+                                        <p className="opac">{feature.text}</p>
                                     </Grid.Unit>
                                 ))}
                             </Grid>
@@ -193,9 +185,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" >
-                                            {feature.text}
-                                        </p>
+                                        <p className="opac">{feature.text}</p>
                                     </Grid.Unit>
                                 ))}
                             </Grid>
@@ -223,9 +213,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" >
-                                            {feature.text}
-                                        </p>
+                                        <p className="opac">{feature.text}</p>
                                     </Grid.Unit>
                                 ))}
                             </Grid>
@@ -248,9 +236,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Header as="h4" style={styles.howToUseHeader}>
                                             {feature.title}
                                         </Header>
-                                        <p className="opac" >
-                                            {feature.text}
-                                        </p>
+                                        <p className="opac">{feature.text}</p>
                                     </Grid.Unit>
                                 ))}
                             </Grid>

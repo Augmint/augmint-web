@@ -18,10 +18,13 @@ export const StyledModal = styled.div`
     ${BaseModal};
     ${media.desktop`
           width: 680px;
-      `};
+    `};
     ${media.tablet`
-        width: 70%;
-      `};
+        width: 75%;
+    `};
+    ${media.phone`
+        width: 85%;
+    `};
 `;
 
 export const StyledOverlay = styled.div`

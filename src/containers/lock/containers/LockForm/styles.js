@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import theme from "styles/theme";
+import { media } from "../../../../styles/media";
 
 export const TermTable = styled.table`
     background-color: transparent !important;
@@ -17,16 +18,37 @@ export const TermTableBody = styled.tbody``;
 
 export const TermTableRow = styled.tr``;
 
-
 export const TermTableCell = styled.td`
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     color: ${theme.colors.primary};
     border-bottom: 1px solid ${theme.colors.opacExtraLighterGrey};
-    padding: 1rem;
+    padding: 0.8rem;
 
     &:first-child {
-        width: 40px;
+        width: 10px;
+        padding-left: 0;
+        ${media.phone`
+            padding-right: .1rem;
+        `};
     }
+
+    ${media.phone`
+        &:nth-child(3) {
+            padding-right: .4rem;
+        }
+        &:nth-child(4) {
+            padding-left: .4rem;
+            padding-right: .2rem;
+        }
+        &:nth-child(5) {
+            padding-left: 0;
+            min-width: 50px;
+        }
+        &:last-child {
+            padding-left: .2rem;
+            padding-right: 0;
+        }
+    `};
 `;
 
 export const TermTableHeadCell = styled.th`
@@ -36,8 +58,31 @@ export const TermTableHeadCell = styled.th`
     text-align: left;
 
     &:first-child {
-        width: 40px;
+        width: 10px;
+        padding-left: 0;
+        ${media.phone`
+            padding-right: .1rem;
+        `};
     }
+
+    ${media.phone`
+        &:nth-child(3) {
+            padding-right: .4rem;
+        }
+        &:nth-child(4) {
+            padding-left: .4rem;
+            padding-right: .2rem;
+        }
+        &:nth-child(5) {
+            padding-left: 0;
+            padding-right: .2rem;
+            width: 52px;
+        }
+        &:last-child {
+            padding-left: .2rem;
+            padding-right: 0;
+        }
+    `};
 `;
 
 export const TermTableHeader = styled.thead`

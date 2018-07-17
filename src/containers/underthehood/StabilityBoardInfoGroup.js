@@ -16,18 +16,16 @@ class StabilityBoardInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid>
-                <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={10 / 32}>
+                <Pgrid.Row>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <StabilityBoardProxyInfo
                             contractData={this.props.stabilityBoardProxyData}
                             contract={this.props.stabilityBoardProxy}
                         />
-                    </Pgrid.Column>
-                    <Pgrid.Column size={11 / 32}>
-                        <StabilityBoardScriptsList scripts={this.props.stabilityBoardProxyData.scripts} />
-                    </Pgrid.Column>
-                    <Pgrid.Column size={11 / 32}>
                         <StabilityBoardSignersList signers={this.props.stabilityBoardProxyData.signers} />
+                    </Pgrid.Column>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                        <StabilityBoardScriptsList scripts={this.props.stabilityBoardProxyData.scripts} />
                     </Pgrid.Column>
                 </Pgrid.Row>
             </Pgrid>

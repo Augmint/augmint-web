@@ -11,7 +11,7 @@ import PreTokenInfoGroup from "./PreTokenInfoGroup";
 import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "components/augmint-ui/menu";
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 class underTheHood extends React.Component {
     constructor(props) {
@@ -32,20 +32,19 @@ class underTheHood extends React.Component {
     render() {
         const { selectedGroup } = this.state;
         const { isConnected } = this.props.web3Connect;
-        
+
         return (
             <div>
                 <EthereumState />
                 <Psegment>
-                    { isConnected && (
+                    {isConnected && (
                         <TopNavTitlePortal>
-                            <Pheader className= { "secondaryColor" } header="Under the hood" />
+                            <Pheader className={"secondaryColor"} header="Under the hood" />
                         </TopNavTitlePortal>
-                        )
-                    }
+                    )}
                     <Pgrid.Row>
                         <Pgrid.Column>
-                            <Menu>
+                            <Menu style={{ overflow: "scroll" }}>
                                 <Menu.Item
                                     data-testid="baseInfoLink"
                                     active={selectedGroup === "baseinfo"}
@@ -126,7 +125,7 @@ class underTheHood extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    web3Connect: state.web3Connect,
+    web3Connect: state.web3Connect
 });
 
 export default connect(mapStateToProps)(underTheHood);
