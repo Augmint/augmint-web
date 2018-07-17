@@ -2,6 +2,7 @@
     TODO: add RATES_REFRESH_ERROR
     */
 import store from "modules/store";
+import BigNumber from "bignumber.js";
 
 import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
@@ -79,9 +80,9 @@ export const refreshRates = () => {
                     bn_tokenBalance,
                     tokenBalance: bn_tokenBalance / DECIMALS_DIV,
 
-                    bn_ethFiatRate,
+                    bn_ethFiatRate: new BigNumber(bn_ethFiatRate / DECIMALS_DIV),
                     ethFiatRate: bn_ethFiatRate / DECIMALS_DIV,
-                    fiatEthRate: 1 / bn_ethFiatRate * DECIMALS_DIV
+                    fiatEthRate: (1 / bn_ethFiatRate) * DECIMALS_DIV
                 }
             });
         } catch (error) {

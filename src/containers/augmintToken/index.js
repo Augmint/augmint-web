@@ -36,14 +36,113 @@ class AugmintToken extends React.Component {
     };
 
     render() {
+        let loansCollected = "?",
+            amountOwnedByUsers = "?",
+            amountOwnedByUsersLiquid = "?",
+            loanCollateralCoverageRatio = "?",
+            collateralInEscrow = "?",
+            availableForMarketIntervention = "?",
+            bn_collateralInEscrowEth = 1,
+            bn_outstandingLoansAmount = 1;
+
+        if (Object.keys(this.props.metrics.loansData).length) {
+            loansCollected = new BigNumber(this.props.metrics.loansData.collectedLoansAmount.toFixed(15))
+                .plus(this.props.metrics.loansData.defaultedLoansAmount)
+                .toNumber();
+        }
+
+        if (
+            this.props.augmintToken.info.totalSupply !== "?" &&
+            this.props.monetarySupervisor.info.reserveTokenBalance !== "?" &&
+            this.props.augmintToken.info.feeAccountTokenBalance !== "?" &&
+            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance !== "?"
+        ) {
+            const bn_amountOwnedByUsers = new BigNumber(this.props.augmintToken.info.totalSupply.toFixed(15))
+                .minus(this.props.monetarySupervisor.info.reserveTokenBalance)
+                .minus(this.props.augmintToken.info.feeAccountTokenBalance)
+                .minus(this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance);
+
+            amountOwnedByUsers = bn_amountOwnedByUsers.toNumber();
+            amountOwnedByUsersLiquid = bn_amountOwnedByUsers
+                .minus(this.props.monetarySupervisor.info.totalLockedAmount)
+                .toNumber();
+        }
+
+        if (
+            this.props.metrics.loansData.collateralInEscrowEth &&
+            this.props.metrics.loansData.outstandingLoansAmount &&
+            this.props.rates.info.bn_ethFiatRate
+        ) {
+            bn_collateralInEscrowEth = new BigNumber(this.props.metrics.loansData.collateralInEscrowEth.toFixed(15));
+            bn_outstandingLoansAmount = new BigNumber(this.props.metrics.loansData.outstandingLoansAmount.toFixed(15));
+            let bn_collateralInEscrow = this.props.rates.info.bn_ethFiatRate.mul(bn_collateralInEscrowEth);
+            collateralInEscrow = bn_collateralInEscrow.toFixed(2);
+
+            loanCollateralCoverageRatio = bn_outstandingLoansAmount
+                .div(bn_collateralInEscrow)
+                .mul(100)
+                .toFixed(2);
+        }
+
+        if (
+            this.props.monetarySupervisor.info.reserveEthBalance !== "?" &&
+            this.props.augmintToken.info.feeAccountEthBalance !== "?"
+        ) {
+            availableForMarketIntervention = new BigNumber(
+                this.props.monetarySupervisor.info.reserveEthBalance.toFixed(15)
+            )
+                .plus(this.props.augmintToken.info.feeAccountEthBalance)
+                .toNumber();
+        }
+        let loanLimit = 0;
+        const loanProductsList =
+            this.props.loanManager &&
+            this.props.loanManager.products &&
+            this.props.loanManager.products.map((product, index) => {
+                if (index === 0) {
+                    loanLimit = product.maxLoanAmount;
+                }
+                if (product.maxLoanAmount < loanLimit) {
+                    loanLimit = product.maxLoanAmount;
+                }
+                return (
+                    <div>
+                        {product.isActive && (
+                            <h1 key={"reserv-page-loan-" + index}>
+                                Loan: {" " + product.termText + " " + (product.interestRatePa * 100).toFixed(2)}
+                            </h1>
+                        )}
+                    </div>
+                );
+            });
+        let lockLimit = 0;
+        const lockProductsList =
+            this.props.lockManager &&
+            this.props.lockManager.products &&
+            this.props.lockManager.products.map((product, index) => {
+                if (index === 0) {
+                    lockLimit = product.maxLockAmount;
+                }
+                if (product.maxLockAmount < loanLimit) {
+                    lockLimit = product.maxLockAmount;
+                }
+                return (
+                    <div>
+                        {product.isActive && (
+                            <h1 key={"reserv-page-lock-" + index}>
+                                Lock: {" " + product.durationText + " " + (product.interestRatePa * 100).toFixed(2)}
+                            </h1>
+                        )}
+                    </div>
+                );
+            });
         return (
             <EthereumState>
                 <div style={{ color: "black" }}>
                     <h1>Loans Outstanding: {this.props.metrics.loansData.outstandingLoansAmount}</h1>
                     <h1>
                         Loans Collected:
-                        {this.props.metrics.loansData.collectedLoansAmount +
-                            this.props.metrics.loansData.defaultedLoansAmount}
+                        {loansCollected}
                     </h1>
                     <h1>
                         Issued by Stability Board (Net): {this.props.monetarySupervisor.info.issuedByStabilityBoard}
@@ -59,43 +158,56 @@ class AugmintToken extends React.Component {
                         Earned Interest (interestEarnedAccountTokenBalance):{" "}
                         {this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance}
                     </h1>
-                    <h1>
-                        Amount Owned by Users:{" "}
-                        {this.props.augmintToken.info.totalSupply -
-                            this.props.monetarySupervisor.info.reserveTokenBalance -
-                            this.props.augmintToken.info.feeAccountTokenBalance -
-                            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance}
-                    </h1>
+                    <h1>Amount Owned by Users: {amountOwnedByUsers}</h1>
                     <br />
                     <h1>
                         Locked in Aamount (totalLockedAmount): {this.props.monetarySupervisor.info.totalLockedAmount}
                     </h1>
-                    <h1>
-                        Amount Owned by Users (Liquid):{" "}
-                        {this.props.augmintToken.info.totalSupply -
-                            this.props.monetarySupervisor.info.reserveTokenBalance -
-                            this.props.augmintToken.info.feeAccountTokenBalance -
-                            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance -
-                            this.props.monetarySupervisor.info.totalLockedAmount}
-                    </h1>
+                    <h1>Amount Owned by Users (Liquid): {amountOwnedByUsersLiquid}</h1>
                     <br />
                     <br />
-                    <h1>Loan Collateral Coverage Ratio: ???</h1>
+                    <h1>Loan Collateral Coverage Ratio: {loanCollateralCoverageRatio + " %"}</h1>
                     <h1>Loans Outstanding: {this.props.metrics.loansData.outstandingLoansAmount}</h1>
 
-                    <h1>Collateral in escrow (metrics):{this.props.metrics.loansData.collateralInEscrowEth}</h1>
+                    <h1>
+                        Collateral in escrow (metrics):{this.props.metrics.loansData.collateralInEscrowEth + " ETH, "}
+                        {collateralInEscrow + " A-EUR"}
+                    </h1>
+                    <h1>??? Collateral in escrow ??? :{this.props.loanManager.info.ethBalance}</h1>
+                    <br />
+                    <br />
+                    <br />
+                    <h1>
+                        ETH Market Intervention Reserve (monetarySupervisor->reserveEthBalance):{
+                            this.props.monetarySupervisor.info.reserveEthBalance
+                        }
+                    </h1>
+                    <h1>
+                        ETH Fees (augmintToken->feeAccountEthBalance):{" "}
+                        {this.props.augmintToken.info.feeAccountEthBalance}
+                    </h1>
+                    <h1>Available for Market Intervention: {availableForMarketIntervention}</h1>
+                    <br />
+                    <br />
+                    <h1>LOANS</h1>
+                    <h1>Active Loans: {this.props.monetarySupervisor.info.totalLoanAmount}</h1>
+                    <h1>Loan To Lockin Ratio: {this.props.monetarySupervisor.info.ltdPercent}</h1>
+                    <h1>Current Loan Limit: {loanLimit}</h1>
+                    {loanProductsList}
+                    <br />
+                    <br />
+                    <h1>LOCK</h1>
+                    <h1>Active Lockins: {this.props.monetarySupervisor.info.totalLockedAmount}</h1>
+                    <h1>Loan To Lockin Ratio: {this.props.monetarySupervisor.info.ltdPercent}</h1>
+                    <h1>Current Lockin Limit: {lockLimit}</h1>
+                    {lockProductsList}
                     <br />
                     <br />
                     <br />
                     <br />
                     <br />
-                    {/* <h1>ETH Fees: {this.props.augmintToken.info.feeAccountEthBalance}</h1>
-                    <h1>Collateral in escrow:{this.props.loanManager.info.ethBalance}</h1>
-                    <h1>ltdPercent: {this.props.monetarySupervisor.info.ltdPercent}</h1>
-                    <h1>maxLoanByLtd: {this.props.monetarySupervisor.info.maxLoanByLtd}</h1>
-                    <h1>maxLockByLtd: {this.props.monetarySupervisor.info.maxLockByLtd}</h1>
-                    <h1>reserveEthBalance: {this.props.monetarySupervisor.info.reserveEthBalance}</h1>
-                    <h1>totalLoanAmount: {this.props.monetarySupervisor.info.totalLoanAmount}</h1> */}
+                    <br />
+                    <br />
                 </div>
                 <Psegment style={{ padding: "2em 1em" }}>
                     <TopNavTitlePortal>

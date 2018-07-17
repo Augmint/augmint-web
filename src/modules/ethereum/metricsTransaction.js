@@ -1,4 +1,5 @@
 import store from "modules/store";
+import BigNumber from "bignumber.js";
 import { fetchLoansTx } from "./loanTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
 import { LOAN_STATES, LEGACY_LOANMANAGER_CONTRACTS } from "utils/constants";
@@ -24,27 +25,27 @@ export async function fetchActiveLegacyLoansTx() {
     ]);
 
     const loanManagersValues = legacyLoans.map((loans, i) => {
-        let outstandingLoansAmount = 0,
-            defaultedLoansAmount = 0,
-            collectedLoansAmount = 0,
-            collateralInEscrowEth = 0;
+        let bn_outstandingLoansAmount = new BigNumber(0),
+            bn_defaultedLoansAmount = new BigNumber(0),
+            bn_collectedLoansAmount = new BigNumber(0),
+            bn_collateralInEscrowEth = new BigNumber(0);
 
         loans.forEach(loan => {
             if (loan.collateralStatus === "in escrow") {
-                collateralInEscrowEth += loan.collateralEth;
+                bn_collateralInEscrowEth = bn_collateralInEscrowEth.plus(loan.collateralEth);
             }
             const loanState = LOAN_STATES[loan.state];
             switch (loanState) {
                 case "Open":
-                    outstandingLoansAmount += loan.loanAmount;
+                    bn_outstandingLoansAmount = bn_outstandingLoansAmount.plus(loan.loanAmount);
                     break;
 
                 case "Defaulted":
-                    defaultedLoansAmount += loan.loanAmount;
+                    bn_defaultedLoansAmount = bn_defaultedLoansAmount.plus(loan.loanAmount);
                     break;
 
                 case "Collected":
-                    collectedLoansAmount += loan.loanAmount;
+                    bn_collectedLoansAmount = bn_collectedLoansAmount.plus(loan.loanAmount);
                     break;
 
                 default:
@@ -54,30 +55,30 @@ export async function fetchActiveLegacyLoansTx() {
         return {
             address: loanManagerAddresses[i],
             tokenAddress: tokenAddresses[i],
-            outstandingLoansAmount,
-            defaultedLoansAmount,
-            collectedLoansAmount,
-            collateralInEscrowEth
+            bn_outstandingLoansAmount,
+            bn_defaultedLoansAmount,
+            bn_collectedLoansAmount,
+            bn_collateralInEscrowEth
         };
     });
 
-    var outstandingLoansAmount = 0,
-        defaultedLoansAmount = 0,
-        collectedLoansAmount = 0,
-        collateralInEscrowEth = 0;
+    var bn_outstandingLoansAmount = new BigNumber(0),
+        bn_defaultedLoansAmount = new BigNumber(0),
+        bn_collectedLoansAmount = new BigNumber(0),
+        bn_collateralInEscrowEth = new BigNumber(0);
 
     loanManagersValues.forEach(loanManagerValues => {
-        outstandingLoansAmount += loanManagerValues.outstandingLoansAmount;
-        defaultedLoansAmount += loanManagerValues.defaultedLoansAmount;
-        collectedLoansAmount += loanManagerValues.collectedLoansAmount;
-        collateralInEscrowEth += loanManagerValues.collateralInEscrowEth;
+        bn_outstandingLoansAmount = bn_outstandingLoansAmount.plus(loanManagerValues.bn_outstandingLoansAmount);
+        bn_defaultedLoansAmount = bn_defaultedLoansAmount.plus(loanManagerValues.bn_defaultedLoansAmount);
+        bn_collectedLoansAmount = bn_collectedLoansAmount.plus(loanManagerValues.bn_collectedLoansAmount);
+        bn_collateralInEscrowEth = bn_collateralInEscrowEth.plus(loanManagerValues.bn_collateralInEscrowEth);
     });
 
     return {
         loanManagersValues,
-        outstandingLoansAmount,
-        defaultedLoansAmount,
-        collectedLoansAmount,
-        collateralInEscrowEth
+        outstandingLoansAmount: bn_outstandingLoansAmount.toNumber(),
+        defaultedLoansAmount: bn_defaultedLoansAmount.toNumber(),
+        collectedLoansAmount: bn_collectedLoansAmount.toNumber(),
+        collateralInEscrowEth: bn_collateralInEscrowEth.toNumber()
     };
 }
