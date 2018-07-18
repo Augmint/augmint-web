@@ -110,7 +110,7 @@ TransferList.defaultProps = {
     transfers: null,
     userAccount: null,
     noItemMessage: <p>No transactions</p>,
-    header: "A-EUR transfer history",
+    header: null,
     limit: 5
 };
 

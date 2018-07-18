@@ -13,6 +13,7 @@ describe("Transfers", function() {
         const expBal = parseFloat((this.startingAeurBalance - amount - fee).toFixed(2));
 
         cy.get("[data-testid=myAccountMenuLink]").click();
+        cy.get("[data-testid=transferButton]").click();
 
         cy.get("[data-testid=transferAmountInput]")
             .type(amount)
@@ -45,6 +46,7 @@ describe("Transfers", function() {
             .as("txHash")
             .then(() => {
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=myAccountMenuLink]").click();
                 cy.get(`[data-testid=transferListItem-${this.txHash}]`).within(() => {
                     cy.contains("[data-testid=txDetails]", "To: " + toAddressShort);
                     cy.contains("[data-testid=txPrice]", "- " + amount);

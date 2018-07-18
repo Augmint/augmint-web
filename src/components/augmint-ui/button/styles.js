@@ -13,7 +13,7 @@ const BaseButton = `
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 200;
-    margin: 0 .95em 0 0;
+    margin: 0 1em 0 0;
     padding: 0 14px;
     border-radius: 4px;
     height: 42px;

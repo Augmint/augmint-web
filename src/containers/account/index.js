@@ -6,12 +6,12 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import LoanList from "containers/loan/components/LoanList";
 import LockList from "containers/lock/components/LockList";
-import TokenTransferForm from "./TokenTransferForm";
 import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import Button from "components/augmint-ui/button";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -29,28 +29,27 @@ class AccountHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <Pgrid>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
-                                <TokenTransferForm />
-                            </Pgrid.Column>
+                        <div style={{ textAlign: "right" }}>
+                            <Button data-testid="transferButton" to="/transfer">
+                                Transfer A-EUR
+                            </Button>
+                        </div>
+                        <TransferList
+                            header="My A-EUR Account History"
+                            transfers={this.props.userTransfers}
+                            userAccount={this.props.userAccount}
+                        />
 
+                        <Pgrid.Row>
                             <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
                                 <LoanList
                                     header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}
                                     loans={this.props.loans}
                                 />
-
-                                <LockList header="My A-EUR Locks" locks={this.props.locks} />
                             </Pgrid.Column>
-                        </Pgrid.Row>
-
-                        <Pgrid.Row>
-                            <Pgrid.Column>
-                                <TransferList
-                                    transfers={this.props.userTransfers}
-                                    userAccount={this.props.userAccount}
-                                />
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
+                                <LockList header="My A-EUR Locks" locks={this.props.locks} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
