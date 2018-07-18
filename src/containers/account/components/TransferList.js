@@ -45,7 +45,7 @@ class TransferList extends React.Component {
                             <TxPrice className={`${tx.direction < 0 ? "minus" : "plus"}`} data-testid="txPrice">
                                 {tx.direction < 0 ? "-" : "+"} {Math.abs(tx.signedAmount).toFixed(2)} A€
                             </TxPrice>
-                            {tx.senderFee >= 0 && (
+                            {tx.senderFee > 0 && (
                                 <TxPrice>
                                     <small data-testid="txFee">
                                         - {tx.senderFee.toFixed(2)}
