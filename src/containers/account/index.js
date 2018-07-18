@@ -29,8 +29,11 @@ class AccountHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <Pgrid>
-                        <div style={{ textAlign: "right" }}>
-                            <Button data-testid="transferButton" to="/transfer">
+                        <div style={{ textAlign: "right", marginTop: 25, marginBottom: -15 }}>
+                            <Button data-testid="transferButton" to="/exchange" className="primary">
+                                Buy / Sell A-EUR
+                            </Button>
+                            <Button data-testid="transferButton" to="/transfer" className="primary">
                                 Transfer A-EUR
                             </Button>
                         </div>

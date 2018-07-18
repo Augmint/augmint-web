@@ -22,24 +22,37 @@ const BaseButton = `
     letter-spacing: normal;
     border: 1px solid ${theme.colors.grey};
 
-    &.dashboardColors {
-      background-color: ${theme.colors.secondary};
+    &:hover {
+      background-color: ${theme.colors.grey};
+      color: ${theme.colors.white};
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.2);
     }
 
     &[disabled] {
       color: ${theme.colors.primary};
       cursor: default;
       opacity: .45;
+      pointer-events: none;
     }
 
     &.hideIfDisables[disabled] {
       visibility: hidden;
     }
 
-    &:not([disabled]):hover {
-        background-color: ${theme.colors.grey};
+    &.dashboardColors {
+      background-color: ${theme.colors.secondary};
+
+      &:hover,
+      &:focus {
+        background-color: ${theme.colors.secondaryDark};
+      }
+    }
+    
+    &.primary {
+        padding: 8px 30px;
+        background-color: ${theme.colors.primary};
         color: ${theme.colors.white};
-        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+        font-size: 16px;
     }
 
     &.grey {
