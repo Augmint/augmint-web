@@ -30,9 +30,9 @@ describe("Loans", function() {
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
         getLoan(8, 50, 50.01, 0.05062).then(res => {
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
-                .scrollIntoView()
-                .click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click({
+                force: true
+            });
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
             cy.get("[data-testid=reservesMenuLink").click();
@@ -46,12 +46,12 @@ describe("Loans", function() {
             cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
-                .scrollIntoView()
-                .click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
 
-            cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }) // increase timeout b/c of occassional Travis timeouts
-                .should("contain", "No defaulted and uncollected loan.");
+            cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }).should(
+                "contain",
+                "No defaulted and uncollected loan."
+            );
         });
     });
 
