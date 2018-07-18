@@ -30,7 +30,9 @@ describe("Loans", function() {
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
         getLoan(8, 50, 50.01, 0.05062).then(res => {
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
+                .scrollIntoView()
+                .click();
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
             cy.get("[data-testid=reservesMenuLink").click();
