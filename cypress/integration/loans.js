@@ -60,7 +60,7 @@ describe("Loans", function() {
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
             cy.contains("this loan's page")
-                .click()
+                .click({ force: true })
                 .then(() => {
                     cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
                 });
