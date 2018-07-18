@@ -24,18 +24,12 @@
   dependencies:
     "@ledgerhq/hw-transport" "^4.19.0"
 
-"@ledgerhq/hw-transport-u2f@4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.19.0.tgz#cfdd31c88e172c53d24e91201513a212b7933a41"
+"@ledgerhq/hw-transport-u2f@4.20.0":
+  version "4.20.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.20.0.tgz#4118ace4dce55e0630db6c69972d8a88c87ed674"
   dependencies:
     "@ledgerhq/hw-transport" "^4.19.0"
     u2f-api "0.2.7"
-
-"@ledgerhq/hw-transport@^4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.15.0.tgz#ec99436c2662e70fb6f9c72f7bb5d1f3a051c4e3"
-  dependencies:
-    events "^2.0.0"
 
 "@ledgerhq/hw-transport@^4.19.0":
   version "4.19.0"
