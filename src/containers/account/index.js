@@ -30,10 +30,10 @@ class AccountHome extends React.Component {
 
                     <Pgrid>
                         <div style={{ textAlign: "right", marginTop: 25, marginBottom: -15 }}>
-                            <Button data-testid="transferButton" to="/exchange" className="primary">
+                            <Button to="/exchange" className="primary">
                                 Buy / Sell A-EUR
                             </Button>
-                            <Button data-testid="transferButton" to="/transfer" className="primary">
+                            <Button to="/transfer" className="primary" data-testid="transferButton">
                                 Transfer A-EUR
                             </Button>
                         </div>
