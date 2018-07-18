@@ -29,12 +29,10 @@ class TransferList extends React.Component {
         if (transfers) {
             transfers = transfers.slice(0, this.state.limit);
 
-            transfers.reduce(
-                (balance, tx, index, all) =>
-                    (tx.balance =
-                        index > 0 ? Math.round(balance * 100 - all[index - 1].signedAmount * 100) / 100 : balance),
-                userAccount.tokenBalance
-            );
+            transfers.reduce((balance, tx, index, all) => {
+                return (tx.balance =
+                    index > 0 ? Math.round(balance * 100 - all[index - 1].signedAmount * 100) / 100 : balance);
+            }, userAccount.tokenBalance || 0);
 
             transfers = transfers.map(tx => {
                 return {
