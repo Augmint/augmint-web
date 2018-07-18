@@ -59,8 +59,8 @@ class TxInfo extends React.Component {
             TO_LOAN: "Loan repayment",
             FROM_LOCK: "Lock in release",
             TO_LOCK: "New lock in",
-            FROM_EXCHANGE: "A-EUR buy order",
-            TO_EXCHANGE: "A-EUR sell order",
+            FROM_EXCHANGE: "Incoming from Exchange",
+            TO_EXCHANGE: "Sell order",
             FROM_TRANSFER: "Incoming transfer",
             TO_TRANSFER: "Outgoing transfer"
         };
