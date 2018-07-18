@@ -2,6 +2,7 @@ import React from "react";
 import { TxDate, TxInfo, TxPrice } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
+import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 
 class TransferList extends React.Component {
@@ -30,8 +31,8 @@ class TransferList extends React.Component {
             transfers = transfers.slice(0, this.state.limit);
 
             transfers.reduce((balance, tx, index, all) => {
-                return (tx.balance =
-                    index > 0 ? Math.round(balance * 100 - all[index - 1].signedAmount * 100) / 100 : balance);
+                const amount = index > 0 ? all[index - 1].signedAmount : 0;
+                return (tx.balance = Math.round(balance * 100 - amount * 100) / 100);
             }, userAccount.tokenBalance || 0);
 
             transfers = transfers.map(tx => {
@@ -61,12 +62,10 @@ class TransferList extends React.Component {
         }
 
         return (
-            <div style={{ color: "black" }}>
+            <Segment loading={isLoading} style={{ color: "black" }}>
                 {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
-                {transfers == null && !isLoading && <p>Connecting...</p>}
-                {isLoading && <p>Refreshing transaction list...</p>}
-                {!transfers ? (
+                {!transfers || transfers.length === 0 ? (
                     noItemMessage
                 ) : (
                     <StyleTable>
@@ -102,7 +101,7 @@ class TransferList extends React.Component {
                             <Button onClick={this.showMore}>Show older</Button>
                         </div>
                     )}
-            </div>
+            </Segment>
         );
     }
 }

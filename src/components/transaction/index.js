@@ -31,19 +31,12 @@ export const TxPrice = styled.span`
 
 class TxInfo extends React.Component {
     getAddressType(address) {
-        const {
-            loanManager,
-            lockManager,
-            exchangeManager,
-            legacyLoanManagers,
-            legacyLockManagers,
-            legacyExchangeManagers
-        } = this.props;
-        const loanAddresses = [loanManager, ...legacyLoanManagers].map(manager => manager.address.toLowerCase());
-        const lockAddresses = [lockManager, ...legacyLockManagers].map(manager => manager.address.toLowerCase());
-        const exchangeAddresses = [exchangeManager, ...legacyExchangeManagers].map(manager =>
-            manager.address.toLowerCase()
-        );
+        const props = this.props;
+        const getAddr = manager => manager.address.toLowerCase();
+
+        const loanAddresses = [props.loanManager, ...props.legacyLoanManagers].map(getAddr);
+        const lockAddresses = [props.lockManager, ...props.legacyLockManagers].map(getAddr);
+        const exchangeAddresses = [props.exchangeManager, ...props.legacyExchangeManagers].map(getAddr);
 
         address = address.toLowerCase();
 
