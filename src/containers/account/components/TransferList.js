@@ -39,7 +39,7 @@ class TransferList extends React.Component {
                     data: tx,
                     key: `${tx.blockNumber}-${tx.transactionIndex}-${tx.logIndex}-${tx.directionText}`,
                     date: <TxDate>{tx.blockTimeStampText}</TxDate>,
-                    title: <TxInfo tx={tx} />,
+                    info: <TxInfo tx={tx} />,
                     amount: (
                         <span>
                             <TxPrice className={`${tx.direction < 0 ? "minus" : "plus"}`} data-testid="txPrice">
@@ -72,7 +72,7 @@ class TransferList extends React.Component {
                     <StyleTable>
                         <StyleThead>
                             <StyleTr>
-                                <StyleTh className={"phone-hidden"}>Date</StyleTh>
+                                <StyleTh className={"hide-xs"}>Date</StyleTh>
                                 <StyleTh>Transaction</StyleTh>
                                 <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
                                 <StyleTh style={{ textAlign: "right" }}>Balance</StyleTh>
@@ -84,8 +84,11 @@ class TransferList extends React.Component {
                                     key={`txRow-${tx.key}`}
                                     data-testid={`transferListItem-${tx.data.transactionHash}`}
                                 >
-                                    <StyleTd className={"phone-hidden"}>{tx.date}</StyleTd>
-                                    <StyleTd>{tx.title}</StyleTd>
+                                    <StyleTd className={"hide-xs"}>{tx.date}</StyleTd>
+                                    <StyleTd>
+                                        <div className={"show-xs"}>{tx.date}</div>
+                                        {tx.info}
+                                    </StyleTd>
                                     <StyleTd style={{ textAlign: "right" }}>{tx.amount}</StyleTd>
                                     <StyleTd style={{ textAlign: "right" }}>{tx.balance}</StyleTd>
                                 </StyleTr>

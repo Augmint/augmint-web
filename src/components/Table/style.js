@@ -24,12 +24,6 @@ export const StyleTr = styled.tr`
     ${StyleTd}, ${StyleTh} {
         text-align: left;
         padding: 0.5em;
-
-        ${media.tablet`
-            &.phone-hidden {
-                display: none;
-            }
-        `};
     }
     ${StyleTh} {
         text-transform: uppercase;

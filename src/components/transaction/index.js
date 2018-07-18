@@ -10,7 +10,6 @@ export const TxDate = styled.span`
 `;
 
 export const TxTitle = styled.span`
-    display: block;
     font-weight: bold;
 `;
 
@@ -32,9 +31,19 @@ export const TxPrice = styled.span`
 
 class TxInfo extends React.Component {
     getAddressType(address) {
-        const { loanManager, lockManager, legacyLoanManagers, legacyLockManagers } = this.props;
+        const {
+            loanManager,
+            lockManager,
+            exchangeManager,
+            legacyLoanManagers,
+            legacyLockManagers,
+            legacyExchangeManagers
+        } = this.props;
         const loanAddresses = [loanManager, ...legacyLoanManagers].map(manager => manager.address.toLowerCase());
         const lockAddresses = [lockManager, ...legacyLockManagers].map(manager => manager.address.toLowerCase());
+        const exchangeAddresses = [exchangeManager, ...legacyExchangeManagers].map(manager =>
+            manager.address.toLowerCase()
+        );
 
         address = address.toLowerCase();
 
@@ -43,6 +52,9 @@ class TxInfo extends React.Component {
         }
         if (lockAddresses.includes(address)) {
             return "LOCK";
+        }
+        if (exchangeAddresses.includes(address)) {
+            return "EXCHANGE";
         }
 
         return "TRANSFER";
@@ -54,6 +66,8 @@ class TxInfo extends React.Component {
             TO_LOAN: "Loan repayment",
             FROM_LOCK: "Lock in release",
             TO_LOCK: "New lock in",
+            FROM_EXCHANGE: "A-EUR buy order",
+            TO_EXCHANGE: "A-EUR sell order",
             FROM_TRANSFER: "Incoming transfer",
             TO_TRANSFER: "Outgoing transfer"
         };
@@ -66,15 +80,19 @@ class TxInfo extends React.Component {
 
         return (
             <div>
-                <TxTitle>{this.getTitleText(tx)}</TxTitle>
+                <div>
+                    <TxTitle>{this.getTitleText(tx)}</TxTitle>{" "}
+                    <small>
+                        <HashURL hash={tx.transactionHash} type={"tx/"} title={"» Details"} />
+                    </small>
+                </div>
                 <TxDetails data-testid="txDetails">
                     <AccountAddress
                         address={tx.direction < 0 ? tx.args.to : tx.args.from}
                         title={tx.direction < 0 ? "To: " : "From: "}
                         shortAddress={true}
                         showCopyIcon={false}
-                    />{" "}
-                    <HashURL hash={tx.transactionHash} type={"tx/"} title={"» Details"} />
+                    />
                     <br />
                     {tx.args.narrative}
                 </TxDetails>
@@ -86,8 +104,10 @@ class TxInfo extends React.Component {
 TxInfo = connect(state => ({
     loanManager: state.contracts.latest.loanManager,
     lockManager: state.contracts.latest.lockManager,
+    exchangeManager: state.contracts.latest.exchange,
     legacyLoanManagers: state.legacyLoanManagers.contracts,
-    legacyLockManagers: state.legacyLockers.contracts
+    legacyLockManagers: state.legacyLockers.contracts,
+    legacyExchangeManagers: state.legacyExchanges.contracts
 }))(TxInfo);
 
 export { TxInfo };
