@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "styles/media";
 
 export const StyleTitle = styled.h3``;
 
@@ -23,6 +24,12 @@ export const StyleTr = styled.tr`
     ${StyleTd}, ${StyleTh} {
         text-align: left;
         padding: 0.5em;
+
+        ${media.tablet`
+            &.phone-hidden {
+                display: none;
+            }
+        `};
     }
     ${StyleTh} {
         text-transform: uppercase;
