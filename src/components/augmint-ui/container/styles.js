@@ -23,9 +23,19 @@ export const StyledDiv = styled.div`
       max-width: 933px;
     `};
     ${media.tablet`
-      max-width: 80%;
+      &.homePage { 
+        max-width: 60%;
+        &.wider {
+            max-width: 85%;
+          }
+      }
     `};
     ${media.phone`
-      max-width: 98%;
+      &.homePage { 
+        max-width: 90%;
+        &.wider {
+          max-width: 98%;
+        }
+      }
     `};
 `;

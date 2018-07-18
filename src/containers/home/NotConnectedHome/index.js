@@ -38,7 +38,7 @@ export default class NotConnectedHome extends React.Component {
     render() {
         return (
             <article>
-                <Container>
+                <Container className="homePage">
                     <section style={{ textAlign: "center" }} className="key-features large-gap segment">
                         <header className="key-features__header">
                             <Header textAlign="center" as="h4" size="large" style={{ lineHeight: "31px" }}>
@@ -136,7 +136,7 @@ export default class NotConnectedHome extends React.Component {
                             </div>
                         </a>
                     </Rail>
-                    <Container>
+                    <Container className="homePage">
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac loans">
                             Use your cryptocurrencies without<br />losing them. Get a loan and spend easily.
@@ -250,7 +250,7 @@ export default class NotConnectedHome extends React.Component {
                     </Container>
                 </section>
                 <section style={{ textAlign: "left" }} className="team segment">
-                    <Container>
+                    <Container className="homePage wider">
                         <Header as="h2">Team</Header>
 
                         <ThemeProvider theme={theme}>
@@ -266,7 +266,7 @@ export default class NotConnectedHome extends React.Component {
                     </Container>
                 </section>
                 <section className="partner segment" style={{ marginTop: 50, textAlign: "center" }}>
-                    <Container>
+                    <Container className="homePage wider">
                         <ThemeProvider theme={theme}>
                             <Grid className="grid">
                                 {partners.map(partner => (
