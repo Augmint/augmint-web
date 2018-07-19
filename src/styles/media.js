@@ -16,6 +16,13 @@ export const media = Object.keys(theme.breakpoints).reduce((accumulator, label) 
             ${css(...args)};
         }
     `;
+
+    const emSizeMin = (theme.breakpoints[label] + 1) / 16;
+    accumulator[label + "Min"] = (...args) => css`
+        @media (min-width: ${emSizeMin}em) {
+            ${css(...args)};
+        }
+    `;
     return accumulator;
 }, {});
 

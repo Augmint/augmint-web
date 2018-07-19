@@ -18,14 +18,24 @@ const BaseDiv = `
 
 export const StyledDiv = styled.div`
     ${BaseDiv};
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin: auto;
     ${media.desktop`
       max-width: 933px;
     `};
     ${media.tablet`
-      margin-left: 0;
-      margin-right: 0;
-      max-width: 100%;
+      &.homePage { 
+        max-width: 60%;
+        &.wider {
+            max-width: 85%;
+          }
+      }
+    `};
+    ${media.phone`
+      &.homePage { 
+        max-width: 90%;
+        &.wider {
+          max-width: 98%;
+        }
+      }
     `};
 `;

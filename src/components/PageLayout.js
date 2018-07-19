@@ -84,7 +84,9 @@ function DashBlock(props) {
                     <Header as="h2" content={header} />
                 </div>
             ) : null}
-            <div className="dashblock__content">{children}</div>
+            <div className="dashblock__content" style={{ overflow: "auto" }}>
+                {children}
+            </div>
         </Segment>
     );
 }

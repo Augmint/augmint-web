@@ -82,15 +82,20 @@ class CancelOrderButton extends React.Component {
                         onCloseRequest={this.handleClose}
                     >
                         <Header
-                            icon="question"
                             content="Cancel your order"
                             className="opacLightGrey"
                             style={{
                                 borderBottom: "1px solid",
                                 borderBottomColor: theme.colors.opacGrey,
-                                padding: "20px"
+                                padding: "20px",
+                                margin: 0
                             }}
-                        />
+                        >
+                            <Icon
+                                name="question"
+                                style={{ float: "left", margin: "0 10px 10px 0", fontSize: "1.5rem" }}
+                            />
+                        </Header>
 
                         <Modal.Content>
                             {error && (
@@ -104,7 +109,7 @@ class CancelOrderButton extends React.Component {
                                     <p>Error cancelling the order.</p>
                                 </EthSubmissionErrorPanel>
                             )}
-                            <p>Order id: {order.id}</p>
+                            <p style={{ marginTop: "0" }}>Order id: {order.id}</p>
                             {order.direction === TOKEN_SELL && (
                                 <p>
                                     Sell {order.amount} A-EUR @{order.price * 100}% EUR/ETH rate
@@ -115,11 +120,11 @@ class CancelOrderButton extends React.Component {
                                     Buy A-EUR for {order.amount} ETH @{order.price * 100}% EUR/ETH rate
                                 </p>
                             )}
-                            <p>Are you sure you want to cancel your order?</p>
+                            <p style={{ marginBottom: "0" }}>Are you sure you want to cancel your order?</p>
                         </Modal.Content>
 
-                        <Modal.Actions>
-                            <Button className="grey" onClick={this.handleClose}>
+                        <Modal.Actions style={{ paddingTop: 0 }}>
+                            <Button className="grey" onClick={this.handleClose} style={{ marginTop: "10px" }}>
                                 <Icon name="close" style={{ marginRight: "6px" }} />Close
                             </Button>
 
@@ -129,6 +134,7 @@ class CancelOrderButton extends React.Component {
                                 disabled={submitting}
                                 onClick={this.submitCancel}
                                 content={submitting ? "Submitting..." : "Submit order cancellation"}
+                                style={{ marginTop: "10px" }}
                             >
                                 <Icon name="trash" style={{ marginRight: "6px" }} />
                             </Button>
@@ -146,4 +152,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { cancelOrder };
 
-export default (CancelOrderButton = connect(mapStateToProps, mapDispatchToProps)(CancelOrderButton));
+export default (CancelOrderButton = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CancelOrderButton));

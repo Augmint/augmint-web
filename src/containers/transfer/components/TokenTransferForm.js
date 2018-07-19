@@ -14,7 +14,7 @@ import { Form, Validations, Normalizations, Parsers } from "components/BaseCompo
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
-import { TransferFeeToolTip } from "./components/AccountToolTips.js";
+import { TransferFeeToolTip } from "./AccountToolTips";
 
 import theme from "styles/theme";
 

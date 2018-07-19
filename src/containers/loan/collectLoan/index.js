@@ -8,6 +8,8 @@ import Message from "components/augmint-ui/message";
 import { fetchLoansToCollect } from "modules/reducers/loanManager";
 import CollectLoanButton from "./CollectLoanButton";
 
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+
 class CollectLoanMain extends React.Component {
     constructor(props) {
         super(props);
@@ -24,9 +26,11 @@ class CollectLoanMain extends React.Component {
         const { loanManager } = this.props;
         return (
             <Psegment>
-                <Pheader header="Collect loans" />
-                <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={6 / 16}>
+                <TopNavTitlePortal>
+                    <Pheader className="secondaryColor" header="Collect loans" />
+                </TopNavTitlePortal>
+                <Pgrid.Row>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                         <Message info>
                             <p>
                                 When collecting a defaulted (not paid on time) loan the ETH held in contract escrow
@@ -39,7 +43,7 @@ class CollectLoanMain extends React.Component {
                             </p>
                         </Message>
                     </Pgrid.Column>
-                    <Pgrid.Column size={10 / 16}>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
                         <CollectLoanButton loanManager={loanManager} loansToCollect={loanManager.loansToCollect} />
                         <LoansToCollectList
                             header="Loans to collect"
