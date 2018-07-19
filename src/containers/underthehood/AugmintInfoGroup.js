@@ -15,22 +15,20 @@ class BaseInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid>
-                <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={10 / 32}>
+                <Pgrid.Row>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <AugmintTokenInfo
                             contractData={this.props.augmintTokenData}
                             contract={this.props.augmintToken}
                         />
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 32} />
-                    <Pgrid.Column size={10 / 32}>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <FeeAccountInfo
                             contractData={this.props.augmintTokenData.info.feeAccount}
                             contract={this.props.feeAccount}
                         />
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 32} />
-                    <Pgrid.Column size={10 / 32}>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <MonetarySupervisorInfo
                             contractData={this.props.monetarySupervisorData}
                             contract={this.props.monetarySupervisor}

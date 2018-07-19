@@ -28,7 +28,7 @@ export default class TradeHistory extends React.Component {
         };
 
         return (
-            <Pblock loading={isLoading} header={header}>
+            <Pblock loading={isLoading} header={header} style={{ overflow: "auto" }}>
                 {error && <ErrorPanel header="Error while fetching trade list">{error.message}</ErrorPanel>}
                 {trades == null && !isLoading && <p>Connecting...</p>}
                 {!error && isLoading ? (

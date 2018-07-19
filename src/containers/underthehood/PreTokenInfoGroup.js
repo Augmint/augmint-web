@@ -16,11 +16,11 @@ class PreTokenInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid>
-                <Pgrid.Row wrap={false}>
-                    <Pgrid.Column size={1 / 2}>
+                <Pgrid.Row>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <PreTokenInfo contractData={this.props.preTokenData} contract={this.props.preToken} />
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 2}>
+                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                         <PreTokenAccountInfo preTokenData={this.props.preTokenData} />
                         <PreTokenTransferList preTokenData={this.props.preTokenData} />
                     </Pgrid.Column>

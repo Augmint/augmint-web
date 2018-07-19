@@ -8,7 +8,7 @@ import { Pheader, Pblock, Psegment, Pgrid } from "components/PageLayout";
 import { LoadingPanel, ErrorPanel } from "components/MsgPanels";
 import { LoanRepayLink } from "./components/LoanRepayLink";
 import CollectLoanButton from "./collectLoan/CollectLoanButton";
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 class LoanDetailsPage extends React.Component {
     constructor(props) {
@@ -55,7 +55,7 @@ class LoanDetailsPage extends React.Component {
         return (
             <Psegment>
                 <TopNavTitlePortal>
-                        <Pheader className={ "secondaryColor" } header="Loan details" />
+                    <Pheader className={"secondaryColor"} header="Loan details" />
                 </TopNavTitlePortal>
                 {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
@@ -67,9 +67,12 @@ class LoanDetailsPage extends React.Component {
 
                 {this.state.isLoanFound && (
                     <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column size={1 / 2}>
-                                <Pblock header={this.state.loan.loanStateText + "loan #" + this.state.loan.id} className={ "tertiaryColor" } >
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
+                                <Pblock
+                                    header={this.state.loan.loanStateText + "loan #" + this.state.loan.id}
+                                    className={"tertiaryColor"}
+                                >
                                     <LoanDetails loan={this.state.loan} />
 
                                     <LoanRepayLink loan={this.state.loan} size="large" />

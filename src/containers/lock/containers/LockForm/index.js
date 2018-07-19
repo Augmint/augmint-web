@@ -166,7 +166,9 @@ class LockContainer extends React.Component {
                                                         <label>{product.durationText}</label>
                                                     </TermTableCell>
                                                     <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>{product.maxLockAmount} A€</TermTableCell>
+                                                    <TermTableCell>
+                                                        {Math.floor(product.maxLockAmount)} A€
+                                                    </TermTableCell>
                                                     <TermTableCell>
                                                         {Math.floor(product.interestRatePa * 10000) / 100} %
                                                     </TermTableCell>

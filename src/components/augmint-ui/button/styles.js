@@ -20,7 +20,6 @@ const BaseButton = `
     line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
-    border: 1px solid ${theme.colors.grey};
 
     &.dashboardColors {
       background-color: ${theme.colors.secondary};
@@ -37,7 +36,7 @@ const BaseButton = `
     }
 
     &:not([disabled]):hover {
-        background-color: ${theme.colors.grey};
+        background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
         box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
     }
