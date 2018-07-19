@@ -9,7 +9,7 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import metricsProvider from "modules/metricsProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader } from "components/PageLayout";
 import { ReserveStats } from "./components/ReserveStats";
 import { TotalSupply } from "./components/TotalSupply";
 import { LtdStats } from "./components/LtdStats";
@@ -17,8 +17,9 @@ import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
 import Button from "components/augmint-ui/button";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import { MyListGroup, MyGridTable } from "components/MyListGroups";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, DECIMALS } from "utils/constants";
+import { StyledContainer, StyledHeader, StyledPheader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -78,8 +79,8 @@ class AugmintToken extends React.Component {
             let bn_collateralInEscrow = this.props.rates.info.bn_ethFiatRate.mul(bn_collateralInEscrowEth);
             collateralInEscrow = bn_collateralInEscrow.toFixed(2);
 
-            loanCollateralCoverageRatio = bn_outstandingLoansAmount
-                .div(bn_collateralInEscrow)
+            loanCollateralCoverageRatio = bn_collateralInEscrow
+                .div(bn_outstandingLoansAmount)
                 .mul(100)
                 .toFixed(2);
         }
@@ -138,12 +139,40 @@ class AugmintToken extends React.Component {
             });
         return (
             <EthereumState>
+                <StyledContainer>
+                    <TopNavTitlePortal>
+                        <Pheader className="secondaryColor" header="Reserves" />
+                    </TopNavTitlePortal>
+                    <StyledPheader header="Stability Dashboard" className="stabilityDashboard" style={{ margin: 0 }} />
+                    <StyledHeader as="h3" content="A-EUR Market Supply" />
+                    <StyledMyListGroup>
+                        <StyledRow>
+                            <StyledCol width={3 / 5}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol>+ Loans Outstanding:</StyledCol>
+                                        <StyledCol>
+                                            {this.props.metrics.loansData.outstandingLoansAmount + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 5} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 5}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol>+ Loans Collected:</StyledCol>
+                                        <StyledCol>{loansCollected + " A€"}</StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 5} />
+                        </StyledRow>
+                    </StyledMyListGroup>
+                </StyledContainer>
                 <div style={{ color: "black" }}>
-                    <h1>Loans Outstanding: {this.props.metrics.loansData.outstandingLoansAmount}</h1>
-                    <h1>
-                        Loans Collected:
-                        {loansCollected}
-                    </h1>
                     <h1>
                         Issued by Stability Board (Net): {this.props.monetarySupervisor.info.issuedByStabilityBoard}
                     </h1>
@@ -209,56 +238,6 @@ class AugmintToken extends React.Component {
                     <br />
                     <br />
                 </div>
-                <Psegment style={{ padding: "2em 1em" }}>
-                    <TopNavTitlePortal>
-                        <Pheader className="secondaryColor" header="Reserves" />
-                    </TopNavTitlePortal>
-                    <Pgrid.Row>
-                        <Pgrid.Column style={{ padding: 0 }}>
-                            <TotalSupply
-                                augmintToken={this.props.augmintToken}
-                                monetarySupervisor={this.props.monetarySupervisor}
-                            />
-                        </Pgrid.Column>
-                        <Pgrid.Column style={{ padding: 0 }}>
-                            <ReserveStats
-                                augmintToken={this.props.augmintToken}
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                rates={this.props.rates}
-                            />
-                        </Pgrid.Column>
-
-                        <Pheader header="Loans & Locks" className={"primaryColor"} style={{ width: "100%" }} />
-                        <Pgrid.Column style={{ padding: 0 }}>
-                            <LtdStats
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                loanManager={this.props.loanManager}
-                                lockManager={this.props.lockManager}
-                            />
-                            <Button
-                                content="Loans to Collect"
-                                data-testid="loansToCollectButton"
-                                to="/loan/collect"
-                                icon="angle-right"
-                                labelposition="right"
-                                size="large"
-                                style={{ marginBottom: "15px" }}
-                            />
-                        </Pgrid.Column>
-
-                        <Pheader
-                            header="Earnings"
-                            className={"primaryColor"}
-                            style={{ marginTop: "1em", width: "100%" }}
-                        />
-                        <Pgrid.Column style={{ padding: 0 }}>
-                            <EarningStats
-                                monetarySupervisor={this.props.monetarySupervisor}
-                                augmintToken={this.props.augmintToken}
-                            />
-                        </Pgrid.Column>
-                    </Pgrid.Row>
-                </Psegment>
             </EthereumState>
         );
     }
