@@ -1,8 +1,6 @@
 import styled from "styled-components";
-
 import { Link } from "react-router-dom";
-
-import theme from "styles/theme";
+import { default as theme, remCalc } from "styles/theme";
 
 const BaseButton = `
     display: inline-flex;
@@ -47,12 +45,12 @@ const BaseButton = `
         background-color: ${theme.colors.secondaryDark};
       }
     }
-    
+
     &.primary {
-        padding: 8px 30px;
-        background-color: ${theme.colors.primary};
-        color: ${theme.colors.white};
-        font-size: 16px;
+      padding: 8px 30px;
+      font-size: ${remCalc(16)};
+      background-color: ${theme.colors.primary};
+      color: ${theme.colors.white};
     }
 
     &.grey {

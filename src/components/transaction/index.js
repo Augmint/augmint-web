@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import theme from "styles/theme";
+import { default as theme, remCalc } from "styles/theme";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 import { connect } from "react-redux";
 
 export const TxDate = styled.span`
-    font-size: 12px;
+    font-size: ${remCalc(12)};
 `;
 
 export const TxTitle = styled.span`
@@ -14,7 +14,7 @@ export const TxTitle = styled.span`
 `;
 
 export const TxDetails = styled.span`
-    font-size: 12px;
+    font-size: ${remCalc(12)};
 `;
 
 export const TxPrice = styled.span`
