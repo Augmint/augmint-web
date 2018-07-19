@@ -8,10 +8,16 @@ import theme from "styles/theme";
 
 export function Pheader(props) {
     const { children, header, className, ...other } = props;
-    return <Container {...other}>
-        {header && <Header className={className} as="h1">{header}</Header>}
-        {children}
-    </Container>;
+    return (
+        <Container {...other}>
+            {header && (
+                <Header className={className} as="h1">
+                    {header}
+                </Header>
+            )}
+            {children}
+        </Container>
+    );
 }
 
 Pheader.defaultProps = {
@@ -35,7 +41,7 @@ export class Psegment extends React.Component {
 }
 
 Psegment.defaultProps = {
-    style: { margin: "0 auto", padding: "2em 2em", maxWidth: theme.pageSize.maxSize },
+    style: { margin: "0 auto", padding: "2em 0", maxWidth: theme.pageSize.maxSize },
     vertical: true
 };
 
@@ -63,7 +69,7 @@ Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid;
 
 export function Pblock(props) {
-    return <DashBlock {...props} />
+    return <DashBlock {...props} />;
 }
 
 function DashBlock(props) {
@@ -72,13 +78,13 @@ function DashBlock(props) {
     const rest = Object.assign({}, { ...other }, { className: newClassName });
 
     return (
-        <Segment basic {...rest} >
-            {(header) ?
+        <Segment basic {...rest}>
+            {header ? (
                 <div className="dashblock__head">
                     <Header as="h2" content={header} />
-                </div> : null
-            }
-            <div className="dashblock__content">
+                </div>
+            ) : null}
+            <div className="dashblock__content" style={{ overflow: "auto" }}>
                 {children}
             </div>
         </Segment>

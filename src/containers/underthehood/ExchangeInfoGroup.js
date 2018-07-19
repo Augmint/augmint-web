@@ -15,17 +15,14 @@ class ExchangeInfoGroup extends React.Component {
 
     render() {
         return (
-            <Pgrid.Row wrap={false}>
-                <Pgrid.Column size={10 / 32}>
+            <Pgrid.Row>
+                <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                     <ExchangeInfo contractData={this.props.exchangeData} contract={this.props.exchange} />
                 </Pgrid.Column>
-                <Pgrid.Column size={1 / 32} />
-                <Pgrid.Column size={10 / 32}>
+                <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                     <RatesInfo contractData={this.props.ratesData} contract={this.props.rates} />
                 </Pgrid.Column>
-
-                <Pgrid.Column size={1 / 32} />
-                <Pgrid.Column size={10 / 32}>
+                <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
                     <OrdersInfo orders={this.props.orders} />
                 </Pgrid.Column>
             </Pgrid.Row>

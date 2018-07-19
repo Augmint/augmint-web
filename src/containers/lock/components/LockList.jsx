@@ -49,7 +49,7 @@ export default function LockList(props) {
             ));
 
     return (
-        <Pblock data-testid="LockListBlock" loading={isLoading} header="My Locks">
+        <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>
             {error && <ErrorPanel header="Error while fetching lock list">{error.message}</ErrorPanel>}
             {locks && listItems.length === 0 ? "You have no locks" : <MyListGroup>{listItems}</MyListGroup>}
         </Pblock>
