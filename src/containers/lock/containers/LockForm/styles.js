@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import theme from "styles/theme";
-import { media } from "../../../../styles/media";
+import { media } from "styles/media";
 
 export const TermTable = styled.table`
     background-color: transparent !important;
