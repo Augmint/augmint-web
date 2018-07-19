@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { default as theme, remCalc } from "styles/theme";
+import { media } from "styles/media";
 
-const BaseButton = `
+const BaseButton = styledComponent => styledComponent`
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -47,10 +48,13 @@ const BaseButton = `
     }
 
     &.primary {
-      padding: 8px 30px;
-      font-size: ${remCalc(16)};
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
+
+      ${media.tabletMin`
+        padding: 8px 30px;
+        font-size: ${remCalc(16)};
+      `};
     }
 
     &.grey {
@@ -134,14 +138,8 @@ const BaseButton = `
     }
 `;
 
-export const StyledLink = styled(Link)`
-    ${BaseButton};
-`;
+export const StyledLink = BaseButton(styled(Link));
 
-export const StyledA = styled.a`
-    ${BaseButton};
-`;
+export const StyledA = BaseButton(styled.a);
 
-export const StyledButton = styled.button`
-    ${BaseButton};
-`;
+export const StyledButton = BaseButton(styled.button);
