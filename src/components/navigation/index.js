@@ -73,6 +73,7 @@ export default class SiteMenu extends React.Component {
                         data-testid="useAEurButton"
                         to={!showConnection && isConnected ? "/account" : "/tryit"}
                         color="primary"
+                        style={{ margin: "0", position: "absolute", top: "9px", right: "8px" }}
                     >
                         My Account
                     </Button>

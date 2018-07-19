@@ -11,7 +11,7 @@ export const StyleNavList = styled.ul`
     padding: 0;
     margin: 0;
     ${media.tablet`
-      margin-top: 25px;
+      margin-top: 135px;
       display: none;
       position: absolute;
       left: 0;

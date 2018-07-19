@@ -55,7 +55,7 @@ export const SideNav = styled.nav`
     }
 
     &.opened {
-        ${mediaopacity.handheld`opacity: .95`} width: 100%;
+        ${mediaopacity.handheld`opacity: .97`} width: 100%;
     }
 
     img:not(${HamburgerMenu}) {

@@ -20,13 +20,13 @@ export const StyledTopNav = styled.nav`
     background-color: ${theme.colors.white};
     z-index: 103;
     top: 0;
+    position: fixed;
 
     &.hide {
         display: none;
     }
 
     ${media.tablet`
-        position: fixed;
         &.hidden {
             z-index: 105;
         }

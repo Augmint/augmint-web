@@ -19,7 +19,6 @@ const BaseButton = styledComponent => styledComponent`
     line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
-    border: 1px solid ${theme.colors.grey};
 
     &:hover {
       background-color: ${theme.colors.grey};
