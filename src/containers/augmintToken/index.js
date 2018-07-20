@@ -147,75 +147,243 @@ class AugmintToken extends React.Component {
                     <StyledHeader as="h3" content="A-EUR Market Supply" />
                     <StyledMyListGroup>
                         <StyledRow>
-                            <StyledCol width={3 / 5}>
+                            <StyledCol width={3 / 6}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
-                                        <StyledCol>+ Loans Outstanding:</StyledCol>
-                                        <StyledCol>
+                                        <StyledCol width={2 / 3}>+ Loans Outstanding</StyledCol>
+                                        <StyledCol width={1 / 3}>
                                             {this.props.metrics.loansData.outstandingLoansAmount + " A€"}
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
                             </StyledCol>
-                            <StyledCol width={2 / 5} />
+                            <StyledCol width={2 / 6} />
                         </StyledRow>
                         <StyledRow>
-                            <StyledCol width={3 / 5}>
+                            <StyledCol width={3 / 6}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
-                                        <StyledCol>+ Loans Collected:</StyledCol>
-                                        <StyledCol>{loansCollected + " A€"}</StyledCol>
+                                        <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
+                                        <StyledCol width={1 / 3}>{loansCollected + " A€"}</StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
                             </StyledCol>
-                            <StyledCol width={2 / 5} />
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>+ Issued by Stability Board (Net)</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.monetarySupervisor.info.issuedByStabilityBoard + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify" className="borderTop result">
+                                        <StyledCol width={2 / 3}>Total</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.augmintToken.info.totalSupply + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow className="borderTop">
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>- Market Intervention Reserve</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.monetarySupervisor.info.reserveTokenBalance + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>- Fees</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.augmintToken.info.feeAccountTokenBalance + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>- Earned Interest</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance +
+                                                " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify" className="borderTop result">
+                                        <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
+                                        <StyledCol width={1 / 3}>{amountOwnedByUsers + " A€"}</StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>- Locked in Aamount</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.monetarySupervisor.info.totalLockedAmount + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify" className="borderTop result">
+                                        <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
+                                        <StyledCol width={1 / 3}>{amountOwnedByUsersLiquid + " A€"}</StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                    </StyledMyListGroup>
+                    <StyledHeader as="h3" content="Market Intervention" />
+                    <StyledMyListGroup>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {Number(this.props.monetarySupervisor.info.reserveEthBalance).toFixed(4) +
+                                                " ETH"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>ETH Fees</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {Number(this.props.augmintToken.info.feeAccountEthBalance).toFixed(4) +
+                                                " ETH"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify" className="borderTop result">
+                                        <StyledCol width={2 / 3}>Total</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {Number(availableForMarketIntervention).toFixed(4) + " ETH"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                    </StyledMyListGroup>
+                    <StyledHeader as="h3" content="Loans and Lockins" />
+                    <StyledMyListGroup>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>Collateral Coverage Ratio</StyledCol>
+                                        <StyledCol width={1 / 3}>{loanCollateralCoverageRatio + "%"}</StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>Loans Outstanding</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {this.props.metrics.loansData.outstandingLoansAmount + " A€"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>Collateral in escrow</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {Number(this.props.metrics.loansData.collateralInEscrowEth).toFixed(4) +
+                                                " ETH, "}
+                                            <span>({collateralInEscrow + " A€"})</span>
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
+                        </StyledRow>
+                        <StyledRow>
+                            <StyledCol width={3 / 6}>
+                                <MyListGroup>
+                                    <StyledRow halign="justify">
+                                        <StyledCol width={2 / 3}>Loan To Lockin Ratio</StyledCol>
+                                        <StyledCol width={1 / 3}>
+                                            {((this.props.monetarySupervisor.info.ltdPercent * 10000) / 100).toFixed(
+                                                2
+                                            ) + "%"}
+                                        </StyledCol>
+                                    </StyledRow>
+                                </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={2 / 6} />
                         </StyledRow>
                     </StyledMyListGroup>
                 </StyledContainer>
                 <div style={{ color: "black" }}>
-                    <h1>
-                        Issued by Stability Board (Net): {this.props.monetarySupervisor.info.issuedByStabilityBoard}
-                    </h1>
-                    <h1>Total Supply: {this.props.augmintToken.info.totalSupply}</h1>
-                    <br />
-                    <h1>
-                        Market Intervention Reserve (reserveTokenBalance):{" "}
-                        {this.props.monetarySupervisor.info.reserveTokenBalance}
-                    </h1>
-                    <h1>FEES:{this.props.augmintToken.info.feeAccountTokenBalance}</h1>
-                    <h1>
-                        Earned Interest (interestEarnedAccountTokenBalance):{" "}
-                        {this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance}
-                    </h1>
-                    <h1>Amount Owned by Users: {amountOwnedByUsers}</h1>
-                    <br />
-                    <h1>
-                        Locked in Aamount (totalLockedAmount): {this.props.monetarySupervisor.info.totalLockedAmount}
-                    </h1>
-                    <h1>Amount Owned by Users (Liquid): {amountOwnedByUsersLiquid}</h1>
                     <br />
                     <br />
-                    <h1>Loan Collateral Coverage Ratio: {loanCollateralCoverageRatio + " %"}</h1>
-                    <h1>Loans Outstanding: {this.props.metrics.loansData.outstandingLoansAmount}</h1>
+                    <br />
 
-                    <h1>
-                        Collateral in escrow (metrics):{this.props.metrics.loansData.collateralInEscrowEth + " ETH, "}
-                        {collateralInEscrow + " A-EUR"}
-                    </h1>
                     <h1>??? Collateral in escrow ??? :{this.props.loanManager.info.ethBalance}</h1>
                     <br />
                     <br />
                     <br />
-                    <h1>
-                        ETH Market Intervention Reserve (monetarySupervisor->reserveEthBalance):{
-                            this.props.monetarySupervisor.info.reserveEthBalance
-                        }
-                    </h1>
-                    <h1>
-                        ETH Fees (augmintToken->feeAccountEthBalance):{" "}
-                        {this.props.augmintToken.info.feeAccountEthBalance}
-                    </h1>
-                    <h1>Available for Market Intervention: {availableForMarketIntervention}</h1>
+
                     <br />
                     <br />
                     <h1>LOANS</h1>

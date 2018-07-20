@@ -38,10 +38,18 @@ export const StyledMyListGroup = styled(MyListGroup)`
     ${baseStyle};
 `;
 
-export const StyledRow = styled(Row)`
-    padding: 0;
-`;
+export const StyledCol = styled(Col)``;
 
-export const StyledCol = styled(Col)`
-    padding: 0;
+export const StyledRow = styled(Row)`
+    & ${StyledCol} + ${StyledCol} {
+        text-align: right;
+    }
+
+    &.borderTop {
+        border-top: 1px solid ${theme.colors.black};
+        &.result ${StyledCol} {
+            font-size: ${remCalc(20)};
+            font-weight: bold;
+        }
+    }
 `;
