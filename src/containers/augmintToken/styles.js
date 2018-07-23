@@ -19,7 +19,7 @@ export const StyledContainer = styled.div`
 
 export const StyledHeader = styled(Header)`
     ${baseStyle};
-    margin: 0 10px;
+    margin: 25px 10px;
     background-color: ${theme.colors.opacExtraLighterGrey};
     line-height: ${remCalc(45)};
     padding-left: ${remCalc(35)};
@@ -38,7 +38,15 @@ export const StyledMyListGroup = styled(MyListGroup)`
     ${baseStyle};
 `;
 
-export const StyledCol = styled(Col)``;
+export const StyledCol = styled(Col)`
+    .alignLeft {
+        text-align: left;
+    }
+
+    .border {
+        border-right: 1px solid ${theme.colors.black};
+    }
+`;
 
 export const StyledRow = styled(Row)`
     & ${StyledCol} + ${StyledCol} {
@@ -47,6 +55,7 @@ export const StyledRow = styled(Row)`
 
     &.borderTop {
         border-top: 1px solid ${theme.colors.black};
+        margin: 15px 0;
         &.result ${StyledCol} {
             font-size: ${remCalc(20)};
             font-weight: bold;
