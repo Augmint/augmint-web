@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import { media } from "styles/media";
 import { remCalc } from "styles/theme";
 
 import Header from "components/augmint-ui/header";
@@ -9,12 +10,17 @@ import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col } from "co
 const baseStyle = `
   color: ${theme.colors.primary};
   padding-left: ${remCalc(45)};
+  padding-right: ${remCalc(10)};
 `;
 
 export const StyledContainer = styled.div`
     background-color: ${theme.colors.white};
     color: ${theme.colors.primary};
     margin: ${remCalc(40)};
+
+    ${media.tablet`
+        margin: 0;
+    `};
 `;
 
 export const StyledHeader = styled(Header)`
@@ -28,6 +34,7 @@ export const StyledHeader = styled(Header)`
 export const StyledPheader = styled(Pheader)`
     ${baseStyle};
     font-size: ${theme.typography.fontSizes.h1};
+
     &.stabilityDashboard {
         padding: ${remCalc(45)};
         margin: 0;
@@ -41,10 +48,6 @@ export const StyledMyListGroup = styled(MyListGroup)`
 export const StyledCol = styled(Col)`
     .alignLeft {
         text-align: left;
-    }
-
-    .border {
-        border-right: 1px solid ${theme.colors.black};
     }
 `;
 
