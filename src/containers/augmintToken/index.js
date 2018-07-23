@@ -369,7 +369,7 @@ class AugmintToken extends React.Component {
                                             style={{ padding: 0, paddingRight: 10, marginTop: 10 }}
                                         >
                                             <MyListGroup>
-                                                <StyledRow halign="justify">
+                                                <StyledRow halign="justify" className="result">
                                                     <StyledCol>Loans</StyledCol>
                                                 </StyledRow>
                                                 <StyledRow halign="justify">
@@ -383,7 +383,7 @@ class AugmintToken extends React.Component {
                                                     <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
                                                 </StyledRow>
                                                 <br />
-                                                <StyledRow halign="justify">
+                                                <StyledRow halign="justify" className="result">
                                                     <StyledCol width={1 / 2}>Term</StyledCol>
                                                     <StyledCol width={1 / 2}>P.a. Interest</StyledCol>
                                                 </StyledRow>
@@ -392,7 +392,7 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                         <StyledCol width={1 / 2} style={{ padding: 0, paddingLeft: 10, marginTop: 10 }}>
                                             <MyListGroup>
-                                                <StyledRow halign="justify">
+                                                <StyledRow halign="justify" className="result">
                                                     <StyledCol className="alignLeft">Lockins</StyledCol>
                                                 </StyledRow>
                                                 <StyledRow halign="justify">
@@ -410,7 +410,7 @@ class AugmintToken extends React.Component {
                                                     <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
                                                 </StyledRow>
                                                 <br />
-                                                <StyledRow halign="justify">
+                                                <StyledRow halign="justify" className="result">
                                                     <StyledCol width={1 / 2} className="alignLeft">
                                                         Term
                                                     </StyledCol>

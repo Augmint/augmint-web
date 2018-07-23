@@ -55,10 +55,9 @@ export const StyledRow = styled(Row)`
 
     &.borderTop {
         border-top: 1px solid ${theme.colors.black};
-        margin: 15px 0;
-        &.result ${StyledCol} {
-            font-size: ${remCalc(20)};
-            font-weight: bold;
-        }
+    }
+    &.result ${StyledCol} {
+        font-size: ${remCalc(20)};
+        font-weight: bold;
     }
 `;
