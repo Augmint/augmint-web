@@ -23,15 +23,15 @@ export function TryItConnected(props) {
                     <Tblock header="Get some test ETH" headerStyle={"primaryColor"}>
                         <StyledP className={_className}>
                             Use{" "}
-                            <Link target="_blank" to="https://faucet.rinkeby.io/">
+                            <a href="https://faucet.rinkeby.io/" target="_blank">
                                 faucet.rinkeby.io
-                            </Link>
+                            </a>
                         </StyledP>
                         <StyledP className={_className}>
                             If you can't be bothered ask for some{" "}
-                            <Link target="_blank" to="https://discord.gg/PwDmsnu">
+                            <a href="https://discord.gg/PwDmsnu" target="_blank">
                                 on our discord channel
-                            </Link>
+                            </a>
                         </StyledP>
                         <Video
                             title="connect to rinkeby"
