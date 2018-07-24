@@ -30,7 +30,7 @@ export default () => (
             </h2>
             <ThemeProvider theme={theme}>
                 <Grid>
-                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }} style={{ padding: "0 1rem" }}>
+                    <Grid.Unit size={{ mobile: 1, tablet: 1 / 2 }} style={{ padding: "0 1rem" }}>
                         <div className="custom-column segment">
                             <h5 className="segment">MODERN MONEY</h5>
                             <p>
@@ -51,7 +51,7 @@ export default () => (
                     </Grid.Unit>
                     <Grid.Unit
                         className="second-column"
-                        size={{ phone: 1, tablet: 1 / 2 }}
+                        size={{ mobile: 1, tablet: 1 / 2 }}
                         style={{ padding: "0 1rem" }}
                     >
                         <div className="custom-column segment">
@@ -148,7 +148,7 @@ export default () => (
         <section className="segment">
             <ThemeProvider theme={theme}>
                 <Grid className="whitepaper-manifesto">
-                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
+                    <Grid.Unit size={{ mobile: 1, tablet: 1 / 2 }}>
                         <a
                             href="https://docs.google.com/document/d/1IQwGEsImpAv2Nlz5IgU_iCJkEqlM2VUHf5SFkcvb80A/edit"
                             target="_blank"
@@ -158,7 +158,7 @@ export default () => (
                             <img src={whitePaper} alt="whitepaper" />
                         </a>
                     </Grid.Unit>
-                    <Grid.Unit size={{ phone: 1, tablet: 1 / 2 }}>
+                    <Grid.Unit size={{ mobile: 1, tablet: 1 / 2 }}>
                         <a href="/manifesto">
                             <h5>MANIFESTO</h5>
                             <img src={manifesto} alt="manifesto" />

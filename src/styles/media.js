@@ -5,7 +5,7 @@ export const theme = {
         giant: 1200,
         desktop: 992,
         tablet: 768,
-        phone: 376
+        mobile: 376
     }
 };
 

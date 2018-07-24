@@ -27,12 +27,12 @@ export const TermTableCell = styled.td`
     &:first-child {
         width: 10px;
         padding-left: 0;
-        ${media.phone`
+        ${media.mobile`
             padding-right: .1rem;
         `};
     }
 
-    ${media.phone`
+    ${media.mobile`
         &:nth-child(3) {
             padding-right: .4rem;
         }
@@ -60,12 +60,12 @@ export const TermTableHeadCell = styled.th`
     &:first-child {
         width: 10px;
         padding-left: 0;
-        ${media.phone`
+        ${media.mobile`
             padding-right: .1rem;
         `};
     }
 
-    ${media.phone`
+    ${media.mobile`
         &:nth-child(3) {
             padding-right: .4rem;
         }

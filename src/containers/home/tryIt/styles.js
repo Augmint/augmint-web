@@ -28,7 +28,7 @@ export const StoreBadge = styled.img`
 `;
 
 export const StyledHeader = styled(Header)`
-    ${media.phone`
+    ${media.mobile`
         font-size: ${remCalc(24)};
     `};
 `;
