@@ -141,7 +141,7 @@ class AugmintToken extends React.Component {
             <EthereumState>
                 <StyledContainer>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor" header="Reserves" />
+                        <Pheader className="secondaryColor nav" header="Reserves" />}
                     </TopNavTitlePortal>
                     <StyledPheader header="Stability Dashboard" className="stabilityDashboard" style={{ margin: 0 }} />
                     <StyledHeader as="h3" content="A-EUR Market Supply" />
