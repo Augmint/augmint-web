@@ -25,7 +25,7 @@ class AccountHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor" header="My Account" />
+                        <Pheader className="secondaryColor nav" header="My Account" />
                     </TopNavTitlePortal>
 
                     <Pgrid>

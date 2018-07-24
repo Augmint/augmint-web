@@ -55,7 +55,7 @@ class LoanDetailsPage extends React.Component {
         return (
             <Psegment>
                 <TopNavTitlePortal>
-                    <Pheader className={"secondaryColor"} header="Loan details" />
+                    <Pheader className="secondaryColor nav" header="Loan details" />
                 </TopNavTitlePortal>
                 {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
