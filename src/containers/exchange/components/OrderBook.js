@@ -64,9 +64,11 @@ const OrderItem = props => {
 
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
+    let bn_totalSellAmount = new BigNumber(0);
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
-    const totalSellAmount = parseFloat(sellOrders.reduce((sum, order) => order.bn_amount.plus(sum), 0).toFixed());
+    sellOrders.forEach(order => (bn_totalSellAmount = bn_totalSellAmount.plus(order.tokenValue)));
+    const totalSellAmount = bn_totalSellAmount.toFixed(2) || 0;
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 
