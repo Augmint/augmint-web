@@ -30,7 +30,7 @@ class ExchangeHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor" header="Buy & Sell A-EUR" />
+                        <Pheader className="secondaryColor nav" header="Buy & Sell A-EUR" />
                     </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row>

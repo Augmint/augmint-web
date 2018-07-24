@@ -8,7 +8,7 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 const newLoanMain = () => (
     <Psegment>
         <TopNavTitlePortal>
-            <Pheader className="secondaryColor" header="Get an A-EUR loan" />
+            <Pheader className="secondaryColor nav" header="Get an A-EUR loan" />
         </TopNavTitlePortal>
 
         <Route exact path="/loan/new" component={LoanProductSelector} />

@@ -27,7 +27,7 @@ class CollectLoanMain extends React.Component {
         return (
             <Psegment>
                 <TopNavTitlePortal>
-                    <Pheader className="secondaryColor" header="Collect loans" />
+                    <Pheader className="secondaryColor nav" header="Collect loans" />
                 </TopNavTitlePortal>
                 <Pgrid.Row>
                     <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>

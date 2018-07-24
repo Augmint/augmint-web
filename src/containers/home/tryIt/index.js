@@ -22,7 +22,7 @@ class TryIt extends React.Component {
                     <TopNavTitlePortal>
                         <StyledHeader
                             as="h1"
-                            className="secondaryColor"
+                            className="secondaryColor nav"
                             content="Try Augmint"
                             style={{ margin: "16px 0" }}
                         />
