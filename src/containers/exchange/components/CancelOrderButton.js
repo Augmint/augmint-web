@@ -62,7 +62,7 @@ class CancelOrderButton extends React.Component {
     render() {
         const { order, label = "Cancel" } = this.props;
         const { submitting, error, confirmOpen } = this.state;
-        const priceRate = floatNumberConverter(order.price, DECIMALS);
+        const price = floatNumberConverter(order.price, DECIMALS);
 
         return (
             <div style={{ display: "inline-block" }}>
@@ -116,12 +116,12 @@ class CancelOrderButton extends React.Component {
                             <p style={{ marginTop: "0" }}>Order id: {order.id}</p>
                             {order.direction === TOKEN_SELL && (
                                 <p>
-                                    Sell {order.amount} A-EUR @{priceRate}% EUR/ETH rate
+                                    Sell {order.amount} A-EUR @{price}% EUR/ETH rate
                                 </p>
                             )}
                             {order.direction === TOKEN_BUY && (
                                 <p>
-                                    Buy A-EUR for {order.amount} ETH @{priceRate}% EUR/ETH rate
+                                    Buy A-EUR for {order.amount} ETH @{price}% EUR/ETH rate
                                 </p>
                             )}
                             <p style={{ marginBottom: "0" }}>Are you sure you want to cancel your order?</p>
