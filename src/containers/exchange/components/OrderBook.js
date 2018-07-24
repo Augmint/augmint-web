@@ -6,6 +6,7 @@ import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/toolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
 import CancelOrderButton from "./CancelOrderButton";
+import BigNumber from "bignumber.js";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS } from "utils/constants";
@@ -13,9 +14,10 @@ import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
+    let bn_ethFiatRate = new BigNumber(ethFiatRate);
 
     const price = floatNumberConverter(order.price, DECIMALS);
-    const actualRate = ethFiatRate * order.price;
+    const actualRate = bn_ethFiatRate.mul(order.price).toFixed(2);
     const actualValue =
         order.direction === TOKEN_SELL
             ? (order.amount / actualRate).toFixed(5)
@@ -64,7 +66,7 @@ const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
-    const totalSellAmount = sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString();
+    const totalSellAmount = parseFloat(sellOrders.reduce((sum, order) => order.bn_amount.plus(sum), 0).toFixed());
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 
