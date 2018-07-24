@@ -48,7 +48,7 @@ export function HowToConnect(props) {
                             </StyledP>
                             <Header as="h4" className={"tertiaryColor"}>
                                 1. Install{" "}
-                                <a href="https://metamask.io" target="_blank">
+                                <a href="https://metamask.io" target="_blank" rel="noopener noreferrer">
                                     <strong>MetaMask Chrome plugin</strong>
                                 </a>
                             </Header>

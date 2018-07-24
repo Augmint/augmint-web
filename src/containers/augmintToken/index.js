@@ -10,14 +10,9 @@ import lockManagerProvider from "modules/lockManagerProvider";
 import metricsProvider from "modules/metricsProvider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { Pheader } from "components/PageLayout";
-import { ReserveStats } from "./components/ReserveStats";
-import { TotalSupply } from "./components/TotalSupply";
-import { LtdStats } from "./components/LtdStats";
-import { EarningStats } from "./components/EarningStats";
 import { EthereumState } from "containers/app/EthereumState";
-import Button from "components/augmint-ui/button";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-import { MyListGroup, MyGridTable } from "components/MyListGroups";
+import { MyListGroup } from "components/MyListGroups";
 
 import { StyledContainer, StyledHeader, StyledPheader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 
