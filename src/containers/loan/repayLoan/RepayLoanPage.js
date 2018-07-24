@@ -3,6 +3,7 @@
 */
 import React from "react";
 import { connect } from "react-redux";
+import { connectWeb3 } from "modules/web3Provider";
 import { Pblock, Pgrid } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
@@ -18,6 +19,9 @@ import {
 } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 import { RepayHelp } from "./components/RepayHelp";
+import { Tsegment, Tblock } from "components/TextContent";
+import { Link } from "react-router-dom";
+import { MrCoinBuyLink } from "components/ExchangeLinks";
 
 // TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
 //import { push } from 'react-router-redux'
@@ -42,6 +46,7 @@ class RepayLoanPage extends React.Component {
 
     componentDidMount() {
         this.setLoan(); // needed when landing from Link within App
+        connectWeb3();
     }
 
     setLoan() {
@@ -97,7 +102,7 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Pgrid.Row>
+            <Pgrid.Row className={"asd"}>
                 <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                     <RepayHelp />
                 </Pgrid.Column>
@@ -128,22 +133,50 @@ class RepayLoanPage extends React.Component {
                                                 This loan is not due soon but you can repay early without any extra fee.
                                             </p>
                                         )}
-                                    {this.state.loan.isRepayable && (
-                                        <Button
-                                            data-testid="confirmRepayButton"
-                                            size="big"
-                                            type="submit"
-                                            disabled={
-                                                this.props.submitting ||
-                                                !this.state.isLoanFound ||
-                                                !this.state.loan.isRepayable
-                                            }
-                                        >
-                                            {this.props.submitting
-                                                ? "Submitting..."
-                                                : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
-                                        </Button>
-                                    )}
+                                    {this.state.loan.isRepayable &&
+                                        (loan.loanAmount < userAccount.tokenBalance ? (
+                                            <Button
+                                                data-testid="confirmRepayButton"
+                                                size="big"
+                                                type="submit"
+                                                disabled={
+                                                    this.props.submitting ||
+                                                    !this.state.isLoanFound ||
+                                                    !this.state.loan.isRepayable
+                                                }
+                                            >
+                                                {this.props.submitting
+                                                    ? "Submitting..."
+                                                    : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
+                                            </Button>
+                                        ) : (
+                                            <Tsegment style={{ padding: 0 }}>
+                                                <p style={{ textAlign: "left" }}>
+                                                    You don't have enough A-EUR to repay this loan.
+                                                </p>
+                                                <Tblock header="Get A-EUR" headerStyle={"primaryColor"}>
+                                                    <p>
+                                                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in
+                                                        escrow and receive A-EUR.
+                                                    </p>
+                                                </Tblock>
+
+                                                <Tblock header="Buy A-EUR" headerStyle={"primaryColor"}>
+                                                    <p>
+                                                        Buy A-EUR for ETH on{" "}
+                                                        <Link to="/exchange">Augmint's exchange</Link>.
+                                                    </p>
+                                                    <p>
+                                                        Buy A-EUR for fiat EUR on{" "}
+                                                        <MrCoinBuyLink web3Connect={this.props.web3Connect}>
+                                                            MrCoin.eu
+                                                        </MrCoinBuyLink>,
+                                                        {/* Buy A-EUR for fiat EUR on MrCoin.eu, */}
+                                                        our partner exchange.
+                                                    </p>
+                                                </Tblock>
+                                            </Tsegment>
+                                        ))}
                                     {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
                                 </Form>
                             </Pblock>
@@ -164,7 +197,8 @@ class RepayLoanPage extends React.Component {
 
 const mapStateToProps = state => ({
     loans: state.loans.loans,
-    userAccount: state.userBalances.account
+    userAccount: state.userBalances.account,
+    web3Connect: state.web3Connect
 });
 
 RepayLoanPage = connect(mapStateToProps)(RepayLoanPage);
