@@ -43,13 +43,13 @@ export function TryItConnected(props) {
 
                 <Tblock header="Get A-EUR" headerStyle={"primaryColor"}>
                     <StyledP className={_className}>
-                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in escrow and receive A-EUR
+                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in escrow and receive A-EUR.
                     </StyledP>
                 </Tblock>
 
                 <Tblock header="Buy A-EUR" headerStyle={"primaryColor"}>
                     <StyledP className={_className}>
-                        Buy A-EUR for ETH on <Link to="/exchange">Augmint's exchange</Link>
+                        Buy A-EUR for ETH on <Link to="/exchange">Augmint's exchange</Link>.
                     </StyledP>
                     <StyledP className={_className}>
                         Buy A-EUR for fiat EUR on <MrCoinBuyLink web3Connect={web3Connect}>MrCoin.eu</MrCoinBuyLink>,
