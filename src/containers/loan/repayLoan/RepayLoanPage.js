@@ -98,10 +98,10 @@ class RepayLoanPage extends React.Component {
 
         return (
             <Pgrid.Row>
-                <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
+                <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
+                <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}

@@ -16,19 +16,19 @@ class BaseInfoGroup extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                         <AugmintTokenInfo
                             contractData={this.props.augmintTokenData}
                             contract={this.props.augmintToken}
                         />
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                         <FeeAccountInfo
                             contractData={this.props.augmintTokenData.info.feeAccount}
                             contract={this.props.feeAccount}
                         />
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                         <MonetarySupervisorInfo
                             contractData={this.props.monetarySupervisorData}
                             contract={this.props.monetarySupervisor}

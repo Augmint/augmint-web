@@ -129,7 +129,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 {children}
                 <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
                 <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
-                <p data-testid="transactionHash" data-testTxHash={result.transactionHash}>
+                <p data-testid="transactionHash" data-testtxhash={result.transactionHash}>
                     <HashURL hash={result.transactionHash} type={"tx/"} />
                 </p>
             </MsgPanel>
