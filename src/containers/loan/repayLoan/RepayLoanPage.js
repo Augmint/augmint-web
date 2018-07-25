@@ -102,7 +102,7 @@ class RepayLoanPage extends React.Component {
         }
 
         return (
-            <Pgrid.Row className={"asd"}>
+            <Pgrid.Row>
                 <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                     <RepayHelp />
                 </Pgrid.Column>
