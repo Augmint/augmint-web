@@ -68,7 +68,7 @@ class LoanDetailsPage extends React.Component {
                 {this.state.isLoanFound && (
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
                                 <Pblock
                                     header={this.state.loan.loanStateText + "loan #" + this.state.loan.id}
                                     className={"tertiaryColor"}

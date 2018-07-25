@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
-import { StyledAccountInfo, StyledAccountP, StyledAccInfoLink } from "./styles";
+import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
 
 export class AccountInfo extends React.Component {
@@ -30,27 +30,28 @@ export class AccountInfo extends React.Component {
                 header={header}
             >
                 <ConnectionStatus contract={augmintToken} />
-                <StyledAccountP>
+                <StyledAccountDiv>
                     Account address:
-                    <p style={{ margin: "0px" }}>
+                    <div style={{ margin: "0px" }}>
                         <AccountAddress
                             address={data.account.address}
                             showCopyIcon="true"
                             title=""
                             style={{ fontWeight: "lighter" }}
                         />
-                    </p>
-                </StyledAccountP>
-                <StyledAccountP>
+                    </div>
+                </StyledAccountDiv>
+                <br />
+                <StyledAccountDiv>
                     Balance:
-                    <p style={{ margin: "0px" }}>
+                    <div style={{ margin: "0px" }}>
                         ETH: <span data-testid={!hideTestId && "userEthBalance"}>{data.account.ethBalance}</span>
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         A-EUR: <span data-testid={!hideTestId && "userAEurBalance"}>{data.account.tokenBalance}</span>
-                    </p>
-                </StyledAccountP>
-                <StyledAccountP className="accInfoDetail">€/ETH {data.rates.info.ethFiatRate}</StyledAccountP>
+                    </div>
+                </StyledAccountDiv>
+                <StyledAccountDiv className="accInfoDetail">€/ETH {data.rates.info.ethFiatRate}</StyledAccountDiv>
                 <StyledAccInfoLink
                     title="Under the hood"
                     to="/under-the-hood"

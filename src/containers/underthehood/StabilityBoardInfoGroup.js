@@ -17,14 +17,14 @@ class StabilityBoardInfoGroup extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                         <StabilityBoardProxyInfo
                             contractData={this.props.stabilityBoardProxyData}
                             contract={this.props.stabilityBoardProxy}
                         />
                         <StabilityBoardSignersList signers={this.props.stabilityBoardProxyData.signers} />
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                         <StabilityBoardScriptsList scripts={this.props.stabilityBoardProxyData.scripts} />
                     </Pgrid.Column>
                 </Pgrid.Row>

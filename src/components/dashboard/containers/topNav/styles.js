@@ -41,7 +41,7 @@ export const TitleWrapper = styled.div`
         font-size: ${remCalc("24")};
         margin: 0;
 
-        ${media.phone`
+        ${media.mobile`
             font-size: 1.1rem;
         `};
     }
