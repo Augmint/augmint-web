@@ -9,7 +9,7 @@ import CancelOrderButton from "./CancelOrderButton";
 import BigNumber from "bignumber.js";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS } from "utils/constants";
+import { DECIMALS, DECIMALS_DIV } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
@@ -64,11 +64,14 @@ const OrderItem = props => {
 
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
-    let bn_totalSellAmount = new BigNumber(0);
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
-    sellOrders.forEach(order => (bn_totalSellAmount = bn_totalSellAmount.plus(order.tokenValue)));
-    const totalSellAmount = bn_totalSellAmount.toFixed(2) || 0;
+    const totalSellAmount = parseFloat(
+        sellOrders
+            .reduce((sum, order) => order.bn_amount.add(sum), 0)
+            .div(DECIMALS_DIV)
+            .toFixed(2)
+    );
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 
