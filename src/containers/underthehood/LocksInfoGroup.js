@@ -13,11 +13,11 @@ class LocksInfoGroup extends React.Component {
     render() {
         return (
             <Pgrid.Row>
-                <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                     <LockManagerInfo contractData={this.props.lockManagerData} contract={this.props.lockManager} />
                     <ArrayDump header="Locks for userAccount" items={this.props.locks} />
                 </Pgrid.Column>
-                <Pgrid.Column size={{ phone: 1, tablet: 1, desktop: 1 / 2 }}>
+                <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                     <ArrayDump header="Lock Products" items={this.props.lockProducts} />
                 </Pgrid.Column>
             </Pgrid.Row>

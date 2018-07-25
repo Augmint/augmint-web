@@ -5,7 +5,7 @@ import { Pblock } from "components/PageLayout";
 import { remCalc } from "styles/theme";
 import { Link } from "react-router-dom";
 
-export const StyledAccountP = styled.p`
+export const StyledAccountDiv = styled.div`
     font-weight: bolder;
 
     &.accInfoDetail {
@@ -24,19 +24,19 @@ export const StyledAccountP = styled.p`
             padding-right: 10px;
         }
 
-        > p {            
-            margin-bottom: 8px;
-            margin-top: 0;
+        > div {
             color: ${theme.colors.white};
             font-size: ${remCalc(20)};
             line-height: 26px;
+            margin-bottom: 8px;
+            margin-top: 0;
         }
     `};
 `;
 
 export const StyledAccountInfo = styled(Pblock)`
     &.accountInfo {
-        padding: 0px 10px;
+        padding: 20px 10px;
         border: 1px solid ${theme.colors.secondary};
         border-radius: 0px 0px 5px 5px;
         ${media.tablet`
@@ -52,7 +52,7 @@ export const StyledAccountInfo = styled(Pblock)`
     }
 
     ${media.tablet`
-        ${StyledAccountP}:first-of-type{
+        ${StyledAccountDiv}:first-of-type{
             margin-top: 80px;
         }
     `};
@@ -71,7 +71,7 @@ export const StyledAccInfoLink = styled(Link)`
         &:hover {
             color: ${theme.colors.white};
         }
-        
+
         & > i {
             padding-right: 10px;
         }
