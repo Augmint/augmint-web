@@ -58,7 +58,7 @@ class TopNav extends React.Component {
                             <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className={this.props.showAccInfo ? "account" : "account hidden"}>
+                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
                         <StyledTopNavLinkRight
                             title="Your account"
                             to={this.props.showAccInfo ? "" : "/account"}
@@ -99,7 +99,20 @@ class TopNav extends React.Component {
                             />
                         </StyledAccount>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className="account">
+                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
+                        <StyledTopNavLinkRight
+                            title="Notifications"
+                            to={this.props.showAccInfo ? "" : "/account"}
+                            onClick={e => this.toggleAccInfo(e, true)}
+                            className={this.props.showAccInfo ? "notifications opened" : "notifications"}
+                        >
+                            <Icon
+                                name="notifications"
+                                // className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
+                            />
+                        </StyledTopNavLinkRight>
+                    </StyledTopNavLi>
+                    <StyledTopNavLi className="navLinkRight">
                         <StyledTopNavLinkRight
                             title="Under the hood"
                             to="/under-the-hood"

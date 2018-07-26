@@ -58,6 +58,7 @@ export const StyledTopNavUl = styled.ul`
     padding-left: 20px;
 `;
 
+// export const StyledNavBtn = styled.div`
 export const StyledAccount = styled.div`
     display: none;
     &.opened {
@@ -79,7 +80,7 @@ export const StyledTopNavLi = styled.li`
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
 
-    &.account:hover ${StyledAccount} {
+    &.navLinkRight:hover ${StyledAccount} {
         display: block;
         position: absolute;
         right: 64px;
@@ -129,6 +130,13 @@ export const StyledTopNavLinkRight = StyledTopNavLink.extend`
         ${media.tablet`
             display: none;
         `};
+    }
+    &.notifications {
+        border-left: solid 1px #fff;
+        border-right: solid 1px #cccccc;
+        :hover {
+            border-right: solid 1px #fff;
+        }
     }
 `;
 
