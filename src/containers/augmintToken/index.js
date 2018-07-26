@@ -141,7 +141,8 @@ class AugmintToken extends React.Component {
         if (
             this.props.metrics.loansData.outstandingLoansAmount > -1 &&
             loansCollected > -1 &&
-            this.props.monetarySupervisor.info.issuedByStabilityBoard > -1
+            this.props.monetarySupervisor.info.issuedByStabilityBoard > -1 &&
+            document.getElementById("marketSupply-1")
         ) {
             let ctx = document.getElementById("marketSupply-1").getContext("2d");
             new Chart(ctx, {
@@ -169,7 +170,8 @@ class AugmintToken extends React.Component {
             this.props.augmintToken.info.feeAccountTokenBalance > -1 &&
             this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance > -1 &&
             this.props.monetarySupervisor.info.totalLockedAmount > -1 &&
-            amountOwnedByUsersLiquid > -1
+            amountOwnedByUsersLiquid > -1 &&
+            document.getElementById("marketSupply-2")
         ) {
             let ctx = document.getElementById("marketSupply-2").getContext("2d");
             const data = new BigNumber(this.props.monetarySupervisor.info.reserveTokenBalance)
@@ -204,7 +206,7 @@ class AugmintToken extends React.Component {
             <EthereumState>
                 <StyledContainer>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor nav" header="Reserves" />}
+                        <Pheader className="secondaryColor nav" header="Reserves" />
                     </TopNavTitlePortal>
                     <StyledPheader header="Stability Dashboard" className="stabilityDashboard" style={{ margin: 0 }} />
                     <StyledHeader as="h3" content="A-EUR Market Supply" />
