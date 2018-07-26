@@ -1,4 +1,5 @@
 import React from "react";
+import Chart from "chart.js";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
@@ -137,6 +138,68 @@ class AugmintToken extends React.Component {
                     </div>
                 );
             });
+        if (
+            this.props.metrics.loansData.outstandingLoansAmount > -1 &&
+            loansCollected > -1 &&
+            this.props.monetarySupervisor.info.issuedByStabilityBoard > -1
+        ) {
+            let ctx = document.getElementById("marketSupply-1").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Loans Outstanding (A€)", "Loans Collected (A€)", "Issued by Stability Board (A€)"],
+                    datasets: [
+                        {
+                            label: " A€",
+                            data: [
+                                this.props.metrics.loansData.outstandingLoansAmount,
+                                loansCollected,
+                                this.props.monetarySupervisor.info.issuedByStabilityBoard
+                            ],
+                            backgroundColor: ["rgba(54, 162, 235, 1)", "rgba(255, 159, 64, 1)", "rgba(255,99,132,1)"],
+                            borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 159, 64, 1)", "rgba(255,99,132,1)"],
+                            borderWidth: 0
+                        }
+                    ]
+                }
+            });
+        }
+        if (
+            this.props.monetarySupervisor.info.reserveTokenBalance > -1 &&
+            this.props.augmintToken.info.feeAccountTokenBalance > -1 &&
+            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance > -1 &&
+            this.props.monetarySupervisor.info.totalLockedAmount > -1 &&
+            amountOwnedByUsersLiquid > -1
+        ) {
+            let ctx = document.getElementById("marketSupply-2").getContext("2d");
+            const data = new BigNumber(this.props.monetarySupervisor.info.reserveTokenBalance)
+                .plus(this.props.augmintToken.info.feeAccountTokenBalance)
+                .plus(this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance)
+                .toNumber();
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Amount Owned by Board (A€)",
+                        "Locked in Aamount (A€)",
+                        "Liquid Amount Owned by Users (A€)"
+                    ],
+                    datasets: [
+                        {
+                            label: " A€",
+                            data: [
+                                data,
+                                this.props.monetarySupervisor.info.totalLockedAmount,
+                                amountOwnedByUsersLiquid
+                            ],
+                            backgroundColor: ["rgba(255,99,132,1)", "rgba(255, 159, 64, 1)", "rgba(75, 192, 192, 1)"],
+                            borderColor: ["rgba(255,99,132,1)", "rgba(255, 159, 64, 1)", "rgba(75, 192, 192, 1)"],
+                            borderWidth: 0
+                        }
+                    ]
+                }
+            });
+        }
         return (
             <EthereumState>
                 <StyledContainer>
@@ -146,7 +209,7 @@ class AugmintToken extends React.Component {
                     <StyledPheader header="Stability Dashboard" className="stabilityDashboard" style={{ margin: 0 }} />
                     <StyledHeader as="h3" content="A-EUR Market Supply" />
                     <StyledMyListGroup>
-                        <StyledRow>
+                        <StyledRow wrap={true} valign="stretch">
                             <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
@@ -156,20 +219,12 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
                                         <StyledCol width={1 / 3}>{loansCollected + " A€"}</StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>+ Issued by Stability Board (Net)</StyledCol>
@@ -178,10 +233,6 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify" className="borderTop result">
                                         <StyledCol width={2 / 3}>Total</StyledCol>
@@ -191,8 +242,11 @@ class AugmintToken extends React.Component {
                                     </StyledRow>
                                 </MyListGroup>
                             </StyledCol>
+                            <StyledCol width={{ tablet: 1, desktop: 2 / 5 }}>
+                                <canvas id="marketSupply-1" />
+                            </StyledCol>
                         </StyledRow>
-                        <StyledRow className="borderTop">
+                        <StyledRow className="borderTop" wrap={true} valign="stretch">
                             <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
@@ -202,10 +256,6 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>- Fees</StyledCol>
@@ -214,10 +264,6 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>- Earned Interest</StyledCol>
@@ -227,20 +273,13 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify" className="borderTop result">
                                         <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
                                         <StyledCol width={1 / 3}>{amountOwnedByUsers + " A€"}</StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
+                                <br />
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>- Locked in Aamount</StyledCol>
@@ -249,16 +288,15 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify" className="borderTop result">
                                         <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
                                         <StyledCol width={1 / 3}>{amountOwnedByUsersLiquid + " A€"}</StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
+                            </StyledCol>
+                            <StyledCol width={{ tablet: 1, desktop: 2 / 5 }}>
+                                <canvas id="marketSupply-2" />
                             </StyledCol>
                         </StyledRow>
                     </StyledMyListGroup>
@@ -275,10 +313,6 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>ETH Fees</StyledCol>
@@ -288,10 +322,6 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify" className="borderTop result">
                                         <StyledCol width={2 / 3}>Total</StyledCol>
@@ -313,10 +343,6 @@ class AugmintToken extends React.Component {
                                         <StyledCol width={1 / 3}>{loanCollateralCoverageRatio + "%"}</StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>Loans Outstanding</StyledCol>
@@ -325,24 +351,16 @@ class AugmintToken extends React.Component {
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>Collateral in escrow</StyledCol>
                                         <StyledCol width={1 / 3}>
                                             {Number(this.props.metrics.loansData.collateralInEscrowEth).toFixed(4) +
-                                                " ETH, "}
-                                            <span>({collateralInEscrow + " A€"})</span>
+                                                " ETH "}
+                                            <span className="collateralInEscrow">({collateralInEscrow + " A€"})</span>
                                         </StyledCol>
                                     </StyledRow>
                                 </MyListGroup>
-                            </StyledCol>
-                        </StyledRow>
-                        <StyledRow>
-                            <StyledCol width={{ tablet: 1, desktop: 3 / 5 }}>
                                 <MyListGroup>
                                     <StyledRow halign="justify">
                                         <StyledCol width={2 / 3}>Loan To Lockin Ratio</StyledCol>
