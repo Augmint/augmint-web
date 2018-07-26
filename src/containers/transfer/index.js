@@ -23,7 +23,7 @@ class TransferPage extends React.Component {
 
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <TokenTransferForm />
                             </Pgrid.Column>
                         </Pgrid.Row>
