@@ -104,9 +104,9 @@ class AugmintToken extends React.Component {
                     loanLimit = product.maxLoanAmount;
                 }
                 return (
-                    <div>
+                    <div key={"reserv-page-loan-" + index}>
                         {product.isActive && (
-                            <StyledRow halign="justify" key={"reserv-page-loan-" + index}>
+                            <StyledRow halign="justify">
                                 <StyledCol width={1 / 2}>{product.termText}</StyledCol>
                                 <StyledCol width={1 / 2}>{(product.interestRatePa * 100).toFixed(2) + "%"}</StyledCol>
                             </StyledRow>
@@ -126,9 +126,9 @@ class AugmintToken extends React.Component {
                     lockLimit = product.maxLockAmount;
                 }
                 return (
-                    <div>
+                    <div key={"reserv-page-lock-" + index}>
                         {product.isActive && (
-                            <StyledRow halign="justify" key={"reserv-page-lock-" + index}>
+                            <StyledRow halign="justify">
                                 <StyledCol width={1 / 2} className="alignLeft">
                                     {product.durationText}
                                 </StyledCol>
