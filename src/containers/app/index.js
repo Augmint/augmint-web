@@ -149,15 +149,16 @@ class App extends React.Component {
                 {showConnection && <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />}
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
-                    {showConnection && (
-                        <div>
-                            <EthereumTxStatus />
-                            <LegacyLoanManagers />
-                            <LegacyLockers />
-                            <LegacyExchanges />
-                            <LegacyTokens />
-                        </div>
-                    )}
+                    {showConnection &&
+                        ["reserves", "under-the-hood"].indexOf(mainPath) < 0 && (
+                            <div>
+                                <EthereumTxStatus />
+                                <LegacyLoanManagers />
+                                <LegacyLockers />
+                                <LegacyExchanges />
+                                <LegacyTokens />
+                            </div>
+                        )}
 
                     <Switch>
                         <Route exact path="/" component={NotConnectedHome} />
