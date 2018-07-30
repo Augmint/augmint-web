@@ -17,6 +17,7 @@ import { MyListGroup } from "components/MyListGroups";
 import Button from "components/augmint-ui/button";
 
 import { StyledContainer, StyledHeader, StyledPheader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
+import theme from "styles/theme";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
@@ -157,8 +158,8 @@ class AugmintToken extends React.Component {
                                 loansCollected,
                                 this.props.monetarySupervisor.info.issuedByStabilityBoard
                             ],
-                            backgroundColor: ["rgba(54, 162, 235, 1)", "rgba(255, 159, 64, 1)", "rgba(255,99,132,1)"],
-                            borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 159, 64, 1)", "rgba(255,99,132,1)"],
+                            backgroundColor: [theme.chartColors.blue, theme.chartColors.orange, theme.chartColors.red],
+                            borderColor: [theme.chartColors.blue, theme.chartColors.orange, theme.chartColors.red],
                             borderWidth: 0
                         }
                     ]
@@ -194,8 +195,8 @@ class AugmintToken extends React.Component {
                                 this.props.monetarySupervisor.info.totalLockedAmount,
                                 amountOwnedByUsersLiquid
                             ],
-                            backgroundColor: ["rgba(255,99,132,1)", "rgba(255, 159, 64, 1)", "rgba(75, 192, 192, 1)"],
-                            borderColor: ["rgba(255,99,132,1)", "rgba(255, 159, 64, 1)", "rgba(75, 192, 192, 1)"],
+                            backgroundColor: [theme.chartColors.orange, theme.chartColors.red, theme.chartColors.green],
+                            borderColor: [theme.chartColors.orange, theme.chartColors.red, theme.chartColors.green],
                             borderWidth: 0
                         }
                     ]
