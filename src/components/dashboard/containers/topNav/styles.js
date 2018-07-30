@@ -38,11 +38,11 @@ export const TitleWrapper = styled.div`
     max-width: 60%;
 
     ${StyledHeaderH1} {
-        font-size: ${remCalc("24")};
+        font-size: ${remCalc(22)};
         margin: 0;
 
         ${media.mobile`
-            font-size: 1.1rem;
+            font-size: ${remCalc(18)};
         `};
     }
 
@@ -145,8 +145,8 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    padding: 0 14px;
-    font-size: 1rem;
+    padding: 0 12px;
+    font-size: ${remCalc(14)};
 
     &.accountInfoContainer {
         ${media.desktop`
