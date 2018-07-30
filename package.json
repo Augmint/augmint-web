@@ -34,7 +34,7 @@
     "styled-components": "3.3.3",
     "styled-components-grid": "2.2.0",
     "styled-tools": "1.0.0",
-    "web3": "1.0.0-beta.34"
+    "web3": "1.0.0-beta.35"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -53,7 +53,7 @@
     "cypress": "3.0.2",
     "eslint-plugin-cypress": "2.0.1",
     "husky": "0.14.3",
-    "prettier": "1.13.7",
+    "prettier": "1.14.0",
     "pretty-quick": "1.6.0"
   },
   "greenkeeper": {
