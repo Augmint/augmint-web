@@ -60,10 +60,10 @@ class AugmintToken extends React.Component {
                 .minus(this.props.augmintToken.info.feeAccountTokenBalance)
                 .minus(this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance);
 
-            amountOwnedByUsers = bn_amountOwnedByUsers.toNumber();
+            amountOwnedByUsers = bn_amountOwnedByUsers.toFixed(2);
             amountOwnedByUsersLiquid = bn_amountOwnedByUsers
                 .minus(this.props.monetarySupervisor.info.totalLockedAmount)
-                .toNumber();
+                .toFixed(2);
         }
 
         if (
