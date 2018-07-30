@@ -65,11 +65,11 @@ export const SideNav = styled.nav`
         visibility: visible;
 
         ${media.tablet`
-            margin-top: 40px; 
+            margin-top: 40px;
             margin-bottom: 0;
-            &.hidden{   
+            &.hidden{
                 display: none;
-                visibility: hidden;    
+                visibility: hidden;
             }
         `};
     }
@@ -196,7 +196,7 @@ export default class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/reserves" activeClassName="active" data-testid="reservesMenuLink">
                             <Icon name="reserves" />
-                            <span>Reserves</span>
+                            <span>Stability</span>
                         </SideNavLink>
                     </SideNavLi>
                 </SideNavUl>

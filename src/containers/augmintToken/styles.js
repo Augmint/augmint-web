@@ -17,6 +17,7 @@ export const StyledContainer = styled.div`
     background-color: ${theme.colors.white};
     color: ${theme.colors.primary};
     margin: ${remCalc(40)};
+    padding-top: 15px;
 
     ${media.tablet`
         margin: 0;
@@ -46,11 +47,12 @@ export const StyledMyListGroup = styled(MyListGroup)`
 `;
 
 export const StyledCol = styled(Col)`
-    .alignLeft {
-        text-align: left;
+    .center {
+        text-align: center;
     }
 
     .collateralInEscrow {
+        display: inline-block;
         font-size: ${remCalc(12)};
     }
 `;
@@ -63,8 +65,13 @@ export const StyledRow = styled(Row)`
     &.borderTop {
         border-top: 1px solid ${theme.colors.black};
     }
+
     &.result ${StyledCol} {
         font-size: ${remCalc(20)};
         font-weight: bold;
+    }
+
+    &.result.smaller ${StyledCol} {
+        font-size: ${remCalc(18)};
     }
 `;
