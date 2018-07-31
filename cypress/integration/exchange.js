@@ -15,11 +15,9 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=exchangeMenuLink]").click();
 
         cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
-        cy
-            .get("@tradeHistoryTbody")
+        cy.get("@tradeHistoryTbody")
             .then(() => {
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .invoke("attr", "data-test-historycount")
                     .as("tradeHistoryStartLength");
             })
@@ -27,25 +25,19 @@ describe("Augmint exchange", function() {
                 tradeHistoryStartLength = parseInt(this.tradeHistoryStartLength);
             });
 
-        cy
-            .get("[data-testid=priceInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=priceInput]")
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
-        cy
-            .get("[data-testid=tokenAmountInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=tokenAmountInput]")
             .type("{selectall}" + tokenAmount)
             .should("have.value", tokenAmount.toString());
 
         cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
 
-        cy
-            .get("@tradeHistoryTbody")
+        cy.get("@tradeHistoryTbody")
             .then(() => {
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .invoke("attr", "data-test-historycount")
                     .as("tradeHistoryCurrentLength");
             })
@@ -57,22 +49,18 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
 
-        cy
-            .get("[data-testid=EthConfirmationReceivedPanel]")
+        cy.get("[data-testid=EthConfirmationReceivedPanel]")
             .should("contain", "confirmation")
             .as("successPanel");
 
-        cy
-            .get("@successPanel")
+        cy.get("@successPanel")
             .contains("confirmation")
             .then(() => {
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-orderid")
                     .as("orderId");
 
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-gasused")
                     .as("orderGasUsed");
             })
@@ -86,12 +74,10 @@ describe("Augmint exchange", function() {
                     parseFloat(this.startingEthBalance) - ethAmount - parseInt(this.orderGasUsed) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .should("contain", "NewOrder")
                     .then(() => {
-                        cy
-                            .get("@tradeHistoryTbody")
+                        cy.get("@tradeHistoryTbody")
                             .invoke("attr", "data-test-historycount")
                             .as("tradeHistoryCurrentLength");
                     })
@@ -108,8 +94,7 @@ describe("Augmint exchange", function() {
                 cy.get("@successPanel").contains("confirmation");
             })
             .then(() => {
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-gasused")
                     .as("cancelGasUsed");
             })
@@ -123,12 +108,10 @@ describe("Augmint exchange", function() {
                     (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .should("contain", "CancelledOrder")
                     .then(() => {
-                        cy
-                            .get("@tradeHistoryTbody")
+                        cy.get("@tradeHistoryTbody")
                             .invoke("attr", "data-test-historycount")
                             .as("tradeHistoryCurrentLength");
                     })
@@ -149,11 +132,9 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=sellMenuLink]").click();
 
         cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
-        cy
-            .get("@tradeHistoryTbody")
+        cy.get("@tradeHistoryTbody")
             .then(() => {
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .invoke("attr", "data-test-historycount")
                     .as("tradeHistoryStartLength");
             })
@@ -161,15 +142,11 @@ describe("Augmint exchange", function() {
                 tradeHistoryStartLength = parseInt(this.tradeHistoryStartLength);
             });
 
-        cy
-            .get("[data-testid=priceInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=priceInput]")
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
-        cy
-            .get("[data-testid=ethAmountInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=ethAmountInput]")
             .type("{selectall}" + ethAmount)
             .should("have.value", ethAmount.toString());
 
@@ -179,18 +156,15 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order submitted");
 
-        cy
-            .get("[data-testid=EthConfirmationReceivedPanel]")
+        cy.get("[data-testid=EthConfirmationReceivedPanel]")
             .should("contain", "confirmation")
             .as("successPanel")
             .then(() => {
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-orderid")
                     .as("orderId");
 
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-gasused")
                     .as("orderGasUsed");
             })
@@ -204,12 +178,10 @@ describe("Augmint exchange", function() {
                 cy.assertUserAEurBalanceOnUI(expectedAEurBalance);
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .should("contain", "NewOrder")
                     .then(() => {
-                        cy
-                            .get("@tradeHistoryTbody")
+                        cy.get("@tradeHistoryTbody")
                             .invoke("attr", "data-test-historycount")
                             .as("tradeHistoryCurrentLength");
                     })
@@ -227,8 +199,7 @@ describe("Augmint exchange", function() {
                 cy.get("@successPanel").should("contain", "confirmation");
             })
             .then(() => {
-                cy
-                    .get("@successPanel")
+                cy.get("@successPanel")
                     .invoke("attr", "data-test-gasused")
                     .as("cancelGasUsed");
             })
@@ -242,12 +213,10 @@ describe("Augmint exchange", function() {
                     (parseInt(this.cancelGasUsed) + parseInt(this.orderGasUsed)) * this.gasPriceInEth;
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
-                cy
-                    .get("@tradeHistoryTbody")
+                cy.get("@tradeHistoryTbody")
                     .should("contain", "CancelledOrder")
                     .then(() => {
-                        cy
-                            .get("@tradeHistoryTbody")
+                        cy.get("@tradeHistoryTbody")
                             .invoke("attr", "data-test-historycount")
                             .as("tradeHistoryCurrentLength");
                     })
@@ -265,15 +234,11 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
-        cy
-            .get("[data-testid=priceInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=priceInput]")
             .type("{selectall}" + price)
             .should("have.value", price.toString());
 
-        cy
-            .get("[data-testid=ethAmountInput]")
-            .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+        cy.get("[data-testid=ethAmountInput]")
             .type("{selectall}" + ethAmount)
             .should("have.value", ethAmount.toString());
 
@@ -281,8 +246,7 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
-        cy
-            .get("[data-testid=EthConfirmationReceivedPanel]")
+        cy.get("[data-testid=EthConfirmationReceivedPanel]")
             .should("contain", "confirmation")
             .as("successPanel")
             .then(() => {
@@ -290,15 +254,11 @@ describe("Augmint exchange", function() {
 
                 cy.get("[data-testid=buyMenuLink]").click();
 
-                cy
-                    .get("[data-testid=priceInput]")
-                    .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+                cy.get("[data-testid=priceInput]")
                     .type("{selectall}" + price)
                     .should("have.value", price.toString());
 
-                cy
-                    .get("[data-testid=tokenAmountInput]")
-                    .invoke("attr", "type", "text") // cast to text. workaround for https://github.com/cypress-io/cypress/issues/1171
+                cy.get("[data-testid=tokenAmountInput]")
                     .type("{selectall}" + tokenAmount)
                     .should("have.value", tokenAmount.toString());
 
@@ -318,8 +278,7 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.get("@successPanel").should("contain", "confirmation");
-                cy
-                    .get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
                     .click()
                     .then(() => {
                         cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
