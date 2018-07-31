@@ -51,6 +51,10 @@ export const StyledCol = styled(Col)`
         text-align: center;
     }
 
+    .alignLeft {
+        text-align: left;
+    }
+
     .collateralInEscrow {
         display: inline-block;
         font-size: ${remCalc(12)};

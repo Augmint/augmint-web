@@ -16,7 +16,7 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { MyListGroup } from "components/MyListGroups";
 import Button from "components/augmint-ui/button";
 
-import { StyledContainer, StyledHeader, StyledPheader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
+import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
 import { theme as medeaTheme } from "styles/media";
 import { ThemeProvider } from "styled-components";
