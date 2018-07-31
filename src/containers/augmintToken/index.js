@@ -421,6 +421,29 @@ class AugmintToken extends React.Component {
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
+                                    <MyListGroup>
+                                        <StyledRow halign="justify">
+                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                Active Loans
+                                            </StyledCol>
+                                            <StyledCol width={1 / 3}>
+                                                {Number(this.props.monetarySupervisor.info.totalLoanAmount).toFixed(0) +
+                                                    " A€"}
+                                            </StyledCol>
+                                        </StyledRow>
+                                    </MyListGroup>
+                                    <MyListGroup>
+                                        <StyledRow halign="justify">
+                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                Active Lock-ins
+                                            </StyledCol>
+                                            <StyledCol width={1 / 3}>
+                                                {Number(this.props.monetarySupervisor.info.totalLockedAmount).toFixed(
+                                                    0
+                                                ) + " A€"}
+                                            </StyledCol>
+                                        </StyledRow>
+                                    </MyListGroup>
                                 </StyledCol>
                             </StyledRow>
                         </StyledMyListGroup>
@@ -437,14 +460,6 @@ class AugmintToken extends React.Component {
                                                 <MyListGroup>
                                                     <StyledRow halign="justify" className="result">
                                                         <StyledCol className="center">Loans</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5}>Active Loans</StyledCol>
-                                                        <StyledCol width={2 / 5}>
-                                                            {Number(
-                                                                this.props.monetarySupervisor.info.totalLoanAmount
-                                                            ).toFixed(0) + " A€"}
-                                                        </StyledCol>
                                                     </StyledRow>
                                                     <StyledRow halign="justify">
                                                         <StyledCol width={3 / 5}>Loan Limit</StyledCol>
@@ -465,16 +480,6 @@ class AugmintToken extends React.Component {
                                                 <MyListGroup>
                                                     <StyledRow halign="justify" className="result">
                                                         <StyledCol className="center">Lock-ins</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5} className="alignLeft">
-                                                            Active Lock-ins
-                                                        </StyledCol>
-                                                        <StyledCol width={2 / 5}>
-                                                            {Number(
-                                                                this.props.monetarySupervisor.info.totalLockedAmount
-                                                            ).toFixed(0) + " A€"}
-                                                        </StyledCol>
                                                     </StyledRow>
                                                     <StyledRow halign="justify">
                                                         <StyledCol width={3 / 5} className="alignLeft">
