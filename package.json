@@ -5,13 +5,13 @@
   "homepage": ".",
   "private": true,
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "4.19.0",
-    "@ledgerhq/hw-transport-u2f": "4.20.0",
+    "@ledgerhq/hw-app-eth": "4.21.0",
+    "@ledgerhq/hw-transport-u2f": "4.21.0",
     "bignumber.js": "5.0.0",
     "chart.js": "2.7.2",
     "del": "3.0.0",
     "ethereumjs-util": "5.2.0",
-    "ethers": "3.0.25",
+    "ethers": "3.0.26",
     "hdkey": "0.8.0",
     "moment": "2.22.2",
     "parse": "1.11.1",
@@ -50,7 +50,7 @@
     "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "cypress": "3.0.2",
+    "cypress": "3.0.3",
     "eslint-plugin-cypress": "2.0.1",
     "husky": "0.14.3",
     "prettier": "1.14.0",
