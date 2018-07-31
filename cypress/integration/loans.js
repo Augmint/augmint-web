@@ -4,7 +4,6 @@ describe("Loans", function() {
 
         cy.get(`[data-testid=label-selectLoanProduct-${prodId}]`).click();
 
-        // NB: only works with integers, see: https://github.com/cypress-io/cypress/issues/1171
         cy.get("[data-testid=loanTokenAmountInput]")
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
