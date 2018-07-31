@@ -169,6 +169,11 @@ class AugmintToken extends React.Component {
                             borderWidth: 0
                         }
                     ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    }
                 }
             });
         }
@@ -202,6 +207,11 @@ class AugmintToken extends React.Component {
                             borderWidth: 0
                         }
                     ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    }
                 }
             });
         }
@@ -223,6 +233,7 @@ class AugmintToken extends React.Component {
                                                 {Number(this.props.metrics.loansData.outstandingLoansAmount).toFixed(
                                                     0
                                                 ) + " A€"}
+                                                <div className="chart-info blue" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -231,6 +242,7 @@ class AugmintToken extends React.Component {
                                             <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
                                             <StyledCol width={1 / 3}>
                                                 {Number(loansCollected).toFixed(0) + " A€"}
+                                                <div className="chart-info orange" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -241,6 +253,7 @@ class AugmintToken extends React.Component {
                                                 {Number(
                                                     this.props.monetarySupervisor.info.issuedByStabilityBoard
                                                 ).toFixed(0) + " A€"}
+                                                <div className="chart-info red" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -266,6 +279,7 @@ class AugmintToken extends React.Component {
                                                 {Number(this.props.monetarySupervisor.info.reserveTokenBalance).toFixed(
                                                     0
                                                 ) + " A€"}
+                                                <div className="chart-info orange" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -276,6 +290,7 @@ class AugmintToken extends React.Component {
                                                 {Number(this.props.augmintToken.info.feeAccountTokenBalance).toFixed(
                                                     0
                                                 ) + " A€"}
+                                                <div className="chart-info orange" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -286,6 +301,7 @@ class AugmintToken extends React.Component {
                                                 {Number(
                                                     this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance
                                                 ).toFixed(0) + " A€"}
+                                                <div className="chart-info orange" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -305,6 +321,7 @@ class AugmintToken extends React.Component {
                                                 {Number(this.props.monetarySupervisor.info.totalLockedAmount).toFixed(
                                                     0
                                                 ) + " A€"}
+                                                <div className="chart-info red" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -313,6 +330,7 @@ class AugmintToken extends React.Component {
                                             <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
                                             <StyledCol width={1 / 3}>
                                                 {Number(amountOwnedByUsersLiquid).toFixed(0) + " A€"}
+                                                <div className="chart-info green" />
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>

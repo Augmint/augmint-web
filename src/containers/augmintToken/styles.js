@@ -55,6 +55,36 @@ export const StyledCol = styled(Col)`
         display: inline-block;
         font-size: ${remCalc(12)};
     }
+
+    & > div.chart-info {
+        background: black;
+        content: "";
+        display: inline-block;
+        height: 10px;
+        margin-left: 5px;
+        width: 10px;
+
+        &.blue {
+            background-color: ${theme.chartColors.blue};
+        }
+
+        &.orange {
+            background-color: ${theme.chartColors.orange};
+        }
+
+        &.red {
+            background-color: ${theme.chartColors.red};
+        }
+
+        &.green {
+            background-color: ${theme.chartColors.green};
+        }
+    }
+    & > canvas {
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+    }
 `;
 
 export const StyledRow = styled(Row)`
