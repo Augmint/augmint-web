@@ -300,7 +300,7 @@ class AugmintToken extends React.Component {
                                     <br />
                                     <MyListGroup>
                                         <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>- Locked in Aamount</StyledCol>
+                                            <StyledCol width={2 / 3}>- Locked in Amount</StyledCol>
                                             <StyledCol width={1 / 3}>
                                                 {Number(this.props.monetarySupervisor.info.totalLockedAmount).toFixed(
                                                     0
