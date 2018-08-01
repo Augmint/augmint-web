@@ -30,7 +30,7 @@ export const StyledDiv = styled.div`
           }
       }
     `};
-    ${media.phone`
+    ${media.mobile`
       &.homePage { 
         max-width: 90%;
         &.wider {

@@ -55,7 +55,7 @@ class LoanDetailsPage extends React.Component {
         return (
             <Psegment>
                 <TopNavTitlePortal>
-                    <Pheader className={"secondaryColor"} header="Loan details" />
+                    <Pheader className="secondaryColor nav" header="Loan details" />
                 </TopNavTitlePortal>
                 {this.state.isLoading && <LoadingPanel>Fetching data (loan id: {this.state.loanId})...</LoadingPanel>}
                 {!this.state.isLoading &&
@@ -68,7 +68,7 @@ class LoanDetailsPage extends React.Component {
                 {this.state.isLoanFound && (
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
                                 <Pblock
                                     header={this.state.loan.loanStateText + "loan #" + this.state.loan.id}
                                     className={"tertiaryColor"}

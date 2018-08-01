@@ -2,10 +2,10 @@ import { css } from "styled-components";
 
 export const theme = {
     breakpoints: {
-        giant: 1200,
+        giant: 1285,
         desktop: 992,
         tablet: 768,
-        phone: 376
+        mobile: 376
     }
 };
 

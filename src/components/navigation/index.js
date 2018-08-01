@@ -43,7 +43,7 @@ export default class SiteMenu extends React.Component {
 
         const currentLocation = location.pathname;
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/reserves", "/lock", "/tryit"].indexOf(currentLocation) > -1;
+            ["/account", "/exchange", "/loan/new", "/stability", "/lock", "/tryit"].indexOf(currentLocation) > -1;
 
         return (
             <div>

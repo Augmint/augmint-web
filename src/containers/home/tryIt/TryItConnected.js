@@ -23,15 +23,15 @@ export function TryItConnected(props) {
                     <Tblock header="Get some test ETH" headerStyle={"primaryColor"}>
                         <StyledP className={_className}>
                             Use{" "}
-                            <Link target="_blank" to="https://faucet.rinkeby.io/">
+                            <a href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
                                 faucet.rinkeby.io
-                            </Link>
+                            </a>
                         </StyledP>
                         <StyledP className={_className}>
                             If you can't be bothered ask for some{" "}
-                            <Link target="_blank" to="https://discord.gg/PwDmsnu">
+                            <a href="https://discord.gg/PwDmsnu" target="_blank" rel="noopener noreferrer">
                                 on our discord channel
-                            </Link>
+                            </a>
                         </StyledP>
                         <Video
                             title="connect to rinkeby"
@@ -43,13 +43,13 @@ export function TryItConnected(props) {
 
                 <Tblock header="Get A-EUR" headerStyle={"primaryColor"}>
                     <StyledP className={_className}>
-                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in escrow and receive A-EUR
+                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in escrow and receive A-EUR.
                     </StyledP>
                 </Tblock>
 
                 <Tblock header="Buy A-EUR" headerStyle={"primaryColor"}>
                     <StyledP className={_className}>
-                        Buy A-EUR for ETH on <Link to="/exchange">Augmint's exchange</Link>
+                        Buy A-EUR for ETH on <Link to="/exchange">Augmint's exchange</Link>.
                     </StyledP>
                     <StyledP className={_className}>
                         Buy A-EUR for fiat EUR on <MrCoinBuyLink web3Connect={web3Connect}>MrCoin.eu</MrCoinBuyLink>,
@@ -68,7 +68,7 @@ export function TryItConnected(props) {
                         See your loans, locks and A-EUR transfer history on your <Link to="/account">account page</Link>
                     </StyledP>
                     <StyledP className={_className}>
-                        Check the <Link to="/reserves">Augmint reserves</Link>
+                        Check the <Link to="/stability">Stability dashboard</Link>
                     </StyledP>
                 </Tblock>
 

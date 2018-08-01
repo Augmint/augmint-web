@@ -22,7 +22,7 @@ export const StyledModal = styled.div`
     ${media.tablet`
         width: 75%;
     `};
-    ${media.phone`
+    ${media.mobile`
         width: 85%;
     `};
 `;

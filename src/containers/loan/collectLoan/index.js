@@ -27,10 +27,10 @@ class CollectLoanMain extends React.Component {
         return (
             <Psegment>
                 <TopNavTitlePortal>
-                    <Pheader className="secondaryColor" header="Collect loans" />
+                    <Pheader className="secondaryColor nav" header="Collect loans" />
                 </TopNavTitlePortal>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                         <Message info>
                             <p>
                                 When collecting a defaulted (not paid on time) loan the ETH held in contract escrow
@@ -43,7 +43,7 @@ class CollectLoanMain extends React.Component {
                             </p>
                         </Message>
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ phone: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
+                    <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
                         <CollectLoanButton loanManager={loanManager} loansToCollect={loanManager.loansToCollect} />
                         <LoansToCollectList
                             header="Loans to collect"

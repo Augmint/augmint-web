@@ -34,6 +34,9 @@ export async function fetchOrders(_exchangeInstance) {
         sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
     }
 
+    buyOrders.sort((o1, o2) => isOrderBetter(o1, o2));
+    sellOrders.sort((o1, o2) => isOrderBetter(o1, o2));
+
     return { buyOrders, sellOrders };
 }
 
@@ -99,8 +102,6 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
         { buyOrders: [], sellOrders: [] }
     );
 
-    orders.buyOrders.sort((o1, o2) => isOrderBetter(o1, o2));
-    orders.sellOrders.sort((o1, o2) => isOrderBetter(o1, o2));
     return orders;
 }
 
@@ -110,7 +111,7 @@ export function isOrderBetter(o1, o2) {
     }
 
     const dir = o1.direction === TOKEN_SELL ? 1 : -1;
-    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id);
+    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id) || -1;
 }
 
 export async function placeOrderTx(orderDirection, amount, price) {

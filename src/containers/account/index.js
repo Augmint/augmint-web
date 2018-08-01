@@ -25,7 +25,7 @@ class AccountHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor" header="My Account" />
+                        <Pheader className="secondaryColor nav" header="My Account" />
                     </TopNavTitlePortal>
 
                     <Pgrid>
@@ -44,14 +44,14 @@ class AccountHome extends React.Component {
                         />
 
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LoanList
                                     header="My A-EUR Loans"
                                     noItemMessage={<span>You have no loans</span>}
                                     loans={this.props.loans}
                                 />
                             </Pgrid.Column>
-                            <Pgrid.Column size={{ phone: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LockList header="My A-EUR Locks" locks={this.props.locks} />
                             </Pgrid.Column>
                         </Pgrid.Row>

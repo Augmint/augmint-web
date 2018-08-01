@@ -3,12 +3,12 @@ import { Route } from "react-router-dom";
 import RepayLoanPage from "./RepayLoanPage";
 import LoanSelector from "./LoanSelector";
 import { Psegment, Pheader } from "components/PageLayout";
-import TopNavTitlePortal from 'components/portals/TopNavTitlePortal';
+import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 const repayLoanMain = () => (
     <Psegment>
         <TopNavTitlePortal>
-            <Pheader className={ "secondaryColor" } header="Repay loan" />
+            <Pheader className="secondaryColor nav" header="Repay loan" />
         </TopNavTitlePortal>
 
         <Route exact path="/loan/repay" component={LoanSelector} />

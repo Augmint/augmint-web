@@ -53,9 +53,12 @@ const HeaderH2 = `
 `;
 
 const HeaderH1 = `
-    font-size: ${remCalc(32)};
+    font-size: ${theme.typography.fontSizes.h1};
     line-height: ${theme.typography.fontSizes.h1};
     margin-bottom: ${remCalc(14)};
+    &.nav {
+        font-size: ${remCalc(32)};
+    }
 `;
 
 export const StyledHeaderH1 = styled.h1`

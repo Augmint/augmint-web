@@ -100,7 +100,8 @@ class NewLoanForm extends React.Component {
             .round(0, BigNumber.ROUND_UP);
 
         const weiAmount = repaymentAmount
-            .div(this.props.rates.info.bn_ethFiatRate)
+            .div(DECIMALS_DIV)
+            .div(this.props.rates.info.bn_ethFiatRate.toNumber())
             .mul(ONE_ETH_IN_WEI)
             .div(this.state.product.bn_collateralRatio)
             .mul(PPM_DIV)
@@ -119,7 +120,7 @@ class NewLoanForm extends React.Component {
         let val;
         const amount = e ? e.target.value : this.state.ethAmount;
         try {
-            val = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
+            val = new BigNumber(amount).mul(ONE_ETH_IN_WEI).mul(DECIMALS_DIV);
         } catch (error) {
             this.props.change("loanTokenAmount", "");
             this.setState({ repaymentAmount: "" });
