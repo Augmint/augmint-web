@@ -73,7 +73,12 @@ class EthereumTxStatus extends React.Component {
                     return (
                         <MyListGroup.Row key={`txRowDiv-${hash}`}>
                             {tx.event === "transactionHash" && (
-                                <LoadingPanel header={header} onDismiss={() => this.handleClose(tx.transactionHash)}>
+                                <LoadingPanel
+                                    header={header}
+                                    onDismiss={() => this.handleClose(tx.transactionHash)}
+                                    btn="noBtn"
+                                    style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
                                         <HashURL hash={tx.transactionHash} type={"tx/"} />
@@ -86,6 +91,8 @@ class EthereumTxStatus extends React.Component {
                                     <LoadingPanel
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
+                                        btn="noBtn"
+                                        style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                     >
                                         <p>Transaction receipt received. Wait for confirmations.</p>
 
@@ -108,6 +115,8 @@ class EthereumTxStatus extends React.Component {
                                     data-test-gasused={gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
+                                    btn="noBtn"
+                                    style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>{tx.confirmationNumber}. confirmation</p>
 

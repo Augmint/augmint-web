@@ -33,6 +33,8 @@ export default class MsgPanel extends React.Component {
             loading,
             error,
             success,
+            btn,
+            testid,
             ...other
         } = this.props;
         let className;
@@ -47,19 +49,21 @@ export default class MsgPanel extends React.Component {
 
         return (
             (!this.state.dismissed || !dismissable) && (
-                <Container style={{ margin: "1em" }}>
+                // <Container style={{margin: "1em" }}>
+                <Container>
                     <Message onDismiss={onDismiss ? this.dismiss : null} className={className} {...other}>
-                        <h3>
+                        <h4>
                             {icon && <Icon name={icon} loading={loading} />} {header}
-                        </h3>
+                        </h4>
 
                         {children}
 
-                        {onDismiss && (
-                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
-                                OK
-                            </Button>
-                        )}
+                        {onDismiss &&
+                            !btn && (
+                                <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
+                                    OK
+                                </Button>
+                            )}
                     </Message>
                 </Container>
             )
@@ -72,8 +76,8 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    const { success = true, icon = "check", ...other } = props;
-    return <MsgPanel success={success} icon={icon} {...other} />;
+    const { success = true, icon = "check", btn, ...other } = props;
+    return <MsgPanel success={success} icon={icon} btn={btn} {...other} />;
 }
 
 export function InfoPanel(props) {
@@ -90,8 +94,8 @@ export function ErrorPanel(props) {
 }
 
 export function LoadingPanel(props) {
-    const { info = true, icon = "circle notched", loading = true, ...other } = props;
-    return <MsgPanel info={info} icon={icon} loading={loading} {...other} />;
+    const { info = true, icon = "circle notched", loading = true, btn, ...other } = props;
+    return <MsgPanel info={info} icon={icon} loading={loading} btn={btn} {...other} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
