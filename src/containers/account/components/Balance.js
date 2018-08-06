@@ -32,13 +32,14 @@ const EthAmount = styled.div`
     font-family: ${theme.typography.fontFamilies.currency};
 `;
 
+const pick = (arr, key) => arr && arr.map(item => item[key]);
+const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
+
 export default class Balance extends React.Component {
     render() {
         const { userAccount, loans, locks } = this.props;
-        const loansAmount =
-            loans.loans && loans.loans.reduce((acc, loan) => acc + loan.loanAmount, 0).toFixed(DECIMALS);
-        const locksAmount =
-            locks.locks && locks.locks.reduce((acc, lock) => acc + lock.amountLocked, 0).toFixed(DECIMALS);
+        const loansAmount = sum(pick(loans.loans, "loanAmount"));
+        const locksAmount = sum(pick(locks.locks, "amountLocked"));
 
         return (
             <Pblock style={{ textAlign: "center" }}>
