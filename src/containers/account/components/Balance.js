@@ -35,14 +35,17 @@ const EthAmount = styled.div`
 export default class Balance extends React.Component {
     render() {
         const { userAccount, loans, locks } = this.props;
-        const loansAmount = loans.loans && loans.loans.reduce((acc, loan) => acc + loan.loanAmount, 0);
-        const locksAmount = locks.locks && locks.locks.reduce((acc, lock) => acc + lock.amountLocked, 0);
+        const loansAmount =
+            loans.loans && loans.loans.reduce((acc, loan) => acc + loan.loanAmount, 0).toFixed(DECIMALS);
+        const locksAmount =
+            locks.locks && locks.locks.reduce((acc, lock) => acc + lock.amountLocked, 0).toFixed(DECIMALS);
+
         return (
             <Pblock style={{ textAlign: "center" }}>
                 <div>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
-                        {userAccount.tokenBalance.toFixed(DECIMALS)}
+                        {userAccount.tokenBalance}
                         <span className="currency"> A€</span>
                     </TokenBalance>
                 </div>
@@ -50,13 +53,13 @@ export default class Balance extends React.Component {
                     <Pgrid.Column size={1 / 2}>
                         <Label>My total loans</Label>
                         <TokenAmount>
-                            {loansAmount.toFixed(DECIMALS)} <span className="currency">A€</span>
+                            {loansAmount} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
                     <Pgrid.Column size={1 / 2}>
                         <Label>My total locks</Label>
                         <TokenAmount>
-                            {locksAmount.toFixed(DECIMALS)} <span className="currency">A€</span>
+                            {locksAmount} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
                 </Pgrid.Row>
