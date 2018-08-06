@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
+import { DECIMALS } from "utils/constants";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -41,7 +42,7 @@ export default class Balance extends React.Component {
                 <div>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
-                        {userAccount.tokenBalance}
+                        {userAccount.tokenBalance.toFixed(DECIMALS)}
                         <span className="currency"> A€</span>
                     </TokenBalance>
                 </div>
@@ -49,13 +50,13 @@ export default class Balance extends React.Component {
                     <Pgrid.Column size={1 / 2}>
                         <Label>My total loans</Label>
                         <TokenAmount>
-                            {loansAmount} <span className="currency">A€</span>
+                            {loansAmount.toFixed(DECIMALS)} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
                     <Pgrid.Column size={1 / 2}>
                         <Label>My total locks</Label>
                         <TokenAmount>
-                            {locksAmount} <span className="currency">A€</span>
+                            {locksAmount.toFixed(DECIMALS)} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
                 </Pgrid.Row>
