@@ -38,8 +38,10 @@ const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIM
 export default class Balance extends React.Component {
     render() {
         const { userAccount, loans, locks } = this.props;
-        const loansAmount = sum(pick(loans.loans, "loanAmount"));
-        const locksAmount = sum(pick(locks.locks, "amountLocked"));
+        const activeLoans = loans.loans && loans.loans.filter(loan => loan.isRepayable);
+        const activeLocks = locks.locks && locks.locks.filter(lock => lock.isReleasebale || lock.isActive);
+        const loansAmount = sum(pick(activeLoans, "loanAmount"));
+        const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
         return (
             <Pblock style={{ textAlign: "center" }}>
