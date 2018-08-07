@@ -3,7 +3,7 @@ const theme = {
         white: "white",
         black: "black",
         grey: "#e0e1e2",
-        mediumGrey: "#767676",
+        mediumGrey: "#828282",
         lightGrey: "#e8e8e8",
         opacGrey: "rgba(34,36,38,.15)",
         opacExtraLighterGrey: "rgba(0,0,0,.05)",
@@ -39,7 +39,9 @@ const theme = {
     },
     typography: {
         fontFamilies: {
-            default: "MaisonNeue,'Helvetica Neue',Arial,Helvetica,sans-serif"
+            default: "'Roboto', sans-serif",
+            currency: "'Roboto Mono', monospace",
+            title: "'Roboto Slab', serif"
         },
         fontSizes: {
             h5: remCalc(12),
