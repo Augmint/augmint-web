@@ -209,11 +209,12 @@ class PlaceOrderForm extends React.Component {
                                 header="Place Order failed"
                                 onDismiss={() => clearSubmitErrors()}
                             />
-
                             <Field
                                 name="tokenAmount"
                                 label={`${this.state.lastChangedAmountField === "ethAmount" ? "= " : "  "} ${
-                                    orderDirection === TOKEN_BUY ? "A-EUR amount: " : "Sell amount: "
+                                    orderDirection === TOKEN_BUY
+                                        ? "A-EUR amount to buy (calculated @ current rate): "
+                                        : "A-EUR amount to sell: "
                                 } `}
                                 component={Form.Field}
                                 as={Form.Input}
@@ -226,26 +227,7 @@ class PlaceOrderForm extends React.Component {
                                 style={{ borderRadius: theme.borderRadius.left }}
                                 labelAlignRight="A-EUR"
                             />
-
-                            <label>
-                                {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
-                                {orderDirection === TOKEN_BUY ? "ETH amount to sell: " : "ETH amount: "}
-                            </label>
-                            <Field
-                                name="ethAmount"
-                                component={Form.Field}
-                                as={Form.Input}
-                                type="number"
-                                disabled={submitting || !exchange.isLoaded}
-                                onChange={this.onEthAmountChange}
-                                validate={ethAmountValidations}
-                                normalize={Normalizations.fiveDecimals}
-                                data-testid="ethAmountInput"
-                                style={{ borderRadius: theme.borderRadius.left }}
-                                labelAlignRight="ETH"
-                            />
-
-                            <label>Price (% of of published rate):</label>
+                            <label>Price (% of of published ETH/€ rate):</label>
                             <Field
                                 name="price"
                                 component={Form.Field}
@@ -260,7 +242,27 @@ class PlaceOrderForm extends React.Component {
                                 labelAlignLeft={<PriceToolTip id={"place_order_form"} />}
                                 labelAlignRight="%"
                             />
+                            <p>( @{(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€/ETH) </p>
 
+                            <label>
+                                {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
+                                {orderDirection === TOKEN_BUY
+                                    ? "ETH amount to sell: "
+                                    : "ETH amount to buy (calculated on current rate): "}
+                            </label>
+                            <Field
+                                name="ethAmount"
+                                component={Form.Field}
+                                as={Form.Input}
+                                type="number"
+                                disabled={submitting || !exchange.isLoaded}
+                                onChange={this.onEthAmountChange}
+                                validate={ethAmountValidations}
+                                normalize={Normalizations.fiveDecimals}
+                                data-testid="ethAmountInput"
+                                style={{ borderRadius: theme.borderRadius.left }}
+                                labelAlignRight="ETH"
+                            />
                             <Button
                                 size="big"
                                 loading={submitting}
