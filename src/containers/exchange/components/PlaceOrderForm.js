@@ -33,7 +33,12 @@ class PlaceOrderForm extends React.Component {
     componentDidUpdate(prevProps) {
         // recaluclate amounts displayed when published ETH/EUR rates changed
         if (prevProps.rates && prevProps.rates.info.ethFiatRate !== this.props.rates.info.ethFiatRate) {
-            this.reCalcAmounts(this.props.price);
+            this.reCalcAmounts(
+                this.state.lastChangedAmountField,
+                this.props.price,
+                this.props.tokenAmount,
+                this.props.ethAmount
+            );
         }
     }
 
@@ -42,49 +47,48 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e) {
-        let tokenAmount, price;
         try {
-            this.setState({ lastChangedAmountField: "tokenAmount" });
-            tokenAmount = parseFloat(e.target.value);
-            price = this.parsePrice(this.props.price);
-            const ethValue = tokenAmount / (this.props.rates.info.ethFiatRate * price);
-            this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
+            const lastChangedAmountField = "tokenAmount";
+            this.setState({ lastChangedAmountField });
+            this.reCalcAmounts(lastChangedAmountField, this.props.price, e.target.value, null);
         } catch (error) {
             this.props.change("ethAmount", "");
         }
     }
 
     onEthAmountChange(e) {
-        let price, ethAmount;
         try {
-            this.setState({ lastChangedAmountField: "ethAmount" });
-            ethAmount = parseFloat(e.target.value);
-            price = this.parsePrice(this.props.price);
-            const tokenValue = ethAmount * this.props.rates.info.ethFiatRate * price;
-
-            this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
+            const lastChangedAmountField = "ethAmount";
+            this.setState({ lastChangedAmountField });
+            this.reCalcAmounts(lastChangedAmountField, this.props.price, null, e.target.value);
         } catch (error) {
             this.props.change("tokenAmount", "");
         }
     }
 
     onPriceChange(e) {
-        this.reCalcAmounts(e.target.value);
+        this.reCalcAmounts(
+            this.state.lastChangedAmountField,
+            e.target.value,
+            this.props.tokenAmount,
+            this.props.ethAmount
+        );
     }
 
-    reCalcAmounts(_price) {
+    reCalcAmounts(lastChangedAmountField, _price, _tokenAmount, _ethAmount) {
         const price = this.parsePrice(_price);
-        if (this.state.lastChangedAmountField === "ethAmount") {
-            const ethAmount = parseFloat(this.props.ethAmount);
+
+        if (lastChangedAmountField === "ethAmount") {
+            const ethAmount = parseFloat(_ethAmount);
             if (!isNaN(ethAmount) && isFinite(ethAmount)) {
-                const tokenValue = ethAmount * this.props.rates.info.ethFiatRate * price;
+                const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
                 this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
             } else {
                 //  ethAmount is not entered yet
                 this.props.change("tokenAmount", "");
             }
         } else {
-            const tokenAmount = parseFloat(this.props.tokenAmount);
+            const tokenAmount = parseFloat(_tokenAmount);
             if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
                 const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
                 this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
