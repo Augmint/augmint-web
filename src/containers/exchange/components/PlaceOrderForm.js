@@ -165,7 +165,7 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu>
+                <Menu style={{ marginBottom: -11 }}>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
@@ -211,11 +211,11 @@ class PlaceOrderForm extends React.Component {
                             />
                             <Field
                                 name="tokenAmount"
-                                label={`${this.state.lastChangedAmountField === "ethAmount" ? "= " : "  "} ${
+                                label={
                                     orderDirection === TOKEN_BUY
-                                        ? "A-EUR amount to buy (calculated @ current rate): "
-                                        : "A-EUR amount to sell: "
-                                } `}
+                                        ? "A-EUR amount to buy (calculated on current rate)"
+                                        : "A-EUR amount to sell"
+                                }
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
@@ -227,34 +227,48 @@ class PlaceOrderForm extends React.Component {
                                 style={{ borderRadius: theme.borderRadius.left }}
                                 labelAlignRight="A-EUR"
                             />
-                            <label>Price (% of of published ETH/€ rate):</label>
+                            <label>
+                                Price (% of published ETH/€ rate) <PriceToolTip id={"place_order_form"} />
+                            </label>
                             <Field
                                 name="price"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
+                                step="0.01"
+                                min="0"
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onPriceChange}
                                 validate={Validations.price}
                                 normalize={Normalizations.twoDecimals}
                                 data-testid="priceInput"
-                                style={{ borderRadius: "0" }}
-                                labelAlignLeft={<PriceToolTip id={"place_order_form"} />}
+                                style={{ borderRadius: theme.borderRadius.left }}
                                 labelAlignRight="%"
                             />
-                            <p>( @{(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€/ETH) </p>
+                            <div
+                                style={{
+                                    marginTop: -10,
+                                    marginBottom: 10,
+                                    color: "#999",
+                                    fontSize: "small",
+                                    textAlign: "right"
+                                }}
+                            >
+                                calculated on current rate 1 ETH ={" "}
+                                {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
+                            </div>
 
                             <label>
-                                {this.state.lastChangedAmountField === "tokenAmount" ? "= " : "  "}
                                 {orderDirection === TOKEN_BUY
-                                    ? "ETH amount to sell: "
-                                    : "ETH amount to buy (calculated on current rate): "}
+                                    ? "ETH amount to sell"
+                                    : "ETH amount to buy (calculated on current rate)"}
                             </label>
                             <Field
                                 name="ethAmount"
                                 component={Form.Field}
                                 as={Form.Input}
                                 type="number"
+                                step="0.1"
                                 disabled={submitting || !exchange.isLoaded}
                                 onChange={this.onEthAmountChange}
                                 validate={ethAmountValidations}
