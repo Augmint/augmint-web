@@ -50,7 +50,7 @@
     "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "cypress": "3.0.3",
+    "cypress": "3.1.0",
     "eslint-plugin-cypress": "2.0.1",
     "husky": "0.14.3",
     "prettier": "1.14.2",
