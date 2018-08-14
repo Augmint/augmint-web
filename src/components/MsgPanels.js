@@ -5,7 +5,9 @@ import Container from "./augmint-ui/container";
 import Message from "./augmint-ui/message";
 import HashURL from "components/hash";
 
-export default class MsgPanel extends React.Component {
+import { connect } from "react-redux";
+
+export class MsgPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = { dismissed: false };
@@ -35,6 +37,7 @@ export default class MsgPanel extends React.Component {
             success,
             btn,
             testid,
+            transactions,
             ...other
         } = this.props;
         let className;
@@ -168,3 +171,11 @@ export function ErrorDetails(props) {
         </div>
     );
 }
+
+function mapStateToProps(state) {
+    return {
+        transactions: state.submittedTransactions.transactions
+    };
+}
+
+export default connect(mapStateToProps)(MsgPanel);

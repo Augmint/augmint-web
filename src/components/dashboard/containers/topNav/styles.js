@@ -33,6 +33,9 @@ export const StyledTopNav = styled.nav`
     `};
 `;
 
+// font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));
+// font-size: ${remClac(calc(18px + (22 - 16) * ((100vw - ${media.mobile}) / (${media.tablet} - ${media.mobile}))))};
+
 export const TitleWrapper = styled.div`
     margin-left: 200px;
     max-width: 60%;
@@ -40,6 +43,10 @@ export const TitleWrapper = styled.div`
     ${StyledHeaderH1} {
         font-size: ${remCalc(22)};
         margin: 0;
+
+        ${media.tablet`
+            font-size: ${remCalc(18)};
+        `};
 
         ${media.mobile`
             font-size: ${remCalc(18)};
@@ -55,10 +62,9 @@ export const StyledTopNavUl = styled.ul`
     display: flex;
     justify-content: flex-end;
     margin: 0;
-    padding-left: 20px;
+    padding-left: 10px;
 `;
 
-// export const StyledNavBtn = styled.div`
 export const StyledAccount = styled.div`
     display: none;
     &.opened {
@@ -119,6 +125,14 @@ export const StyledTopNavLink = styled(Link)`
         background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
     }
+
+    &.notifications {
+        &.open {
+            background-color: ${theme.colors.secondaryDark};
+            color: ${theme.colors.white};
+            border-right: solid 1px #fff;
+        }
+    }
 `;
 
 export const StyledTopNavLinkRight = StyledTopNavLink.extend`
@@ -127,10 +141,19 @@ export const StyledTopNavLinkRight = StyledTopNavLink.extend`
     font-size: 11px;
 
     &:not(.accountDetails) {
-        ${media.tablet`
+        &:not(.notifications) {
+            ${media.tablet`
+                display: none;
+            `};
+        }
+    }
+
+    &:not(.accountDetails) {
+        ${media.mobile`
             display: none;
         `};
     }
+
     &.notifications {
         border-left: solid 1px #fff;
         border-right: solid 1px #cccccc;

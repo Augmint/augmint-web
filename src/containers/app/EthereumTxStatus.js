@@ -22,12 +22,15 @@ class EthereumTxStatus extends React.Component {
     }
 
     render() {
-        const { transactions, network, decimalsDiv } = this.props;
+        const { transactions, network, decimalsDiv, showNotificationPanel } = this.props;
 
         const txList =
             transactions &&
             Object.keys(transactions)
-                .filter(hash => !transactions[hash].isDismissed)
+                // .filter(hash => !transactions[hash].isDismissed)
+                .filter(
+                    hash => (showNotificationPanel === "open" ? transactions[hash] : !transactions[hash].isDismissed)
+                )
                 .map((hash, _index) => {
                     const tx = transactions[hash];
                     const index = _index + 1;
@@ -72,12 +75,13 @@ class EthereumTxStatus extends React.Component {
 
                     return (
                         <MyListGroup.Row key={`txRowDiv-${hash}`}>
+                            {/* <MyListGroup.Row key={`txRowDiv-${hash}`} className={this.props.showNotificationPanel ? "notifications open" : ""}> */}
                             {tx.event === "transactionHash" && (
                                 <LoadingPanel
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                    // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
@@ -92,7 +96,7 @@ class EthereumTxStatus extends React.Component {
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
                                         btn="noBtn"
-                                        style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                        // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                     >
                                         <p>Transaction receipt received. Wait for confirmations.</p>
 
@@ -116,7 +120,7 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                    // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>{tx.confirmationNumber}. confirmation</p>
 

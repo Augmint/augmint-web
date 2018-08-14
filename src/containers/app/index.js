@@ -34,6 +34,7 @@ import { AppFooter } from "containers/app/AppFooter";
 import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
 import DisclaimerModal from "components/Disclaimer";
+import { NotificationPanel } from "components/notifications";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
@@ -92,9 +93,11 @@ class App extends React.Component {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
         this.toggleAccInfo = this.toggleAccInfo.bind(this);
+        this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
         this.state = {
             showMobileMenu: false,
-            showAccInfo: false
+            showAccInfo: false,
+            showNotificationPanel: false
         };
     }
 
@@ -107,6 +110,12 @@ class App extends React.Component {
     toggleMenu() {
         this.setState({
             showMobileMenu: !this.state.showMobileMenu
+        });
+    }
+
+    toggleNotificationPanel() {
+        this.setState({
+            showNotificationPanel: !this.state.showNotificationPanel
         });
     }
 
@@ -135,7 +144,9 @@ class App extends React.Component {
                 <TopNav
                     web3Connect={this.props.web3Connect}
                     toggleAccInfo={this.toggleAccInfo}
+                    toggleNotificationPanel={this.toggleNotificationPanel}
                     showAccInfo={this.state.showAccInfo}
+                    showNotificationPanel={this.state.showNotificationPanel}
                     className={!showConnection && "hide"}
                 />
                 {!showConnection && (
@@ -146,13 +157,28 @@ class App extends React.Component {
                         toggleMenu={this.toggleMenu}
                     />
                 )}
-                {showConnection && <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />}
+                {showConnection && (
+                    <SideNav
+                        showMenu={this.state.showMobileMenu}
+                        toggleMenu={this.toggleMenu}
+                        toggleNotificationPanel={this.state.toggleNotificationPanel}
+                    />
+                )}
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
+                    {showConnection && (
+                        <NotificationPanel
+                            className={this.state.showNotificationPanel ? "notifications open" : "notifications"}
+                        >
+                            <EthereumTxStatus
+                                showNotificationPanel={this.state.showNotificationPanel ? "open" : "close"}
+                            />
+                            {/* <EthereumTxStatus showNotificationPanel={this.state.showNotificationPanel}/>  */}
+                        </NotificationPanel>
+                    )}
                     {showConnection &&
                         ["reserves", "under-the-hood"].indexOf(mainPath) < 0 && (
                             <div>
-                                <EthereumTxStatus />
                                 <LegacyLoanManagers />
                                 <LegacyLockers />
                                 <LegacyExchanges />

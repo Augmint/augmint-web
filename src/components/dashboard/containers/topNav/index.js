@@ -25,6 +25,7 @@ class TopNav extends React.Component {
     constructor(props) {
         super(props);
         this.toggleAccInfo = this.toggleAccInfo.bind(this);
+        this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
     }
 
     componentDidMount() {
@@ -39,6 +40,11 @@ class TopNav extends React.Component {
         this.props.toggleAccInfo();
         let fakebody = document.getElementById("fakebody");
         noScroll ? fakebody.classList.add("noScroll") : fakebody.classList.remove("noScroll");
+    }
+
+    toggleNotificationPanel(e) {
+        e.preventDefault();
+        this.props.toggleNotificationPanel();
     }
 
     render() {
@@ -102,9 +108,9 @@ class TopNav extends React.Component {
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"
-                            to={this.props.showAccInfo ? "" : "/account"}
-                            onClick={e => this.toggleAccInfo(e, true)}
-                            className={this.props.showAccInfo ? "notifications opened" : "notifications"}
+                            to=""
+                            onClick={e => this.toggleNotificationPanel(e)}
+                            className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
                             <Icon
                                 name="notifications"
