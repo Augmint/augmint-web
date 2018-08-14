@@ -3847,9 +3847,9 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hdkey@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/hdkey/-/hdkey-0.8.0.tgz#08c9a9fcb6a42d9724d669f81c53a3c507f87bf1"
+hdkey@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/hdkey/-/hdkey-1.1.0.tgz#e74e7b01d2c47f797fa65d1d839adb7a44639f29"
   dependencies:
     coinstring "^2.0.0"
     safe-buffer "^5.1.1"
