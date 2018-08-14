@@ -149,7 +149,7 @@ class EthereumTxStatus extends React.Component {
                 });
 
         return !txList ? null : (
-            <Psegment>
+            <Psegment style={{ margin: "0 auto", padding: "0" }}>
                 <Container>{txList}</Container>
             </Psegment>
         );

@@ -11,7 +11,7 @@ const BaseDiv = `
     font-size: 16px;
     font-smoothing: antialiased;
     min-height: 1em;
-    margin: 1em 0em;
+    margin: .2em 0em;
     padding: .8em;
     position: relative;
     // top: 10px;

@@ -169,11 +169,12 @@ class App extends React.Component {
                     {showConnection && (
                         <NotificationPanel
                             className={this.state.showNotificationPanel ? "notifications open" : "notifications"}
+                            toggleNotificationPanel={this.toggleNotificationPanel}
+                            showNotificationPanel={this.state.showNotificationPanel}
                         >
                             <EthereumTxStatus
                                 showNotificationPanel={this.state.showNotificationPanel ? "open" : "close"}
                             />
-                            {/* <EthereumTxStatus showNotificationPanel={this.state.showNotificationPanel}/>  */}
                         </NotificationPanel>
                     )}
                     {showConnection &&
