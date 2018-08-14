@@ -161,7 +161,7 @@ class App extends React.Component {
                     <SideNav
                         showMenu={this.state.showMobileMenu}
                         toggleMenu={this.toggleMenu}
-                        toggleNotificationPanel={this.state.toggleNotificationPanel}
+                        toggleNotificationPanel={this.toggleNotificationPanel}
                     />
                 )}
 
