@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import store from "modules/store";
+import { dismissTx } from "modules/reducers/submittedTransactions";
 
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -26,6 +28,7 @@ class TopNav extends React.Component {
         super(props);
         this.toggleAccInfo = this.toggleAccInfo.bind(this);
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +48,10 @@ class TopNav extends React.Component {
     toggleNotificationPanel(e) {
         e.preventDefault();
         this.props.toggleNotificationPanel();
+    }
+
+    handleClose(txHash) {
+        store.dispatch(dismissTx(txHash));
     }
 
     render() {
@@ -109,7 +116,12 @@ class TopNav extends React.Component {
                         <StyledTopNavLinkRight
                             title="Notifications"
                             to=""
-                            onClick={e => this.toggleNotificationPanel(e)}
+                            onClick={e => {
+                                this.toggleNotificationPanel(e);
+                                if (this.props.showNotificationPanel) {
+                                    this.handleClose();
+                                }
+                            }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
                             <Icon

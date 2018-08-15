@@ -56,7 +56,13 @@ export const dismissTx = txHash => {
     return async dispatch => {
         try {
             const transactions = Object.assign({}, store.getState().submittedTransactions.transactions);
-            transactions[txHash].isDismissed = true;
+            if (txHash === undefined) {
+                Object.keys(transactions).forEach(key => {
+                    transactions[key].isDismissed = true;
+                });
+            } else {
+                transactions[txHash].isDismissed = true;
+            }
 
             return dispatch({
                 type: DISMISS_TX_SUCCESS,
