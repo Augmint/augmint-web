@@ -46,7 +46,7 @@ const OrderItem = props => {
                         <p>
                             Sell A€ order: <br />
                             {order.amount} A€ @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} A€ * {order.price} A€/€ / (1 / {ethFiatRate} ETH/€) = <br />
+                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} €/ETH = <br />
                             {actualValue} ETH
                         </p>
                     )}
@@ -54,7 +54,7 @@ const OrderItem = props => {
                         <p>
                             Buy A€ Order: <br />
                             {order.amount} ETH @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} ETH * {order.price} A€/€ * (1 / {ethFiatRate} €/ETH) =<br />
+                            {order.amount} ETH * {ethFiatRate} €/ETH / {order.price} €/A€ = <br />
                             {actualValue} A€
                         </p>
                     )}
