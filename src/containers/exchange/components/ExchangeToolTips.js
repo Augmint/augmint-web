@@ -4,8 +4,9 @@ import ToolTip from "components/toolTip";
 export function NoOrdersToolTip(props) {
     return (
         <ToolTip header="No open orders" id={"no_orders_tooltip"}>
-            There are no sell or buy A-EUR orders. You can still place an order.<br />
-            You can always cancel your order. TODO: more help
+            There are no sell or buy A-EUR orders. You can still place an order.
+            <br />
+            You can always cancel your order.
         </ToolTip>
     );
 }
@@ -13,9 +14,9 @@ export function NoOrdersToolTip(props) {
 export function PriceToolTip(props) {
     return (
         <ToolTip header="Order price" id={"price_tooltip"}>
-            % of published EUR/ETH price.<br />
-            E.g.: An order on 101% price will fill on 1,010 EUR/ETH price if the published rate is 1,000 EUR/ETH at the
-            moment of the matching.
+            % of published ETH/EUR price. <br /> The actual price will be calculated based on the rate published by
+            Augmint at the time of the matching executed. The published price is calculated as an avarage rate from
+            multiple exchanges.
         </ToolTip>
     );
 }
