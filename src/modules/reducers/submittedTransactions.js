@@ -35,6 +35,12 @@ export const updateTx = tx => {
             const transactions = Object.assign({}, store.getState().submittedTransactions.transactions);
             const updatedTx = Object.assign({}, transactions[tx.transactionHash], tx);
             transactions[tx.transactionHash] = updatedTx;
+            if (
+                transactions[tx.transactionHash].confirmationNumber <= 1 &&
+                transactions[tx.transactionHash].event !== ("transactionHash" || "confirmation")
+            ) {
+                transactions[tx.transactionHash].isDismissed = false;
+            }
 
             return dispatch({
                 type: UPDATE_TX_SUCCESS,
