@@ -68,7 +68,7 @@ export function TryItConnected(props) {
                         See your loans, locks and A-EUR transfer history on your <Link to="/account">account page</Link>
                     </StyledP>
                     <StyledP className={_className}>
-                        Check the <Link to="/reserves">Augmint reserves</Link>
+                        Check the <Link to="/stability">Stability dashboard</Link>
                     </StyledP>
                 </Tblock>
 

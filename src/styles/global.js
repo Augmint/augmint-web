@@ -2,11 +2,7 @@ import { injectGlobal } from "styled-components";
 import { media } from "./media";
 
 injectGlobal`
-    @font-face {
-        font-family: 'MaisonNeue';
-        src: local('MaisonNeue'), url(fonts/MaisonNeue-Book.woff) format('woff');
-        src: local('MaisonNeue'), url(fonts/MaisonNeue-Book.woff2) format('woff2');
-    }
+    @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab');
 
     @keyframes icon-loading {
         0% {

@@ -1,8 +1,9 @@
 const theme = {
     colors: {
         white: "white",
+        black: "black",
         grey: "#e0e1e2",
-        mediumGrey: "#767676",
+        mediumGrey: "#828282",
         lightGrey: "#e8e8e8",
         opacGrey: "rgba(34,36,38,.15)",
         opacExtraLighterGrey: "rgba(0,0,0,.05)",
@@ -23,6 +24,12 @@ const theme = {
         lightGreen: "#fcfff5",
         darkGreen: "#2c662d"
     },
+    chartColors: {
+        blue: "rgba(54, 162, 235, 1)",
+        orange: "rgba(255, 159, 64, 1)",
+        red: "rgba(255,99,132,1)",
+        green: "rgba(75, 192, 192, 1)"
+    },
     transitions: {
         standard: "0.3s ease-in",
         fast: "0.1s ease"
@@ -32,7 +39,9 @@ const theme = {
     },
     typography: {
         fontFamilies: {
-            default: "MaisonNeue,'Helvetica Neue',Arial,Helvetica,sans-serif"
+            default: "'Roboto', sans-serif",
+            currency: "'Roboto Mono', monospace",
+            title: "'Roboto Slab', serif"
         },
         fontSizes: {
             h5: remCalc(12),

@@ -134,7 +134,7 @@ class App extends React.Component {
             this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "transfer", "exchange", "loan", "reserves", "lock", "tryit", "loan", "under-the-hood"].indexOf(
+            ["account", "transfer", "exchange", "loan", "stability", "lock", "tryit", "loan", "under-the-hood"].indexOf(
                 mainPath
             ) > -1;
         return (
@@ -178,7 +178,7 @@ class App extends React.Component {
                         </NotificationPanel>
                     )}
                     {showConnection &&
-                        ["reserves", "under-the-hood"].indexOf(mainPath) < 0 && (
+                        ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                             <div>
                                 <LegacyLoanManagers />
                                 <LegacyLockers />
@@ -192,7 +192,7 @@ class App extends React.Component {
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/transfer" component={TransferPage} />
                         <Route exact path="/exchange" component={ExchangeHome} />
-                        <Route exact path="/reserves" component={AugmintToken} />
+                        <Route exact path="/stability" component={AugmintToken} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
