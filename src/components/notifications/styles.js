@@ -11,7 +11,8 @@ export const StyledNotificationPanel = styled.div`
     width: 290px;
     /* max-width: 366px; */
     padding: 40px 10px 10px;
-    height: calc(100% - 120px);
+    max-height: calc(100% - 120px);
+    overflow: scroll;
 
     ${media.mobile`
         right: 0;
