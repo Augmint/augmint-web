@@ -10,6 +10,15 @@ import { SuccessPanel, EthSubmissionErrorPanel, LoadingPanel } from "components/
 import Container from "components/augmint-ui/container";
 import { dismissTx } from "modules/reducers/submittedTransactions";
 import HashURL from "components/hash";
+import styled from "styled-components";
+
+const StyledLoadingPanel = styled(LoadingPanel)`
+    display: none;
+
+    &.open {
+        display: block;
+    }
+`;
 
 class EthereumTxStatus extends React.Component {
     constructor(props) {
@@ -75,27 +84,28 @@ class EthereumTxStatus extends React.Component {
 
                     return (
                         <MyListGroup.Row key={`txRowDiv-${hash}`}>
-                            {/* <MyListGroup.Row key={`txRowDiv-${hash}`} className={this.props.showNotificationPanel ? "notifications open" : ""}> */}
                             {tx.event === "transactionHash" && (
-                                <LoadingPanel
+                                <StyledLoadingPanel
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
+                                    className={this.props.showNotificationPanel === "open" ? "open" : ""}
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
                                         <HashURL hash={tx.transactionHash} type={"tx/"} />
                                     </p>
-                                </LoadingPanel>
+                                </StyledLoadingPanel>
                             )}
 
                             {tx.event === "receipt" &&
                                 network.id !== 999 && (
-                                    <LoadingPanel
+                                    <StyledLoadingPanel
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
                                         btn="noBtn"
+                                        className={this.props.showNotificationPanel === "open" ? "open" : ""}
                                         // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                     >
                                         <p>Transaction receipt received. Wait for confirmations.</p>
@@ -109,7 +119,7 @@ class EthereumTxStatus extends React.Component {
                                                 <HashURL hash={tx.transactionHash} type={"tx/"} />
                                             </small>
                                         </p>
-                                    </LoadingPanel>
+                                    </StyledLoadingPanel>
                                 )}
 
                             {tx.event === "confirmation" && (

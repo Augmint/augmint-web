@@ -35,7 +35,7 @@ export const StyledHead = styled.div`
     z-index: 1;
     /* text-align: center; */
 
-    &.opened {
+    &.open {
         display: block;
         position: fixed;
         /* top: 0px;
@@ -46,7 +46,7 @@ export const StyledHead = styled.div`
 export const StyledWrapper = styled.div`
     display: block;
     margin: 5px 10px 10px;
-    &.opened {
+    &.open {
         margin: 50px 10px 10px;
     }
 `;
@@ -56,7 +56,7 @@ export const StyledSpan = styled.span`
     color: ${theme.colors.white};
     text-align: center;
 
-    &.opened {
+    &.open {
         display: inline-block;
         position: absolute;
         top: 10px;
@@ -69,7 +69,7 @@ export const CloseIcon = styled.img`
     height: 16px;
     width: 16px;
 
-    &.opened {
+    &.open {
         display: inline-block;
         position: absolute;
         top: 14px;

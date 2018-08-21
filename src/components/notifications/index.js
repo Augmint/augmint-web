@@ -23,18 +23,18 @@ export class NotificationPanel extends React.Component {
         const { className, children } = this.props;
         return (
             <StyledNotificationPanel className={className}>
-                <StyledHead className={this.props.showNotificationPanel ? "opened" : ""}>
-                    <StyledSpan className={this.props.showNotificationPanel ? "opened" : ""}>Notifications</StyledSpan>
+                <StyledHead className={this.props.showNotificationPanel ? "open" : ""}>
+                    <StyledSpan className={this.props.showNotificationPanel ? "open" : ""}>Notifications</StyledSpan>
                     <CloseIcon
                         src={close}
                         onClick={e => {
                             this.toggleNotificationPanel();
                             this.handleClose();
                         }}
-                        className={this.props.showNotificationPanel ? "opened" : ""}
+                        className={this.props.showNotificationPanel ? "open" : ""}
                     />
                 </StyledHead>
-                <StyledWrapper className={this.props.showNotificationPanel ? "opened" : ""}>{children}</StyledWrapper>
+                <StyledWrapper className={this.props.showNotificationPanel ? "open" : ""}>{children}</StyledWrapper>
             </StyledNotificationPanel>
         );
     }
