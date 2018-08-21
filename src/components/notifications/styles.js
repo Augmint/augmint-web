@@ -45,7 +45,10 @@ export const StyledHead = styled.div`
 
 export const StyledWrapper = styled.div`
     display: block;
-    margin: 50px 10px 10px;
+    margin: 5px 10px 10px;
+    &.opened {
+        margin: 50px 10px 10px;
+    }
 `;
 
 export const StyledSpan = styled.span`

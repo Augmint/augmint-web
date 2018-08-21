@@ -34,7 +34,7 @@ export class NotificationPanel extends React.Component {
                         className={this.props.showNotificationPanel ? "opened" : ""}
                     />
                 </StyledHead>
-                <StyledWrapper>{children}</StyledWrapper>
+                <StyledWrapper className={this.props.showNotificationPanel ? "opened" : ""}>{children}</StyledWrapper>
             </StyledNotificationPanel>
         );
     }
