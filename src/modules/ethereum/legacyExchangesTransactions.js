@@ -15,7 +15,8 @@ const LEGACY_EXCHANGE_CONTRACTS = {
         "0x65d30e5a6191a507fda96341f6ba773c4224c0e1",
         "0x03fe291f8a30e54cd05459f368d554b40784ca78",
         "0x86abc21cbb508fcb303f881d6871e4f870ce041a",
-        "0xc5b604f8e046dff26642ca544c9eb3064e02ecd9"
+        "0xc5b604f8e046dff26642ca544c9eb3064e02ecd9",
+        "0x5e2Be81aB4237c7c08d929c42b9F13cF4f9040D2"
     ]
 };
 
