@@ -11,6 +11,8 @@ import Container from "components/augmint-ui/container";
 import { dismissTx } from "modules/reducers/submittedTransactions";
 import HashURL from "components/hash";
 import styled from "styled-components";
+import theme from "styles/theme";
+// import AugmintLogo from "assets/images/logo/augmint.svg";
 
 const StyledLoadingPanel = styled(LoadingPanel)`
     display: none;
@@ -18,6 +20,28 @@ const StyledLoadingPanel = styled(LoadingPanel)`
     &.open {
         display: block;
     }
+`;
+
+const StyledSuccessPanel = styled(SuccessPanel)`
+    display: none;
+
+    &.visible {
+        display: block;
+    }
+`;
+
+// const StyledWrapper = styled.div`
+//     display: block;
+//     margin: 20px 10px 20px;
+// `;
+
+// const LogoIllustration = styled.img`
+//     width: 60px;
+// `;
+
+const StyledSpan = styled.span`
+    color: ${theme.colors.primary};
+    text-align: center;
 `;
 
 class EthereumTxStatus extends React.Component {
@@ -123,13 +147,20 @@ class EthereumTxStatus extends React.Component {
                                 )}
 
                             {tx.event === "confirmation" && (
-                                <SuccessPanel
+                                <StyledSuccessPanel
                                     data-testid="EthConfirmationReceivedPanel"
                                     data-test-orderid={orderId}
                                     data-test-gasused={gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
+                                    className={
+                                        this.props.showNotificationPanel === "open"
+                                            ? "visible"
+                                            : tx.confirmationNumber >= 12 && tx.confirmationNumber < 24
+                                                ? "visible"
+                                                : ""
+                                    }
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>{tx.confirmationNumber}. confirmation</p>
@@ -143,7 +174,7 @@ class EthereumTxStatus extends React.Component {
                                             <HashURL hash={tx.transactionHash} type={"tx/"} />
                                         </small>
                                     </p>
-                                </SuccessPanel>
+                                </StyledSuccessPanel>
                             )}
 
                             {tx.event === "error" && (
@@ -156,9 +187,17 @@ class EthereumTxStatus extends React.Component {
                             )}
                         </MyListGroup.Row>
                     );
-                });
+                })
+                .reverse();
 
-        return !txList ? null : (
+        return !txList ? (
+            showNotificationPanel === "open" ? (
+                <StyledSpan>No transactions here yet...</StyledSpan>
+            ) : // <StyledWrapper>
+            //     <img alt="Augmint" src={AugmintLogo}/>
+            // </StyledWrapper>
+            null
+        ) : (
             <Psegment style={{ margin: "0 auto", padding: "0" }}>
                 <Container>{txList}</Container>
             </Psegment>
