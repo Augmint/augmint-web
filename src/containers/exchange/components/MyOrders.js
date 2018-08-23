@@ -119,7 +119,7 @@ export default class OrderBook extends React.Component {
             orders == null
                 ? []
                 : orders.sellOrders.filter(order => order.maker.toLowerCase() === userAccountAddress.toLowerCase());
-        const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o1.id > o2.id);
+        const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o2.id - o1.id);
 
         const totalBuyAmount = orders
             ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
