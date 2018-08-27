@@ -5917,9 +5917,9 @@ parse5@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-1.5.1.tgz#9b7f3b0de32be78dc2401b17573ccaf0f6f59d94"
 
-parse@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/parse/-/parse-2.0.1.tgz#59bc4cf729a3783361b97f689b35f3f1f75e3374"
+parse@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/parse/-/parse-2.0.2.tgz#970d5f65f6c8d8b527e16b7c45f1419cd8c53007"
   dependencies:
     babel-runtime "6.26.0"
     ws "6.0.0"
