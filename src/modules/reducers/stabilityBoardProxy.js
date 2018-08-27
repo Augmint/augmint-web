@@ -121,7 +121,7 @@ export function fetchScripts() {
             const scripts = await fetchScriptsTx(stabilityBoardProxyInstance);
 
             scripts.sort((a, b) => {
-                return b.id > a.id;
+                return b.id - a.id;
             });
 
             return dispatch({
@@ -149,7 +149,7 @@ export function fetchSigners() {
             const signers = await fetchSignersTx(stabilityBoardProxyInstance);
 
             signers.sort((a, b) => {
-                return b.id > a.id;
+                return b.id - a.id;
             });
 
             return dispatch({

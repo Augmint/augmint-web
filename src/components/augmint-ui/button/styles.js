@@ -12,13 +12,17 @@ const BaseButton = styledComponent => styledComponent`
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 200;
-    margin: 0 1em 0 0;
+    margin: 0;
     padding: 0 14px;
     border-radius: 4px;
     height: 42px;
     line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
+    
+    & + & {
+      margin-left: 1em;
+    }
 
     &:hover {
       background-color: ${theme.colors.grey};

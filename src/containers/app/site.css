@@ -124,8 +124,8 @@
 /* TODO: clean up f_dashboard temporary styles */
 .segment.dashblock {
     background: white;
-    border: 1px solid #051d2d;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     color: #051d2d;
     padding: 0;
     margin-bottom: 40px;

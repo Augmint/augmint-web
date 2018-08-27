@@ -6,6 +6,7 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import LoanList from "containers/loan/components/LoanList";
 import LockList from "containers/lock/components/LockList";
+import Balance from "./components/Balance";
 import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
@@ -29,14 +30,25 @@ class AccountHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <Pgrid>
-                        <div style={{ textAlign: "right", marginTop: 25, marginBottom: -15 }}>
-                            <Button to="/exchange" className="primary">
-                                Buy / Sell A-EUR
-                            </Button>
-                            <Button to="/transfer" className="primary" data-testid="transferButton">
-                                Transfer A-EUR
-                            </Button>
-                        </div>
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ tablet: 2 / 5 }}>
+                                <Balance
+                                    userAccount={this.props.userAccount}
+                                    loans={this.props.loans}
+                                    locks={this.props.locks}
+                                />
+                            </Pgrid.Column>
+                            <Pgrid.Column size={{ tablet: 3 / 5 }}>
+                                <div style={{ textAlign: "right" }}>
+                                    <Button to="/exchange" className="primary">
+                                        Buy / Sell A-EUR
+                                    </Button>
+                                    <Button to="/transfer" className="primary" data-testid="transferButton">
+                                        Transfer A-EUR
+                                    </Button>
+                                </div>
+                            </Pgrid.Column>
+                        </Pgrid.Row>
                         <TransferList
                             header="My A-EUR Account History"
                             transfers={this.props.userTransfers}
