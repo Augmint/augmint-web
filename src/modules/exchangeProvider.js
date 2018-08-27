@@ -106,6 +106,7 @@ const onOrderFill = function(
     tokenSeller,
     buyTokenOrderId,
     sellTokenOrderId,
+    publishedRate,
     price,
     weiAmount,
     tokenAmount
