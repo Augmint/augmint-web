@@ -28,7 +28,7 @@ class NewLoanForm extends React.Component {
         this.products = this.props.loanManager.products;
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
-            .sort((p1, p2) => p1.termInSecs < p2.termInSecs);
+            .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
         this.product = props.loanManager.products[this.defaultProductId()];
         this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
@@ -195,7 +195,8 @@ class NewLoanForm extends React.Component {
                                     <label>
                                         A-EUR amount to loan
                                         <ToolTip id={"loan_amount"}>
-                                            Disbursed loan amount (paid out) = Repayable loan amount - Interest amount<br />
+                                            Disbursed loan amount (paid out) = Repayable loan amount - Interest amount
+                                            <br />
                                             Interest amount = Disbursed loan amount x Interest rate per annum / 365 x
                                             Loan term in days
                                         </ToolTip>

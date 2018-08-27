@@ -128,7 +128,7 @@ export function fetchTransfersForAccount(userAccount) {
             ]);
 
             transfers.sort((a, b) => {
-                return b.blockNumber > a.blockNumber;
+                return b.blockNumber - a.blockNumber;
             });
 
             return dispatch({

@@ -4,7 +4,7 @@ import TokenAEur from "abiniser/abis/TokenAEur_ABI_9aa81519ec45a52d3f8f1a1a83d25
 import Rates from "abiniser/abis/Rates_ABI_73a17ebb0acc71773371c6a8e1c8e6ce.json";
 import LockManager from "abiniser/abis/Locker_ABI_619ff7809b73aead28176fe6317953c3.json";
 import LoanManager from "abiniser/abis/LoanManager_ABI_ec709c3341045caa3a75374b8cfc7286.json";
-import Exchange from "abiniser/abis/Exchange_ABI_b2a23202a9a0f04755a186896c2b56eb.json";
+import Exchange from "abiniser/abis/Exchange_ABI_c28de2392aea85ef2aa1b108fce6568c.json";
 import StabilityBoardProxy from "abiniser/abis/StabilityBoardProxy_ABI_19ab69b650e28b2dd211d3851893f91f.json";
 import PreToken from "abiniser/abis/PreToken_ABI_10eebbb51a771cfd3473475169a569f1.json";
 

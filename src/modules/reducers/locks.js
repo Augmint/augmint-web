@@ -63,7 +63,7 @@ export function fetchLocksForAddress(account) {
             const locks = await fetchLocksForAddressTx(lockManagerInstance, account);
 
             locks.sort((a, b) => {
-                return b.id > a.id;
+                return b.id - a.id;
             });
 
             return dispatch({
@@ -100,7 +100,7 @@ export function processNewLock(account, lockData) {
             } else {
                 const newLock = await processNewLockTx(account, lockData);
                 locks = [...locksInStore, newLock].sort((a, b) => {
-                    return b.id > a.id;
+                    return b.id - a.id;
                 });
             }
 

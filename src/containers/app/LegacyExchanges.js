@@ -65,9 +65,9 @@ class LegacyExchanges extends React.Component {
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
                     <p style={styleP}>
-                        {contract.userOrders.length} orders in legacy Exchange contract{" "}
+                        {contract.userOrders.length} orders in{" "}
                         <small>
-                            <HashURL hash={contract.address} type={"address/"} />{" "}
+                            <HashURL hash={contract.address} title="a legacy Exchange contract" type={"address/"} />{" "}
                         </small>
                     </p>
 
@@ -84,7 +84,8 @@ class LegacyExchanges extends React.Component {
                     {contract.userOrders.map((order, orderIndex) => (
                         <MyListGroup.Col key={`ordersDiv-${contractIndex}-${order.id}`}>
                             <p style={styleP}>
-                                Order id: {order.id} <br />Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
+                                Order id: {order.id} <br />
+                                Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
                             </p>
 
                             {order.isSubmitted ? (
@@ -112,18 +113,11 @@ class LegacyExchanges extends React.Component {
                 <Container>
                     <InfoPanel header="You have orders in an older version of Augmint Exchange contract">
                         <p style={styleP}>
-                            Augmint Exchange version in use on{" "}
-                            <HashURL
-                                hash={exchangeContract.address}
-                                title={network.name + " network"}
-                                type={"address/"}
-                            />.
+                            Cancel your orders on the old exchange.
                             <br />
-                            You can cancel your orders on the old exchange.<br />
                             <small>
-                                NB: Exchange contract upgrades will be infrequent when Augmint released in public.
-                                During pilots we deliberately deploy a couple of new versions to test the conversion
-                                process.
+                                NB: Exchange contract upgrades will be infrequent in the future. We deliberately deploy
+                                a couple of new versions to test the conversion process during our pilot.
                             </small>
                         </p>
                         {error && (
@@ -141,6 +135,13 @@ class LegacyExchanges extends React.Component {
                             />
                         )}
                         {!submitSucceeded && !error && orders}
+                        <br />
+                        <HashURL
+                            hash={exchangeContract.address}
+                            title={"View current Exchange version in use on " + network.name + " network"}
+                            type={"address/"}
+                        />
+                        <br />
                     </InfoPanel>
                 </Container>
             </Psegment>
