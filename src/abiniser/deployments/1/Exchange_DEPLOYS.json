@@ -21,12 +21,12 @@
             }
         },
         "c28de2392aea85ef2aa1b108fce6568c": {
-            "latestDeployedAddress": "0x60830798cF0fd79cC05C8CE09CBC1ebc3f82Ea3f",
+            "latestDeployedAddress": "0xeae7d30bcd44f27d58985b56add007fcee254abd",
             "deployments": {
-                "0x60830798cF0fd79cC05C8CE09CBC1ebc3f82Ea3f": {
-                    "generatedAt": "2018-08-22T16:07:19.810Z",
-                    "truffleContractFileUpdatedAt": "2018-08-22T15:17:49.328Z",
-                    "deployTransactionHash": "0x75add9bc3aacfffbc94d7519451fb3a3c546a58e02a3954432f84a5693bdf0ab",
+                "0xeae7d30bcd44f27d58985b56add007fcee254abd": {
+                    "generatedAt": "2018-08-24T11:57:19.856Z",
+                    "truffleContractFileUpdatedAt": "2018-08-24T11:56:50.685Z",
+                    "deployTransactionHash": "0x63c1f732ab97198940c599777736d3aca263d1c8bfdc26a2adf44fbfe7e7da09",
                     "compiler": {
                         "name": "solc",
                         "version": "0.4.24+commit.e67f0147.Emscripten.clang"

@@ -5,7 +5,7 @@ import SolidityContract from "modules/ethereum/SolidityContract";
 /* List of old augmint token deploy addresses by network id */
 const LEGACY_EXCHANGE_CONTRACTS = {
     // mainnet
-    1: ["0x8b52b019d237d0bbe8Baedf219132D5254e0690b"], // initial Exchange, replaced by 0x60830798cF0fd79cC05C8CE09CBC1ebc3f82Ea3f
+    1: ["0x8b52b019d237d0bbe8Baedf219132D5254e0690b"], // initial Exchange, replaced by 0xeae7d30bcd44f27d58985b56add007fcee254abd
 
     // local ganache (migrations deploys it for manual testing)
     999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
