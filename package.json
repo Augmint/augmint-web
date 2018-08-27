@@ -14,7 +14,7 @@
     "ethers": "3.0.26",
     "hdkey": "1.1.0",
     "moment": "2.22.2",
-    "parse": "2.0.1",
+    "parse": "2.0.2",
     "react": "16.4.2",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.4.2",
