@@ -14,47 +14,54 @@ import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
-    let bn_ethFiatRate = new BigNumber(ethFiatRate);
+    const bn_ethFiatRate = new BigNumber(ethFiatRate);
 
-    const price = floatNumberConverter(order.price, DECIMALS);
-    const actualRate = bn_ethFiatRate.mul(order.price).toFixed(2);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+
     const actualValue =
         order.direction === TOKEN_SELL
-            ? (order.amount / actualRate).toFixed(5)
-            : (order.amount * actualRate).toFixed(2);
+            ? ((order.amount * order.price) / bn_ethFiatRate).toFixed(5)
+            : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
 
     const ret = [
         <Col width={3} key={`${order.direction}-amount`}>
             {order.direction === TOKEN_SELL && (
                 <span>
-                    {order.amount} A€<br />({actualValue} ETH)
+                    {order.amount} A€
+                    <br />({actualValue} ETH)
                 </span>
             )}
             {order.direction === TOKEN_BUY && (
                 <span>
-                    {order.amountRounded} ETH<br />({actualValue} A€)
+                    {order.amountRounded} ETH
+                    <br />({actualValue} A€)
                 </span>
             )}
         </Col>,
         <Col width={2} key={`${order.direction}-price`}>
-            {price} %
+            {displayPrice} %
         </Col>,
         <Col width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
                 {order.direction === TOKEN_SELL && (
                     <p>
-                        Sell {order.amount} A€ @{price}% of current {ethFiatRate} A€/ETH = <br />
-                        {order.amount} A€ / {actualRate} A€/ETH = {actualValue} ETH
+                        Sell A€ order: <br />
+                        {order.amount} A€ @{displayPrice}% of current ETH/€ = <br />
+                        {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} €/ETH = <br />
+                        {actualValue} ETH
                     </p>
                 )}
                 {order.direction === TOKEN_BUY && (
                     <p>
-                        Buy A€ for {order.amount} ETH @{price}% of current {ethFiatRate} A€/ETH =<br />
-                        {order.amount} ETH x {actualRate} A€/ETH = {actualValue} A€
+                        Buy A€ Order: <br />
+                        {order.amount} ETH @{displayPrice}% of current ETH/€ = <br />
+                        {order.amount} ETH * {ethFiatRate} €/ETH / {order.price} €/A€ = <br />
+                        {actualValue} A€
                     </p>
                 )}
                 Maker: {order.maker}
-                <br />Order Id: {order.id}
+                <br />
+                Order Id: {order.id}
             </MoreInfoTip>
             {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}
         </Col>

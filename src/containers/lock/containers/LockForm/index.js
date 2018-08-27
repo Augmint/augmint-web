@@ -30,7 +30,7 @@ class LockContainer extends React.Component {
         if (!productId) {
             productId = this.props.lockProducts
                 .filter(product => product.isActive)
-                .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)[0].id;
+                .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs)[0].id;
             this.setState({
                 defaultId: productId
             });
@@ -136,7 +136,8 @@ class LockContainer extends React.Component {
                                         Interest p.a.
                                         <ToolTip header="Lock Interest per Annum" id={"lock_interest"}>
                                             The annualised interest rate of the lock. It's calculated using a simple
-                                            (non-compound) method and with a 365 day year.<br />
+                                            (non-compound) method and with a 365 day year.
+                                            <br />
                                             <br />
                                             Note: For small lock amounts the actual interest per annum can be slightly
                                             higher than displayed (additonal 0.01 A-EUR in interest due to rounding)
@@ -149,7 +150,7 @@ class LockContainer extends React.Component {
                                 {lockProducts &&
                                     lockProducts
                                         .filter(product => product.isActive)
-                                        .sort((p1, p2) => p1.durationInSecs < p2.durationInSecs)
+                                        .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs)
                                         .map((product, index) => {
                                             return (
                                                 <TermTableRow key={`lock-term-${product.id}`}>
