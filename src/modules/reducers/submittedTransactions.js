@@ -6,7 +6,9 @@ export const UPDATE_TX_ERROR = "submittedTransactions/UPDATE_TX_ERROR";
 export const DISMISS_TX_SUCCESS = "submittedTransactions/DISMISS_TX_SUCCESS";
 export const DISMISS_TX_ERROR = "submittedTransactions/DISMISS_TX_ERROR";
 
-const initialState = {};
+const initialState = {
+    transactions: {}
+};
 
 export default (state = initialState, action) => {
     switch (action.type) {

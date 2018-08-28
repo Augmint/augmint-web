@@ -190,7 +190,7 @@ class EthereumTxStatus extends React.Component {
                 })
                 .reverse();
 
-        return !txList ? (
+        return !txList || !Object.keys(txList).length ? (
             showNotificationPanel === "open" ? (
                 <StyledSpan>No transactions here yet...</StyledSpan>
             ) : // <StyledWrapper>
