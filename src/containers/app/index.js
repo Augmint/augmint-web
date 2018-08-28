@@ -11,6 +11,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
+import store from "modules/store";
 import { injectGlobal } from "styled-components";
 import theme from "styles/theme";
 
@@ -35,6 +36,7 @@ import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
 import DisclaimerModal from "components/Disclaimer";
 import { NotificationPanel } from "components/notifications";
+import { dismissTx } from "modules/reducers/submittedTransactions";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
@@ -94,6 +96,7 @@ class App extends React.Component {
         this.toggleMenu = this.toggleMenu.bind(this);
         this.toggleAccInfo = this.toggleAccInfo.bind(this);
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
+        this.handleNotificationPanelClose = this.handleNotificationPanelClose.bind(this);
         this.state = {
             showMobileMenu: false,
             showAccInfo: false,
@@ -119,6 +122,23 @@ class App extends React.Component {
         });
     }
 
+    handleNotificationDismiss(txHash) {
+        store.dispatch(dismissTx(txHash));
+    }
+
+    handleNotificationPanelClose(e) {
+        // console.log(e.target.outerHTML);
+        // console.log(e.target.parentElement);
+        console.log(e.target.parentElement.id);
+        console.log(e.target);
+        console.log(this.state.showNotificationPanel);
+        if (this.state.showNotificationPanel === true && e.target.parentElement.id !== "NotificationPanel") {
+            // console.log("bejott");
+            this.toggleNotificationPanel();
+            this.handleNotificationDismiss();
+        }
+    }
+
     componentDidMount() {
         this.props.history.listen((location, action) => {
             this.setState(state => {
@@ -138,7 +158,7 @@ class App extends React.Component {
                 mainPath
             ) > -1;
         return (
-            <div className={showConnection ? "Site App" : "Site"}>
+            <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 <ScrollToTop />
                 {showConnection && <DisclaimerModal />}
                 <TopNav
@@ -171,6 +191,7 @@ class App extends React.Component {
                             className={this.state.showNotificationPanel ? "notifications open" : "notifications"}
                             toggleNotificationPanel={this.toggleNotificationPanel}
                             showNotificationPanel={this.state.showNotificationPanel}
+                            id={"NotificationPanel"}
                         >
                             <EthereumTxStatus
                                 showNotificationPanel={this.state.showNotificationPanel ? "open" : "close"}

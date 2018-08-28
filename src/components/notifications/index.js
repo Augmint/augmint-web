@@ -20,9 +20,9 @@ export class NotificationPanel extends React.Component {
     }
 
     render() {
-        const { className, children } = this.props;
+        const { className, id, children } = this.props;
         return (
-            <StyledNotificationPanel className={className}>
+            <StyledNotificationPanel className={className} id={id}>
                 <StyledHead className={this.props.showNotificationPanel ? "open" : ""}>
                     <StyledSpan className={this.props.showNotificationPanel ? "open" : ""}>Notifications</StyledSpan>
                     <CloseIcon

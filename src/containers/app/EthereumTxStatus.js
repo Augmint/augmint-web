@@ -22,13 +22,13 @@ const StyledLoadingPanel = styled(LoadingPanel)`
     }
 `;
 
-const StyledSuccessPanel = styled(SuccessPanel)`
-    display: none;
+// const StyledSuccessPanel = styled(SuccessPanel)`
+//     display: none;
 
-    &.visible {
-        display: block;
-    }
-`;
+//     &.visible {
+//         display: block;
+//     }
+// `;
 
 // const StyledWrapper = styled.div`
 //     display: block;
@@ -147,20 +147,20 @@ class EthereumTxStatus extends React.Component {
                                 )}
 
                             {tx.event === "confirmation" && (
-                                <StyledSuccessPanel
+                                <SuccessPanel
                                     data-testid="EthConfirmationReceivedPanel"
                                     data-test-orderid={orderId}
                                     data-test-gasused={gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    className={
-                                        this.props.showNotificationPanel === "open"
-                                            ? "visible"
-                                            : tx.confirmationNumber >= 12 && tx.confirmationNumber < 24
-                                                ? "visible"
-                                                : ""
-                                    }
+                                    // className={
+                                    //     this.props.showNotificationPanel === "open"
+                                    //         ? "visible"
+                                    //         : tx.confirmationNumber >= 12 && tx.confirmationNumber < 24
+                                    //             ? "visible"
+                                    //             : ""
+                                    // }
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>{tx.confirmationNumber}. confirmation</p>
@@ -174,7 +174,7 @@ class EthereumTxStatus extends React.Component {
                                             <HashURL hash={tx.transactionHash} type={"tx/"} />
                                         </small>
                                     </p>
-                                </StyledSuccessPanel>
+                                </SuccessPanel>
                             )}
 
                             {tx.event === "error" && (
