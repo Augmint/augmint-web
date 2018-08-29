@@ -54,13 +54,13 @@ export const StyledWrapper = styled.div`
 export const StyledSpan = styled.span`
     display: none;
     color: ${theme.colors.white};
-    text-align: center;
+    /* text-align: center; */
 
     &.open {
-        display: inline-block;
+        display: block;
         position: absolute;
         top: 10px;
-        left: 10px;
+        left: 110px;
     }
 `;
 

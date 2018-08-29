@@ -12,7 +12,7 @@ import { dismissTx } from "modules/reducers/submittedTransactions";
 import HashURL from "components/hash";
 import styled from "styled-components";
 import theme from "styles/theme";
-// import AugmintLogo from "assets/images/logo/augmint.svg";
+import AugmintLogo from "assets/images/logo/augmint-dark.svg";
 
 const StyledLoadingPanel = styled(LoadingPanel)`
     display: none;
@@ -30,18 +30,24 @@ const StyledLoadingPanel = styled(LoadingPanel)`
 //     }
 // `;
 
-// const StyledWrapper = styled.div`
-//     display: block;
-//     margin: 20px 10px 20px;
-// `;
+const StyledWrapper = styled.div`
+    display: block;
+    margin: 20px 10px 20px;
+`;
 
-// const LogoIllustration = styled.img`
-//     width: 60px;
-// `;
+const StyledLogo = styled.img`
+    height: 100px;
+    text-align: center;
+    display: block;
+    margin: auto;
+    margin-top: 75px;
+`;
 
 const StyledSpan = styled.span`
     color: ${theme.colors.primary};
+    display: block;
     text-align: center;
+    margin: 15px 0 40px;
 `;
 
 class EthereumTxStatus extends React.Component {
@@ -60,7 +66,6 @@ class EthereumTxStatus extends React.Component {
         const txList =
             transactions &&
             Object.keys(transactions)
-                // .filter(hash => !transactions[hash].isDismissed)
                 .filter(
                     hash =>
                         showNotificationPanel === "open"
@@ -195,11 +200,14 @@ class EthereumTxStatus extends React.Component {
 
         return !txList || !Object.keys(txList).length ? (
             showNotificationPanel === "open" ? (
-                <StyledSpan>No transactions here yet...</StyledSpan>
-            ) : // <StyledWrapper>
-            //     <img alt="Augmint" src={AugmintLogo}/>
-            // </StyledWrapper>
-            null
+                <StyledWrapper>
+                    <StyledLogo src={AugmintLogo} alt="Augmint logo illustration" />
+                    <StyledSpan>
+                        There are no transaction <br />
+                        notifications to show...
+                    </StyledSpan>
+                </StyledWrapper>
+            ) : null
         ) : (
             <Psegment style={{ margin: "0 auto", padding: "0" }}>
                 <Container>{txList}</Container>
