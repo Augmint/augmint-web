@@ -12,7 +12,7 @@ export class NotificationPanel extends React.Component {
     }
 
     handleClose(txHash) {
-        store.dispatch(dismissTx(txHash));
+        store.dispatch(dismissTx(txHash, "dismiss"));
     }
 
     toggleNotificationPanel() {

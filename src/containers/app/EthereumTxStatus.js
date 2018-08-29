@@ -51,7 +51,7 @@ class EthereumTxStatus extends React.Component {
     }
 
     handleClose(txHash) {
-        store.dispatch(dismissTx(txHash));
+        store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
     }
 
     render() {
@@ -62,7 +62,10 @@ class EthereumTxStatus extends React.Component {
             Object.keys(transactions)
                 // .filter(hash => !transactions[hash].isDismissed)
                 .filter(
-                    hash => (showNotificationPanel === "open" ? transactions[hash] : !transactions[hash].isDismissed)
+                    hash =>
+                        showNotificationPanel === "open"
+                            ? transactions[hash] && transactions[hash].isDismissed !== "archive"
+                            : !transactions[hash].isDismissed
                 )
                 .map((hash, _index) => {
                     const tx = transactions[hash];

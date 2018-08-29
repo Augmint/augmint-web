@@ -51,7 +51,7 @@ class TopNav extends React.Component {
     }
 
     handleClose(txHash) {
-        store.dispatch(dismissTx(txHash));
+        store.dispatch(dismissTx(txHash, "dismiss"));
     }
 
     render() {

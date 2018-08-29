@@ -122,20 +122,14 @@ class App extends React.Component {
         });
     }
 
-    handleNotificationDismiss(txHash) {
-        store.dispatch(dismissTx(txHash));
+    handleNotificationDismiss(txHash, dismissState) {
+        store.dispatch(dismissTx(txHash, dismissState));
     }
 
     handleNotificationPanelClose(e) {
-        // console.log(e.target.outerHTML);
-        // console.log(e.target.parentElement);
-        console.log(e.target.parentElement.id);
-        console.log(e.target);
-        console.log(this.state.showNotificationPanel);
-        if (this.state.showNotificationPanel === true && e.target.parentElement.id !== "NotificationPanel") {
-            // console.log("bejott");
+        if (this.state.showNotificationPanel === true && !e.target.closest("#NotificationPanel")) {
             this.toggleNotificationPanel();
-            this.handleNotificationDismiss();
+            this.handleNotificationDismiss(undefined, "dismiss");
         }
     }
 
