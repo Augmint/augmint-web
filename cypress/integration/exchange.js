@@ -7,7 +7,7 @@ describe("Augmint exchange", function() {
 
     it("Should place and cancel buy order on exchange and also check the trade history", function() {
         const tokenAmount = 102.01;
-        const ethAmount = 0.1012;
+        const ethAmount = 0.10324;
         const price = 101;
 
         let tradeHistoryStartLength;
@@ -122,7 +122,7 @@ describe("Augmint exchange", function() {
     });
 
     it("Should place and cancel sell order on exchange and also check the trade history", function() {
-        const tokenAmount = 98.8;
+        const tokenAmount = 100.81;
         const ethAmount = 0.1;
         const price = 99;
 
