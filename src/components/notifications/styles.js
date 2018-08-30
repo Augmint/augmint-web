@@ -7,13 +7,12 @@ export const StyledNotificationPanel = styled.div`
     z-index: 100;
     position: fixed;
     top: 65px;
-    right: 5px;
+    right: 11px;
     width: 310px;
-    /* min-width: 310px; */
-    /* max-width: 366px; */
-    /* padding: 40px 10px 10px; */
-    max-height: calc(100% - 70px);
-    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 73px);
+    padding-bottom: 3px;
 
     ${media.mobile`
         right: 0;
@@ -29,37 +28,28 @@ export const StyledNotificationPanel = styled.div`
 export const StyledHead = styled.div`
     display: none;
     background: ${theme.colors.primary};
-    /* border-radius: 5px 5px 0 0; */
-    width: 310px;
+    width: 100%;
     height: 40px;
     z-index: 1;
-    /* text-align: center; */
 
     &.open {
         display: block;
-        position: fixed;
-        /* top: 0px;
-        left: 0px; */
     }
 `;
 
 export const StyledWrapper = styled.div`
     display: block;
-    margin: 5px 5px 10px;
-    &.open {
-        margin: 50px 10px 10px;
-    }
+    overflow: auto;
 `;
 
 export const StyledSpan = styled.span`
     display: none;
     color: ${theme.colors.white};
-    /* text-align: center; */
 
     &.open {
         display: block;
         position: absolute;
-        top: 10px;
+        top: 6px;
         left: 110px;
     }
 `;
@@ -72,7 +62,7 @@ export const CloseIcon = styled.img`
     &.open {
         display: inline-block;
         position: absolute;
-        top: 14px;
+        top: 10px;
         right: 10px;
         cursor: pointer;
     }

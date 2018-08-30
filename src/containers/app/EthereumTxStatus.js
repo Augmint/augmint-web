@@ -40,7 +40,7 @@ const StyledLogo = styled.img`
     text-align: center;
     display: block;
     margin: auto;
-    margin-top: 75px;
+    margin-top: 45px;
 `;
 
 const StyledSpan = styled.span`
@@ -48,6 +48,18 @@ const StyledSpan = styled.span`
     display: block;
     text-align: center;
     margin: 15px 0 40px;
+`;
+
+const StyledBTN = styled.span`
+    color: ${theme.colors.primary};
+    display: inline-block;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    margin: 10px 10px 8px;
+
+    &:hover {
+        font-weight: 600;
+    }
 `;
 
 class EthereumTxStatus extends React.Component {
@@ -59,6 +71,12 @@ class EthereumTxStatus extends React.Component {
     handleClose(txHash) {
         store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
     }
+
+    // handleCloseAll() {
+    //     transactions.forEach(element => {
+    //         store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
+    //     });
+    // }
 
     render() {
         const { transactions, network, decimalsDiv, showNotificationPanel } = this.props;
@@ -209,7 +227,8 @@ class EthereumTxStatus extends React.Component {
                 </StyledWrapper>
             ) : null
         ) : (
-            <Psegment style={{ margin: "0 auto", padding: "0" }}>
+            <Psegment style={{ margin: "0", padding: "0" }}>
+                {showNotificationPanel === "open" && <StyledBTN>Dismiss All</StyledBTN>}
                 <Container>{txList}</Container>
             </Psegment>
         );
