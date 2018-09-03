@@ -6726,9 +6726,9 @@ react-scrollchor@6.0.0:
   dependencies:
     requestanimationframe-timer "1.x.x"
 
-react-tooltip@3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.6.1.tgz#2ca993baa50d7e0271b8d13c6024445a883842eb"
+react-tooltip@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.7.0.tgz#08aaf680259056f27735a17fe834ae812229ac7a"
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.6.0"
