@@ -42,6 +42,11 @@ export class MsgPanel extends React.Component {
             ...other
         } = this.props;
         let _className = className;
+        let noClose = false;
+
+        if (loading) {
+            noClose = true;
+        }
 
         if (error) {
             _className += " error";
@@ -55,7 +60,12 @@ export class MsgPanel extends React.Component {
             (!this.state.dismissed || !dismissable) && (
                 // <Container style={{margin: "1em" }}>
                 <Container>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} className={_className} {...other}>
+                    <Message
+                        onDismiss={onDismiss ? this.dismiss : null}
+                        className={_className}
+                        noCloseIcon={noClose}
+                        {...other}
+                    >
                         <h4>
                             {icon && <Icon name={icon} loading={loading} />} {header}
                         </h4>
