@@ -1,8 +1,8 @@
 import React from "react";
-import moment from "moment";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import Button from "components/augmint-ui/button";
+import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
 
 export const CardHead = styled.div`
@@ -20,18 +20,10 @@ export const CardStatus = styled.div`
     font-size: ${remCalc(14)};
     font-weight: bold;
     text-transform: uppercase;
-
-    &.active {
-        color: ${theme.colors.green};
-    }
+    color: ${theme.colors.grey};
 `;
 
-export const CardDescription = styled.p`
-    margin: 0;
-    padding: 20px;
-    border: 1px solid ${theme.colors.grey};
-    font-family: ${theme.typography.fontFamilies.title};
-    font-size: ${remCalc(14)};
+export const CardStatusInfo = styled(StyledStatusBox)`
     text-align: center;
 
     strong {
@@ -39,6 +31,8 @@ export const CardDescription = styled.p`
         font-size: ${remCalc(24)};
     }
 `;
+
+export const CardStatusHelp = styled(StyledStatusText)``;
 
 export const Card = styled.section`
     position: relative;
@@ -48,27 +42,6 @@ export const Card = styled.section`
     background: ${theme.colors.white};
     border: 1px solid ${theme.colors.grey};
     color: ${theme.colors.black};
-
-    ${CardDescription} {
-        color: ${theme.colors.mediumGrey};
-    }
-
-    &.expired,
-    &.danger {
-        color: ${theme.colors.white};
-        background: ${theme.colors.red};
-        border: 0;
-
-        ${CardDescription} {
-            color: ${theme.colors.white};
-        }
-    }
-
-    &.warning {
-        ${CardDescription} {
-            color: ${theme.colors.red};
-        }
-    }
 `;
 
 export const DataGroup = styled.div`
@@ -91,63 +64,34 @@ export const DataLabel = styled.div`
 `;
 export const DataValue = styled.div``;
 
-const statusMap = [
-    {
-        daysLeft: 0,
-        status: "expired"
-    },
-    {
-        daysLeft: 3,
-        status: "danger"
-    },
-    {
-        daysLeft: 7,
-        status: "warning"
-    }
-];
-
 export default function LoanCard(props) {
     const loan = props.loan;
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const msToLeft = loan.maturity * 1000 - Date.now();
-    const fromNow = moment(loan.maturity * 1000).fromNow(true);
-    const { status } = statusMap.find(status => msToLeft < status.daysLeft * oneDayInMs) || {};
 
     return (
-        <Card className={status}>
+        <Card className={loan.dueState}>
             <CardHead>
                 <CardTitle>
-                    {loan.loanAmount} A€ loan for {moment.duration(loan.term * 1000).humanize()}
+                    {loan.loanAmount} A€ loan for {loan.termText}
                 </CardTitle>
-                <CardStatus className="active">{loan.loanStateText} loan</CardStatus>
+                <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
                     <Pgrid.Column size={{ desktop: 1 / 3 }}>
-                        {(function() {
-                            switch (status) {
-                                case "expired":
-                                    return <CardDescription>Due date was expired</CardDescription>;
-                                case "danger":
-                                    return (
-                                        <CardDescription>
-                                            <strong>{fromNow}</strong> left to due date
-                                        </CardDescription>
-                                    );
-                                case "warning":
-                                    return (
-                                        <CardDescription>
-                                            <strong>{fromNow}</strong> left to due date
-                                        </CardDescription>
-                                    );
-                                default:
-                                    return (
-                                        <CardDescription>
-                                            <strong>{fromNow}</strong> left to due date
-                                        </CardDescription>
-                                    );
-                            }
-                        })()}
+                        {loan.isRepayable ? (
+                            <div>
+                                <CardStatusInfo>
+                                    <strong>{loan.maturityFromNow}</strong> left to due date
+                                </CardStatusInfo>
+                                <CardStatusHelp>
+                                    {loan.isDue
+                                        ? "Near to due date. You will have to pay back soon."
+                                        : "You can repay at any time."}
+                                </CardStatusHelp>
+                            </div>
+                        ) : (
+                            <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
+                        )}
                     </Pgrid.Column>
                     <Pgrid.Column size={{ desktop: 1 / 3 }}>
                         <DataGroup>
