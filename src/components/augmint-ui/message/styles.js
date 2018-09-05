@@ -23,7 +23,12 @@ const BaseDiv = `
 
     & h4 {
       font-size: ${remCalc(18)};
+      // font-weight: 600;
       margin: 0 0 .6em;
+      
+      i {
+        margin-right: 8px;
+      }
     }
 
     & p {
@@ -31,6 +36,16 @@ const BaseDiv = `
       font-size: ${remCalc(14)};
       line-height: ${remCalc(16)};
       margin: 0;
+      
+    }
+
+    &.notification > div > p {
+      margin-left: 30px;
+
+      & small {
+        display: block;
+        margin-top: 5px;
+      }
     }
 
     &.error {

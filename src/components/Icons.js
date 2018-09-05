@@ -14,6 +14,8 @@ import spendEuroSVG from "assets/images/spend-euro.svg";
 
 import exchangeSVG from "assets/images/exchange.svg";
 
+import exchangeDarkSVG from "assets/images/exchange-dark.svg";
+
 import partnersSVG from "assets/images/partners.svg";
 
 import ethDSVG from "assets/images/ether-delta.svg";
@@ -77,6 +79,20 @@ export const SpendIcon = () => <img alt="spend icon" src={spendEuroSVG} />;
 export const GetDepositIcon = () => <img alt="get deposit icon" src={getDepositSVG} />;
 
 export const ExchangeIcon = () => <img alt="exchange icon" src={exchangeSVG} />;
+
+export const ExchangeIconDark = () => (
+    <img
+        alt="exchange icon"
+        src={exchangeDarkSVG}
+        style={{
+            height: "60px",
+            display: "block",
+            margin: "auto",
+            marginTop: "45px",
+            filter: "grayscale(90%) opacity(40%)"
+        }}
+    />
+);
 
 export const PartnersIcon = () => <img alt="partners icon" src={partnersSVG} />;
 

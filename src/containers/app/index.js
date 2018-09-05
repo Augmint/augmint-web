@@ -189,6 +189,7 @@ class App extends React.Component {
                         >
                             <EthereumTxStatus
                                 showNotificationPanel={this.state.showNotificationPanel ? "open" : "close"}
+                                toggleNotificationPanel={this.toggleNotificationPanel}
                             />
                         </NotificationPanel>
                     )}

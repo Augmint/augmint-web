@@ -12,21 +12,22 @@ import { dismissTx } from "modules/reducers/submittedTransactions";
 import HashURL from "components/hash";
 import styled from "styled-components";
 import theme from "styles/theme";
-import AugmintLogo from "assets/images/logo/augmint-dark.svg";
+import { ExchangeIconDark } from "components/Icons";
 
 const StyledLoadingPanel = styled(LoadingPanel)`
     display: none;
 
     &.open {
         display: block;
+        p {
+            margin-left: 25px;
+        }
     }
 `;
 
 // const StyledSuccessPanel = styled(SuccessPanel)`
-//     display: none;
-
-//     &.visible {
-//         display: block;
+//     p {
+//         margin-left: 25px;
 //     }
 // `;
 
@@ -35,16 +36,8 @@ const StyledWrapper = styled.div`
     margin: 20px 10px 20px;
 `;
 
-const StyledLogo = styled.img`
-    height: 100px;
-    text-align: center;
-    display: block;
-    margin: auto;
-    margin-top: 45px;
-`;
-
 const StyledSpan = styled.span`
-    color: ${theme.colors.primary};
+    color: ${theme.colors.mediumGrey};
     display: block;
     text-align: center;
     margin: 15px 0 40px;
@@ -55,7 +48,7 @@ const StyledBTN = styled.span`
     display: inline-block;
     font-size: 0.8rem;
     text-decoration: underline;
-    margin: 10px 10px 8px;
+    margin: 10px 22px 8px;
 
     &:hover {
         font-weight: 600;
@@ -66,6 +59,7 @@ class EthereumTxStatus extends React.Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
+        this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
     }
 
     handleClose(txHash) {
@@ -77,6 +71,10 @@ class EthereumTxStatus extends React.Component {
     //         store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
     //     });
     // }
+
+    toggleNotificationPanel(e) {
+        this.props.toggleNotificationPanel();
+    }
 
     render() {
         const { transactions, network, decimalsDiv, showNotificationPanel } = this.props;
@@ -133,7 +131,14 @@ class EthereumTxStatus extends React.Component {
                     }
 
                     return (
-                        <MyListGroup.Row key={`txRowDiv-${hash}`}>
+                        <MyListGroup.Row
+                            key={`txRowDiv-${hash}`}
+                            onClick={e => {
+                                if (showNotificationPanel !== "open" && !e.target.matches(".fa-times")) {
+                                    this.toggleNotificationPanel();
+                                }
+                            }}
+                        >
                             {tx.event === "transactionHash" && (
                                 <StyledLoadingPanel
                                     header={header}
@@ -180,26 +185,28 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    // className={
-                                    //     this.props.showNotificationPanel === "open"
-                                    //         ? "visible"
-                                    //         : tx.confirmationNumber >= 12 && tx.confirmationNumber < 24
-                                    //             ? "visible"
-                                    //             : ""
-                                    // }
+                                    className={"notification open"}
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
-                                    <p>{tx.confirmationNumber}. confirmation</p>
+                                    {this.props.showNotificationPanel === "open" ? (
+                                        <div>
+                                            <p>{tx.confirmationNumber}. confirmation</p>
 
-                                    {txInfo}
+                                            {txInfo}
 
-                                    <p>
-                                        <small>
-                                            Gas used: {gasUsed}
-                                            <br />
-                                            <HashURL hash={tx.transactionHash} type={"tx/"} />
-                                        </small>
-                                    </p>
+                                            <p>
+                                                <small>
+                                                    Gas used: {gasUsed}
+                                                    <br />
+                                                    <HashURL hash={tx.transactionHash} type={"tx/"} />
+                                                </small>
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <p>{tx.confirmationNumber}. confirmation</p>
+                                        </div>
+                                    )}
                                 </SuccessPanel>
                             )}
 
@@ -219,7 +226,7 @@ class EthereumTxStatus extends React.Component {
         return !txList || !Object.keys(txList).length ? (
             showNotificationPanel === "open" ? (
                 <StyledWrapper>
-                    <StyledLogo src={AugmintLogo} alt="Augmint logo illustration" />
+                    <ExchangeIconDark />
                     <StyledSpan>
                         There are no transaction <br />
                         notifications to show...

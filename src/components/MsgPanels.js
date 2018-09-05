@@ -38,23 +38,24 @@ export class MsgPanel extends React.Component {
             btn,
             testid,
             transactions,
+            className,
             ...other
         } = this.props;
-        let className;
+        let _className = className;
 
         if (error) {
-            className = "error";
+            _className += " error";
         }
 
         if (success) {
-            className = "success";
+            _className += " success";
         }
 
         return (
             (!this.state.dismissed || !dismissable) && (
                 // <Container style={{margin: "1em" }}>
                 <Container>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} className={className} {...other}>
+                    <Message onDismiss={onDismiss ? this.dismiss : null} className={_className} {...other}>
                         <h4>
                             {icon && <Icon name={icon} loading={loading} />} {header}
                         </h4>
@@ -79,8 +80,8 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    const { success = true, icon = "check", btn, ...other } = props;
-    return <MsgPanel success={success} icon={icon} btn={btn} {...other} />;
+    const { success = true, icon = "check", className, btn, ...other } = props;
+    return <MsgPanel success={success} icon={icon} className={className} btn={btn} {...other} />;
 }
 
 export function InfoPanel(props) {
@@ -97,8 +98,8 @@ export function ErrorPanel(props) {
 }
 
 export function LoadingPanel(props) {
-    const { info = true, icon = "circle notched", loading = true, btn, ...other } = props;
-    return <MsgPanel info={info} icon={icon} loading={loading} btn={btn} {...other} />;
+    const { info = true, icon = "circle notched", loading = true, className, btn, ...other } = props;
+    return <MsgPanel info={info} icon={icon} loading={loading} className={className} btn={btn} {...other} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
