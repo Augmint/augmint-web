@@ -75,7 +75,9 @@ class TransferList extends React.Component {
                                 <StyleTh className={"hide-xs"}>Date</StyleTh>
                                 <StyleTh>Transaction</StyleTh>
                                 <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
-                                <StyleTh style={{ textAlign: "right" }}>Balance</StyleTh>
+                                <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
+                                    Balance
+                                </StyleTh>
                             </StyleTr>
                         </StyleThead>
                         <StyleTbody>
@@ -89,8 +91,13 @@ class TransferList extends React.Component {
                                         <div className={"show-xs"}>{tx.date}</div>
                                         {tx.info}
                                     </StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }}>{tx.amount}</StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }}>{tx.balance}</StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }}>
+                                        {tx.amount}
+                                        <div className={"show-xs"}>= {tx.balance}</div>
+                                    </StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
+                                        {tx.balance}
+                                    </StyleTd>
                                 </StyleTr>
                             ))}
                         </StyleTbody>

@@ -26,7 +26,7 @@ function LoanList(props) {
                 <Pheader header="My loans" />
             </TopNavTitlePortal>
 
-            <Segment>
+            <Segment className="block">
                 <Menu>
                     <Menu.Item exact to="/loan" activeClassName="active">
                         My active loans

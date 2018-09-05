@@ -8,9 +8,8 @@ import LoanList from "containers/loan/components/LoanList";
 import LockList from "containers/lock/components/LockList";
 import Balance from "./components/Balance";
 import TransferList from "./components/TransferList";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pblock, Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
-
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 
@@ -49,7 +48,12 @@ class AccountHome extends React.Component {
                                 </div>
                             </Pgrid.Column>
                         </Pgrid.Row>
-                        <TransferList userAccount={this.props.userAccount} header="My account history" />
+
+                        <Pgrid.Row>
+                            <Pgrid.Column>
+                                <TransferList userAccount={this.props.userAccount} header="My account history" />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
 
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>

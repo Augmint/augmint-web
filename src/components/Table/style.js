@@ -1,22 +1,17 @@
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
-import { media } from "styles/media";
 import Header from "components/augmint-ui/header";
 
 export const StyleTitle = styled(Header)`
-    border-bottom: 1px solid ${theme.colors.opacGrey};
-    padding: 0 20px 20px;
-    margin: 0;
-
-    ${media.tablet`
-        padding-left: 0;
-        padding-right: 0;
-    `};
+    padding-left: 20px;
+    padding-right: 20px;
 `;
 
 export const StyleTable = styled.table`
     width: 100%;
     border-collapse: collapse;
+    border-top: 1px solid ${theme.colors.opacGrey};
+    border-bottom: 1px solid ${theme.colors.opacGrey};
     font-family: ${theme.typography.fontFamilies.currency};
 `;
 
@@ -33,11 +28,6 @@ export const StyleTr = styled.tr`
     ${StyleTd}, ${StyleTh} {
         text-align: left;
         padding: 10px 20px;
-
-        ${media.tablet`
-            padding-left: 0;
-            padding-right: 0;
-        `};
     }
     ${StyleTh} {
         text-transform: uppercase;
