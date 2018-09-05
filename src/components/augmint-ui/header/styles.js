@@ -7,7 +7,17 @@ const BaseHeader = `
     font-family: ${theme.typography.fontFamilies.default};
     font-weight: 200;
     padding: 0;
-
+    
+    .App & {
+      color: ${theme.colors.black};
+      font-family: ${theme.typography.fontFamilies.title};
+      font-weight: lighter;
+    }
+    
+    &.mediumGrey {
+      color: ${theme.colors.mediumGrey}
+    }
+    
     &.opacLightGrey {
       color: ${theme.colors.opacLightGrey}
     }

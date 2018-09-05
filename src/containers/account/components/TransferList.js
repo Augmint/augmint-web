@@ -4,6 +4,7 @@ import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
+import { connect } from "react-redux";
 
 class TransferList extends React.Component {
     constructor(props) {
@@ -98,7 +99,9 @@ class TransferList extends React.Component {
                 {transfers &&
                     this.hasMore() && (
                         <div style={{ marginTop: 20 }}>
-                            <Button onClick={this.showMore}>Show older</Button>
+                            <Button onClick={this.showMore} className="ghost">
+                                Show older
+                            </Button>
                         </div>
                     )}
             </Segment>
@@ -107,11 +110,14 @@ class TransferList extends React.Component {
 }
 
 TransferList.defaultProps = {
-    transfers: null,
     userAccount: null,
     noItemMessage: <p>No transactions</p>,
     header: null,
     limit: 5
 };
 
-export default TransferList;
+const mapStateToProps = state => ({
+    transfers: state.userTransfers
+});
+
+export default connect(mapStateToProps)(TransferList);

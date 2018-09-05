@@ -13,6 +13,8 @@ import AugmintLogo from "assets/images/logo/augmint.svg";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
 
+const breakpoint = media.desktop;
+
 export const HamburgerMenu = styled.img`
     display: none;
     height: 32px;
@@ -20,7 +22,7 @@ export const HamburgerMenu = styled.img`
     margin-top: 15px;
     visibility: hidden;
 
-    ${media.tablet`
+    ${breakpoint`
       display: block;
       visibility: visible;
     `};
@@ -47,7 +49,7 @@ export const SideNav = styled.nav`
     padding: 20px 0;
 
     &.closed {
-        ${media.tablet`
+        ${breakpoint`
             width: 60px;
             height: 60px;
             padding: 0;
@@ -64,7 +66,7 @@ export const SideNav = styled.nav`
         display: block;
         visibility: visible;
 
-        ${media.tablet`
+        ${breakpoint`
             margin-top: 40px;
             margin-bottom: 0;
             &.hidden{
@@ -83,7 +85,7 @@ export const SideNavUl = styled.ul`
     list-style: none;
     padding: 0;
 
-    ${media.tablet`
+    ${breakpoint`
       display: block;
       visibility: visible;
       &.hidden {
@@ -96,7 +98,7 @@ export const SideNavUl = styled.ul`
 export const SideNavLi = styled.li`
     margin-bottom: 10px;
     width: 100%;
-    ${media.tablet`
+    ${breakpoint`
         max-width: 150px;
         margin: auto;
         text-align: left;
@@ -123,7 +125,7 @@ export const SideNavLink = styled(NavLink)`
         color: ${theme.colors.secondary};
         display: flex;
         align-items: center;
-        ${media.tablet`
+        ${breakpoint`
             border: none;
         `};
     }
@@ -140,7 +142,7 @@ export const SideNavLink = styled(NavLink)`
         line-height: 1.5rem;
         text-transform: uppercase;
         font-size: 12px;
-        ${media.tablet`
+        ${breakpoint`
             font-size: ${remCalc(20)};
             line-height: 2.4rem;
         `};
@@ -182,7 +184,7 @@ export default class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/loan/new" activeClassName="active" data-testid="getLoanMenuLink">
+                        <SideNavLink to="/loan" activeClassName="active" data-testid="getLoanMenuLink">
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>

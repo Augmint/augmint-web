@@ -97,7 +97,7 @@ export const StyledRow = styled(Row)`
     }
 
     &.borderTop {
-        border-top: 1px solid ${theme.colors.black};
+        border-top: 1px solid ${theme.colors.grey};
     }
 
     &.result ${StyledCol} {

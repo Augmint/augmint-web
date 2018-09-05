@@ -337,7 +337,7 @@ function parseLoans(loansArray, account) {
                 term,
                 termText: moment.duration(term, "seconds").humanize(),
                 disbursementTime,
-                disbursementTimeText: moment.unix(disbursementTime).format("D MMM YYYY HH:mm:ss"),
+                disbursementTimeText: moment.unix(disbursementTime).format("D MMM YYYY HH:mm"),
                 maturity,
                 maturityText: moment.unix(maturity).format("D MMM YYYY HH:mm"),
                 isDue,

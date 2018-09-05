@@ -6,11 +6,13 @@ import { NavLink } from "react-router-dom";
 import theme from "styles/theme";
 import { media, mediaopacity } from "styles/media";
 
+const breakpoint = media.desktop;
+
 export const StyleNavList = styled.ul`
     display: flex;
     padding: 0;
     margin: 0;
-    ${media.tablet`
+    ${breakpoint`
       margin-top: 135px;
       display: none;
       position: absolute;
@@ -35,12 +37,12 @@ export const StyleNavLink = styled(NavLink)`
 
 export const StyleNavItem = styled.li`
     display: flex;
-    ${media.tablet`
+    ${breakpoint`
       text-align: center;
 
     `} & + li {
         margin-left: 8px;
-        ${media.tablet`
+        ${breakpoint`
           margin-left: 0px;
         `};
     }
@@ -48,7 +50,7 @@ export const StyleNavItem = styled.li`
     & a {
         padding: 15px 5px;
         width: 100%;
-        ${media.tablet`
+        ${breakpoint`
         font-size: 18px;
       `};
     }
@@ -71,7 +73,7 @@ export const StyledNavLeftSide = styled.div`
     & img.augmint {
         max-height: 50px;
         padding-right: 10px;
-        ${media.tablet`
+        ${breakpoint`
           display: none;
         `};
     }
@@ -86,7 +88,7 @@ export const HamburgerMenu = styled.img`
     height: 32px;
     width: 32px;
     visibility: hidden;
-    ${mediaopacity.handheld`opacity: .8`} ${media.tablet`
+    ${mediaopacity.handheld`opacity: .8`} ${breakpoint`
       display: block;
       visibility: visible;
     `};
