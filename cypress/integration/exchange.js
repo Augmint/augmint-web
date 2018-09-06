@@ -65,8 +65,8 @@ describe("Augmint exchange", function() {
                     .as("orderGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
-                cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
+                cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
@@ -99,7 +99,7 @@ describe("Augmint exchange", function() {
                     .as("cancelGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
@@ -169,7 +169,7 @@ describe("Augmint exchange", function() {
                     .as("orderGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
                 cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
                 const expectedEthBalance =
@@ -204,7 +204,7 @@ describe("Augmint exchange", function() {
                     .as("cancelGasUsed");
             })
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
                 cy.assertUserAEurBalanceOnUI(this.startingAeurBalance);
 
@@ -250,7 +250,7 @@ describe("Augmint exchange", function() {
             .should("contain", "confirmation")
             .as("successPanel")
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
                 cy.get("[data-testid=buyMenuLink]").click();
 
@@ -270,7 +270,7 @@ describe("Augmint exchange", function() {
                 cy.get("@successPanel").should("contain", "confirmation");
             })
             .then(() => {
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
                 cy.get("[data-testid=matchTopOrdersButton]").click();
 
@@ -278,7 +278,7 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
                 cy.get("@successPanel").should("contain", "confirmation");
-                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]")
+                cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                     .click()
                     .then(() => {
                         cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");

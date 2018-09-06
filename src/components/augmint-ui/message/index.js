@@ -11,7 +11,11 @@ export default function Message(props) {
         return React.createElement(
             StyledDiv,
             props,
-            React.createElement(StyledIcon, { className: "fas fa-times close", onClick: props.onDismiss }),
+            React.createElement(StyledIcon, {
+                className: "fas fa-times close",
+                "data-testid": "msgPanelClose",
+                onClick: props.onDismiss
+            }),
             children
         );
     } else {
