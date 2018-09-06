@@ -64,7 +64,7 @@ class EthereumTxStatus extends React.Component {
     }
 
     handleClose(txHash) {
-        store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
+        store.dispatch(dismissTx(txHash, this.props.showNotificationPanel ? "archive" : "dismiss"));
     }
 
     handleCloseAll(transactions) {
@@ -85,7 +85,7 @@ class EthereumTxStatus extends React.Component {
             Object.keys(transactions)
                 .filter(
                     hash =>
-                        showNotificationPanel === "open"
+                        showNotificationPanel
                             ? transactions[hash] && transactions[hash].isDismissed !== "archive"
                             : !transactions[hash].isDismissed
                 )
@@ -135,7 +135,7 @@ class EthereumTxStatus extends React.Component {
                         <MyListGroup.Row
                             key={`txRowDiv-${hash}`}
                             onClick={e => {
-                                if (showNotificationPanel !== "open" && !e.target.matches(".fa-times")) {
+                                if (!showNotificationPanel && !e.target.matches(".fa-times")) {
                                     this.toggleNotificationPanel();
                                 }
                             }}
@@ -145,7 +145,7 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    className={this.props.showNotificationPanel === "open" ? "open" : ""}
+                                    className={this.props.showNotificationPanel ? "open" : ""}
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     <p>
@@ -161,7 +161,7 @@ class EthereumTxStatus extends React.Component {
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
                                         btn="noBtn"
-                                        className={this.props.showNotificationPanel === "open" ? "open" : ""}
+                                        className={this.props.showNotificationPanel ? "open" : ""}
                                         // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                     >
                                         <p>Transaction receipt received. Wait for confirmations.</p>
@@ -189,7 +189,7 @@ class EthereumTxStatus extends React.Component {
                                     className={"notification open"}
                                     // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
-                                    {this.props.showNotificationPanel === "open" ? (
+                                    {this.props.showNotificationPanel ? (
                                         <div>
                                             <p>{tx.confirmationNumber}. confirmation</p>
 
@@ -225,7 +225,7 @@ class EthereumTxStatus extends React.Component {
                 .reverse();
 
         return !txList || !Object.keys(txList).length ? (
-            showNotificationPanel === "open" ? (
+            showNotificationPanel ? (
                 <StyledWrapper>
                     <ExchangeIconDark />
                     <StyledSpan>
@@ -236,7 +236,7 @@ class EthereumTxStatus extends React.Component {
             ) : null
         ) : (
             <Psegment style={{ margin: "0", padding: "0" }}>
-                {showNotificationPanel === "open" && (
+                {showNotificationPanel && (
                     <StyledBTN
                         id={"DismissAllBtn"}
                         onClick={() => {
