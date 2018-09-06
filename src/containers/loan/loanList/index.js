@@ -34,7 +34,12 @@ function LoanList(props) {
                     <Menu.Item exact to="/loan/archive" activeClassName="active">
                         My old loans
                     </Menu.Item>
-                    <Button style={{ marginLeft: "auto" }} content="Get a new loan" to="/loan/new" />
+                    <Button
+                        style={{ marginLeft: "auto" }}
+                        content="Get a new loan"
+                        to="/loan/new"
+                        data-testid="newLoanLink"
+                    />
                 </Menu>
 
                 <div className={isLoading ? "loading" : ""}>

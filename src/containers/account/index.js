@@ -8,7 +8,7 @@ import LoanList from "containers/loan/components/LoanList";
 import LockList from "containers/lock/components/LockList";
 import Balance from "./components/Balance";
 import TransferList from "./components/TransferList";
-import { Pblock, Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";

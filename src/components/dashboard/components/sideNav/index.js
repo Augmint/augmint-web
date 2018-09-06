@@ -184,7 +184,7 @@ export default class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/loan" activeClassName="active" data-testid="getLoanMenuLink">
+                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>
