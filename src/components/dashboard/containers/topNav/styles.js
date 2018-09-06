@@ -13,6 +13,7 @@ const TOP_NAV_HEIGHT = "60px";
 export const StyledTopNav = styled.nav`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
     border-bottom: 1px solid #ccc;
     height: ${TOP_NAV_HEIGHT};
@@ -38,15 +39,15 @@ export const TitleWrapper = styled.div`
     max-width: 60%;
 
     ${StyledHeaderH1} {
-        font-size: ${remCalc("24")};
+        font-size: ${remCalc("20")};
         margin: 0;
 
-        ${media.mobile`
+        ${media.tablet`
             font-size: 1.1rem;
         `};
     }
 
-    ${media.tablet`
+    ${media.desktop`
         margin-left: 80px;
     `};
 `;
