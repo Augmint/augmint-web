@@ -13,11 +13,14 @@ describe("Locks", function() {
         cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New Lock submitted");
         cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
 
-        return cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
-            cy.contains("New lock");
-            cy.contains("View on Etherscan.");
-            cy.get("[data-testid=msgPanelOkButton]").click();
-        });
+        return cy
+            .get("[data-testid=EthConfirmationReceivedPanel]")
+            .click()
+            .within(() => {
+                cy.contains("New lock");
+                cy.contains("View on Etherscan.");
+                cy.get("[data-testid=msgPanelClose]").click();
+            });
     };
 
     beforeEach(function() {
