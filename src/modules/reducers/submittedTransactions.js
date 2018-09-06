@@ -44,6 +44,13 @@ export const updateTx = tx => {
             //     transactions[tx.transactionHash].isDismissed = false;
             // }
 
+            if (
+                transactions[tx.transactionHash].confirmationNumber === 0 &&
+                transactions[tx.transactionHash].event === "confirmation"
+            ) {
+                transactions[tx.transactionHash].isDismissed = undefined;
+            }
+
             return dispatch({
                 type: UPDATE_TX_SUCCESS,
                 result: transactions

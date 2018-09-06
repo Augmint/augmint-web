@@ -20,7 +20,7 @@ const StyledLoadingPanel = styled(LoadingPanel)`
     &.open {
         display: block;
         p {
-            margin-left: 25px;
+            margin-left: 30px;
         }
     }
 `;
@@ -48,6 +48,7 @@ const StyledBTN = styled.span`
     display: inline-block;
     font-size: 0.8rem;
     text-decoration: underline;
+    cursor: pointer;
     margin: 10px 22px 8px;
 
     &:hover {
@@ -66,11 +67,11 @@ class EthereumTxStatus extends React.Component {
         store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
     }
 
-    // handleCloseAll() {
-    //     transactions.forEach(element => {
-    //         store.dispatch(dismissTx(txHash, this.props.showNotificationPanel === "open" ? "archive" : "dismiss"));
-    //     });
-    // }
+    handleCloseAll(transactions) {
+        Object.keys(transactions).forEach(e => {
+            store.dispatch(dismissTx(e.transactionHash, "archive"));
+        });
+    }
 
     toggleNotificationPanel(e) {
         this.props.toggleNotificationPanel();
@@ -235,7 +236,17 @@ class EthereumTxStatus extends React.Component {
             ) : null
         ) : (
             <Psegment style={{ margin: "0", padding: "0" }}>
-                {showNotificationPanel === "open" && <StyledBTN>Dismiss All</StyledBTN>}
+                {showNotificationPanel === "open" && (
+                    <StyledBTN
+                        id={"DismissAllBtn"}
+                        onClick={() => {
+                            console.log("haha");
+                            this.handleCloseAll(transactions);
+                        }}
+                    >
+                        Dismiss All
+                    </StyledBTN>
+                )}
                 <Container>{txList}</Container>
             </Psegment>
         );
