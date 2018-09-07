@@ -5,7 +5,6 @@ import { remCalc } from "styles/theme";
 
 const BaseDiv = `
     background: ${theme.colors.lightCyan};
-    width: 260px;
     border-radius: 4px;
     color: ${theme.colors.darkCyan};
     font-size: 16px;
@@ -14,16 +13,16 @@ const BaseDiv = `
     margin: .2em 0em;
     padding: .8em;
     position: relative;
-    // top: 10px;
-    // z-index: 100;
     line-height: 20px;
     transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, box-shadow 0.1s ease;
     box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.22) inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-    // box-shadow: 0px 0px 10px 2px #bbbbbb5c;
+
+    &.notification {
+      width: 260px;
+    }
 
     & h4 {
       font-size: ${remCalc(18)};
-      // font-weight: 600;
       margin: 0 0 .6em;
       
       i {

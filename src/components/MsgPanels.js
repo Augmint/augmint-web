@@ -58,8 +58,7 @@ export class MsgPanel extends React.Component {
 
         return (
             (!this.state.dismissed || !dismissable) && (
-                // <Container style={{margin: "1em" }}>
-                <Container>
+                <Container style={loading || error || success ? {} : { margin: "1em" }}>
                     <Message
                         onDismiss={onDismiss ? this.dismiss : null}
                         className={_className}

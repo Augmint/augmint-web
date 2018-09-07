@@ -25,12 +25,6 @@ const StyledLoadingPanel = styled(LoadingPanel)`
     }
 `;
 
-// const StyledSuccessPanel = styled(SuccessPanel)`
-//     p {
-//         margin-left: 25px;
-//     }
-// `;
-
 const StyledWrapper = styled.div`
     display: block;
     margin: 20px 10px 20px;
@@ -145,8 +139,7 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
-                                    className={this.props.showNotificationPanel ? "open" : ""}
-                                    // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                    className={this.props.showNotificationPanel ? "notification open" : "notification"}
                                 >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
@@ -161,8 +154,9 @@ class EthereumTxStatus extends React.Component {
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
                                         btn="noBtn"
-                                        className={this.props.showNotificationPanel ? "open" : ""}
-                                        // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
+                                        className={
+                                            this.props.showNotificationPanel ? "notification open" : "notification"
+                                        }
                                     >
                                         <p>Transaction receipt received. Wait for confirmations.</p>
 
@@ -187,7 +181,6 @@ class EthereumTxStatus extends React.Component {
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     btn="noBtn"
                                     className={"notification open"}
-                                    // style={{ position: "fixed", top: "60px", right: "17px", zIndex: "100" }}
                                 >
                                     {this.props.showNotificationPanel ? (
                                         <div>
@@ -240,7 +233,6 @@ class EthereumTxStatus extends React.Component {
                     <StyledBTN
                         id={"DismissAllBtn"}
                         onClick={() => {
-                            console.log("haha");
                             this.handleCloseAll(transactions);
                         }}
                     >
