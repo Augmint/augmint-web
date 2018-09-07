@@ -63,7 +63,9 @@ class EthereumTxStatus extends React.Component {
 
     handleCloseAll(transactions) {
         Object.keys(transactions).forEach(e => {
-            store.dispatch(dismissTx(e.transactionHash, "archive"));
+            if (transactions[e].event === "confirmation") {
+                store.dispatch(dismissTx(transactions[e].transactionHash, "archive"));
+            }
         });
     }
 
@@ -236,7 +238,7 @@ class EthereumTxStatus extends React.Component {
                             this.handleCloseAll(transactions);
                         }}
                     >
-                        Dismiss All
+                        Dismiss All Confirmed
                     </StyledBTN>
                 )}
                 <Container>{txList}</Container>
