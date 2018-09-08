@@ -31,6 +31,7 @@ export const StyledHead = styled.div`
     width: 100%;
     height: 40px;
     z-index: 1;
+    flex: none;
 
     &.open {
         display: block;
@@ -49,7 +50,7 @@ export const StyledSpan = styled.span`
     &.open {
         display: block;
         position: absolute;
-        top: 6px;
+        top: 9px;
         left: 110px;
     }
 `;
@@ -62,7 +63,7 @@ export const CloseIcon = styled.img`
     &.open {
         display: inline-block;
         position: absolute;
-        top: 10px;
+        top: 12px;
         right: 10px;
         cursor: pointer;
     }
