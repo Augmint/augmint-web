@@ -70,18 +70,18 @@ class TopNav extends React.Component {
         let notiIcon = "";
         let _loading = false;
         let _style = {
-            display: "none"
+            visibility: "hidden"
         };
 
-        console.log(transactions);
         Object.keys(transactions).forEach(e => {
             if (transactions[e].event === "transactionHash" || "receipt") {
                 notiIcon = "circle notched";
                 _loading = true;
                 _style = {
-                    position: "absolute",
-                    top: "28px",
-                    right: "13px",
+                    position: "relative",
+                    visibility: "visible",
+                    top: "-3px",
+                    right: "-12px",
                     fontSize: "1.2rem",
                     height: "1.2rem",
                     width: "1.2rem",
@@ -92,7 +92,7 @@ class TopNav extends React.Component {
             if (transactions[e].event === "confirmation") {
                 _loading = false;
                 _style = {
-                    display: "none"
+                    visibility: "hidden"
                 };
             }
         });
@@ -159,7 +159,7 @@ class TopNav extends React.Component {
                             }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
-                            <Icon name="notifications" />
+                            <Icon name="notifications" style={{ position: "relative", top: "11px" }} />
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
