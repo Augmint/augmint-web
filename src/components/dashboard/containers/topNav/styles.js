@@ -33,9 +33,6 @@ export const StyledTopNav = styled.nav`
     `};
 `;
 
-// font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));
-// font-size: ${remClac(calc(18px + (22 - 16) * ((100vw - ${media.mobile}) / (${media.tablet} - ${media.mobile}))))};
-
 export const TitleWrapper = styled.div`
     margin-left: 200px;
     max-width: 60%;

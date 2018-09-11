@@ -54,9 +54,6 @@ class TopNav extends React.Component {
         store.dispatch(dismissTx(txHash, "dismiss"));
     }
 
-    // handleNotiIcon(txHash) {
-    // }
-
     render() {
         const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
         const { ethBalance, tokenBalance } = this.props.userAccount;
