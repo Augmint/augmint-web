@@ -89,7 +89,7 @@ class TopNav extends React.Component {
                     textShadow: "-2px 0 white, 0 2px white, 2px 0 white, 0 -2px white"
                 };
             }
-            if (transactions[e].event === "confirmation") {
+            if (transactions[e].event === ("confirmation" || "error")) {
                 _loading = false;
                 _style = {
                     visibility: "hidden"
