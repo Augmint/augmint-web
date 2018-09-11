@@ -90,15 +90,9 @@ class TopNav extends React.Component {
                 };
             }
             if (transactions[e].event === "confirmation") {
-                // notiIcon = "confirmation";
                 _loading = false;
                 _style = {
                     display: "none"
-                    // top: "26px",
-                    // right: "13px",
-                    // fontSize: "1.2rem",
-                    // color: "green",
-                    // textShadow: "-2px 0 white 0 2px white 2px 0 white 0 -2px white"
                 };
             }
         });
@@ -165,10 +159,7 @@ class TopNav extends React.Component {
                             }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
-                            <Icon
-                                name="notifications"
-                                // className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
-                            />
+                            <Icon name="notifications" />
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>

@@ -147,10 +147,9 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 <p style={{ paddingBottom: "8px" }}>
                     {result.txName} transaction has been sent to the Ethereum network but it's not mined yet.
                 </p>
-                <p style={{ paddingBottom: "8px" }}>Wait for 12 confirmations to ensure it's accepted by network.</p>
                 <p style={{ paddingBottom: "8px" }}>
-                    For the status of the transaction see the notification <Icon name="notifications" /> panel at the
-                    top righ corner of the window, or inside the menu > notification panel on mobile
+                    <Icon name="notifications" style={{ paddingRight: "5px" }} />
+                    Wait for 12 confirmations to ensure it's accepted by network.
                 </p>
                 <p
                     style={{ paddingBottom: "10px" }}
