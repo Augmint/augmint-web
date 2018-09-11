@@ -54,14 +54,55 @@ class TopNav extends React.Component {
         store.dispatch(dismissTx(txHash, "dismiss"));
     }
 
+    // handleNotiIcon(txHash) {
+    // }
+
     render() {
         const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
         const { ethBalance, tokenBalance } = this.props.userAccount;
+        const transactions = this.props.transactions;
         const accountInfoData = {
             account: this.props.userAccount,
             rates: this.props.rates,
             web3Connect: this.props.web3Connect
         };
+
+        let notiIcon = "";
+        let _loading = false;
+        let _style = {
+            display: "none"
+        };
+
+        console.log(transactions);
+        Object.keys(transactions).forEach(e => {
+            if (transactions[e].event === "transactionHash" || "receipt") {
+                notiIcon = "circle notched";
+                _loading = true;
+                _style = {
+                    position: "absolute",
+                    top: "28px",
+                    right: "13px",
+                    fontSize: "1.2rem",
+                    height: "1.2rem",
+                    width: "1.2rem",
+                    color: "#276f86",
+                    textShadow: "-2px 0 white, 0 2px white, 2px 0 white, 0 -2px white"
+                };
+            }
+            if (transactions[e].event === "confirmation") {
+                // notiIcon = "confirmation";
+                _loading = false;
+                _style = {
+                    display: "none"
+                    // top: "26px",
+                    // right: "13px",
+                    // fontSize: "1.2rem",
+                    // color: "green",
+                    // textShadow: "-2px 0 white 0 2px white 2px 0 white 0 -2px white"
+                };
+            }
+        });
+
         return (
             <StyledTopNav className={this.props.showAccInfo ? this.props.className + " hidden" : this.props.className}>
                 <TitleWrapper id="page-title" />
@@ -128,6 +169,7 @@ class TopNav extends React.Component {
                                 name="notifications"
                                 // className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
                             />
+                            <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
                     <StyledTopNavLi className="navLinkRight">
@@ -148,6 +190,7 @@ class TopNav extends React.Component {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
+    transactions: state.submittedTransactions.transactions,
     rates: state.rates
 });
 

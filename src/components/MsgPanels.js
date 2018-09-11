@@ -144,9 +144,19 @@ export class EthSubmissionSuccessPanel extends React.Component {
         return (
             <MsgPanel data-testid={testid} {...other}>
                 {children}
-                <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
-                <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
-                <p data-testid="transactionHash" data-testtxhash={result.transactionHash}>
+                <p style={{ paddingBottom: "8px" }}>
+                    {result.txName} transaction has been sent to the Ethereum network but it's not mined yet.
+                </p>
+                <p style={{ paddingBottom: "8px" }}>Wait for 12 confirmations to ensure it's accepted by network.</p>
+                <p style={{ paddingBottom: "8px" }}>
+                    For the status of the transaction see the notification <Icon name="notifications" /> panel at the
+                    top righ corner of the window, or inside the menu > notification panel on mobile
+                </p>
+                <p
+                    style={{ paddingBottom: "10px" }}
+                    data-testid="transactionHash"
+                    data-testtxhash={result.transactionHash}
+                >
                     <HashURL hash={result.transactionHash} type={"tx/"} />
                 </p>
             </MsgPanel>
