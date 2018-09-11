@@ -15,11 +15,12 @@ export function ListItem(props) {
 List.Item = ListItem;
 
 export function NoItems(props) {
-    const { children } = props;
+    const { title, children } = props;
     return (
         <StyledNoItems>
-            <Icon name="empty" />
-            <h3>{children}</h3>
+            <Icon name="empty" style={{ opacity: 0.4 }} />
+            {title && <h3>{title}</h3>}
+            {children}
         </StyledNoItems>
     );
 }

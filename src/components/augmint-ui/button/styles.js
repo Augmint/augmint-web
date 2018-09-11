@@ -7,16 +7,15 @@ const BaseButton = styledComponent => styledComponent`
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    align-self: baseline;
     background-color: ${theme.colors.white};
     color: ${theme.colors.primary};
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 200;
     margin: 0;
-    padding: 0 20px;
+    padding: 10px 20px;
     border-radius: ${theme.borderRadius.all};
-    height: 42px;
-    line-height: 42px;
     font-size: 13px;
     letter-spacing: normal;
     

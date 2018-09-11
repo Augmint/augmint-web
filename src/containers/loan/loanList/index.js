@@ -8,6 +8,7 @@ import { Menu } from "components/augmint-ui/menu";
 import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
+import Message from "components/augmint-ui/message";
 import LoanCard from "./LoanCard";
 
 function LoanList(props) {
@@ -36,24 +37,28 @@ function LoanList(props) {
                     <Menu.Item exact to="/loan/archive" activeClassName="active">
                         My old loans
                     </Menu.Item>
-                    <Button
-                        style={{ marginLeft: "auto" }}
-                        content="Get a new loan"
-                        to="/loan/new"
-                        data-testid="newLoanLink"
-                    />
                 </Menu>
 
                 <div className={isLoading ? "loading" : ""}>
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
                     {listItems && listItems.length === 0 ? (
-                        <div style={{ textAlign: "center" }}>
-                            <NoItems>{isActivePage ? "You have no active loans." : "You have no old loans."}</NoItems>
-                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
-                        </div>
+                        <NoItems title={isActivePage ? "You have no active loans." : "You have no old loans."}>
+                            <div style={{ margin: "30px 20px" }}>
+                                <p>
+                                    <strong>Start spending the value of your ETH while keeping your investment.</strong>
+                                </p>
+                                <p>
+                                    You can get A-EUR for placing your ETH in escrow (collateral). You will get back all
+                                    of your ETH when you repay your A-EUR loan anytime before it's due (maturity).
+                                </p>
+                            </div>
+                        </NoItems>
                     ) : (
                         <div>{listItems}</div>
                     )}
+                    <div style={{ textAlign: "center" }}>
+                        <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
+                    </div>
                 </div>
             </Segment>
         </Psegment>

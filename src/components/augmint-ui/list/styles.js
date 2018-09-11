@@ -37,9 +37,10 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledNoItems = styled.div`
+    max-width: 660px;
+    margin: 0 auto;
     padding-top: 40px;
     color: ${theme.colors.mediumGrey};
     text-align: center;
     font-family: ${theme.typography.fontFamilies.title};
-    opacity: 0.4;
 `;
