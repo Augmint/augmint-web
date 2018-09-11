@@ -5,6 +5,7 @@ import { Psegment, Pheader } from "components/PageLayout";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Segment from "components/augmint-ui/segment";
 import { Menu } from "components/augmint-ui/menu";
+import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
@@ -17,6 +18,7 @@ function LoanList(props) {
     const listItems =
         loans &&
         loans
+            .reverse()
             .filter(loan => loan.isRepayable === isActivePage)
             .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
 
@@ -44,7 +46,14 @@ function LoanList(props) {
 
                 <div className={isLoading ? "loading" : ""}>
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
-                    {listItems && listItems.length === 0 ? <p>You have no loans.</p> : <div>{listItems}</div>}
+                    {listItems && listItems.length === 0 ? (
+                        <div style={{ textAlign: "center" }}>
+                            <NoItems>{isActivePage ? "You have no active loans." : "You have no old loans."}</NoItems>
+                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
+                        </div>
+                    ) : (
+                        <div>{listItems}</div>
+                    )}
                 </div>
             </Segment>
         </Psegment>

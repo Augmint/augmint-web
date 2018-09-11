@@ -1,6 +1,6 @@
 import React from "react";
-
-import { StyledContainer, StyledItem } from "./styles";
+import Icon from "../icon";
+import { StyledContainer, StyledItem, StyledNoItems } from "./styles";
 
 export default function List(props) {
     const { children, ...other } = props;
@@ -13,3 +13,13 @@ export function ListItem(props) {
 }
 
 List.Item = ListItem;
+
+export function NoItems(props) {
+    const { children } = props;
+    return (
+        <StyledNoItems>
+            <Icon name="empty" />
+            <h3>{children}</h3>
+        </StyledNoItems>
+    );
+}

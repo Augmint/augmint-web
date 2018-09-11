@@ -18,6 +18,7 @@ const BaseDiv = `
   }
 
   &.block {
+    margin-top: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;
   }

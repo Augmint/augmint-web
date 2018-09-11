@@ -15,7 +15,6 @@ export const StyledTopNav = styled.nav`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    border-bottom: 1px solid #ccc;
     height: ${TOP_NAV_HEIGHT};
     position: absolute;
     background-color: ${theme.colors.white};

@@ -35,3 +35,11 @@ export const StyledContainer = styled.div`
     padding: 0;
     text-align: center;
 `;
+
+export const StyledNoItems = styled.div`
+    padding-top: 40px;
+    color: ${theme.colors.mediumGrey};
+    text-align: center;
+    font-family: ${theme.typography.fontFamilies.title};
+    opacity: 0.4;
+`;

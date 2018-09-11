@@ -18,9 +18,8 @@ export const CardTitle = styled.h1`
 
 export const CardStatus = styled.div`
     font-size: ${remCalc(14)};
-    font-weight: bold;
     text-transform: uppercase;
-    color: ${theme.colors.grey};
+    color: ${theme.colors.mediumGrey};
 `;
 
 export const CardStatusInfo = styled(StyledStatusBox)`
