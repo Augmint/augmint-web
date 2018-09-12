@@ -67,12 +67,14 @@ export const dismissTx = (txHash, dismissState) => {
             const transactions = Object.assign({}, store.getState().submittedTransactions.transactions);
             if (txHash === undefined) {
                 Object.keys(transactions).forEach(key => {
-                    transactions[key].isDismissed =
-                        transactions[key].isDismissed === "archive" ? "archive" : dismissState;
+                    if (transactions[key].isDismissed !== "archive") {
+                        transactions[key].isDismissed = dismissState;
+                    }
                 });
             } else {
-                transactions[txHash].isDismissed =
-                    transactions[txHash].isDismissed === "archive" ? "archive" : dismissState;
+                if (transactions[txHash].isDismissed !== "archive") {
+                    transactions[txHash].isDismissed = dismissState;
+                }
             }
 
             return dispatch({

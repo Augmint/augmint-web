@@ -21,20 +21,21 @@ export class NotificationPanel extends React.Component {
 
     render() {
         const { className, id, children } = this.props;
+        const _className = this.props.showNotificationPanel ? "open" : "";
         return (
             <StyledNotificationPanel className={className} id={id}>
-                <StyledHead className={this.props.showNotificationPanel ? "open" : ""}>
-                    <StyledSpan className={this.props.showNotificationPanel ? "open" : ""}>Notifications</StyledSpan>
+                <StyledHead className={_className}>
+                    <StyledSpan className={_className}>Notifications</StyledSpan>
                     <CloseIcon
                         src={close}
                         onClick={e => {
                             this.toggleNotificationPanel();
                             this.handleClose();
                         }}
-                        className={this.props.showNotificationPanel ? "open" : ""}
+                        className={_className}
                     />
                 </StyledHead>
-                <StyledWrapper className={this.props.showNotificationPanel ? "open" : ""}>{children}</StyledWrapper>
+                <StyledWrapper className={_className}>{children}</StyledWrapper>
             </StyledNotificationPanel>
         );
     }
