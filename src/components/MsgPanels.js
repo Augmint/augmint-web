@@ -35,7 +35,7 @@ export class MsgPanel extends React.Component {
             loading,
             error,
             success,
-            noBtn,
+            enableDismissBtn,
             className,
             ...other
         } = this.props;
@@ -70,7 +70,7 @@ export class MsgPanel extends React.Component {
                         {children}
 
                         {onDismiss &&
-                            !noBtn && (
+                            enableDismissBtn && (
                                 <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
                                     OK
                                 </Button>
@@ -83,7 +83,8 @@ export class MsgPanel extends React.Component {
 }
 MsgPanel.defaultProps = {
     dismissed: false,
-    dismissable: false
+    dismissable: false,
+    enableDismissBtn: true
 };
 
 export function SuccessPanel(props) {

@@ -140,7 +140,7 @@ class EthereumTxStatus extends React.Component {
                                 <StyledLoadingPanel
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
-                                    noBtn={true}
+                                    enableDismissBtn={false}
                                     className={this.props.showNotificationPanel ? "notification open" : "notification"}
                                 >
                                     <p>
@@ -155,7 +155,7 @@ class EthereumTxStatus extends React.Component {
                                     <StyledLoadingPanel
                                         header={header}
                                         onDismiss={() => this.handleClose(tx.transactionHash)}
-                                        noBtn={true}
+                                        enableDismissBtn={false}
                                         className={
                                             this.props.showNotificationPanel ? "notification open" : "notification"
                                         }
@@ -181,7 +181,7 @@ class EthereumTxStatus extends React.Component {
                                     data-test-gasused={gasUsed}
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
-                                    noBtn={true}
+                                    enableDismissBtn={false}
                                     className={"notification open"}
                                 >
                                     {this.props.showNotificationPanel ? (
