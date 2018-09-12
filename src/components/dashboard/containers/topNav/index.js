@@ -71,7 +71,8 @@ class TopNav extends React.Component {
         };
 
         Object.keys(transactions).forEach(e => {
-            if (transactions[e].event === "transactionHash" || "receipt") {
+            console.log(transactions[e].event);
+            if (transactions[e].event === "transactionHash" || transactions[e].event === "receipt") {
                 notiIcon = "circle notched";
                 _loading = true;
                 _style = {
@@ -85,14 +86,7 @@ class TopNav extends React.Component {
                     color: "#276f86",
                     textShadow: "-2px 0 white, 0 2px white, 2px 0 white, 0 -2px white"
                 };
-            }
-            if (transactions[e].event === "confirmation") {
-                _loading = false;
-                _style = {
-                    visibility: "hidden"
-                };
-            }
-            if (transactions[e].event === "error") {
+            } else if (transactions[e].event === "confirmation" || transactions[e].event === "error") {
                 _loading = false;
                 _style = {
                     visibility: "hidden"
