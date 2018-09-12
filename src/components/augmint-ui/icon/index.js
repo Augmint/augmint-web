@@ -60,6 +60,7 @@ export default function Icon(props) {
             break;
         case "notifications":
             className += " far fa-bell";
+            break;
         case "empty":
             className += " empty";
             break;
