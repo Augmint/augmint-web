@@ -18,6 +18,7 @@ const BaseButton = styledComponent => styledComponent`
     border-radius: ${theme.borderRadius.all};
     font-size: 13px;
     letter-spacing: normal;
+    border: 0;
     
     & + & {
       margin-left: 1em;
@@ -62,7 +63,7 @@ const BaseButton = styledComponent => styledComponent`
       color: ${theme.colors.white};
 
       ${media.tabletMin`
-        padding: 8px 30px;
+        padding: 20px 30px;
         font-size: ${remCalc(16)};
       `};
     }
