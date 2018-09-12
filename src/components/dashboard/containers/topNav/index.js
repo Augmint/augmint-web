@@ -71,7 +71,6 @@ class TopNav extends React.Component {
         };
 
         Object.keys(transactions).forEach(e => {
-            console.log(transactions[e].event);
             if (transactions[e].event === "transactionHash" || transactions[e].event === "receipt") {
                 notiIcon = "circle notched";
                 _loading = true;

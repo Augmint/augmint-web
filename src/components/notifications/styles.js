@@ -44,27 +44,19 @@ export const StyledWrapper = styled.div`
 `;
 
 export const StyledSpan = styled.span`
-    display: none;
     color: ${theme.colors.white};
-
-    &.open {
-        display: block;
-        position: absolute;
-        top: 9px;
-        left: 110px;
-    }
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 110px;
 `;
 
 export const CloseIcon = styled.img`
-    display: none;
     height: 16px;
     width: 16px;
-
-    &.open {
-        display: inline-block;
-        position: absolute;
-        top: 12px;
-        right: 10px;
-        cursor: pointer;
-    }
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    cursor: pointer;
 `;

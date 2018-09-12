@@ -25,14 +25,13 @@ export class NotificationPanel extends React.Component {
         return (
             <StyledNotificationPanel className={className} id={id}>
                 <StyledHead className={_className}>
-                    <StyledSpan className={_className}>Notifications</StyledSpan>
+                    <StyledSpan>Notifications</StyledSpan>
                     <CloseIcon
                         src={close}
                         onClick={e => {
                             this.toggleNotificationPanel();
                             this.handleClose();
                         }}
-                        className={_className}
                     />
                 </StyledHead>
                 <StyledWrapper className={_className}>{children}</StyledWrapper>
