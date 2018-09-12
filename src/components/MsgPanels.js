@@ -36,8 +36,6 @@ export class MsgPanel extends React.Component {
             error,
             success,
             btn,
-            testid,
-            transactions,
             className,
             ...other
         } = this.props;
@@ -89,8 +87,8 @@ MsgPanel.defaultProps = {
 };
 
 export function SuccessPanel(props) {
-    const { success = true, icon = "check", className, btn, ...other } = props;
-    return <MsgPanel success={success} icon={icon} className={className} btn={btn} {...other} />;
+    const { success = true, icon = "check", ...other } = props;
+    return <MsgPanel success={success} icon={icon} {...other} />;
 }
 
 export function InfoPanel(props) {
@@ -107,8 +105,8 @@ export function ErrorPanel(props) {
 }
 
 export function LoadingPanel(props) {
-    const { info = true, icon = "circle notched", loading = true, className, btn, ...other } = props;
-    return <MsgPanel info={info} icon={icon} loading={loading} className={className} btn={btn} {...other} />;
+    const { info = true, icon = "circle notched", loading = true, ...other } = props;
+    return <MsgPanel info={info} icon={icon} loading={loading} {...other} />;
 }
 
 export class EthSubmissionErrorPanel extends React.Component {
@@ -191,10 +189,10 @@ export function ErrorDetails(props) {
     );
 }
 
-function mapStateToProps(state) {
-    return {
-        transactions: state.submittedTransactions.transactions
-    };
-}
+// function mapStateToProps(state) {
+//     return {
+//         transactions: state.submittedTransactions.transactions
+//     };
+// }
 
-export default connect(mapStateToProps)(MsgPanel);
+// export default connect(mapStateToProps)(MsgPanel);
