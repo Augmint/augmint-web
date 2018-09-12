@@ -35,7 +35,7 @@ export class MsgPanel extends React.Component {
             loading,
             error,
             success,
-            btn,
+            noBtn,
             className,
             ...other
         } = this.props;
@@ -70,7 +70,7 @@ export class MsgPanel extends React.Component {
                         {children}
 
                         {onDismiss &&
-                            !btn && (
+                            !noBtn && (
                                 <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
                                     OK
                                 </Button>
