@@ -5,8 +5,6 @@ import Container from "./augmint-ui/container";
 import Message from "./augmint-ui/message";
 import HashURL from "components/hash";
 
-import { connect } from "react-redux";
-
 export class MsgPanel extends React.Component {
     constructor(props) {
         super(props);

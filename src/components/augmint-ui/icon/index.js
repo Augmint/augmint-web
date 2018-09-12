@@ -64,6 +64,8 @@ export default function Icon(props) {
         case "empty":
             className += " empty";
             break;
+        default:
+            break;
     }
     if (props.loading) {
         className += " loading fas fa-circle-notch";
