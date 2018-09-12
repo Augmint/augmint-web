@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyledMenu, StyledMenuItem, StyledMenuItemDashboard } from "./styles";
+import { StyledMenu, StyledMenuItem, StyledMenuItemNav } from "./styles";
 
 export function Menu(props) {
     const { children, className, ...other } = props;
@@ -10,7 +10,7 @@ export function Menu(props) {
     }
 
     return (
-        <StyledMenu className={ _className + " dashboardColor" } {...other}>
+        <StyledMenu className={_className + " dashboardColor"} {...other}>
             {children}
         </StyledMenu>
     );
@@ -26,10 +26,12 @@ export function MenuItem(props) {
         _className += " active ";
     }
 
-    return (
-        className!=="buySell"
-            ? <StyledMenuItemDashboard className={_className} {...other}>{children}</StyledMenuItemDashboard>
-            : <StyledMenuItem className={_className} {...other}>{children}</StyledMenuItem>
+    return props.to ? (
+        <StyledMenuItemNav {...props} />
+    ) : (
+        <StyledMenuItem className={_className} {...other}>
+            {children}
+        </StyledMenuItem>
     );
 }
 

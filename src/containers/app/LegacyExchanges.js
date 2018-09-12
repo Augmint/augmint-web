@@ -67,7 +67,9 @@ class LegacyExchanges extends React.Component {
                     <p style={styleP}>
                         {contract.userOrders.length} orders in{" "}
                         <small>
-                            <HashURL hash={contract.address} title="a legacy Exchange contract" type={"address/"} />{" "}
+                            <HashURL hash={contract.address} type={"address/"}>
+                                a legacy Exchange contract
+                            </HashURL>{" "}
                         </small>
                     </p>
 

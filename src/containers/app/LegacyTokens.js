@@ -62,7 +62,8 @@ class LegacyTokens extends React.Component {
             ? contractBalances.filter(item => item.balance > 0 && !item.isDismissed).map((item, index) => (
                   <MyListGroup.Col key={`txRowDiv-${item.contract}`}>
                       <p>
-                          Balance in legacy contract:<br /> {item.balance} A-EUR <br />
+                          Balance in legacy contract:
+                          <br /> {item.balance} A-EUR <br />
                           <small>
                               <HashURL hash={item.contract} type={"address/"} />{" "}
                           </small>
@@ -92,13 +93,12 @@ class LegacyTokens extends React.Component {
                     <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
                         <p>
                             There is newer Augmint A-EUR Token version deployed to the{" "}
-                            <HashURL
-                                hash={augmintTokenContract.address}
-                                title={network.name + " network"}
-                                type={"address/"}
-                            />.
+                            <HashURL hash={augmintTokenContract.address} type={"address/"}>
+                                {network.name + " network"}
+                            </HashURL>
+                            .<br />
+                            You can convert your old A-EUR balance to the new contract.
                             <br />
-                            You can convert your old A-EUR balance to the new contract.<br />
                             <small>
                                 NB: token contract upgrades will be infrequent (ideally not needed at all) when Augmint
                                 released in public. During pilots we deliberately deploy a couple of new versions to

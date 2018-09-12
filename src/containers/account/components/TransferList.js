@@ -4,6 +4,7 @@ import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
+import { connect } from "react-redux";
 
 class TransferList extends React.Component {
     constructor(props) {
@@ -74,7 +75,9 @@ class TransferList extends React.Component {
                                 <StyleTh className={"hide-xs"}>Date</StyleTh>
                                 <StyleTh>Transaction</StyleTh>
                                 <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
-                                <StyleTh style={{ textAlign: "right" }}>Balance</StyleTh>
+                                <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
+                                    Balance
+                                </StyleTh>
                             </StyleTr>
                         </StyleThead>
                         <StyleTbody>
@@ -88,8 +91,13 @@ class TransferList extends React.Component {
                                         <div className={"show-xs"}>{tx.date}</div>
                                         {tx.info}
                                     </StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }}>{tx.amount}</StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }}>{tx.balance}</StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }}>
+                                        {tx.amount}
+                                        <div className={"show-xs"}>= {tx.balance}</div>
+                                    </StyleTd>
+                                    <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
+                                        {tx.balance}
+                                    </StyleTd>
                                 </StyleTr>
                             ))}
                         </StyleTbody>
@@ -98,7 +106,9 @@ class TransferList extends React.Component {
                 {transfers &&
                     this.hasMore() && (
                         <div style={{ marginTop: 20 }}>
-                            <Button onClick={this.showMore}>Show older</Button>
+                            <Button onClick={this.showMore} className="ghost">
+                                Show older
+                            </Button>
                         </div>
                     )}
             </Segment>
@@ -107,11 +117,14 @@ class TransferList extends React.Component {
 }
 
 TransferList.defaultProps = {
-    transfers: null,
     userAccount: null,
     noItemMessage: <p>No transactions</p>,
     header: null,
     limit: 5
 };
 
-export default TransferList;
+const mapStateToProps = state => ({
+    transfers: state.userTransfers
+});
+
+export default connect(mapStateToProps)(TransferList);

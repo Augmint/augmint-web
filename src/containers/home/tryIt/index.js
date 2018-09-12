@@ -7,7 +7,7 @@ import Button from "components/augmint-ui/button";
 import { HowToConnect } from "./HowToConnect";
 import { TryItConnected } from "./TryItConnected";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-import { StyledHeader } from "./styles";
+import { Pheader } from "components/PageLayout";
 
 class TryIt extends React.Component {
     componentDidMount() {
@@ -20,12 +20,7 @@ class TryIt extends React.Component {
             <div>
                 {isConnected && (
                     <TopNavTitlePortal>
-                        <StyledHeader
-                            as="h1"
-                            className="secondaryColor nav"
-                            content="Try Augmint"
-                            style={{ margin: "16px 0" }}
-                        />
+                        <Pheader header="Try Augmint" />
                     </TopNavTitlePortal>
                 )}
                 <Tsegment header={""}>
