@@ -30,6 +30,10 @@ export const StyledHeader = styled(Header)`
     background-color: ${theme.colors.opacExtraLighterGrey};
     line-height: ${remCalc(45)};
     padding-left: ${remCalc(35)};
+
+    ${media.tablet`
+        padding-left: 10px;
+    `};
 `;
 
 export const StyledPheader = styled(Pheader)`
@@ -44,6 +48,11 @@ export const StyledPheader = styled(Pheader)`
 
 export const StyledMyListGroup = styled(MyListGroup)`
     ${baseStyle};
+
+    ${media.tablet`
+        padding-left: 20px;
+        padding-right: 20px;
+    `};
 `;
 
 export const StyledCol = styled(Col)`

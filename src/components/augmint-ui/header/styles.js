@@ -12,6 +12,7 @@ const BaseHeader = `
       color: ${theme.colors.black};
       font-family: ${theme.typography.fontFamilies.title};
       font-weight: lighter;
+      line-height: 1.2em;
     }
     
     &.mediumGrey {

@@ -8,7 +8,6 @@ import { Menu } from "components/augmint-ui/menu";
 import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
-import Message from "components/augmint-ui/message";
 import LoanCard from "./LoanCard";
 
 function LoanList(props) {
@@ -43,7 +42,7 @@ function LoanList(props) {
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
                     {listItems && listItems.length === 0 ? (
                         <NoItems title={isActivePage ? "You have no active loans." : "You have no old loans."}>
-                            <div style={{ margin: "30px 20px" }}>
+                            <div style={{ margin: "30px 0" }}>
                                 <p>
                                     <strong>Start spending the value of your ETH while keeping your investment.</strong>
                                 </p>
