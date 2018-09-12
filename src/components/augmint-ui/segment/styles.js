@@ -1,19 +1,26 @@
 import styled from "styled-components";
 import theme from "styles/theme";
+import { media } from "styles/media";
 import { remCalc } from "styles/theme";
 
 const BaseDiv = `
-    background: none transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    font-size: 1rem;
-    margin: 1rem 0;
-    padding: 1em;
-    position: relative;
+  background: none transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1rem;
+  margin: 1rem 0;
+  padding: 0;
+  position: relative;
 
-    &:first-child {
+  &:first-child {
     margin-top: 0;
+  }
+
+  &.block {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   &.vertical {
@@ -67,4 +74,13 @@ const BaseDiv = `
 
 export const StyledDiv = styled.div`
     ${BaseDiv};
+    ${media.tablet`
+        margin-left: -1rem;
+        margin-right: -1rem;
+        
+        &.block {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    `};
 `;

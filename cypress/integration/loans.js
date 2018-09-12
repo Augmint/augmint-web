@@ -1,6 +1,7 @@
 describe("Loans", function() {
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
-        cy.get("[data-testid=getLoanMenuLink]").click();
+        cy.get("[data-testid=loanMenuLink]").click();
+        cy.get("[data-testid=newLoanLink]").click();
 
         cy.get(`[data-testid=label-selectLoanProduct-${prodId}]`).click();
 

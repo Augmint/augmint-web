@@ -2,7 +2,7 @@ import { injectGlobal } from "styled-components";
 import { media } from "./media";
 
 injectGlobal`
-    @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab');
+    @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab:300,400');
 
     @keyframes icon-loading {
         0% {

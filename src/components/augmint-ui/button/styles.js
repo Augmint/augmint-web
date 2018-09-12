@@ -7,16 +7,15 @@ const BaseButton = styledComponent => styledComponent`
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    align-self: baseline;
     background-color: ${theme.colors.white};
     color: ${theme.colors.primary};
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 200;
     margin: 0;
-    padding: 0 14px;
-    border-radius: 4px;
-    height: 42px;
-    line-height: 42px;
+    padding: 10px 20px;
+    border-radius: ${theme.borderRadius.all};
     font-size: 13px;
     letter-spacing: normal;
     
@@ -24,10 +23,11 @@ const BaseButton = styledComponent => styledComponent`
       margin-left: 1em;
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
+      outline: 0;
       background-color: ${theme.colors.grey};
       color: ${theme.colors.white};
-      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.2);
     }
 
     &[disabled] {
@@ -42,6 +42,10 @@ const BaseButton = styledComponent => styledComponent`
     }
 
     &.dashboardColors {
+      font-family: ${theme.typography.fontFamilies.title};
+      font-size: ${remCalc(16)};
+      text-transform: none;
+      color: ${theme.colors.white};
       background-color: ${theme.colors.secondary};
 
       &:hover,
@@ -51,6 +55,9 @@ const BaseButton = styledComponent => styledComponent`
     }
 
     &.primary {
+      font-family: ${theme.typography.fontFamilies.title};
+      font-size: ${remCalc(16)};
+      text-transform: none;
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
 
@@ -58,6 +65,38 @@ const BaseButton = styledComponent => styledComponent`
         padding: 8px 30px;
         font-size: ${remCalc(16)};
       `};
+    }
+
+    &.ghost {
+      font-family: ${theme.typography.fontFamilies.title};
+      font-size: ${remCalc(16)};
+      text-transform: none;
+      background: transparent;
+      border: 1px solid ${theme.colors.secondary};
+      color: ${theme.colors.secondary};
+
+      &:hover,
+      &:focus {
+        background: transparent;
+        color: ${theme.colors.secondaryDark};
+        border-color: ${theme.colors.secondaryDark};
+        box-shadow: none;
+      }
+    }
+
+    &.naked {
+      font-family: ${theme.typography.fontFamilies.title};
+      text-transform: none;
+      background: transparent;
+      border: transparent;
+      color: ${theme.colors.secondary};
+
+      &:hover,
+      &:focus {
+        background: transparent;
+        color: ${theme.colors.secondaryDark};
+        border-color: transparent;
+      }
     }
 
     &.grey {

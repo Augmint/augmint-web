@@ -8,10 +8,11 @@ import theme from "styles/theme";
 
 export function Pheader(props) {
     const { children, header, className, ...other } = props;
+    const _className = (className ? className + " " : "") + "mediumGrey";
     return (
         <Container {...other}>
             {header && (
-                <Header className={className} as="h1">
+                <Header className={_className} as="h1">
                     {header}
                 </Header>
             )}

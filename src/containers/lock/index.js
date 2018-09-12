@@ -31,7 +31,7 @@ class LockContainer extends React.Component {
             <Psegment>
                 <EthereumState>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor nav" header="Lock A-EUR" />
+                        <Pheader header="Lock A-EUR" />
                     </TopNavTitlePortal>
                     <Pgrid>
                         <Pgrid.Row wrap={false}>

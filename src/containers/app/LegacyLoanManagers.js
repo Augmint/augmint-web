@@ -106,7 +106,8 @@ class LegacyLoanManagers extends React.Component {
                     {contract.loans.map((loan, loanIndex) => (
                         <MyListGroup.Col key={`loansDiv-${contractIndex}-${loan.id}`}>
                             <p style={styleP}>
-                                Loan id: {loan.id} <br />Repayment amount: {loan.repaymentAmount} A€
+                                Loan id: {loan.id} <br />
+                                Repayment amount: {loan.repaymentAmount} A€
                             </p>
                             {loan.isRepayable ? (
                                 <p style={styleP}>This loan is due on {loan.maturityText}</p>
@@ -162,12 +163,10 @@ class LegacyLoanManagers extends React.Component {
                     <InfoPanel header="You have loan(s) in an older version of Augmint LoanManager contract">
                         <p style={styleP}>
                             Augmint LoanManager version in use on{" "}
-                            <HashURL
-                                hash={loanManagerContract.address}
-                                title={network.name + " network"}
-                                type={"address/"}
-                            />.
-                            <br />
+                            <HashURL hash={loanManagerContract.address} type={"address/"}>
+                                {network.name + " network"}
+                            </HashURL>
+                            .<br />
                             You can repay your loan in the old loan contract or collect and release leftover collateral
                             if it's defaulted .<br />
                             <small>

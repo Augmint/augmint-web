@@ -59,7 +59,11 @@ const refresh = () => {
     store.dispatch(refreshAugmintToken());
     store.dispatch(refreshMonetarySupervisor());
     store.dispatch(fetchUserBalance(userAccount));
+
     store.dispatch(fetchTransfers(userAccount, augmintToken.deployedAtBlock, "latest"));
+    /*store.getState().web3Connect.web3Instance.eth.getBlockNumber().then(fromBlock => {
+        store.dispatch(fetchTransfers(userAccount, fromBlock - Math.round( 2 * 24 * 60 * 60 / 14), "latest")); // last 2 days
+    })*/
 };
 
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {

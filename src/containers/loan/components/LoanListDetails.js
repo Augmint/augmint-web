@@ -1,33 +1,53 @@
 import React from "react";
-import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
-import Button from "components/augmint-ui/button";
-import { LoanRepayLink } from "./LoanRepayLink";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { default as theme, remCalc } from "styles/theme";
+import { StyledStatusBox } from "components/augmint-ui/baseComponents/styles";
+
+export const CardTitle = styled.h1`
+    margin: 0;
+    font-family: ${theme.typography.fontFamilies.title};
+    font-size: ${remCalc(18)};
+    font-weight: normal;
+`;
+
+export const CardDescription = styled.p`
+    margin: 0;
+    font-size: ${remCalc(14)};
+`;
+
+export const Card = styled(StyledStatusBox)`
+    flex: 1 1 auto;
+    width: auto;
+    margin-bottom: 15px;
+    padding: 10px 20px;
+    color: ${theme.colors.black};
+`;
 
 export default function LoanListDetails(props) {
-    let loan = props.loan;
-    return (
-        <MyGridTable header={loan.loanStateText + " loan #" + loan.id}>
-            <Row>
-                <Col>Repayment amount:</Col>
-                <Col>{loan.repaymentAmount} A-EUR</Col>
-            </Row>
+    const loan = props.loan;
 
-            <Row>
-                <Col>Pay by:</Col>
-                <Col>{loan.maturityText}</Col>
-            </Row>
-            <Row columns={1}>
-                <Col>
-                    <Button
-                        content="Details"
-                        key={"selectlink-" + loan.id}
-                        to={`/loan/${loan.id}`}
-                        labelposition="right"
-                        icon="right chevron"
-                    />
-                    <LoanRepayLink loan={loan} />
-                </Col>
-            </Row>
-        </MyGridTable>
+    return (
+        <NavLink to={`/loan/${loan.id}`} style={{ flex: 1 }}>
+            <Card className={loan.dueState}>
+                <CardTitle>
+                    {loan.loanAmount} A€ loan for {loan.termText}
+                </CardTitle>
+                <CardDescription>
+                    {loan.isRepayable ? (
+                        <span>
+                            <strong>{loan.maturityFromNow}</strong> left to due date
+                            {loan.isDue && (
+                                <span>
+                                    , please <strong>repay it</strong>
+                                </span>
+                            )}
+                        </span>
+                    ) : (
+                        loan.loanStateText
+                    )}
+                </CardDescription>
+            </Card>
+        </NavLink>
     );
 }
