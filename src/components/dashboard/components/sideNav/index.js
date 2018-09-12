@@ -103,6 +103,14 @@ export const SideNavLi = styled.li`
         margin: auto;
         text-align: left;
     `};
+
+    &.notifications {
+        display: none;
+
+        ${media.mobile`
+            display: list-item;
+        `};
+    }
 `;
 
 export const SideNavLink = styled(NavLink)`
@@ -153,9 +161,16 @@ export default class SiteNav extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
+        this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
     }
+
     toggleMenu() {
         this.props.toggleMenu();
+    }
+
+    toggleNotificationPanel(e) {
+        e.preventDefault();
+        this.props.toggleNotificationPanel();
     }
 
     render() {
@@ -199,6 +214,20 @@ export default class SiteNav extends React.Component {
                         <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
                             <Icon name="reserves" />
                             <span>Stability</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi className="notifications">
+                        <SideNavLink
+                            to="/notifications"
+                            activeClassName="active"
+                            data-testid="notificationsMenuLink"
+                            onClick={e => {
+                                this.toggleMenu(e);
+                                this.toggleNotificationPanel(e);
+                            }}
+                        >
+                            <Icon name="notifications" />
+                            <span>Notifications</span>
                         </SideNavLink>
                     </SideNavLi>
                 </SideNavUl>

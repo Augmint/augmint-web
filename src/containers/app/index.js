@@ -11,6 +11,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
+import store from "modules/store";
 import { injectGlobal } from "styled-components";
 import theme from "styles/theme";
 
@@ -34,6 +35,8 @@ import { AppFooter } from "containers/app/AppFooter";
 import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
 import DisclaimerModal from "components/Disclaimer";
+import { NotificationPanel } from "components/notifications";
+import { dismissTx } from "modules/reducers/submittedTransactions";
 
 import LockContainer from "containers/lock";
 import EthereumTxStatus from "./EthereumTxStatus";
@@ -92,9 +95,12 @@ class App extends React.Component {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
         this.toggleAccInfo = this.toggleAccInfo.bind(this);
+        this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
+        this.handleNotificationPanelClose = this.handleNotificationPanelClose.bind(this);
         this.state = {
             showMobileMenu: false,
-            showAccInfo: false
+            showAccInfo: false,
+            showNotificationPanel: false
         };
     }
 
@@ -108,6 +114,23 @@ class App extends React.Component {
         this.setState({
             showMobileMenu: !this.state.showMobileMenu
         });
+    }
+
+    toggleNotificationPanel() {
+        this.setState({
+            showNotificationPanel: !this.state.showNotificationPanel
+        });
+    }
+
+    handleNotificationDismiss(txHash, dismissState) {
+        store.dispatch(dismissTx(txHash, dismissState));
+    }
+
+    handleNotificationPanelClose(e) {
+        if (this.state.showNotificationPanel === true && !e.target.closest("#NotificationPanel")) {
+            this.toggleNotificationPanel();
+            this.handleNotificationDismiss(undefined, "dismiss");
+        }
     }
 
     componentDidMount() {
@@ -129,13 +152,15 @@ class App extends React.Component {
                 mainPath
             ) > -1;
         return (
-            <div className={showConnection ? "Site App" : "Site"}>
+            <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 <ScrollToTop />
                 {showConnection && <DisclaimerModal />}
                 <TopNav
                     web3Connect={this.props.web3Connect}
                     toggleAccInfo={this.toggleAccInfo}
+                    toggleNotificationPanel={this.toggleNotificationPanel}
                     showAccInfo={this.state.showAccInfo}
+                    showNotificationPanel={this.state.showNotificationPanel}
                     className={!showConnection && "hide"}
                 />
                 {!showConnection && (
@@ -146,13 +171,31 @@ class App extends React.Component {
                         toggleMenu={this.toggleMenu}
                     />
                 )}
-                {showConnection && <SideNav showMenu={this.state.showMobileMenu} toggleMenu={this.toggleMenu} />}
+                {showConnection && (
+                    <SideNav
+                        showMenu={this.state.showMobileMenu}
+                        toggleMenu={this.toggleMenu}
+                        toggleNotificationPanel={this.toggleNotificationPanel}
+                    />
+                )}
 
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
+                    {showConnection && (
+                        <NotificationPanel
+                            className={this.state.showNotificationPanel ? "notifications open" : "notifications"}
+                            toggleNotificationPanel={this.toggleNotificationPanel}
+                            showNotificationPanel={this.state.showNotificationPanel}
+                            id={"NotificationPanel"}
+                        >
+                            <EthereumTxStatus
+                                showNotificationPanel={this.state.showNotificationPanel}
+                                toggleNotificationPanel={this.toggleNotificationPanel}
+                            />
+                        </NotificationPanel>
+                    )}
                     {showConnection &&
                         ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                             <div>
-                                <EthereumTxStatus />
                                 <LegacyLoanManagers />
                                 <LegacyLockers />
                                 <LegacyExchanges />

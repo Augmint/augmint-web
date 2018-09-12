@@ -58,6 +58,8 @@ export default function Icon(props) {
         case "copy":
             className += " far fa-copy";
             break;
+        case "notifications":
+            className += " far fa-bell";
         case "empty":
             className += " empty";
             break;

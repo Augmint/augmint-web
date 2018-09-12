@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="299px" viewBox="0 0 200 299" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>augmint logo copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#051E2E" offset="0%"></stop>
+            <stop stop-color="#051E2E" stop-opacity="0.04" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#051E2E" offset="0%"></stop>
+            <stop stop-color="#051E2E" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="augmint-logo-copy" fill-rule="nonzero">
+            <path d="M99.9006211,199.801242 C44.7270316,199.801242 6.75681598e-15,155.074211 0,99.9006211 C-6.75681598e-15,44.7270316 44.7270316,1.0135224e-14 99.9006211,0 C155.074211,-1.0135224e-14 199.801242,44.7270316 199.801242,99.9006211 C199.732798,155.045835 155.045835,199.732798 99.9006211,199.801242 Z" id="Shape" fill="url(#linearGradient-1)"></path>
+            <path d="M99.9006211,299.180124 C44.7270316,299.180124 6.75681598e-15,254.453093 0,199.279503 C-6.75681598e-15,144.105914 44.7270316,99.378882 99.9006211,99.378882 C155.074211,99.378882 199.801242,144.105914 199.801242,199.279503 C199.732798,254.424717 155.045835,299.11168 99.9006211,299.180124 Z" id="Shape" fill="url(#linearGradient-2)"></path>
+        </g>
+    </g>
+</svg>

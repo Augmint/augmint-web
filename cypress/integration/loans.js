@@ -14,12 +14,15 @@ describe("Loans", function() {
         cy.get("[data-testid=submitBtn]").click();
         cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New loan submitted");
 
-        return cy.get("[data-testid=EthConfirmationReceivedPanel]").within(() => {
-            cy.contains("New loan");
-            cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
-            cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
-            cy.contains("Collateral in escrow: " + ethAmount + " ETH");
-        });
+        return cy
+            .get("[data-testid=EthConfirmationReceivedPanel]")
+            .click()
+            .within(() => {
+                cy.contains("New loan");
+                cy.contains("Disbursed: " + disbursedAmount + " A-EUR");
+                cy.contains("To be repaid: " + repaymentAmount + " A-EUR");
+                cy.contains("Collateral in escrow: " + ethAmount + " ETH");
+            });
     };
 
     beforeEach(function() {
@@ -30,9 +33,11 @@ describe("Loans", function() {
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
         getLoan(8, 50, 50.01, 0.05062).then(res => {
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click({
-                force: true
-            });
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
+                .first()
+                .click({
+                    force: true
+                });
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
             cy.get("[data-testid=reservesMenuLink").click();
@@ -46,7 +51,9 @@ describe("Loans", function() {
             cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
+                .first()
+                .click();
 
             cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }).should(
                 "contain",
@@ -62,7 +69,9 @@ describe("Loans", function() {
             cy.contains("this loan's page")
                 .click({ force: true })
                 .then(() => {
-                    cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+                    cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
+                        .first()
+                        .click();
                 });
 
             cy.get("[data-testid=repayLoanButton]").click();
@@ -71,7 +80,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Repayment submitted");
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
             cy.assertUserAEurBalanceOnUI((this.startingAeurBalance - 8.68).toFixed(2)); // interest
 

@@ -5,7 +5,9 @@ import Container from "./augmint-ui/container";
 import Message from "./augmint-ui/message";
 import HashURL from "components/hash";
 
-export default class MsgPanel extends React.Component {
+import { connect } from "react-redux";
+
+export class MsgPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = { dismissed: false };
@@ -33,33 +35,46 @@ export default class MsgPanel extends React.Component {
             loading,
             error,
             success,
+            enableDismissBtn,
+            className,
             ...other
         } = this.props;
-        let className;
+        let _className = className;
+        let noClose = false;
+
+        if (loading) {
+            noClose = true;
+        }
 
         if (error) {
-            className = "error";
+            _className += " error";
         }
 
         if (success) {
-            className = "success";
+            _className += " success";
         }
 
         return (
             (!this.state.dismissed || !dismissable) && (
-                <Container style={{ margin: "1em" }}>
-                    <Message onDismiss={onDismiss ? this.dismiss : null} className={className} {...other}>
-                        <h3>
+                <Container style={loading || error || success ? {} : { margin: "1em" }}>
+                    <Message
+                        onDismiss={onDismiss ? this.dismiss : null}
+                        className={_className}
+                        noCloseIcon={noClose}
+                        {...other}
+                    >
+                        <h4>
                             {icon && <Icon name={icon} loading={loading} />} {header}
-                        </h3>
+                        </h4>
 
                         {children}
 
-                        {onDismiss && (
-                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
-                                OK
-                            </Button>
-                        )}
+                        {onDismiss &&
+                            enableDismissBtn && (
+                                <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
+                                    OK
+                                </Button>
+                            )}
                     </Message>
                 </Container>
             )
@@ -68,7 +83,8 @@ export default class MsgPanel extends React.Component {
 }
 MsgPanel.defaultProps = {
     dismissed: false,
-    dismissable: false
+    dismissable: false,
+    enableDismissBtn: true
 };
 
 export function SuccessPanel(props) {
@@ -127,9 +143,18 @@ export class EthSubmissionSuccessPanel extends React.Component {
         return (
             <MsgPanel data-testid={testid} {...other}>
                 {children}
-                <p>{result.txName} transaction has been sent to Ethereum network but it's not mined yet.</p>
-                <p>Wait for 12 confirmations to ensure it's accepted by network.</p>
-                <p data-testid="transactionHash" data-testtxhash={result.transactionHash}>
+                <p style={{ paddingBottom: "8px" }}>
+                    {result.txName} transaction has been sent to the Ethereum network but it's not mined yet.
+                </p>
+                <p style={{ paddingBottom: "8px" }}>
+                    <Icon name="notifications" style={{ paddingRight: "5px" }} />
+                    Wait for 12 confirmations to ensure it's accepted by network.
+                </p>
+                <p
+                    style={{ paddingBottom: "10px" }}
+                    data-testid="transactionHash"
+                    data-testtxhash={result.transactionHash}
+                >
                     <HashURL hash={result.transactionHash} type={"tx/"} />
                 </p>
             </MsgPanel>
@@ -164,3 +189,11 @@ export function ErrorDetails(props) {
         </div>
     );
 }
+
+// function mapStateToProps(state) {
+//     return {
+//         transactions: state.submittedTransactions.transactions
+//     };
+// }
+
+// export default connect(mapStateToProps)(MsgPanel);

@@ -39,7 +39,7 @@ describe("Transfers", function() {
         });
 
         cy.get("[data-testid=EthConfirmationReceivedPanel]").contains("confirmation");
-        cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelOkButton]").click();
+        cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
         cy.get("[data-testid=transactionHash]")
             .invoke("attr", "data-testtxhash")
