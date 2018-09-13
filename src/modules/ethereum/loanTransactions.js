@@ -286,6 +286,7 @@ function parseLoans(loansArray, account) {
             const term = maturity - disbursementTime;
 
             let loanStateText = null;
+            let dueState;
             let isDue = false;
             let isRepayable = false;
             let isCollectable = false;
@@ -295,16 +296,19 @@ function parseLoans(loansArray, account) {
             const loanState = LOAN_STATES[state];
             switch (loanState) {
                 case "Open":
-                    if (maturity - currentTime < 24 * 60 * 60 * 2) {
-                        /* consider it due 2 days before */
+                    isRepayable = true;
+                    collateralStatus = "in escrow";
+                    if (maturity - currentTime < 24 * 60 * 60 * 7) {
+                        // 7 days
                         isDue = true;
-                        isRepayable = true;
                         loanStateText = "Payment Due";
+                        dueState =
+                            maturity - currentTime < 24 * 60 * 60 * 3 // 3 days
+                                ? "danger"
+                                : "warning";
                     } else {
-                        isRepayable = true;
                         loanStateText = "Open";
                     }
-                    collateralStatus = "in escrow";
                     break;
                 case "Repaid":
                     loanStateText = "Repaid";
@@ -337,9 +341,11 @@ function parseLoans(loansArray, account) {
                 term,
                 termText: moment.duration(term, "seconds").humanize(),
                 disbursementTime,
-                disbursementTimeText: moment.unix(disbursementTime).format("D MMM YYYY HH:mm:ss"),
+                disbursementTimeText: moment.unix(disbursementTime).format("D MMM YYYY HH:mm"),
                 maturity,
                 maturityText: moment.unix(maturity).format("D MMM YYYY HH:mm"),
+                maturityFromNow: moment.unix(maturity).fromNow(true),
+                dueState,
                 isDue,
                 isRepayable,
                 isCollectable

@@ -18,7 +18,7 @@ class TransferPage extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor nav" header="Transfer A-EUR" />
+                        <Pheader header="Transfer A-EUR" />
                     </TopNavTitlePortal>
 
                     <Pgrid>

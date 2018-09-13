@@ -28,7 +28,7 @@ const TokenAmount = styled.div`
 const EthAmount = styled.div`
     margin-top: 0.5em;
     padding: 0.5em 0;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid ${theme.colors.grey};
     font-family: ${theme.typography.fontFamilies.currency};
 `;
 

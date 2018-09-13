@@ -84,8 +84,8 @@ class LegacyLockers extends React.Component {
                     {contract.locks.map((lock, lockIndex) => (
                         <MyListGroup.Col key={`ordersDiv-${contractIndex}-${lock.id}`}>
                             <p style={styleP}>
-                                Lock id: {lock.id} <br />Amount locked: {lock.amountLocked} A€ (+ {lock.interestEarned}{" "}
-                                A€ premium)
+                                Lock id: {lock.id} <br />
+                                Amount locked: {lock.amountLocked} A€ (+ {lock.interestEarned} A€ premium)
                             </p>
 
                             {lock.isSubmitted ? (
@@ -116,13 +116,12 @@ class LegacyLockers extends React.Component {
                     <InfoPanel header="You have locked funds in an older version of Augmint Locker contract">
                         <p style={styleP}>
                             Augmint Locker version in use on{" "}
-                            <HashURL
-                                hash={lockerContract.address}
-                                title={network.name + " network"}
-                                type={"address/"}
-                            />.
+                            <HashURL hash={lockerContract.address} type={"address/"}>
+                                {network.name + " network"}
+                            </HashURL>
+                            .<br />
+                            You can release your funds in the old locker contract when the lock expired.
                             <br />
-                            You can release your funds in the old locker contract when the lock expired.<br />
                             <small>
                                 NB: Locker contract upgrades will be infrequent when Augmint released in public. During
                                 pilots we deliberately deploy a couple of new versions to test the conversion process.

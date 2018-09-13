@@ -220,7 +220,7 @@ class AugmintToken extends React.Component {
                 <ThemeProvider theme={medeaTheme}>
                     <StyledContainer>
                         <TopNavTitlePortal>
-                            <Pheader className="secondaryColor nav" header="Stability Dashboard" />
+                            <Pheader header="Stability Dashboard" />
                         </TopNavTitlePortal>
                         <StyledHeader as="h3" content="A-EUR Supply" />
                         <StyledMyListGroup>

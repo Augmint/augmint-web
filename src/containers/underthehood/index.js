@@ -39,7 +39,7 @@ class underTheHood extends React.Component {
                 <Psegment>
                     {isConnected && (
                         <TopNavTitlePortal>
-                            <Pheader className="secondaryColor nav" header="Under the hood" />
+                            <Pheader header="Under the hood" />
                         </TopNavTitlePortal>
                     )}
                     <Pgrid.Row>

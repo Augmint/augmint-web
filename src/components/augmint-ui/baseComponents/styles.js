@@ -29,7 +29,6 @@ export const StyledInput = styled.input`
     border-right: none;
     padding: ${remCalc(10)} ${remCalc(16)};
     width: 100%;
-    
 `;
 
 export const StyledLabel = styled.label`
@@ -51,5 +50,38 @@ export const StyledFormField = styled.div`
             border: 2px solid ${theme.colors.darkRed};
             color: ${theme.colors.darkRed};
         }
+    }
+`;
+
+export const StyledStatusBox = styled.div`
+    margin: 0;
+    padding: 20px;
+    border: 1px solid ${theme.colors.grey};
+    font-family: ${theme.typography.fontFamilies.title};
+    font-size: ${remCalc(14)};
+    color: ${theme.colors.mediumGrey};
+
+    .danger &,
+    &.danger {
+        background: ${theme.colors.red};
+        border-color: ${theme.colors.red};
+        color: ${theme.colors.white};
+    }
+
+    .warning &,
+    &.warning {
+        border-color: ${theme.colors.red};
+        color: ${theme.colors.red};
+    }
+`;
+
+export const StyledStatusText = styled.p`
+    font-size: ${remCalc(14)};
+
+    .warning &,
+    .danger &,
+    &.warning,
+    &.danger {
+        color: ${theme.colors.red};
     }
 `;

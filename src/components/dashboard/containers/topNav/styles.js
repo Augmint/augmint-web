@@ -13,8 +13,8 @@ const TOP_NAV_HEIGHT = "60px";
 export const StyledTopNav = styled.nav`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
-    border-bottom: 1px solid #ccc;
     height: ${TOP_NAV_HEIGHT};
     position: absolute;
     background-color: ${theme.colors.white};
@@ -38,15 +38,15 @@ export const TitleWrapper = styled.div`
     max-width: 60%;
 
     ${StyledHeaderH1} {
-        font-size: ${remCalc("24")};
+        font-size: ${remCalc("20")};
         margin: 0;
 
-        ${media.mobile`
+        ${media.tablet`
             font-size: 1.1rem;
         `};
     }
 
-    ${media.tablet`
+    ${media.desktop`
         margin-left: 80px;
     `};
 `;
@@ -55,7 +55,7 @@ export const StyledTopNavUl = styled.ul`
     display: flex;
     justify-content: flex-end;
     margin: 0;
-    padding-left: 20px;
+    padding-left: 10px;
 `;
 
 export const StyledAccount = styled.div`
@@ -79,7 +79,7 @@ export const StyledTopNavLi = styled.li`
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
 
-    &.account:hover ${StyledAccount} {
+    &.navLinkRight:hover ${StyledAccount} {
         display: block;
         position: absolute;
         right: 64px;
@@ -118,6 +118,14 @@ export const StyledTopNavLink = styled(Link)`
         background-color: ${theme.colors.secondary};
         color: ${theme.colors.white};
     }
+
+    &.notifications {
+        &.open {
+            background-color: ${theme.colors.secondaryDark};
+            color: ${theme.colors.white};
+            border-right: solid 1px #fff;
+        }
+    }
 `;
 
 export const StyledTopNavLinkRight = StyledTopNavLink.extend`
@@ -126,9 +134,25 @@ export const StyledTopNavLinkRight = StyledTopNavLink.extend`
     font-size: 11px;
 
     &:not(.accountDetails) {
-        ${media.tablet`
+        &:not(.notifications) {
+            ${media.tablet`
+                display: none;
+            `};
+        }
+    }
+
+    &:not(.accountDetails) {
+        ${media.mobile`
             display: none;
         `};
+    }
+
+    &.notifications {
+        border-left: solid 1px #fff;
+        border-right: solid 1px #cccccc;
+        :hover {
+            border-right: solid 1px #fff;
+        }
     }
 `;
 
@@ -137,8 +161,8 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    padding: 0 14px;
-    font-size: 1rem;
+    padding: 0 12px;
+    font-size: ${remCalc(14)};
 
     &.accountInfoContainer {
         ${media.desktop`

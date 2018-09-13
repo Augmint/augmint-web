@@ -17,7 +17,7 @@ const theme = {
         secondaryDark: "#d99300",
         lightCyan: "#f8ffff",
         darkCyan: "#276f86",
-        red: "red",
+        red: "#eb5757",
         lightRed: "#fff6f6",
         darkRed: "#9f3a38",
         green: "green",
@@ -52,10 +52,10 @@ const theme = {
         }
     },
     borderRadius: {
-        right: "0 5px 5px 0",
-        left: "5px 0 0 5px",
-        top: "5px 5px 0 0",
-        all: "5px"
+        right: "0 3px 3px 0",
+        left: "3px 0 0 3px",
+        top: "3px 3px 0 0",
+        all: "3px"
     }
 };
 

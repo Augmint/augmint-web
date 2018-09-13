@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import theme from "styles/theme";
 import { media } from "styles/media";
+import empty from "assets/images/empty.svg";
 
 export const StyledIcon = styled.i`
     text-align: center;
@@ -41,5 +42,13 @@ export const StyledIcon = styled.i`
         ${media.desktop`
             padding-left: 0;
         `};
+    }
+
+    &.empty {
+        display: block;
+        width: 4em;
+        height: 4em;
+        margin: 0 auto;
+        background: url(${empty}) center center/100% 100% no-repeat;
     }
 `;

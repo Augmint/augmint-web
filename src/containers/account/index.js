@@ -10,7 +10,6 @@ import Balance from "./components/Balance";
 import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
-
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 
@@ -26,7 +25,7 @@ class AccountHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader className="secondaryColor nav" header="My Account" />
+                        <Pheader header="My Account" />
                     </TopNavTitlePortal>
 
                     <Pgrid>
@@ -49,22 +48,19 @@ class AccountHome extends React.Component {
                                 </div>
                             </Pgrid.Column>
                         </Pgrid.Row>
-                        <TransferList
-                            header="My A-EUR Account History"
-                            transfers={this.props.userTransfers}
-                            userAccount={this.props.userAccount}
-                        />
+
+                        <Pgrid.Row>
+                            <Pgrid.Column>
+                                <TransferList userAccount={this.props.userAccount} header="My account history" />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
 
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LoanList
-                                    header="My A-EUR Loans"
-                                    noItemMessage={<span>You have no loans</span>}
-                                    loans={this.props.loans}
-                                />
+                                <LoanList header="My active loans" loans={this.props.loans} />
                             </Pgrid.Column>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LockList header="My A-EUR Locks" locks={this.props.locks} />
+                                <LockList header="My active locks" locks={this.props.locks} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
@@ -77,8 +73,7 @@ class AccountHome extends React.Component {
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
-    locks: state.locks,
-    userTransfers: state.userTransfers
+    locks: state.locks
 });
 
 export default connect(mapStateToProps)(AccountHome);
