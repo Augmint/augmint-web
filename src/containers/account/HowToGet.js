@@ -9,6 +9,7 @@ import Button from "components/augmint-ui/button";
 import Message from "components/augmint-ui/message";
 
 const StyledHeader = styled.h1`
+    margin-top: 10px;
     font-family: ${theme.typography.fontFamilies.title};
     font-size: ${remCalc(32)};
     font-weight: 100;
