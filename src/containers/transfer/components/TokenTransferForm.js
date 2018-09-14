@@ -70,8 +70,26 @@ class TokenTransferForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            augmintToken
+            augmintToken,
+            change
         } = this.props;
+
+        const urlParams = new URL(document.location).searchParams;
+        const amountFromParam = urlParams.get("amount");
+        const addressFromParam = urlParams.get("to");
+        const referenceFromParam = urlParams.get("narrative");
+
+        if (amountFromParam !== null) {
+            change("tokenAmount", amountFromParam);
+        }
+
+        if (addressFromParam !== null) {
+            change("payee", addressFromParam);
+        }
+
+        if (referenceFromParam !== null) {
+            change("narrative", referenceFromParam);
+        }
 
         return (
             <Pblock

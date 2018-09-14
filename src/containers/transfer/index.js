@@ -13,6 +13,7 @@ class TransferPage extends React.Component {
         connectWeb3();
         augmintTokenProvider();
     }
+
     render() {
         return (
             <EthereumState>
