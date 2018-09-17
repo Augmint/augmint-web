@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
@@ -7,6 +8,8 @@ import { Psegment, Pgrid, Pblock } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import Button from "components/augmint-ui/button";
 import Message from "components/augmint-ui/message";
+import { MrCoinBuyLink } from "components/ExchangeLinks";
+import { BaseButton } from "components/augmint-ui/button/styles";
 
 const StyledHeader = styled.h1`
     margin-top: 10px;
@@ -48,11 +51,15 @@ const StyledTextBlock = styled(TextBlock)`
     font-size: ${remCalc(14)};
 `;
 
-export default class HowToGet extends React.Component {
+const MrCoinBuyButton = BaseButton(styled(MrCoinBuyLink));
+
+class HowToGet extends React.Component {
     componentDidMount() {
         connectWeb3();
     }
     render() {
+        const web3Connect = this.props.web3Connect;
+
         return (
             <EthereumState>
                 <Psegment>
@@ -77,7 +84,11 @@ export default class HowToGet extends React.Component {
                                                 Buy for fiat <small>on partner exchange</small>
                                             </span>
                                         }
-                                        action={<Button to="/exchange">Buy A-EUR for fiat</Button>}
+                                        action={
+                                            <MrCoinBuyButton className="dashboardColors" web3Connect={web3Connect}>
+                                                Buy A-EUR for fiat
+                                            </MrCoinBuyButton>
+                                        }
                                     >
                                         <p>Buy/sell A-EUR for EUR (or ETH) on our partner exchanges.</p>
                                     </StyledTextBlock>
@@ -122,3 +133,9 @@ export default class HowToGet extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    web3Connect: state.web3Connect
+});
+
+export default connect(mapStateToProps)(HowToGet);
