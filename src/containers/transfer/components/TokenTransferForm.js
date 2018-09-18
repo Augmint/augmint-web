@@ -21,31 +21,34 @@ import theme from "styles/theme";
 class TokenTransferForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, feeAmount: "0" };
+        this.state = { result: null, feeAmount: "0", urlResolved: false };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+        this.setFeeByAmount = this.setFeeByAmount.bind(this);
     }
 
-    componentDidMount() {
-        const { change, blur } = this.props;
-        const urlParams = new URL(document.location).searchParams;
-        const amountFromParam = urlParams.get("amount");
-        const addressFromParam = urlParams.get("to");
-        const referenceFromParam = urlParams.get("narrative");
+    componentDidUpdate() {
+        if (!this.state.urlResolved && this.props.augmintToken.isLoaded) {
+            const { blur } = this.props;
+            const urlParams = new URL(document.location).searchParams;
+            const amountFromParam = urlParams.get("amount");
+            const addressFromParam = urlParams.get("to");
+            const referenceFromParam = urlParams.get("narrative");
 
-        if (amountFromParam !== null) {
-            change("tokenAmount", amountFromParam);
-            // blur("tokenAmount", amountFromParam);
-        }
+            if (amountFromParam !== null) {
+                blur("tokenAmount", amountFromParam);
+                this.setFeeByAmount(amountFromParam);
+            }
 
-        if (addressFromParam !== null) {
-            change("payee", addressFromParam);
-            blur("payee", addressFromParam);
-        }
+            if (addressFromParam !== null) {
+                blur("payee", addressFromParam);
+            }
 
-        if (referenceFromParam !== null) {
-            change("narrative", referenceFromParam);
-            blur("narrative", referenceFromParam);
+            if (referenceFromParam !== null) {
+                blur("narrative", referenceFromParam);
+            }
+
+            this.setState({ urlResolved: true });
         }
     }
 
@@ -56,6 +59,10 @@ class TokenTransferForm extends React.Component {
         } catch (error) {
             return;
         }
+        this.setFeeByAmount(amount);
+    }
+
+    setFeeByAmount(amount) {
         const fee = getTransferFee(amount);
         this.setState({ feeAmount: fee });
     }
