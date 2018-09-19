@@ -30,7 +30,6 @@ class AccountHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
-
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ tablet: 2 / 5 }}>

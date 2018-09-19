@@ -9,12 +9,10 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import { EthereumState } from "containers/app/EthereumState";
 
 import { Psegment, Pgrid, Pheader } from "components/PageLayout";
-import Button from "components/augmint-ui/button";
 import LockForm from "./containers/LockForm";
 
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-
-import { StyledButtonContainer } from "./styles";
+import NoTokenAlert from "../account/components/NoTokenAlert";
 
 class LockContainer extends React.Component {
     componentDidMount() {
@@ -33,15 +31,8 @@ class LockContainer extends React.Component {
                     <TopNavTitlePortal>
                         <Pheader header="Lock A-EUR" />
                     </TopNavTitlePortal>
-                    <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column>
-                                <StyledButtonContainer>
-                                    <Button to="/exchange">Buy A€</Button>
-                                </StyledButtonContainer>
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
+
+                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row columns={1}>
                             <Pgrid.Column>
