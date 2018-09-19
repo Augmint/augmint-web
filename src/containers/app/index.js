@@ -16,6 +16,7 @@ import { injectGlobal } from "styled-components";
 import theme from "styles/theme";
 
 import AccountHome from "containers/account";
+import HowToGet from "containers/account/HowToGet";
 import TransferPage from "containers/transfer";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
@@ -148,9 +149,18 @@ class App extends React.Component {
             this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "transfer", "exchange", "loan", "stability", "lock", "tryit", "loan", "under-the-hood"].indexOf(
-                mainPath
-            ) > -1;
+            [
+                "account",
+                "transfer",
+                "exchange",
+                "loan",
+                "stability",
+                "lock",
+                "loan",
+                "tryit",
+                "how-to-get",
+                "under-the-hood"
+            ].indexOf(mainPath) > -1;
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 <ScrollToTop />
@@ -209,6 +219,7 @@ class App extends React.Component {
                         <Route exact path="/transfer" component={TransferPage} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/stability" component={AugmintToken} />
+                        <Route exact path="/how-to-get" component={HowToGet} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
