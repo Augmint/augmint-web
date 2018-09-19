@@ -43,7 +43,7 @@ class NoTokenAlert extends React.Component {
     }
 
     render() {
-        const balanceIsNull = this.props.userAccount.tokenBalance >= 0;
+        const balanceIsNull = this.props.userAccount.tokenBalance === 0;
 
         return (
             !this.state.dismissed &&
