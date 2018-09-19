@@ -5,6 +5,8 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import Message from "components/augmint-ui/message";
 
+const dismissedCookie = "noTokenAlertDismissed=true";
+
 const Box = styled(Message)`
     padding: 20px;
     background: transparent;
@@ -23,23 +25,28 @@ const Box = styled(Message)`
 class NoTokenAlert extends React.Component {
     constructor(props) {
         super(props);
+
+        const dismissed = document.cookie
+            .split(";")
+            .map(cookie => cookie.trim())
+            .includes(dismissedCookie);
+
         this.state = {
-            isActive: true
+            dismissed
         };
         this.dismiss = this.dismiss.bind(this);
     }
 
     dismiss() {
-        this.setState({
-            isActive: false
-        });
+        document.cookie = dismissedCookie;
+        this.setState({ dismissed: true });
     }
 
     render() {
-        const balanceIsNull = this.props.userAccount.tokenBalance === 0;
+        const balanceIsNull = this.props.userAccount.tokenBalance >= 0;
 
         return (
-            this.state.isActive &&
+            !this.state.dismissed &&
             balanceIsNull && (
                 <Box onDismiss={this.dismiss} {...this.props}>
                     <Link to="/how-to-get">
