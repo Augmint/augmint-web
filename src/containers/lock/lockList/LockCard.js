@@ -129,6 +129,7 @@ export default function LockCard(props) {
                             marginLeft: "auto",
                             padding: "1rem"
                         }}
+                        data-testid={`lockCard`}
                     >
                         {lock.isReleasebale && <ReleaseFundsButton lockId={lock.id} />}
                     </Pgrid.Column>
