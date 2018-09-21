@@ -15,6 +15,7 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./AccountToolTips";
+import { callbackAfterTransfer } from "./TransferRequestHelper";
 
 import theme from "styles/theme";
 
@@ -31,9 +32,9 @@ class TokenTransferForm extends React.Component {
         if (!this.state.urlResolved && this.props.augmintToken.isLoaded) {
             const { blur } = this.props;
             const urlParams = new URL(document.location).searchParams;
+            const addressFromParam = urlParams.get("address");
             const amountFromParam = urlParams.get("amount");
-            const addressFromParam = urlParams.get("to");
-            const referenceFromParam = urlParams.get("narrative");
+            const referenceFromParam = urlParams.get("reference");
 
             if (amountFromParam !== null) {
                 blur("tokenAmount", amountFromParam);
@@ -87,7 +88,8 @@ class TokenTransferForm extends React.Component {
                 tokenAmount,
                 feeAmount: "0"
             });
-            return;
+
+            callbackAfterTransfer(values.payee, tokenAmount, res.result.transactionHash);
         }
     }
 
