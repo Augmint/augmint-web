@@ -110,7 +110,6 @@ class TokenTransferForm extends React.Component {
                 loading={augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)}
                 header="Send A-EUR"
             >
-                <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="Token transfer submitted"
