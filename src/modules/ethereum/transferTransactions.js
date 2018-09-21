@@ -51,18 +51,19 @@ export async function transferTokenTx(payload) {
     const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
+    const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
 
     let tx;
     let txName;
     if (_narrative) {
         txName = "A-EUR transfer (with narrative)";
-        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * DECIMALS_DIV, _narrative).send({
+        tx = augmintToken.methods.transferWithNarrative(payee, amount, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
         txName = "A-EUR transfer";
-        tx = augmintToken.methods.transfer(payee, tokenAmount * DECIMALS_DIV).send({
+        tx = augmintToken.methods.transfer(payee, amount).send({
             from: userAccount,
             gas: gasEstimate
         });
