@@ -5,6 +5,7 @@ import theme from "styles/theme";
 import { remCalc } from "styles/theme";
 
 import discordSVG from "assets/images/Discord-Logo.svg";
+import telegramSVG from "assets/images/telegram_logo.svg";
 
 const style = {
     all: "initial",
@@ -28,6 +29,19 @@ export function DiscordButton(props) {
                 style={{ display: "inline-block", marginRight: 20, maxWidth: 40 }}
             />
             Ask for help on our Discord
+        </Button>
+    );
+}
+
+export function TelegramButton(props) {
+    return (
+        <Button style={style} href="https://t.me/augmint" target="_blank">
+            <img
+                alt="telegram icon"
+                src={telegramSVG}
+                style={{ display: "inline-block", marginRight: 20, maxWidth: 40 }}
+            />
+            Ask for help on our Telegram
         </Button>
     );
 }
