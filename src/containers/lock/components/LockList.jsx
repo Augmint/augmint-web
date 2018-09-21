@@ -6,7 +6,6 @@ import Button from "components/augmint-ui/button";
 import LockListDetails from "./LockListDetails";
 
 export default function LockList(props) {
-    console.log(props.locks);
     const { isLoading, error, locks } = props.locks;
     const listItems =
         locks &&
@@ -32,7 +31,7 @@ export default function LockList(props) {
             <div className="dashblock__footer">
                 {locks &&
                     listItems.length > 0 && (
-                        <Button className="naked" to="/loan">
+                        <Button className="naked" to="/lock">
                             View all
                         </Button>
                     )}
