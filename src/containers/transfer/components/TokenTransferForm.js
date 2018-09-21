@@ -152,13 +152,9 @@ class TokenTransferForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-                        <small style={{ display: "flex" }}>
-                            Fee:
+                        <small style={{ display: "block", marginBottom: 10 }}>
+                            Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
                             <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            <span data-testid="transferFeeAmount" style={{ margin: "0 5px" }}>
-                                {this.state.feeAmount}
-                            </span>
-                            A€
                         </small>
 
                         <Field

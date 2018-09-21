@@ -1,9 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { connect } from "react-redux";
 import { Psegment } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import { InfoPanel } from "components/MsgPanels";
+import HashURL from "components/hash";
 import Container from "components/augmint-ui/container";
 import { getTransferRequests, getTransferLink, deleteTransferRequest } from "./TransferRequestHelper";
 
@@ -17,47 +17,47 @@ class TransferRequestAlert extends React.Component {
         this.unlisten();
     }
     render() {
-        const tokenBalance = this.props.userAccount.tokenBalance;
         const transferRequests = getTransferRequests();
-        const requestIndex = transferRequests.findIndex(request => {
-            return request.amount <= tokenBalance;
-        });
-        if (requestIndex >= 0) {
-            const request = transferRequests[requestIndex];
-            const link = getTransferLink(request);
-            const url = new URL(document.location);
-            const onDissmiss = () => {
-                deleteTransferRequest(requestIndex);
-                this.forceUpdate();
-            };
+        const url = new URL(document.location);
 
-            return link !== url.pathname + "?" + url.searchParams ? (
-                <Psegment>
-                    <Container>
-                        <InfoPanel header={`Transfer request to ${request.beneficiary_name}`}>
-                            <p style={{ marginBottom: 20 }}>
-                                You have a pending transfer request of{" "}
-                                <strong>
-                                    {request.amount} {request.currency_code} to {request.beneficiary_name}
-                                </strong>{" "}
-                                ({request.beneficiary_address}
-                                ).
-                            </p>
-                            <Button to={link}>Complete your transfer</Button>
-                            <Button style={{ marginLeft: 20 }} className="ghost" onClick={onDissmiss}>
-                                Dissmiss
-                            </Button>
-                        </InfoPanel>
-                    </Container>
-                </Psegment>
-            ) : null;
-        }
-        return null;
+        return url.pathname !== "/transfer" ? (
+            <Psegment>
+                <Container>
+                    {transferRequests.map((request, i) => {
+                        const link = getTransferLink(request);
+                        const onDissmiss = () => {
+                            deleteTransferRequest(i);
+                            this.forceUpdate();
+                        };
+
+                        return (
+                            <InfoPanel header={`Transfer request to ${request.beneficiary_name}`} key={i}>
+                                <p style={{ marginBottom: 20 }}>
+                                    You have a pending transfer request of{" "}
+                                    <strong>
+                                        {request.amount} {request.currency_code} to {request.beneficiary_name}
+                                    </strong>{" "}
+                                    (
+                                    <HashURL
+                                        style={{ color: "inherit" }}
+                                        hash={request.beneficiary_address}
+                                        type={"address/"}
+                                    >
+                                        {request.beneficiary_address}
+                                    </HashURL>
+                                    ).
+                                </p>
+                                <Button to={link}>Complete your transfer</Button>
+                                <Button style={{ marginLeft: 20 }} className="ghost" onClick={onDissmiss}>
+                                    Dissmiss
+                                </Button>
+                            </InfoPanel>
+                        );
+                    })}
+                </Container>
+            </Psegment>
+        ) : null;
     }
 }
 
-const mapStateToProps = state => ({
-    userAccount: state.userBalances.account
-});
-
-export default connect(mapStateToProps)(withRouter(TransferRequestAlert));
+export default withRouter(TransferRequestAlert);
