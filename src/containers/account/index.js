@@ -12,6 +12,7 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
+import NoTokenAlert from "./components/NoTokenAlert";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -28,6 +29,7 @@ class AccountHome extends React.Component {
                         <Pheader header="My Account" />
                     </TopNavTitlePortal>
 
+                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ tablet: 2 / 5 }}>
