@@ -1,7 +1,7 @@
 {
-    "baseUrl": "http://localhost:3000",
-    "chromeWebSecurity": false,
-    "defaultCommandTimeout": 10000,
-    "projectId": "jvuuf8",
-    "viewport": "macbook-15"
+  "baseUrl": "http://localhost:3000",
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 20000,
+  "projectId": "jvuuf8",
+  "viewport": "macbook-15"
 }
