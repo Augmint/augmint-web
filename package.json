@@ -11,7 +11,7 @@
     "chart.js": "2.7.2",
     "del": "3.0.0",
     "ethereumjs-util": "5.2.0",
-    "ethers": "3.0.27",
+    "ethers": "3.0.29",
     "hdkey": "1.1.0",
     "moment": "2.22.2",
     "parse": "2.1.0",
@@ -34,7 +34,7 @@
     "styled-components": "3.4.6",
     "styled-components-grid": "2.2.0",
     "styled-tools": "1.5.1",
-    "web3": "1.0.0-beta.35"
+    "web3": "1.0.0-beta.36"
   },
   "scripts": {
     "start": "react-scripts start",
