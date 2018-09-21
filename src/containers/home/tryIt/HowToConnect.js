@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Tsegment } from "components/TextContent";
-import { DiscordButton } from "components/LinkButtons";
+import { DiscordButton, TelegramButton } from "components/LinkButtons";
 import Video from "components/augmint-ui/video";
 import Header from "components/augmint-ui/header";
 
@@ -37,6 +37,14 @@ export function HowToConnect(props) {
                             </a>
                         </Tsegment.Column>
                     </Tsegment.Row>
+                    <Tsegment.Row columns={2}>
+                        <Tsegment.Column>
+                            <DiscordButton />
+                        </Tsegment.Column>
+                        <Tsegment.Column>
+                            <TelegramButton />
+                        </Tsegment.Column>
+                    </Tsegment.Row>
                 </Tsegment>
             </MobileView>
             <DesktopView>
@@ -53,8 +61,11 @@ export function HowToConnect(props) {
                                 </a>
                             </Header>
                             <Header as="h4" className={"tertiaryColor"}>
-                                2. Connect to Rinkeby test network
+                                2. Connect to Main or Rinkeby test network.
                             </Header>
+                            <StyledP className={"primaryColor"}>
+                                Video about installing MetaMask and getting test A-EUR:
+                            </StyledP>
                             <Video
                                 title="connect to rinkeby"
                                 src="https://www.youtube.com/embed/0APcMesrZ_U"
@@ -62,9 +73,12 @@ export function HowToConnect(props) {
                             />
                         </Tsegment.Column>
                     </Tsegment.Row>
-                    <Tsegment.Row columns={1}>
+                    <Tsegment.Row columns={2}>
                         <Tsegment.Column>
                             <DiscordButton />
+                        </Tsegment.Column>
+                        <Tsegment.Column>
+                            <TelegramButton />
                         </Tsegment.Column>
                     </Tsegment.Row>
                 </Tsegment>

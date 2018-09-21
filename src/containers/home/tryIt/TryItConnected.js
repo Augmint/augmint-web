@@ -3,7 +3,7 @@ import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { EthereumState } from "containers/app/EthereumState";
 import { SuccessPanel } from "components/MsgPanels";
-import { DiscordButton } from "components/LinkButtons";
+import { DiscordButton, TelegramButton } from "components/LinkButtons";
 import { StyledP } from "components/augmint-ui/paragraph/styles";
 import Video from "components/augmint-ui/video";
 import { MrCoinBuyLink } from "components/ExchangeLinks";
@@ -20,19 +20,25 @@ export function TryItConnected(props) {
                 />
 
                 {web3Connect.network.id === 4 && (
-                    <Tblock header="Get some test ETH" headerStyle={"primaryColor"}>
+                    <Tblock header="Get ETH" headerStyle={"primaryColor"}>
                         <StyledP className={_className}>
-                            Use{" "}
+                            To get real Ether on mainnet see{" "}
+                            <a
+                                href="https://cointelegraph.com/ethereum-for-beginners/how-to-buy-ethereum"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                this guide
+                            </a>
+                        </StyledP>
+                        <StyledP className={_className}>
+                            For trying out Augmint on Rinkeby test network get test ethers on{" "}
                             <a href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
                                 faucet.rinkeby.io
-                            </a>
+                            </a>{" "}
+                            or checkout our video:
                         </StyledP>
-                        <StyledP className={_className}>
-                            If you can't be bothered ask for some{" "}
-                            <a href="https://discord.gg/PwDmsnu" target="_blank" rel="noopener noreferrer">
-                                on our discord channel
-                            </a>
-                        </StyledP>
+
                         <Video
                             title="connect to rinkeby"
                             src="https://www.youtube.com/embed/0APcMesrZ_U"
@@ -72,9 +78,12 @@ export function TryItConnected(props) {
                     </StyledP>
                 </Tblock>
 
-                <Tsegment.Row columns={1}>
+                <Tsegment.Row columns={2}>
                     <Tsegment.Column>
                         <DiscordButton />
+                    </Tsegment.Column>
+                    <Tsegment.Column>
+                        <TelegramButton />
                     </Tsegment.Column>
                 </Tsegment.Row>
             </Tsegment>
