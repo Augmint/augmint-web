@@ -8,13 +8,14 @@ import React from "react";
 import Button from "components/augmint-ui/button";
 import { connect } from "react-redux";
 import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./AccountToolTips";
+import { callbackAfterTransfer } from "./TransferRequestHelper";
 
 import theme from "styles/theme";
 
@@ -31,9 +32,9 @@ class TokenTransferForm extends React.Component {
         if (!this.state.urlResolved && this.props.augmintToken.isLoaded) {
             const { blur } = this.props;
             const urlParams = new URL(document.location).searchParams;
+            const addressFromParam = urlParams.get("address");
             const amountFromParam = urlParams.get("amount");
-            const addressFromParam = urlParams.get("to");
-            const referenceFromParam = urlParams.get("narrative");
+            const referenceFromParam = urlParams.get("reference");
 
             if (amountFromParam !== null) {
                 blur("tokenAmount", amountFromParam);
@@ -87,7 +88,8 @@ class TokenTransferForm extends React.Component {
                 tokenAmount,
                 feeAmount: "0"
             });
-            return;
+
+            callbackAfterTransfer(values.payee, tokenAmount, res.result.transactionHash);
         }
     }
 
@@ -108,7 +110,6 @@ class TokenTransferForm extends React.Component {
                 loading={augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)}
                 header="Send A-EUR"
             >
-                <ConnectionStatus contract={augmintToken} />
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="Token transfer submitted"
@@ -150,13 +151,9 @@ class TokenTransferForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-                        <small style={{ display: "flex" }}>
-                            Fee:
+                        <small style={{ display: "block", marginBottom: 10 }}>
+                            Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
                             <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                            <span data-testid="transferFeeAmount" style={{ margin: "0 5px" }}>
-                                {this.state.feeAmount}
-                            </span>
-                            A€
                         </small>
 
                         <Field
