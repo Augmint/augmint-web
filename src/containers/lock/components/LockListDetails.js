@@ -48,29 +48,3 @@ export default function LockListDetails(props) {
         </NavLink>
     );
 }
-
-// function LockDetails(props) {
-//   const { lock } = props;
-//   return (
-//       <MyGridTable header={`${lock.lockStateText} lock # ${lock.id}`}>
-//           <Row>
-//               <Col>Locked amount:</Col>
-//               <Col>{lock.amountLocked} A-EUR</Col>
-//           </Row>
-
-//           <Row>
-//               <Col>Interest amount:</Col>
-//               <Col>
-//                   {lock.interestEarned} A-EUR ({(lock.interestRatePa * 100).toFixed(2)} % p.a)
-//               </Col>
-//           </Row>
-
-//           <Row>
-//               <Col>locked for {lock.durationText}</Col>
-//               <Col>until {lock.lockedUntilText}</Col>
-//           </Row>
-
-//           <Row>{lock.isReleasebale && <ReleaseFundsButton lockId={lock.id} />}</Row>
-//       </MyGridTable>
-//   );
-// }

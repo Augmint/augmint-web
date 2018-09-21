@@ -76,9 +76,9 @@ export const StyledStatusBox = styled.div`
 
     .ReadyToRelease &,
     &.ReadyToRelease {
-        background: ${theme.colors.green};
+        background: ${theme.colors.white};
         border-color: ${theme.colors.green};
-        color: ${theme.colors.white};
+        color: ${theme.colors.green};
     }
 `;
 

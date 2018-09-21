@@ -1,65 +1,55 @@
 import React from "react";
-import { connect } from "react-redux";
+import { Switch, Route } from "react-router-dom";
+// import { connect } from "react-redux";
 
 import { connectWeb3 } from "modules/web3Provider";
+
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
+// import ratesProvider from "modules/ratesProvider";
 
 import { EthereumState } from "containers/app/EthereumState";
 
-import { Psegment, Pgrid, Pheader } from "components/PageLayout";
-import Button from "components/augmint-ui/button";
-import LockForm from "./containers/LockForm";
+import { PageNotFound } from "containers/PageNotFound";
 
-import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import lockList from "./lockList";
+import newLock from "./newLock";
+import lockDetails from "./lockDetailsPage";
+// import CollectLoanMain from "./collectLoan"; - Release?
 
-import { StyledButtonContainer } from "./styles";
-
-class LockContainer extends React.Component {
+export default class LockContainer extends React.Component {
     componentDidMount() {
         connectWeb3();
+        // ratesProvider();
         augmintTokenProvider();
         lockManagerProvider();
         loanManagerProvider();
     }
 
     render() {
-        const { lockManager, lockProducts } = this.props;
-
         return (
-            <Psegment>
+            <div>
                 <EthereumState>
-                    <TopNavTitlePortal>
-                        <Pheader header="Lock A-EUR" />
-                    </TopNavTitlePortal>
-                    <Pgrid>
-                        <Pgrid.Row wrap={false}>
-                            <Pgrid.Column>
-                                <StyledButtonContainer>
-                                    <Button to="/exchange">Buy A€</Button>
-                                </StyledButtonContainer>
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
-                    <Pgrid>
-                        <Pgrid.Row columns={1}>
-                            <Pgrid.Column>
-                                <LockForm lockManager={lockManager} lockProducts={lockProducts} />
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
+                    <Switch>
+                        <Route exact path="/lock" component={lockList} />
+                        <Route exact path="/lock/archive" component={lockList} /> {/* Released */}
+                        <Route path="/lock/new" component={newLock} />
+                        {/* <Route exact path="/loan/collect" component={CollectLoanMain} /> - Release? */}
+                        <Route path="/lock/:lockId" component={lockDetails} />
+                        <Route component={PageNotFound} />
+                    </Switch>
                 </EthereumState>
-            </Psegment>
+            </div>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        lockManager: state.lockManager,
-        lockProducts: state.lockManager.products
-    };
-};
+// const mapStateToProps = state => {
+//     return {
+//         lockManager: state.lockManager,
+//         lockProducts: state.lockManager.products
+//     };
+// };
 
-export default connect(mapStateToProps)(LockContainer);
+// export default connect(mapStateToProps)(LockContainer);

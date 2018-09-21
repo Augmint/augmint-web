@@ -1,8 +1,8 @@
 import React from "react";
-import { MyListGroup, MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
+import { MyListGroup } from "components/MyListGroups";
 import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
-import ReleaseFundsButton from "./ReleaseFundsButton";
+// import ReleaseFundsButton from "./ReleaseFundsButton";
 import Button from "components/augmint-ui/button";
 import LockListDetails from "./LockListDetails";
 
@@ -38,13 +38,13 @@ export default function LockList(props) {
     const listItems =
         locks &&
         locks
-            .reverse()
             .filter(props.filter ? props.filter : lock => lock.isReleasebale || lock.isActive)
             .map((lock, index) => (
                 <MyListGroup.Row key={`lock-${lock.id}`}>
                     <LockListDetails lock={lock} />
                 </MyListGroup.Row>
-            ));
+            ))
+            .reverse();
 
     return (
         <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>
@@ -52,7 +52,7 @@ export default function LockList(props) {
             {/* {locks && listItems.length === 0 ? "You have no locks" : <MyListGroup>{listItems}</MyListGroup>} */}
             {locks && listItems.length === 0 ? (
                 <div>
-                    <p>You have no active loans.</p>
+                    <p>You have no ?active? locks.</p>
                 </div>
             ) : (
                 <MyListGroup>{listItems}</MyListGroup>
@@ -64,8 +64,8 @@ export default function LockList(props) {
                             View all
                         </Button>
                     )}
-                <Button style={{ marginLeft: "auto" }} to="/loan/new">
-                    Get a new loan
+                <Button style={{ marginLeft: "auto" }} to="/lock/new">
+                    Lock A-EUR
                 </Button>
             </div>
         </Pblock>
