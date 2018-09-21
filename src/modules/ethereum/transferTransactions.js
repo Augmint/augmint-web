@@ -15,7 +15,6 @@ import { DECIMALS_DIV } from "utils/constants";
 
 export function getTransferFee(amount) {
     const { feePt, feeMin, feeMax } = store.getState().augmintToken.info;
-
     let fee = Math.round(amount * feePt * DECIMALS_DIV) / DECIMALS_DIV;
     if (fee < feeMin) {
         fee = feeMin;
@@ -38,7 +37,7 @@ export function getMaxTransfer(amount) {
         // TODO: fix this on edge cases, https://github.com/Augmint/augmint-web/issues/60
         maxAmount = amount - feeMax;
     } else {
-        maxAmount = Math.round(amount / (feePt + 1) * DECIMALS_DIV) / DECIMALS_DIV;
+        maxAmount = Math.round((amount / (feePt + 1)) * DECIMALS_DIV) / DECIMALS_DIV;
     }
 
     return maxAmount;
@@ -52,18 +51,19 @@ export async function transferTokenTx(payload) {
     const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const _narrative = narrative == null || payload.narrative.trim() === "" ? null : payload.narrative.trim();
+    const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
 
     let tx;
     let txName;
     if (_narrative) {
         txName = "A-EUR transfer (with narrative)";
-        tx = augmintToken.methods.transferWithNarrative(payee, tokenAmount * DECIMALS_DIV, _narrative).send({
+        tx = augmintToken.methods.transferWithNarrative(payee, amount, _narrative).send({
             from: userAccount,
             gas: gasEstimate
         });
     } else {
         txName = "A-EUR transfer";
-        tx = augmintToken.methods.transfer(payee, tokenAmount * DECIMALS_DIV).send({
+        tx = augmintToken.methods.transfer(payee, amount).send({
             from: userAccount,
             gas: gasEstimate
         });
@@ -134,7 +134,7 @@ async function _formatTransferLog(AugmintTransfer, account, eventLog) {
         directionText: direction === -1 ? "sent" : "received",
         senderFee: senderFee,
         blockTimeStampText: blockTimeStampText,
-        signedAmount: parsedData.amount / DECIMALS_DIV * direction
+        signedAmount: (parsedData.amount / DECIMALS_DIV) * direction
     });
 
     return logData;

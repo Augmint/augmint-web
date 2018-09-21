@@ -5,14 +5,15 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import TokenTransferForm from "./components/TokenTransferForm";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
-
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import NoTokenAlert from "../account/components/NoTokenAlert";
 
 class TransferPage extends React.Component {
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
     }
+
     render() {
         return (
             <EthereumState>
@@ -21,6 +22,7 @@ class TransferPage extends React.Component {
                         <Pheader header="Transfer A-EUR" />
                     </TopNavTitlePortal>
 
+                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>

@@ -16,7 +16,9 @@ import { injectGlobal } from "styled-components";
 import theme from "styles/theme";
 
 import AccountHome from "containers/account";
+import HowToGet from "containers/account/HowToGet";
 import TransferPage from "containers/transfer";
+import TransferRequest from "containers/transfer/components/TransferRequest";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
@@ -44,6 +46,7 @@ import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
+import TransferRequestAlert from "../transfer/components/TransferRequestAlert";
 
 injectGlobal`
 body {
@@ -148,9 +151,18 @@ class App extends React.Component {
             this.props.location.pathname.split("/").length > 0 ? this.props.location.pathname.split("/")[1] : "";
 
         const showConnection =
-            ["account", "transfer", "exchange", "loan", "stability", "lock", "tryit", "loan", "under-the-hood"].indexOf(
-                mainPath
-            ) > -1;
+            [
+                "account",
+                "transfer",
+                "exchange",
+                "loan",
+                "stability",
+                "lock",
+                "loan",
+                "tryit",
+                "how-to-get",
+                "under-the-hood"
+            ].indexOf(mainPath) > -1;
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 <ScrollToTop />
@@ -200,6 +212,7 @@ class App extends React.Component {
                                 <LegacyLockers />
                                 <LegacyExchanges />
                                 <LegacyTokens />
+                                <TransferRequestAlert />
                             </div>
                         )}
 
@@ -207,8 +220,10 @@ class App extends React.Component {
                         <Route exact path="/" component={NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/transfer" component={TransferPage} />
+                        <Route exact path="/transfer/request" component={TransferRequest} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/stability" component={AugmintToken} />
+                        <Route exact path="/how-to-get" component={HowToGet} />
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
@@ -218,7 +233,7 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
-                        <Route exact path="/lock" component={LockContainer} />
+                        <Route path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

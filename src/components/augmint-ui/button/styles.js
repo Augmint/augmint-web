@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { default as theme, remCalc } from "styles/theme";
 import { media } from "styles/media";
 
-const BaseButton = styledComponent => styledComponent`
+export const BaseButton = styledComponent => styledComponent`
     display: inline-flex;
     justify-content: center;
     align-items: center;
