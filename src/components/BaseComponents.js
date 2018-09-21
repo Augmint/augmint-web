@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import BigNumber from "bignumber.js";
 import { getTransferFee, getMaxTransfer } from "modules/ethereum/transferTransactions";
 import store from "modules/store";
@@ -50,10 +51,15 @@ export const Validations = {
             return undefined;
         }
         const maxTransfer = getMaxTransfer(userBalance);
-        if (maxTransfer <= 0) {
-            return "Your A-EUR balance is less than the amount + transfer fee.";
-        }
-        return `Your A-EUR balance is less than the amount + transfer fee. Max amount you can transfer is ${maxTransfer} A-EUR`;
+
+        return (
+            <span>
+                Your A-EUR balance is less than the amount + transfer fee.
+                {maxTransfer > 0 && ` Max amount you can transfer is ${maxTransfer} A-EUR`}
+                <br />
+                <Link to="/how-to-get">See, how to get more A-EUR »</Link>
+            </span>
+        );
     },
 
     minOrderTokenAmount: value => {
@@ -149,7 +155,7 @@ export const formField = ({
     ...props
 }) => {
     return (
-        <StyledFormField className={touched && error ? "error" : ""} >
+        <StyledFormField className={touched && error ? "error" : ""}>
             {children}
             {label && <StyledLabel>{label}</StyledLabel>}
             <StyledContainer className={oneLine ? "oneLine" : ""}>
@@ -162,7 +168,7 @@ export const formField = ({
                     placeholder={placeholder}
                     error={touched && error ? "true" : "false"}
                 />
-                {labelAlignRight && <StyleLabel align="right" >{labelAlignRight}</StyleLabel>}
+                {labelAlignRight && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
             </StyledContainer>
             {touched &&
                 ((error && <StyledError>{error}</StyledError>) ||
