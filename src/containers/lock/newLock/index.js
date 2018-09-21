@@ -1,16 +1,9 @@
 import React from "react";
-// import { Route } from "react-router-dom";
 import { connect } from "react-redux";
-// import { connectWeb3 } from "modules/web3Provider";
-// import augmintTokenProvider from "modules/augmintTokenProvider";
-// import lockManagerProvider from "modules/lockManagerProvider";
-// import loanManagerProvider from "modules/loanManagerProvider";
-import LockForm from "../containers/LockForm";
 import styled from "styled-components";
-
 import { Pgrid, Pheader, Psegment } from "components/PageLayout";
+import LockForm from "../containers/LockForm";
 import Button from "components/augmint-ui/button";
-// import { StyledButtonContainer } from "./styles";
 
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
@@ -21,23 +14,14 @@ export const StyledButtonContainer = styled.div`
 `;
 
 class NewLock extends React.Component {
-    // componentDidMount() {
-    //     connectWeb3();
-    //     augmintTokenProvider();
-    //     lockManagerProvider();
-    //     loanManagerProvider();
-    // }
-
     render() {
         const { lockManager, lockProducts } = this.props;
 
         return (
             <Psegment>
-                {/*<EthereumState> -vszinu nem kell - parent componenetben lesz*/}
                 <TopNavTitlePortal>
                     <Pheader header="Lock A-EUR" />
                 </TopNavTitlePortal>
-                {/* <Route exact path="/loan/new" component={LoanProductSelector} /> esetleg igy ha /lock-ot atalakitom? */}
                 <Pgrid>
                     <Pgrid.Row wrap={false}>
                         <Pgrid.Column>
@@ -54,7 +38,6 @@ class NewLock extends React.Component {
                         </Pgrid.Column>
                     </Pgrid.Row>
                 </Pgrid>
-                {/* </EthereumState> */}
             </Psegment>
         );
     }

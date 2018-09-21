@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { media } from "styles/media";
-// import Button from "components/augmint-ui/button";
 import ReleaseFundsButton from "../components/ReleaseFundsButton";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
@@ -91,9 +90,13 @@ export default function LockCard(props) {
                             <CardStatusInfo className="ReadyToRelease">
                                 <strong>Ready to release</strong>
                             </CardStatusInfo>
-                        ) : (
+                        ) : lock.isActive ? (
                             <CardStatusInfo>
                                 <strong>Releasable in {lock.durationText}</strong>
+                            </CardStatusInfo>
+                        ) : (
+                            <CardStatusInfo>
+                                <strong>Released at {lock.lockedUntilText}</strong>
                             </CardStatusInfo>
                         )}
                     </Pgrid.Column>

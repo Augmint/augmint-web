@@ -36,11 +36,11 @@ export default function LockListDetails(props) {
                 <CardDescription>
                     {lock.isReleasebale ? (
                         <span>
-                            lock is <strong>ready to release.</strong>
+                            <strong>Ready to release</strong>
                         </span>
                     ) : (
                         <span>
-                            lock will be <strong>released at {lock.lockedUntilText}.</strong>
+                            <strong>Releasable in {lock.durationText}.</strong>
                         </span>
                     )}
                 </CardDescription>

@@ -218,7 +218,7 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
-                        <Route exact path="/lock" component={LockContainer} />
+                        <Route path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

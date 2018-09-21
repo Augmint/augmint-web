@@ -52,7 +52,6 @@ function LockList(props) {
                         <div>{listItems}</div>
                     )}
                     <div style={{ textAlign: "center" }}>
-                        {/* <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" /> */}
                         <Button style={{ marginLeft: "auto" }} to="/lock/new" data-testid="newLockLink">
                             Lock A-EUR
                         </Button>

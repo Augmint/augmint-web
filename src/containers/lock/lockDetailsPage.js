@@ -18,17 +18,17 @@ class LockDetailsPage extends React.Component {
         };
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     if (prevProps.loans !== this.props.loans) {
-    //         this.setLoan(); // needed when landing from on URL directly
-    //     }
-    // }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.locks !== this.props.locks) {
+            this.setLock(); // needed when landing from on URL directly
+        }
+    }
 
-    // componentDidMount() {
-    //     this.setLoan(); // needed when landing from Link within App
-    // }
+    componentDidMount() {
+        this.setLock(); // needed when landing from Link within App
+    }
 
-    setLoan() {
+    setLock() {
         // workaround b/c landing directly on URL and from LoanSelector triggers different events.
         if (this.props.locks == null) {
             return;
