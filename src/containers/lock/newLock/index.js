@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import LockForm from "../containers/LockForm";
-import Button from "components/augmint-ui/button";
+import NoTokenAlert from "../../account/components/NoTokenAlert";
 
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
@@ -22,15 +22,8 @@ class NewLock extends React.Component {
                 <TopNavTitlePortal>
                     <Pheader header="Lock A-EUR" />
                 </TopNavTitlePortal>
-                <Pgrid>
-                    <Pgrid.Row wrap={false}>
-                        <Pgrid.Column>
-                            <StyledButtonContainer>
-                                <Button to="/exchange">Buy A€</Button>
-                            </StyledButtonContainer>
-                        </Pgrid.Column>
-                    </Pgrid.Row>
-                </Pgrid>
+
+                <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                 <Pgrid>
                     <Pgrid.Row columns={1}>
                         <Pgrid.Column>
