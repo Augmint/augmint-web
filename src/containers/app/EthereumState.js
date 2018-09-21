@@ -5,6 +5,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Container from "components/augmint-ui/container";
 import { StyledP } from "components/augmint-ui/paragraph/styles";
+import Header from "components/augmint-ui/header";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
@@ -18,8 +19,7 @@ export class EthereumState extends React.Component {
 
         let _className = className + " primaryColor";
 
-        const isConnecting =
-            web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
+        const isConnecting = web3Connect.isLoading || contracts.isLoading || document.readyState !== "complete";
 
         const anyConnectionError = web3Connect.error || contracts.error || augmintToken.loadError;
 
@@ -28,10 +28,13 @@ export class EthereumState extends React.Component {
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
             msg = (
                 <WarningPanel header="Can't connect Ethereum network">
-                    <StyledP className={_className}>
-                        Please check our <Link to="/tryit">connection guide</Link> about how to connect to
-                        Ethereum network.
-                    </StyledP>
+                    <Header as="h4" className={_className}>
+                        See our{" "}
+                        <strong>
+                            <Link to="/tryit">Connection Guide</Link>
+                        </strong>{" "}
+                        on how to connect to Ethereum.
+                    </Header>
 
                     {web3Connect.error && (
                         <ErrorDetails header="Web3 connection error details:" details={web3Connect.error} />
@@ -55,12 +58,11 @@ export class EthereumState extends React.Component {
                     </StyledP>
                     <StyledP className={_className}>
                         Your browser seems to be connected to {web3Connect.network.name} network. (id:{" "}
-                        {web3Connect.network.id}).
+                        {web3Connect.network.id}
+                        ).
                     </StyledP>
 
-                    <StyledP className={_className}>
-                        Make sure you are connected to Mainnet or Rinkeby
-                    </StyledP>
+                    <StyledP className={_className}>Make sure you are connected to Mainnet or Rinkeby</StyledP>
                     <DiscordButton />
                     <StyledP className={_className}>
                         If you feel geeky you can{" "}
@@ -69,7 +71,8 @@ export class EthereumState extends React.Component {
                             target="_blank"
                         >
                             install it locally
-                        </Link>.
+                        </Link>
+                        .
                     </StyledP>
                 </div>
             );
@@ -81,15 +84,13 @@ export class EthereumState extends React.Component {
                     </StyledP>
                     {network.id === 4 && (
                         <StyledP className={_className}>
-                            It's an issue with our deployment, because you are on {network.name} and Augmint
-                            contracts should be deployed.
+                            It's an issue with our deployment, because you are on {network.name} and Augmint contracts
+                            should be deployed.
                         </StyledP>
                     )}
                     {network.id !== 4 && (
                         <div>
-                            <StyledP className={_className}>
-                                Do you have all the contracts deployed?
-                            </StyledP>
+                            <StyledP className={_className}>Do you have all the contracts deployed?</StyledP>
                             <StyledP className={_className}>
                                 See local dev setup instructions on our{" "}
                                 <Link
@@ -112,9 +113,7 @@ export class EthereumState extends React.Component {
                     <StyledP className={_className}>
                         Connected to Ethereum {network.name} network but can't get user account.
                     </StyledP>
-                    <StyledP className={_className}>
-                        If you are using Metamask make sure it's unlocked.
-                    </StyledP>
+                    <StyledP className={_className}>If you are using Metamask make sure it's unlocked.</StyledP>
                 </WarningPanel>
             );
         }
