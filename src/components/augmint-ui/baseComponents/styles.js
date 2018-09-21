@@ -73,6 +73,13 @@ export const StyledStatusBox = styled.div`
         border-color: ${theme.colors.red};
         color: ${theme.colors.red};
     }
+
+    .ReadyToRelease &,
+    &.ReadyToRelease {
+        background: ${theme.colors.white};
+        border-color: ${theme.colors.green};
+        color: ${theme.colors.green};
+    }
 `;
 
 export const StyledStatusText = styled.p`

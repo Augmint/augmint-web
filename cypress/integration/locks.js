@@ -1,12 +1,14 @@
 describe("Locks", function() {
     const getLock = (prodId, disbursedAmount) => {
         cy.get("[data-testid=lockMenuLink]").click();
+        cy.get(`[data-testid=newLockLink]`).click();
 
         cy.get(`[data-testid=selectLockProduct-${prodId}]`).then(() => {
             cy.get("[data-testid=lockAmountInput]")
                 .type(disbursedAmount.toString())
                 .should("have.value", disbursedAmount.toString());
         });
+
         cy.get(`[data-testid=selectLockProduct-${prodId}]`).click();
 
         cy.get(`[data-testid=submitButton]`).click();
@@ -36,10 +38,10 @@ describe("Locks", function() {
 
     it("Should release locked A-EUR", function() {
         getLock(9, 50).then(() => {
-            cy.get("[data-testid=myAccountMenuLink]")
+            cy.get("[data-testid=lockMenuLink]")
                 .click()
                 .then(() => {
-                    cy.get("[data-testid=LockListBlock] [data-testid=releaseLockButton]")
+                    cy.get("[data-testid=lockCard] [data-testid=releaseLockButton]")
                         .first()
                         .click();
                     cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]", {
