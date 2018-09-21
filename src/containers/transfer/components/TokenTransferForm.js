@@ -8,7 +8,7 @@ import React from "react";
 import Button from "components/augmint-ui/button";
 import { connect } from "react-redux";
 import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
