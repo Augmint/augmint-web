@@ -18,6 +18,7 @@ import theme from "styles/theme";
 import AccountHome from "containers/account";
 import HowToGet from "containers/account/HowToGet";
 import TransferPage from "containers/transfer";
+import TransferRequest from "containers/transfer/components/TransferRequest";
 import ExchangeHome from "containers/exchange";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
@@ -45,6 +46,7 @@ import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
+import TransferRequestAlert from "../transfer/components/TransferRequestAlert";
 
 injectGlobal`
 body {
@@ -210,6 +212,7 @@ class App extends React.Component {
                                 <LegacyLockers />
                                 <LegacyExchanges />
                                 <LegacyTokens />
+                                <TransferRequestAlert />
                             </div>
                         )}
 
@@ -217,6 +220,7 @@ class App extends React.Component {
                         <Route exact path="/" component={NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/transfer" component={TransferPage} />
+                        <Route exact path="/transfer/request" component={TransferRequest} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/stability" component={AugmintToken} />
                         <Route exact path="/how-to-get" component={HowToGet} />
