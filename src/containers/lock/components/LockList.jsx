@@ -7,16 +7,23 @@ import LockListDetails from "./LockListDetails";
 
 export default function LockList(props) {
     const { isLoading, error, locks } = props.locks;
+
+    console.log(locks);
+
     const listItems =
         locks &&
         locks
-            .filter(props.filter ? props.filter : lock => lock.isReleasebale || lock.isActive)
-            .map((lock, index) => (
+            .filter(props.filter ? props.filter : lock => lock.isActive)
+            .map(lock => (
                 <MyListGroup.Row key={`lock-${lock.id}`}>
                     <LockListDetails lock={lock} />
                 </MyListGroup.Row>
             ))
-            .reverse();
+            .sort((a, b) => {
+                return a.props.children.props.lock.lockedUntil - b.props.children.props.lock.lockedUntil;
+            });
+
+    console.log(listItems);
 
     return (
         <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>

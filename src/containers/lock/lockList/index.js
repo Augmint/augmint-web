@@ -18,9 +18,13 @@ function LockList(props) {
     const listItems =
         locks &&
         locks
-            .reverse()
             .filter(lock => lock.isActive === isActivePage)
-            .map(lock => <LockCard key={`lock-${lock.id}`} lock={lock} />);
+            .map(lock => <LockCard key={`lock-${lock.id}`} lock={lock} />)
+            .sort((a, b) => {
+                return isActivePage
+                    ? a.props.lock.lockedUntil - b.props.lock.lockedUntil
+                    : b.props.lock.lockedUntil - a.props.lock.lockedUntil;
+            });
 
     return (
         <Psegment>
