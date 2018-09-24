@@ -7,9 +7,6 @@ import LockListDetails from "./LockListDetails";
 
 export default function LockList(props) {
     const { isLoading, error, locks } = props.locks;
-
-    console.log(locks);
-
     const listItems =
         locks &&
         locks
@@ -22,8 +19,6 @@ export default function LockList(props) {
             .sort((a, b) => {
                 return a.props.children.props.lock.lockedUntil - b.props.children.props.lock.lockedUntil;
             });
-
-    console.log(listItems);
 
     return (
         <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>
