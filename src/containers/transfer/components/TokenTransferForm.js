@@ -89,7 +89,8 @@ class TokenTransferForm extends React.Component {
                 feeAmount: "0"
             });
 
-            callbackAfterTransfer(values.payee, tokenAmount, res.result.transactionHash);
+            const networkId = store.getState().web3Connect.network.id;
+            callbackAfterTransfer(values.payee, tokenAmount, "AEUR", networkId, res.result.transactionHash);
         }
     }
 

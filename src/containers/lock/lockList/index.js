@@ -14,12 +14,13 @@ function LockList(props) {
     const { location } = props;
     const { isLoading, error, locks } = props.locks;
     const isActivePage = location.pathname === "/lock";
-
     const listItems =
         locks &&
         locks
-            .reverse()
             .filter(lock => lock.isActive === isActivePage)
+            .sort((a, b) => {
+                return isActivePage ? a.lockedUntil - b.lockedUntil : b.lockedUntil - a.lockedUntil;
+            })
             .map(lock => <LockCard key={`lock-${lock.id}`} lock={lock} />);
 
     return (

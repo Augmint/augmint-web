@@ -10,13 +10,15 @@ export default function LockList(props) {
     const listItems =
         locks &&
         locks
-            .filter(props.filter ? props.filter : lock => lock.isReleasebale || lock.isActive)
-            .map((lock, index) => (
+            .filter(props.filter ? props.filter : lock => lock.isActive)
+            .sort((a, b) => {
+                return a.lockedUntil - b.lockedUntil;
+            })
+            .map(lock => (
                 <MyListGroup.Row key={`lock-${lock.id}`}>
                     <LockListDetails lock={lock} />
                 </MyListGroup.Row>
-            ))
-            .reverse();
+            ));
 
     return (
         <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>
