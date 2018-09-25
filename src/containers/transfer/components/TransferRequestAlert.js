@@ -41,6 +41,7 @@ class TransferRequestAlert extends React.Component {
                                     <HashURL
                                         style={{ color: "inherit" }}
                                         hash={request.beneficiary_address}
+                                        network={request.network_id}
                                         type={"address/"}
                                     >
                                         {request.beneficiary_address}

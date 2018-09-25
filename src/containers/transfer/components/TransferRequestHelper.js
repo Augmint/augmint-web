@@ -3,17 +3,26 @@ import * as cookie from "utils/cookie";
 const transferRequestsCookieName = "transferRequests";
 
 function transferRequestEqual(a, b) {
-    return a.beneficiary_address === b.beneficiary_address && a.amount === b.amount;
+    return (
+        a.beneficiary_address === b.beneficiary_address &&
+        a.amount === b.amount &&
+        a.currency_code === b.currency_code &&
+        a.network_id === b.network_id
+    );
 }
 
-function createUrl(path, params) {
-    const qs = new URLSearchParams();
+function createUrl(url, params) {
+    const i = url.indexOf("?");
+    const origSearch = i >= 0 ? url.slice(i + 1) : "";
+    const origPath = i >= 0 ? url.slice(0, i) : url;
+    const qs = new URLSearchParams(origSearch);
 
     for (const key in params) {
         qs.set(key, params[key]);
     }
 
-    return path + "?" + qs;
+    const search = qs.toString();
+    return origPath + (search ? "?" + search : "");
 }
 
 export function getTransferLink(request) {
@@ -47,14 +56,23 @@ export function applyTransferRequestFromUrl(urlParams) {
         const request = {
             order_id: urlParams.get("order_id"),
             token: urlParams.get("token"),
-            network_id: urlParams.get("network_id"),
+            network_id: parseInt(urlParams.get("network_id") || 1, 10),
             beneficiary_address: address,
             beneficiary_name: urlParams.get("beneficiary_name"),
             amount: parseFloat(amount),
-            currency_code: "AEUR", //urlParams.get("currency_code"),
+            currency_code: urlParams.get("currency_code") || "AEUR",
             reference: urlParams.get("reference"),
             notify_url: urlParams.get("notify_url")
         };
+
+        if (![1, 4].includes(request.network_id)) {
+            throw new Error("Invalid 'network_id' parameter. Available values: 1 (mainnet), 4 (rinkeby)");
+        }
+
+        if (!["AEUR"].includes(request.currency_code)) {
+            throw new Error("Invalid currency_code parameter. Available values: AEUR");
+        }
+
         transferRequests.push(request);
         transferRequests = transferRequests.filter(
             (value, index, arr) =>
@@ -69,7 +87,7 @@ export function applyTransferRequestFromUrl(urlParams) {
     }
 }
 
-export function callbackAfterTransfer(beneficiary_address, amount, transactionHash) {
+export function callbackAfterTransfer(beneficiary_address, amount, currency_code, network_id, transactionHash) {
     const transferRequests = getTransferRequests();
 
     for (const i in transferRequests) {
@@ -78,7 +96,9 @@ export function callbackAfterTransfer(beneficiary_address, amount, transactionHa
         if (
             transferRequestEqual(transferRequest, {
                 beneficiary_address,
-                amount
+                amount,
+                currency_code,
+                network_id
             })
         ) {
             deleteTransferRequest(i);

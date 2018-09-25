@@ -12,4 +12,7 @@ export default class TransferRequest extends React.Component {
 
         window.location.replace(link);
     }
+    render() {
+        return "Please, wait... ";
+    }
 }
