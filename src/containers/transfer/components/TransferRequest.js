@@ -18,7 +18,6 @@ class TransferRequest extends React.Component {
 
             this.props.history.replace(link);
         } catch (e) {
-            console.log(e);
             this.state.error = e;
         }
     }
