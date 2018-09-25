@@ -10,8 +10,10 @@ export default function LoanList(props) {
     const listItems =
         loans &&
         loans
-            .reverse()
             .filter(props.filter ? props.filter : loan => loan.isRepayable)
+            .sort((a, b) => {
+                return a.maturity - b.maturity;
+            })
             .map(loan => (
                 <MyListGroup.Row key={`loan-${loan.id}`}>
                     <LoanListDetails loan={loan} />
