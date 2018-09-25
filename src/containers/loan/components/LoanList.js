@@ -11,15 +11,15 @@ export default function LoanList(props) {
         loans &&
         loans
             .filter(props.filter ? props.filter : loan => loan.isRepayable)
+            .sort((a, b) => {
+                return a.maturity - b.maturity;
+            })
             .map(loan => (
                 <MyListGroup.Row key={`loan-${loan.id}`}>
                     <LoanListDetails loan={loan} />
                     {props.selectComponent && <props.selectComponent loanId={loan.id} />}
                 </MyListGroup.Row>
-            ))
-            .sort((a, b) => {
-                return a.props.children[0].props.loan.maturity - b.props.children[0].props.loan.maturity;
-            });
+            ));
 
     return (
         <Pblock data-testid="LoanListBlock" loading={isLoading} header={props.header}>

@@ -11,14 +11,14 @@ export default function LockList(props) {
         locks &&
         locks
             .filter(props.filter ? props.filter : lock => lock.isActive)
+            .sort((a, b) => {
+                return a.lockedUntil - b.lockedUntil;
+            })
             .map(lock => (
                 <MyListGroup.Row key={`lock-${lock.id}`}>
                     <LockListDetails lock={lock} />
                 </MyListGroup.Row>
-            ))
-            .sort((a, b) => {
-                return a.props.children.props.lock.lockedUntil - b.props.children.props.lock.lockedUntil;
-            });
+            ));
 
     return (
         <Pblock data-testid="LockListBlock" loading={isLoading} header={props.header}>

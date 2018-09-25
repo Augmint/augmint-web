@@ -14,21 +14,14 @@ function LoanList(props) {
     const { location } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
-
-    console.log(loans);
-
     const listItems =
         loans &&
         loans
             .filter(loan => loan.isRepayable === isActivePage)
-            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />)
             .sort((a, b) => {
-                return isActivePage
-                    ? a.props.loan.maturity - b.props.loan.maturity
-                    : b.props.loan.maturity - a.props.loan.maturity;
-            });
-
-    console.log(listItems);
+                return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
+            })
+            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
 
     return (
         <Psegment>
