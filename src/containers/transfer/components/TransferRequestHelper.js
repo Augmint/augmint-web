@@ -18,7 +18,9 @@ function createUrl(url, params) {
     const qs = new URLSearchParams(origSearch);
 
     for (const key in params) {
-        qs.set(key, params[key]);
+        if (params[key] !== null && params[key] !== "") {
+            qs.set(key, params[key]);
+        }
     }
 
     const search = qs.toString();
@@ -73,7 +75,7 @@ export function applyTransferRequestFromUrl(urlParams) {
             throw new Error("Invalid currency_code parameter. Available values: AEUR");
         }
 
-        transferRequests.push(request);
+        transferRequests.unshift(request);
         transferRequests = transferRequests.filter(
             (value, index, arr) =>
                 arr.findIndex(v => {
@@ -103,17 +105,19 @@ export function callbackAfterTransfer(beneficiary_address, amount, currency_code
         ) {
             deleteTransferRequest(i);
 
-            const link = createUrl(transferRequest.notify_url, {
-                order_id: transferRequest.order_id,
-                token: transferRequest.token,
-                network_id: transferRequest.network_id,
-                beneficiary_address,
-                amount,
-                currency_code: transferRequest.currency_code,
-                tx_hash: transactionHash
-            });
+            if (transferRequest.notify_url) {
+                const link = createUrl(transferRequest.notify_url, {
+                    order_id: transferRequest.order_id,
+                    token: transferRequest.token,
+                    network_id: transferRequest.network_id,
+                    beneficiary_address,
+                    amount,
+                    currency_code: transferRequest.currency_code,
+                    tx_hash: transactionHash
+                });
 
-            window.location.replace(link);
+                window.location.replace(link);
+            }
         }
     }
 }
