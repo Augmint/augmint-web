@@ -74,7 +74,12 @@ class ShowTransferRequest extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1 }}>
-                                <Pblock header={`Transfer request to ${request.beneficiary_name}`}>
+                                <Pblock
+                                    header={
+                                        "Transfer request" +
+                                        (request.beneficiary_name ? " to " + request.beneficiary_name : "")
+                                    }
+                                >
                                     <p>
                                         Amount:{" "}
                                         <strong
@@ -102,6 +107,8 @@ class ShowTransferRequest extends React.Component {
                                             {request.beneficiary_address}
                                         </HashURL>
                                     </p>
+
+                                    {request.reference && <p>Reference: {request.reference}</p>}
                                     <EthereumState extraValidation={getErrors}>
                                         {!augmintToken.isLoading && (
                                             <div>
@@ -111,17 +118,19 @@ class ShowTransferRequest extends React.Component {
                                                         <i>
                                                             <b>Warning:</b> you are making a transfer to an address
                                                             provided by an external site. Make sure the address belongs
-                                                            to {request.beneficiary_name} who you are really willing to
-                                                            transfer A-EUR. Funds sent to wrong address might be lost
-                                                            irreversibly.
+                                                            to {request.beneficiary_name}
+                                                            who you are really willing to transfer A-EUR. Funds sent to
+                                                            wrong address might be lost irreversibly.
                                                         </i>
                                                     </small>
                                                 </p>
                                                 {request.notify_url && (
                                                     <p style={{ color: "grey" }}>
                                                         <small>
-                                                            If transfer was success, we automatically redirect back to{" "}
-                                                            {request.beneficiary_name}.
+                                                            If transfer was success, we automatically redirect back
+                                                            {request.beneficiary_name &&
+                                                                ` to ${request.beneficiary_name}`}
+                                                            .
                                                         </small>
                                                     </p>
                                                 )}

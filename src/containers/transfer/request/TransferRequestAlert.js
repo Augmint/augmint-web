@@ -31,11 +31,18 @@ class TransferRequestAlert extends React.Component {
                         };
 
                         return (
-                            <InfoPanel header={`Transfer request to ${request.beneficiary_name}`} key={i}>
+                            <InfoPanel
+                                header={
+                                    "Transfer request" +
+                                    (request.beneficiary_name ? " to " + request.beneficiary_name : "")
+                                }
+                                key={i}
+                            >
                                 <p style={{ marginBottom: 20 }}>
                                     You have a pending transfer request of{" "}
                                     <strong>
-                                        {request.amount} {request.currency_code} to {request.beneficiary_name}
+                                        {request.amount} {request.currency_code}{" "}
+                                        {request.beneficiary_name ? " to " + request.beneficiary_name : ""}
                                     </strong>{" "}
                                     (
                                     <HashURL
