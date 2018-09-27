@@ -20,7 +20,7 @@ class TransferRequestAlert extends React.Component {
         const transferRequests = getTransferRequests() || [];
         const url = new URL(document.location);
 
-        return transferRequests.length && url.pathname !== "/transfer" ? (
+        return transferRequests.length && url.pathname.indexOf("/transfer/") !== 0 ? (
             <Psegment>
                 <Container>
                     {transferRequests.map((request, i) => {

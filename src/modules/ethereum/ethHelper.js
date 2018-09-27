@@ -1,6 +1,7 @@
 /* TODO: consider moving processTx somewhere else */
 import store from "modules/store";
 import { updateTx } from "modules/reducers/submittedTransactions";
+import { getNetworkName } from "utils/helpers";
 
 class ExtendableError extends Error {
     constructor(message) {
@@ -26,36 +27,9 @@ export class EthereumTransactionError extends ExtendableError {
 export async function getNetworkDetails(web3) {
     let networkId = await web3.eth.net.getId();
     networkId = parseInt(networkId, 10);
-    let networkType = await web3.eth.net.getNetworkType();
-    let networkName;
-    switch (networkId) {
-        case 1:
-            networkName = "Main";
-            break;
-        case 2:
-            networkName = "Morden";
-            break;
-        case 3:
-            networkName = "Ropsten";
-            break;
-        case 4:
-            networkName = "Rinkeby";
-            break;
-        case 42:
-            networkName = "Kovan";
-            break;
-        case 999:
-            networkName = "Testrpc";
-            break;
-        case 4447:
-            networkName = "TruffleLocal";
-            break;
-        case 1976:
-            networkName = "PrivateChain";
-            break;
-        default:
-            networkName = "Unknown";
-    }
+    const networkType = await web3.eth.net.getNetworkType();
+    const networkName = getNetworkName(networkId);
+
     return {
         id: networkId,
         name: networkName,
@@ -66,18 +40,17 @@ export async function getNetworkDetails(web3) {
 /* returns a Promise which resolves a transactionHash and then dispatches
 use onReceipt cb arg to do extra checks on the receipt (throw an EthereumTransactionError or return processed args)
 */
-export function processTx(tx, txName, gasEstimate, onReceipt) {
+export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
     return new Promise((resolve, reject) => {
         let receipt;
         let transactionHash;
         let error;
-        tx
-            .once("transactionHash", hash => {
-                transactionHash = hash;
-                store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
-                console.debug(` ${txName} hash received: ${hash}`);
-                resolve(transactionHash);
-            })
+        tx.once("transactionHash", hash => {
+            transactionHash = hash;
+            store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
+            console.debug(` ${txName} hash received: ${hash}`);
+            resolve(transactionHash);
+        })
 
             .on("error", e => {
                 error = new EthereumTransactionError(`${txName} failed`, e, receipt, gasEstimate);
@@ -98,7 +71,8 @@ export function processTx(tx, txName, gasEstimate, onReceipt) {
                             event: "confirmation",
                             txName,
                             transactionHash: rec.transactionHash,
-                            confirmationNumber
+                            confirmationNumber,
+                            payload
                         })
                     );
                 }
