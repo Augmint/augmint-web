@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import { getNetworkName } from "utils/helpers";
@@ -155,7 +155,15 @@ class ShowTransferRequest extends React.Component {
             );
         }
 
-        return <PageNotFound location={this.props.location} />;
+        return (
+            <Psegment>
+                <ErrorPanel header="This transfer doesn't exist or already sent." style={{ margin: "1em" }}>
+                    <p>
+                        <Link to="/">Go to home page »</Link>
+                    </p>
+                </ErrorPanel>
+            </Psegment>
+        );
     }
 }
 
@@ -165,4 +173,4 @@ const mapStateToProps = state => ({
     userAccount: state.userBalances.account
 });
 
-export default withRouter(connect(mapStateToProps)(ShowTransferRequest));
+export default connect(mapStateToProps)(ShowTransferRequest);
