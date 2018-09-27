@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import { getNetworkName } from "utils/helpers";
@@ -10,11 +11,23 @@ import { Psegment, Pblock, Pgrid } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
 import HashURL from "components/hash";
 import Icon from "components/augmint-ui/icon";
-import { PageNotFound } from "containers/PageNotFound";
 import EthereumState from "containers/app/EthereumState";
 import { Validations } from "components/BaseComponents";
 import TokenTransferForm from "../components/TokenTransferForm";
 import { default as theme, remCalc } from "styles/theme";
+import { media } from "styles/media";
+
+const StyledNetworkInfo = styled.span`
+    display: block;
+    color: ${theme.colors.mediumGrey};
+    font-family: ${theme.typography.fontFamilies.default};
+    font-size: ${remCalc(14)};
+    text-transform: uppercase;
+
+    ${media.tabletMin`
+        float: right;
+    `};
+`;
 
 class ShowTransferRequest extends React.Component {
     constructor(props) {
@@ -76,8 +89,13 @@ class ShowTransferRequest extends React.Component {
                             <Pgrid.Column size={{ mobile: 1 }}>
                                 <Pblock
                                     header={
-                                        "Transfer request" +
-                                        (request.beneficiary_name ? " to " + request.beneficiary_name : "")
+                                        <span>
+                                            Transfer request{" "}
+                                            {request.beneficiary_name ? " to " + request.beneficiary_name : ""}
+                                            <StyledNetworkInfo>
+                                                on {getNetworkName(request.network_id)} network
+                                            </StyledNetworkInfo>
+                                        </span>
                                     }
                                 >
                                     <p>
@@ -92,7 +110,9 @@ class ShowTransferRequest extends React.Component {
                                             {!isNaN(fee) && (
                                                 <small>
                                                     {" "}
-                                                    + {fee} {request.currency_code} fee
+                                                    <span style={{ whiteSpace: "nowrap" }}>
+                                                        + {fee} {request.currency_code} fee
+                                                    </span>
                                                 </small>
                                             )}
                                         </strong>
@@ -112,7 +132,7 @@ class ShowTransferRequest extends React.Component {
                                     <EthereumState extraValidation={getErrors}>
                                         {!augmintToken.isLoading && (
                                             <div>
-                                                <p style={{ color: "grey" }}>
+                                                <p style={{ color: theme.colors.mediumGrey }}>
                                                     <small>
                                                         <Icon name="warning" style={{ marginRight: 5 }} />
                                                         <i>
@@ -125,7 +145,7 @@ class ShowTransferRequest extends React.Component {
                                                     </small>
                                                 </p>
                                                 {request.notify_url && (
-                                                    <p style={{ color: "grey" }}>
+                                                    <p style={{ color: theme.colors.mediumGrey }}>
                                                         <small>
                                                             If transfer was success, we automatically redirect back
                                                             {request.beneficiary_name &&

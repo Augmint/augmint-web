@@ -6,6 +6,8 @@ import { InfoPanel } from "components/MsgPanels";
 import HashURL from "components/hash";
 import Container from "components/augmint-ui/container";
 import { getTransferRequests, getTransferLink, deleteTransferRequest } from "./TransferRequestHelper";
+import { getNetworkName } from "utils/helpers";
+import { default as theme, remCalc } from "styles/theme";
 
 class TransferRequestAlert extends React.Component {
     componentWillMount() {
@@ -33,8 +35,22 @@ class TransferRequestAlert extends React.Component {
                         return (
                             <InfoPanel
                                 header={
-                                    "Transfer request" +
-                                    (request.beneficiary_name ? " to " + request.beneficiary_name : "")
+                                    <span>
+                                        Transfer request{" "}
+                                        {request.beneficiary_name ? " to " + request.beneficiary_name : ""}
+                                        <span
+                                            className="hide-xs"
+                                            style={{
+                                                color: theme.colors.mediumGrey,
+                                                float: "right",
+                                                fontFamily: theme.typography.fontFamilies.default,
+                                                fontSize: remCalc(14),
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            on {getNetworkName(request.network_id)} network
+                                        </span>
+                                    </span>
                                 }
                                 key={i}
                             >
@@ -43,19 +59,25 @@ class TransferRequestAlert extends React.Component {
                                     <strong>
                                         {request.amount} {request.currency_code}{" "}
                                         {request.beneficiary_name ? " to " + request.beneficiary_name : ""}
-                                    </strong>{" "}
-                                    (
-                                    <HashURL
-                                        style={{ color: "inherit" }}
-                                        hash={request.beneficiary_address}
-                                        network={request.network_id}
-                                        type={"address/"}
-                                    >
-                                        {request.beneficiary_address}
-                                    </HashURL>
-                                    ).
+                                    </strong>
+                                    <span className="hide-xs">
+                                        {" "}
+                                        (address:{" "}
+                                        <HashURL
+                                            style={{ color: "inherit" }}
+                                            hash={request.beneficiary_address}
+                                            network={request.network_id}
+                                            type={"address/"}
+                                        >
+                                            {request.beneficiary_address}
+                                        </HashURL>
+                                        )
+                                    </span>
                                 </p>
-                                <Button to={link}>Complete your transfer</Button>
+                                <Button to={link}>
+                                    <span className="show-xs">Complete</span>
+                                    <span className="hide-xs">Complete your transfer</span>
+                                </Button>
                                 <Button style={{ marginLeft: 20 }} className="ghost" onClick={onDissmiss}>
                                     Dissmiss
                                 </Button>
