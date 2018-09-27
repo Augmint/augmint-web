@@ -11,6 +11,8 @@ import { MrCoinBuyLink } from "components/ExchangeLinks";
 export function TryItConnected(props) {
     const { className, web3Connect } = props;
     let _className = className + " primaryColor";
+
+    console.log(web3Connect.network);
     return (
         <EthereumState>
             <Tsegment style={{ padding: "2em 1em" }}>
@@ -19,10 +21,13 @@ export function TryItConnected(props) {
                     header={`Great! You are connected to ${web3Connect.network.name} network`}
                 />
 
-                {web3Connect.network.id === 4 && (
+                {(web3Connect.network.id === 1 || web3Connect.network.id === 4) && (
                     <Tblock header="Get ETH" headerStyle={"primaryColor"}>
                         <StyledP className={_className}>
-                            To get real Ether on mainnet see{" "}
+                            You need ETH to send transactions to the Ethereum network (e.g. send A-EUR or buy for ETH).
+                        </StyledP>
+                        <StyledP className={_className}>
+                            To get real ETH on mainnet see{" "}
                             <a
                                 href="https://cointelegraph.com/ethereum-for-beginners/how-to-buy-ethereum"
                                 target="_blank"
@@ -30,6 +35,7 @@ export function TryItConnected(props) {
                             >
                                 this guide
                             </a>
+                            .
                         </StyledP>
                         <StyledP className={_className}>
                             For trying out Augmint on Rinkeby test network get test ethers on{" "}
