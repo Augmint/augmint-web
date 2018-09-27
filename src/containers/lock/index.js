@@ -10,6 +10,7 @@ import lockDetails from "./lockDetailsPage";
 
 import { EthereumState } from "containers/app/EthereumState";
 import { PageNotFound } from "containers/PageNotFound";
+import NoTokenAlert from "../account/components/NoTokenAlert";
 
 export default class LockContainer extends React.Component {
     componentDidMount() {
@@ -23,6 +24,7 @@ export default class LockContainer extends React.Component {
         return (
             <div>
                 <EthereumState>
+                    <NoTokenAlert style={{ margin: "2em 15px 5px" }} />
                     <Switch>
                         <Route exact path="/lock" component={lockList} />
                         <Route exact path="/lock/archive" component={lockList} />

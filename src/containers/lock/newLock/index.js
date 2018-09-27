@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import LockForm from "../containers/LockForm";
-import NoTokenAlert from "../../account/components/NoTokenAlert";
 
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
@@ -23,7 +22,6 @@ class NewLock extends React.Component {
                     <Pheader header="Lock A-EUR" />
                 </TopNavTitlePortal>
 
-                <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                 <Pgrid>
                     <Pgrid.Row columns={1}>
                         <Pgrid.Column>
