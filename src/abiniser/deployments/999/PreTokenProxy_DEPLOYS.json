@@ -1,6 +1,6 @@
 {
     "contractName": "PreTokenProxy",
-    "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
+    "latestAbiHash": "dd40c0d39ea8bad8a388522667a84687",
     "deployedAbis": {
         "19ab69b650e28b2dd211d3851893f91f": {
             "latestDeployedAddress": "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463",
@@ -15,6 +15,24 @@
                     },
                     "bytecodeHash": "9c5756eba5d12433f15b0ba1c6e78424",
                     "deployedBytecodeHash": "41bc836f0fad20e8f9a4afdd4d4725f3",
+                    "sourceHash": "2d172fe41d2b97c827d6dca816138047",
+                    "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
+                }
+            }
+        },
+        "dd40c0d39ea8bad8a388522667a84687": {
+            "latestDeployedAddress": "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463",
+            "deployments": {
+                "0x8b639dc72f3e640c0d6bc19497fbc7b5160d0463": {
+                    "generatedAt": "2018-09-27T15:24:23.411Z",
+                    "truffleContractFileUpdatedAt": "2018-09-27T15:22:06.391Z",
+                    "deployTransactionHash": "0xf1c2892f7ebaed61c01dfacd414ca31cfcee4146a4ffb04f2937f46b53407594",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "6e6bc0edea4dbaba28d55ff2d846b182",
+                    "deployedBytecodeHash": "8aaeb6228e8e8eba670bdbbe8d23f449",
                     "sourceHash": "2d172fe41d2b97c827d6dca816138047",
                     "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
                 }
