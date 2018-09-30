@@ -1,12 +1,12 @@
 import { default as Web3 } from "web3";
 
-import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_962b41ca272a86b1f556fc47e0f7954f.json";
+import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_2ea91d34a7bfefc8f38ef0e8a5ae24a5.json";
 import TokenAEurDeploys from "../../src/abiniser/deployments/999/TokenAEur_DEPLOYS.json";
 
-import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_54d27fedd8bf3010ad5509866a42c053.json";
+import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_df21702119818bc90918a2ffe5f87b2d.json";
 import MonetarySupervisorDeploys from "../../src/abiniser/deployments/999/MonetarySupervisor_DEPLOYS.json";
 
-import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_fe74b7986dafb00f221486e790fc70ec.json";
+import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_024b81d1a1f75241167a8a0f6e62326f.json";
 import AugmintReservesDeploys from "../../src/abiniser/deployments/999/AugmintReserves_DEPLOYS.json";
 
 let accounts = null;
@@ -132,8 +132,7 @@ Cypress.Commands.add("getUserEthBalance", (account, options = {}) => {
 Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
-    cy
-        .get("[data-testid=userAEurBalance]")
+    cy.get("[data-testid=userAEurBalance]")
         .invoke("text")
         .should("equal", balance.toString());
 });
@@ -143,8 +142,7 @@ Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 12, o
     const expectedEth = Number(_expectedEth.toFixed(decimals));
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
-    cy
-        .get("[data-testid=userEthBalance]")
+    cy.get("[data-testid=userEthBalance]")
         .invoke("text")
         .should(val => {
             // TODO: this throws a lot of console warnings
