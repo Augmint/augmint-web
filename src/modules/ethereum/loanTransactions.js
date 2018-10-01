@@ -247,7 +247,9 @@ export async function fetchLoansTx(loanManagerInstance) {
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const loansArray = await loanManagerInstance.methods.getLoans(i * chunkSize).call();
+        const loansArray = isLegacyLoanContract
+            ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
+            : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }
     return loans;
