@@ -4,6 +4,7 @@
 */
 import store from "modules/store";
 import { fetchTransfersTx, processNewTransferTx } from "modules/ethereum/transferTransactions";
+import { AVG_BLOCK_TIME } from "utils/constants";
 
 export const FETCH_TRANSFERS_REQUESTED = "userTransfers/FETCH_TRANSFERS_REQUESTED";
 export const FETCH_TRANSFERS_ERROR = "userBalances/FETCH_TRANSFERS_ERROR";
@@ -56,7 +57,14 @@ export default (state = initialState, action) => {
     }
 };
 
-export function fetchTransfers(account, fromBlock, toBlock) {
+export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
+    if (!isAdditional) {
+        // reset transfer state
+        store.getState().userTransfers.fromBlock = null;
+        store.getState().userTransfers.toBlock = null;
+        store.getState().userTransfers.transfers = null;
+    }
+
     return async dispatch => {
         dispatch({
             type: FETCH_TRANSFERS_REQUESTED,
@@ -73,7 +81,7 @@ export function fetchTransfers(account, fromBlock, toBlock) {
 
             return dispatch({
                 type: FETCH_TRANSFERS_RECEIVED,
-                result: transfers
+                result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -85,6 +93,18 @@ export function fetchTransfers(account, fromBlock, toBlock) {
             });
         }
     };
+}
+
+export function fetchLatestTransfers(account, isAdditional) {
+    const blockLimit = Math.round((30 * 24 * 60 * 60) / AVG_BLOCK_TIME); // 30 days
+
+    return dispatch =>
+        Promise.resolve(
+            store.getState().userTransfers.fromBlock ||
+                store.getState().contracts.latest.augmintToken.getLastBlockNumber()
+        ).then(blockNumber => {
+            return fetchTransfers(account, blockNumber - blockLimit, blockNumber, isAdditional)(dispatch);
+        });
 }
 
 export function processNewTransfer(account, eventLog) {

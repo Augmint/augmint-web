@@ -35,3 +35,5 @@ export const LEGACY_LOANMANAGER_CONTRACTS = {
         "0x214919Abe3f2b7CA7a43a799C4FC7132bBf78e8A" // oldLoanManager2 (oldToken4)
     ]
 };
+
+export const AVG_BLOCK_TIME = 14; // 14 sec
