@@ -12,7 +12,6 @@ export function TryItConnected(props) {
     const { className, web3Connect } = props;
     let _className = className + " primaryColor";
 
-    console.log(web3Connect.network);
     return (
         <EthereumState>
             <Tsegment style={{ padding: "2em 1em" }}>
