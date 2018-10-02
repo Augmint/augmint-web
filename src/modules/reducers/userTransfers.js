@@ -97,13 +97,16 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
 
 export function fetchLatestTransfers(account, isAdditional) {
     const blockLimit = Math.round((30 * 24 * 60 * 60) / AVG_BLOCK_TIME); // 30 days
+    const lastBlock = store.getState().contracts.latest.augmintToken.deployedAtBlock;
 
     return dispatch =>
         Promise.resolve(
             store.getState().userTransfers.fromBlock ||
                 store.getState().contracts.latest.augmintToken.getLastBlockNumber()
         ).then(blockNumber => {
-            return fetchTransfers(account, blockNumber - blockLimit, blockNumber, isAdditional)(dispatch);
+            const fromBlock = Math.max(blockNumber - blockLimit, lastBlock, 0);
+            const toBlock = blockNumber;
+            return fetchTransfers(account, fromBlock, toBlock, isAdditional)(dispatch);
         });
 }
 
