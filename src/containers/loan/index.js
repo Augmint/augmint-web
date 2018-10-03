@@ -12,6 +12,7 @@ import loanDetails from "./loanDetailsPage";
 import CollectLoanMain from "./collectLoan";
 import { PageNotFound } from "containers/PageNotFound";
 import { EthereumState } from "containers/app/EthereumState";
+import NoTokenAlert from "../account/components/NoTokenAlert";
 
 export default class LoanMain extends React.Component {
     componentDidMount() {
@@ -26,6 +27,7 @@ export default class LoanMain extends React.Component {
         return (
             <div>
                 <EthereumState>
+                    <NoTokenAlert style={{ margin: "2em 15px 5px" }} />
                     <Switch>
                         <Route exact path="/loan" component={loanList} />
                         <Route exact path="/loan/archive" component={loanList} />

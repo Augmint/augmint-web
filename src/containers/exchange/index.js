@@ -13,8 +13,8 @@ import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
-
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import NoTokenAlert from "../account/components/NoTokenAlert";
 
 class ExchangeHome extends React.Component {
     componentDidMount() {
@@ -32,6 +32,8 @@ class ExchangeHome extends React.Component {
                     <TopNavTitlePortal>
                         <Pheader header="Buy & Sell A-EUR" />
                     </TopNavTitlePortal>
+
+                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
