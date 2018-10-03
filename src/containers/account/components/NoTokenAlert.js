@@ -44,18 +44,29 @@ class NoTokenAlert extends React.Component {
     }
 
     render() {
-        const balanceIsNull = this.props.userAccount.tokenBalance === 0;
+        const tokenBalanceIsNull = this.props.userAccount.tokenBalance === 0;
+        const ethBalanceIsNull = this.props.userAccount.ethBalance === 0;
 
         return (
             !this.state.dismissed &&
-            balanceIsNull && (
+            (tokenBalanceIsNull ? (
                 <Box onDismiss={this.dismiss} {...this.props}>
                     <Link to="/how-to-get">
                         <Icon name="warning" style={{ marginRight: 15 }} />
                         You have no A-EUR yet. <u>How to get?</u> »
                     </Link>
                 </Box>
-            )
+            ) : (
+                ethBalanceIsNull && (
+                    <Box onDismiss={this.dismiss} {...this.props}>
+                        <Link to="/tryit">
+                            <i className="fas fa-exclamation-triangle" style={{ marginRight: 15 }} />
+                            You have no ETH. To send transactions on Ethereum network you need some ETH.{" "}
+                            <u>How to get?</u> »
+                        </Link>
+                    </Box>
+                )
+            ))
         );
     }
 }

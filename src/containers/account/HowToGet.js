@@ -68,6 +68,27 @@ class HowToGet extends React.Component {
                             <Pgrid.Column size={{ mobile: 1, tablet: 2 / 3 }}>
                                 <Pblock>
                                     <StyledHeader>How to get A-EUR?</StyledHeader>
+                                    <StyledTextBlock style={{ marginTop: "0", paddingTop: "0", borderTop: "0" }}>
+                                        <p>
+                                            <em>
+                                                You need ETH to send transactions to the Ethereum network (e.g. send
+                                                A-EUR or buy for ETH).
+                                            </em>
+                                        </p>
+                                        <p>
+                                            <em>
+                                                To get real ETH on mainnet see{" "}
+                                                <a
+                                                    href="https://cointelegraph.com/ethereum-for-beginners/how-to-buy-ethereum"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    this guide
+                                                </a>
+                                                .
+                                            </em>
+                                        </p>
+                                    </StyledTextBlock>
                                     <StyledTextBlock
                                         header={
                                             <span>
