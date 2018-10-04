@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import theme from "styles/theme";
 import Message from "components/augmint-ui/message";
+import Icon from "components/augmint-ui/icon";
 
 const dismissedCookie = "noTokenAlertDismissed=true";
 
@@ -51,7 +52,7 @@ class NoTokenAlert extends React.Component {
             (tokenBalanceIsNull ? (
                 <Box onDismiss={this.dismiss} {...this.props}>
                     <Link to="/how-to-get">
-                        <i className="fas fa-exclamation-triangle" style={{ marginRight: 15 }} />
+                        <Icon name="warning" style={{ marginRight: 15 }} />
                         You have no A-EUR yet. <u>How to get?</u> »
                     </Link>
                 </Box>

@@ -14,7 +14,7 @@ import { DiscordButton } from "components/LinkButtons";
 export class EthereumState extends React.Component {
     render() {
         let msg = null;
-        const { web3Connect, contracts, augmintToken, className, children = null } = this.props;
+        const { web3Connect, contracts, augmintToken, extraValidation, className, children = null } = this.props;
         const { network } = web3Connect;
 
         let _className = className + " primaryColor";
@@ -116,6 +116,8 @@ export class EthereumState extends React.Component {
                     <StyledP className={_className}>If you are using Metamask make sure it's unlocked.</StyledP>
                 </WarningPanel>
             );
+        } else if (extraValidation) {
+            msg = extraValidation();
         }
 
         if (msg) {
