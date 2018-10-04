@@ -5,7 +5,7 @@ import { ErrorPanel } from "components/MsgPanels";
 
 import { applyTransferRequestFromUrl, getTransferLink } from "./TransferRequestHelper";
 
-class TransferRequest extends React.Component {
+class CreateTransferRequest extends React.Component {
     constructor(props) {
         super(props);
 
@@ -34,4 +34,4 @@ class TransferRequest extends React.Component {
     }
 }
 
-export default withRouter(TransferRequest);
+export default withRouter(CreateTransferRequest);

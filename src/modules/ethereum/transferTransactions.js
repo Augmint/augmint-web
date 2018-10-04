@@ -69,7 +69,7 @@ export async function transferTokenTx(payload) {
         });
     }
 
-    const transactionHash = await processTx(tx, txName, gasEstimate);
+    const transactionHash = await processTx(tx, txName, gasEstimate, null, payload);
     return { txName, transactionHash };
 }
 
