@@ -42,12 +42,13 @@ export const StyledAccountInfo = styled(Pblock)`
         ${media.tablet`
             position: fixed;
             top: 0;
-            left: 0;
+            left: 16px;
             width: 100%;
             height: 100%;
             background: ${theme.colors.secondary};
             opacity: .97;
             padding: 0;
+            z-index: 1;
         `};
     }
 

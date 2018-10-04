@@ -10,6 +10,9 @@ export default function Icon(props) {
         case "info":
             className += " fas fa-info";
             break;
+        case "warning":
+            className += " fas fa-exclamation-triangle";
+            break;
         case "check":
             className += " fas fa-check";
             break;
