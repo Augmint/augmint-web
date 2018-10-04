@@ -5,24 +5,25 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import Button from "components/augmint-ui/button";
 import { connect } from "react-redux";
+import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { reduxForm, SubmissionError, Field } from "redux-form";
+import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
-import { Pblock } from "components/PageLayout";
 import { TransferFeeToolTip } from "./AccountToolTips";
-import { callbackAfterTransfer } from "./TransferRequestHelper";
-
 import theme from "styles/theme";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, feeAmount: "0", urlResolved: false };
+        this.state = {
+            result: null,
+            feeAmount: "0",
+            urlResolved: false
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
@@ -88,9 +89,6 @@ class TokenTransferForm extends React.Component {
                 tokenAmount,
                 feeAmount: "0"
             });
-
-            const networkId = store.getState().web3Connect.network.id;
-            callbackAfterTransfer(values.payee, tokenAmount, "AEUR", networkId, res.result.transactionHash);
         }
     }
 
@@ -103,14 +101,13 @@ class TokenTransferForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            augmintToken
+            augmintToken,
+            isFunctional,
+            submitText
         } = this.props;
 
         return (
-            <Pblock
-                loading={augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)}
-                header="Send A-EUR"
-            >
+            <div style={isFunctional && { display: "inline" }}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="Token transfer submitted"
@@ -123,7 +120,11 @@ class TokenTransferForm extends React.Component {
                     </EthSubmissionSuccessPanel>
                 )}
                 {!submitSucceeded && (
-                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
+                    <Form
+                        error={error ? "true" : "false"}
+                        onSubmit={handleSubmit(this.handleSubmit)}
+                        style={isFunctional && { display: "inline" }}
+                    >
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
@@ -134,64 +135,68 @@ class TokenTransferForm extends React.Component {
                             />
                         )}
 
-                        <Field
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            name="tokenAmount"
-                            placeholder="Amount"
-                            onChange={this.onTokenAmountChange}
-                            validate={[
-                                Validations.required,
-                                Validations.tokenAmount,
-                                Validations.userTokenBalanceWithTransferFee
-                            ]}
-                            normalize={Normalizations.twoDecimals}
-                            disabled={submitting || !augmintToken.isLoaded}
-                            data-testid="transferAmountInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="A-EUR"
-                        />
-                        <small style={{ display: "block", marginBottom: 10 }}>
-                            Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                            <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                        </small>
+                        {!isFunctional && (
+                            <div>
+                                <Field
+                                    component={Form.Field}
+                                    as={Form.Input}
+                                    type={isFunctional ? "hidden" : "number"}
+                                    name="tokenAmount"
+                                    placeholder="Amount"
+                                    onChange={this.onTokenAmountChange}
+                                    validate={[
+                                        Validations.required,
+                                        Validations.tokenAmount,
+                                        Validations.userTokenBalanceWithTransferFee
+                                    ]}
+                                    normalize={Normalizations.twoDecimals}
+                                    disabled={submitting || !augmintToken.isLoaded}
+                                    data-testid="transferAmountInput"
+                                    style={{ borderRadius: theme.borderRadius.left }}
+                                    labelAlignRight="A-EUR"
+                                />
+                                <small style={{ display: "block", marginBottom: 10 }}>
+                                    Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
+                                    <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
+                                </small>
 
-                        <Field
-                            component={Form.Field}
-                            as={Form.Input}
-                            label="To:"
-                            size="small"
-                            data-testid="transferToAddressField"
-                            name="payee"
-                            type="text"
-                            parse={Parsers.trim}
-                            validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
-                            placeholder="0x0..."
-                            disabled={submitting || !augmintToken.isLoaded}
-                        />
-                        <Field
-                            component={Form.Field}
-                            as={Form.Input}
-                            data-testid="transferNarrativeField"
-                            label="Reference:"
-                            name="narrative"
-                            type="text"
-                            placeholder="short narrative (optional)"
-                            disabled={submitting || !augmintToken.isLoaded}
-                        />
+                                <Field
+                                    component={Form.Field}
+                                    as={Form.Input}
+                                    label="To:"
+                                    size="small"
+                                    data-testid="transferToAddressField"
+                                    name="payee"
+                                    type={isFunctional ? "hidden" : "text"}
+                                    parse={Parsers.trim}
+                                    validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
+                                    placeholder="0x0..."
+                                    disabled={submitting || !augmintToken.isLoaded}
+                                />
+                                <Field
+                                    component={Form.Field}
+                                    as={Form.Input}
+                                    data-testid="transferNarrativeField"
+                                    label="Reference:"
+                                    name="narrative"
+                                    type={isFunctional ? "hidden" : "text"}
+                                    placeholder="short narrative (optional)"
+                                    disabled={submitting || !augmintToken.isLoaded}
+                                />
+                            </div>
+                        )}
                         <Button
                             type="submit"
                             loading={submitting}
-                            disabled={pristine}
+                            disabled={!isFunctional && pristine}
                             data-testid="submitTransferButton"
                             className={submitting ? "loading" : ""}
                         >
-                            {submitting ? "Submitting..." : "Transfer"}
+                            {submitting ? "Submitting..." : submitText || "Transfer"}
                         </Button>
                     </Form>
                 )}
-            </Pblock>
+            </div>
         );
     }
 }

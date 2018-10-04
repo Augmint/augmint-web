@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import TokenTransferForm from "./components/TokenTransferForm";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
@@ -15,6 +15,8 @@ class TransferPage extends React.Component {
     }
 
     render() {
+        const { augmintToken } = this.props;
+
         return (
             <EthereumState>
                 <Psegment>
@@ -26,7 +28,14 @@ class TransferPage extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <TokenTransferForm />
+                                <Pblock
+                                    loading={
+                                        augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
+                                    }
+                                    header="Send A-EUR"
+                                >
+                                    <TokenTransferForm />
+                                </Pblock>
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
@@ -37,6 +46,7 @@ class TransferPage extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    augmintToken: state.augmintToken,
     userAccount: state.userBalances.account
 });
 

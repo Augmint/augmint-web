@@ -35,3 +35,14 @@ export const LEGACY_LOANMANAGER_CONTRACTS = {
         "0x214919Abe3f2b7CA7a43a799C4FC7132bBf78e8A" // oldLoanManager2 (oldToken4)
     ]
 };
+
+export const NETWORKS = {
+    1: "Main",
+    2: "Morden",
+    3: "Ropsten",
+    4: "Rinkeby",
+    42: "Kovan",
+    999: "Testrpc",
+    4447: "TruffleLocal",
+    1976: "PrivateChain"
+};
