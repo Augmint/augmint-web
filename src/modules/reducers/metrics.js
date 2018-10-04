@@ -13,8 +13,8 @@ const initialState = {
     isLoaded: false,
     loadError: null,
     loansData: {},
-    augmintTokenData: {},
-    monetarySupervisorData: {}
+    augmintTokenInfo: {},
+    monetarySupervisorInfo: {}
 };
 
 export default (state = initialState, action) => {
@@ -53,13 +53,13 @@ export const fetchAllData = () => {
             type: METRICS_DATA_REFRESH_REQUESTED
         });
         try {
-            const augmintTokenData = await fetchAllTokensInfo();
+            const augmintTokenInfo = await fetchAllTokensInfo();
             const loansData = await fetchAllLoansInfo();
-            const monetarySupervisorData = await fetchAllMonetarySupervisorInfo();
+            const monetarySupervisorInfo = await fetchAllMonetarySupervisorInfo();
 
             return dispatch({
                 type: METRICS_DATA_REFRESH_SUCCESS,
-                result: { augmintTokenData, loansData, monetarySupervisorData }
+                result: { augmintTokenInfo, loansData, monetarySupervisorInfo }
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
