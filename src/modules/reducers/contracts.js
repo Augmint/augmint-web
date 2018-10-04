@@ -80,11 +80,7 @@ export const connectContracts = () => {
                 lockManager.web3ContractInstance.methods.monetarySupervisor().call()
             ]);
 
-            const feeAccount = SolidityContract.connectAt(
-                store.getState().web3Connect,
-                "FeeAccount",
-                feeAccountAddress
-            );
+            const feeAccount = SolidityContract.connectAt(web3, "FeeAccount", feeAccountAddress);
             const monetarySupervisor = SolidityContract.connectAt(
                 web3,
                 "MonetarySupervisor",

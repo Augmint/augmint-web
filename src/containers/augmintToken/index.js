@@ -215,6 +215,7 @@ class AugmintToken extends React.Component {
                 }
             });
         }
+
         return (
             <EthereumState>
                 <ThemeProvider theme={medeaTheme}>
@@ -261,7 +262,8 @@ class AugmintToken extends React.Component {
                                         <StyledRow halign="justify" className="borderTop result">
                                             <StyledCol width={2 / 3}>Total</StyledCol>
                                             <StyledCol width={1 / 3}>
-                                                {Number(this.props.augmintToken.info.totalSupply).toFixed(0) + " A€"}
+                                                {Number(this.props.metrics.augmintTokenData.totalSupply).toFixed(0) +
+                                                    " A€"}
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -276,9 +278,9 @@ class AugmintToken extends React.Component {
                                         <StyledRow halign="justify">
                                             <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
                                             <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.reserveTokenBalance).toFixed(
-                                                    0
-                                                ) + " A€"}
+                                                {Number(
+                                                    this.props.metrics.monetarySupervisorData.reserveTokenBalance
+                                                ).toFixed(0) + " A€"}
                                                 <div className="chart-info orange" />
                                             </StyledCol>
                                         </StyledRow>

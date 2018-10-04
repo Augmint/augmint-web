@@ -2,9 +2,85 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { fetchLoansTx } from "./loanTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { LOAN_STATES, LEGACY_LOANMANAGER_CONTRACTS } from "utils/constants";
+import {
+    LEGACY_AEUR_CONTRACTS,
+    LOAN_STATES,
+    LEGACY_LOANMANAGER_CONTRACTS,
+    LEGACY_LOCKER_CONTRACTS
+} from "utils/constants";
 
-export async function fetchActiveLegacyLoansTx() {
+export async function fetchAllTokensInfo() {
+    const web3 = store.getState().web3Connect;
+    const latestTokenAddress = store.getState().contracts.latest.augmintToken.address;
+    const tokenAddresses = [latestTokenAddress, ...LEGACY_AEUR_CONTRACTS[web3.network.id]];
+
+    const queries = tokenAddresses.map(tokenAddress => {
+        const tokenContract = SolidityContract.connectAt(web3, "TokenAEur", tokenAddress);
+        return Promise.all([
+            tokenContract.web3ContractInstance.methods.totalSupply().call(),
+            tokenContract.web3ContractInstance.methods.decimals().call()
+        ]).then(([bn_totalSupply, decimals]) => {
+            return bn_totalSupply / 10 ** decimals;
+        });
+    });
+
+    return (await Promise.all(queries)).reduce(
+        (res, totalSupply) => {
+            res.totalSupply = res.totalSupply.plus(totalSupply);
+            return res;
+        },
+        {
+            totalSupply: new BigNumber(0)
+        }
+    );
+}
+
+export async function fetchAllMonetarySupervisorInfo() {
+    const web3 = store.getState().web3Connect;
+    const latestLockAddress = store.getState().contracts.latest.lockManager.address;
+    const lockAddresses = [latestLockAddress, ...LEGACY_LOCKER_CONTRACTS[web3.network.id]];
+
+    const queries = lockAddresses.map(lockAddress => {
+        const lockContract = SolidityContract.connectAt(web3, "Locker", lockAddress);
+
+        return lockContract.web3ContractInstance.methods
+            .monetarySupervisor()
+            .call()
+            .then(monetarySupervisorAddress =>
+                SolidityContract.connectAt(web3, "MonetarySupervisor", monetarySupervisorAddress)
+            )
+            .then(monetarySupervisor =>
+                Promise.all([
+                    monetarySupervisor.web3ContractInstance.methods.augmintReserves().call(),
+                    monetarySupervisor.web3ContractInstance.methods
+                        .augmintToken()
+                        .call()
+                        .then(augmintTokenAddress => SolidityContract.connectAt(web3, "TokenAEur", augmintTokenAddress))
+                ])
+            )
+            .then(([reservesAddress, augmintToken]) =>
+                Promise.all([
+                    augmintToken.web3ContractInstance.methods.balanceOf(reservesAddress).call(),
+                    augmintToken.web3ContractInstance.methods.decimals().call()
+                ])
+            )
+            .then(([bn_reserveTokenBalance, decimals]) => {
+                return bn_reserveTokenBalance / 10 ** decimals;
+            });
+    });
+
+    return (await Promise.all(queries)).reduce(
+        (res, reserveTokenBalance) => {
+            res.reserveTokenBalance = res.reserveTokenBalance.plus(reserveTokenBalance);
+            return res;
+        },
+        {
+            reserveTokenBalance: new BigNumber(0)
+        }
+    );
+}
+
+export async function fetchAllLoansInfo() {
     const web3 = store.getState().web3Connect;
     const currentLoanManagerAddress = store.getState().contracts.latest.loanManager.address;
     const loanManagerAddresses = [currentLoanManagerAddress, ...LEGACY_LOANMANAGER_CONTRACTS[web3.network.id]];

@@ -1,6 +1,6 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
-import { fetchAllLoans } from "modules/reducers/metrics";
+import { fetchAllData } from "modules/reducers/metrics";
 
 let isWatchSetup = false;
 
@@ -24,6 +24,6 @@ const onContractsIsConnectedChange = () => {
     const contractsIsConnected = store.getState().contracts.isConnected;
     if (contractsIsConnected) {
         console.debug("metricsProvider - contracts.isConnected changed: Dispatching fetchActiveLegacyLoans() ");
-        store.dispatch(fetchAllLoans());
+        store.dispatch(fetchAllData());
     }
 };

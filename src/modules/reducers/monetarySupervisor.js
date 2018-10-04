@@ -86,7 +86,7 @@ export const refreshMonetarySupervisor = () => {
     };
 };
 
-async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
+export async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
