@@ -11,7 +11,7 @@
     "chart.js": "2.7.2",
     "del": "3.0.0",
     "ethereumjs-util": "5.2.0",
-    "ethers": "3.0.29",
+    "ethers": "4.0.1",
     "hdkey": "1.1.0",
     "moment": "2.22.2",
     "parse": "2.1.0",
