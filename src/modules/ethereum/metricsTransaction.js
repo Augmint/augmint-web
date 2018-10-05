@@ -46,11 +46,11 @@ export async function fetchAllTokensInfo() {
 
     return {
         totalSupply: sum([
-            0, //latestToken.info.totalSupply,
+            latestToken.info.totalSupply,
             ...(await Promise.all(LEGACY_AEUR_CONTRACTS[web3.network.id].map(fetchTokenInfo)))
         ]),
         feeAccountTokenBalance: sum([
-            0, //latestToken.info.feeAccountTokenBalance,
+            latestToken.info.feeAccountTokenBalance,
             ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchBalance)))
         ])
     };
@@ -74,17 +74,17 @@ export async function fetchAllMonetarySupervisorInfo() {
 
     return {
         issuedByStabilityBoard: sum([
-            0, //latestMs.info.issuedByStabilityBoard,
+            latestMs.info.issuedByStabilityBoard,
             ...(await Promise.all(
                 LEGACY_MONETARY_SUPERVISOR_CONTRACTS[web3.network.id].map(fetchMonetarySupervisorInfo)
             ))
         ]),
         reserveTokenBalance: sum([
-            0, //latestMs.info.reserveTokenBalance,
+            latestMs.info.reserveTokenBalance,
             ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchBalance)))
         ]),
         interestEarnedAccountTokenBalance: sum([
-            0, //latestMs.info.interestEarnedAccountTokenBalance,
+            latestMs.info.interestEarnedAccountTokenBalance,
             ...(await Promise.all(LEGACY_INTEREST_EARNED_CONTRACTS[web3.network.id].map(fetchBalance)))
         ])
     };
