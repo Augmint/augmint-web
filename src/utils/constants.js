@@ -36,6 +36,8 @@ export const LEGACY_LOANMANAGER_CONTRACTS = {
     ]
 };
 
+export const AVG_BLOCK_TIME = 14; // 14 sec
+
 export const NETWORKS = {
     1: "Main",
     2: "Morden",

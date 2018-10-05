@@ -1,35 +1,56 @@
 import React from "react";
+import { connect } from "react-redux";
+import store from "modules/store";
+import { fetchLatestTransfers } from "modules/reducers/userTransfers";
 import { TxDate, TxInfo, TxPrice } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
-import { connect } from "react-redux";
 
 class TransferList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { limit: this.props.limit };
+        this.state = { page: 1 };
         this.showMore = this.showMore.bind(this);
     }
 
     showMore() {
-        this.setState({
-            limit: this.state.limit + this.props.limit
-        });
+        const page = this.state.page + 1;
+        const limit = page * this.props.limit;
+        const nextPage = () => {
+            this.setState({ page });
+        };
+        const fetchData = () => {
+            store.dispatch(fetchLatestTransfers(this.props.userAccount.address, true)).then(res => {
+                if (res.type === "userTransfers/FETCH_TRANSFERS_RECEIVED") {
+                    if (this.isLastPage() || limit <= res.result.length) {
+                        nextPage();
+                    } else {
+                        fetchData();
+                    }
+                }
+            });
+        };
+
+        if (limit < this.props.userTransfers.transfers.length) {
+            nextPage();
+        } else {
+            fetchData();
+        }
     }
 
-    hasMore() {
-        return this.state.limit < this.props.transfers.transfers.length;
+    isLastPage() {
+        return store.getState().contracts.latest.augmintToken.deployedAtBlock >= this.props.userTransfers.fromBlock;
     }
 
     render() {
         const { header, noItemMessage, userAccount } = this.props;
-        const { isLoading, error } = this.props.transfers;
-        let { transfers } = this.props.transfers;
+        const { isLoading, error } = this.props.userTransfers;
+        let { transfers } = this.props.userTransfers;
 
         if (transfers) {
-            transfers = transfers.slice(0, this.state.limit);
+            transfers = transfers.slice(0, this.state.page * this.props.limit);
 
             transfers.reduce((balance, tx, index, all) => {
                 const amount = index > 0 ? all[index - 1].signedAmount : 0;
@@ -104,7 +125,7 @@ class TransferList extends React.Component {
                     </StyleTable>
                 )}
                 {transfers &&
-                    this.hasMore() && (
+                    !this.isLastPage() && (
                         <div style={{ marginTop: 20 }}>
                             <Button onClick={this.showMore} className="ghost">
                                 Show older
@@ -118,13 +139,13 @@ class TransferList extends React.Component {
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p>No transactions</p>,
+    noItemMessage: <p>There was nothing lately.</p>,
     header: null,
     limit: 5
 };
 
 const mapStateToProps = state => ({
-    transfers: state.userTransfers
+    userTransfers: state.userTransfers
 });
 
 export default connect(mapStateToProps)(TransferList);
