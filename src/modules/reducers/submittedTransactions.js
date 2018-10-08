@@ -1,4 +1,5 @@
 import store from "modules/store";
+import { callbackAfterTransfer } from "../../containers/transfer/request/TransferRequestHelper";
 
 export const UPDATE_TX_SUCCESS = "submittedTransactions/UPDATE_TX_SUCCESS";
 export const UPDATE_TX_ERROR = "submittedTransactions/UPDATE_TX_ERROR";
@@ -43,6 +44,10 @@ export const updateTx = tx => {
                 transactions[tx.transactionHash].event === "confirmation"
             ) {
                 transactions[tx.transactionHash].isDismissed = undefined;
+            }
+
+            if (transactions[tx.transactionHash].confirmationNumber >= 5) {
+                callbackAfterTransfer(transactions[tx.transactionHash]);
             }
 
             return dispatch({

@@ -141,6 +141,9 @@ async function getAugmintTokenInfo(augmintTokenInstance) {
 }
 
 export function transferToken(payload) {
+    payload.currencyCode = "AEUR";
+    payload.networkId = store.getState().web3Connect.network.id;
+
     return async dispatch => {
         dispatch({
             type: AUGMINT_TOKEN_TRANSFER_REQUESTED,

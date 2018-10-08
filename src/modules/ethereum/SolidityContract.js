@@ -33,6 +33,11 @@ export default class SolidityContract {
                 startBlock = 0;
         }
         this.deployedAtBlock = ethers.utils.bigNumberify(startBlock).toHexString();
+        this.connection = connection;
+    }
+
+    getLastBlockNumber() {
+        return this.connection.web3Instance.eth.getBlockNumber();
     }
 
     static connectLatest(connection, abiFile) {

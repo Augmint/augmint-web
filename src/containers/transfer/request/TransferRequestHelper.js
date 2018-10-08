@@ -1,5 +1,6 @@
+import { utils as web3Utils } from "web3";
 import * as cookie from "utils/cookie";
-
+import { createUrl } from "utils/helpers";
 const transferRequestsCookieName = "transferRequests";
 
 function transferRequestEqual(a, b) {
@@ -11,32 +12,16 @@ function transferRequestEqual(a, b) {
     );
 }
 
-function createUrl(url, params) {
-    const i = url.indexOf("?");
-    const origSearch = i >= 0 ? url.slice(i + 1) : "";
-    const origPath = i >= 0 ? url.slice(0, i) : url;
-    const qs = new URLSearchParams(origSearch);
-
-    for (const key in params) {
-        if (params[key] !== null && params[key] !== "") {
-            qs.set(key, params[key]);
-        }
-    }
-
-    const search = qs.toString();
-    return origPath + (search ? "?" + search : "");
-}
-
 export function getTransferLink(request) {
-    return createUrl("/transfer", {
-        address: request.beneficiary_address,
-        amount: request.amount,
-        reference: request.reference
-    });
+    return "/transfer/" + request.timestamp;
 }
 
 export function getTransferRequests() {
     return cookie.getCookie(transferRequestsCookieName) || [];
+}
+
+export function getTransferRequest(timestamp) {
+    return getTransferRequests().find(request => parseInt(request.timestamp, 10) === parseInt(timestamp, 10));
 }
 
 export function setTransferRequests(transferRequests) {
@@ -64,8 +49,13 @@ export function applyTransferRequestFromUrl(urlParams) {
             amount: parseFloat(amount),
             currency_code: urlParams.get("currency_code") || "AEUR",
             reference: urlParams.get("reference"),
-            notify_url: urlParams.get("notify_url")
+            notify_url: urlParams.get("notify_url"),
+            timestamp: Date.now()
         };
+
+        if (!web3Utils.isAddress(request.beneficiary_address)) {
+            throw new Error("Invalid 'beneficiary_address' parameter.");
+        }
 
         if (![1, 4].includes(request.network_id)) {
             throw new Error("Invalid 'network_id' parameter. Available values: 1 (mainnet), 4 (rinkeby)");
@@ -89,7 +79,7 @@ export function applyTransferRequestFromUrl(urlParams) {
     }
 }
 
-export function callbackAfterTransfer(beneficiary_address, amount, currency_code, network_id, transactionHash) {
+export function callbackAfterTransfer(transaction) {
     const transferRequests = getTransferRequests();
 
     for (const i in transferRequests) {
@@ -97,10 +87,10 @@ export function callbackAfterTransfer(beneficiary_address, amount, currency_code
 
         if (
             transferRequestEqual(transferRequest, {
-                beneficiary_address,
-                amount,
-                currency_code,
-                network_id
+                beneficiary_address: transaction.payload.payee,
+                amount: transaction.payload.tokenAmount,
+                currency_code: transaction.payload.currencyCode,
+                network_id: transaction.payload.networkId
             })
         ) {
             deleteTransferRequest(i);
@@ -110,10 +100,10 @@ export function callbackAfterTransfer(beneficiary_address, amount, currency_code
                     order_id: transferRequest.order_id,
                     token: transferRequest.token,
                     network_id: transferRequest.network_id,
-                    beneficiary_address,
-                    amount,
+                    beneficiary_address: transferRequest.beneficiary_address,
+                    amount: transferRequest.amount,
                     currency_code: transferRequest.currency_code,
-                    tx_hash: transactionHash
+                    tx_hash: transaction.transactionHash
                 });
 
                 window.location.replace(link);
