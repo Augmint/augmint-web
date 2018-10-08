@@ -86,13 +86,13 @@ class AugmintToken extends React.Component {
         }
 
         if (
-            this.props.monetarySupervisor.info.reserveEthBalance !== "?" &&
-            this.props.augmintToken.info.feeAccountEthBalance !== "?"
+            this.props.metrics.monetarySupervisorInfo.reserveEthBalance !== undefined &&
+            this.props.metrics.augmintTokenInfo.feeAccountEthBalance !== undefined
         ) {
             availableForMarketIntervention = new BigNumber(
-                this.props.monetarySupervisor.info.reserveEthBalance.toFixed(15)
+                this.props.metrics.monetarySupervisorInfo.reserveEthBalance.toFixed(15)
             )
-                .plus(this.props.augmintToken.info.feeAccountEthBalance)
+                .plus(this.props.metrics.augmintTokenInfo.feeAccountEthBalance)
                 .toNumber();
         }
         let loanLimit = 0;
@@ -351,9 +351,9 @@ class AugmintToken extends React.Component {
                                         <StyledRow halign="justify">
                                             <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
                                             <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.reserveEthBalance).toFixed(
-                                                    4
-                                                ) + " ETH"}
+                                                {Number(
+                                                    this.props.metrics.monetarySupervisorInfo.reserveEthBalance
+                                                ).toFixed(4) + " ETH"}
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>
@@ -361,8 +361,9 @@ class AugmintToken extends React.Component {
                                         <StyledRow halign="justify">
                                             <StyledCol width={2 / 3}>ETH Fees</StyledCol>
                                             <StyledCol width={1 / 3}>
-                                                {Number(this.props.augmintToken.info.feeAccountEthBalance).toFixed(4) +
-                                                    " ETH"}
+                                                {Number(
+                                                    this.props.metrics.augmintTokenInfo.feeAccountEthBalance
+                                                ).toFixed(4) + " ETH"}
                                             </StyledCol>
                                         </StyledRow>
                                     </MyListGroup>

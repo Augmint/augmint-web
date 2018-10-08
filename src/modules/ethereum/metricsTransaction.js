@@ -16,7 +16,7 @@ function sum(arr) {
     return arr.reduce((res, item) => res.plus(item), new BigNumber(0));
 }
 
-async function fetchBalance({ address, tokenAddress }) {
+async function fetchTokenBalance({ address, tokenAddress }) {
     const web3 = store.getState().web3Connect;
     const tokenInstance = SolidityContract.connectAt(web3, "TokenAEur", tokenAddress).web3ContractInstance;
 
@@ -26,6 +26,12 @@ async function fetchBalance({ address, tokenAddress }) {
     ]);
 
     return bn_balance / 10 ** decimals;
+}
+
+async function fetchEthBalance(address) {
+    const web3 = store.getState().web3Connect;
+    const bn_balance = await web3.eth.getBalance(address);
+    return web3.web3Instance.utils.fromWei(bn_balance);
 }
 
 async function fetchTokenInfo(tokenAddress) {
@@ -51,7 +57,11 @@ export async function fetchAllTokensInfo() {
         ]),
         feeAccountTokenBalance: sum([
             latestToken.info.feeAccountTokenBalance,
-            ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchBalance)))
+            ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
+        ]),
+        feeAccountEthBalance: sum([
+            latestToken.info.feeAccountEthBalance,
+            ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchEthBalance)))
         ])
     };
 }
@@ -81,11 +91,15 @@ export async function fetchAllMonetarySupervisorInfo() {
         ]),
         reserveTokenBalance: sum([
             latestMs.info.reserveTokenBalance,
-            ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchBalance)))
+            ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
+        ]),
+        reserveEthBalance: sum([
+            latestMs.info.reserveEthBalance,
+            ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchEthBalance)))
         ]),
         interestEarnedAccountTokenBalance: sum([
             latestMs.info.interestEarnedAccountTokenBalance,
-            ...(await Promise.all(LEGACY_INTEREST_EARNED_CONTRACTS[web3.network.id].map(fetchBalance)))
+            ...(await Promise.all(LEGACY_INTEREST_EARNED_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
         ])
     };
 }
