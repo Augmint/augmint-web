@@ -40,9 +40,13 @@ class TopNav extends React.Component {
         if (!isPropagate) {
             e.preventDefault();
         }
-        this.props.toggleAccInfo();
-        let fakebody = document.getElementById("fakebody");
-        noScroll ? fakebody.classList.add("noScroll") : fakebody.classList.remove("noScroll");
+        if (window.innerWidth > 768) {
+            e.preventDefault();
+        } else {
+            this.props.toggleAccInfo();
+            let fakebody = document.getElementById("fakebody");
+            noScroll ? fakebody.classList.add("noScroll") : fakebody.classList.remove("noScroll");
+        }
     }
 
     toggleNotificationPanel(e) {

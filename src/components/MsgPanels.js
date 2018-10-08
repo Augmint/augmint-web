@@ -187,11 +187,3 @@ export function ErrorDetails(props) {
         </div>
     );
 }
-
-// function mapStateToProps(state) {
-//     return {
-//         transactions: state.submittedTransactions.transactions
-//     };
-// }
-
-// export default connect(mapStateToProps)(MsgPanel);
