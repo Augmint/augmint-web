@@ -110,6 +110,7 @@ class LegacyLockers extends React.Component {
 
                     <p style={styleP}>
                         <Button
+                            className="ghost"
                             type="submit"
                             data-testid={`dismissLegacyLockerButton-${contractIndex}`}
                             onClick={() => this.handleDismiss(contract.address)}

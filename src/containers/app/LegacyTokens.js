@@ -64,17 +64,10 @@ class LegacyTokens extends React.Component {
                       <p>
                           Balance in legacy contract:
                           <br /> {item.balance} A-EUR <br />
-                          <small>
+                          <small style={{ display: "inline-block", margin: "0 0 .5rem" }}>
                               <HashURL hash={item.contract} type={"address/"} />{" "}
                           </small>
                       </p>
-                      <Button
-                          type="submit"
-                          data-testid={`dismissLegacyBalanceButton-${index}`}
-                          onClick={() => this.handleDismiss(item.contract)}
-                      >
-                          Dismiss
-                      </Button>
                       <Button
                           type="submit"
                           disabled={submitting}
@@ -82,6 +75,15 @@ class LegacyTokens extends React.Component {
                           onClick={() => this.submitConvert(item.contract, item.balance)}
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
+                      </Button>
+                      <Button
+                          style={{ marginLeft: 20 }}
+                          className="ghost"
+                          type="submit"
+                          data-testid={`dismissLegacyBalanceButton-${index}`}
+                          onClick={() => this.handleDismiss(item.contract)}
+                      >
+                          Dismiss
                       </Button>
                   </MyListGroup.Col>
               ))

@@ -132,6 +132,7 @@ class LegacyLoanManagers extends React.Component {
 
                     <p style={styleP}>
                         <Button
+                            className="ghost"
                             type="submit"
                             data-testid={`dismissLegacyLoanManagerButton-${contractIndex}`}
                             onClick={() => this.handleDismiss(contract.address)}

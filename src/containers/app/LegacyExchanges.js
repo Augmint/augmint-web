@@ -112,6 +112,7 @@ class LegacyExchanges extends React.Component {
 
                     <p style={styleP}>
                         <Button
+                            className="ghost"
                             type="submit"
                             data-testid={`dismissLegacyExchangeButton-${contractIndex}`}
                             onClick={() => this.handleDismiss(contract.address)}
