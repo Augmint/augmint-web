@@ -9,12 +9,10 @@ import { default as theme } from "styles/theme";
 
 export const StyledIcon = styled(Icon)`
     position: absolute;
-    /* margin: 0; */
     font-size: 1.8rem;
     color: ${theme.colors.secondary};
     cursor: pointer;
     &.close {
-        /* transform: rotate(-180deg); */
         top: 10px;
         right: 10px;
     }
@@ -81,14 +79,14 @@ export class MsgPanel extends React.Component {
 
         return (
             (!this.state.dismissed || !dismissable) && (
-                <Container style={loading || error || success ? {} : { margin: "1em" }}>
+                <Container style={loading || error || success ? {} : { margin: "0 1em" }}>
                     <Message
                         onDismiss={onDismiss ? this.dismiss : null}
                         className={_className}
                         noCloseIcon={noClose}
                         {...other}
                     >
-                        <h4 style={chevron ? { paddingRight: "30px" } : { paddingRidght: "0" }}>
+                        <h4 style={chevron && { paddingRight: "30px" }}>
                             {icon && <Icon name={icon} loading={loading} />}
                             {header}
                             {chevron && (
@@ -127,7 +125,7 @@ export function SuccessPanel(props) {
 }
 
 export function InfoPanel(props) {
-    const { info = true, icon = "info", chevron = "chevron-down", ...other } = props;
+    const { info = true, icon = "info", chevron, ...other } = props;
     return <MsgPanel info={info} icon={icon} chevron={chevron} {...other} />;
 }
 
@@ -223,11 +221,3 @@ export function ErrorDetails(props) {
         </div>
     );
 }
-
-// function mapStateToProps(state) {
-//     return {
-//         transactions: state.submittedTransactions.transactions
-//     };
-// }
-
-// export default connect(mapStateToProps)(MsgPanel);

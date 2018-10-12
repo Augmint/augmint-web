@@ -27,8 +27,6 @@ export const StyledP = styled.p`
 `;
 
 export const StyledSmall = styled.small`
-    /* display: inline-block;
-    margin-top: 10px; */
     &.close {
         display: none;
     }
@@ -98,7 +96,6 @@ class LegacyLockers extends React.Component {
         const { contracts, lockerContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
         let _className = this.state.showInfoPanel ? "open" : "close";
-        console.log("this.state: ", this.state);
 
         const locks = contracts
             .filter(contract => contract.locks.length > 0 && !contract.isDismissed)
@@ -157,23 +154,26 @@ class LegacyLockers extends React.Component {
                         header="We have a new contract in effect. You have locked funds in an older version of Augmint Locker contract."
                         showInfoPanel={this.state.showInfoPanel}
                         toggleInfoPanel={this.toggleInfoPanel}
+                        chevron="chevron-down"
                     >
                         <p style={styleP}>
                             You can release your funds in the old locker contract when the lock expired.
                         </p>
-                        <StyledP style={styleP} className={_className}>
-                            Augmint Locker version in use on{" "}
-                            <HashURL hash={lockerContract.address} type={"address/"}>
-                                {network.name + " network"}
-                            </HashURL>
-                            .
+                        <StyledP style={{ margin: ".3rem 0" }} className={_className}>
+                            <StyledSmall className={_className}>
+                                Augmint Locker version in use on{" "}
+                                <HashURL hash={lockerContract.address} type={"address/"}>
+                                    {network.name + " network"}
+                                </HashURL>
+                                .
+                            </StyledSmall>
                         </StyledP>
-                        <p style={styleP}>
+                        <StyledP style={{ margin: ".3rem 0" }} className={_className}>
                             <StyledSmall className={_className}>
                                 NB: Locker contract upgrades will be infrequent when Augmint released in public. During
                                 pilots we deliberately deploy a couple of new versions to test the conversion process.
                             </StyledSmall>
-                        </p>
+                        </StyledP>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}

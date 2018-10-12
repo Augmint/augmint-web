@@ -15,8 +15,36 @@ import {
     LEGACY_LOANMANAGERS_COLLECT_SUCCESS
 } from "modules/reducers/legacyLoanManagers";
 import HashURL from "components/hash";
+import styled from "styled-components";
 
-const styleP = { margin: "1rem 0" };
+const styleP = { margin: ".5rem 0" };
+
+export const StyledP = styled.p`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
+
+export const StyledSmall = styled.small`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: inline;
+    }
+`;
+
+export const StyledDiv = styled.div`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
 
 class LegacyLoanManagers extends React.Component {
     constructor(props) {
@@ -24,11 +52,13 @@ class LegacyLoanManagers extends React.Component {
         this.handleDismiss = this.handleDismiss.bind(this);
         this.submitRepayLoan = this.submitRepayLoan.bind(this);
         this.submitCollectLoan = this.submitCollectLoan.bind(this);
+        this.toggleInfoPanel = this.toggleInfoPanel.bind(this);
         this.state = {
             submitting: false,
             submitSucceeded: false,
             error: null,
-            result: null
+            result: null,
+            showInfoPanel: false
         };
     }
 
@@ -38,6 +68,12 @@ class LegacyLoanManagers extends React.Component {
 
     handleDismiss(legacyLockerAddress) {
         this.props.dismissLegacyLoanManager(legacyLockerAddress);
+    }
+
+    toggleInfoPanel() {
+        this.setState({
+            showInfoPanel: !this.state.showInfoPanel
+        });
     }
 
     async submitRepayLoan(legacyLoanManagerAddress, repaymentAmount, loanId) {
@@ -81,6 +117,7 @@ class LegacyLoanManagers extends React.Component {
     render() {
         const { contracts, loanManagerContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
+        let _className = this.state.showInfoPanel ? "open" : "close";
 
         const loans = contracts
             .filter(contract => contract.loans.length > 0 && !contract.isDismissed)
@@ -160,21 +197,31 @@ class LegacyLoanManagers extends React.Component {
         return loans && loans.length > 0 && loanManagerContract ? (
             <Psegment>
                 <Container>
-                    <InfoPanel header="You have loan(s) in an older version of Augmint LoanManager contract">
+                    <InfoPanel
+                        header="We have a new contract in effect. You have loan(s) in an older version of Augmint LoanManager contract"
+                        showInfoPanel={this.state.showInfoPanel}
+                        toggleInfoPanel={this.toggleInfoPanel}
+                        chevron="chevron-down"
+                    >
                         <p style={styleP}>
-                            Augmint LoanManager version in use on{" "}
-                            <HashURL hash={loanManagerContract.address} type={"address/"}>
-                                {network.name + " network"}
-                            </HashURL>
-                            .<br />
                             You can repay your loan in the old loan contract or collect and release leftover collateral
-                            if it's defaulted .<br />
-                            <small>
+                            if it's defaulted.
+                        </p>
+                        <StyledP className={_className}>
+                            <StyledSmall>
+                                Augmint LoanManager version in use on{" "}
+                                <HashURL hash={loanManagerContract.address} type={"address/"}>
+                                    {network.name + " network"}
+                                </HashURL>
+                                .
+                            </StyledSmall>
+                            <br />
+                            <StyledSmall>
                                 NB: LoanManger contract upgrades will be infrequent when Augmint released in public.
                                 During pilots we deliberately deploy a couple of new versions to test the conversion
                                 process.
-                            </small>
-                        </p>
+                            </StyledSmall>
+                        </StyledP>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
@@ -189,7 +236,7 @@ class LegacyLoanManagers extends React.Component {
                                 onDismiss={() => this.setState({ submitSucceeded: false, result: null })}
                             />
                         )}
-                        {!submitSucceeded && !error && loans}
+                        <StyledDiv className={_className}>{!submitSucceeded && !error && loans}</StyledDiv>
                     </InfoPanel>
                 </Container>
             </Psegment>

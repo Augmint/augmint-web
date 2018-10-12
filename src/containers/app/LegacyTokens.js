@@ -90,7 +90,7 @@ class LegacyTokens extends React.Component {
         return balances && balances.length > 0 && augmintTokenContract ? (
             <Psegment>
                 <Container>
-                    <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
+                    <InfoPanel header="We have a new contract in effect. You have A-EUR in an older version of Augmint token contract">
                         <p>
                             There is newer Augmint A-EUR Token version deployed to the{" "}
                             <HashURL hash={augmintTokenContract.address} type={"address/"}>
