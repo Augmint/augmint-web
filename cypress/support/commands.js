@@ -3,7 +3,7 @@ import { default as Web3 } from "web3";
 import TokenAEur from "../../src/abiniser/abis/TokenAEur_ABI_2ea91d34a7bfefc8f38ef0e8a5ae24a5.json";
 import TokenAEurDeploys from "../../src/abiniser/deployments/999/TokenAEur_DEPLOYS.json";
 
-import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_df21702119818bc90918a2ffe5f87b2d.json";
+import MonetarySupervisor from "../../src/abiniser/abis/MonetarySupervisor_ABI_7f500b43397413e97de925528187f9cd.json";
 import MonetarySupervisorDeploys from "../../src/abiniser/deployments/999/MonetarySupervisor_DEPLOYS.json";
 
 import AugmintReserves from "../../src/abiniser/abis/AugmintReserves_ABI_024b81d1a1f75241167a8a0f6e62326f.json";
