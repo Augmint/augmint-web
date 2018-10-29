@@ -6,7 +6,7 @@ import LockManager from "abiniser/abis/Locker_ABI_f59526398823aef0f0c1454d0b6b4e
 import LoanManager from "abiniser/abis/LoanManager_ABI_fdf5fde95aa940c6dbfb8353c572c5fb.json";
 import Exchange from "abiniser/abis/Exchange_ABI_d3e7f8a261b756f9c40da097608b21cd.json";
 import StabilityBoardProxy from "abiniser/abis/StabilityBoardProxy_ABI_dd40c0d39ea8bad8a388522667a84687.json";
-import PreToken from "abiniser/abis/PreToken_ABI_10eebbb51a771cfd3473475169a569f1.json";
+import PreToken from "abiniser/abis/PreToken_ABI_7f69e33e7b345c780ac9e43f391437d9.json";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
 export const CONTRACTS_CONNECT_SUCCESS = "contracts/CONTRACTS_CONNECT_SUCCESS";
