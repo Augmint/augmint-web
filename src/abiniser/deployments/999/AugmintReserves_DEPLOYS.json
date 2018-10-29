@@ -63,24 +63,6 @@
                 }
             }
         },
-        "fe74b7986dafb00f221486e790fc70ec": {
-            "latestDeployedAddress": "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4",
-            "deployments": {
-                "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4": {
-                    "generatedAt": "2018-08-14T19:51:18.010Z",
-                    "truffleContractFileUpdatedAt": "2018-08-14T19:50:56.846Z",
-                    "deployTransactionHash": "0x5e29c445328b0a15af223d0e3c551a2bbe5bf9fb4f69078aac8c9ee2c486787c",
-                    "compiler": {
-                        "name": "solc",
-                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-                    },
-                    "bytecodeHash": "d7c3fae717169f479dc6cb5fbad4819d",
-                    "deployedBytecodeHash": "e5371ee78a44dcf0a1cf4e902035e415",
-                    "sourceHash": "d5753af67c3f621da910f47d3d749db3",
-                    "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is SystemAccount {\n\n    function () public payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    constructor(address permissionGranterContract) public SystemAccount(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function burn(AugmintTokenInterface augmintToken, uint amount) external restrict(\"MonetarySupervisor\") {\n        augmintToken.burn(amount);\n    }\n\n}\n"
-                }
-            }
-        },
         "024b81d1a1f75241167a8a0f6e62326f": {
             "latestDeployedAddress": "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4",
             "deployments": {
