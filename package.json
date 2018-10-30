@@ -46,8 +46,7 @@
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
-    "precommit": "pretty-quick --staged"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
     "cypress": "3.1.0",
@@ -60,5 +59,10 @@
     "ignore": [
       "bignumber.js"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
