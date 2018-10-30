@@ -61,7 +61,9 @@ export const StyledTopNavUl = styled.ul`
 export const StyledAccount = styled.div`
     display: none;
     &.opened {
-        display: block;
+        ${media.tablet`
+            display: block;
+        `};
     }
 `;
 
