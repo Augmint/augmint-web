@@ -57,6 +57,54 @@ export const LEGACY_LOCKER_CONTRACTS = {
     4: []
 };
 
+/* List of old MonetarySupervisor deploy addresses by network id */
+export const LEGACY_MONETARY_SUPERVISOR_CONTRACTS = {
+    // mainnet
+    1: [],
+
+    // local ganache (migrations deploys it for manual testing)
+    999: [],
+
+    // rinkeby
+    4: []
+};
+
+/* List of old MonetarySupervisor deploy addresses by network id */
+export const LEGACY_FEE_CONTRACTS = {
+    // mainnet
+    1: [],
+
+    // local ganache (migrations deploys it for manual testing)
+    999: [],
+
+    // rinkeby
+    4: []
+};
+
+/* List of old MonetarySupervisor deploy addresses by network id */
+export const LEGACY_INTEREST_EARNED_CONTRACTS = {
+    // mainnet
+    1: [],
+
+    // local ganache (migrations deploys it for manual testing)
+    999: [],
+
+    // rinkeby
+    4: []
+};
+
+/* List of old MonetarySupervisor deploy addresses by network id */
+export const LEGACY_RESERVES_CONTRACTS = {
+    // mainnet
+    1: [],
+
+    // local ganache (migrations deploys it for manual testing)
+    999: [],
+
+    // rinkeby
+    4: []
+};
+
 /* List of old augmint token deploy addresses by network id */
 export const LEGACY_EXCHANGE_CONTRACTS = {
     // mainnet
