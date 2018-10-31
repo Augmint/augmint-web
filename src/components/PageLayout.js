@@ -42,7 +42,7 @@ export class Psegment extends React.Component {
 }
 
 Psegment.defaultProps = {
-    style: { margin: "0 auto", padding: "2em 0", maxWidth: theme.pageSize.maxSize },
+    style: { margin: "0 auto", padding: "1em 0", maxWidth: theme.pageSize.maxSize },
     vertical: true
 };
 
