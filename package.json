@@ -31,7 +31,7 @@
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
     "stringifier": "1.4.0",
-    "styled-components": "3.4.6",
+    "styled-components": "3.4.10",
     "styled-components-grid": "2.2.0",
     "styled-tools": "1.5.1",
     "web3": "1.0.0-beta.36"
@@ -46,13 +46,12 @@
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
-    "precommit": "pretty-quick --staged"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
     "cypress": "3.1.0",
     "eslint-plugin-cypress": "2.0.1",
-    "husky": "1.1.0",
+    "husky": "1.1.1",
     "prettier": "1.14.3",
     "pretty-quick": "1.8.0"
   },
@@ -60,5 +59,11 @@
     "ignore": [
       "bignumber.js"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
