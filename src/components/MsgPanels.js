@@ -4,12 +4,32 @@ import Icon from "./augmint-ui/icon";
 import Container from "./augmint-ui/container";
 import Message from "./augmint-ui/message";
 import HashURL from "components/hash";
+import styled from "styled-components";
+import { default as theme } from "styles/theme";
+
+export const StyledIcon = styled(Icon)`
+    position: absolute;
+    font-size: 1.8rem;
+    color: ${theme.colors.secondary};
+    cursor: pointer;
+    &.close {
+        top: 10px;
+        right: 10px;
+    }
+    &.open {
+        transform: rotate(180deg);
+        margin: 0;
+        top: 10px;
+        right: 10px;
+    }
+`;
 
 export class MsgPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = { dismissed: false };
         this.dismiss = this.dismiss.bind(this);
+        this.toggleInfoPanel = this.toggleInfoPanel.bind(this);
     }
 
     dismiss() {
@@ -19,6 +39,10 @@ export class MsgPanel extends React.Component {
         if (this.props.onDismiss) {
             this.props.onDismiss();
         }
+    }
+
+    toggleInfoPanel() {
+        this.props.toggleInfoPanel();
     }
 
     render() {
@@ -35,6 +59,7 @@ export class MsgPanel extends React.Component {
             success,
             enableDismissBtn,
             className,
+            chevron,
             ...other
         } = this.props;
         let _className = className;
@@ -54,15 +79,23 @@ export class MsgPanel extends React.Component {
 
         return (
             (!this.state.dismissed || !dismissable) && (
-                <Container style={loading || error || success ? {} : { margin: "1em" }}>
+                <Container style={loading || error || success ? {} : { margin: "0 1em" }}>
                     <Message
                         onDismiss={onDismiss ? this.dismiss : null}
                         className={_className}
                         noCloseIcon={noClose}
                         {...other}
                     >
-                        <h4>
-                            {icon && <Icon name={icon} loading={loading} />} {header}
+                        <h4 style={chevron && { paddingRight: "30px" }}>
+                            {icon && <Icon name={icon} loading={loading} />}
+                            {header}
+                            {chevron && (
+                                <StyledIcon
+                                    name={chevron}
+                                    className={this.props.showInfoPanel ? "open" : "close"}
+                                    onClick={() => this.toggleInfoPanel()}
+                                />
+                            )}
                         </h4>
 
                         {children}
@@ -83,6 +116,7 @@ MsgPanel.defaultProps = {
     dismissed: false,
     dismissable: false,
     enableDismissBtn: true
+    // chevron: false
 };
 
 export function SuccessPanel(props) {
@@ -91,8 +125,8 @@ export function SuccessPanel(props) {
 }
 
 export function InfoPanel(props) {
-    const { info = true, icon = "info", ...other } = props;
-    return <MsgPanel info={info} icon={icon} {...other} />;
+    const { info = true, icon = "info", chevron, ...other } = props;
+    return <MsgPanel info={info} icon={icon} chevron={chevron} {...other} />;
 }
 
 export function WarningPanel(props) {
