@@ -13,19 +13,49 @@ import {
     LEGACY_EXCHANGES_CANCEL_ORDER_SUCCESS
 } from "modules/reducers/legacyExchanges";
 import HashURL from "components/hash";
+import styled from "styled-components";
 
-const styleP = { margin: "1rem 0" };
+const styleP = { margin: ".5rem 0" };
+
+export const StyledP = styled.p`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
+
+export const StyledSmall = styled.small`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: inline;
+    }
+`;
+
+export const StyledDiv = styled.div`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
 
 class LegacyExchanges extends React.Component {
     constructor(props) {
         super(props);
         this.handleDismiss = this.handleDismiss.bind(this);
         this.submitOrderCancel = this.submitOrderCancel.bind(this);
+        this.toggleInfoPanel = this.toggleInfoPanel.bind(this);
         this.state = {
             submitting: false,
             submitSucceeded: false,
             error: null,
-            result: null
+            result: null,
+            showInfoPanel: false
         };
     }
 
@@ -35,6 +65,12 @@ class LegacyExchanges extends React.Component {
 
     handleDismiss(legacyExchangeAddress) {
         this.props.dismissLegacyExchange(legacyExchangeAddress);
+    }
+
+    toggleInfoPanel() {
+        this.setState({
+            showInfoPanel: !this.state.showInfoPanel
+        });
     }
 
     async submitOrderCancel(legacyExchangeAddress, direction, orderId) {
@@ -59,6 +95,7 @@ class LegacyExchanges extends React.Component {
     render() {
         const { contracts, exchangeContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
+        let _className = this.state.showInfoPanel ? "open" : "close";
 
         const orders = contracts
             .filter(contract => contract.userOrders.length > 0 && !contract.isDismissed)
@@ -75,6 +112,7 @@ class LegacyExchanges extends React.Component {
 
                     <p style={styleP}>
                         <Button
+                            className="ghost"
                             type="submit"
                             data-testid={`dismissLegacyExchangeButton-${contractIndex}`}
                             onClick={() => this.handleDismiss(contract.address)}
@@ -113,15 +151,19 @@ class LegacyExchanges extends React.Component {
         return orders && orders.length > 0 && exchangeContract ? (
             <Psegment>
                 <Container>
-                    <InfoPanel header="You have orders in an older version of Augmint Exchange contract">
-                        <p style={styleP}>
-                            Cancel your orders on the old exchange.
-                            <br />
-                            <small>
+                    <InfoPanel
+                        header="We have a new contract in effect. You have orders in an older version of Augmint Exchange contract"
+                        showInfoPanel={this.state.showInfoPanel}
+                        toggleInfoPanel={this.toggleInfoPanel}
+                        chevron="chevron-down"
+                    >
+                        <p style={styleP}>Cancel your orders on the old exchange.</p>
+                        <StyledP className={_className}>
+                            <StyledSmall>
                                 NB: Exchange contract upgrades will be infrequent in the future. We deliberately deploy
                                 a couple of new versions to test the conversion process during our pilot.
-                            </small>
-                        </p>
+                            </StyledSmall>
+                        </StyledP>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
@@ -136,14 +178,15 @@ class LegacyExchanges extends React.Component {
                                 onDismiss={() => this.setState({ submitSucceeded: false, result: null })}
                             />
                         )}
-                        {!submitSucceeded && !error && orders}
-                        <br />
-                        <HashURL
-                            hash={exchangeContract.address}
-                            title={"View current Exchange version in use on " + network.name + " network"}
-                            type={"address/"}
-                        />
-                        <br />
+                        <StyledDiv className={_className}>
+                            {!submitSucceeded && !error && orders}
+                            <HashURL
+                                hash={exchangeContract.address}
+                                title={"View current Exchange version in use on " + network.name + " network"}
+                                type={"address/"}
+                                className={_className}
+                            />
+                        </StyledDiv>
                     </InfoPanel>
                 </Container>
             </Psegment>

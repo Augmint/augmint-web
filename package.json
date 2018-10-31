@@ -46,13 +46,12 @@
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
-    "precommit": "pretty-quick --staged"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
     "cypress": "3.1.0",
     "eslint-plugin-cypress": "2.0.1",
-    "husky": "1.1.0",
+    "husky": "1.1.1",
     "prettier": "1.14.3",
     "pretty-quick": "1.7.0"
   },
@@ -60,5 +59,11 @@
     "ignore": [
       "bignumber.js"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
