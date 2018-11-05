@@ -1,4 +1,4 @@
-<span style="display:block;text-align:center">![Augmint](http://www.augmint.cc/android-chrome-192x192.png)
+<span style="display:block;text-align:center">![Augmint](http://www.augmint.org/android-chrome-192x192.png)
 </span>
 
 # Augmint - Stable Digital Tokens - Web Frontend
@@ -20,7 +20,7 @@ The value of 1 A-EUR is always closely around 1 EUR.
 
 Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
 
-Read more and try it: **[www.augmint.cc](http://www.augmint.cc)**
+Read more and try it: **[www.augmint.org](http://www.augmint.org)**
 
 **[Our Trello board](https://trello.com/b/RYGAt2so/augmint-documents)** with a collection of documents about the project.
 
@@ -52,10 +52,10 @@ The project was born at [DECENT Labs](http://www.decent.org)
 
 ### Concept, initial version
 
-* [szerintedmi](https://github.com/szerintedmi)
-* [Charlie](https://github.com/krosza)
+- [szerintedmi](https://github.com/szerintedmi)
+- [Charlie](https://github.com/krosza)
 
-Check the whole team on [augmint.cc](http://www.augmint.cc)
+Check the whole team on [augmint.org](http://www.augmint.org)
 
 ## Licence
 
