@@ -64,17 +64,10 @@ class LegacyTokens extends React.Component {
                       <p>
                           Balance in legacy contract:
                           <br /> {item.balance} A-EUR <br />
-                          <small>
+                          <small style={{ display: "inline-block", margin: "0 0 .5rem" }}>
                               <HashURL hash={item.contract} type={"address/"} />{" "}
                           </small>
                       </p>
-                      <Button
-                          type="submit"
-                          data-testid={`dismissLegacyBalanceButton-${index}`}
-                          onClick={() => this.handleDismiss(item.contract)}
-                      >
-                          Dismiss
-                      </Button>
                       <Button
                           type="submit"
                           disabled={submitting}
@@ -83,6 +76,15 @@ class LegacyTokens extends React.Component {
                       >
                           {submitting ? "Submitting convert..." : "Convert"}
                       </Button>
+                      <Button
+                          style={{ marginLeft: 20 }}
+                          className="ghost"
+                          type="submit"
+                          data-testid={`dismissLegacyBalanceButton-${index}`}
+                          onClick={() => this.handleDismiss(item.contract)}
+                      >
+                          Dismiss
+                      </Button>
                   </MyListGroup.Col>
               ))
             : null;
@@ -90,7 +92,7 @@ class LegacyTokens extends React.Component {
         return balances && balances.length > 0 && augmintTokenContract ? (
             <Psegment>
                 <Container>
-                    <InfoPanel header="You have A-EUR in an older version of Augmint token contract">
+                    <InfoPanel header="We have a new contract in effect. You have A-EUR in an older version of Augmint token contract">
                         <p>
                             There is newer Augmint A-EUR Token version deployed to the{" "}
                             <HashURL hash={augmintTokenContract.address} type={"address/"}>
