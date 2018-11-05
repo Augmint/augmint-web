@@ -86,6 +86,7 @@ export function callbackAfterTransfer(transaction) {
         const transferRequest = transferRequests[i];
 
         if (
+            transaction.payload &&
             transferRequestEqual(transferRequest, {
                 beneficiary_address: transaction.payload.payee,
                 amount: transaction.payload.tokenAmount,

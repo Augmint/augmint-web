@@ -9,8 +9,8 @@ export default function Video(props) {
         allowFullScreen: true,
         width: "100%",
         height: "100%",
-        origin: "https://www.augmint.cc",
-        widget_referrer: "https://www.augmint.cc",
+        origin: "https://www.augmint.org",
+        widget_referrer: "https://www.augmint.org",
         ...props
     });
 }
