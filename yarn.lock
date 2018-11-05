@@ -9229,9 +9229,9 @@ styled-components-breakpoint@^2.0.2:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/styled-components-breakpoint/-/styled-components-breakpoint-2.1.0.tgz#839370362c1e084a23d1155286c9a8a1f2af853f"
 
-styled-components-grid@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/styled-components-grid/-/styled-components-grid-2.2.0.tgz#bbbc36209912e124717ddfbf796483b5fa2461a0"
+styled-components-grid@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/styled-components-grid/-/styled-components-grid-2.2.1.tgz#900c0ac91970f40d04eb17795eab6b9bd4ca9ca9"
   dependencies:
     react-create-component-from-tag-prop "^1.4.0"
     styled-components-breakpoint "^2.0.2"
