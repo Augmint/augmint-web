@@ -10,6 +10,7 @@ import Icon from "components/augmint-ui/icon";
 import { shortAccountAddresConverter } from "utils/converter";
 import { CloseIcon } from "./styles";
 import close from "assets/images/close.svg";
+import { theme } from "styles/media";
 
 import {
     StyledTopNav,
@@ -40,9 +41,12 @@ class TopNav extends React.Component {
         if (!isPropagate) {
             e.preventDefault();
         }
+        if (window.innerWidth > theme.breakpoints.tablet) {
+            e.preventDefault();
+        }
         this.props.toggleAccInfo();
-        let fakebody = document.getElementById("fakebody");
-        noScroll ? fakebody.classList.add("noScroll") : fakebody.classList.remove("noScroll");
+        let siteBody = document.body;
+        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
     }
 
     toggleNotificationPanel(e) {

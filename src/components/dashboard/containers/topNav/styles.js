@@ -61,7 +61,9 @@ export const StyledTopNavUl = styled.ul`
 export const StyledAccount = styled.div`
     display: none;
     &.opened {
-        display: block;
+        ${media.tablet`
+            display: block;
+        `};
     }
 `;
 
@@ -216,6 +218,7 @@ export const CloseIcon = styled.img`
             position: fixed;
             top: 15px;
             right: 15px;
+            z-index: 2;
         `};
     }
 `;

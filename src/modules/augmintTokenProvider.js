@@ -3,7 +3,7 @@ import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
-import { fetchTransfers, processNewTransfer } from "modules/reducers/userTransfers";
+import { fetchTransfers, fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 let isWatchSetup = false;
@@ -54,16 +54,11 @@ const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
 
 const refresh = () => {
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().contracts.latest.augmintToken;
 
     store.dispatch(refreshAugmintToken());
     store.dispatch(refreshMonetarySupervisor());
     store.dispatch(fetchUserBalance(userAccount));
-
-    store.dispatch(fetchTransfers(userAccount, augmintToken.deployedAtBlock, "latest"));
-    /*store.getState().web3Connect.web3Instance.eth.getBlockNumber().then(fromBlock => {
-        store.dispatch(fetchTransfers(userAccount, fromBlock - Math.round( 2 * 24 * 60 * 60 / 14), "latest")); // last 2 days
-    })*/
+    store.dispatch(fetchLatestTransfers(userAccount));
 };
 
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {

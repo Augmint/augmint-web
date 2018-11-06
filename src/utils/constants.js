@@ -119,3 +119,16 @@ export const LEGACY_EXCHANGE_CONTRACTS = {
     // rinkeby
     4: ["0xdf47d51028daff13424f42523fdac73079ab901b"]
 };
+
+export const AVG_BLOCK_TIME = 14; // 14 sec
+
+export const NETWORKS = {
+    1: "Main",
+    2: "Morden",
+    3: "Ropsten",
+    4: "Rinkeby",
+    42: "Kovan",
+    999: "Testrpc",
+    4447: "TruffleLocal",
+    1976: "PrivateChain"
+};
