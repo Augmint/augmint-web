@@ -7,10 +7,13 @@ export const StyledClicked = styled.span`
 `;
 
 export const StyledHint = styled.span`
+    -webkit-font-smoothing: antialiased;
+    color: ${theme.colors.white};
     display: none;
     position: absolute;
-    background-color: ${theme.colors.lightGreen};
-    padding: 5px;
+    background-color: ${theme.colors.primary};
+    font-weight: lighter;
+    padding: 5px 10px;
     border-radius: 5px;
 
     &::after {
