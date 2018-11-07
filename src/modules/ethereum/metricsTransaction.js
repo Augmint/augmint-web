@@ -28,7 +28,7 @@ async function fetchTokenBalance({ address, tokenAddress }) {
     return bn_balance / 10 ** decimals;
 }
 
-async function fetchEthBalance(address) {
+async function fetchEthBalance({ address }) {
     const web3 = store.getState().web3Connect;
     const bn_balance = await web3.eth.getBalance(address);
     return web3.web3Instance.utils.fromWei(bn_balance);
