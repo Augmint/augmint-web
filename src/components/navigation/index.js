@@ -33,8 +33,10 @@ export default class SiteMenu extends React.Component {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
     }
-    toggleMenu() {
+    toggleMenu(e, noScroll) {
         this.props.toggleMenu();
+        let siteBody = document.body;
+        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
     }
 
     render() {
@@ -51,7 +53,7 @@ export default class SiteMenu extends React.Component {
                     <StyledNavLeftSide>
                         <HamburgerMenu
                             src={this.props.showMenu ? close : hamburgerMenu}
-                            onClick={this.toggleMenu}
+                            onClick={e => this.toggleMenu(e, this.props.showMenu ? false : true)}
                             id="hamburgerMenu"
                             className={this.props.showMenu ? "opened" : ""}
                         />

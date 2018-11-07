@@ -164,8 +164,10 @@ export default class SiteNav extends React.Component {
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
     }
 
-    toggleMenu() {
+    toggleMenu(e, noScroll) {
         this.props.toggleMenu();
+        let siteBody = document.body;
+        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
     }
 
     toggleNotificationPanel(e) {
@@ -178,7 +180,7 @@ export default class SiteNav extends React.Component {
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
                     src={this.props.showMenu ? close : hamburgerMenu}
-                    onClick={this.toggleMenu}
+                    onClick={e => this.toggleMenu(e, this.props.showMenu ? false : true)}
                     id="hamburgerMenu"
                     className={this.props.showMenu ? "opened" : ""}
                 />
