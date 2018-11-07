@@ -166,13 +166,17 @@ export default class SiteNav extends React.Component {
 
     toggleMenu(e, noScroll) {
         this.props.toggleMenu();
-        let siteBody = document.body;
-        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
+        this.toggleScroll(noScroll);
     }
 
     toggleNotificationPanel(e) {
         e.preventDefault();
         this.props.toggleNotificationPanel();
+    }
+
+    toggleScroll(noScroll) {
+        let siteBody = document.body;
+        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
     }
 
     render() {
@@ -185,35 +189,35 @@ export default class SiteNav extends React.Component {
                     className={this.props.showMenu ? "opened" : ""}
                 />
                 <NavLink to="/">
-                    <img alt="Augmint" src={AugmintLogo} className={this.props.showMenu ? "" : "hidden"} />
+                    <img alt="Augmint" src={AugmintLogo} className={this.props.showMenu ? "" : "hidden"} onClick={e => this.toggleScroll(false)}/>
                 </NavLink>
                 <SideNavUl className={this.props.showMenu ? "" : "hidden"}>
                     <SideNavLi>
-                        <SideNavLink to="/account" activeClassName="active" data-testid="myAccountMenuLink">
+                        <SideNavLink to="/account" activeClassName="active" data-testid="myAccountMenuLink" onClick={e => this.toggleScroll(false)}>
                             <Icon name="account" />
                             <span>Account</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
+                        <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink" onClick={e => this.toggleScroll(false)}>
                             <Icon name="exchange" />
                             <span>Buy/Sell</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
+                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink" onClick={e => this.toggleScroll(false)}>
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink">
+                        <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink" onClick={e => this.toggleScroll(false)}>
                             <Icon name="lock" />
                             <span>Lock</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
+                        <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink" onClick={e => this.toggleScroll(false)}>
                             <Icon name="reserves" />
                             <span>Stability</span>
                         </SideNavLink>

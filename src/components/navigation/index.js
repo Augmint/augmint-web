@@ -35,6 +35,10 @@ export default class SiteMenu extends React.Component {
     }
     toggleMenu(e, noScroll) {
         this.props.toggleMenu();
+        this.toggleScroll(noScroll);
+    }
+
+    toggleScroll(noScroll) {
         let siteBody = document.body;
         noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
     }
@@ -59,13 +63,13 @@ export default class SiteMenu extends React.Component {
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
                         <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
-                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
+                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/" onClick={e => this.toggleScroll(false)}>
                                 Home
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
+                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept" onClick={e => this.toggleScroll(false)}>
                                 Concept
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
+                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap" onClick={e => this.toggleScroll(false)}>
                                 Roadmap
                             </SiteMenuItem>
                         </StyleNavList>
