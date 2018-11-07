@@ -30,7 +30,7 @@ async function fetchTokenBalance({ address, tokenAddress }) {
 
 async function fetchEthBalance({ address }) {
     const web3 = store.getState().web3Connect;
-    const bn_balance = await web3.eth.getBalance(address);
+    const bn_balance = await web3.web3Instance.eth.getBalance(address);
     return web3.web3Instance.utils.fromWei(bn_balance);
 }
 
