@@ -78,7 +78,7 @@ export const LEGACY_FEE_CONTRACTS = {
     999: [],
 
     // rinkeby
-    4: ["0xb77f9cdda72eec47a57793be088c7b523f6b5014"]
+    4: [{ address: "0xb77f9cdda72eec47a57793be088c7b523f6b5014", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
 };
 
 /* List of old MonetarySupervisor deploy addresses by network id */
@@ -90,7 +90,7 @@ export const LEGACY_INTEREST_EARNED_CONTRACTS = {
     999: [],
 
     // rinkeby
-    4: ["0x489cbf1674b575e6dfcff0a4f2bbc74f7e9dde28"]
+    4: [{ address: "0x489cbf1674b575e6dfcff0a4f2bbc74f7e9dde28", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
 };
 
 /* List of old MonetarySupervisor deploy addresses by network id */
@@ -102,7 +102,7 @@ export const LEGACY_RESERVES_CONTRACTS = {
     999: [],
 
     // rinkeby
-    4: ["0xc036a1dd59ac55e2fb6b3d7416cb4ecc44605834"]
+    4: [{ address: "0xc036a1dd59ac55e2fb6b3d7416cb4ecc44605834", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
 };
 
 /* List of old augmint token deploy addresses by network id */
