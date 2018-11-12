@@ -3302,9 +3302,9 @@ eslint-module-utils@^2.2.0:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
-eslint-plugin-cypress@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.1.0.tgz#2dcef8e42e792ff5f64459176ef294035afd55a7"
+eslint-plugin-cypress@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.1.2.tgz#e4638f54235250ce264202001526537bac9d029e"
   dependencies:
     globals "^11.0.1"
 
@@ -7682,9 +7682,9 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.0.tgz#c6191a50fbc9056ff770577d64ebd9987cca1dd7"
+prettier@1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.2.tgz#d31abe22afa4351efa14c7f8b94b58bb7452205e"
 
 prettier@^1.14.2:
   version "1.14.3"
