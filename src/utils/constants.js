@@ -24,7 +24,7 @@ export const LOAN_STATES = ["Open", "Repaid", "Defaulted", "Collected"];
 /* List of old augmint token deploy addresses by network id */
 export const LEGACY_AEUR_CONTRACTS = {
     // mainnet (no deploy yet)
-    1: [],
+    1: ["0x86a635eccefffa70ff8a6db29da9c8db288e40d0"],
 
     // local ganache (migrations deploys it for manual testing)
     999: ["0x7f3abcd33ffe83ba7426ee6ec45014364fe1cab4"],
@@ -35,8 +35,8 @@ export const LEGACY_AEUR_CONTRACTS = {
 
 /* List of old augmint token deploy addresses by network id */
 export const LEGACY_LOANMANAGER_CONTRACTS = {
-    // mainnet (no deploy yet)
-    1: [],
+    // mainnet
+    1: ["0xcbefaf199b800deeb9ead61f358ee46e06c54070"],
 
     // local ganache (migrations deploys it for manual testing)
     999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
@@ -48,8 +48,7 @@ export const LEGACY_LOANMANAGER_CONTRACTS = {
 /* List of old Locker deploy addresses by network id */
 export const LEGACY_LOCKER_CONTRACTS = {
     // mainnet
-    1: ["0x095c0F071Fd75875a6b5a1dEf3f3a993F591080c"], // initial locker, replaced by 0x26438D7c52cE617dFc75A2F02eE816557f01e5Bb
-
+    1: ["0x095c0F071Fd75875a6b5a1dEf3f3a993F591080c", "0x26438D7c52cE617dFc75A2F02eE816557f01e5Bb"],
     // local ganache (migrations deploys it for manual testing)
     999: ["0xe6a48098a0a318ccec66bcd8297417e0d74585dc"],
 
@@ -60,7 +59,7 @@ export const LEGACY_LOCKER_CONTRACTS = {
 /* List of old MonetarySupervisor deploy addresses by network id */
 export const LEGACY_MONETARY_SUPERVISOR_CONTRACTS = {
     // mainnet
-    1: [],
+    1: ["0x1ca4f9d261707af8a856020a4909b777da218868"],
 
     // local ganache (migrations deploys it for manual testing)
     999: [],
@@ -72,37 +71,67 @@ export const LEGACY_MONETARY_SUPERVISOR_CONTRACTS = {
 /* List of old MonetarySupervisor deploy addresses by network id */
 export const LEGACY_FEE_CONTRACTS = {
     // mainnet
-    1: [],
+    1: [
+        {
+            address: "0xf6b541e1b5e001dcc11827c1a16232759aea730a",
+            tokenAddress: "0x86a635eccefffa70ff8a6db29da9c8db288e40d0"
+        }
+    ],
 
     // local ganache (migrations deploys it for manual testing)
     999: [],
 
     // rinkeby
-    4: [{ address: "0xb77f9cdda72eec47a57793be088c7b523f6b5014", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
+    4: [
+        {
+            address: "0xb77f9cdda72eec47a57793be088c7b523f6b5014",
+            tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
+        }
+    ]
 };
 
 /* List of old MonetarySupervisor deploy addresses by network id */
 export const LEGACY_INTEREST_EARNED_CONTRACTS = {
     // mainnet
-    1: [],
+    1: [
+        {
+            address: "0x5c1a44e07541203474d92bdd03f803ea74f6947c",
+            tokenAddress: "0x86a635eccefffa70ff8a6db29da9c8db288e40d0"
+        }
+    ],
 
     // local ganache (migrations deploys it for manual testing)
     999: [],
 
     // rinkeby
-    4: [{ address: "0x489cbf1674b575e6dfcff0a4f2bbc74f7e9dde28", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
+    4: [
+        {
+            address: "0x489cbf1674b575e6dfcff0a4f2bbc74f7e9dde28",
+            tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
+        }
+    ]
 };
 
 /* List of old MonetarySupervisor deploy addresses by network id */
 export const LEGACY_RESERVES_CONTRACTS = {
     // mainnet
-    1: [],
+    1: [
+        {
+            address: "0x633cb544b2ef1bd9269b2111fd2b66fc05cd3477",
+            tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
+        }
+    ],
 
     // local ganache (migrations deploys it for manual testing)
     999: [],
 
     // rinkeby
-    4: [{ address: "0xc036a1dd59ac55e2fb6b3d7416cb4ecc44605834", tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f" }]
+    4: [
+        {
+            address: "0xc036a1dd59ac55e2fb6b3d7416cb4ecc44605834",
+            tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
+        }
+    ]
 };
 
 /* List of old augmint token deploy addresses by network id */
@@ -110,7 +139,8 @@ export const LEGACY_EXCHANGE_CONTRACTS = {
     // mainnet
     1: [
         "0x8b52b019d237d0bbe8Baedf219132D5254e0690b", // initial Exchange, replaced by 0xeae7d30bcd44f27d58985b56add007fcee254abd
-        "0xeae7d30bcd44f27d58985b56add007fcee254abd" // replaced by 0.6.1 at 0xaFEA54baDf7A68F93C2235B5F4cC8F02a2b55Edd
+        "0xeae7d30bcd44f27d58985b56add007fcee254abd", // replaced by 0.6.1 at 0xaFEA54baDf7A68F93C2235B5F4cC8F02a2b55Edd
+        "0xafea54badf7a68f93c2235b5f4cc8f02a2b55edd"
     ],
 
     // local ganache (migrations deploys it for manual testing)
