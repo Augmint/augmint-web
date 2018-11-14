@@ -73,7 +73,13 @@ export const setupWeb3 = () => {
         });
 
         try {
-            if (typeof window.web3 !== "undefined") {
+            // Modern dapp browsers...
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+            }
+            // Legacy dapp browsers...
+            else if (typeof window.web3 !== "undefined") {
                 console.debug("Using web3 detected from external source.");
                 web3 = new Web3(window.web3.currentProvider);
             } else {
