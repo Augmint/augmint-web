@@ -118,7 +118,7 @@ export const LEGACY_RESERVES_CONTRACTS = {
     1: [
         {
             address: "0x633cb544b2ef1bd9269b2111fd2b66fc05cd3477",
-            tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
+            tokenAddress: "0x86a635eccefffa70ff8a6db29da9c8db288e40d0"
         }
     ],
 
