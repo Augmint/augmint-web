@@ -1,7 +1,7 @@
-import { injectGlobal } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { media } from "./media";
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab:300,400');
 
     @keyframes icon-loading {
