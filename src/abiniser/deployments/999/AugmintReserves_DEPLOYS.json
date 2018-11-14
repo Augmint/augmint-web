@@ -1,24 +1,24 @@
 {
-    "contractName": "AugmintReserves",
-    "latestAbiHash": "024b81d1a1f75241167a8a0f6e62326f",
-    "deployedAbis": {
-        "024b81d1a1f75241167a8a0f6e62326f": {
-            "latestDeployedAddress": "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4",
-            "deployments": {
-                "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4": {
-                    "generatedAt": "2018-10-18T13:35:02.347Z",
-                    "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.845Z",
-                    "deployTransactionHash": "0x856ac4754df0c03bfe83966e71225b02c97363a09cabc370aafba56ad4a016f2",
-                    "compiler": {
-                        "name": "solc",
-                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-                    },
-                    "bytecodeHash": "5bf4ede2aaad5b0b112f7b1ebf420fd2",
-                    "deployedBytecodeHash": "3720667df6506876043fba53c540acb6",
-                    "sourceHash": "b9d84f5f6153164ba581845190291c88",
-                    "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is Restricted {\n\n    event ReserveMigration(address to, uint weiAmount);\n\n    constructor(address permissionGranterContract)\n    public Restricted(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function () external payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    function burn(AugmintTokenInterface augmintToken, uint amount)\n    external restrict(\"MonetarySupervisor\") {\n        augmintToken.burn(amount);\n    }\n\n    function migrate(address to, uint weiAmount)\n    external restrict(\"StabilityBoard\") {\n        if (weiAmount > 0) {\n            to.transfer(weiAmount);\n        }\n        emit ReserveMigration(to, weiAmount);\n    }\n}\n"
-                }
-            }
+  "contractName": "AugmintReserves",
+  "latestAbiHash": "024b81d1a1f75241167a8a0f6e62326f",
+  "deployedAbis": {
+    "024b81d1a1f75241167a8a0f6e62326f": {
+      "latestDeployedAddress": "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4",
+      "deployments": {
+        "0x1b9441428f9e682bab4f9cc70fdf50adcc3411f4": {
+          "generatedAt": "2018-10-18T13:35:02.347Z",
+          "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.845Z",
+          "deployTransactionHash": "0x856ac4754df0c03bfe83966e71225b02c97363a09cabc370aafba56ad4a016f2",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "5bf4ede2aaad5b0b112f7b1ebf420fd2",
+          "deployedBytecodeHash": "3720667df6506876043fba53c540acb6",
+          "sourceHash": "b9d84f5f6153164ba581845190291c88",
+          "source": "/* Contract to hold Augmint reserves (ETH & Token)\n    - ETH as regular ETH balance of the contract\n    - ERC20 token reserve (stored as regular Token balance under the contract address)\n\nNB: reserves are held under the contract address, therefore any transaction on the reserve is limited to the\n    tx-s defined here (i.e. transfer is not allowed even by the contract owner or StabilityBoard or MonetarySupervisor)\n\n */\n\npragma solidity 0.4.24;\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/AugmintTokenInterface.sol\";\n\n\ncontract AugmintReserves is Restricted {\n\n    event ReserveMigration(address to, uint weiAmount);\n\n    constructor(address permissionGranterContract)\n    public Restricted(permissionGranterContract) {} // solhint-disable-line no-empty-blocks\n\n    function () external payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into reserve (from defaulted loan's collateral )\n    }\n\n    function burn(AugmintTokenInterface augmintToken, uint amount)\n    external restrict(\"MonetarySupervisor\") {\n        augmintToken.burn(amount);\n    }\n\n    function migrate(address to, uint weiAmount)\n    external restrict(\"StabilityBoard\") {\n        if (weiAmount > 0) {\n            to.transfer(weiAmount);\n        }\n        emit ReserveMigration(to, weiAmount);\n    }\n}\n"
         }
+      }
     }
+  }
 }

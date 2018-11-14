@@ -1,6 +1,6 @@
 {
   "contractName": "StabilityBoardProxy",
-  "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
+  "latestAbiHash": "dd40c0d39ea8bad8a388522667a84687",
   "deployedAbis": {
     "19ab69b650e28b2dd211d3851893f91f": {
       "latestDeployedAddress": "0x4686f017d456331ed2c1de66e134d8d05b24413d",
@@ -15,6 +15,24 @@
           },
           "bytecodeHash": "56131f88a46fe46a487da0a9bae573fc",
           "deployedBytecodeHash": "2996d609801f2039ae49c17ac8bcad92",
+          "sourceHash": "4d60c55b8e4009873db939b37558d9dc",
+          "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract StabilityBoardProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
+        }
+      }
+    },
+    "dd40c0d39ea8bad8a388522667a84687": {
+      "latestDeployedAddress": "0xde36a8773531406dcbeffdfd3c7b89fced7a9f84",
+      "deployments": {
+        "0xde36a8773531406dcbeffdfd3c7b89fced7a9f84": {
+          "generatedAt": "2018-11-14T12:52:13.104Z",
+          "truffleContractFileUpdatedAt": "2018-11-13T16:34:24.516Z",
+          "deployTransactionHash": "0xcb0e9651d51ba99070837dcf083acfcc3f13df8c146b4a01c8bf6f4d2a924d41",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "4f899546765577ad2e325da53c3e7179",
+          "deployedBytecodeHash": "a5f3dd7878e556db538c1206827e5959",
           "sourceHash": "4d60c55b8e4009873db939b37558d9dc",
           "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract StabilityBoardProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
         }
