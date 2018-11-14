@@ -34,7 +34,7 @@
     "styled-components-grid": "2.2.1",
     "styled-components": "3.4.10",
     "styled-tools": "1.6.0",
-    "web3": "1.0.0-beta.36"
+    "web3": "1.0.0-beta.35"
   },
   "scripts": {
     "start": "react-scripts start",
