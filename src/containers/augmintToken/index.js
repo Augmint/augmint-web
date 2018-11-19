@@ -14,6 +14,8 @@ import { Pheader } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { MyListGroup } from "components/MyListGroups";
+import { ErrorPanel } from "components/MsgPanels";
+import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
@@ -45,6 +47,13 @@ class AugmintToken extends React.Component {
             availableForMarketIntervention = "?",
             bn_collateralInEscrowEth = 1,
             bn_outstandingLoansAmount = 1;
+        // const { isLoading, error } = this.props.metrics;
+        const metricsIsLoading = this.props.metrics.isLoading;
+        const metricsError = this.props.metrics.error;
+        const monetarySupervisorIsLoading = this.props.monetarySupervisor.isLoading;
+        const monetarySupervisorLoadError = this.props.monetarySupervisor.loadError;
+        const augmintTokenIsLoading = this.props.augmintToken.isLoading;
+        const augmintTokenError = this.props.augmintToken.error;
 
         if (Object.keys(this.props.metrics.loansData).length) {
             loansCollected = new BigNumber(this.props.metrics.loansData.collectedLoansAmount.toFixed(15))
@@ -222,124 +231,138 @@ class AugmintToken extends React.Component {
                         <TopNavTitlePortal>
                             <Pheader header="Stability Dashboard" />
                         </TopNavTitlePortal>
-                        <StyledHeader as="h3" content="A-EUR Supply" />
-                        <StyledMyListGroup>
-                            <StyledRow wrap={true} valign="stretch">
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>+ Loans Outstanding</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.metrics.loansData.outstandingLoansAmount).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                                <div className="chart-info blue" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(loansCollected).toFixed(0) + " A€"}
-                                                <div className="chart-info orange" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>+ Issued by Stability Board (Net)</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(
-                                                    this.props.monetarySupervisor.info.issuedByStabilityBoard
-                                                ).toFixed(0) + " A€"}
-                                                <div className="chart-info red" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="borderTop result">
-                                            <StyledCol width={2 / 3}>Total</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.augmintToken.info.totalSupply).toFixed(0) + " A€"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                                <StyledCol width={{ tablet: 1, desktop: 2 / 5, giant: 3 / 5 }}>
-                                    <canvas id="marketSupply-1" />
-                                </StyledCol>
-                            </StyledRow>
-                            <StyledRow className="borderTop" wrap={true} valign="stretch">
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.reserveTokenBalance).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                                <div className="chart-info orange" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>- Fees Reserve</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.augmintToken.info.feeAccountTokenBalance).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                                <div className="chart-info orange" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>- Earned Interest Reserve</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(
-                                                    this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance
-                                                ).toFixed(0) + " A€"}
-                                                <div className="chart-info orange" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="borderTop result">
-                                            <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(amountOwnedByUsers).toFixed(0) + " A€"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <br />
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>- Locked-in Amount</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.totalLockedAmount).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                                <div className="chart-info red" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="borderTop result">
-                                            <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(amountOwnedByUsersLiquid).toFixed(0) + " A€"}
-                                                <div className="chart-info green" />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                                <StyledCol width={{ tablet: 1, desktop: 2 / 5, giant: 3 / 5 }}>
-                                    <canvas id="marketSupply-2" />
-                                </StyledCol>
-                            </StyledRow>
-                        </StyledMyListGroup>
+                        <Segment
+                            loading={metricsIsLoading || monetarySupervisorIsLoading || augmintTokenIsLoading}
+                            style={{ color: "black" }}
+                        >
+                            {(metricsError || monetarySupervisorLoadError || augmintTokenError) && (
+                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                            )}
+                            <StyledHeader as="h3" content="A-EUR Supply" />
+                            <StyledMyListGroup>
+                                <StyledRow wrap={true} valign="stretch">
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>+ Loans Outstanding</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {console.log(
+                                                        "LOANS: ",
+                                                        this.props.metrics.loansData.outstandingLoansAmount
+                                                    )}
+                                                    {Number(
+                                                        this.props.metrics.loansData.outstandingLoansAmount
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info blue" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(loansCollected).toFixed(0) + " A€"}
+                                                    <div className="chart-info orange" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>+ Issued by Stability Board (Net)</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(
+                                                        this.props.monetarySupervisor.info.issuedByStabilityBoard
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info red" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="borderTop result">
+                                                <StyledCol width={2 / 3}>Total</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(this.props.augmintToken.info.totalSupply).toFixed(0) +
+                                                        " A€"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                    <StyledCol width={{ tablet: 1, desktop: 2 / 5, giant: 3 / 5 }}>
+                                        <canvas id="marketSupply-1" />
+                                    </StyledCol>
+                                </StyledRow>
+                                <StyledRow className="borderTop" wrap={true} valign="stretch">
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(
+                                                        this.props.monetarySupervisor.info.reserveTokenBalance
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info orange" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>- Fees Reserve</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(
+                                                        this.props.augmintToken.info.feeAccountTokenBalance
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info orange" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>- Earned Interest Reserve</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(
+                                                        this.props.monetarySupervisor.info
+                                                            .interestEarnedAccountTokenBalance
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info orange" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="borderTop result">
+                                                <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(amountOwnedByUsers).toFixed(0) + " A€"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <br />
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>- Locked-in Amount</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(
+                                                        this.props.monetarySupervisor.info.totalLockedAmount
+                                                    ).toFixed(0) + " A€"}
+                                                    <div className="chart-info red" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="borderTop result">
+                                                <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {Number(amountOwnedByUsersLiquid).toFixed(0) + " A€"}
+                                                    <div className="chart-info green" />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                    <StyledCol width={{ tablet: 1, desktop: 2 / 5, giant: 3 / 5 }}>
+                                        <canvas id="marketSupply-2" />
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                         <StyledHeader as="h3" content="ETH Reserves" />
                         <StyledMyListGroup>
                             <StyledRow>
