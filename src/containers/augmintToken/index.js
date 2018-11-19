@@ -47,13 +47,15 @@ class AugmintToken extends React.Component {
             availableForMarketIntervention = "?",
             bn_collateralInEscrowEth = 1,
             bn_outstandingLoansAmount = 1;
-        // const { isLoading, error } = this.props.metrics;
+
         const metricsIsLoading = this.props.metrics.isLoading;
         const metricsError = this.props.metrics.error;
         const monetarySupervisorIsLoading = this.props.monetarySupervisor.isLoading;
         const monetarySupervisorLoadError = this.props.monetarySupervisor.loadError;
         const augmintTokenIsLoading = this.props.augmintToken.isLoading;
         const augmintTokenError = this.props.augmintToken.error;
+        const ratesIsLoading = this.props.rates.isLoading;
+        const ratesLoadError = this.props.rates.loadError;
 
         if (Object.keys(this.props.metrics.loansData).length) {
             loansCollected = new BigNumber(this.props.metrics.loansData.collectedLoansAmount.toFixed(15))
@@ -379,113 +381,156 @@ class AugmintToken extends React.Component {
                                 </StyledRow>
                             </StyledMyListGroup>
                         </Segment>
-                        <StyledHeader as="h3" content="ETH Reserves" />
-                        <StyledMyListGroup>
-                            <StyledRow>
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.reserveEthBalance).toFixed(
-                                                    4
-                                                ) + " ETH"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3}>ETH Fees</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.augmintToken.info.feeAccountEthBalance).toFixed(4) +
-                                                    " ETH"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="borderTop result">
-                                            <StyledCol width={2 / 3}>Total</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(availableForMarketIntervention).toFixed(4) + " ETH"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                            </StyledRow>
-                        </StyledMyListGroup>
-                        <StyledHeader as="h3" content="Stability Ratios" />
-                        <StyledMyListGroup>
-                            <StyledRow>
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="result">
-                                            <StyledCol width={2 / 3}>Collateral Coverage Ratio</StyledCol>
-                                            <StyledCol width={1 / 3}>{loanCollateralCoverageRatio + "%"}</StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
-                                                Loans Outstanding
-                                            </StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.metrics.loansData.outstandingLoansAmount).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
-                                                Collateral in escrow
-                                            </StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.metrics.loansData.collateralInEscrowEth).toFixed(4) +
-                                                    " ETH "}
-                                                <span className="collateralInEscrow">
-                                                    ({Number(collateralInEscrow).toFixed(0) + " A€"})
-                                                </span>
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" className="result">
-                                            <StyledCol width={2 / 3}>Loan To Lock-in Ratio</StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {(
-                                                    (this.props.monetarySupervisor.info.ltdPercent * 10000) /
-                                                    100
-                                                ).toFixed(2) + "%"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
-                                                Active Loans
-                                            </StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.totalLoanAmount).toFixed(0) +
-                                                    " A€"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify">
-                                            <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
-                                                Active Lock-ins
-                                            </StyledCol>
-                                            <StyledCol width={1 / 3}>
-                                                {Number(this.props.monetarySupervisor.info.totalLockedAmount).toFixed(
-                                                    0
-                                                ) + " A€"}
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                            </StyledRow>
-                        </StyledMyListGroup>
+                        <Segment
+                            loading={monetarySupervisorIsLoading || augmintTokenIsLoading}
+                            style={{ color: "black" }}
+                        >
+                            {(monetarySupervisorLoadError || augmintTokenError) && (
+                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                            )}
+                            <StyledHeader as="h3" content="ETH Reserves" />
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.monetarySupervisor.info.reserveEthBalance !== "?"
+                                                        ? Number(
+                                                              this.props.monetarySupervisor.info.reserveEthBalance
+                                                          ).toFixed(4)
+                                                        : "?") + " ETH"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3}>ETH Fees</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.augmintToken.info.feeAccountEthBalance !== "?"
+                                                        ? Number(
+                                                              this.props.augmintToken.info.feeAccountEthBalance
+                                                          ).toFixed(4)
+                                                        : "?") + " ETH"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="borderTop result">
+                                                <StyledCol width={2 / 3}>Total</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(availableForMarketIntervention !== "?"
+                                                        ? Number(availableForMarketIntervention).toFixed(4)
+                                                        : "?") + " ETH"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
+                        <Segment
+                            loading={ratesIsLoading || metricsIsLoading || monetarySupervisorIsLoading}
+                            style={{ color: "black" }}
+                        >
+                            {(ratesLoadError || metricsError || monetarySupervisorLoadError) && (
+                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                            )}
+                            <StyledHeader as="h3" content="Stability Ratios" />
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="result">
+                                                <StyledCol width={2 / 3}>Collateral Coverage Ratio</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(loanCollateralCoverageRatio !== "?"
+                                                        ? loanCollateralCoverageRatio
+                                                        : "?") + "%"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                    Loans Outstanding
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.metrics.loansData.outstandingLoansAmount !== undefined
+                                                        ? Number(
+                                                              this.props.metrics.loansData.outstandingLoansAmount
+                                                          ).toFixed(0)
+                                                        : "?") + " A€"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                    Collateral in escrow
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.metrics.loansData.collateralInEscrowEth !== undefined
+                                                        ? Number(
+                                                              this.props.metrics.loansData.collateralInEscrowEth
+                                                          ).toFixed(4)
+                                                        : "?") + " ETH "}
+                                                    <span className="collateralInEscrow">
+                                                        (
+                                                        {(collateralInEscrow !== "?"
+                                                            ? Number(collateralInEscrow).toFixed(0)
+                                                            : "?") + " A€"}
+                                                        )
+                                                    </span>
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" className="result">
+                                                <StyledCol width={2 / 3}>Loan To Lock-in Ratio</StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.monetarySupervisor.info.ltdPercent !== "?"
+                                                        ? (
+                                                              (this.props.monetarySupervisor.info.ltdPercent * 10000) /
+                                                              100
+                                                          ).toFixed(2)
+                                                        : "?") + "%"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                    Active Loans
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.monetarySupervisor.info.totalLoanAmount !== "?"
+                                                        ? Number(
+                                                              this.props.monetarySupervisor.info.totalLoanAmount
+                                                          ).toFixed(0)
+                                                        : "?") + " A€"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify">
+                                                <StyledCol width={2 / 3} style={{ marginLeft: 20 }}>
+                                                    Active Lock-ins
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>
+                                                    {(this.props.monetarySupervisor.info.totalLockedAmount !== "?"
+                                                        ? Number(
+                                                              this.props.monetarySupervisor.info.totalLockedAmount
+                                                          ).toFixed(0)
+                                                        : "?") + " A€"}
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                         <StyledHeader as="h3" content="Loan & Lock Conditions" />
                         <StyledMyListGroup>
                             <StyledRow>
