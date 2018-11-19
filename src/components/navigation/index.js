@@ -19,6 +19,7 @@ import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
+import { toggleScroll } from "utils/bodyHelper";
 
 function SiteMenuItem(props) {
     return (
@@ -35,13 +36,13 @@ export default class SiteMenu extends React.Component {
     }
     toggleMenu(e, noScroll) {
         this.props.toggleMenu();
-        this.toggleScroll(noScroll);
+        toggleScroll(noScroll);
     }
 
-    toggleScroll(noScroll) {
-        let siteBody = document.body;
-        siteBody.classList.toggle("noScroll", noScroll);
-    }
+    // toggleScroll(noScroll) {
+    //     let siteBody = document.body;
+    //     siteBody.classList.toggle("noScroll", noScroll);
+    // }
 
     render() {
         const { isConnected } = this.props.web3Connect;
@@ -66,21 +67,21 @@ export default class SiteMenu extends React.Component {
                             <SiteMenuItem
                                 isActive={() => currentLocation === "/"}
                                 to="/"
-                                onClick={e => this.toggleScroll(false)}
+                                onClick={e => toggleScroll(false)}
                             >
                                 Home
                             </SiteMenuItem>
                             <SiteMenuItem
                                 isActive={() => currentLocation === "/concept"}
                                 to="/concept"
-                                onClick={e => this.toggleScroll(false)}
+                                onClick={e => toggleScroll(false)}
                             >
                                 Concept
                             </SiteMenuItem>
                             <SiteMenuItem
                                 isActive={() => currentLocation === "/roadmap"}
                                 to="/roadmap"
-                                onClick={e => this.toggleScroll(false)}
+                                onClick={e => toggleScroll(false)}
                             >
                                 Roadmap
                             </SiteMenuItem>

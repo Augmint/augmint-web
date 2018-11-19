@@ -12,6 +12,7 @@ import { media, mediaopacity } from "styles/media";
 import AugmintLogo from "assets/images/logo/augmint.svg";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
+import { toggleScroll } from "utils/bodyHelper";
 
 const breakpoint = media.desktop;
 
@@ -166,7 +167,7 @@ export default class SiteNav extends React.Component {
 
     toggleMenu(e, noScroll) {
         this.props.toggleMenu();
-        this.toggleScroll(noScroll);
+        toggleScroll(noScroll);
     }
 
     toggleNotificationPanel(e) {
@@ -174,10 +175,10 @@ export default class SiteNav extends React.Component {
         this.props.toggleNotificationPanel();
     }
 
-    toggleScroll(noScroll) {
-        const siteBody = document.body;
-        siteBody.classList.toggle("noScroll", noScroll);
-    }
+    // toggleScroll(noScroll) {
+    //     const siteBody = document.body;
+    //     siteBody.classList.toggle("noScroll", noScroll);
+    // }
 
     render() {
         return (
@@ -193,7 +194,7 @@ export default class SiteNav extends React.Component {
                         alt="Augmint"
                         src={AugmintLogo}
                         className={this.props.showMenu ? "" : "hidden"}
-                        onClick={e => this.toggleScroll(false)}
+                        onClick={e => toggleScroll(false)}
                     />
                 </NavLink>
                 <SideNavUl className={this.props.showMenu ? "" : "hidden"}>
@@ -202,7 +203,7 @@ export default class SiteNav extends React.Component {
                             to="/account"
                             activeClassName="active"
                             data-testid="myAccountMenuLink"
-                            onClick={e => this.toggleScroll(false)}
+                            onClick={e => toggleScroll(false)}
                         >
                             <Icon name="account" />
                             <span>Account</span>
@@ -213,7 +214,7 @@ export default class SiteNav extends React.Component {
                             to="/exchange"
                             activeClassName="active"
                             data-testid="exchangeMenuLink"
-                            onClick={e => this.toggleScroll(false)}
+                            onClick={e => toggleScroll(false)}
                         >
                             <Icon name="exchange" />
                             <span>Buy/Sell</span>
@@ -224,7 +225,7 @@ export default class SiteNav extends React.Component {
                             to="/loan"
                             activeClassName="active"
                             data-testid="loanMenuLink"
-                            onClick={e => this.toggleScroll(false)}
+                            onClick={e => toggleScroll(false)}
                         >
                             <Icon name="loan" />
                             <span>Loan</span>
@@ -235,7 +236,7 @@ export default class SiteNav extends React.Component {
                             to="/lock"
                             activeClassName="active"
                             data-testid="lockMenuLink"
-                            onClick={e => this.toggleScroll(false)}
+                            onClick={e => toggleScroll(false)}
                         >
                             <Icon name="lock" />
                             <span>Lock</span>
@@ -246,7 +247,7 @@ export default class SiteNav extends React.Component {
                             to="/stability"
                             activeClassName="active"
                             data-testid="reservesMenuLink"
-                            onClick={e => this.toggleScroll(false)}
+                            onClick={e => toggleScroll(false)}
                         >
                             <Icon name="reserves" />
                             <span>Stability</span>
