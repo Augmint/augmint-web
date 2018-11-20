@@ -175,11 +175,6 @@ export default class SiteNav extends React.Component {
         this.props.toggleNotificationPanel();
     }
 
-    // toggleScroll(noScroll) {
-    //     const siteBody = document.body;
-    //     siteBody.classList.toggle("noScroll", noScroll);
-    // }
-
     render() {
         return (
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
@@ -197,58 +192,33 @@ export default class SiteNav extends React.Component {
                         onClick={e => toggleScroll(false)}
                     />
                 </NavLink>
-                <SideNavUl className={this.props.showMenu ? "" : "hidden"}>
+                <SideNavUl className={this.props.showMenu ? "" : "hidden"} onClick={e => toggleScroll(false)}>
                     <SideNavLi>
-                        <SideNavLink
-                            to="/account"
-                            activeClassName="active"
-                            data-testid="myAccountMenuLink"
-                            onClick={e => toggleScroll(false)}
-                        >
+                        <SideNavLink to="/account" activeClassName="active" data-testid="myAccountMenuLink">
                             <Icon name="account" />
                             <span>Account</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink
-                            to="/exchange"
-                            activeClassName="active"
-                            data-testid="exchangeMenuLink"
-                            onClick={e => toggleScroll(false)}
-                        >
+                        <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                             <Icon name="exchange" />
                             <span>Buy/Sell</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink
-                            to="/loan"
-                            activeClassName="active"
-                            data-testid="loanMenuLink"
-                            onClick={e => toggleScroll(false)}
-                        >
+                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink
-                            to="/lock"
-                            activeClassName="active"
-                            data-testid="lockMenuLink"
-                            onClick={e => toggleScroll(false)}
-                        >
+                        <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink">
                             <Icon name="lock" />
                             <span>Lock</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink
-                            to="/stability"
-                            activeClassName="active"
-                            data-testid="reservesMenuLink"
-                            onClick={e => toggleScroll(false)}
-                        >
+                        <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
                             <Icon name="reserves" />
                             <span>Stability</span>
                         </SideNavLink>

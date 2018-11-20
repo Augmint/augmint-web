@@ -39,11 +39,6 @@ export default class SiteMenu extends React.Component {
         toggleScroll(noScroll);
     }
 
-    // toggleScroll(noScroll) {
-    //     let siteBody = document.body;
-    //     siteBody.classList.toggle("noScroll", noScroll);
-    // }
-
     render() {
         const { isConnected } = this.props.web3Connect;
         const { location } = this.props;
@@ -63,26 +58,17 @@ export default class SiteMenu extends React.Component {
                             className={this.props.showMenu ? "opened" : ""}
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
-                        <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
-                            <SiteMenuItem
-                                isActive={() => currentLocation === "/"}
-                                to="/"
-                                onClick={e => toggleScroll(false)}
-                            >
+                        <StyleNavList
+                            className={this.props.showMenu ? "show" : "hidden"}
+                            onClick={e => toggleScroll(false)}
+                        >
+                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
                                 Home
                             </SiteMenuItem>
-                            <SiteMenuItem
-                                isActive={() => currentLocation === "/concept"}
-                                to="/concept"
-                                onClick={e => toggleScroll(false)}
-                            >
+                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
                                 Concept
                             </SiteMenuItem>
-                            <SiteMenuItem
-                                isActive={() => currentLocation === "/roadmap"}
-                                to="/roadmap"
-                                onClick={e => toggleScroll(false)}
-                            >
+                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
                                 Roadmap
                             </SiteMenuItem>
                         </StyleNavList>
