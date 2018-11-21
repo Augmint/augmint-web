@@ -12,7 +12,7 @@ export function MrCoinBuyLink(props) {
     }
 
     return (
-        <a href={mrCoinBuyUrl} target="_blank" {...other}>
+        <a href={mrCoinBuyUrl} target="_blank" rel="noopener noreferrer" {...other}>
             {props.children}
         </a>
     );
@@ -30,7 +30,7 @@ export function MrCoinSellLink(props) {
     }
 
     return (
-        <a href={mrCoinSellUrl} target="_blank" {...other}>
+        <a href={mrCoinSellUrl} target="_blank" rel="noopener noreferrer" {...other}>
             {props.children}
         </a>
     );

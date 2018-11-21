@@ -12,6 +12,7 @@ import { media, mediaopacity } from "styles/media";
 import AugmintLogo from "assets/images/logo/augmint.svg";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
+import { toggleScroll } from "utils/bodyHelper";
 
 const breakpoint = media.desktop;
 
@@ -164,8 +165,9 @@ export default class SiteNav extends React.Component {
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
     }
 
-    toggleMenu() {
+    toggleMenu(e, noScroll) {
         this.props.toggleMenu();
+        toggleScroll(noScroll);
     }
 
     toggleNotificationPanel(e) {
@@ -178,14 +180,19 @@ export default class SiteNav extends React.Component {
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
                     src={this.props.showMenu ? close : hamburgerMenu}
-                    onClick={this.toggleMenu}
+                    onClick={e => this.toggleMenu(e, this.props.showMenu ? false : true)}
                     id="hamburgerMenu"
                     className={this.props.showMenu ? "opened" : ""}
                 />
                 <NavLink to="/">
-                    <img alt="Augmint" src={AugmintLogo} className={this.props.showMenu ? "" : "hidden"} />
+                    <img
+                        alt="Augmint"
+                        src={AugmintLogo}
+                        className={this.props.showMenu ? "" : "hidden"}
+                        onClick={e => toggleScroll(false)}
+                    />
                 </NavLink>
-                <SideNavUl className={this.props.showMenu ? "" : "hidden"}>
+                <SideNavUl className={this.props.showMenu ? "" : "hidden"} onClick={e => toggleScroll(false)}>
                     <SideNavLi>
                         <SideNavLink to="/account" activeClassName="active" data-testid="myAccountMenuLink">
                             <Icon name="account" />

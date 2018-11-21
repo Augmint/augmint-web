@@ -130,7 +130,7 @@ export const StyledTopNavLink = styled(Link)`
     }
 `;
 
-export const StyledTopNavLinkRight = StyledTopNavLink.extend`
+export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     display: flex;
     flex-direction: column;
     font-size: 11px;
