@@ -139,7 +139,9 @@ export default class NotConnectedHome extends React.Component {
                     <Container className="homePage">
                         <Header as="h2">Augmint loans</Header>
                         <p className="opac loans">
-                            Use your cryptocurrencies without<br />losing them. Get a loan and spend easily.
+                            Use your cryptocurrencies without
+                            <br />
+                            losing them. Get a loan and spend easily.
                         </p>
 
                         <ThemeProvider theme={theme}>
@@ -255,12 +257,16 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ marginBottom: 75 }}>
-                                {founders.map(member => <Member member={member} key={member.pk} />)}
+                                {founders.map(member => (
+                                    <Member member={member} key={member.pk} />
+                                ))}
                             </Grid>
                         </ThemeProvider>
                         <ThemeProvider theme={theme}>
                             <Grid className="grid">
-                                {teamMembers.map(member => <Member member={member} key={member.pk} />)}
+                                {teamMembers.map(member => (
+                                    <Member member={member} key={member.pk} />
+                                ))}
                             </Grid>
                         </ThemeProvider>
                     </Container>
@@ -286,7 +292,7 @@ export default class NotConnectedHome extends React.Component {
                                             />
                                         )}
                                         {partner.slackUrl && (
-                                            <a href={partner.slackUrl} target="_blank">
+                                            <a href={partner.slackUrl} target="_blank" rel="noopener noreferrer">
                                                 <img
                                                     alt="slack icon"
                                                     src={slackIcon}

@@ -22,12 +22,22 @@ export class Member extends React.Component {
                 <Header as="h5" style={{ margin: "10px 0 0" }}>
                     {this.props.member.title}
                     {this.props.member.portfolio && (
-                        <a href={this.props.member.portfolio} target="_blank" style={{ fontSize: 12 }}>
+                        <a
+                            href={this.props.member.portfolio}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ fontSize: 12 }}
+                        >
                             , PORTFOLIO
                         </a>
                     )}
                     {this.props.member.linkedinUrl && (
-                        <a href={this.props.member.linkedinUrl} target="_blank" className="social">
+                        <a
+                            href={this.props.member.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social"
+                        >
                             <img
                                 src={linkedinLogo}
                                 style={{ display: "inline-block", margin: 0, width: 14 }}
@@ -36,7 +46,12 @@ export class Member extends React.Component {
                         </a>
                     )}
                     {this.props.member.githubUrl && (
-                        <a href={this.props.member.githubUrl} target="_blank" className="social">
+                        <a
+                            href={this.props.member.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social"
+                        >
                             <img
                                 src={githubLogo}
                                 style={{ display: "inline-block", margin: 0, width: 14 }}
