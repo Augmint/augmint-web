@@ -30,7 +30,7 @@
     "redux-logger": "3.0.6",
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
-    "stringifier": "1.4.0",
+    "stringifier": "2.0.0",
     "styled-components-grid": "2.2.1",
     "styled-components": "4.1.1",
     "styled-tools": "1.6.0",
