@@ -13,6 +13,7 @@ const theme = {
         opacWhite: "rgba(255, 255, 255, 0.5)",
         opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
+        primaryLight: "#2e3438",
         secondary: "#ffad00",
         secondaryDark: "#d99300",
         lightCyan: "#f8ffff",

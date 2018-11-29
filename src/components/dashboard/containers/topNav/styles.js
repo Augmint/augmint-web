@@ -179,14 +179,13 @@ export const StyledPrice = styled.span`
     }
 
     > .price {
-        color: ${theme.colors.secondary};
         ${media.tablet`
             display: none;
         `};
     }
 
     > .accountDetailsInfo {
-        color: ${theme.colors.white};
+        /* color: ${theme.colors.white}; */
     }
 
     > .last-update {
@@ -195,7 +194,7 @@ export const StyledPrice = styled.span`
 `;
 
 export const StyledSeparator = styled.div`
-    background-color: ${theme.colors.white};
+    background-color: ${theme.colors.primaryLight};
     padding: 0px;
     height: 24px;
     width: 2px;
