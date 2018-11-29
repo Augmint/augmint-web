@@ -32,7 +32,7 @@
     "redux-watch": "1.1.1",
     "stringifier": "1.4.0",
     "styled-components-grid": "2.2.1",
-    "styled-components": "4.1.1",
+    "styled-components": "4.1.2",
     "styled-tools": "1.6.0",
     "web3": "1.0.0-beta.35"
   },
