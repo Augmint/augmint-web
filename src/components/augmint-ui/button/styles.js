@@ -46,7 +46,7 @@ export const BaseButton = styledComponent => styledComponent`
       font-family: ${theme.typography.fontFamilies.title};
       font-size: ${remCalc(16)};
       text-transform: none;
-      color: ${theme.colors.white};
+      color: ${theme.colors.primary};
       background-color: ${theme.colors.secondary};
 
       &:hover,
@@ -90,7 +90,7 @@ export const BaseButton = styledComponent => styledComponent`
       text-transform: none;
       background: transparent;
       border: transparent;
-      color: ${theme.colors.secondary};
+      color: ${theme.colors.primary};
 
       &:hover,
       &:focus {

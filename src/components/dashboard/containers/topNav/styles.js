@@ -184,10 +184,6 @@ export const StyledPrice = styled.span`
         `};
     }
 
-    > .accountDetailsInfo {
-        /* color: ${theme.colors.white}; */
-    }
-
     > .last-update {
         font-size: 0.75rem;
     }
