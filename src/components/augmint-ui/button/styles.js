@@ -71,6 +71,7 @@ export const BaseButton = styledComponent => styledComponent`
     &.ghost {
       font-family: ${theme.typography.fontFamilies.title};
       font-size: ${remCalc(16)};
+      font-weight: 400;
       text-transform: none;
       background: transparent;
       border: 1px solid ${theme.colors.secondary};
