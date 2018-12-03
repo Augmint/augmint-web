@@ -18,7 +18,7 @@
     "react": "16.6.3",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.6.3",
-    "react-ga": "2.5.3",
+    "react-ga": "2.5.6",
     "react-redux": "5.1.1",
     "react-router-dom": "4.3.1",
     "react-router-redux": "5.0.0-alpha.9",
@@ -32,7 +32,7 @@
     "redux-watch": "1.1.1",
     "stringifier": "1.4.0",
     "styled-components-grid": "2.2.1",
-    "styled-components": "3.4.10",
+    "styled-components": "4.1.2",
     "styled-tools": "1.6.0",
     "web3": "1.0.0-beta.35"
   },
@@ -49,16 +49,21 @@
     "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
-    "cypress": "3.1.1",
+    "cypress": "3.1.2",
     "eslint-plugin-cypress": "2.1.2",
-    "husky": "1.1.4",
-    "prettier": "1.15.2",
+    "husky": "1.2.0",
+    "prettier": "1.15.3",
     "pretty-quick": "1.8.0"
   },
   "greenkeeper": {
     "ignore": [
       "bignumber.js"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "browserslist": [
     ">0.2%",

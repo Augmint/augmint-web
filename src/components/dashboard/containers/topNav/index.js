@@ -46,7 +46,7 @@ class TopNav extends React.Component {
         }
         this.props.toggleAccInfo();
         let siteBody = document.body;
-        noScroll ? siteBody.classList.add("noScroll") : siteBody.classList.remove("noScroll");
+        siteBody.classList.toggle("noScroll", noScroll);
     }
 
     toggleNotificationPanel(e) {

@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 import store from "modules/store";
-import { injectGlobal } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import theme from "styles/theme";
 
 import AccountHome from "containers/account";
@@ -49,7 +49,7 @@ import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
 import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
 body {
     margin: 0;
     padding: 0;
@@ -244,6 +244,7 @@ class App extends React.Component {
                         <AppFooter web3Connect={this.props.web3Connect} />
                     </div>
                 )}
+                <GlobalStyle />
             </div>
         );
     }
