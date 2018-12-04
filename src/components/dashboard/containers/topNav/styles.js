@@ -118,13 +118,13 @@ export const StyledTopNavLink = styled(Link)`
 
     &:hover {
         background-color: ${theme.colors.secondary};
-        color: ${theme.colors.white};
+        color: ${theme.colors.primary};
     }
 
     &.notifications {
         &.open {
             background-color: ${theme.colors.secondaryDark};
-            color: ${theme.colors.white};
+            color: ${theme.colors.primary};
             border-right: solid 1px #fff;
         }
     }
