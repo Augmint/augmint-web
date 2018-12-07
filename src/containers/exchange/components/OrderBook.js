@@ -81,7 +81,7 @@ const OrderList = props => {
 
     for (let i = 0; i < listLen; i++) {
         itemList.push(
-            <Row key={`ordersRow-${i}`}>
+            <Row key={`ordersRow-${i}`} valign="top">
                 {i < buyOrders.length ? (
                     <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
                 ) : (
@@ -105,7 +105,7 @@ const OrderList = props => {
 
     return (
         <MyListGroup>
-            <Row halign="center">
+            <Row halign="center" valign="top">
                 <Col width={3} header="Buy A-EUR" style={{ textAlign: "center" }}>
                     {totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
                 </Col>
@@ -114,7 +114,7 @@ const OrderList = props => {
                     {totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}
                 </Col>
             </Row>
-            <Row wrap={false} halign="center">
+            <Row wrap={false} halign="center" valign="top">
                 <Col width={3}>
                     <strong>Amount</strong>
                 </Col>
