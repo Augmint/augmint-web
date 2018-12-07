@@ -1,6 +1,6 @@
 {
   "contractName": "TokenAEur",
-  "latestAbiHash": "9aa81519ec45a52d3f8f1a1a83d25c74",
+  "latestAbiHash": "2ea91d34a7bfefc8f38ef0e8a5ae24a5",
   "deployedAbis": {
     "9aa81519ec45a52d3f8f1a1a83d25c74": {
       "latestDeployedAddress": "0x86a635eccefffa70ff8a6db29da9c8db288e40d0",
@@ -17,6 +17,24 @@
           "deployedBytecodeHash": "c3636b199ceefdd5deb396f099915a87",
           "sourceHash": "20cc69065a6935fc7519147f3fc5fa2c",
           "source": "/* Augmint Crypto Euro token (A-EUR) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Crypto Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
+        }
+      }
+    },
+    "2ea91d34a7bfefc8f38ef0e8a5ae24a5": {
+      "latestDeployedAddress": "0xc994a2deb02543db1f48688438b9903c4b305ce3",
+      "deployments": {
+        "0xc994a2deb02543db1f48688438b9903c4b305ce3": {
+          "generatedAt": "2018-11-14T12:52:13.041Z",
+          "truffleContractFileUpdatedAt": "2018-11-13T16:34:24.517Z",
+          "deployTransactionHash": "0x55a49768013ad9201ab71c8cf91cea967f2165d2a3f2e025a0beb7631c4b8f30",
+          "compiler": {
+            "name": "solc",
+            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+          },
+          "bytecodeHash": "0398a39cdab3b394103910ea6b28eef7",
+          "deployedBytecodeHash": "2916088286d725e884630bc95fc19dbf",
+          "sourceHash": "04025a37ea64acbc6f0ea2ec8a6f3e4d",
+          "source": "/* Augmint Euro token (A-EUR) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
         }
       }
     }

@@ -12,8 +12,9 @@ import { connect } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 import store from "modules/store";
-import { injectGlobal } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import theme from "styles/theme";
+import { media } from "styles/media";
 
 import AccountHome from "containers/account";
 import HowToGet from "containers/account/HowToGet";
@@ -49,30 +50,53 @@ import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
 import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 
-injectGlobal`
-body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    min-width: 320px;
-    background: ${theme.colors.primary};
-    font-family: ${theme.typography.fontFamilies.default};
-    color: ${theme.colors.white};
-    font-smoothing: antialiased;
-}
+const GlobalStyle = createGlobalStyle`
+    @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab:300,400');
 
-a {
-  color: ${theme.colors.secondary};
-}
+    @keyframes icon-loading {
+        0% {
+            transform: rotate(0);
+        }
 
-a:hover {
-  color: ${theme.colors.secondaryDark};
-}
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 
-a,
-a:hover {
-  text-decoration: none;
-}
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        min-width: 320px;
+        background: ${theme.colors.primary};
+        font-family: ${theme.typography.fontFamilies.default};
+        color: ${theme.colors.white};
+        font-smoothing: antialiased;
+    }
+
+    a {
+    color: ${theme.colors.secondary};
+    }
+
+    a:hover {
+    color: ${theme.colors.secondaryDark};
+    }
+
+    a,
+    a:hover {
+    text-decoration: none;
+    }
+
+    .hide-xs {
+        ${media.tablet`
+            display: none;
+        `}
+    }
+    .show-xs {
+        ${media.tabletMin`
+            display: none;
+        `}
+    }
 `;
 
 class ScrollToTop extends React.Component {
@@ -206,16 +230,15 @@ class App extends React.Component {
                             />
                         </NotificationPanel>
                     )}
-                    {showConnection &&
-                        ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
-                            <div>
-                                <LegacyLoanManagers />
-                                <LegacyLockers />
-                                <LegacyExchanges />
-                                <LegacyTokens />
-                                <TransferRequestAlert />
-                            </div>
-                        )}
+                    {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
+                        <div>
+                            <LegacyLoanManagers />
+                            <LegacyLockers />
+                            <LegacyExchanges />
+                            <LegacyTokens />
+                            <TransferRequestAlert />
+                        </div>
+                    )}
 
                     <Switch>
                         <Route exact path="/" component={NotConnectedHome} />
@@ -244,6 +267,7 @@ class App extends React.Component {
                         <AppFooter web3Connect={this.props.web3Connect} />
                     </div>
                 )}
+                <GlobalStyle />
             </div>
         );
     }

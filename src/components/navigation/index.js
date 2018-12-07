@@ -19,6 +19,7 @@ import augmintLogo2x from "assets/images/logo/logo@2x.png";
 import augmintLogo3x from "assets/images/logo/logo@3x.png";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
+import { toggleScroll } from "utils/bodyHelper";
 
 function SiteMenuItem(props) {
     return (
@@ -33,8 +34,9 @@ export default class SiteMenu extends React.Component {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
     }
-    toggleMenu() {
+    toggleMenu(e, noScroll) {
         this.props.toggleMenu();
+        toggleScroll(noScroll);
     }
 
     render() {
@@ -51,12 +53,15 @@ export default class SiteMenu extends React.Component {
                     <StyledNavLeftSide>
                         <HamburgerMenu
                             src={this.props.showMenu ? close : hamburgerMenu}
-                            onClick={this.toggleMenu}
+                            onClick={e => this.toggleMenu(e, this.props.showMenu ? false : true)}
                             id="hamburgerMenu"
                             className={this.props.showMenu ? "opened" : ""}
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
-                        <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
+                        <StyleNavList
+                            className={this.props.showMenu ? "show" : "hidden"}
+                            onClick={e => toggleScroll(false)}
+                        >
                             <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
                                 Home
                             </SiteMenuItem>
@@ -74,6 +79,7 @@ export default class SiteMenu extends React.Component {
                         to={!showConnection && isConnected ? "/account" : "/tryit"}
                         color="primary"
                         style={{ margin: "0", position: "absolute", top: "9px", right: "8px" }}
+                        onClick={e => toggleScroll(false)}
                     >
                         My Account
                     </Button>

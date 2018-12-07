@@ -13,19 +13,49 @@ import {
     LEGACY_LOCKERS_RELEASE_SUCCESS
 } from "modules/reducers/legacyLockers";
 import HashURL from "components/hash";
+import styled from "styled-components";
 
-const styleP = { margin: "1rem 0" };
+const styleP = { margin: ".5rem 0" };
+
+export const StyledP = styled.p`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
+
+export const StyledSmall = styled.small`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: inline;
+    }
+`;
+
+export const StyledDiv = styled.div`
+    &.close {
+        display: none;
+    }
+    &.open {
+        display: block;
+    }
+`;
 
 class LegacyLockers extends React.Component {
     constructor(props) {
         super(props);
         this.handleDismiss = this.handleDismiss.bind(this);
         this.submitReleaseFunds = this.submitReleaseFunds.bind(this);
+        this.toggleInfoPanel = this.toggleInfoPanel.bind(this);
         this.state = {
             submitting: false,
             submitSucceeded: false,
             error: null,
-            result: null
+            result: null,
+            showInfoPanel: false
         };
     }
 
@@ -35,6 +65,12 @@ class LegacyLockers extends React.Component {
 
     handleDismiss(legacyLockerAddress) {
         this.props.dismissLegacyLocker(legacyLockerAddress);
+    }
+
+    toggleInfoPanel() {
+        this.setState({
+            showInfoPanel: !this.state.showInfoPanel
+        });
     }
 
     async submitReleaseFunds(legacyLockerAddress, lockId) {
@@ -59,13 +95,14 @@ class LegacyLockers extends React.Component {
     render() {
         const { contracts, lockerContract, network } = this.props;
         const { error, submitting, submitSucceeded, result } = this.state;
+        let _className = this.state.showInfoPanel ? "open" : "close";
 
         const locks = contracts
             .filter(contract => contract.locks.length > 0 && !contract.isDismissed)
             .map((contract, contractIndex) => (
                 <MyListGroup.Col key={`contractColDiv-${contractIndex}`} size={1}>
                     <p style={styleP}>
-                        {contract.locks.length} locks in legacy Lock contract{" "}
+                        {contract.locks.length} lock(s) in legacy Lock contract{" "}
                         <small>
                             <HashURL hash={lockerContract.address} type={"address/"} />
                         </small>
@@ -73,6 +110,7 @@ class LegacyLockers extends React.Component {
 
                     <p style={styleP}>
                         <Button
+                            className="ghost"
                             type="submit"
                             data-testid={`dismissLegacyLockerButton-${contractIndex}`}
                             onClick={() => this.handleDismiss(contract.address)}
@@ -113,20 +151,30 @@ class LegacyLockers extends React.Component {
         return locks && locks.length > 0 && lockerContract ? (
             <Psegment>
                 <Container>
-                    <InfoPanel header="You have locked funds in an older version of Augmint Locker contract">
+                    <InfoPanel
+                        header="We have a new contract in effect. You have locked funds in an older version of Augmint Locker contract."
+                        showInfoPanel={this.state.showInfoPanel}
+                        toggleInfoPanel={this.toggleInfoPanel}
+                        chevron="chevron-down"
+                    >
                         <p style={styleP}>
-                            Augmint Locker version in use on{" "}
-                            <HashURL hash={lockerContract.address} type={"address/"}>
-                                {network.name + " network"}
-                            </HashURL>
-                            .<br />
                             You can release your funds in the old locker contract when the lock expired.
-                            <br />
-                            <small>
+                        </p>
+                        <StyledP style={{ margin: ".3rem 0" }} className={_className}>
+                            <StyledSmall className={_className}>
+                                Augmint Locker version in use on{" "}
+                                <HashURL hash={lockerContract.address} type={"address/"}>
+                                    {network.name + " network"}
+                                </HashURL>
+                                .
+                            </StyledSmall>
+                        </StyledP>
+                        <StyledP style={{ margin: ".3rem 0" }} className={_className}>
+                            <StyledSmall className={_className}>
                                 NB: Locker contract upgrades will be infrequent when Augmint released in public. During
                                 pilots we deliberately deploy a couple of new versions to test the conversion process.
-                            </small>
-                        </p>
+                            </StyledSmall>
+                        </StyledP>
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
@@ -141,7 +189,7 @@ class LegacyLockers extends React.Component {
                                 onDismiss={() => this.setState({ submitSucceeded: false, result: null })}
                             />
                         )}
-                        {!submitSucceeded && !error && locks}
+                        <StyledDiv className={_className}>{!submitSucceeded && !error && locks}</StyledDiv>
                     </InfoPanel>
                 </Container>
             </Psegment>

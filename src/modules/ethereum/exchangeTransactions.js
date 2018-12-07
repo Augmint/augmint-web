@@ -3,7 +3,14 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, DECIMALS, EXCHANGE_CHUNK_SIZE } from "utils/constants";
+import {
+    ONE_ETH_IN_WEI,
+    DECIMALS_DIV,
+    PPM_DIV,
+    DECIMALS,
+    LEGACY_CONTRACTS_CHUNK_SIZE,
+    CHUNK_SIZE
+} from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -13,6 +20,8 @@ export async function fetchOrders(_exchangeInstance) {
     const exchangeInstance = _exchangeInstance
         ? _exchangeInstance
         : store.getState().contracts.latest.exchange.web3ContractInstance;
+    const isLegacyExchangeContract = typeof exchangeInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyExchangeContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
 
     const orderCounts = await exchangeInstance.methods.getActiveOrderCounts().call();
     const buyCount = parseInt(orderCounts.buyTokenOrderCount, 10);
@@ -20,17 +29,21 @@ export async function fetchOrders(_exchangeInstance) {
 
     // retreive all orders
     let buyOrders = [];
-    let queryCount = Math.ceil(buyCount / EXCHANGE_CHUNK_SIZE);
+    let queryCount = Math.ceil(buyCount / LEGACY_CONTRACTS_CHUNK_SIZE);
 
     for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = await getOrders(exchangeInstance, TOKEN_BUY, i * EXCHANGE_CHUNK_SIZE);
+        const fetchedOrders = isLegacyExchangeContract
+            ? await getOrders(exchangeInstance, TOKEN_BUY, i * chunkSize)
+            : await getOrders(exchangeInstance, TOKEN_BUY, i * chunkSize, chunkSize);
         buyOrders = buyOrders.concat(fetchedOrders.buyOrders);
     }
 
     let sellOrders = [];
-    queryCount = Math.ceil(sellCount / EXCHANGE_CHUNK_SIZE);
+    queryCount = Math.ceil(sellCount / chunkSize);
     for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = await getOrders(exchangeInstance, TOKEN_SELL, i * EXCHANGE_CHUNK_SIZE);
+        const fetchedOrders = isLegacyExchangeContract
+            ? await getOrders(exchangeInstance, TOKEN_SELL, i * chunkSize)
+            : await getOrders(exchangeInstance, TOKEN_SELL, i * chunkSize, chunkSize);
         sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
     }
 
@@ -43,11 +56,18 @@ export async function fetchOrders(_exchangeInstance) {
 async function getOrders(exchangeInstance, orderDirection, offset) {
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
 
+    const isLegacyExchangeContract = typeof exchangeInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyExchangeContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+
     let result;
     if (orderDirection === TOKEN_BUY) {
-        result = await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit });
+        result = isLegacyExchangeContract
+            ? await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit })
+            : await exchangeInstance.methods.getActiveBuyOrders(offset, chunkSize).call({ gas: blockGasLimit });
     } else {
-        result = await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit });
+        result = isLegacyExchangeContract
+            ? await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit })
+            : await exchangeInstance.methods.getActiveSellOrders(offset, chunkSize).call({ gas: blockGasLimit });
     }
 
     // result format: [id, maker,  price, amount]

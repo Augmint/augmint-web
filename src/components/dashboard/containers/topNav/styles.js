@@ -61,7 +61,9 @@ export const StyledTopNavUl = styled.ul`
 export const StyledAccount = styled.div`
     display: none;
     &.opened {
-        display: block;
+        ${media.tablet`
+            display: block;
+        `};
     }
 `;
 
@@ -116,19 +118,19 @@ export const StyledTopNavLink = styled(Link)`
 
     &:hover {
         background-color: ${theme.colors.secondary};
-        color: ${theme.colors.white};
+        color: ${theme.colors.primary};
     }
 
     &.notifications {
         &.open {
             background-color: ${theme.colors.secondaryDark};
-            color: ${theme.colors.white};
+            color: ${theme.colors.primary};
             border-right: solid 1px #fff;
         }
     }
 `;
 
-export const StyledTopNavLinkRight = StyledTopNavLink.extend`
+export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     display: flex;
     flex-direction: column;
     font-size: 11px;
@@ -177,14 +179,9 @@ export const StyledPrice = styled.span`
     }
 
     > .price {
-        color: ${theme.colors.secondary};
         ${media.tablet`
             display: none;
         `};
-    }
-
-    > .accountDetailsInfo {
-        color: ${theme.colors.white};
     }
 
     > .last-update {
@@ -193,7 +190,7 @@ export const StyledPrice = styled.span`
 `;
 
 export const StyledSeparator = styled.div`
-    background-color: ${theme.colors.white};
+    background-color: ${theme.colors.primaryLight};
     padding: 0px;
     height: 24px;
     width: 2px;

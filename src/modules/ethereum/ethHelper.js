@@ -88,7 +88,8 @@ export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
                         receipt
                     );
 
-                    if (receipt.status !== true) {
+                    if (receipt.status !== true && receipt.status !== "0x1") {
+                        // web3js > beta33 returns bool
                         throw new EthereumTransactionError(
                             `${txName} failed`,
                             "Ethereum transaction returned status: " + receipt.status,

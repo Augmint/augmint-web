@@ -8,21 +8,21 @@
     "@ledgerhq/hw-app-eth": "4.21.0",
     "@ledgerhq/hw-transport-u2f": "4.21.0",
     "bignumber.js": "5.0.0",
-    "chart.js": "2.7.2",
+    "chart.js": "2.7.3",
     "del": "3.0.0",
-    "ethereumjs-util": "5.2.0",
+    "ethereumjs-util": "6.0.0",
     "ethers": "3.0.29",
     "hdkey": "1.1.0",
     "moment": "2.22.2",
     "parse": "2.1.0",
-    "react": "16.5.2",
+    "react": "16.6.3",
     "react-copy-to-clipboard": "5.0.1",
-    "react-dom": "16.5.2",
-    "react-ga": "2.5.3",
-    "react-redux": "5.0.7",
+    "react-dom": "16.6.3",
+    "react-ga": "2.5.6",
+    "react-redux": "5.1.1",
     "react-router-dom": "4.3.1",
     "react-router-redux": "5.0.0-alpha.9",
-    "react-scripts": "2.0.4",
+    "react-scripts": "2.0.5",
     "react-scrollchor": "6.0.0",
     "react-tooltip": "3.8.4",
     "redux": "3.7.2",
@@ -30,11 +30,11 @@
     "redux-logger": "3.0.6",
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
-    "stringifier": "1.4.0",
-    "styled-components": "3.4.6",
-    "styled-components-grid": "2.2.0",
-    "styled-tools": "1.5.1",
-    "web3": "1.0.0-beta.36"
+    "stringifier": "2.0.0",
+    "styled-components-grid": "2.2.1",
+    "styled-components": "4.1.2",
+    "styled-tools": "1.6.0",
+    "web3": "1.0.0-beta.33"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,19 +46,29 @@
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "contracts:migrate": "cd augmint-contracts && yarn migrate",
     "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate",
-    "precommit": "pretty-quick --staged"
+    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
-    "cypress": "3.1.0",
-    "eslint-plugin-cypress": "2.0.1",
-    "husky": "1.1.0",
-    "prettier": "1.14.3",
-    "pretty-quick": "1.7.0"
+    "cypress": "3.1.3",
+    "eslint-plugin-cypress": "2.1.2",
+    "husky": "1.2.0",
+    "prettier": "1.15.3",
+    "pretty-quick": "1.8.0"
   },
   "greenkeeper": {
     "ignore": [
       "bignumber.js"
     ]
-  }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

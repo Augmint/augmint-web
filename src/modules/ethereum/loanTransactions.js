@@ -6,7 +6,15 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, MIN_LOAN_AMOUNT_ADJUSTMENT, LOAN_STATES } from "../../utils/constants";
+import {
+    ONE_ETH_IN_WEI,
+    DECIMALS_DIV,
+    PPM_DIV,
+    MIN_LOAN_AMOUNT_ADJUSTMENT,
+    LOAN_STATES,
+    CHUNK_SIZE,
+    LEGACY_CONTRACTS_CHUNK_SIZE
+} from "../../utils/constants";
 
 export async function newEthBackedLoanTx(productId, ethAmount) {
     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
@@ -32,27 +40,22 @@ export async function newEthBackedLoanTx(productId, ethAmount) {
 
 export async function fetchProductsTx() {
     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+    const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
 
-    // TODO: resolve timing of loanManager refresh in order to get chunkSize & productCount from loanManager:
-    const [chunkSize, productCount] = await Promise.all([
-        loanManagerInstance.methods
-            .CHUNK_SIZE()
-            .call()
-            .then(res => parseInt(res, 10)),
-        loanManagerInstance.methods
-            .getProductCount()
-            .call()
-            .then(res => parseInt(res, 10))
-    ]);
-    // const chunkSize = store.getState().loanManager.info.chunkSize;
-    // const productCount = store.getState().loanManager.info.productCount;
+    const productCount = await loanManagerInstance.methods
+        .getProductCount()
+        .call()
+        .then(res => parseInt(res, 10));
 
     let products = [];
 
     const queryCount = Math.ceil(productCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const productsArray = await loanManagerInstance.methods.getProducts(i * chunkSize).call();
+        const productsArray = isLegacyLoanContract
+            ? await loanManagerInstance.methods.getProducts(i * chunkSize).call()
+            : await loanManagerInstance.methods.getProducts(i * chunkSize, chunkSize).call();
         const parsedProducts = parseProducts(productsArray);
         products = products.concat(parsedProducts);
     }
@@ -148,26 +151,21 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
 export async function fetchLoansToCollectTx() {
     try {
         const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+        const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
+        const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
 
-        // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
-        const [chunkSize, loanCount] = await Promise.all([
-            loanManagerInstance.methods
-                .CHUNK_SIZE()
-                .call()
-                .then(res => parseInt(res, 10)),
-            loanManagerInstance.methods
-                .getLoanCount()
-                .call()
-                .then(res => parseInt(res, 10))
-        ]);
-        // const chunkSize = store.getState().loanManager.info.chunkSize;
-        // const loanCount = await loanManager.getLoanCount();
+        const loanCount = await loanManagerInstance.methods
+            .getLoanCount()
+            .call()
+            .then(res => parseInt(res, 10));
 
         let loansToCollect = [];
 
         const queryCount = Math.ceil(loanCount / chunkSize);
         for (let i = 0; i < queryCount; i++) {
-            const loansArray = await loanManagerInstance.methods.getLoans(i * chunkSize).call();
+            const loansArray = isLegacyLoanContract
+                ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
+                : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
             const defaultedLoans = parseLoans(loansArray).filter(loan => loan.isCollectable);
             loansToCollect = loansToCollect.concat(defaultedLoans);
         }
@@ -214,25 +212,22 @@ export async function collectLoansTx(loanManagerInstance, loansToCollect) {
 }
 
 export async function fetchLoansForAddressTx(loanManagerInstance, account) {
-    // TODO: resolve timing of loanManager refresh in order to get chunkSize & loanCount from loanManager:
-    const [chunkSize, loanCount] = await Promise.all([
-        loanManagerInstance.methods
-            .CHUNK_SIZE()
-            .call()
-            .then(res => parseInt(res, 10)),
-        loanManagerInstance.methods
-            .getLoanCountForAddress(account)
-            .call()
-            .then(res => parseInt(res, 10))
-    ]);
-    // const chunkSize = store.getState().loanManager.info.chunkSize;
-    // const loanCount = await loanManager.getLoanCountForAddress(account);
+    // TODO: resolve timing of loanManager refresh in order to get loanCount from loanManager:
+    const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+    const loanCount = await loanManagerInstance.methods
+        .getLoanCountForAddress(account)
+        .call()
+        .then(res => parseInt(res, 10));
+
     let loans = [];
 
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const loansArray = await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize).call();
+        const loansArray = isLegacyLoanContract
+            ? await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize).call()
+            : await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize, chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }
 
@@ -240,23 +235,21 @@ export async function fetchLoansForAddressTx(loanManagerInstance, account) {
 }
 
 export async function fetchLoansTx(loanManagerInstance) {
-    const [chunkSize, loanCount] = await Promise.all([
-        loanManagerInstance.methods
-            .CHUNK_SIZE()
-            .call()
-            .then(res => parseInt(res, 10)),
-        loanManagerInstance.methods
-            .getLoanCount()
-            .call()
-            .then(res => parseInt(res, 10))
-    ]);
+    const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+    const loanCount = await loanManagerInstance.methods
+        .getLoanCount()
+        .call()
+        .then(res => parseInt(res, 10));
 
     let loans = [];
 
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const loansArray = await loanManagerInstance.methods.getLoans(i * chunkSize).call();
+        const loansArray = isLegacyLoanContract
+            ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
+            : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }
     return loans;
