@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
-import { media } from "styles/media";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 import { connect } from "react-redux";
@@ -12,12 +11,6 @@ export const TxDate = styled.span`
 
 export const TxTitle = styled.span`
     font-weight: bold;
-
-    & > small {
-        ${media.tablet`
-            display: none;
-        `};
-    }
 `;
 
 export const TxDetails = styled.span`
@@ -84,7 +77,8 @@ class TxInfo extends React.Component {
                 <div>
                     <HashURL hash={tx.transactionHash} type={"tx/"} title="Transaction details">
                         <TxTitle>
-                            <span style={{ color: "black" }}>{this.getTitleText(tx)}</span> »<small> Details</small>
+                            <span style={{ color: "black" }}>{this.getTitleText(tx)}</span> <br />»
+                            <small> Details</small>
                         </TxTitle>
                     </HashURL>
                 </div>

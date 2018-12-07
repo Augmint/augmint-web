@@ -25,7 +25,7 @@ const OrderItem = props => {
             : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
 
     return (
-        <Row>
+        <Row valign="top">
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
@@ -81,7 +81,7 @@ const OrderList = props => {
     return (
         itemList.length > 0 && (
             <MyListGroup>
-                <Row wrap={false} halign="center">
+                <Row wrap={false} halign="center" valign="top">
                     <Col width={2} />
 
                     <Col width={3}>
