@@ -8,7 +8,7 @@ export default function HashURL(props) {
     const _children = children !== undefined ? children : "View on Etherscan.";
 
     return (
-        <a href={url + type + hash} target="_blank" rel="noopener noreferrer" {...other}>
+        <a href={url + type + hash} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 400 }} {...other}>
             {_children}
         </a>
     );
