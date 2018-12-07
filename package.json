@@ -18,7 +18,7 @@
     "react": "16.6.3",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.6.3",
-    "react-ga": "2.5.4",
+    "react-ga": "2.5.6",
     "react-redux": "5.1.1",
     "react-router-dom": "4.3.1",
     "react-router-redux": "5.0.0-alpha.9",
@@ -49,10 +49,10 @@
     "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
   },
   "devDependencies": {
-    "cypress": "3.1.2",
+    "cypress": "3.1.3",
     "eslint-plugin-cypress": "2.1.2",
     "husky": "1.2.0",
-    "prettier": "1.15.2",
+    "prettier": "1.15.3",
     "pretty-quick": "1.8.0"
   },
   "greenkeeper": {
