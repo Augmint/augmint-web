@@ -33,7 +33,7 @@ export const StyledIcon = styled.i`
     }
 
     &.accountIcon {
-        color: ${theme.colors.white};
+        color: ${theme.colors.primary};
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;

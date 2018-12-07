@@ -27,6 +27,7 @@ export const StyleTh = styled.th`
 export const StyleTr = styled.tr`
     ${StyleTd}, ${StyleTh} {
         text-align: left;
+        vertical-align: top;
         padding: 10px 20px;
     }
     ${StyleTh} {

@@ -1,47 +1,33 @@
 {
-  "contractName": "Exchange",
-  "abiHash": "c28de2392aea85ef2aa1b108fce6568c",
-  "generatedAt": "2018-08-14T17:38:01.618Z",
+  "contractName": "Locker",
+  "abiHash": "f59526398823aef0f0c1454d0b6b4eac",
+  "generatedAt": "2018-10-18T13:35:02.422Z",
   "abi": [
     {
       "constant": true,
       "inputs": [
         {
           "name": "",
-          "type": "uint64"
-        }
-      ],
-      "name": "buyTokenOrders",
-      "outputs": [
-        {
-          "name": "index",
-          "type": "uint64"
-        },
-        {
-          "name": "maker",
-          "type": "address"
-        },
-        {
-          "name": "price",
-          "type": "uint32"
-        },
-        {
-          "name": "amount",
           "type": "uint256"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "orderCount",
+      "name": "lockProducts",
       "outputs": [
         {
-          "name": "",
-          "type": "uint64"
+          "name": "perTermInterest",
+          "type": "uint32"
+        },
+        {
+          "name": "durationInSecs",
+          "type": "uint32"
+        },
+        {
+          "name": "minimumLockAmount",
+          "type": "uint32"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -51,7 +37,7 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "rates",
+      "name": "monetarySupervisor",
       "outputs": [
         {
           "name": "",
@@ -158,36 +144,14 @@
       "inputs": [
         {
           "name": "",
-          "type": "uint64"
-        }
-      ],
-      "name": "sellTokenOrders",
-      "outputs": [
-        {
-          "name": "index",
-          "type": "uint64"
-        },
-        {
-          "name": "maker",
           "type": "address"
         },
         {
-          "name": "price",
-          "type": "uint32"
-        },
-        {
-          "name": "amount",
+          "name": "",
           "type": "uint256"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "CHUNK_SIZE",
+      "name": "accountLocks",
       "outputs": [
         {
           "name": "",
@@ -217,6 +181,41 @@
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "locks",
+      "outputs": [
+        {
+          "name": "amountLocked",
+          "type": "uint256"
+        },
+        {
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "productId",
+          "type": "uint32"
+        },
+        {
+          "name": "lockedUntil",
+          "type": "uint40"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "name": "permissionGranterContract",
@@ -227,7 +226,7 @@
           "type": "address"
         },
         {
-          "name": "_rates",
+          "name": "_monetarySupervisor",
           "type": "address"
         }
       ],
@@ -240,78 +239,31 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": true,
-          "name": "maker",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "price",
+          "name": "lockProductId",
           "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "NewOrder",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "tokenBuyer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "tokenSeller",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "buyTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "sellTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "publishedRate",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "price",
+          "name": "perTermInterest",
           "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
+          "name": "durationInSecs",
+          "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
+          "name": "minimumLockAmount",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "name": "isActive",
+          "type": "bool"
         }
       ],
-      "name": "OrderFill",
+      "name": "NewLockProduct",
       "type": "event"
     },
     {
@@ -319,26 +271,75 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
+          "name": "lockProductId",
+          "type": "uint32"
         },
         {
+          "indexed": false,
+          "name": "newActiveState",
+          "type": "bool"
+        }
+      ],
+      "name": "LockProductActiveChange",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
-          "name": "maker",
+          "name": "lockOwner",
           "type": "address"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
+          "name": "lockId",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "name": "weiAmount",
+          "name": "amountLocked",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "interestEarned",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "lockedUntil",
+          "type": "uint40"
+        },
+        {
+          "indexed": false,
+          "name": "perTermInterest",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "name": "durationInSecs",
+          "type": "uint32"
+        }
+      ],
+      "name": "NewLock",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "lockOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "lockId",
           "type": "uint256"
         }
       ],
-      "name": "CancelledOrder",
+      "name": "LockReleased",
       "type": "event"
     },
     {
@@ -346,11 +347,11 @@
       "inputs": [
         {
           "indexed": false,
-          "name": "newRatesContract",
+          "name": "newMonetarySupervisor",
           "type": "address"
         }
       ],
-      "name": "RatesContractChanged",
+      "name": "MonetarySupervisorChanged",
       "type": "event"
     },
     {
@@ -391,11 +392,23 @@
       "constant": false,
       "inputs": [
         {
-          "name": "newRatesContract",
-          "type": "address"
+          "name": "perTermInterest",
+          "type": "uint32"
+        },
+        {
+          "name": "durationInSecs",
+          "type": "uint32"
+        },
+        {
+          "name": "minimumLockAmount",
+          "type": "uint32"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
         }
       ],
-      "name": "setRatesContract",
+      "name": "addLockProduct",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -405,40 +418,16 @@
       "constant": false,
       "inputs": [
         {
-          "name": "price",
-          "type": "uint32"
-        }
-      ],
-      "name": "placeBuyTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint64"
-        }
-      ],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "price",
+          "name": "lockProductId",
           "type": "uint32"
         },
         {
-          "name": "tokenAmount",
-          "type": "uint256"
+          "name": "isActive",
+          "type": "bool"
         }
       ],
-      "name": "placeSellTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint256"
-        }
-      ],
+      "name": "setLockProductActiveState",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -447,15 +436,15 @@
       "constant": false,
       "inputs": [
         {
-          "name": "maker",
+          "name": "from",
           "type": "address"
         },
         {
-          "name": "tokenAmount",
+          "name": "amountToLock",
           "type": "uint256"
         },
         {
-          "name": "price",
+          "name": "_lockProductId",
           "type": "uint256"
         }
       ],
@@ -469,67 +458,26 @@
       "constant": false,
       "inputs": [
         {
-          "name": "buyTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "cancelBuyTokenOrder",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "sellTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "cancelSellTokenOrder",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenId",
-          "type": "uint64"
-        },
-        {
-          "name": "sellTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "matchOrders",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenIds",
-          "type": "uint64[]"
-        },
-        {
-          "name": "sellTokenIds",
-          "type": "uint64[]"
-        }
-      ],
-      "name": "matchMultipleOrders",
-      "outputs": [
-        {
-          "name": "matchCount",
+          "name": "lockId",
           "type": "uint256"
         }
       ],
+      "name": "releaseFunds",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newMonetarySupervisor",
+          "type": "address"
+        }
+      ],
+      "name": "setMonetarySupervisor",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -537,14 +485,66 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "getActiveOrderCounts",
+      "name": "getLockProductCount",
       "outputs": [
         {
-          "name": "buyTokenOrderCount",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "offset",
           "type": "uint256"
         },
         {
-          "name": "sellTokenOrderCount",
+          "name": "chunkSize",
+          "type": "uint16"
+        }
+      ],
+      "name": "getLockProducts",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[5][]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getLockCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "lockOwner",
+          "type": "address"
+        }
+      ],
+      "name": "getLockCountForAddress",
+      "outputs": [
+        {
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -558,13 +558,17 @@
         {
           "name": "offset",
           "type": "uint256"
+        },
+        {
+          "name": "chunkSize",
+          "type": "uint16"
         }
       ],
-      "name": "getActiveBuyOrders",
+      "name": "getLocks",
       "outputs": [
         {
-          "name": "response",
-          "type": "uint256[4][100]"
+          "name": "",
+          "type": "uint256[8][]"
         }
       ],
       "payable": false,
@@ -575,19 +579,50 @@
       "constant": true,
       "inputs": [
         {
+          "name": "lockOwner",
+          "type": "address"
+        },
+        {
           "name": "offset",
           "type": "uint256"
+        },
+        {
+          "name": "chunkSize",
+          "type": "uint16"
         }
       ],
-      "name": "getActiveSellOrders",
+      "name": "getLocksForAddress",
       "outputs": [
         {
-          "name": "response",
-          "type": "uint256[4][100]"
+          "name": "",
+          "type": "uint256[7][]"
         }
       ],
       "payable": false,
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "perTermInterest",
+          "type": "uint32"
+        },
+        {
+          "name": "amountToLock",
+          "type": "uint256"
+        }
+      ],
+      "name": "calculateInterest",
+      "outputs": [
+        {
+          "name": "interestEarned",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
       "type": "function"
     }
   ]

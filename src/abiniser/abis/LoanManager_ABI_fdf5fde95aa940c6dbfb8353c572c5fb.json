@@ -1,47 +1,16 @@
 {
-  "contractName": "Exchange",
-  "abiHash": "c28de2392aea85ef2aa1b108fce6568c",
-  "generatedAt": "2018-08-14T17:38:01.618Z",
+  "contractName": "LoanManager",
+  "abiHash": "fdf5fde95aa940c6dbfb8353c572c5fb",
+  "generatedAt": "2018-10-18T13:35:02.403Z",
   "abi": [
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint64"
-        }
-      ],
-      "name": "buyTokenOrders",
-      "outputs": [
-        {
-          "name": "index",
-          "type": "uint64"
-        },
-        {
-          "name": "maker",
-          "type": "address"
-        },
-        {
-          "name": "price",
-          "type": "uint32"
-        },
-        {
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [],
-      "name": "orderCount",
+      "name": "monetarySupervisor",
       "outputs": [
         {
           "name": "",
-          "type": "uint64"
+          "type": "address"
         }
       ],
       "payable": false,
@@ -105,6 +74,68 @@
     },
     {
       "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "accountLoans",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "products",
+      "outputs": [
+        {
+          "name": "minDisbursedAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "term",
+          "type": "uint32"
+        },
+        {
+          "name": "discountRate",
+          "type": "uint32"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "uint32"
+        },
+        {
+          "name": "defaultingFeePt",
+          "type": "uint32"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "augmintToken",
       "outputs": [
@@ -158,40 +189,34 @@
       "inputs": [
         {
           "name": "",
-          "type": "uint64"
+          "type": "uint256"
         }
       ],
-      "name": "sellTokenOrders",
+      "name": "loans",
       "outputs": [
         {
-          "name": "index",
-          "type": "uint64"
+          "name": "collateralAmount",
+          "type": "uint256"
         },
         {
-          "name": "maker",
+          "name": "repaymentAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "borrower",
           "type": "address"
         },
         {
-          "name": "price",
+          "name": "productId",
           "type": "uint32"
         },
         {
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "CHUNK_SIZE",
-      "outputs": [
+          "name": "state",
+          "type": "uint8"
+        },
         {
-          "name": "",
-          "type": "uint256"
+          "name": "maturity",
+          "type": "uint40"
         }
       ],
       "payable": false,
@@ -227,6 +252,10 @@
           "type": "address"
         },
         {
+          "name": "_monetarySupervisor",
+          "type": "address"
+        },
+        {
           "name": "_rates",
           "type": "address"
         }
@@ -239,106 +268,120 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": true,
-          "name": "maker",
-          "type": "address"
-        },
-        {
           "indexed": false,
-          "name": "price",
+          "name": "productId",
           "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
+          "name": "loanId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "collateralAmount",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "name": "weiAmount",
+          "name": "loanAmount",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "repaymentAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "maturity",
+          "type": "uint40"
         }
       ],
-      "name": "NewOrder",
+      "name": "NewLoan",
       "type": "event"
     },
     {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "tokenBuyer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "tokenSeller",
-          "type": "address"
-        },
-        {
           "indexed": false,
-          "name": "buyTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "sellTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "publishedRate",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "price",
+          "name": "productId",
           "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
+          "name": "newState",
+          "type": "bool"
         }
       ],
-      "name": "OrderFill",
+      "name": "LoanProductActiveStateChanged",
       "type": "event"
     },
     {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
+          "indexed": false,
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "LoanProductAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "loanId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "borrower",
+          "type": "address"
+        }
+      ],
+      "name": "LoanRepayed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "loanId",
+          "type": "uint256"
         },
         {
           "indexed": true,
-          "name": "maker",
+          "name": "borrower",
           "type": "address"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
+          "name": "collectedCollateral",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "name": "weiAmount",
+          "name": "releasedCollateral",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "defaultingFee",
           "type": "uint256"
         }
       ],
-      "name": "CancelledOrder",
+      "name": "LoanCollected",
       "type": "event"
     },
     {
@@ -348,9 +391,14 @@
           "indexed": false,
           "name": "newRatesContract",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "newMonetarySupervisor",
+          "type": "address"
         }
       ],
-      "name": "RatesContractChanged",
+      "name": "SystemContractsChanged",
       "type": "event"
     },
     {
@@ -391,11 +439,31 @@
       "constant": false,
       "inputs": [
         {
-          "name": "newRatesContract",
-          "type": "address"
+          "name": "term",
+          "type": "uint32"
+        },
+        {
+          "name": "discountRate",
+          "type": "uint32"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "uint32"
+        },
+        {
+          "name": "minDisbursedAmount",
+          "type": "uint256"
+        },
+        {
+          "name": "defaultingFeePt",
+          "type": "uint32"
+        },
+        {
+          "name": "isActive",
+          "type": "bool"
         }
       ],
-      "name": "setRatesContract",
+      "name": "addLoanProduct",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -405,40 +473,16 @@
       "constant": false,
       "inputs": [
         {
-          "name": "price",
-          "type": "uint32"
-        }
-      ],
-      "name": "placeBuyTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint64"
-        }
-      ],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "price",
+          "name": "productId",
           "type": "uint32"
         },
         {
-          "name": "tokenAmount",
-          "type": "uint256"
+          "name": "newState",
+          "type": "bool"
         }
       ],
-      "name": "placeSellTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint256"
-        }
-      ],
+      "name": "setLoanProductActiveState",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -447,15 +491,29 @@
       "constant": false,
       "inputs": [
         {
-          "name": "maker",
+          "name": "productId",
+          "type": "uint32"
+        }
+      ],
+      "name": "newEthBackedLoan",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "",
           "type": "address"
         },
         {
-          "name": "tokenAmount",
+          "name": "repaymentAmount",
           "type": "uint256"
         },
         {
-          "name": "price",
+          "name": "loanId",
           "type": "uint256"
         }
       ],
@@ -469,11 +527,11 @@
       "constant": false,
       "inputs": [
         {
-          "name": "buyTokenId",
-          "type": "uint64"
+          "name": "loanIds",
+          "type": "uint256[]"
         }
       ],
-      "name": "cancelBuyTokenOrder",
+      "name": "collect",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -483,53 +541,16 @@
       "constant": false,
       "inputs": [
         {
-          "name": "sellTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "cancelSellTokenOrder",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenId",
-          "type": "uint64"
+          "name": "newRatesContract",
+          "type": "address"
         },
         {
-          "name": "sellTokenId",
-          "type": "uint64"
+          "name": "newMonetarySupervisor",
+          "type": "address"
         }
       ],
-      "name": "matchOrders",
+      "name": "setSystemContracts",
       "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenIds",
-          "type": "uint64[]"
-        },
-        {
-          "name": "sellTokenIds",
-          "type": "uint64[]"
-        }
-      ],
-      "name": "matchMultipleOrders",
-      "outputs": [
-        {
-          "name": "matchCount",
-          "type": "uint256"
-        }
-      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -537,14 +558,47 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "getActiveOrderCounts",
+      "name": "getProductCount",
       "outputs": [
         {
-          "name": "buyTokenOrderCount",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "offset",
           "type": "uint256"
         },
         {
-          "name": "sellTokenOrderCount",
+          "name": "chunkSize",
+          "type": "uint16"
+        }
+      ],
+      "name": "getProducts",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[8][]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getLoanCount",
+      "outputs": [
+        {
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -558,13 +612,17 @@
         {
           "name": "offset",
           "type": "uint256"
+        },
+        {
+          "name": "chunkSize",
+          "type": "uint16"
         }
       ],
-      "name": "getActiveBuyOrders",
+      "name": "getLoans",
       "outputs": [
         {
-          "name": "response",
-          "type": "uint256[4][100]"
+          "name": "",
+          "type": "uint256[10][]"
         }
       ],
       "payable": false,
@@ -575,15 +633,61 @@
       "constant": true,
       "inputs": [
         {
-          "name": "offset",
+          "name": "borrower",
+          "type": "address"
+        }
+      ],
+      "name": "getLoanCountForAddress",
+      "outputs": [
+        {
+          "name": "",
           "type": "uint256"
         }
       ],
-      "name": "getActiveSellOrders",
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "name": "offset",
+          "type": "uint256"
+        },
+        {
+          "name": "chunkSize",
+          "type": "uint16"
+        }
+      ],
+      "name": "getLoansForAddress",
       "outputs": [
         {
-          "name": "response",
-          "type": "uint256[4][100]"
+          "name": "",
+          "type": "uint256[10][]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "loanId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getLoanTuple",
+      "outputs": [
+        {
+          "name": "result",
+          "type": "uint256[10]"
         }
       ],
       "payable": false,
