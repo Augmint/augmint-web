@@ -1,7 +1,7 @@
 {
   "contractName": "TokenAEur",
-  "abiHash": "1bf228e8c50681d2a93b6723af2144a7",
-  "generatedAt": "2018-07-08T15:47:54.866Z",
+  "abiHash": "2ea91d34a7bfefc8f38ef0e8a5ae24a5",
+  "generatedAt": "2018-10-18T13:35:02.364Z",
   "abi": [
     {
       "constant": true,
@@ -287,12 +287,7 @@
         }
       ],
       "name": "decreaseApproval",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -461,6 +456,34 @@
       "constant": false,
       "inputs": [
         {
+          "name": "_symbol",
+          "type": "string"
+        }
+      ],
+      "name": "setSymbol",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_name",
+          "type": "string"
+        }
+      ],
+      "name": "setName",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "from",
           "type": "address"
         },
@@ -512,12 +535,7 @@
         }
       ],
       "name": "increaseApproval",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"

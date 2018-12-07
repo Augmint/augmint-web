@@ -1,7 +1,7 @@
 import store from "modules/store";
 import { fetchLoansForAddressTx, collectLoansTx, repayLoanTx } from "./loanTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { DECIMALS_DIV, LEGACY_LOANMANAGER_CONTRACTS } from "../../utils/constants";
+import { DECIMALS_DIV, LEGACY_LOANMANAGER_CONTRACTS } from "utils/constants";
 
 export async function fetchActiveLegacyLoansForAddressTx(_userAccount) {
     const web3 = store.getState().web3Connect;

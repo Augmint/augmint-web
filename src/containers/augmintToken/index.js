@@ -64,15 +64,15 @@ class AugmintToken extends React.Component {
         }
 
         if (
-            this.props.augmintToken.info.totalSupply !== "?" &&
-            this.props.monetarySupervisor.info.reserveTokenBalance !== "?" &&
-            this.props.augmintToken.info.feeAccountTokenBalance !== "?" &&
-            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance !== "?"
+            this.props.metrics.augmintTokenInfo.totalSupply !== undefined &&
+            this.props.metrics.monetarySupervisorInfo.reserveTokenBalance !== undefined &&
+            this.props.metrics.augmintTokenInfo.feeAccountTokenBalance !== undefined &&
+            this.props.metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance !== undefined
         ) {
-            const bn_amountOwnedByUsers = new BigNumber(this.props.augmintToken.info.totalSupply.toFixed(15))
-                .minus(this.props.monetarySupervisor.info.reserveTokenBalance)
-                .minus(this.props.augmintToken.info.feeAccountTokenBalance)
-                .minus(this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance);
+            const bn_amountOwnedByUsers = new BigNumber(this.props.metrics.augmintTokenInfo.totalSupply.toFixed(15))
+                .minus(this.props.metrics.monetarySupervisorInfo.reserveTokenBalance)
+                .minus(this.props.metrics.augmintTokenInfo.feeAccountTokenBalance)
+                .minus(this.props.metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance);
 
             amountOwnedByUsers = bn_amountOwnedByUsers.toFixed(2);
             amountOwnedByUsersLiquid = bn_amountOwnedByUsers
@@ -97,13 +97,13 @@ class AugmintToken extends React.Component {
         }
 
         if (
-            this.props.monetarySupervisor.info.reserveEthBalance !== "?" &&
-            this.props.augmintToken.info.feeAccountEthBalance !== "?"
+            this.props.metrics.monetarySupervisorInfo.reserveEthBalance !== undefined &&
+            this.props.metrics.augmintTokenInfo.feeAccountEthBalance !== undefined
         ) {
             availableForMarketIntervention = new BigNumber(
-                this.props.monetarySupervisor.info.reserveEthBalance.toFixed(15)
+                this.props.metrics.monetarySupervisorInfo.reserveEthBalance.toFixed(15)
             )
-                .plus(this.props.augmintToken.info.feeAccountEthBalance)
+                .plus(this.props.metrics.augmintTokenInfo.feeAccountEthBalance)
                 .toNumber();
         }
         let loanLimit = 0;
@@ -159,7 +159,7 @@ class AugmintToken extends React.Component {
         if (
             this.props.metrics.loansData.outstandingLoansAmount > -1 &&
             loansCollected > -1 &&
-            this.props.monetarySupervisor.info.issuedByStabilityBoard > -1 &&
+            this.props.metrics.monetarySupervisorInfo.issuedByStabilityBoard > -1 &&
             document.getElementById("marketSupply-1")
         ) {
             let ctx = document.getElementById("marketSupply-1").getContext("2d");
@@ -173,7 +173,7 @@ class AugmintToken extends React.Component {
                             data: [
                                 this.props.metrics.loansData.outstandingLoansAmount,
                                 loansCollected,
-                                this.props.monetarySupervisor.info.issuedByStabilityBoard
+                                this.props.metrics.monetarySupervisorInfo.issuedByStabilityBoard
                             ],
                             backgroundColor: [theme.chartColors.blue, theme.chartColors.orange, theme.chartColors.red],
                             borderColor: [theme.chartColors.blue, theme.chartColors.orange, theme.chartColors.red],
@@ -189,17 +189,17 @@ class AugmintToken extends React.Component {
             });
         }
         if (
-            this.props.monetarySupervisor.info.reserveTokenBalance > -1 &&
-            this.props.augmintToken.info.feeAccountTokenBalance > -1 &&
-            this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance > -1 &&
+            this.props.metrics.monetarySupervisorInfo.reserveTokenBalance > -1 &&
+            this.props.metrics.augmintTokenInfo.feeAccountTokenBalance > -1 &&
+            this.props.metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance > -1 &&
             this.props.monetarySupervisor.info.totalLockedAmount > -1 &&
             amountOwnedByUsersLiquid > -1 &&
             document.getElementById("marketSupply-2")
         ) {
             let ctx = document.getElementById("marketSupply-2").getContext("2d");
-            const data = new BigNumber(this.props.monetarySupervisor.info.reserveTokenBalance)
-                .plus(this.props.augmintToken.info.feeAccountTokenBalance)
-                .plus(this.props.monetarySupervisor.info.interestEarnedAccountTokenBalance)
+            const data = new BigNumber(this.props.metrics.monetarySupervisorInfo.reserveTokenBalance)
+                .plus(this.props.metrics.augmintTokenInfo.feeAccountTokenBalance)
+                .plus(this.props.metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance)
                 .toNumber();
             new Chart(ctx, {
                 type: "pie",
@@ -226,6 +226,7 @@ class AugmintToken extends React.Component {
                 }
             });
         }
+
         return (
             <EthereumState>
                 <ThemeProvider theme={medeaTheme}>

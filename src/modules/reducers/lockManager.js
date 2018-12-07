@@ -20,7 +20,6 @@ const initialState = {
     error: null,
     products: null,
     info: {
-        chunkSize: null,
         bn_weiBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
@@ -133,7 +132,6 @@ async function getLockManagerInfo(lockManagerInstance) {
     const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [
-        chunkSize,
         lockCount,
         productCount,
         augmintTokenAddress,
@@ -141,7 +139,6 @@ async function getLockManagerInfo(lockManagerInstance) {
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
-        lockManagerInstance.methods.CHUNK_SIZE().call(),
         lockManagerInstance.methods.getLockCount().call(),
         lockManagerInstance.methods.getLockProductCount().call(),
 
@@ -153,7 +150,6 @@ async function getLockManagerInfo(lockManagerInstance) {
     ]);
 
     return {
-        chunkSize: parseInt(chunkSize, 10),
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
