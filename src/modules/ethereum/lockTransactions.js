@@ -5,28 +5,25 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { cost } from "./gas";
 import { processTx } from "modules/ethereum/ethHelper";
-import { DECIMALS_DIV, PPM_DIV } from "utils/constants";
+import { DECIMALS_DIV, PPM_DIV, CHUNK_SIZE, LEGACY_CONTRACTS_CHUNK_SIZE } from "utils/constants";
 
 export async function fetchLockProductsTx() {
     const lockManagerInstance = store.getState().contracts.latest.lockManager.web3ContractInstance;
-
-    const [chunkSize, productCount] = await Promise.all([
-        lockManagerInstance.methods
-            .CHUNK_SIZE()
-            .call()
-            .then(res => parseInt(res, 10)),
-        lockManagerInstance.methods
-            .getLockProductCount()
-            .call()
-            .then(res => parseInt(res, 10))
-    ]);
+    const isLegacyLockContract = typeof lockManagerInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyLockContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+    const productCount = await lockManagerInstance.methods
+        .getLockProductCount()
+        .call()
+        .then(res => parseInt(res, 10));
 
     let products = [];
 
     const queryCount = Math.ceil(productCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const productsArray = await lockManagerInstance.methods.getLockProducts(i * chunkSize).call();
+        const productsArray = isLegacyLockContract
+            ? await lockManagerInstance.methods.getLockProducts(i * chunkSize).call()
+            : await lockManagerInstance.methods.getLockProducts(i * chunkSize, chunkSize).call();
         const parsedProducts = parseProducts(productsArray);
         products = products.concat(parsedProducts);
     }
@@ -100,23 +97,21 @@ export async function releaseFundsTx(lockManagerInstance, lockId) {
 export async function fetchLocksForAddressTx(lockManagerInstance, account) {
     // TODO: resolve timing of loanManager refresh in order to get chunkSize from loanManager
     // const chunkSize = store.getState().loanManager.info.chunkSize;
-    const [chunkSize, loanCount] = await Promise.all([
-        lockManagerInstance.methods
-            .CHUNK_SIZE()
-            .call()
-            .then(res => parseInt(res, 10)),
-        lockManagerInstance.methods
-            .getLockCountForAddress(account)
-            .call()
-            .then(res => parseInt(res, 10))
-    ]);
+    const isLegacyLockContract = typeof lockManagerInstance.methods.CHUNK_SIZE === "function";
+    const chunkSize = isLegacyLockContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+    const loanCount = await lockManagerInstance.methods
+        .getLockCountForAddress(account)
+        .call()
+        .then(res => parseInt(res, 10));
 
     let locks = [];
 
     const queryCount = Math.ceil(loanCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
-        const locksArray = await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize).call();
+        const locksArray = isLegacyLockContract
+            ? await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize).call()
+            : await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize, chunkSize).call();
         locks = locks.concat(parseLocks(locksArray));
     }
 

@@ -27,7 +27,6 @@ const initialState = {
     error: null,
     products: null,
     info: {
-        chunkSize: null,
         bn_weiBalance: null,
         ethBalance: "?",
         bn_tokenBalance: null,
@@ -132,7 +131,6 @@ async function getLoanManagerInfo(loanManagerInstance) {
     const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [
-        chunkSize,
         loanCount,
         productCount,
         augmintTokenAddress,
@@ -141,7 +139,6 @@ async function getLoanManagerInfo(loanManagerInstance) {
         bn_weiBalance,
         bn_tokenBalance
     ] = await Promise.all([
-        loanManagerInstance.methods.CHUNK_SIZE().call(),
         loanManagerInstance.methods.getLoanCount().call(),
         loanManagerInstance.methods.getProductCount().call(),
 
@@ -154,7 +151,6 @@ async function getLoanManagerInfo(loanManagerInstance) {
     ]);
 
     return {
-        chunkSize: parseInt(chunkSize, 10),
         bn_weiBalance,
         ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
         bn_tokenBalance,
