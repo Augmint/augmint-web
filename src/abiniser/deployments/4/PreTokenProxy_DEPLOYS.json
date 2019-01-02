@@ -1,20 +1,20 @@
 {
   "contractName": "PreTokenProxy",
-  "latestAbiHash": "19ab69b650e28b2dd211d3851893f91f",
+  "latestAbiHash": "dd40c0d39ea8bad8a388522667a84687",
   "deployedAbis": {
-    "19ab69b650e28b2dd211d3851893f91f": {
-      "latestDeployedAddress": "0x0775465245e523b45cc3b41477d44f908e22fede",
+    "dd40c0d39ea8bad8a388522667a84687": {
+      "latestDeployedAddress": "0xb7cae2c48f3f34b9696fd290001dea16b299498a",
       "deployments": {
-        "0x0775465245e523b45cc3b41477d44f908e22fede": {
-          "generatedAt": "2018-06-10T08:34:45.034Z",
-          "truffleContractFileUpdatedAt": "2018-06-10T08:33:25.091Z",
-          "deployTransactionHash": "0xe447e2f5055b6229d9b00d09f55f4153cdcde40a031c3a233e077e2147b19ace",
+        "0xb7cae2c48f3f34b9696fd290001dea16b299498a": {
+          "generatedAt": "2018-10-18T13:35:02.452Z",
+          "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.836Z",
+          "deployTransactionHash": "0x0999dfd76266fbe0226af6d4f62f9b440b3b9098af17193df1d47a9e63ef028a",
           "compiler": {
             "name": "solc",
             "version": "0.4.24+commit.e67f0147.Emscripten.clang"
           },
-          "bytecodeHash": "9fd82afe11a8ff7af3e815e243d31647",
-          "deployedBytecodeHash": "1846d508980d6136e1e81708c995e572",
+          "bytecodeHash": "5007bce3d0997985a9357d5b1a97103b",
+          "deployedBytecodeHash": "b5a32ad0b8570f3cd6b7efaef3655911",
           "sourceHash": "2d172fe41d2b97c827d6dca816138047",
           "source": "/* allows tx to execute if 50% +1 vote of active signers signed */\npragma solidity 0.4.24;\nimport \"./generic/MultiSig.sol\";\n\n\ncontract PreTokenProxy is MultiSig {\n\n    function checkQuorum(uint signersCount) internal view returns(bool isQuorum) {\n        isQuorum = signersCount > activeSignersCount / 2 ;\n    }\n}\n"
         }

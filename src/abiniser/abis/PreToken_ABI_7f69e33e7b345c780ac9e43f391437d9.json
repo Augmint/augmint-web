@@ -1,32 +1,48 @@
 {
-  "contractName": "Exchange",
-  "abiHash": "c28de2392aea85ef2aa1b108fce6568c",
-  "generatedAt": "2018-08-14T17:38:01.618Z",
+  "contractName": "PreToken",
+  "abiHash": "7f69e33e7b345c780ac9e43f391437d9",
+  "generatedAt": "2018-10-18T13:35:02.467Z",
   "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
     {
       "constant": true,
       "inputs": [
         {
           "name": "",
-          "type": "uint64"
+          "type": "uint256"
         }
       ],
-      "name": "buyTokenOrders",
+      "name": "allAgreements",
       "outputs": [
         {
-          "name": "index",
-          "type": "uint64"
-        },
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
         {
-          "name": "maker",
-          "type": "address"
-        },
-        {
-          "name": "price",
-          "type": "uint32"
-        },
-        {
-          "name": "amount",
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -37,11 +53,11 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "orderCount",
+      "name": "decimals",
       "outputs": [
         {
           "name": "",
-          "type": "uint64"
+          "type": "uint8"
         }
       ],
       "payable": false,
@@ -50,12 +66,17 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "rates",
-      "outputs": [
+      "inputs": [
         {
           "name": "",
           "type": "address"
+        }
+      ],
+      "name": "agreementOwners",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
         }
       ],
       "payable": false,
@@ -104,20 +125,6 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "augmintToken",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -133,6 +140,20 @@
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -158,40 +179,26 @@
       "inputs": [
         {
           "name": "",
-          "type": "uint64"
+          "type": "bytes32"
         }
       ],
-      "name": "sellTokenOrders",
+      "name": "agreements",
       "outputs": [
         {
-          "name": "index",
-          "type": "uint64"
-        },
-        {
-          "name": "maker",
+          "name": "owner",
           "type": "address"
         },
         {
-          "name": "price",
+          "name": "balance",
+          "type": "uint256"
+        },
+        {
+          "name": "discount",
           "type": "uint32"
         },
         {
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "CHUNK_SIZE",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
+          "name": "valuationCap",
+          "type": "uint32"
         }
       ],
       "payable": false,
@@ -221,14 +228,6 @@
         {
           "name": "permissionGranterContract",
           "type": "address"
-        },
-        {
-          "name": "_augmintToken",
-          "type": "address"
-        },
-        {
-          "name": "_rates",
-          "type": "address"
         }
       ],
       "payable": false,
@@ -240,117 +239,48 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
+          "name": "from",
+          "type": "address"
         },
         {
           "indexed": true,
-          "name": "maker",
+          "name": "to",
           "type": "address"
         },
         {
           "indexed": false,
-          "name": "price",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "agreementHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "discount",
           "type": "uint32"
         },
         {
           "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "NewOrder",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "tokenBuyer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "tokenSeller",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "buyTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "sellTokenOrderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "name": "publishedRate",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "price",
+          "name": "valuationCap",
           "type": "uint32"
-        },
-        {
-          "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
         }
       ],
-      "name": "OrderFill",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "orderId",
-          "type": "uint64"
-        },
-        {
-          "indexed": true,
-          "name": "maker",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "tokenAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "weiAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "CancelledOrder",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "newRatesContract",
-          "type": "address"
-        }
-      ],
-      "name": "RatesContractChanged",
+      "name": "NewAgreement",
       "type": "event"
     },
     {
@@ -391,143 +321,128 @@
       "constant": false,
       "inputs": [
         {
-          "name": "newRatesContract",
-          "type": "address"
-        }
-      ],
-      "name": "setRatesContract",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "price",
-          "type": "uint32"
-        }
-      ],
-      "name": "placeBuyTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint64"
-        }
-      ],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "price",
-          "type": "uint32"
-        },
-        {
-          "name": "tokenAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "placeSellTokenOrder",
-      "outputs": [
-        {
-          "name": "orderId",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "maker",
+          "name": "owner",
           "type": "address"
         },
         {
-          "name": "tokenAmount",
+          "name": "agreementHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "discount",
+          "type": "uint32"
+        },
+        {
+          "name": "valuationCap",
+          "type": "uint32"
+        }
+      ],
+      "name": "addAgreement",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agreementHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "amount",
           "type": "uint256"
+        }
+      ],
+      "name": "issueTo",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agreementHash",
+          "type": "bytes32"
         },
         {
-          "name": "price",
+          "name": "amount",
           "type": "uint256"
         }
       ],
-      "name": "transferNotification",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "cancelBuyTokenOrder",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "sellTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "cancelSellTokenOrder",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenId",
-          "type": "uint64"
-        },
-        {
-          "name": "sellTokenId",
-          "type": "uint64"
-        }
-      ],
-      "name": "matchOrders",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "buyTokenIds",
-          "type": "uint64[]"
-        },
-        {
-          "name": "sellTokenIds",
-          "type": "uint64[]"
-        }
-      ],
-      "name": "matchMultipleOrders",
+      "name": "burnFrom",
       "outputs": [
         {
-          "name": "matchCount",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
           "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agreementHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "transferAgreement",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -537,53 +452,34 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "getActiveOrderCounts",
+      "name": "getAgreementsCount",
       "outputs": [
         {
-          "name": "buyTokenOrderCount",
+          "name": "agreementsCount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "offset",
           "type": "uint256"
         },
         {
-          "name": "sellTokenOrderCount",
-          "type": "uint256"
+          "name": "chunkSize",
+          "type": "uint16"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "offset",
-          "type": "uint256"
-        }
-      ],
-      "name": "getActiveBuyOrders",
+      "name": "getAgreements",
       "outputs": [
         {
-          "name": "response",
-          "type": "uint256[4][100]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "offset",
-          "type": "uint256"
-        }
-      ],
-      "name": "getActiveSellOrders",
-      "outputs": [
-        {
-          "name": "response",
-          "type": "uint256[4][100]"
+          "name": "",
+          "type": "uint256[6][]"
         }
       ],
       "payable": false,

@@ -79,6 +79,7 @@ export default class SiteMenu extends React.Component {
                         to={!showConnection && isConnected ? "/account" : "/tryit"}
                         color="primary"
                         style={{ margin: "0", position: "absolute", top: "9px", right: "8px" }}
+                        onClick={e => toggleScroll(false)}
                     >
                         My Account
                     </Button>

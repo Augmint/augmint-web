@@ -11,7 +11,6 @@ const initialState = {
     isLoading: false,
     isLoaded: false,
     info: {
-        chunkSize: null,
         ethBalance: "?",
         bn_tokenBalance: null,
         tokenBalance: "?",
@@ -69,11 +68,10 @@ async function getExchangeInfo(exchangeInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
-    const [bn_weiBalance, bn_tokenBalance, orderCount, chunkSize] = await Promise.all([
+    const [bn_weiBalance, bn_tokenBalance, orderCount] = await Promise.all([
         web3.eth.getBalance(exchangeInstance._address),
         augmintToken.methods.balanceOf(exchangeInstance._address).call(),
-        exchangeInstance.methods.getActiveOrderCounts().call(),
-        exchangeInstance.methods.CHUNK_SIZE().call()
+        exchangeInstance.methods.getActiveOrderCounts().call()
     ]);
 
     return {
@@ -82,7 +80,6 @@ async function getExchangeInfo(exchangeInstance) {
         bn_tokenBalance: bn_tokenBalance,
         tokenBalance: bn_tokenBalance / DECIMALS_DIV,
         buyOrderCount: parseInt(orderCount.buyTokenOrderCount, 10),
-        sellOrderCount: parseInt(orderCount.sellTokenOrderCount, 10),
-        chunkSize: parseInt(chunkSize, 10)
+        sellOrderCount: parseInt(orderCount.sellTokenOrderCount, 10)
     };
 }

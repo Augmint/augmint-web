@@ -61,15 +61,15 @@ export default class SolidityContract {
         return new SolidityContract(connection, contractAddress, abiFile);
     }
 
-    static connectAt(connection, contractName, _contractAddress) {
-        const contractAddress = _contractAddress.toLowerCase();
+    static connectAt(connection, contractName, contractAddress) {
+        const contractAddressLowerCase = contractAddress.toLowerCase();
         const networkId = connection.network.id;
         const deploysFile = this.getDeploysFile(networkId, contractName);
         let abiVersionHash;
 
         // TODO: do it nicer, i.e. break when found
         Object.entries(deploysFile.deployedAbis).forEach(([abiHash, entry]) => {
-            if (entry.deployments[contractAddress]) {
+            if (entry.deployments[contractAddressLowerCase] || entry.deployments[contractAddress]) {
                 abiVersionHash = abiHash;
             }
         });
@@ -93,7 +93,7 @@ export default class SolidityContract {
 
         const abiFile = this.getAbiFile(contractName, abiVersionHash);
 
-        return new SolidityContract(connection, contractAddress, abiFile);
+        return new SolidityContract(connection, contractAddressLowerCase, abiFile);
     }
 
     /* NB: this is not in use atm, not tested */
