@@ -241,7 +241,7 @@ class AugmintToken extends React.Component {
                             {(metricsError || monetarySupervisorLoadError || augmintTokenError) && (
                                 <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="A-EUR Supply" />
+                            <StyledHeader as="h3">A-EUR Supply</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow wrap={true} valign="stretch">
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -389,7 +389,7 @@ class AugmintToken extends React.Component {
                             {(monetarySupervisorLoadError || augmintTokenError) && (
                                 <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="ETH Reserves" />
+                            <StyledHeader as="h3">ETH Reserves</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow>
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -438,7 +438,7 @@ class AugmintToken extends React.Component {
                             {(ratesLoadError || metricsError || monetarySupervisorLoadError) && (
                                 <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="Stability Ratios" />
+                            <StyledHeader as="h3">Stability Ratios</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow>
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -532,74 +532,89 @@ class AugmintToken extends React.Component {
                                 </StyledRow>
                             </StyledMyListGroup>
                         </Segment>
-                        <StyledHeader as="h3" content="Loan & Lock Conditions" />
-                        <StyledMyListGroup>
-                            <StyledRow>
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" valign="stretch" wrap={true}>
-                                            <StyledCol
-                                                width={{ tablet: 1, desktop: 1 / 2 }}
-                                                style={{ padding: "0 15px", marginTop: 15 }}
-                                            >
-                                                <MyListGroup>
-                                                    <StyledRow halign="justify" className="result">
-                                                        <StyledCol className="center">Loans</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5}>Loan Limit</StyledCol>
-                                                        <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
-                                                    </StyledRow>
-                                                    <br />
-                                                    <StyledRow halign="justify" className="result smaller">
-                                                        <StyledCol width={1 / 2}>Term</StyledCol>
-                                                        <StyledCol width={1 / 2}>pa. Interest</StyledCol>
-                                                    </StyledRow>
-                                                    {loanProductsList}
-                                                </MyListGroup>
-                                            </StyledCol>
-                                            <StyledCol
-                                                width={{ tablet: 1, desktop: 1 / 2 }}
-                                                style={{ padding: "0 15px", marginTop: 15 }}
-                                            >
-                                                <MyListGroup>
-                                                    <StyledRow halign="justify" className="result">
-                                                        <StyledCol className="center">Lock-ins</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5} className="alignLeft">
-                                                            Lock-in Limit
-                                                        </StyledCol>
-                                                        <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
-                                                    </StyledRow>
-                                                    <br />
-                                                    <StyledRow halign="justify" className="result smaller">
-                                                        <StyledCol width={1 / 2} className="alignLeft">
-                                                            Term
-                                                        </StyledCol>
-                                                        <StyledCol width={1 / 2}>pa. Interest</StyledCol>
-                                                    </StyledRow>
-                                                    {lockProductsList}
-                                                </MyListGroup>
-                                            </StyledCol>
-                                        </StyledRow>
-                                        <StyledRow>
-                                            <StyledCol>
-                                                <Button
-                                                    content="Loans to Collect"
-                                                    data-testid="loansToCollectButton"
-                                                    to="/loan/collect"
-                                                    icon="angle-right"
-                                                    labelposition="right"
-                                                    size="large"
-                                                    style={{ marginBottom: "15px" }}
-                                                />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                            </StyledRow>
-                        </StyledMyListGroup>
+                        <Segment>
+                            <StyledHeader as="h3">Loan & Lock Conditions</StyledHeader>
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol
+                                        width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}
+                                        style={{ padding: "0 0 .5em" }}
+                                    >
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" valign="stretch" wrap={true}>
+                                                <StyledCol
+                                                    width={{ tablet: 1, desktop: 1 / 2 }}
+                                                    style={{ padding: "0 15px", marginTop: 15 }}
+                                                >
+                                                    <MyListGroup>
+                                                        <StyledRow halign="justify" className="result">
+                                                            <StyledCol
+                                                                className="center"
+                                                                style={{ padding: "0 0 .5em" }}
+                                                            >
+                                                                Loans
+                                                            </StyledCol>
+                                                        </StyledRow>
+                                                        <StyledRow halign="justify">
+                                                            <StyledCol width={3 / 5}>Loan Limit</StyledCol>
+                                                            <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
+                                                        </StyledRow>
+                                                        <br />
+                                                        <StyledRow halign="justify" className="result smaller">
+                                                            <StyledCol width={1 / 2}>Term</StyledCol>
+                                                            <StyledCol width={1 / 2}>pa. Interest</StyledCol>
+                                                        </StyledRow>
+                                                        {loanProductsList}
+                                                    </MyListGroup>
+                                                </StyledCol>
+                                                <StyledCol
+                                                    width={{ tablet: 1, desktop: 1 / 2 }}
+                                                    style={{ padding: "0 15px", marginTop: 15 }}
+                                                >
+                                                    <MyListGroup>
+                                                        <StyledRow halign="justify" className="result">
+                                                            <StyledCol
+                                                                className="center"
+                                                                style={{ padding: "0 0 .5em" }}
+                                                            >
+                                                                Lock-ins
+                                                            </StyledCol>
+                                                        </StyledRow>
+                                                        <StyledRow halign="justify">
+                                                            <StyledCol width={3 / 5} className="alignLeft">
+                                                                Lock-in Limit
+                                                            </StyledCol>
+                                                            <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
+                                                        </StyledRow>
+                                                        <br />
+                                                        <StyledRow halign="justify" className="result smaller">
+                                                            <StyledCol width={1 / 2} className="alignLeft">
+                                                                Term
+                                                            </StyledCol>
+                                                            <StyledCol width={1 / 2}>pa. Interest</StyledCol>
+                                                        </StyledRow>
+                                                        {lockProductsList}
+                                                    </MyListGroup>
+                                                </StyledCol>
+                                            </StyledRow>
+                                            <StyledRow>
+                                                <StyledCol>
+                                                    <Button
+                                                        content="Loans to Collect"
+                                                        data-testid="loansToCollectButton"
+                                                        to="/loan/collect"
+                                                        icon="angle-right"
+                                                        labelposition="right"
+                                                        size="large"
+                                                        style={{ marginBottom: "15px" }}
+                                                    />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                     </StyledContainer>
                 </ThemeProvider>
             </EthereumState>

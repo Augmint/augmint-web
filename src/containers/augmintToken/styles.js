@@ -26,7 +26,7 @@ export const StyledContainer = styled.div`
 
 export const StyledHeader = styled(Header)`
     ${baseStyle};
-    margin: 25px 10px;
+    margin: 25px 10px 10px;
     background-color: ${theme.colors.opacExtraLighterGrey};
     line-height: ${remCalc(45)};
     padding-left: ${remCalc(35)};
