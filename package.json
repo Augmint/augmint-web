@@ -24,7 +24,7 @@
     "react-router-redux": "5.0.0-alpha.9",
     "react-scripts": "2.1.2",
     "react-scrollchor": "6.0.0",
-    "react-tooltip": "3.8.4",
+    "react-tooltip": "3.9.1",
     "redux": "3.7.2",
     "redux-form": "7.4.2",
     "redux-logger": "3.0.6",
@@ -33,7 +33,7 @@
     "stringifier": "2.0.0",
     "styled-components-grid": "2.2.1",
     "styled-components": "4.1.3",
-    "styled-tools": "1.6.0",
+    "styled-tools": "1.7.0",
     "web3": "1.0.0-beta.33"
   },
   "scripts": {
@@ -53,7 +53,7 @@
     "husky": "1.3.1",
     "eslint-plugin-cypress": "2.2.0",
     "prettier": "1.15.3",
-    "pretty-quick": "1.8.0"
+    "pretty-quick": "1.9.0"
   },
   "greenkeeper": {
     "ignore": [
