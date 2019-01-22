@@ -20,7 +20,7 @@ import Button from "components/augmint-ui/button";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
-import { theme as medeaTheme } from "styles/media";
+import { theme as mediaTheme } from "styles/media";
 import { ThemeProvider } from "styled-components";
 
 class AugmintToken extends React.Component {
@@ -234,7 +234,7 @@ class AugmintToken extends React.Component {
 
         return (
             <EthereumState>
-                <ThemeProvider theme={medeaTheme}>
+                <ThemeProvider theme={mediaTheme}>
                     <StyledContainer>
                         <TopNavTitlePortal>
                             <Pheader header="Stability Dashboard" />
