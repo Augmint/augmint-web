@@ -155,14 +155,14 @@ class TokenTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="A-EUR"
                                 />
-                                {augmintToken.info.feeMax !== 0 &&
-                                    augmintToken.info.feeMin !== 0 &&
-                                    augmintToken.info.feePt !== 0 && (
-                                        <small style={{ display: "block", marginBottom: 10 }}>
-                                            Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                                            <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                                        </small>
-                                    )}
+                                {(augmintToken.info.feeMax !== 0 ||
+                                    augmintToken.info.feeMin !== 0 ||
+                                    augmintToken.info.feePt !== 0) && (
+                                    <small style={{ display: "block", marginBottom: 10 }}>
+                                        Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
+                                        <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
+                                    </small>
+                                )}
 
                                 <Field
                                     component={Form.Field}
