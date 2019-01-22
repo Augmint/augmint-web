@@ -13,9 +13,6 @@ import {
 } from "utils/constants";
 
 function sum(arr, funcName) {
-    console.log(funcName);
-    console.log(arr);
-    arr.forEach(item => console.log(item, typeof item));
     return arr.reduce((res, item) => res.plus(item), new BigNumber(0));
 }
 
