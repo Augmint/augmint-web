@@ -57,6 +57,10 @@ class AugmintToken extends React.Component {
         const ratesIsLoading = this.props.rates.isLoading;
         const ratesLoadError = this.props.rates.loadError;
 
+        const aurSupplyError = metricsError || monetarySupervisorLoadError || augmintTokenError;
+        const ethReservesError = monetarySupervisorLoadError || metricsError;
+        const stabilityRatiosError = ratesLoadError || metricsError || monetarySupervisorLoadError;
+
         if (Object.keys(this.props.metrics.loansData).length) {
             loansCollected = new BigNumber(this.props.metrics.loansData.collectedLoansAmount.toFixed(15))
                 .plus(this.props.metrics.loansData.defaultedLoansAmount)
@@ -106,6 +110,7 @@ class AugmintToken extends React.Component {
                 .plus(this.props.metrics.augmintTokenInfo.feeAccountEthBalance)
                 .toNumber();
         }
+
         let loanLimit = 0;
         const loanProductsList =
             this.props.loanManager &&
@@ -239,7 +244,7 @@ class AugmintToken extends React.Component {
                             style={{ color: "black" }}
                         >
                             {(metricsError || monetarySupervisorLoadError || augmintTokenError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                                <ErrorPanel header="Error while fetching data">{aurSupplyError.message}</ErrorPanel>
                             )}
                             <StyledHeader as="h3">A-EUR Supply</StyledHeader>
                             <StyledMyListGroup>
@@ -286,8 +291,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Total</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.totalSupply !== "?"
-                                                        ? Number(this.props.augmintToken.info.totalSupply).toFixed(0)
+                                                    {(this.props.metrics.augmintTokenInfo.totalSupply !== undefined
+                                                        ? Number(
+                                                              this.props.metrics.augmintTokenInfo.totalSupply
+                                                          ).toFixed(0)
                                                         : "?") + " A€"}
                                                 </StyledCol>
                                             </StyledRow>
@@ -303,9 +310,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info.reserveTokenBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo.reserveTokenBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info.reserveTokenBalance
+                                                              this.props.metrics.monetarySupervisorInfo
+                                                                  .reserveTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info orange" />
@@ -316,9 +325,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Fees Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.feeAccountTokenBalance !== "?"
+                                                    {(this.props.metrics.augmintTokenInfo.feeAccountTokenBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.augmintToken.info.feeAccountTokenBalance
+                                                              this.props.metrics.augmintTokenInfo.feeAccountTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info orange" />
@@ -329,10 +339,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Earned Interest Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info
-                                                        .interestEarnedAccountTokenBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo
+                                                        .interestEarnedAccountTokenBalance !== undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info
+                                                              this.props.metrics.monetarySupervisorInfo
                                                                   .interestEarnedAccountTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
@@ -382,12 +392,9 @@ class AugmintToken extends React.Component {
                                 </StyledRow>
                             </StyledMyListGroup>
                         </Segment>
-                        <Segment
-                            loading={monetarySupervisorIsLoading || augmintTokenIsLoading}
-                            style={{ color: "black" }}
-                        >
-                            {(monetarySupervisorLoadError || augmintTokenError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                        <Segment loading={monetarySupervisorIsLoading || metricsIsLoading} style={{ color: "black" }}>
+                            {(monetarySupervisorLoadError || metricsError) && (
+                                <ErrorPanel header="Error while fetching data">{ethReservesError.message}</ErrorPanel>
                             )}
                             <StyledHeader as="h3">ETH Reserves</StyledHeader>
                             <StyledMyListGroup>
@@ -397,9 +404,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info.reserveEthBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo.reserveEthBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info.reserveEthBalance
+                                                              this.props.metrics.monetarySupervisorInfo
+                                                                  .reserveEthBalance
                                                           ).toFixed(4)
                                                         : "?") + " ETH"}
                                                 </StyledCol>
@@ -409,9 +418,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Fees</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.feeAccountEthBalance !== "?"
+                                                    {(this.props.metrics.augmintTokenInfo.feeAccountEthBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.augmintToken.info.feeAccountEthBalance
+                                                              this.props.metrics.augmintTokenInfo.feeAccountEthBalance
                                                           ).toFixed(4)
                                                         : "?") + " ETH"}
                                                 </StyledCol>
@@ -436,7 +446,9 @@ class AugmintToken extends React.Component {
                             style={{ color: "black" }}
                         >
                             {(ratesLoadError || metricsError || monetarySupervisorLoadError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                                <ErrorPanel header="Error while fetching data">
+                                    {stabilityRatiosError.message}
+                                </ErrorPanel>
                             )}
                             <StyledHeader as="h3">Stability Ratios</StyledHeader>
                             <StyledMyListGroup>
@@ -448,7 +460,7 @@ class AugmintToken extends React.Component {
                                                 <StyledCol width={1 / 3}>
                                                     {(loanCollateralCoverageRatio !== "?"
                                                         ? loanCollateralCoverageRatio
-                                                        : "?") + "%"}
+                                                        : "? ") + "%"}
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -496,7 +508,7 @@ class AugmintToken extends React.Component {
                                                               (this.props.monetarySupervisor.info.ltdPercent * 10000) /
                                                               100
                                                           ).toFixed(2)
-                                                        : "?") + "%"}
+                                                        : "? ") + "%"}
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
