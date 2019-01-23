@@ -20,7 +20,7 @@ import Button from "components/augmint-ui/button";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
-import { theme as medeaTheme } from "styles/media";
+import { theme as mediaTheme } from "styles/media";
 import { ThemeProvider } from "styled-components";
 
 class AugmintToken extends React.Component {
@@ -56,6 +56,10 @@ class AugmintToken extends React.Component {
         const augmintTokenError = this.props.augmintToken.error;
         const ratesIsLoading = this.props.rates.isLoading;
         const ratesLoadError = this.props.rates.loadError;
+
+        const aurSupplyError = metricsError || monetarySupervisorLoadError || augmintTokenError;
+        const ethReservesError = monetarySupervisorLoadError || metricsError;
+        const stabilityRatiosError = ratesLoadError || metricsError || monetarySupervisorLoadError;
 
         if (Object.keys(this.props.metrics.loansData).length) {
             loansCollected = new BigNumber(this.props.metrics.loansData.collectedLoansAmount.toFixed(15))
@@ -106,6 +110,7 @@ class AugmintToken extends React.Component {
                 .plus(this.props.metrics.augmintTokenInfo.feeAccountEthBalance)
                 .toNumber();
         }
+
         let loanLimit = 0;
         const loanProductsList =
             this.props.loanManager &&
@@ -229,7 +234,7 @@ class AugmintToken extends React.Component {
 
         return (
             <EthereumState>
-                <ThemeProvider theme={medeaTheme}>
+                <ThemeProvider theme={mediaTheme}>
                     <StyledContainer>
                         <TopNavTitlePortal>
                             <Pheader header="Stability Dashboard" />
@@ -239,9 +244,9 @@ class AugmintToken extends React.Component {
                             style={{ color: "black" }}
                         >
                             {(metricsError || monetarySupervisorLoadError || augmintTokenError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                                <ErrorPanel header="Error while fetching data">{aurSupplyError.message}</ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="A-EUR Supply" />
+                            <StyledHeader as="h3">A-EUR Supply</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow wrap={true} valign="stretch">
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -286,8 +291,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Total</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.totalSupply !== "?"
-                                                        ? Number(this.props.augmintToken.info.totalSupply).toFixed(0)
+                                                    {(this.props.metrics.augmintTokenInfo.totalSupply !== undefined
+                                                        ? Number(
+                                                              this.props.metrics.augmintTokenInfo.totalSupply
+                                                          ).toFixed(0)
                                                         : "?") + " A€"}
                                                 </StyledCol>
                                             </StyledRow>
@@ -303,9 +310,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info.reserveTokenBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo.reserveTokenBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info.reserveTokenBalance
+                                                              this.props.metrics.monetarySupervisorInfo
+                                                                  .reserveTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info orange" />
@@ -316,9 +325,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Fees Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.feeAccountTokenBalance !== "?"
+                                                    {(this.props.metrics.augmintTokenInfo.feeAccountTokenBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.augmintToken.info.feeAccountTokenBalance
+                                                              this.props.metrics.augmintTokenInfo.feeAccountTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info orange" />
@@ -329,10 +339,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Earned Interest Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info
-                                                        .interestEarnedAccountTokenBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo
+                                                        .interestEarnedAccountTokenBalance !== undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info
+                                                              this.props.metrics.monetarySupervisorInfo
                                                                   .interestEarnedAccountTokenBalance
                                                           ).toFixed(0)
                                                         : "?") + " A€"}
@@ -382,14 +392,11 @@ class AugmintToken extends React.Component {
                                 </StyledRow>
                             </StyledMyListGroup>
                         </Segment>
-                        <Segment
-                            loading={monetarySupervisorIsLoading || augmintTokenIsLoading}
-                            style={{ color: "black" }}
-                        >
-                            {(monetarySupervisorLoadError || augmintTokenError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                        <Segment loading={monetarySupervisorIsLoading || metricsIsLoading} style={{ color: "black" }}>
+                            {(monetarySupervisorLoadError || metricsError) && (
+                                <ErrorPanel header="Error while fetching data">{ethReservesError.message}</ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="ETH Reserves" />
+                            <StyledHeader as="h3">ETH Reserves</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow>
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -397,9 +404,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.monetarySupervisor.info.reserveEthBalance !== "?"
+                                                    {(this.props.metrics.monetarySupervisorInfo.reserveEthBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.monetarySupervisor.info.reserveEthBalance
+                                                              this.props.metrics.monetarySupervisorInfo
+                                                                  .reserveEthBalance
                                                           ).toFixed(4)
                                                         : "?") + " ETH"}
                                                 </StyledCol>
@@ -409,9 +418,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Fees</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(this.props.augmintToken.info.feeAccountEthBalance !== "?"
+                                                    {(this.props.metrics.augmintTokenInfo.feeAccountEthBalance !==
+                                                    undefined
                                                         ? Number(
-                                                              this.props.augmintToken.info.feeAccountEthBalance
+                                                              this.props.metrics.augmintTokenInfo.feeAccountEthBalance
                                                           ).toFixed(4)
                                                         : "?") + " ETH"}
                                                 </StyledCol>
@@ -436,9 +446,11 @@ class AugmintToken extends React.Component {
                             style={{ color: "black" }}
                         >
                             {(ratesLoadError || metricsError || monetarySupervisorLoadError) && (
-                                <ErrorPanel header="Error while fetching data">{metricsError.message}</ErrorPanel>
+                                <ErrorPanel header="Error while fetching data">
+                                    {stabilityRatiosError.message}
+                                </ErrorPanel>
                             )}
-                            <StyledHeader as="h3" content="Stability Ratios" />
+                            <StyledHeader as="h3">Stability Ratios</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow>
                                     <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
@@ -448,7 +460,7 @@ class AugmintToken extends React.Component {
                                                 <StyledCol width={1 / 3}>
                                                     {(loanCollateralCoverageRatio !== "?"
                                                         ? loanCollateralCoverageRatio
-                                                        : "?") + "%"}
+                                                        : "? ") + "%"}
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -496,7 +508,7 @@ class AugmintToken extends React.Component {
                                                               (this.props.monetarySupervisor.info.ltdPercent * 10000) /
                                                               100
                                                           ).toFixed(2)
-                                                        : "?") + "%"}
+                                                        : "? ") + "%"}
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -532,74 +544,89 @@ class AugmintToken extends React.Component {
                                 </StyledRow>
                             </StyledMyListGroup>
                         </Segment>
-                        <StyledHeader as="h3" content="Loan & Lock Conditions" />
-                        <StyledMyListGroup>
-                            <StyledRow>
-                                <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
-                                    <MyListGroup>
-                                        <StyledRow halign="justify" valign="stretch" wrap={true}>
-                                            <StyledCol
-                                                width={{ tablet: 1, desktop: 1 / 2 }}
-                                                style={{ padding: "0 15px", marginTop: 15 }}
-                                            >
-                                                <MyListGroup>
-                                                    <StyledRow halign="justify" className="result">
-                                                        <StyledCol className="center">Loans</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5}>Loan Limit</StyledCol>
-                                                        <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
-                                                    </StyledRow>
-                                                    <br />
-                                                    <StyledRow halign="justify" className="result smaller">
-                                                        <StyledCol width={1 / 2}>Term</StyledCol>
-                                                        <StyledCol width={1 / 2}>pa. Interest</StyledCol>
-                                                    </StyledRow>
-                                                    {loanProductsList}
-                                                </MyListGroup>
-                                            </StyledCol>
-                                            <StyledCol
-                                                width={{ tablet: 1, desktop: 1 / 2 }}
-                                                style={{ padding: "0 15px", marginTop: 15 }}
-                                            >
-                                                <MyListGroup>
-                                                    <StyledRow halign="justify" className="result">
-                                                        <StyledCol className="center">Lock-ins</StyledCol>
-                                                    </StyledRow>
-                                                    <StyledRow halign="justify">
-                                                        <StyledCol width={3 / 5} className="alignLeft">
-                                                            Lock-in Limit
-                                                        </StyledCol>
-                                                        <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
-                                                    </StyledRow>
-                                                    <br />
-                                                    <StyledRow halign="justify" className="result smaller">
-                                                        <StyledCol width={1 / 2} className="alignLeft">
-                                                            Term
-                                                        </StyledCol>
-                                                        <StyledCol width={1 / 2}>pa. Interest</StyledCol>
-                                                    </StyledRow>
-                                                    {lockProductsList}
-                                                </MyListGroup>
-                                            </StyledCol>
-                                        </StyledRow>
-                                        <StyledRow>
-                                            <StyledCol>
-                                                <Button
-                                                    content="Loans to Collect"
-                                                    data-testid="loansToCollectButton"
-                                                    to="/loan/collect"
-                                                    icon="angle-right"
-                                                    labelposition="right"
-                                                    size="large"
-                                                    style={{ marginBottom: "15px" }}
-                                                />
-                                            </StyledCol>
-                                        </StyledRow>
-                                    </MyListGroup>
-                                </StyledCol>
-                            </StyledRow>
-                        </StyledMyListGroup>
+                        <Segment>
+                            <StyledHeader as="h3">Loan & Lock Conditions</StyledHeader>
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol
+                                        width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}
+                                        style={{ padding: "0 0 .5em" }}
+                                    >
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" valign="stretch" wrap={true}>
+                                                <StyledCol
+                                                    width={{ tablet: 1, desktop: 1 / 2 }}
+                                                    style={{ padding: "0 15px", marginTop: 15 }}
+                                                >
+                                                    <MyListGroup>
+                                                        <StyledRow halign="justify" className="result">
+                                                            <StyledCol
+                                                                className="center"
+                                                                style={{ padding: "0 0 .5em" }}
+                                                            >
+                                                                Loans
+                                                            </StyledCol>
+                                                        </StyledRow>
+                                                        <StyledRow halign="justify">
+                                                            <StyledCol width={3 / 5}>Loan Limit</StyledCol>
+                                                            <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
+                                                        </StyledRow>
+                                                        <br />
+                                                        <StyledRow halign="justify" className="result smaller">
+                                                            <StyledCol width={1 / 2}>Term</StyledCol>
+                                                            <StyledCol width={1 / 2}>pa. Interest</StyledCol>
+                                                        </StyledRow>
+                                                        {loanProductsList}
+                                                    </MyListGroup>
+                                                </StyledCol>
+                                                <StyledCol
+                                                    width={{ tablet: 1, desktop: 1 / 2 }}
+                                                    style={{ padding: "0 15px", marginTop: 15 }}
+                                                >
+                                                    <MyListGroup>
+                                                        <StyledRow halign="justify" className="result">
+                                                            <StyledCol
+                                                                className="center"
+                                                                style={{ padding: "0 0 .5em" }}
+                                                            >
+                                                                Lock-ins
+                                                            </StyledCol>
+                                                        </StyledRow>
+                                                        <StyledRow halign="justify">
+                                                            <StyledCol width={3 / 5} className="alignLeft">
+                                                                Lock-in Limit
+                                                            </StyledCol>
+                                                            <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
+                                                        </StyledRow>
+                                                        <br />
+                                                        <StyledRow halign="justify" className="result smaller">
+                                                            <StyledCol width={1 / 2} className="alignLeft">
+                                                                Term
+                                                            </StyledCol>
+                                                            <StyledCol width={1 / 2}>pa. Interest</StyledCol>
+                                                        </StyledRow>
+                                                        {lockProductsList}
+                                                    </MyListGroup>
+                                                </StyledCol>
+                                            </StyledRow>
+                                            <StyledRow>
+                                                <StyledCol>
+                                                    <Button
+                                                        content="Loans to Collect"
+                                                        data-testid="loansToCollectButton"
+                                                        to="/loan/collect"
+                                                        icon="angle-right"
+                                                        labelposition="right"
+                                                        size="large"
+                                                        style={{ marginBottom: "15px" }}
+                                                    />
+                                                </StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                     </StyledContainer>
                 </ThemeProvider>
             </EthereumState>
