@@ -139,7 +139,7 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
         augmintTokenInstance.methods.balanceOf(interestEarnedAccountAddress).call()
     ]);
 
-    const reserveEthBalance = bn_reserveWeiBalance / ONE_ETH_IN_WEI;
+    const reserveEthBalance = (bn_reserveWeiBalance / ONE_ETH_IN_WEI).toString();
     const reserveTokenBalance = bn_reserveTokenBalance / DECIMALS_DIV;
     const interestEarnedAccountTokenBalance = bn_interestEarnedAccountTokenBalance / DECIMALS_DIV;
 
