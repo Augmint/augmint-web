@@ -36,7 +36,7 @@ import dkovacs from "assets/images/team/dkovacs.jpg";
 import aridovics from "assets/images/team/aridovics.jpg";
 
 import decent from "assets/images/decent.png";
-import euedge from "assets/images/euedge.png";
+import decentlabs from "assets/images/decentlabs.png";
 
 export const keyFeatures = [
     {
@@ -358,9 +358,9 @@ export const partners = [
     },
     {
         pk: "partner-2",
-        name: "EU Edge",
-        imgSrc: euedge,
+        name: "Decent Labs",
+        imgSrc: decentlabs,
         description:
-            "<a href='https://euedge.com/' target='_blank'>EU Edge</a> is supporting Augmint as a technical partner."
+            "<a href='https://decent.org/' target='_blank'>Decent Labs</a> is supporting Augmint as a technical partner."
     }
 ];
