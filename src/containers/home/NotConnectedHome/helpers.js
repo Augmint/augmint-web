@@ -340,17 +340,9 @@ export const teamMembers = [
 export const partners = [
     {
         pk: "partner-1",
-        name: "Decent",
-        imgSrc: decent,
-        description: "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a>",
-        slackText: "Join Decent's slack.",
-        slackUrl: "https://decent-slack-autoinvite.herokuapp.com"
-    },
-    {
-        pk: "partner-2",
         name: "Decent Labs",
         imgSrc: decentlabs,
         description:
-            "<a href='https://decent.org/' target='_blank'>Decent Labs</a> is supporting Augmint as a technical partner."
+            "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a> It supports Augmint as a technical partner."
     }
 ];
