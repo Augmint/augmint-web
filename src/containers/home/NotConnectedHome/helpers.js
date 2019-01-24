@@ -296,16 +296,6 @@ export const teamMembers = [
     },
     {
         pk: "team-11",
-        firstName: "Andras",
-        lastName: "Szabo",
-        imgSrc: aszabo,
-        title: "Technical project manager",
-        linkedinUrl: "https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853",
-        description:
-            "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from EU Edge.</a>"
-    },
-    {
-        pk: "team-12",
         firstName: "Tamas",
         lastName: "Nadrai",
         imgSrc: tnadrai,
@@ -316,7 +306,7 @@ export const teamMembers = [
             "Tamas has 8+ years experience in software development and testing. He is a blockchain and cryptocurrency enthusiast since 2017."
     },
     {
-        pk: "team-13",
+        pk: "team-12",
         firstName: "Peter",
         lastName: "Kolcza",
         imgSrc: pkolcza,
@@ -326,7 +316,7 @@ export const teamMembers = [
             "Peter has 10+ years of experience in building enterprise solutions for financial institutions in the areas of loans and data quality. He performs best when complex problems should be solved: when technology meets finance, tax, business and complience."
     },
     {
-        pk: "team-14",
+        pk: "team-13",
         firstName: "David",
         lastName: "Kovacs",
         imgSrc: dkovacs,
@@ -336,7 +326,7 @@ export const teamMembers = [
             "David’s background is in Project Management - he has lived in several countries, having most recently spent 2 years in San Francisco in the tech startup scene. Outside of work, he is a triathlete and ultra runner."
     },
     {
-        pk: "team-15",
+        pk: "team-14",
         firstName: "Adam",
         lastName: "Ridovics",
         imgSrc: aridovics,
