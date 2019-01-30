@@ -29,13 +29,11 @@ import vszatmahry from "assets/images/team/vszatmahry.jpg";
 import thume from "assets/images/team/thume.jpg";
 import vkontra from "assets/images/team/vkontra.jpg";
 import gycsado from "assets/images/team/gycsado.jpg";
-import aszabo from "assets/images/team/aszabo.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
 import dkovacs from "assets/images/team/dkovacs.jpg";
 import aridovics from "assets/images/team/aridovics.jpg";
 
-import decent from "assets/images/decent.png";
 import decentlabs from "assets/images/decentlabs.png";
 
 export const keyFeatures = [
@@ -343,6 +341,6 @@ export const partners = [
         name: "Decent Labs",
         imgSrc: decentlabs,
         description:
-            "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a> It supports Augmint as a technical partner."
+            "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent Labs.</a> It supports Augmint as a technical partner."
     }
 ];
