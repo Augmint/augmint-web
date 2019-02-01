@@ -100,12 +100,11 @@ export class MsgPanel extends React.Component {
 
                         {children}
 
-                        {onDismiss &&
-                            enableDismissBtn && (
-                                <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
-                                    OK
-                                </Button>
-                            )}
+                        {onDismiss && enableDismissBtn && (
+                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
+                                OK
+                            </Button>
+                        )}
                     </Message>
                 </Container>
             )
@@ -199,6 +198,28 @@ EthSubmissionSuccessPanel.defaultProps = {
     header: "Transaction sent",
     dismissable: true
 };
+
+// export class EthFormPanel extends React.Component {
+//     render() {
+//         const { children, result, testid = "EthFormPanel", ...other } = this.props;
+
+//         return (
+//             <MsgPanel data-testid={testid} {...other}>
+//                 {children}
+//                 <p style={{ paddingBottom: "8px" }}>
+//                     <Icon name="notifications" style={{ paddingRight: "5px" }} />
+//                     Send a small amount enough for a few transactions.
+//                 </p>
+//             </MsgPanel>
+//         );
+//     }
+// }
+
+// EthFormPanel.defaultProps = {
+//     info: true,
+//     header: "The recipient needs ETH to cover transaction fees, but does not have any... Care to help?",
+//     dismissable: true
+// };
 
 /* it to be used on compents connected to contracts or contractData (i.e. contract.info style).*/
 export function ConnectionStatus(props) {

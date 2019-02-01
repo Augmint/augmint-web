@@ -9,25 +9,21 @@ import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, EthFormPanel } from "components/MsgPanels";
 import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
-import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
-import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
 
-class TokenTransferForm extends React.Component {
+class EthTransferForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             result: null,
-            feeAmount: "0",
             urlResolved: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-        this.setFeeByAmount = this.setFeeByAmount.bind(this);
+        this.onEthAmountChange = this.onEthAmountChange.bind(this);
     }
 
     componentDidUpdate() {
@@ -55,7 +51,7 @@ class TokenTransferForm extends React.Component {
         }
     }
 
-    onTokenAmountChange(e) {
+    onEthAmountChange(e) {
         let amount;
         try {
             amount = parseFloat(e.target.value);
@@ -104,7 +100,8 @@ class TokenTransferForm extends React.Component {
             reset,
             augmintToken,
             isFunctional,
-            submitText
+            submitText,
+            recipientEth
         } = this.props;
 
         return (
@@ -144,7 +141,7 @@ class TokenTransferForm extends React.Component {
                                     type={isFunctional ? "hidden" : "number"}
                                     name="tokenAmount"
                                     placeholder="Amount"
-                                    onChange={this.onTokenAmountChange}
+                                    onChange={this.onEthAmountChange}
                                     validate={[
                                         Validations.required,
                                         Validations.tokenAmount,
@@ -161,7 +158,6 @@ class TokenTransferForm extends React.Component {
                                     augmintToken.info.feePt !== 0) && (
                                     <small style={{ display: "block", marginBottom: 10 }}>
                                         Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                                        <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
                                     </small>
                                 )}
 
@@ -176,16 +172,6 @@ class TokenTransferForm extends React.Component {
                                     parse={Parsers.trim}
                                     validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
                                     placeholder="0x0..."
-                                    disabled={submitting || !augmintToken.isLoaded}
-                                />
-                                <Field
-                                    component={Form.Field}
-                                    as={Form.Input}
-                                    data-testid="transferNarrativeField"
-                                    label="Reference:"
-                                    name="narrative"
-                                    type={isFunctional ? "hidden" : "text"}
-                                    placeholder="short narrative (optional)"
                                     disabled={submitting || !augmintToken.isLoaded}
                                 />
                             </div>
@@ -213,8 +199,8 @@ const mapStateToProps = state => ({
     web3: state.web3Connect.web3Instance
 });
 
-TokenTransferForm = connect(mapStateToProps)(TokenTransferForm);
+EthTransferForm = connect(mapStateToProps)(EthTransferForm);
 
 export default reduxForm({
-    form: "TokenTransferForm"
-})(TokenTransferForm);
+    form: "EthTransferForm"
+})(EthTransferForm);
