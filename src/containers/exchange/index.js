@@ -9,7 +9,6 @@ import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
-import ExchangeSummary from "./components/ExchangeSummary";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
@@ -23,9 +22,16 @@ class ExchangeHome extends React.Component {
         exchangeProvider();
         ratesProvider();
     }
+
     render() {
         const { orders, exchange, rates, trades } = this.props;
         const userAccount = this.props.userAccount;
+        // const buyOrder = orders.orders.buyOrders[0];
+        // const sellOrder = orders.orders.sellOrders[0];
+        // const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
+        console.log("ORDERS: ", orders);
+        // {orders.orders && !isMatching && (
+
         return (
             <EthereumState>
                 <Psegment>
@@ -36,24 +42,15 @@ class ExchangeHome extends React.Component {
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
                                 <FiatExchange
                                     header="€ &harr; A€ on partner exchange"
                                     web3Connect={this.props.web3Connect}
                                 />
                                 <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
-
-                                <MyOrders
-                                    testid="myOrdersBlock"
-                                    orders={orders}
-                                    rates={rates}
-                                    userAccountAddress={userAccount.address}
-                                    header="My open orders"
-                                />
                             </Pgrid.Column>
 
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <ExchangeSummary exchange={exchange} rates={rates} />
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
                                 {orders.orders && (
                                     <MatchOrdersButton
                                         buyOrder={orders.orders.buyOrders[0]}
@@ -70,12 +67,26 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>
-                        <Pgrid.Row style={{ padding: "0 1em" }}>
-                            <TradeHistory
-                                trades={trades}
-                                userAccountAddress={userAccount.address}
-                                header="My trade history"
-                            />
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 2 / 2, desktop: 3 / 3 }}>
+                                <MyOrders
+                                    testid="myOrdersBlock"
+                                    orders={orders}
+                                    rates={rates}
+                                    userAccountAddress={userAccount.address}
+                                    header="My open orders"
+                                />
+                            </Pgrid.Column>
+                        </Pgrid.Row>
+                        <Pgrid.Row>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 2 / 2, desktop: 3 / 3 }}>
+                                <TradeHistory
+                                    trades={trades}
+                                    orders={orders}
+                                    userAccountAddress={userAccount.address}
+                                    header="My trade history"
+                                />
+                            </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
                 </Psegment>

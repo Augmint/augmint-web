@@ -106,11 +106,11 @@ const OrderList = props => {
     return (
         <MyListGroup>
             <Row halign="center" valign="top">
-                <Col width={3} header="Buy A-EUR" style={{ textAlign: "center" }}>
+                <Col width={3} header="A-EUR Buyers" style={{ textAlign: "center" }}>
                     {totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
                 </Col>
                 <Col width={1} />
-                <Col width={3} header="Sell A-EUR" style={{ textAlign: "center" }}>
+                <Col width={3} header="A-EUR Sellers" style={{ textAlign: "center" }}>
                     {totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}
                 </Col>
             </Row>
