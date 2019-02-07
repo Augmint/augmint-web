@@ -8,7 +8,7 @@ import Subscribe from "./Subscribe";
 
 import backgroundImg from "assets/images/globe.png";
 import discordLogo from "assets/images/Discord-Logo.svg";
-import decent from "assets/images/decent.png";
+import decentlabs from "assets/images/decentlabs.png";
 import telegramLogo from "assets/images/telegram_logo.svg";
 
 import "./custom_footer_style.css";
@@ -91,12 +91,13 @@ export function AppFooter(props) {
                 </List>
                 <Subscribe />
                 <div className="partner">
-                    <img src={decent} alt="Decent logo" />
+                    <img src={decentlabs} alt="Decent Labs logo" />
                     <h5>
                         Augmint was born at{" "}
                         <a href="http://www.decent.org/" target="_blank" rel="noopener noreferrer">
-                            Decent
-                        </a>.
+                            Decent Labs
+                        </a>
+                        .
                     </h5>
                 </div>
             </Container>
