@@ -29,7 +29,6 @@ class ExchangeHome extends React.Component {
         // const buyOrder = orders.orders.buyOrders[0];
         // const sellOrder = orders.orders.sellOrders[0];
         // const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
-        console.log("ORDERS: ", orders);
         // {orders.orders && !isMatching && (
 
         return (
@@ -84,7 +83,7 @@ class ExchangeHome extends React.Component {
                                     trades={trades}
                                     orders={orders}
                                     userAccountAddress={userAccount.address}
-                                    header="My trade history"
+                                    header="My transaction history"
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>

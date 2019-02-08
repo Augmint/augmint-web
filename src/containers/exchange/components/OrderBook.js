@@ -13,10 +13,14 @@ import { DECIMALS, DECIMALS_DIV } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
-    const { order, ethFiatRate, userAccountAddress } = props;
+    const { order, ethFiatRate, userAccountAddress, rates } = props;
     const bn_ethFiatRate = new BigNumber(ethFiatRate);
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS);
+
+    function parsePrice(price) {
+        return Math.round(price * 100) / 10000;
+    }
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -25,21 +29,23 @@ const OrderItem = props => {
 
     const ret = [
         <Col width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && (
-                <span>
-                    {order.amount} A€
-                    <br />({actualValue} ETH)
-                </span>
-            )}
+            {order.direction === TOKEN_SELL && <span>{order.amount} A€</span>}
             {order.direction === TOKEN_BUY && (
                 <span>
                     {order.amountRounded} ETH
-                    <br />({actualValue} A€)
+                    {/* <br />{actualValue} A€ */}
                 </span>
             )}
         </Col>,
+        <Col width={3} key={`${order.direction}-est_amount`}>
+            {order.direction === TOKEN_SELL && <span>{actualValue} ETH</span>}
+            {order.direction === TOKEN_BUY && <span>{actualValue} A€</span>}
+        </Col>,
         <Col width={2} key={`${order.direction}-price`}>
             {displayPrice} %
+        </Col>,
+        <Col width={2} key={`${order.direction}-rate`}>
+            {(rates.info.ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€
         </Col>,
         <Col width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
@@ -70,7 +76,7 @@ const OrderItem = props => {
 };
 
 const OrderList = props => {
-    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
+    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, rates } = props;
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
     const totalSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
@@ -83,7 +89,12 @@ const OrderList = props => {
         itemList.push(
             <Row key={`ordersRow-${i}`} valign="top">
                 {i < buyOrders.length ? (
-                    <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
+                    <OrderItem
+                        order={buyOrders[i]}
+                        ethFiatRate={ethFiatRate}
+                        userAccountAddress={userAccountAddress}
+                        rates={rates}
+                    />
                 ) : (
                     <Col width={7} />
                 )}
@@ -95,6 +106,7 @@ const OrderList = props => {
                         order={sellOrders[i]}
                         ethFiatRate={ethFiatRate}
                         userAccountAddress={userAccountAddress}
+                        rates={rates}
                     />
                 ) : (
                     <Col width={7} />
@@ -116,18 +128,30 @@ const OrderList = props => {
             </Row>
             <Row wrap={false} halign="center" valign="top">
                 <Col width={3}>
-                    <strong>Amount</strong>
+                    <strong>ETH amount</strong>
+                </Col>
+                <Col width={3}>
+                    <strong>Est. A-EUR amount</strong>
                 </Col>
                 <Col width={2}>
                     <strong>Price</strong> <PriceToolTip id={"price_buy"} />
                 </Col>
+                <Col width={2}>
+                    <strong>Est. ETH/EUR rate</strong> <PriceToolTip id={"rate_buy"} />
+                </Col>
                 <Col width={2} />
                 <Col width={1} />
                 <Col width={3}>
-                    <strong>Amount</strong>
+                    <strong>A-EUR amount</strong>
+                </Col>
+                <Col width={3}>
+                    <strong>Est. ETH amount</strong>
                 </Col>
                 <Col width={2}>
                     <strong>Price</strong> <PriceToolTip id={"price_sell"} />
+                </Col>
+                <Col width={2}>
+                    <strong>Est. ETH/EUR rate</strong> <PriceToolTip id={"rate_sell"} />
                 </Col>
                 <Col width={2} />
             </Row>
@@ -138,12 +162,14 @@ const OrderList = props => {
 
 export default class OrderBook extends React.Component {
     render() {
-        const { filter, header, userAccountAddress, testid } = this.props;
+        const { filter, header, userAccountAddress, testid, rates } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
         const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
         const { ethFiatRate } = this.props.rates.info;
         //const { ethFiatRate } = this.props.rates ? rates.info : "?";
+
+        // console.log("ORDERBOOK ethFiatRate: ", ethFiatRate);
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
@@ -160,6 +186,7 @@ export default class OrderBook extends React.Component {
                             sellOrders={sellOrders}
                             ethFiatRate={ethFiatRate}
                             userAccountAddress={userAccountAddress}
+                            rates={rates}
                         />
                     </MyGridTable>
                 )}
@@ -174,5 +201,6 @@ OrderBook.defaultProps = {
     filter: () => {
         return true; // no filter passed
     },
-    header: <h3>Open orders</h3>
+    header: <h3>Open orders</h3>,
+    rates: null
 };

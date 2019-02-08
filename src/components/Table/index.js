@@ -13,7 +13,9 @@ export class CustomTable extends React.Component {
                     <StyleThead>
                         {headerdata && (
                             <StyleTr>
-                                {datakeys.map((key, i) => <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>)}
+                                {datakeys.map((key, i) => (
+                                    <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>
+                                ))}
                             </StyleTr>
                         )}
                     </StyleThead>
@@ -21,9 +23,11 @@ export class CustomTable extends React.Component {
                         {data &&
                             data.map((rowData, rowIndex) => (
                                 <StyleTr key={"row_" + rowIndex}>
+                                    {/* {console.log(rowData)} */}
                                     {datakeys.map((key, index) => (
                                         <StyleTd key={"row_" + rowIndex + "_cell_" + index}>
                                             {rowData[key]}
+                                            {/* {rowData[key] !== "args" ? rowData[key] : rowData[key][5]} */}
                                             {rowData[key] ? " " + unit[index] : ""}
                                         </StyleTd>
                                     ))}

@@ -15,17 +15,21 @@ export default class TradeHistory extends React.Component {
             "pricePt",
             "tokenValue",
             "ethAmountRounded",
-            "tokenAmount"
+            "tokenAmount",
+            "publishedRate"
         ];
-        const unit = ["", "", "", "", "A€", "ETH", "A€"];
+        const unit = ["", "", "", "", "A€", "ETH", "A€", "A€"];
         const headerData = {
             blockTimeStampText: "Date",
             type: "Type",
             direction: "Direction",
             pricePt: "Price",
             ethAmountRounded: "Eth Amount",
-            tokenAmount: "Token Amount"
+            tokenAmount: "Token Amount",
+            publishedRate: "ETH/€ rate"
         };
+
+        console.log("TRADES: ", this.props.trades);
 
         return (
             <Pblock loading={isLoading} header={header} style={{ overflow: "auto" }}>
