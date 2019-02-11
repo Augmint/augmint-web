@@ -24,12 +24,7 @@ class ExchangeHome extends React.Component {
     }
 
     render() {
-        const { orders, exchange, rates, trades } = this.props;
-        const userAccount = this.props.userAccount;
-        // const buyOrder = orders.orders.buyOrders[0];
-        // const sellOrder = orders.orders.sellOrders[0];
-        // const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
-        // {orders.orders && !isMatching && (
+        const { userAccount, orders, exchange, rates, trades } = this.props;
 
         return (
             <EthereumState>

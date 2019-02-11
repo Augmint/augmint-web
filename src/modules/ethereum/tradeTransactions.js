@@ -41,8 +41,6 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
             })
         ]);
 
-        console.log("BEFOREFORMAT logsOrderFillBuy:", logsOrderFillBuy);
-
         const logs = await Promise.all([
             ...logsNewOrder.map(eventLog => _formatTradeLog(NewOrder, account, eventLog)),
             ...logsCanceledOrder.map(eventLog => _formatTradeLog(CancelledOrder, account, eventLog)),
@@ -53,9 +51,6 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
         logs.sort((log1, log2) => {
             return log2.blockData.timestamp - log1.blockData.timestamp;
         });
-
-        console.log("logsOrderFillBuy: ", logsOrderFillBuy);
-        console.log("LOGS: ", logs);
 
         return logs;
     } catch (error) {
@@ -73,9 +68,6 @@ export async function processNewTradeTx(eventName, account, eventLog, type) {
 async function _formatTradeLog(event, account, eventLog, type) {
     let blockData;
 
-    console.log("EVENTLOG: ", eventLog);
-    console.log("EVENT: ", event);
-
     if (typeof eventLog.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
         blockData = await eventLog.getBlock();
@@ -83,13 +75,10 @@ async function _formatTradeLog(event, account, eventLog, type) {
         // not from event, provider.getBlock should work
         const provider = store.getState().web3Connect.ethers.provider;
         blockData = await provider.getBlock(eventLog.blockNumber);
-        // console.log("blockData ELSE: ", blockData);
     }
 
     const parsedData = event.parse(eventLog.topics, eventLog.data);
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
-
-    console.log("parsedData: ", parsedData);
 
     const bn_weiAmount = new BigNumber(parsedData.weiAmount.toString());
     const bn_tokenAmount = parsedData.tokenAmount;
@@ -100,6 +89,12 @@ async function _formatTradeLog(event, account, eventLog, type) {
     const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
     const price = parseFloat(parsedData.price / PPM_DIV);
     const publishedRate = parsedData.publishedRate && parseFloat(parsedData.publishedRate / DECIMALS_DIV);
+    const orderId = (parsedData.orderId
+        ? parsedData.orderId
+        : tokenAmount === 0
+        ? parsedData.buyTokenOrderId
+        : parsedData.sellTokenOrderId
+    ).toNumber();
     let direction = tokenAmount === 0 ? "buy" : "sell";
     if (event.name === "OrderFill") {
         direction = type;
@@ -117,10 +112,9 @@ async function _formatTradeLog(event, account, eventLog, type) {
         price: price ? price : "",
         pricePt: price ? floatNumberConverter(price, DECIMALS) + "%" : "",
         publishedRate,
+        orderId,
         type: event.name
     });
-
-    console.log("LOGDATA: ", logData);
 
     return logData;
 }

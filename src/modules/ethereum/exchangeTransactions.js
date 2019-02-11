@@ -70,7 +70,7 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
             : await exchangeInstance.methods.getActiveSellOrders(offset, chunkSize).call({ gas: blockGasLimit });
     }
 
-    // result format: [id, maker,  price, amount]
+    // result format: [id, maker, price, amount]
     const orders = result.reduce(
         (res, order, idx) => {
             const bn_amount = new BigNumber(order[3]);

@@ -9,17 +9,18 @@ export default class TradeHistory extends React.Component {
         const { header } = this.props;
         const { trades, error, isLoading } = this.props.trades;
         const dataKeys = [
+            "orderId",
             "blockTimeStampText",
             "type",
             "direction",
             "pricePt",
-            "tokenValue",
             "ethAmountRounded",
             "tokenAmount",
             "publishedRate"
         ];
-        const unit = ["", "", "", "", "A€", "ETH", "A€", "A€"];
+        const unit = ["", "", "", "", "", "A€", "ETH", "A€", "A€"];
         const headerData = {
+            orderId: "Order ID",
             blockTimeStampText: "Date",
             type: "Type",
             direction: "Direction",
@@ -28,8 +29,6 @@ export default class TradeHistory extends React.Component {
             tokenAmount: "Token Amount",
             publishedRate: "ETH/€ rate"
         };
-
-        console.log("TRADES: ", this.props.trades);
 
         return (
             <Pblock loading={isLoading} header={header} style={{ overflow: "auto" }}>

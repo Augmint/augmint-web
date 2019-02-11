@@ -169,8 +169,6 @@ export default class OrderBook extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         //const { ethFiatRate } = this.props.rates ? rates.info : "?";
 
-        // console.log("ORDERBOOK ethFiatRate: ", ethFiatRate);
-
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && (
