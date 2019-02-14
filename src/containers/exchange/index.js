@@ -14,13 +14,28 @@ import { EthereumState } from "containers/app/EthereumState";
 import MatchOrdersButton from "./components/MatchOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
+import { TOKEN_SELL } from "modules/reducers/orders";
 
 class ExchangeHome extends React.Component {
+    constructor(props) {
+        super(props);
+        this.toggleOrderBook = this.toggleOrderBook.bind(this);
+        this.state = {
+            orderBookDirection: TOKEN_SELL
+        };
+    }
+
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
         exchangeProvider();
         ratesProvider();
+    }
+
+    toggleOrderBook(direction) {
+        this.setState({
+            orderBookDirection: direction
+        });
     }
 
     render() {
@@ -41,7 +56,12 @@ class ExchangeHome extends React.Component {
                                     header="€ &harr; A€ on partner exchange"
                                     web3Connect={this.props.web3Connect}
                                 />
-                                <PlaceOrderForm orders={orders} exchange={exchange} rates={rates} />
+                                <PlaceOrderForm
+                                    orders={orders}
+                                    exchange={exchange}
+                                    rates={rates}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                />
                             </Pgrid.Column>
 
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
@@ -58,6 +78,8 @@ class ExchangeHome extends React.Component {
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
                                     header="Order book"
+                                    orderBookDirection={this.state.orderBookDirection}
+                                    toggleOrderBook={this.toggleOrderBook}
                                 />
                             </Pgrid.Column>
                         </Pgrid.Row>

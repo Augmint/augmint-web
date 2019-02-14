@@ -28,6 +28,7 @@ class PlaceOrderForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
+        this.toggleOrderBook = this.toggleOrderBook.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -42,8 +43,14 @@ class PlaceOrderForm extends React.Component {
         }
     }
 
+    toggleOrderBook(e) {
+        const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
+        this.props.toggleOrderBook(direction);
+    }
+
     onOrderDirectionChange(e) {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
+        this.toggleOrderBook(+e.target.attributes["data-index"].value);
     }
 
     onTokenAmountChange(e) {
@@ -201,97 +208,94 @@ class PlaceOrderForm extends React.Component {
                     />
                 )}
 
-                {!submitSucceeded &&
-                    this.props.rates.isLoaded && (
-                        <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
-                            <EthSubmissionErrorPanel
-                                error={error}
-                                header="Place Order failed"
-                                onDismiss={() => clearSubmitErrors()}
-                            />
-                            <Field
-                                name="tokenAmount"
-                                label={
-                                    orderDirection === TOKEN_BUY
-                                        ? "A-EUR amount to buy (calculated on current rate)"
-                                        : "A-EUR amount to sell"
-                                }
-                                component={Form.Field}
-                                as={Form.Input}
-                                type="number"
-                                disabled={submitting || !exchange.isLoaded}
-                                onChange={this.onTokenAmountChange}
-                                validate={tokenAmountValidations}
-                                normalize={Normalizations.twoDecimals}
-                                data-testid="tokenAmountInput"
-                                style={{ borderRadius: theme.borderRadius.left }}
-                                labelAlignRight="A-EUR"
-                            />
-                            <label>
-                                Price (% of published ETH/€ rate) <PriceToolTip id={"place_order_form"} />
-                            </label>
-                            <Field
-                                name="price"
-                                component={Form.Field}
-                                as={Form.Input}
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                disabled={submitting || !exchange.isLoaded}
-                                onChange={this.onPriceChange}
-                                validate={Validations.price}
-                                normalize={Normalizations.twoDecimals}
-                                data-testid="priceInput"
-                                style={{ borderRadius: theme.borderRadius.left }}
-                                labelAlignRight="%"
-                            />
-                            <div
-                                style={{
-                                    marginTop: -10,
-                                    marginBottom: 10,
-                                    color: "#999",
-                                    fontSize: "small",
-                                    textAlign: "right"
-                                }}
-                            >
-                                calculated on current rate 1 ETH ={" "}
-                                {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
-                            </div>
+                {!submitSucceeded && this.props.rates.isLoaded && (
+                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
+                        <EthSubmissionErrorPanel
+                            error={error}
+                            header="Place Order failed"
+                            onDismiss={() => clearSubmitErrors()}
+                        />
+                        <Field
+                            name="tokenAmount"
+                            label={
+                                orderDirection === TOKEN_BUY
+                                    ? "A-EUR amount to buy (calculated on current rate)"
+                                    : "A-EUR amount to sell"
+                            }
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            disabled={submitting || !exchange.isLoaded}
+                            onChange={this.onTokenAmountChange}
+                            validate={tokenAmountValidations}
+                            normalize={Normalizations.twoDecimals}
+                            data-testid="tokenAmountInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="A-EUR"
+                        />
+                        <label>
+                            Price (% of published ETH/€ rate) <PriceToolTip id={"place_order_form"} />
+                        </label>
+                        <Field
+                            name="price"
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            disabled={submitting || !exchange.isLoaded}
+                            onChange={this.onPriceChange}
+                            validate={Validations.price}
+                            normalize={Normalizations.twoDecimals}
+                            data-testid="priceInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="%"
+                        />
+                        <div
+                            style={{
+                                marginTop: -10,
+                                marginBottom: 10,
+                                color: "#999",
+                                fontSize: "small",
+                                textAlign: "right"
+                            }}
+                        >
+                            calculated on current rate 1 ETH ={" "}
+                            {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
+                        </div>
 
-                            <label>
-                                {orderDirection === TOKEN_BUY
-                                    ? "ETH amount to sell"
-                                    : "ETH amount to buy (calculated on current rate)"}
-                            </label>
-                            <Field
-                                name="ethAmount"
-                                component={Form.Field}
-                                as={Form.Input}
-                                type="number"
-                                step="0.1"
-                                disabled={submitting || !exchange.isLoaded}
-                                onChange={this.onEthAmountChange}
-                                validate={ethAmountValidations}
-                                normalize={Normalizations.fiveDecimals}
-                                data-testid="ethAmountInput"
-                                style={{ borderRadius: theme.borderRadius.left }}
-                                labelAlignRight="ETH"
-                            />
-                            <Button
-                                size="big"
-                                loading={submitting}
-                                disabled={pristine}
-                                data-testid="submitButton"
-                                type="submit"
-                            >
-                                {submitting && "Submitting..."}
-                                {!submitting &&
-                                    (orderDirection === TOKEN_BUY
-                                        ? "Submit buy A-EUR order"
-                                        : "Submit sell A-EUR order")}
-                            </Button>
-                        </Form>
-                    )}
+                        <label>
+                            {orderDirection === TOKEN_BUY
+                                ? "ETH amount to sell"
+                                : "ETH amount to buy (calculated on current rate)"}
+                        </label>
+                        <Field
+                            name="ethAmount"
+                            component={Form.Field}
+                            as={Form.Input}
+                            type="number"
+                            step="0.1"
+                            disabled={submitting || !exchange.isLoaded}
+                            onChange={this.onEthAmountChange}
+                            validate={ethAmountValidations}
+                            normalize={Normalizations.fiveDecimals}
+                            data-testid="ethAmountInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="ETH"
+                        />
+                        <Button
+                            size="big"
+                            loading={submitting}
+                            disabled={pristine}
+                            data-testid="submitButton"
+                            type="submit"
+                        >
+                            {submitting && "Submitting..."}
+                            {!submitting &&
+                                (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
+                        </Button>
+                    </Form>
+                )}
             </Pblock>
         );
     }
