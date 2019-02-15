@@ -14,7 +14,7 @@ import { DECIMALS, DECIMALS_DIV } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
-    const { order, ethFiatRate, userAccountAddress, rates } = props;
+    const { order, ethFiatRate, userAccountAddress } = props;
     const bn_ethFiatRate = new BigNumber(ethFiatRate);
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS);
@@ -31,22 +31,17 @@ const OrderItem = props => {
     const ret = [
         <Col width={3} key={`${order.direction}-amount`}>
             {order.direction === TOKEN_SELL && <span>{order.amount} A€</span>}
-            {order.direction === TOKEN_BUY && (
-                <span>
-                    {order.amountRounded} ETH
-                    {/* <br />{actualValue} A€ */}
-                </span>
-            )}
+            {order.direction === TOKEN_BUY && <span>{actualValue} A€</span>}
         </Col>,
         <Col width={3} key={`${order.direction}-est_amount`}>
             {order.direction === TOKEN_SELL && <span>{actualValue} ETH</span>}
-            {order.direction === TOKEN_BUY && <span>{actualValue} A€</span>}
+            {order.direction === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
         </Col>,
         <Col width={2} key={`${order.direction}-price`}>
             {displayPrice} %
         </Col>,
         <Col width={2} key={`${order.direction}-rate`}>
-            {(rates.info.ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€
+            {(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€
         </Col>,
         <Col width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
@@ -77,7 +72,7 @@ const OrderItem = props => {
 };
 
 const OrderList = props => {
-    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, rates, orderDirection } = props;
+    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
     const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
     const totalSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
@@ -95,18 +90,12 @@ const OrderList = props => {
                             order={sellOrders[i]}
                             ethFiatRate={ethFiatRate}
                             userAccountAddress={userAccountAddress}
-                            rates={rates}
                         />
                     ) : (
                         <Col width={7} />
                     )
                 ) : i < buyOrders.length ? (
-                    <OrderItem
-                        order={buyOrders[i]}
-                        ethFiatRate={ethFiatRate}
-                        userAccountAddress={userAccountAddress}
-                        rates={rates}
-                    />
+                    <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
                 ) : (
                     <Col width={7} />
                 )}
@@ -119,16 +108,24 @@ const OrderList = props => {
             <Row halign="center" valign="top">
                 <Col width={3} style={{ textAlign: "center" }}>
                     {orderDirection === TOKEN_SELL
-                        ? totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>
-                        : totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
+                        ? totalSellAmount > 0 && (
+                              <p style={{ marginBottom: "20px" }}>
+                                  Total: <strong>{totalSellAmount} A-EUR</strong>
+                              </p>
+                          )
+                        : totalBuyAmount > 0 && (
+                              <p style={{ marginBottom: "20px" }}>
+                                  Total: <strong>{totalBuyAmount} ETH</strong>
+                              </p>
+                          )}
                 </Col>
             </Row>
             <Row wrap={false} halign="center" valign="top">
                 <Col width={3}>
-                    <strong> {orderDirection === TOKEN_SELL ? "A-EUR amount" : "ETH amount"} </strong>
+                    <strong> {orderDirection === TOKEN_SELL ? "A-EUR amount" : "Est. A-EUR amount"} </strong>
                 </Col>
                 <Col width={3}>
-                    <strong> {orderDirection === TOKEN_SELL ? "Est. ETH amount" : "Est. A-EUR amount"} </strong>
+                    <strong> {orderDirection === TOKEN_SELL ? "Est. ETH amount" : "ETH amount"} </strong>
                 </Col>
                 <Col width={2}>
                     <strong>Price</strong>
