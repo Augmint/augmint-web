@@ -13,6 +13,7 @@ export const StyleTable = styled.table`
     border-top: 1px solid ${theme.colors.opacGrey};
     border-bottom: 1px solid ${theme.colors.opacGrey};
     font-family: ${theme.typography.fontFamilies.currency};
+    white-space: nowrap;
 `;
 
 export const StyleTd = styled.td`
