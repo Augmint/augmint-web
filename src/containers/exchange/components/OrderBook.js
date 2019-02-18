@@ -8,10 +8,16 @@ import { PriceToolTip } from "./ExchangeToolTips";
 import { Menu } from "components/augmint-ui/menu";
 import CancelOrderButton from "./CancelOrderButton";
 import BigNumber from "bignumber.js";
+import styled from "styled-components";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS, DECIMALS_DIV } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
+
+const StyledSpan = styled.span`
+    display: block;
+    text-align: right;
+`;
 
 const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
@@ -29,21 +35,21 @@ const OrderItem = props => {
             : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
 
     const ret = [
-        <Col width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <span>{order.amount} A€</span>}
-            {order.direction === TOKEN_BUY && <span>{actualValue} A€</span>}
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
+            {order.direction === TOKEN_SELL && <StyledSpan>{order.amount} A€</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{actualValue} A€</StyledSpan>}
         </Col>,
-        <Col width={3} key={`${order.direction}-est_amount`}>
-            {order.direction === TOKEN_SELL && <span>{actualValue} ETH</span>}
-            {order.direction === TOKEN_BUY && <span>{order.amountRounded} ETH</span>}
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
+            {order.direction === TOKEN_SELL && <StyledSpan>{actualValue} ETH</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{order.amountRounded} ETH</StyledSpan>}
         </Col>,
-        <Col width={2} key={`${order.direction}-price`}>
-            {displayPrice} %
+        <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
+            <StyledSpan>{displayPrice} %</StyledSpan>
         </Col>,
-        <Col width={2} key={`${order.direction}-rate`}>
-            {(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€
+        <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-rate`}>
+            <StyledSpan>{(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€</StyledSpan>
         </Col>,
-        <Col width={2} key={`${order.direction}-action`}>
+        <Col style={{ padding: ".1em 0 0 5px" }} width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
                 {order.direction === TOKEN_SELL && (
                     <p>
@@ -121,21 +127,21 @@ const OrderList = props => {
                 </Col>
             </Row>
             <Row wrap={false} halign="center" valign="top">
-                <Col width={3}>
+                <Col style={{ textAlign: "right" }} width={3}>
                     <strong> {orderDirection === TOKEN_SELL ? "A-EUR amount" : "Est. A-EUR amount"} </strong>
                 </Col>
-                <Col width={3}>
+                <Col style={{ textAlign: "right" }} width={3}>
                     <strong> {orderDirection === TOKEN_SELL ? "Est. ETH amount" : "ETH amount"} </strong>
                 </Col>
-                <Col width={2}>
+                <Col style={{ textAlign: "right" }} width={2}>
                     <strong>Price</strong>
                     <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
                 </Col>
-                <Col width={2}>
+                <Col style={{ textAlign: "right" }} width={2}>
                     <strong>Est. ETH/EUR rate</strong>
                     <PriceToolTip id={orderDirection === TOKEN_SELL ? "rate_sell" : "rate_buy"} />
                 </Col>
-                <Col width={2} />
+                <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
             </Row>
             {itemList}
         </MyListGroup>
