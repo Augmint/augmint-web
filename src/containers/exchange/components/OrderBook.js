@@ -23,7 +23,7 @@ const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
     const bn_ethFiatRate = new BigNumber(ethFiatRate);
 
-    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
     function parsePrice(price) {
         return Math.round(price * 100) / 10000;
@@ -41,7 +41,7 @@ const OrderItem = props => {
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
             {order.direction === TOKEN_SELL && <StyledSpan>{actualValue} ETH</StyledSpan>}
-            {order.direction === TOKEN_BUY && <StyledSpan>{order.amountRounded} ETH</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{order.amountRounded.toFixed(6)} ETH</StyledSpan>}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
             <StyledSpan>{displayPrice} %</StyledSpan>
