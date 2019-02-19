@@ -46,7 +46,7 @@ const OrderItem = props => {
         <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
             <StyledSpan>{displayPrice} %</StyledSpan>
         </Col>,
-        <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-rate`}>
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-rate`}>
             <StyledSpan>{(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€</StyledSpan>
         </Col>,
         <Col style={{ padding: ".1em 0 0 5px" }} width={2} key={`${order.direction}-action`}>
@@ -98,12 +98,12 @@ const OrderList = props => {
                             userAccountAddress={userAccountAddress}
                         />
                     ) : (
-                        <Col width={7} />
+                        <Col width={13} />
                     )
                 ) : i < buyOrders.length ? (
                     <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
                 ) : (
-                    <Col width={7} />
+                    <Col width={13} />
                 )}
             </Row>
         );
@@ -137,9 +137,8 @@ const OrderList = props => {
                     <strong>Price</strong>
                     <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
                 </Col>
-                <Col style={{ textAlign: "right" }} width={2}>
-                    <strong>Est. ETH/EUR rate</strong>
-                    <PriceToolTip id={orderDirection === TOKEN_SELL ? "rate_sell" : "rate_buy"} />
+                <Col style={{ textAlign: "right" }} width={3}>
+                    <strong>Est. ETH/€ rate</strong>
                 </Col>
                 <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
             </Row>
