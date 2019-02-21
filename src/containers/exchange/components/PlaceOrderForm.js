@@ -15,9 +15,15 @@ import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
 
 import theme from "styles/theme";
+import styled from "styled-components";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
+
+const Styledlabel = styled.label`
+    display: inline-block;
+    margin-bottom: 5px;
+`;
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -215,13 +221,14 @@ class PlaceOrderForm extends React.Component {
                             header="Place Order failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
+                        <Styledlabel>
+                            <strong>
+                                {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
+                            </strong>
+                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
+                        </Styledlabel>
                         <Field
                             name="tokenAmount"
-                            label={
-                                orderDirection === TOKEN_BUY
-                                    ? "A-EUR amount to buy (calculated on current rate)"
-                                    : "A-EUR amount to sell"
-                            }
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
@@ -233,9 +240,9 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-                        <label>
-                            Price (% of published ETH/€ rate) <PriceToolTip id={"place_order_form"} />
-                        </label>
+                        <Styledlabel>
+                            Price <PriceToolTip id={"place_order_form"} />
+                        </Styledlabel>
                         <Field
                             name="price"
                             component={Form.Field}
@@ -256,7 +263,6 @@ class PlaceOrderForm extends React.Component {
                                 marginTop: -10,
                                 marginBottom: 10,
                                 color: "#999",
-                                fontSize: "small",
                                 textAlign: "right"
                             }}
                         >
@@ -264,11 +270,11 @@ class PlaceOrderForm extends React.Component {
                             {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
                         </div>
 
-                        <label>
+                        <Styledlabel>
                             {orderDirection === TOKEN_BUY
                                 ? "ETH amount to sell"
                                 : "ETH amount to buy (calculated on current rate)"}
-                        </label>
+                        </Styledlabel>
                         <Field
                             name="ethAmount"
                             component={Form.Field}
