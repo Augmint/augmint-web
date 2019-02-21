@@ -23,7 +23,7 @@ export class CustomTable extends React.Component {
                         {data &&
                             data.map((rowData, rowIndex) => (
                                 <StyleTr key={"row_" + rowIndex}>
-                                    {/* {console.log(rowData)} */}
+                                    {/* {console.log("rowData: ",rowData)} */}
                                     {datakeys.map((key, index) => (
                                         <StyleTd key={"row_" + rowIndex + "_cell_" + index}>
                                             {rowData[key]}

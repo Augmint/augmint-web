@@ -37,6 +37,9 @@ export const StyleTr = styled.tr`
     &:hover ${StyleTd} {
         background: ${theme.colors.white};
     }
+    ${StyleTd}:nth-child(2) {
+        text-align: right;
+    }
 `;
 
 export const StyleThead = styled.thead`

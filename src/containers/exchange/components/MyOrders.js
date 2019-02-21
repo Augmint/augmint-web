@@ -17,7 +17,9 @@ const OrderItem = props => {
 
     const bn_ethFiatRate = new BigNumber(ethFiatRate);
 
-    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
+
+    const amountRounded = order.amountRounded.toFixed(5);
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -29,16 +31,16 @@ const OrderItem = props => {
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_BUY && `${order.amountRounded} ETH`}
+                {order.direction === TOKEN_BUY && `${amountRounded} ETH`}
                 {order.direction === TOKEN_SELL && `(${actualValue} ETH)`}
             </Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_SELL && `${order.amountRounded} A€`}
+                {order.direction === TOKEN_SELL && `${amountRounded} A€`}
                 {order.direction === TOKEN_BUY && `(${actualValue} A€)`}
             </Col>
 
-            <Col width={2}>{displayPrice} %</Col>
+            <Col width={2}>{displayPrice}%</Col>
 
             <Col width={2}>
                 <MoreInfoTip id={"my_order_more_info-" + order.id}>

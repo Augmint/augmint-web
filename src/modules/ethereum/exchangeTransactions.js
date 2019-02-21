@@ -2,6 +2,7 @@ import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
+import { refreshRates } from "modules/reducers/rates";
 
 import {
     ONE_ETH_IN_WEI,
@@ -55,6 +56,9 @@ export async function fetchOrders(_exchangeInstance) {
 
 async function getOrders(exchangeInstance, orderDirection, offset) {
     const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
+    // const bn_ethFiatRate = new BigNumber(store.getState().rates.ethFiatRate)
+
+    // console.log("ethFiatRate: ", store.getState().rates.ethFiatRate);
 
     const isLegacyExchangeContract = typeof exchangeInstance.methods.CHUNK_SIZE === "function";
     const chunkSize = isLegacyExchangeContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
@@ -110,8 +114,10 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
                 if (orderDirection === TOKEN_BUY) {
                     parsed.amount = parsed.ethValue;
                     parsed.amountRounded = parsed.ethValueRounded;
+                    // parsed.aeurValue = ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
                     res.buyOrders.push(parsed);
                 } else {
+                    // parsed.aeurValue = parsed.tokenValue;
                     parsed.amount = parsed.tokenValue;
                     parsed.amountRounded = parsed.tokenValue;
                     res.sellOrders.push(parsed);
