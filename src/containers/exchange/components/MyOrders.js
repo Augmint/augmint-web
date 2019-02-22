@@ -15,7 +15,7 @@ import { floatNumberConverter } from "utils/converter";
 const OrderItem = props => {
     const { order, ethFiatRate } = props;
 
-    const bn_ethFiatRate = new BigNumber(ethFiatRate);
+    const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
