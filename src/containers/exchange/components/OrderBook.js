@@ -86,15 +86,18 @@ const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
     const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
-    // const totalAeurBuyAmount;
+    const totalEthSellAmount = sellOrders
+        .reduce((sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum), 0)
+        .toFixed(5);
     const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
         .div(DECIMALS_DIV)
         .toFixed(2);
+    const totalAeurBuyAmount = buyOrders
+        .reduce((sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum), 0)
+        .toFixed(2);
+
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
-
-    console.log("totalAeurSellAmount: ", totalAeurSellAmount);
-    console.log("totalEthBuyAmount: ", totalEthBuyAmount);
 
     for (let i = 0; i < listLen; i++) {
         itemList.push(
@@ -146,9 +149,9 @@ const OrderList = props => {
                                   Total: <strong>{totalAeurSellAmount} A€</strong>
                               </StyledP>
                           )
-                        : totalEthBuyAmount > 0 && (
+                        : totalAeurBuyAmount > 0 && (
                               <StyledP>
-                                  Total: <strong>{totalEthBuyAmount} A€</strong>
+                                  Total: <strong>{totalAeurBuyAmount} A€</strong>
                               </StyledP>
                           )}
                 </Col>
@@ -156,7 +159,7 @@ const OrderList = props => {
                     {orderDirection === TOKEN_SELL
                         ? totalAeurSellAmount > 0 && (
                               <StyledP>
-                                  <strong>{totalAeurSellAmount} ETH</strong>
+                                  <strong>{totalEthSellAmount} ETH</strong>
                               </StyledP>
                           )
                         : totalEthBuyAmount > 0 && (
