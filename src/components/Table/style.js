@@ -37,7 +37,10 @@ export const StyleTr = styled.tr`
     &:hover ${StyleTd} {
         background: ${theme.colors.white};
     }
-    ${StyleTd}:nth-child(2) {
+    ${StyleTd}:nth-child(2),
+    ${StyleTd}:nth-child(5),
+    ${StyleTd}:nth-child(7),
+    ${StyleTd}:nth-child(8) {
         text-align: right;
     }
 `;
