@@ -19,7 +19,8 @@ const OrderItem = props => {
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
-    const amountRounded = order.amountRounded.toFixed(5);
+    const amountRounded =
+        order.direction === TOKEN_SELL ? order.amountRounded.toFixed(2) : order.amountRounded.toFixed(5);
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -126,14 +127,15 @@ export default class OrderBook extends React.Component {
         const totalBuyAmount = orders
             ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
             : "?";
-        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString() : "?";
+        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toFixed(2) : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && <ErrorPanel header="Error while fetching orders">{refreshError.message}</ErrorPanel>}
                 {orders == null && !isLoading && <p>Connecting...</p>}
                 <p>
-                    Total: {totalBuyAmount} ETH + {totalSellAmount} A€
+                    Total: <strong>{totalBuyAmount} ETH </strong>Buy Order + <strong>{totalSellAmount} A€</strong> Sell
+                    Order
                 </p>
                 {isLoading ? (
                     <p>Refreshing orders...</p>
