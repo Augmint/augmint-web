@@ -132,8 +132,7 @@ const OrderList = props => {
                 </Col>
                 <Col style={{ textAlign: "right" }} width={2}>
                     <strong>Price</strong>
-                    {orderDirection === TOKEN_SELL && <PriceToolTip id={"price_sell"} />}
-                    {orderDirection === TOKEN_BUY && <PriceToolTip id={"price_buy"} />}
+                    <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
                 </Col>
                 <Col style={{ textAlign: "right" }} width={3}>
                     <strong>Est. ETH/€ rate</strong>
