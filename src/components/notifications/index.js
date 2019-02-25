@@ -20,7 +20,6 @@ export class NotificationPanel extends React.Component {
     }
 
     render() {
-        console.log(this.props, "props");
         const { className, id, children } = this.props;
         const _className = this.props.showNotificationPanel ? "open" : "";
         return (

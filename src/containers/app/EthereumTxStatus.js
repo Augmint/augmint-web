@@ -128,7 +128,6 @@ class EthereumTxStatus extends React.Component {
                         txInfo = <p>Order id: {orderId}</p>;
                     }
 
-                    console.log(this.props, "prooops");
                     return (
                         <MyListGroup.Row
                             key={`txRowDiv-${hash}`}
