@@ -100,12 +100,11 @@ export class MsgPanel extends React.Component {
 
                         {children}
 
-                        {onDismiss &&
-                            enableDismissBtn && (
-                                <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
-                                    OK
-                                </Button>
-                            )}
+                        {onDismiss && enableDismissBtn && (
+                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
+                                Close
+                            </Button>
+                        )}
                     </Message>
                 </Container>
             )

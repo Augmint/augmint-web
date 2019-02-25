@@ -79,16 +79,17 @@ class EthereumTxStatus extends React.Component {
         const txList =
             transactions &&
             Object.keys(transactions)
-                .filter(
-                    hash =>
-                        showNotificationPanel
-                            ? transactions[hash] && transactions[hash].isDismissed !== "archive"
-                            : !transactions[hash].isDismissed
+                .filter(hash =>
+                    showNotificationPanel
+                        ? transactions[hash] && transactions[hash].isDismissed !== "archive"
+                        : !transactions[hash].isDismissed
                 )
                 .map((hash, _index) => {
                     const tx = transactions[hash];
                     const index = _index + 1;
-                    const header = `${index}. ${tx.txName}`;
+                    const header = tx.txName;
+                    // const header = `${index}. ${tx.txName}`;
+                    // use nonce instead of index ?
                     let txInfo;
                     let orderId;
 
@@ -127,6 +128,7 @@ class EthereumTxStatus extends React.Component {
                         txInfo = <p>Order id: {orderId}</p>;
                     }
 
+                    console.log(this.props, "prooops");
                     return (
                         <MyListGroup.Row
                             key={`txRowDiv-${hash}`}
@@ -141,7 +143,7 @@ class EthereumTxStatus extends React.Component {
                                     header={header}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
-                                    className={this.props.showNotificationPanel ? "notification open" : "notification"}
+                                    className={"notification open"}
                                 >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
@@ -150,29 +152,26 @@ class EthereumTxStatus extends React.Component {
                                 </StyledLoadingPanel>
                             )}
 
-                            {tx.event === "receipt" &&
-                                network.id !== 999 && (
-                                    <StyledLoadingPanel
-                                        header={header}
-                                        onDismiss={() => this.handleClose(tx.transactionHash)}
-                                        enableDismissBtn={false}
-                                        className={
-                                            this.props.showNotificationPanel ? "notification open" : "notification"
-                                        }
-                                    >
-                                        <p>Transaction receipt received. Wait for confirmations.</p>
+                            {tx.event === "receipt" && network.id !== 999 && (
+                                <StyledLoadingPanel
+                                    header={header}
+                                    onDismiss={() => this.handleClose(tx.transactionHash)}
+                                    enableDismissBtn={false}
+                                    className={this.props.showNotificationPanel ? "notification open" : "notification"}
+                                >
+                                    <p>Transaction receipt received. Wait for confirmations.</p>
 
-                                        {txInfo}
+                                    {txInfo}
 
-                                        <p>
-                                            <small>
-                                                Gas used: {gasUsed}
-                                                <br />
-                                                <HashURL hash={tx.transactionHash} type={"tx/"} />
-                                            </small>
-                                        </p>
-                                    </StyledLoadingPanel>
-                                )}
+                                    <p>
+                                        <small>
+                                            Gas used: {gasUsed}
+                                            <br />
+                                            <HashURL hash={tx.transactionHash} type={"tx/"} />
+                                        </small>
+                                    </p>
+                                </StyledLoadingPanel>
+                            )}
 
                             {tx.event === "confirmation" && (
                                 <SuccessPanel
@@ -186,7 +185,10 @@ class EthereumTxStatus extends React.Component {
                                 >
                                     {this.props.showNotificationPanel ? (
                                         <div>
-                                            <p>{tx.confirmationNumber}. confirmation</p>
+                                            <p>
+                                                {tx.confirmationNumber} confirmation
+                                                {tx.confirmationNumber > 1 ? "s" : ""}
+                                            </p>
 
                                             {txInfo}
 
@@ -200,7 +202,10 @@ class EthereumTxStatus extends React.Component {
                                         </div>
                                     ) : (
                                         <div>
-                                            <p>{tx.confirmationNumber}. confirmation</p>
+                                            <p>
+                                                {tx.confirmationNumber} confirmation
+                                                {tx.confirmationNumber > 1 ? "s" : ""}
+                                            </p>
                                         </div>
                                     )}
                                 </SuccessPanel>
