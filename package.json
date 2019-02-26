@@ -15,7 +15,7 @@
     "hdkey": "1.1.0",
     "moment": "2.22.2",
     "react": "16.8.0",
-    "parse": "2.2.0",
+    "parse": "2.2.1",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.0",
     "react-ga": "2.5.6",
