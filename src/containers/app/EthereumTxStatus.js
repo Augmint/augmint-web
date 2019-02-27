@@ -84,12 +84,9 @@ class EthereumTxStatus extends React.Component {
                         ? transactions[hash] && transactions[hash].isDismissed !== "archive"
                         : !transactions[hash].isDismissed
                 )
-                .map((hash, _index) => {
+                .map(hash => {
                     const tx = transactions[hash];
-                    const index = _index + 1;
-                    const header = tx.txName;
-                    // const header = `${index}. ${tx.txName}`;
-                    // use nonce instead of index ?
+                    const header = tx.nonce ? `#${tx.nonce} ${tx.txName}` : tx.txName;
                     let txInfo;
                     let orderId;
 
