@@ -29,14 +29,12 @@ import vszatmahry from "assets/images/team/vszatmahry.jpg";
 import thume from "assets/images/team/thume.jpg";
 import vkontra from "assets/images/team/vkontra.jpg";
 import gycsado from "assets/images/team/gycsado.jpg";
-import aszabo from "assets/images/team/aszabo.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
 import dkovacs from "assets/images/team/dkovacs.jpg";
 import aridovics from "assets/images/team/aridovics.jpg";
 
-import decent from "assets/images/decent.png";
-import euedge from "assets/images/euedge.png";
+import decentlabs from "assets/images/decentlabs.png";
 
 export const keyFeatures = [
     {
@@ -296,16 +294,6 @@ export const teamMembers = [
     },
     {
         pk: "team-11",
-        firstName: "Andras",
-        lastName: "Szabo",
-        imgSrc: aszabo,
-        title: "Technical project manager",
-        linkedinUrl: "https://www.linkedin.com/in/andr%C3%A1s-szab%C3%B3-82921853",
-        description:
-            "Bandi  is a software engineer and he helps to keep the ball rolling on Augmint projects. <a href='https://euedge.com' target='_blank'>He is from EU Edge.</a>"
-    },
-    {
-        pk: "team-12",
         firstName: "Tamas",
         lastName: "Nadrai",
         imgSrc: tnadrai,
@@ -316,7 +304,7 @@ export const teamMembers = [
             "Tamas has 8+ years experience in software development and testing. He is a blockchain and cryptocurrency enthusiast since 2017."
     },
     {
-        pk: "team-13",
+        pk: "team-12",
         firstName: "Peter",
         lastName: "Kolcza",
         imgSrc: pkolcza,
@@ -326,7 +314,7 @@ export const teamMembers = [
             "Peter has 10+ years of experience in building enterprise solutions for financial institutions in the areas of loans and data quality. He performs best when complex problems should be solved: when technology meets finance, tax, business and complience."
     },
     {
-        pk: "team-14",
+        pk: "team-13",
         firstName: "David",
         lastName: "Kovacs",
         imgSrc: dkovacs,
@@ -336,7 +324,7 @@ export const teamMembers = [
             "David’s background is in Project Management - he has lived in several countries, having most recently spent 2 years in San Francisco in the tech startup scene. Outside of work, he is a triathlete and ultra runner."
     },
     {
-        pk: "team-15",
+        pk: "team-14",
         firstName: "Adam",
         lastName: "Ridovics",
         imgSrc: aridovics,
@@ -350,17 +338,9 @@ export const teamMembers = [
 export const partners = [
     {
         pk: "partner-1",
-        name: "Decent",
-        imgSrc: decent,
-        description: "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent.</a>",
-        slackText: "Join Decent's slack.",
-        slackUrl: "https://decent-slack-autoinvite.herokuapp.com"
-    },
-    {
-        pk: "partner-2",
-        name: "EU Edge",
-        imgSrc: euedge,
+        name: "Decent Labs",
+        imgSrc: decentlabs,
         description:
-            "<a href='https://euedge.com/' target='_blank'>EU Edge</a> is supporting Augmint as a technical partner."
+            "<a href='http://www.decent.org/' target='_blank'>Augmint was born at Decent Labs.</a> It supports Augmint as a technical partner."
     }
 ];
