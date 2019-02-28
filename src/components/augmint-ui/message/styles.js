@@ -20,10 +20,23 @@ const BaseDiv = `
       width: 260px;
     }
 
+    & .notification-header-cont {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    & .notification-header-cont i {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+    }
+
     & h4 {
       font-size: ${remCalc(18)};
-      margin: 0 0 .6em;
-      
+      margin: 0 0 .6em .6em;
+      display: inline-block
+
       i {
         margin-right: 8px;
       }
@@ -34,7 +47,12 @@ const BaseDiv = `
       font-size: ${remCalc(14)};
       line-height: ${remCalc(16)};
       margin: 0;
-      
+
+    }
+
+    &.notification p.nonce {
+      margin-left: 30px;
+      padding-bottom: 0.6em;
     }
 
     &.notification > div > p {

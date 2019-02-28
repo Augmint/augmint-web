@@ -86,7 +86,8 @@ class EthereumTxStatus extends React.Component {
                 )
                 .map(hash => {
                     const tx = transactions[hash];
-                    const header = tx.nonce ? `#${tx.nonce} ${tx.txName}` : tx.txName;
+                    const header = tx.txName;
+                    const nonce = tx.nonce ? `Transaction #${tx.nonce}` : null;
                     let txInfo;
                     let orderId;
 
@@ -137,6 +138,7 @@ class EthereumTxStatus extends React.Component {
                             {tx.event === "transactionHash" && (
                                 <StyledLoadingPanel
                                     header={header}
+                                    nonce={nonce}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
                                     className={"notification open"}
@@ -151,9 +153,10 @@ class EthereumTxStatus extends React.Component {
                             {tx.event === "receipt" && network.id !== 999 && (
                                 <StyledLoadingPanel
                                     header={header}
+                                    nonce={nonce}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
-                                    className={this.props.showNotificationPanel ? "notification open" : "notification"}
+                                    className={"notification open"}
                                 >
                                     <p>Transaction receipt received. Wait for confirmations.</p>
 
@@ -175,6 +178,7 @@ class EthereumTxStatus extends React.Component {
                                     data-test-orderid={orderId}
                                     data-test-gasused={gasUsed}
                                     header={header}
+                                    nonce={nonce}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
                                     className={"notification open"}
@@ -210,6 +214,7 @@ class EthereumTxStatus extends React.Component {
                             {tx.event === "error" && (
                                 <EthSubmissionErrorPanel
                                     header={header}
+                                    nonce={nonce}
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     error={tx.error}
                                     receipt={tx.receipt}

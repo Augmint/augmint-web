@@ -54,6 +54,7 @@ export class MsgPanel extends React.Component {
             dismissed,
             onDismiss,
             header,
+            nonce,
             loading,
             error,
             success,
@@ -65,9 +66,10 @@ export class MsgPanel extends React.Component {
         let _className = className;
         let noClose = false;
 
-        if (loading) {
-            noClose = true;
-        }
+        // always show notification close icon
+        // if (loading) {
+        //     noClose = true;
+        // }
 
         if (error) {
             _className += " error";
@@ -86,17 +88,21 @@ export class MsgPanel extends React.Component {
                         noCloseIcon={noClose}
                         {...other}
                     >
-                        <h4 style={chevron && { paddingRight: "30px" }}>
+                        <div class="notification-header-cont">
                             {icon && <Icon name={icon} loading={loading} />}
-                            {header}
-                            {chevron && (
-                                <StyledIcon
-                                    name={chevron}
-                                    className={this.props.showInfoPanel ? "open" : "close"}
-                                    onClick={() => this.toggleInfoPanel()}
-                                />
-                            )}
-                        </h4>
+                            <h4 style={chevron && { paddingRight: "30px" }}>
+                                {header}
+                                {chevron && (
+                                    <StyledIcon
+                                        name={chevron}
+                                        className={this.props.showInfoPanel ? "open" : "close"}
+                                        onClick={() => this.toggleInfoPanel()}
+                                    />
+                                )}
+                            </h4>
+                        </div>
+
+                        {nonce && <p class="nonce">{nonce}</p>}
 
                         {children}
 
