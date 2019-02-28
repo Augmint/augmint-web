@@ -70,7 +70,7 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
             : await exchangeInstance.methods.getActiveSellOrders(offset, chunkSize).call({ gas: blockGasLimit });
     }
 
-    // result format: [id, maker,  price, amount]
+    // result format: [id, maker, price, amount]
     const orders = result.reduce(
         (res, order, idx) => {
             const bn_amount = new BigNumber(order[3]);
@@ -110,8 +110,10 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
                 if (orderDirection === TOKEN_BUY) {
                     parsed.amount = parsed.ethValue;
                     parsed.amountRounded = parsed.ethValueRounded;
+                    // parsed.aeurValue = ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
                     res.buyOrders.push(parsed);
                 } else {
+                    // parsed.aeurValue = parsed.tokenValue;
                     parsed.amount = parsed.tokenValue;
                     parsed.amountRounded = parsed.tokenValue;
                     res.sellOrders.push(parsed);

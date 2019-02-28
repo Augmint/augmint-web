@@ -86,7 +86,6 @@ export const fetchTrades = (account, fromBlock, toBlock) => {
         });
         try {
             const trades = await fetchTradesTx(account, fromBlock, toBlock);
-
             return dispatch({
                 type: TRADE_FETCH_SUCCESS,
                 result: trades
