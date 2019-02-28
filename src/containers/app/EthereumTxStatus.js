@@ -142,6 +142,7 @@ class EthereumTxStatus extends React.Component {
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
                                     className={"notification open"}
+                                    isNotification={true}
                                 >
                                     <p>
                                         Transaction's sent to Ethereum network. Wait for confirmations. <br />
@@ -157,6 +158,7 @@ class EthereumTxStatus extends React.Component {
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
                                     className={"notification open"}
+                                    isNotification={true}
                                 >
                                     <p>Transaction receipt received. Wait for confirmations.</p>
 
@@ -182,6 +184,7 @@ class EthereumTxStatus extends React.Component {
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     enableDismissBtn={false}
                                     className={"notification open"}
+                                    isNotification={true}
                                 >
                                     {this.props.showNotificationPanel ? (
                                         <div>
@@ -218,6 +221,7 @@ class EthereumTxStatus extends React.Component {
                                     onDismiss={() => this.handleClose(tx.transactionHash)}
                                     error={tx.error}
                                     receipt={tx.receipt}
+                                    isNotification={true}
                                 />
                             )}
                         </MyListGroup.Row>

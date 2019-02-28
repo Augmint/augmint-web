@@ -32,10 +32,13 @@ const BaseDiv = `
       margin-top: 2px;
     }
 
+    & .notification-header-cont h4 {
+      margin-left: .6em;
+    }
+
     & h4 {
       font-size: ${remCalc(18)};
-      margin: 0 0 .6em .6em;
-      display: inline-block
+      margin: 0 0 .6em;
 
       i {
         margin-right: 8px;
