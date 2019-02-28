@@ -119,9 +119,11 @@ const onOrderFill = function(
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === tokenBuyer.toLowerCase()) {
         store.dispatch(processNewTrade("OrderFill", userAccount, this, "buy"));
+        console.log("THIS buy: ", this);
     }
     if (userAccount.toLowerCase() === tokenSeller.toLowerCase()) {
         store.dispatch(processNewTrade("OrderFill", userAccount, this, "sell"));
+        console.log("THIS sell: ", this);
     }
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(

@@ -202,7 +202,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 </p>
                 <p style={{ paddingBottom: "8px" }}>
                     <Icon name="notifications" style={{ paddingRight: "5px" }} />
-                    Wait for 12 confirmations to ensure it's accepted by network.
+                    Wait for confirmation to ensure it was processed by the network.
                 </p>
                 <p
                     style={{ paddingBottom: "10px" }}

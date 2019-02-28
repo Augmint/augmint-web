@@ -13,7 +13,9 @@ export class CustomTable extends React.Component {
                     <StyleThead>
                         {headerdata && (
                             <StyleTr>
-                                {datakeys.map((key, i) => <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>)}
+                                {datakeys.map((key, i) => (
+                                    <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>
+                                ))}
                             </StyleTr>
                         )}
                     </StyleThead>
