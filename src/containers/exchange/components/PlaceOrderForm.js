@@ -15,9 +15,15 @@ import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
 
 import theme from "styles/theme";
+import styled from "styled-components";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
+
+const Styledlabel = styled.label`
+    display: inline-block;
+    margin-bottom: 5px;
+`;
 
 class PlaceOrderForm extends React.Component {
     constructor(props) {
@@ -28,6 +34,7 @@ class PlaceOrderForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
+        this.toggleOrderBook = this.toggleOrderBook.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -42,8 +49,14 @@ class PlaceOrderForm extends React.Component {
         }
     }
 
+    toggleOrderBook(e) {
+        const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
+        this.props.toggleOrderBook(direction);
+    }
+
     onOrderDirectionChange(e) {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
+        this.toggleOrderBook(+e.target.attributes["data-index"].value);
     }
 
     onTokenAmountChange(e) {
@@ -208,19 +221,22 @@ class PlaceOrderForm extends React.Component {
                             header="Place Order failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
+                              
+                        <Styledlabel>
+                            <strong>
+                                {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
+                            </strong>
+                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
+                        </Styledlabel>
                         <Field
                             name="tokenAmount"
-                            label={
-                                orderDirection === TOKEN_BUY
-                                    ? "A-EUR amount to buy (calculated on current rate)"
-                                    : "A-EUR amount to sell"
-                            }
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
                             inputmode="numeric"
                             step="any"
                             min="0"
+
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
@@ -229,9 +245,11 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-                        <label>
-                            Price (% of published ETH/€ rate) <PriceToolTip id={"place_order_form"} />
-                        </label>
+                              
+                        <Styledlabel>
+                            Price <PriceToolTip id={"place_order_form"} />
+                        </Styledlabel>
+
                         <Field
                             name="price"
                             component={Form.Field}
@@ -261,11 +279,12 @@ class PlaceOrderForm extends React.Component {
                             {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
                         </div>
 
-                        <label>
+                        <Styledlabel>
                             {orderDirection === TOKEN_BUY
                                 ? "ETH amount to sell"
                                 : "ETH amount to buy (calculated on current rate)"}
-                        </label>
+                        </Styledlabel>
+
                         <Field
                             name="ethAmount"
                             component={Form.Field}
