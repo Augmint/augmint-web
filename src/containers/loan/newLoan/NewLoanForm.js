@@ -206,6 +206,9 @@ class NewLoanForm extends React.Component {
                                         as={Form.Input}
                                         name="loanTokenAmount"
                                         type="number"
+                                        inputmode="numeric"
+                                        step="any"
+                                        min="0"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[
                                             Validations.required,
@@ -236,6 +239,9 @@ class NewLoanForm extends React.Component {
                                         as={Form.Input}
                                         name="ethAmount"
                                         type="number"
+                                        inputmode="numeric"
+                                        step="any"
+                                        min="0"
                                         placeholder="amount taken to escrow"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[
