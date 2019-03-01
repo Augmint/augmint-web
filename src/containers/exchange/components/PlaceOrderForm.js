@@ -221,6 +221,7 @@ class PlaceOrderForm extends React.Component {
                             header="Place Order failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
+                              
                         <Styledlabel>
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
@@ -232,6 +233,10 @@ class PlaceOrderForm extends React.Component {
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
+                            inputmode="numeric"
+                            step="any"
+                            min="0"
+
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
@@ -240,15 +245,18 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
+                              
                         <Styledlabel>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
+
                         <Field
                             name="price"
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
-                            step="0.01"
+                            inputmode="numeric"
+                            step="any"
                             min="0"
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onPriceChange}
@@ -263,6 +271,7 @@ class PlaceOrderForm extends React.Component {
                                 marginTop: -10,
                                 marginBottom: 10,
                                 color: "#999",
+                                fontSize: "small",
                                 textAlign: "right"
                             }}
                         >
@@ -275,12 +284,15 @@ class PlaceOrderForm extends React.Component {
                                 ? "ETH amount to sell"
                                 : "ETH amount to buy (calculated on current rate)"}
                         </Styledlabel>
+
                         <Field
                             name="ethAmount"
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
-                            step="0.1"
+                            inputmode="numeric"
+                            step="any"
+                            min="0"
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onEthAmountChange}
                             validate={ethAmountValidations}

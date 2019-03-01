@@ -141,6 +141,9 @@ class TokenTransferForm extends React.Component {
                                     component={Form.Field}
                                     as={Form.Input}
                                     type={isFunctional ? "hidden" : "number"}
+                                    inputmode="numeric"
+                                    step="any"
+                                    min="0"
                                     name="tokenAmount"
                                     placeholder="Amount"
                                     onChange={this.onTokenAmountChange}
