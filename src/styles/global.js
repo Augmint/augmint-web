@@ -2,7 +2,7 @@
 // import { media } from "./media";
 
 // const GlobalStyle = createGlobalStyle`
-//     @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Roboto+Slab:300,400');
+//     @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono|Roboto+Slab:300,400');
 
 //     @keyframes icon-loading {
 //         0% {

@@ -40,6 +40,7 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
                 topics: [CancelledOrder.topics[0], null, paddedAccount]
             })
         ]);
+
         const logs = await Promise.all([
             ...logsNewOrder.map(eventLog => _formatTradeLog(NewOrder, account, eventLog)),
             ...logsCanceledOrder.map(eventLog => _formatTradeLog(CancelledOrder, account, eventLog)),
@@ -66,6 +67,7 @@ export async function processNewTradeTx(eventName, account, eventLog, type) {
 
 async function _formatTradeLog(event, account, eventLog, type) {
     let blockData;
+
     if (typeof eventLog.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
         blockData = await eventLog.getBlock();
@@ -83,9 +85,16 @@ async function _formatTradeLog(event, account, eventLog, type) {
     const bn_ethAmount = bn_weiAmount.div(ONE_ETH_IN_WEI);
 
     const ethAmount = bn_ethAmount.toString();
-    const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
+    const ethAmountRounded = parseFloat(bn_ethAmount).toFixed(5);
     const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
     const price = parseFloat(parsedData.price / PPM_DIV);
+    const publishedRate = parsedData.publishedRate && parseFloat(parsedData.publishedRate / DECIMALS_DIV).toFixed(2);
+    const orderId = (parsedData.orderId
+        ? parsedData.orderId
+        : tokenAmount === 0
+        ? parsedData.buyTokenOrderId
+        : parsedData.sellTokenOrderId
+    ).toNumber();
     let direction = tokenAmount === 0 ? "buy" : "sell";
     if (event.name === "OrderFill") {
         direction = type;
@@ -97,11 +106,13 @@ async function _formatTradeLog(event, account, eventLog, type) {
         blockTimeStampText: blockTimeStampText,
         bn_weiAmount: bn_weiAmount,
         bn_tokenAmount: bn_tokenAmount,
-        tokenAmount: tokenAmount ? tokenAmount : "",
+        tokenAmount: tokenAmount ? tokenAmount.toFixed(2) : "",
         ethAmount: ethAmount,
         ethAmountRounded: ethAmountRounded ? ethAmountRounded : "",
         price: price ? price : "",
-        pricePt: price ? floatNumberConverter(price, DECIMALS) + " %" : "",
+        pricePt: price ? floatNumberConverter(price, DECIMALS).toFixed(2) + "%" : "",
+        publishedRate,
+        orderId,
         type: event.name
     });
 

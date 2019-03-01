@@ -13,6 +13,7 @@ export const StyleTable = styled.table`
     border-top: 1px solid ${theme.colors.opacGrey};
     border-bottom: 1px solid ${theme.colors.opacGrey};
     font-family: ${theme.typography.fontFamilies.currency};
+    white-space: nowrap;
 `;
 
 export const StyleTd = styled.td`
@@ -35,6 +36,12 @@ export const StyleTr = styled.tr`
     }
     &:hover ${StyleTd} {
         background: ${theme.colors.white};
+    }
+    ${StyleTd}:nth-child(2),
+    ${StyleTd}:nth-child(5),
+    ${StyleTd}:nth-child(7),
+    ${StyleTd}:nth-child(8) {
+        text-align: right;
     }
 `;
 
