@@ -195,7 +195,6 @@ export async function placeOrderTx(orderDirection, amount, price) {
     }
 
     const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
-
     return { txName, transactionHash };
 }
 
