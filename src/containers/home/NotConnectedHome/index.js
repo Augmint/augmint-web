@@ -49,6 +49,11 @@ export default class NotConnectedHome extends React.Component {
                                 Stored securely and decentralised stable crypto tokens are instantly transferable
                                 worldwide.
                             </Header>
+                            <div className="segment" style={{ margin: "30px 0 140px 0", textAlign: "center" }}>
+                                <Button type="a" to="/tryit" color="primary" className="try-now">
+                                    Try now
+                                </Button>
+                            </div>
                         </header>
 
                         <div className="balance-image">
@@ -83,18 +88,20 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
-                                {keyBenefits.filter(item => item.type === "business").map(item => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        style={{ textAlign: "left" }}
-                                        key={item.pk}
-                                    >
-                                        <div className="list-item">
-                                            <p className="opac">{item.text}</p>
-                                        </div>
-                                    </Grid.Unit>
-                                ))}
+                                {keyBenefits
+                                    .filter(item => item.type === "business")
+                                    .map(item => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            style={{ textAlign: "left" }}
+                                            key={item.pk}
+                                        >
+                                            <div className="list-item">
+                                                <p className="opac">{item.text}</p>
+                                            </div>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
 
@@ -104,18 +111,20 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
-                                {keyBenefits.filter(item => item.type === "individual").map(item => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        style={{ textAlign: "left" }}
-                                        key={item.pk}
-                                    >
-                                        <div className="list-item">
-                                            <p className="opac">{item.text}</p>
-                                        </div>
-                                    </Grid.Unit>
-                                ))}
+                                {keyBenefits
+                                    .filter(item => item.type === "individual")
+                                    .map(item => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            style={{ textAlign: "left" }}
+                                            key={item.pk}
+                                        >
+                                            <div className="list-item">
+                                                <p className="opac">{item.text}</p>
+                                            </div>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
                     </section>
@@ -146,22 +155,24 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks.filter(feature => feature.type === "loan").map(feature => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        key={feature.pk}
-                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                    >
-                                        <div className="home-image segment" style={styles.howItWorksImage}>
-                                            {feature.image}
-                                        </div>
-                                        <Header as="h4" style={styles.howToUseHeader}>
-                                            {feature.title}
-                                        </Header>
-                                        <p className="opac">{feature.text}</p>
-                                    </Grid.Unit>
-                                ))}
+                                {howItWorks
+                                    .filter(feature => feature.type === "loan")
+                                    .map(feature => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            key={feature.pk}
+                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                        >
+                                            <div className="home-image segment" style={styles.howItWorksImage}>
+                                                {feature.image}
+                                            </div>
+                                            <Header as="h4" style={styles.howToUseHeader}>
+                                                {feature.title}
+                                            </Header>
+                                            <p className="opac">{feature.text}</p>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
 
@@ -174,22 +185,24 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks.filter(feature => feature.type === "exchange").map(feature => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        key={feature.pk}
-                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                    >
-                                        <div className="home-image segment" style={styles.howItWorksImage}>
-                                            {feature.image}
-                                        </div>
-                                        <Header as="h4" style={styles.howToUseHeader}>
-                                            {feature.title}
-                                        </Header>
-                                        <p className="opac">{feature.text}</p>
-                                    </Grid.Unit>
-                                ))}
+                                {howItWorks
+                                    .filter(feature => feature.type === "exchange")
+                                    .map(feature => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            key={feature.pk}
+                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                        >
+                                            <div className="home-image segment" style={styles.howItWorksImage}>
+                                                {feature.image}
+                                            </div>
+                                            <Header as="h4" style={styles.howToUseHeader}>
+                                                {feature.title}
+                                            </Header>
+                                            <p className="opac">{feature.text}</p>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
 
@@ -202,22 +215,24 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="margin grid">
-                                {howItWorks.filter(feature => feature.type === "use").map(feature => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        key={feature.pk}
-                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                    >
-                                        <div className="home-image segment" style={styles.howItWorksImage}>
-                                            {feature.image}
-                                        </div>
-                                        <Header as="h4" style={styles.howToUseHeader}>
-                                            {feature.title}
-                                        </Header>
-                                        <p className="opac">{feature.text}</p>
-                                    </Grid.Unit>
-                                ))}
+                                {howItWorks
+                                    .filter(feature => feature.type === "use")
+                                    .map(feature => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            key={feature.pk}
+                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                        >
+                                            <div className="home-image segment" style={styles.howItWorksImage}>
+                                                {feature.image}
+                                            </div>
+                                            <Header as="h4" style={styles.howToUseHeader}>
+                                                {feature.title}
+                                            </Header>
+                                            <p className="opac">{feature.text}</p>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
 
@@ -225,22 +240,24 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks.filter(feature => feature.type === "lock").map(feature => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        key={feature.pk}
-                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                    >
-                                        <div className="home-image segment" style={styles.howItWorksImage}>
-                                            {feature.image}
-                                        </div>
-                                        <Header as="h4" style={styles.howToUseHeader}>
-                                            {feature.title}
-                                        </Header>
-                                        <p className="opac">{feature.text}</p>
-                                    </Grid.Unit>
-                                ))}
+                                {howItWorks
+                                    .filter(feature => feature.type === "lock")
+                                    .map(feature => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            key={feature.pk}
+                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                        >
+                                            <div className="home-image segment" style={styles.howItWorksImage}>
+                                                {feature.image}
+                                            </div>
+                                            <Header as="h4" style={styles.howToUseHeader}>
+                                                {feature.title}
+                                            </Header>
+                                            <p className="opac">{feature.text}</p>
+                                        </Grid.Unit>
+                                    ))}
                             </Grid>
                         </ThemeProvider>
 
