@@ -4,22 +4,25 @@ import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, Style
 
 export class CustomTable extends React.Component {
     render() {
-        const { datakeys, unit, data, headerdata, title, extraClass, testid } = this.props;
+        const { datakeys, unit, data, headerdata, title, extraClass, testid, noItemsMessage } = this.props;
 
         return (
             <div className={extraClass}>
                 {title && <StyleTitle>{title}</StyleTitle>}
-                <StyleTable data-testid={testid}>
-                    <StyleThead>
-                        {headerdata && (
-                            <StyleTr>
-                                {datakeys.map((key, i) => (
-                                    <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>
-                                ))}
-                            </StyleTr>
-                        )}
-                    </StyleThead>
-                    <StyleTbody data-test-historycount={data ? data.length : 0}>
+                {data && data.length === 0 && <p>{noItemsMessage || "No items"}</p>}
+                <StyleTable data-testid={testid} data-test-historycount={data ? data.length : 0}>
+                    {data && data.length > 0 && (
+                        <StyleThead>
+                            {headerdata && (
+                                <StyleTr>
+                                    {datakeys.map((key, i) => (
+                                        <StyleTh key={"th_" + i}>{headerdata[key]}</StyleTh>
+                                    ))}
+                                </StyleTr>
+                            )}
+                        </StyleThead>
+                    )}
+                    <StyleTbody>
                         {data &&
                             data.map((rowData, rowIndex) => (
                                 <StyleTr key={"row_" + rowIndex}>
