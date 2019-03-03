@@ -1,10 +1,9 @@
+dist: xenial # https://docs.travis-ci.com/user/reference/xenial/
 language: node_js
 cache:
   directories:
     - "~/.cache" # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH="$HOME/.yarn/bin:$PATH"
   - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
   - yarn global add greenkeeper-lockfile
 install:
