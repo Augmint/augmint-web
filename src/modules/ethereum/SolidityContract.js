@@ -1,4 +1,4 @@
-import ethers from "ethers";
+import { ethers } from "ethers";
 
 /*  using a mix of 2 different contract abstractions: web3.Contract and ethers.
     It's a temporary workaround for some issues with web3 1.0 (e.g. getLogs, subscribe etc. )

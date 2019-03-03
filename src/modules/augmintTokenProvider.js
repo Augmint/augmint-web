@@ -32,19 +32,15 @@ export default () => {
 
 const setupListeners = () => {
     const augmintToken = store.getState().contracts.latest.augmintToken.ethersInstance;
-    augmintToken.onaugminttransfer = onAugmintTransfer;
+
+    augmintToken.on("AugmintTransfer", (...args) => {
+        onAugmintTransfer(...args);
+    });
+
     // TODO: monetarySupervisor events: ParamsChanged, AcceptedLegacyAugmintTokenChanged,
 };
 
-const removeListeners = oldInstance => {
-    // TODO: test if we need this with ethers
-    // if (oldInstance && oldInstance.instance) {
-    //     oldInstance.instance.Transfer().stopWatching();
-    // }
-};
-
 const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
-    removeListeners(oldVal);
     console.debug("augmintTokenProvider - web3Connect.network changed");
     if (store.getState().contracts.latest.augmintToken && newVal !== null) {
         console.debug("augmintTokenProvider - web3Connect.network changed. Dispatching refreshAugmintToken() ");
@@ -62,7 +58,6 @@ const refresh = () => {
 };
 
 const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
-    removeListeners(oldVal);
     if (newVal) {
         console.debug(
             "augmintTokenProvider - augmintToken.contract changed. Dispatching refreshAugmintToken(), fetchUserBalance(), fetchTransferList() and refreshMonetarySupervisor()"
@@ -85,7 +80,7 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onAugmintTransfer = function(from, to, amount, narrative, fee) {
+const onAugmintTransfer = function(from, to, amount, narrative, fee, eventObject) {
     // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
     console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken()");
     store.dispatch(refreshAugmintToken());
@@ -95,6 +90,6 @@ const onAugmintTransfer = function(from, to, amount, narrative, fee) {
             "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(processNewTransfer(userAccount, this));
+        store.dispatch(processNewTransfer(userAccount, eventObject));
     }
 };

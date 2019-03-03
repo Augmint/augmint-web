@@ -9,7 +9,7 @@
     "chart.js": "2.7.3",
     "del": "3.0.0",
     "ethereumjs-util": "6.1.0",
-    "ethers": "3.0.29",
+    "ethers": "4.0.26",
     "moment": "2.22.2",
     "react": "16.8.3",
     "parse": "2.2.1",
