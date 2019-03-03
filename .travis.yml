@@ -5,6 +5,7 @@ cache:
     - "~/.cache" # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
   - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+  - apt-get install libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
   - yarn global add greenkeeper-lockfile
 install:
   - |
