@@ -30,9 +30,15 @@ export default () => {
 
 const setupListeners = () => {
     const exchange = store.getState().contracts.latest.exchange.ethersInstance;
-    exchange.onneworder = onNewOrder;
-    exchange.onorderfill = onOrderFill;
-    exchange.oncancelledorder = onCancelledOrder;
+    exchange.on("NewOrder", (...args) => {
+        onNewOrder(...args);
+    });
+    exchange.on("OrderFill", (...args) => {
+        onOrderFill(...args);
+    });
+    exchange.on("CancelledOrder", (...args) => {
+        onCancelledOrder(...args);
+    });
 };
 
 const refresh = () => {
@@ -66,13 +72,13 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
 };
 
 // event NewOrder(uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
+const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount, eventObject) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade("NewOrder", userAccount, this));
+        store.dispatch(processNewTrade(userAccount, eventObject));
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
@@ -84,13 +90,13 @@ const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount) {
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
-const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount) {
+const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount, eventObject) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade("CancelledOrder", userAccount, this));
+        store.dispatch(processNewTrade(userAccount, eventObject));
     }
     if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -109,22 +115,37 @@ const onOrderFill = function(
     publishedRate,
     price,
     weiAmount,
-    tokenAmount
+    tokenAmount,
+    eventObject
 ) {
-    console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and regreshOrders()");
+    console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and refreshOrders()");
     // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
     //          but newOrder is not emmited when a sell fully covered by orders and
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
     const userAccount = store.getState().web3Connect.userAccount;
     if (userAccount.toLowerCase() === tokenBuyer.toLowerCase()) {
-        store.dispatch(processNewTrade("OrderFill", userAccount, this, "buy"));
-        console.log("THIS buy: ", this);
+        store.dispatch(
+            processNewTrade(
+                userAccount,
+                eventObject,
+
+                "buy"
+            )
+        );
     }
+
     if (userAccount.toLowerCase() === tokenSeller.toLowerCase()) {
-        store.dispatch(processNewTrade("OrderFill", userAccount, this, "sell"));
-        console.log("THIS sell: ", this);
+        store.dispatch(
+            processNewTrade(
+                userAccount,
+                eventObject,
+
+                "sell"
+            )
+        );
     }
+
     if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"

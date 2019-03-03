@@ -34,15 +34,15 @@ export default class TradeHistory extends React.Component {
             <Pblock loading={isLoading} header={header} style={{ overflow: "auto" }}>
                 {error && <ErrorPanel header="Error while fetching trade list">{error.message}</ErrorPanel>}
                 {trades == null && !isLoading && <p>Connecting...</p>}
-                {!error && isLoading ? (
-                    <p data-testid="TradeHistoryRefreshing">Refreshing orders...</p>
-                ) : (
+                {!error && isLoading && <p>Refreshing orders...</p>}
+                {!error && trades && !isLoading && (
                     <CustomTable
                         datakeys={dataKeys}
                         unit={unit}
                         data={trades}
                         headerdata={headerData}
                         testid="trade-history"
+                        noItemsMessage="You have no trades yet"
                     />
                 )}
             </Pblock>

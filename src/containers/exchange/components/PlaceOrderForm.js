@@ -221,7 +221,7 @@ class PlaceOrderForm extends React.Component {
                             header="Place Order failed"
                             onDismiss={() => clearSubmitErrors()}
                         />
-                              
+
                         <Styledlabel>
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
@@ -236,7 +236,6 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
@@ -245,7 +244,7 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-                              
+
                         <Styledlabel>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
