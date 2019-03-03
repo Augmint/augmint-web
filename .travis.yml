@@ -3,7 +3,7 @@ cache:
   directories:
     - "~/.cache"  # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
-    - export PATH=$PATH:`yarn global bin` # workaround for "greenkeeper-lockfile-update: command not found" caused by a regression of this travis issue: https://github.com/travis-ci/travis-ci/issues/8870#issuecomment-351395853
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
     - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
     - yarn global add greenkeeper-lockfile
 install:
