@@ -37,6 +37,14 @@ class TransferPage extends React.Component {
                                 >
                                     <TokenTransferForm />
                                 </Pblock>
+                                {/* <Pblock
+                                    loading={
+                                        augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
+                                    }
+                                    header="The recipient needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                >
+                                    <EthTransferForm />
+                                </Pblock> */}
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

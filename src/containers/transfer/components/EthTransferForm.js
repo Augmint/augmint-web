@@ -9,9 +9,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, EthFormPanel } from "components/MsgPanels";
+import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import Button from "components/augmint-ui/button";
-import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
+import { Form, Validations, Normalizations } from "components/BaseComponents";
+// import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import theme from "styles/theme";
 
@@ -19,52 +20,28 @@ class EthTransferForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            result: null,
-            urlResolved: false
+            result: null
+            // feeAmount: "0",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
+        this.setFeeByEthAmount = this.setFeeByEthAmount.bind(this);
     }
 
-    componentDidUpdate() {
-        if (!this.state.urlResolved && this.props.augmintToken.isLoaded) {
-            const { blur } = this.props;
-            const urlParams = new URL(document.location).searchParams;
-            const addressFromParam = urlParams.get("address");
-            const amountFromParam = urlParams.get("amount");
-            const referenceFromParam = urlParams.get("reference");
+    // onEthAmountChange(e) {
+    //     let amount;
+    //     try {
+    //         amount = parseFloat(e.target.value);
+    //     } catch (error) {
+    //         return;
+    //     }
+    //     this.setFeeByEthAmount(amount);
+    // }
 
-            if (amountFromParam !== null) {
-                blur("tokenAmount", amountFromParam);
-                this.setFeeByAmount(amountFromParam);
-            }
-
-            if (addressFromParam !== null) {
-                blur("payee", addressFromParam);
-            }
-
-            if (referenceFromParam !== null) {
-                blur("narrative", referenceFromParam);
-            }
-
-            this.setState({ urlResolved: true });
-        }
-    }
-
-    onEthAmountChange(e) {
-        let amount;
-        try {
-            amount = parseFloat(e.target.value);
-        } catch (error) {
-            return;
-        }
-        this.setFeeByAmount(amount);
-    }
-
-    setFeeByAmount(amount) {
-        const fee = getTransferFee(amount);
-        this.setState({ feeAmount: fee });
-    }
+    // setFeeByEthAmount(amount) {
+    //     const fee = getTransferFee(amount);
+    //     this.setState({ feeAmount: fee });
+    // }
 
     async handleSubmit(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
@@ -113,7 +90,7 @@ class EthTransferForm extends React.Component {
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Transfer {this.state.tokenAmount} A-EUR to {this.state.to}
+                            Transfer {this.state.tokenAmount} ETH to {this.state.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
@@ -135,12 +112,18 @@ class EthTransferForm extends React.Component {
 
                         {!isFunctional && (
                             <div>
+                                <p style={{ display: "block", marginBottom: 10 }}>
+                                    Send a small amount enough for a few transactions:
+                                </p>
                                 <Field
                                     component={Form.Field}
                                     as={Form.Input}
                                     type={isFunctional ? "hidden" : "number"}
-                                    name="tokenAmount"
-                                    placeholder="Amount"
+                                    name="ethAmount"
+                                    placeholder="0.01"
+                                    inputmode="numeric"
+                                    step="any"
+                                    min="0"
                                     onChange={this.onEthAmountChange}
                                     validate={[
                                         Validations.required,
@@ -149,38 +132,27 @@ class EthTransferForm extends React.Component {
                                     ]}
                                     normalize={Normalizations.twoDecimals}
                                     disabled={submitting || !augmintToken.isLoaded}
-                                    data-testid="transferAmountInput"
+                                    data-testid="ethTransferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left }}
-                                    labelAlignRight="A-EUR"
+                                    labelAlignRight="ETH"
                                 />
+                                <p style={{ display: "block", marginBottom: 10 }}>
+                                    Approx. €0.9 (covers 2 to 5 transactions)
+                                </p>
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||
                                     augmintToken.info.feePt !== 0) && (
-                                    <small style={{ display: "block", marginBottom: 10 }}>
-                                        Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                                    </small>
+                                    <p style={{ display: "block", marginBottom: 10 }}>
+                                        Fee: <span data-testid="ethTransferFeeAmount">{this.state.feeAmount}</span> A€{" "}
+                                    </p>
                                 )}
-
-                                <Field
-                                    component={Form.Field}
-                                    as={Form.Input}
-                                    label="To:"
-                                    size="small"
-                                    data-testid="transferToAddressField"
-                                    name="payee"
-                                    type={isFunctional ? "hidden" : "text"}
-                                    parse={Parsers.trim}
-                                    validate={[Validations.required, Validations.address, Validations.notOwnAddress]}
-                                    placeholder="0x0..."
-                                    disabled={submitting || !augmintToken.isLoaded}
-                                />
                             </div>
                         )}
                         <Button
                             type="submit"
                             loading={submitting}
                             disabled={!isFunctional && pristine}
-                            data-testid="submitTransferButton"
+                            data-testid="submitEthTransferButton"
                             className={submitting ? "loading" : ""}
                         >
                             {submitting ? "Submitting..." : submitText || "Transfer"}
