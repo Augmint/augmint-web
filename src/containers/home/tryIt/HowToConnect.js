@@ -19,8 +19,44 @@ export function HowToConnect(props) {
                     <Tsegment.Row columns={1}>
                         <Tsegment.Column>
                             <StyledP className={"primaryColor"}>
-                                To use A-EUR on mobile you need a web3 capable browser such as Trust Wallet.
+                                To use A-EUR on mobile you need a web3 capable browser such as:
                             </StyledP>
+                            {/* <a
+                                href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={appStoreSVG} />
+                            </a>
+                            <a
+                                href="https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={googlePlayPNG} />
+                            </a> */}
+                        </Tsegment.Column>
+                    </Tsegment.Row>
+                    <Tsegment.Row columns={2}>
+                        <Tsegment.Column>
+                            <StyledP>Trust Wallet</StyledP>
+                            <a
+                                href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={appStoreSVG} />
+                            </a>
+                            <a
+                                href="https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={googlePlayPNG} />
+                            </a>
+                        </Tsegment.Column>
+                        <Tsegment.Column>
+                            <StyledP>Coinsbase Wallet</StyledP>
                             <a
                                 href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
                                 target="_blank"
