@@ -12,7 +12,7 @@ import {
     LEGACY_INTEREST_EARNED_CONTRACTS
 } from "utils/constants";
 
-function sum(arr) {
+function sum(arr, funcName) {
     return arr.reduce((res, item) => res.plus(item), new BigNumber(0));
 }
 
@@ -51,18 +51,27 @@ export async function fetchAllTokensInfo() {
     const latestToken = store.getState().augmintToken;
 
     return {
-        totalSupply: sum([
-            latestToken.info.totalSupply,
-            ...(await Promise.all(LEGACY_AEUR_CONTRACTS[web3.network.id].map(fetchTokenInfo)))
-        ]),
-        feeAccountTokenBalance: sum([
-            latestToken.info.feeAccountTokenBalance,
-            ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
-        ]),
-        feeAccountEthBalance: sum([
-            latestToken.info.feeAccountEthBalance,
-            ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchEthBalance)))
-        ])
+        totalSupply: sum(
+            [
+                latestToken.info.totalSupply,
+                ...(await Promise.all(LEGACY_AEUR_CONTRACTS[web3.network.id].map(fetchTokenInfo)))
+            ],
+            "totalSupply:"
+        ),
+        feeAccountTokenBalance: sum(
+            [
+                latestToken.info.feeAccountTokenBalance,
+                ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
+            ],
+            "feeAccountTokenBalance:"
+        ),
+        feeAccountEthBalance: sum(
+            [
+                latestToken.info.feeAccountEthBalance,
+                ...(await Promise.all(LEGACY_FEE_CONTRACTS[web3.network.id].map(fetchEthBalance)))
+            ],
+            "feeAccountEthBalance:"
+        )
     };
 }
 
@@ -83,24 +92,36 @@ export async function fetchAllMonetarySupervisorInfo() {
     const latestMs = store.getState().monetarySupervisor;
 
     return {
-        issuedByStabilityBoard: sum([
-            latestMs.info.issuedByStabilityBoard,
-            ...(await Promise.all(
-                LEGACY_MONETARY_SUPERVISOR_CONTRACTS[web3.network.id].map(fetchMonetarySupervisorInfo)
-            ))
-        ]),
-        reserveTokenBalance: sum([
-            latestMs.info.reserveTokenBalance,
-            ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
-        ]),
-        reserveEthBalance: sum([
-            latestMs.info.reserveEthBalance,
-            ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchEthBalance)))
-        ]),
-        interestEarnedAccountTokenBalance: sum([
-            latestMs.info.interestEarnedAccountTokenBalance,
-            ...(await Promise.all(LEGACY_INTEREST_EARNED_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
-        ])
+        issuedByStabilityBoard: sum(
+            [
+                latestMs.info.issuedByStabilityBoard,
+                ...(await Promise.all(
+                    LEGACY_MONETARY_SUPERVISOR_CONTRACTS[web3.network.id].map(fetchMonetarySupervisorInfo)
+                ))
+            ],
+            "issuedByStabilityBoard:"
+        ),
+        reserveTokenBalance: sum(
+            [
+                latestMs.info.reserveTokenBalance,
+                ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
+            ],
+            "reserveTokenBalance:"
+        ),
+        reserveEthBalance: sum(
+            [
+                latestMs.info.reserveEthBalance,
+                ...(await Promise.all(LEGACY_RESERVES_CONTRACTS[web3.network.id].map(fetchEthBalance)))
+            ],
+            "reserveEthBalance:"
+        ),
+        interestEarnedAccountTokenBalance: sum(
+            [
+                latestMs.info.interestEarnedAccountTokenBalance,
+                ...(await Promise.all(LEGACY_INTEREST_EARNED_CONTRACTS[web3.network.id].map(fetchTokenBalance)))
+            ],
+            "interestEarnedAccountTokenBalance:"
+        )
     };
 }
 

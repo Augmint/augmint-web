@@ -1,26 +1,27 @@
+dist: xenial # https://docs.travis-ci.com/user/reference/xenial/
 language: node_js
 cache:
   directories:
-    - "~/.cache"  # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
+    - "~/.cache" # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
-    - export PATH=$PATH:`yarn global bin` # workaround for "greenkeeper-lockfile-update: command not found" caused by a regression of this travis issue: https://github.com/travis-ci/travis-ci/issues/8870#issuecomment-351395853
-    - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-    - yarn global add greenkeeper-lockfile
+  - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
 install:
-    - |
-      if [[ $BRANCH == "greenkeeper/"* ]]; then
-        echo Greenkeeper build using .yarnrc.greenkeeper; cp .yarnrc.greenkeeper .yarnrc; yarn install;
-      else
-        echo Normal build using .yarnrc and --frozen-lockfile option; yarn install --frozen-lockfile;
-      fi
-    - cd augmint-contracts && yarn install && cd ..
+  - sudo apt-get install -y libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
+  - yarn global add greenkeeper-lockfile
+  - |
+    if [[ $BRANCH == "greenkeeper/"* ]]; then
+      echo Greenkeeper build using .yarnrc.greenkeeper; cp .yarnrc.greenkeeper .yarnrc; yarn install;
+    else
+      echo Normal build using .yarnrc and --frozen-lockfile option; yarn install --frozen-lockfile;
+    fi
+  - cd augmint-contracts && yarn install && cd ..
 before_script:
-    - greenkeeper-lockfile-update
-    - yarn ganache:run > ganache.out &
-    - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
-    - yarn start  &
+  - greenkeeper-lockfile-update
+  - yarn ganache:run > ganache.out &
+  - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
+  - yarn start & wait-on http-get://localhost:3000
 script:
-    - yarn cypress:runrecord
+  - yarn cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_script: greenkeeper-lockfile-upload
 after_success:

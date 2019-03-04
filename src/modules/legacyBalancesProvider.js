@@ -30,10 +30,12 @@ const onMonetarySupervisorContractChange = (newVal, oldVal) => {
 
 const setupListeners = () => {
     const monetarySupervisor = store.getState().contracts.latest.monetarySupervisor.ethersInstance;
-    monetarySupervisor.onlegacytokenconverted = onLegacyTokenConverted;
+    monetarySupervisor.on("LegacyTokenConverted", (...args) => {
+        onLegacyTokenConverted(...args);
+    });
 };
 
-const onLegacyTokenConverted = (oldTokenAddress, account, amount) => {
+const onLegacyTokenConverted = (oldTokenAddress, account, amount, eventObject) => {
     const userAccount = store.getState().web3Connect.userAccount;
     if (account.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(

@@ -103,7 +103,7 @@ class TopNav extends React.Component {
                 <StyledTopNavUl>
                     <StyledTopNavLi>
                         <StyledPrice>
-                            <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
+                            <span className="price">ETH/€ {this.props.rates.info.ethFiatRate}</span>
                         </StyledPrice>
                     </StyledTopNavLi>
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>

@@ -14,7 +14,7 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=exchangeMenuLink]").click();
 
-        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
         cy.get("@tradeHistoryTbody")
             .then(() => {
                 cy.get("@tradeHistoryTbody")
@@ -131,7 +131,7 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
-        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
         cy.get("@tradeHistoryTbody")
             .then(() => {
                 cy.get("@tradeHistoryTbody")
@@ -281,7 +281,7 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                     .click()
                     .then(() => {
-                        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+                        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
                         cy.get("@tradeHistoryTbody").then(() => {
                             cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
                         });

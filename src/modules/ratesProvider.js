@@ -23,7 +23,9 @@ export default () => {
 
 const setupListeners = () => {
     const rates = store.getState().contracts.latest.rates.ethersInstance;
-    rates.onratechanged = onRateChange;
+    rates.on("RateChanged", (...args) => {
+        onRateChange(...args);
+    });
 };
 
 const onRatesContractChange = (newVal, oldVal, objectPath) => {
@@ -33,7 +35,7 @@ const onRatesContractChange = (newVal, oldVal, objectPath) => {
 };
 
 // RateChanged(bytes32 symbol, uint newRate);
-const onRateChange = (symbol, newRate) => {
+const onRateChange = (symbol, newRate, eventName) => {
     console.debug("ratesProvider.onRateChange(): RateChange event. Dispatching refreshRates()");
     store.dispatch(refreshRates());
 };

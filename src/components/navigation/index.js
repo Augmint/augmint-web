@@ -8,6 +8,7 @@ import {
     StyledLogoContainer,
     StyledNavContainer,
     StyledNavLeftSide,
+    StyledNavRightSide,
     StyledLogo,
     HamburgerMenu
 } from "./styles";
@@ -71,18 +72,30 @@ export default class SiteMenu extends React.Component {
                             <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
                                 Roadmap
                             </SiteMenuItem>
+                            <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
+                                <Button type="a" to="/tryit" color="primary" className="try-now">
+                                    Try now
+                                </Button>
+                            </div>
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    <Button
-                        type="a"
-                        data-testid="useAEurButton"
-                        to={!showConnection && isConnected ? "/account" : "/tryit"}
-                        color="primary"
-                        style={{ margin: "0", position: "absolute", top: "9px", right: "8px" }}
-                        onClick={e => toggleScroll(false)}
-                    >
-                        My Account
-                    </Button>
+
+                    <StyledNavRightSide>
+                        <Button type="a" to="/tryit" color="primary" className="try-now">
+                            Try now
+                        </Button>
+                        <Button
+                            type="a"
+                            data-testid="useAEurButton"
+                            to={!showConnection && isConnected ? "/account" : "/tryit"}
+                            color="primary"
+                            style={{ marginLeft: "15px" }}
+                            onClick={e => toggleScroll(false)}
+                        >
+                            My Account
+                        </Button>
+                    </StyledNavRightSide>
+
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
                 <StyledLogoContainer>
