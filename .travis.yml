@@ -6,6 +6,7 @@ cache:
 before_install:
   - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
   - sudo apt-get install -y libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
+  - yarn add wait-on # https://docs.cypress.io/guides/guides/continuous-integration.html#Challenges
   - yarn global add greenkeeper-lockfile
 install:
   - |
@@ -19,7 +20,7 @@ before_script:
   - greenkeeper-lockfile-update
   - yarn ganache:run > ganache.out &
   - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
-  - yarn start  &
+  - yarn start & wait-on http://localhost:3000
 script:
   - yarn cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
