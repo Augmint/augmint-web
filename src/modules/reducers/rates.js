@@ -60,26 +60,19 @@ export const refreshRates = () => {
             type: RATES_REFRESH_REQUESTED
         });
         try {
-            const web3 = store.getState().web3Connect.web3Instance;
             const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
             const bytes32_peggedSymbol = await augmintTokenInstance.methods.peggedSymbol().call();
 
             const ratesInstance = store.getState().contracts.latest.rates.web3ContractInstance;
 
-            const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
-                ratesInstance.methods.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI.toString()).call(),
-                augmintTokenInstance.methods.balanceOf(ratesInstance.options.address).call(),
-                web3.eth.getBalance(ratesInstance.options.address)
-            ]);
+            const bn_ethFiatRate = await ratesInstance.methods
+                .convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI.toString())
+                .call()
+                .then(res => res.value);
 
             return dispatch({
                 type: RATES_REFRESHED,
                 result: {
-                    bn_weiBalance,
-                    ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
-                    bn_tokenBalance,
-                    tokenBalance: bn_tokenBalance / DECIMALS_DIV,
-
                     bn_ethFiatRate: new BigNumber(bn_ethFiatRate / DECIMALS_DIV),
                     ethFiatRate: bn_ethFiatRate / DECIMALS_DIV,
                     fiatEthRate: (1 / bn_ethFiatRate) * DECIMALS_DIV

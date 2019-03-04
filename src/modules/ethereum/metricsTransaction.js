@@ -21,7 +21,10 @@ async function fetchTokenBalance({ address, tokenAddress }) {
     const tokenInstance = SolidityContract.connectAt(web3, "TokenAEur", tokenAddress).web3ContractInstance;
 
     const [bn_balance, decimals] = await Promise.all([
-        tokenInstance.methods.balanceOf(address).call(),
+        tokenInstance.methods
+            .balanceOf(address)
+            .call()
+            .then(res => res.balance),
         tokenInstance.methods.decimals().call()
     ]);
 

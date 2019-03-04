@@ -146,7 +146,10 @@ async function getLockManagerInfo(lockManagerInstance) {
         lockManagerInstance.methods.monetarySupervisor().call(),
 
         web3.eth.getBalance(lockManagerInstance.options.address),
-        augmintTokenInstance.methods.balanceOf(lockManagerInstance.options.address).call()
+        augmintTokenInstance.methods
+            .balanceOf(lockManagerInstance.options.address)
+            .call()
+            .then(res => res.balance)
     ]);
 
     return {

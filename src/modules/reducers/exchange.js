@@ -70,7 +70,10 @@ async function getExchangeInfo(exchangeInstance) {
 
     const [bn_weiBalance, bn_tokenBalance, orderCount] = await Promise.all([
         web3.eth.getBalance(exchangeInstance.options.address),
-        augmintToken.methods.balanceOf(exchangeInstance.options.address).call(),
+        augmintToken.methods
+            .balanceOf(exchangeInstance.options.address)
+            .call()
+            .then(res => res.balance),
         exchangeInstance.methods.getActiveOrderCounts().call()
     ]);
 

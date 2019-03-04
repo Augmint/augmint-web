@@ -135,8 +135,14 @@ async function getMonetarySupervisorInfo(monetarySupervisorInstance) {
 
     const [bn_reserveWeiBalance, bn_reserveTokenBalance, bn_interestEarnedAccountTokenBalance] = await Promise.all([
         web3.eth.getBalance(augmintReservesAddress),
-        augmintTokenInstance.methods.balanceOf(augmintReservesAddress).call(),
-        augmintTokenInstance.methods.balanceOf(interestEarnedAccountAddress).call()
+        augmintTokenInstance.methods
+            .balanceOf(augmintReservesAddress)
+            .call()
+            .then(res => res.balance),
+        augmintTokenInstance.methods
+            .balanceOf(interestEarnedAccountAddress)
+            .call()
+            .then(res => res.balance)
     ]);
 
     const reserveEthBalance = (bn_reserveWeiBalance / ONE_ETH_IN_WEI).toString();

@@ -115,7 +115,10 @@ async function getAugmintTokenInfo(augmintTokenInstance) {
 
     const [transferFeeStruct, bn_feeAccountTokenBalance, bn_feeAccountEthBalance] = await Promise.all([
         feeAccountContract.web3ContractInstance.methods.transferFee().call(),
-        augmintTokenInstance.methods.balanceOf(feeAccountContract.address).call(),
+        augmintTokenInstance.methods
+            .balanceOf(feeAccountContract.address)
+            .call()
+            .then(res => res.balance),
         web3.eth.getBalance(feeAccountContract.address)
     ]);
 

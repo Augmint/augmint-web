@@ -28,7 +28,10 @@ export async function fetchActiveLegacyLoansForAddressTx(_userAccount) {
     const balanceQueries = tokenAddresses.map(address => {
         const legacyTokenContract = SolidityContract.connectAt(web3, "TokenAEur", address);
 
-        return legacyTokenContract.web3ContractInstance.methods.balanceOf(userAccount).call();
+        return legacyTokenContract.web3ContractInstance.methods
+            .balanceOf(userAccount)
+            .call()
+            .then(res => res.balance);
     });
 
     const balances = await Promise.all(balanceQueries);
