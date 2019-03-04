@@ -226,7 +226,10 @@ export async function fetchLoansForAddressTx(loanManagerInstance, account) {
 
     for (let i = 0; i < queryCount; i++) {
         const loansArray = isLegacyLoanContract
-            ? await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize).call()
+            ? await loanManagerInstance.methods
+                  .getLoansForAddress(account, i * chunkSize)
+                  .call()
+                  .then(res => res.response)
             : await loanManagerInstance.methods.getLoansForAddress(account, i * chunkSize, chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }
@@ -248,7 +251,10 @@ export async function fetchLoansTx(loanManagerInstance) {
 
     for (let i = 0; i < queryCount; i++) {
         const loansArray = isLegacyLoanContract
-            ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
+            ? await loanManagerInstance.methods
+                  .getLoans(i * chunkSize)
+                  .call()
+                  .then(res => res.response)
             : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
         loans = loans.concat(parseLoans(loansArray));
     }

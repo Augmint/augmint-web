@@ -62,11 +62,17 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
     let result;
     if (orderDirection === TOKEN_BUY) {
         result = isLegacyExchangeContract
-            ? await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit })
+            ? await exchangeInstance.methods
+                  .getActiveBuyOrders(offset)
+                  .call({ gas: blockGasLimit })
+                  .then(res => res.response)
             : await exchangeInstance.methods.getActiveBuyOrders(offset, chunkSize).call({ gas: blockGasLimit });
     } else {
         result = isLegacyExchangeContract
-            ? await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit })
+            ? await exchangeInstance.methods
+                  .getActiveSellOrders(offset)
+                  .call({ gas: blockGasLimit })
+                  .then(res => res.response)
             : await exchangeInstance.methods.getActiveSellOrders(offset, chunkSize).call({ gas: blockGasLimit });
     }
 

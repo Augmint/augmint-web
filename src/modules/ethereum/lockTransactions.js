@@ -110,7 +110,10 @@ export async function fetchLocksForAddressTx(lockManagerInstance, account) {
 
     for (let i = 0; i < queryCount; i++) {
         const locksArray = isLegacyLockContract
-            ? await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize).call()
+            ? await lockManagerInstance.methods
+                  .getLocksForAddress(account, i * chunkSize)
+                  .call()
+                  .then(res => res.response)
             : await lockManagerInstance.methods.getLocksForAddress(account, i * chunkSize, chunkSize).call();
         locks = locks.concat(parseLocks(locksArray));
     }
