@@ -5,9 +5,10 @@ cache:
     - "~/.cache" # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
 before_install:
   - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-  - sudo apt-get install -y libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
-  - yarn global add greenkeeper-lockfile
 install:
+  - sudo apt-get install -y libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
+  - dpkg -L libgconf-2-4
+  - yarn global add greenkeeper-lockfile
   - |
     if [[ $BRANCH == "greenkeeper/"* ]]; then
       echo Greenkeeper build using .yarnrc.greenkeeper; cp .yarnrc.greenkeeper .yarnrc; yarn install;
