@@ -68,8 +68,8 @@ export const refreshRates = () => {
 
             const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
                 ratesInstance.methods.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI.toString()).call(),
-                augmintTokenInstance.methods.balanceOf(ratesInstance._address).call(),
-                web3.eth.getBalance(ratesInstance._address)
+                augmintTokenInstance.methods.balanceOf(ratesInstance.options.address).call(),
+                web3.eth.getBalance(ratesInstance.options.address)
             ]);
 
             return dispatch({

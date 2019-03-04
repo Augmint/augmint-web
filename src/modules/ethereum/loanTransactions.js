@@ -111,7 +111,7 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
     const userAccount = store.getState().web3Connect.userAccount;
 
     let augmintTokenInstance;
-    if (loanManagerInstance._address !== store.getState().contracts.latest.loanManager.address) {
+    if (loanManagerInstance.options.address !== store.getState().contracts.latest.loanManager.address) {
         // repayment of a legacy loan, need to fetch which augmintToken is it
         const augmintTokenAddress = await loanManagerInstance.methods.augmintToken().call();
         const web3 = store.getState().web3Connect;
@@ -122,7 +122,7 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
 
     const tx = augmintTokenInstance.methods
         .transferAndNotify(
-            loanManagerInstance._address,
+            loanManagerInstance.options.address,
             new BigNumber(repaymentAmount).mul(DECIMALS_DIV).toString(),
             loanId
         )
@@ -191,8 +191,8 @@ export async function collectLoansTx(loanManagerInstance, loansToCollect) {
             typeof receipt.events.LoanCollected === "undefined"
                 ? 0
                 : Array.isArray(receipt.events.LoanCollected)
-                    ? receipt.events.LoanCollected.length
-                    : 1;
+                ? receipt.events.LoanCollected.length
+                : 1;
 
         if (loanCollectedEventsCount !== loansToCollect.length) {
             throw new EthereumTransactionError(
