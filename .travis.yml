@@ -7,7 +7,6 @@ before_install:
   - export BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
 install:
   - sudo apt-get install -y libgconf-2-4 # https://github.com/cypress-io/cypress/issues/1526
-  - dpkg -L libgconf-2-4
   - yarn global add greenkeeper-lockfile
   - |
     if [[ $BRANCH == "greenkeeper/"* ]]; then
