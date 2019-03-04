@@ -86,7 +86,6 @@ export const fetchTrades = (account, fromBlock, toBlock) => {
         });
         try {
             const trades = await fetchTradesTx(account, fromBlock, toBlock);
-
             return dispatch({
                 type: TRADE_FETCH_SUCCESS,
                 result: trades
@@ -100,15 +99,15 @@ export const fetchTrades = (account, fromBlock, toBlock) => {
     };
 };
 
-export const processNewTrade = (eventName, account, eventLog, type) => {
+export const processNewTrade = (account, eventObject, type) => {
     return async dispatch => {
         dispatch({
             type: TRADE_PROCESS_REQUESTED,
-            account: account,
-            eventLog
+            account,
+            eventObject
         });
         try {
-            const newTrade = await processNewTradeTx(eventName, account, eventLog, type);
+            const newTrade = await processNewTradeTx(account, eventObject, type);
             let trades = store.getState().trades.trades;
 
             if (!trades) {

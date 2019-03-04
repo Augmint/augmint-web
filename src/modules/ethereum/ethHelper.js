@@ -1,6 +1,6 @@
 /* TODO: consider moving processTx somewhere else */
 import store from "modules/store";
-import { updateTx } from "modules/reducers/submittedTransactions";
+import { updateTx, updateTxNonce } from "modules/reducers/submittedTransactions";
 import { getNetworkName } from "utils/helpers";
 
 class ExtendableError extends Error {
@@ -48,6 +48,7 @@ export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
         tx.once("transactionHash", hash => {
             transactionHash = hash;
             store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
+            getTxNonce(transactionHash);
             console.debug(` ${txName} hash received: ${hash}`);
             resolve(transactionHash);
         })
@@ -82,7 +83,6 @@ export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
                 try {
                     let onReceiptResult;
                     receipt = rec;
-
                     console.debug(
                         `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
                         receipt
@@ -124,5 +124,18 @@ export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
                     );
                 }
             });
+    });
+}
+
+function getTxNonce(transactionHash) {
+    let eth = store.getState().web3Connect.web3Instance.eth;
+    eth.getTransaction(transactionHash, (err, res) => {
+        if (res) {
+            store.dispatch(updateTxNonce({ nonce: res.nonce, transactionHash: transactionHash }));
+            return res.nonce;
+        }
+        if (err) {
+            // TODO
+        }
     });
 }

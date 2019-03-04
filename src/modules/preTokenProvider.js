@@ -25,8 +25,12 @@ export default () => {
 
 const setupListeners = () => {
     const preToken = store.getState().contracts.latest.preToken.ethersInstance;
-    preToken.onnewagreement = onNewAgreement;
-    preToken.ontransfer = onTransfer;
+    preToken.on("NewAgreement", (...args) => {
+        onNewAgreement(...args);
+    });
+    preToken.on("Transfer", (...args) => {
+        onTransfer(...args);
+    });
 };
 
 const refresh = () => {
@@ -52,13 +56,13 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewAgreement = (owner, agreementHash, discount, valuationCap) => {
+const onNewAgreement = (owner, agreementHash, discount, valuationCap, eventObject) => {
     // event NewAgreement(address owner, bytes32 agreementHash, uint32 discount, uint32 valuationCap);
     console.debug("preTokenProvider.onNewAgreement: dispatching refreshPretoken TODO:  fetchAgreements");
     store.dispatch(refreshPreToken());
 };
 
-const onTransfer = (from, to, amount) => {
+const onTransfer = (from, to, amount, eventObject) => {
     // event Transfer(address indexed from, address indexed to, uint amount);
     console.debug("preTokenProvider.onTransfer: dispatching  fetchTransfersForAccount");
     store.dispatch(refreshPreToken());

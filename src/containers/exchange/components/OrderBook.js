@@ -5,18 +5,34 @@ import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTab
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/toolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
+import { Menu } from "components/augmint-ui/menu";
 import CancelOrderButton from "./CancelOrderButton";
 import BigNumber from "bignumber.js";
+import styled from "styled-components";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS, DECIMALS_DIV } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
+const StyledSpan = styled.span`
+    display: block;
+    text-align: right;
+`;
+
+const StyledP = styled.p`
+    margin: 15px 0;
+    text-align: right;
+`;
+
 const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
-    const bn_ethFiatRate = new BigNumber(ethFiatRate);
+    const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
-    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
+
+    function parsePrice(price) {
+        return Math.round(price * 100) / 10000;
+    }
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -24,24 +40,21 @@ const OrderItem = props => {
             : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
 
     const ret = [
-        <Col width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && (
-                <span>
-                    {order.amount} A€
-                    <br />({actualValue} ETH)
-                </span>
-            )}
-            {order.direction === TOKEN_BUY && (
-                <span>
-                    {order.amountRounded} ETH
-                    <br />({actualValue} A€)
-                </span>
-            )}
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
+            {order.direction === TOKEN_SELL && <StyledSpan>{order.amount.toFixed(2)} A€</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{actualValue} A€</StyledSpan>}
         </Col>,
-        <Col width={2} key={`${order.direction}-price`}>
-            {displayPrice} %
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
+            {order.direction === TOKEN_SELL && <StyledSpan>{actualValue} ETH</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{order.amountRounded.toFixed(5)} ETH</StyledSpan>}
         </Col>,
-        <Col width={2} key={`${order.direction}-action`}>
+        <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
+            <StyledSpan>{displayPrice}%</StyledSpan>
+        </Col>,
+        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-rate`}>
+            <StyledSpan>{(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€</StyledSpan>
+        </Col>,
+        <Col style={{ padding: ".1em 0 0 5px" }} width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
                 {order.direction === TOKEN_SELL && (
                     <p>
@@ -70,34 +83,39 @@ const OrderItem = props => {
 };
 
 const OrderList = props => {
-    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate } = props;
+    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6));
-    const totalSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(5));
+    const totalEthSellAmount = sellOrders
+        .reduce((sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum), 0)
+        .toFixed(5);
+    const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
         .div(DECIMALS_DIV)
         .toFixed(2);
+    const totalAeurBuyAmount = buyOrders
+        .reduce((sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum), 0)
+        .toFixed(2);
+
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
 
     for (let i = 0; i < listLen; i++) {
         itemList.push(
             <Row key={`ordersRow-${i}`} valign="top">
-                {i < buyOrders.length ? (
+                {orderDirection === TOKEN_SELL ? (
+                    i < sellOrders.length ? (
+                        <OrderItem
+                            order={sellOrders[i]}
+                            ethFiatRate={ethFiatRate}
+                            userAccountAddress={userAccountAddress}
+                        />
+                    ) : (
+                        <Col width={13} />
+                    )
+                ) : i < buyOrders.length ? (
                     <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
                 ) : (
-                    <Col width={7} />
-                )}
-
-                <Col width={1} />
-
-                {i < sellOrders.length ? (
-                    <OrderItem
-                        order={sellOrders[i]}
-                        ethFiatRate={ethFiatRate}
-                        userAccountAddress={userAccountAddress}
-                    />
-                ) : (
-                    <Col width={7} />
+                    <Col width={13} />
                 )}
             </Row>
         );
@@ -105,45 +123,106 @@ const OrderList = props => {
 
     return (
         <MyListGroup>
-            <Row halign="center" valign="top">
-                <Col width={3} header="Buy A-EUR" style={{ textAlign: "center" }}>
-                    {totalBuyAmount > 0 && <p>Total: {totalBuyAmount} ETH</p>}
-                </Col>
-                <Col width={1} />
-                <Col width={3} header="Sell A-EUR" style={{ textAlign: "center" }}>
-                    {totalSellAmount > 0 && <p>Total: {totalSellAmount} A-EUR</p>}
-                </Col>
-            </Row>
             <Row wrap={false} halign="center" valign="top">
-                <Col width={3}>
-                    <strong>Amount</strong>
+                <Col style={{ textAlign: "right" }} width={3}>
+                    <strong> {orderDirection === TOKEN_SELL ? "A-EUR amount" : "Est. A-EUR amount"} </strong>
                 </Col>
-                <Col width={2}>
-                    <strong>Price</strong> <PriceToolTip id={"price_buy"} />
+                <Col style={{ textAlign: "right" }} width={3}>
+                    <strong> {orderDirection === TOKEN_SELL ? "Est. ETH amount" : "ETH amount"} </strong>
                 </Col>
-                <Col width={2} />
-                <Col width={1} />
-                <Col width={3}>
-                    <strong>Amount</strong>
+                <Col style={{ textAlign: "right" }} width={2}>
+                    <strong>Price</strong>
+                    <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
                 </Col>
-                <Col width={2}>
-                    <strong>Price</strong> <PriceToolTip id={"price_sell"} />
+                <Col style={{ textAlign: "right" }} width={3}>
+                    <strong>Est. ETH/€ rate</strong>
                 </Col>
-                <Col width={2} />
+                <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
             </Row>
             {itemList}
+            <Row halign="center" valign="top">
+                <Col width={3} style={{ textAlign: "center" }}>
+                    {orderDirection === TOKEN_SELL
+                        ? totalAeurSellAmount > 0 && (
+                              <StyledP>
+                                  Total: <strong>{totalAeurSellAmount} A€</strong>
+                              </StyledP>
+                          )
+                        : totalAeurBuyAmount > 0 && (
+                              <StyledP>
+                                  Total: <strong>{totalAeurBuyAmount} A€</strong>
+                              </StyledP>
+                          )}
+                </Col>
+                <Col width={3} style={{ textAlign: "center" }}>
+                    {orderDirection === TOKEN_SELL
+                        ? totalAeurSellAmount > 0 && (
+                              <StyledP>
+                                  <strong>{totalEthSellAmount} ETH</strong>
+                              </StyledP>
+                          )
+                        : totalEthBuyAmount > 0 && (
+                              <StyledP>
+                                  <strong>{totalEthBuyAmount} ETH</strong>
+                              </StyledP>
+                          )}
+                </Col>
+                <Col width={2} />
+                <Col width={3} />
+                <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
+            </Row>
         </MyListGroup>
     );
 };
 
 export default class OrderBook extends React.Component {
+    constructor(props) {
+        super(props);
+        this.toggleOrderBook = this.toggleOrderBook.bind(this);
+        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
+    }
+
+    toggleOrderBook(e) {
+        this.props.toggleOrderBook(e);
+    }
+
+    onOrderDirectionChange(e) {
+        this.toggleOrderBook(+e.target.attributes["data-index"].value);
+    }
+
     render() {
-        const { filter, header, userAccountAddress, testid } = this.props;
+        const { filter, header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
         const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
         const { ethFiatRate } = this.props.rates.info;
-        //const { ethFiatRate } = this.props.rates ? rates.info : "?";
+        const orderDirection = orderBookDirection;
+
+        const header = (
+            <div>
+                {mainHeader}
+                <Menu style={{ marginBottom: -11, marginTop: 11 }}>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_SELL}
+                        data-index={TOKEN_SELL}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="sellOrdersMenuLink"
+                        className={"buySell"}
+                    >
+                        A-EUR Sellers
+                    </Menu.Item>
+                    <Menu.Item
+                        active={orderDirection === TOKEN_BUY}
+                        data-index={TOKEN_BUY}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="buyOrdersMenuLink"
+                        className={"buySell"}
+                    >
+                        A-EUR Buyers
+                    </Menu.Item>
+                </Menu>
+            </div>
+        );
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
@@ -160,6 +239,8 @@ export default class OrderBook extends React.Component {
                             sellOrders={sellOrders}
                             ethFiatRate={ethFiatRate}
                             userAccountAddress={userAccountAddress}
+                            rates={rates}
+                            orderDirection={orderDirection}
                         />
                     </MyGridTable>
                 )}
@@ -174,5 +255,6 @@ OrderBook.defaultProps = {
     filter: () => {
         return true; // no filter passed
     },
-    header: <h3>Open orders</h3>
+    header: <h3>Open orders</h3>,
+    rates: null
 };

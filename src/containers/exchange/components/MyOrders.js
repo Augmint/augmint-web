@@ -15,9 +15,12 @@ import { floatNumberConverter } from "utils/converter";
 const OrderItem = props => {
     const { order, ethFiatRate } = props;
 
-    const bn_ethFiatRate = new BigNumber(ethFiatRate);
+    const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
-    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
+
+    const amountRounded =
+        order.direction === TOKEN_SELL ? order.amountRounded.toFixed(2) : order.amountRounded.toFixed(5);
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -29,16 +32,16 @@ const OrderItem = props => {
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_BUY && `${order.amountRounded} ETH`}
+                {order.direction === TOKEN_BUY && `${amountRounded} ETH`}
                 {order.direction === TOKEN_SELL && `(${actualValue} ETH)`}
             </Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_SELL && `${order.amountRounded} A€`}
+                {order.direction === TOKEN_SELL && `${amountRounded} A€`}
                 {order.direction === TOKEN_BUY && `(${actualValue} A€)`}
             </Col>
 
-            <Col width={2}>{displayPrice} %</Col>
+            <Col width={2}>{displayPrice}%</Col>
 
             <Col width={2}>
                 <MoreInfoTip id={"my_order_more_info-" + order.id}>
@@ -124,14 +127,15 @@ export default class OrderBook extends React.Component {
         const totalBuyAmount = orders
             ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
             : "?";
-        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString() : "?";
+        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toFixed(2) : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && <ErrorPanel header="Error while fetching orders">{refreshError.message}</ErrorPanel>}
                 {orders == null && !isLoading && <p>Connecting...</p>}
                 <p>
-                    Total: {totalBuyAmount} ETH + {totalSellAmount} A€
+                    Total: <strong>{totalBuyAmount} ETH </strong>Buy Order + <strong>{totalSellAmount} A€</strong> Sell
+                    Order
                 </p>
                 {isLoading ? (
                     <p>Refreshing orders...</p>
