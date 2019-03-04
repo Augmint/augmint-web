@@ -9,7 +9,7 @@ before(function() {
     cy.ganacheTakeSnapshot();
     cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)
 
-    cy.visit("/");
+    cy.visit("/", { timeout: 60000 }); // extra time for webserver ramp up in CI env
     cy.get("[data-testid=useAEurButton]").click();
     cy.get("[data-testid=TryItConnectedPanel]").should("contain", "You are connected");
     cy.get("[data-testid=disclaimerCloseButton").click();
