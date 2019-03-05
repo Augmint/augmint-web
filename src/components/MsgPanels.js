@@ -119,7 +119,7 @@ export class MsgPanel extends React.Component {
                             </h4>
                         )}
 
-                        {nonce && <p class="nonce">{nonce}</p>}
+                        {nonce && <p className="nonce">{nonce}</p>}
 
                         {children}
 
