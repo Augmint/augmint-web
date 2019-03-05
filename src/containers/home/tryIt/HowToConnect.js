@@ -41,7 +41,7 @@ export function HowToConnect(props) {
                         </Tsegment.Column>
                         <Tsegment.Column>
                             <StyledP className={"primaryColor dappBrowsernames"}>
-                                <strong>Coinsbase Wallet</strong>
+                                <strong>Coinbase Wallet</strong>
                             </StyledP>
                             <a
                                 href="https://itunes.apple.com/app/coinbase-wallet/id1278383455?ls=1&mt=8"
