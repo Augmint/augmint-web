@@ -110,7 +110,7 @@ export function fetchLatestTransfers(account, isAdditional) {
         });
 }
 
-export function processNewTransfer(account, eventLog) {
+export function processNewTransfer(account, eventLog, parsedData) {
     return async dispatch => {
         dispatch({
             type: PROCESS_NEW_TRANSFER_REQUESTED,
@@ -118,7 +118,7 @@ export function processNewTransfer(account, eventLog) {
         });
 
         try {
-            const newTransfer = await processNewTransferTx(account, eventLog);
+            const newTransfer = await processNewTransferTx(account, eventLog, parsedData);
             let transfers = store.getState().userTransfers.transfers;
             if (!transfers) {
                 transfers = [];

@@ -26,10 +26,18 @@ export default () => {
 
 const setupListeners = () => {
     const lockManager = store.getState().contracts.latest.lockManager.ethersInstance;
-    lockManager.onnewlockproduct = onNewLockProduct;
-    lockManager.onlockproductactivechange = onLockProductActiveChange;
-    lockManager.onnewlock = onNewLock;
-    lockManager.onlockreleased = onLockReleased;
+    lockManager.on("NewLockProduct", (...args) => {
+        onNewLockProduct(...args);
+    });
+    lockManager.on("LockProductActiveChange", (...args) => {
+        onLockProductActiveChange(...args);
+    });
+    lockManager.on("NewLock", (...args) => {
+        onNewLock(...args);
+    });
+    lockManager.on("LockReleased", (...args) => {
+        onLockReleased(...args);
+    });
 };
 
 const refresh = () => {
@@ -56,7 +64,7 @@ const onLockContractChange = (newVal, oldVal) => {
     setupListeners();
 };
 
-const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive) => {
+const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive, eventObject) => {
     // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
     //                         uint32 minimumLockAmount, bool isActive);
     console.debug("lockManagerProvider.onNewLockProduct: dispatching refreshLockManager and fetchLockProducts");
@@ -64,13 +72,22 @@ const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimu
     store.dispatch(fetchLockProducts()); // to fetch new product
 };
 
-const onLockProductActiveChange = (lockProductId, newActiveState) => {
+const onLockProductActiveChange = (lockProductId, newActiveState, eventObject) => {
     // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
     console.debug("lockManagerProvider.onLockProductActiveChange: dispatching fetchLockProducts");
     store.dispatch(fetchLockProducts()); // to refresh product list
 };
 
-const onNewLock = (lockOwner, lockId, amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs) => {
+const onNewLock = (
+    lockOwner,
+    lockId,
+    amountLocked,
+    interestEarned,
+    lockedUntil,
+    perTermInterest,
+    durationInSecs,
+    eventObject
+) => {
     // event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
     //                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
     console.debug(
@@ -102,7 +119,7 @@ const onNewLock = (lockOwner, lockId, amountLocked, interestEarned, lockedUntil,
     }
 };
 
-const onLockReleased = (lockOwner, lockId) => {
+const onLockReleased = (lockOwner, lockId, eventObject) => {
     // event LockReleased(address indexed lockOwner, uint lockId);
 
     console.debug(

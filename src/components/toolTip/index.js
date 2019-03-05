@@ -6,7 +6,7 @@ import { StyledToolTip, StyledContent, StyledHeader } from "./styles";
 export default function ToolTip(props) {
     const { id, children, header, icon, html } = props;
     return (
-        <div style={{ display: "inline-block", marginRight: 5 }}>
+        <div style={{ display: "inline-block", marginRight: 5, marginLeft: 5, textAlign: "left" }}>
             <Icon color="grey" name={icon ? icon : "help circle"} data-tip data-for={id} />
             <StyledToolTip
                 id={id}

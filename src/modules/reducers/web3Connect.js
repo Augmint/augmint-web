@@ -2,7 +2,7 @@ import store from "modules/store";
 import { default as Web3 } from "web3";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
-import ethers from "ethers";
+import { ethers } from "ethers";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
@@ -108,13 +108,13 @@ export const setupWeb3 = () => {
             const web3Version = web3.version.api ? web3.version.api : web3.version;
 
             // ethers is used as a workaround for at least two issues w/ web3: event handling and filtering events
-            const provider = new ethers.providers.Web3Provider(web3.currentProvider, {
+            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider, {
                 name: network.name,
                 chainId: network.id
             });
             // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
             //  provider = ethers.providers.getDefaultProvider(); // TODO: https://github.com/ethers-io/ethers.js/issues/108
-            const signer = network.id === 999 ? null : provider.getSigner(); // only null signer works on local ganache
+            const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
             const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
@@ -122,7 +122,7 @@ export const setupWeb3 = () => {
                 userAccount,
                 accounts,
                 network,
-                ethers: { signer, provider },
+                ethers: { signer: ethersSigner, provider: ethersProvider },
                 info: { web3Version, gasLimit: lastBlock.gasLimit, gasPrice }
             });
         } catch (error) {
