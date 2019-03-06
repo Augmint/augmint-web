@@ -65,7 +65,7 @@ export class MsgPanel extends React.Component {
             ...other
         } = this.props;
         let _className = className;
-        let noClose = false;
+        // let noClose = false;
 
         // always show notification close icon
         // if (loading) {
@@ -86,7 +86,7 @@ export class MsgPanel extends React.Component {
                     <Message
                         onDismiss={onDismiss ? this.dismiss : null}
                         className={_className}
-                        noCloseIcon={noClose}
+                        // noCloseIcon={noClose}
                         {...other}
                     >
                         {isNotification && (
@@ -119,7 +119,7 @@ export class MsgPanel extends React.Component {
                             </h4>
                         )}
 
-                        {nonce && <p class="nonce">{nonce}</p>}
+                        {nonce && <p className="nonce">{nonce}</p>}
 
                         {children}
 

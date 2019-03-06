@@ -16,20 +16,42 @@ export function HowToConnect(props) {
         <div>
             <MobileView>
                 <Tsegment>
-                    <Tsegment.Row columns={1}>
+                    <StyledP className={"primaryColor"} style={{ margin: "0 5px" }}>
+                        To use A-EUR on mobile you need one of the following web3 capable browsers:
+                    </StyledP>
+                    <Tsegment.Row columns={2}>
                         <Tsegment.Column>
-                            <StyledP className={"primaryColor"}>
-                                To use A-EUR on mobile you need a web3 capable browser such as Trust Wallet.
+                            <StyledP className={"primaryColor dappBrowsernames"}>
+                                <strong>Trust Wallet</strong>
                             </StyledP>
                             <a
-                                href="https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
+                                href="https://links.trustwalletapp.com/levRYG1UMU"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <StoreBadge src={appStoreSVG} />
                             </a>
                             <a
-                                href="https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp"
+                                href="https://links.trustwalletapp.com/levRYG1UMU"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={googlePlayPNG} />
+                            </a>
+                        </Tsegment.Column>
+                        <Tsegment.Column>
+                            <StyledP className={"primaryColor dappBrowsernames"}>
+                                <strong>Coinbase Wallet</strong>
+                            </StyledP>
+                            <a
+                                href="https://itunes.apple.com/app/coinbase-wallet/id1278383455?ls=1&mt=8"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <StoreBadge src={appStoreSVG} />
+                            </a>
+                            <a
+                                href="https://play.google.com/store/apps/details?id=org.toshi"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
