@@ -54,20 +54,23 @@ export class MsgPanel extends React.Component {
             dismissed,
             onDismiss,
             header,
+            nonce,
             loading,
             error,
             success,
             enableDismissBtn,
             className,
             chevron,
+            isNotification,
             ...other
         } = this.props;
         let _className = className;
-        let noClose = false;
+        // let noClose = false;
 
-        if (loading) {
-            noClose = true;
-        }
+        // always show notification close icon
+        // if (loading) {
+        //     noClose = true;
+        // }
 
         if (error) {
             _className += " error";
@@ -83,29 +86,48 @@ export class MsgPanel extends React.Component {
                     <Message
                         onDismiss={onDismiss ? this.dismiss : null}
                         className={_className}
-                        noCloseIcon={noClose}
+                        // noCloseIcon={noClose}
                         {...other}
                     >
-                        <h4 style={chevron && { paddingRight: "30px" }}>
-                            {icon && <Icon name={icon} loading={loading} />}
-                            {header}
-                            {chevron && (
-                                <StyledIcon
-                                    name={chevron}
-                                    className={this.props.showInfoPanel ? "open" : "close"}
-                                    onClick={() => this.toggleInfoPanel()}
-                                />
-                            )}
-                        </h4>
+                        {isNotification && (
+                            <div className={"notification-header-cont"}>
+                                {icon && <Icon name={icon} loading={loading} />}
+                                <h4 style={chevron && { paddingRight: "30px" }}>
+                                    {header}
+                                    {chevron && (
+                                        <StyledIcon
+                                            name={chevron}
+                                            className={this.props.showInfoPanel ? "open" : "close"}
+                                            onClick={() => this.toggleInfoPanel()}
+                                        />
+                                    )}
+                                </h4>
+                            </div>
+                        )}
+
+                        {!isNotification && (
+                            <h4 style={chevron && { paddingRight: "30px" }}>
+                                {icon && <Icon name={icon} loading={loading} />}
+                                {header}
+                                {chevron && (
+                                    <StyledIcon
+                                        name={chevron}
+                                        className={this.props.showInfoPanel ? "open" : "close"}
+                                        onClick={() => this.toggleInfoPanel()}
+                                    />
+                                )}
+                            </h4>
+                        )}
+
+                        {nonce && <p className="nonce">{nonce}</p>}
 
                         {children}
 
-                        {onDismiss &&
-                            enableDismissBtn && (
-                                <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
-                                    OK
-                                </Button>
-                            )}
+                        {onDismiss && enableDismissBtn && (
+                            <Button data-testid="msgPanelOkButton" className="grey" onClick={this.dismiss}>
+                                Close
+                            </Button>
+                        )}
                     </Message>
                 </Container>
             )
@@ -180,7 +202,7 @@ export class EthSubmissionSuccessPanel extends React.Component {
                 </p>
                 <p style={{ paddingBottom: "8px" }}>
                     <Icon name="notifications" style={{ paddingRight: "5px" }} />
-                    Wait for 12 confirmations to ensure it's accepted by network.
+                    Wait for confirmation to ensure it was processed by the network.
                 </p>
                 <p
                     style={{ paddingBottom: "10px" }}

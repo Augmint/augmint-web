@@ -8,6 +8,7 @@ import {
     StyledLogoContainer,
     StyledNavContainer,
     StyledNavLeftSide,
+    StyledNavRightSide,
     StyledLogo,
     HamburgerMenu
 } from "./styles";
@@ -58,31 +59,58 @@ export default class SiteMenu extends React.Component {
                             className={this.props.showMenu ? "opened" : ""}
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
-                        <StyleNavList
-                            className={this.props.showMenu ? "show" : "hidden"}
-                            onClick={e => toggleScroll(false)}
-                        >
-                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
+                        <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/"}
+                                to="/"
+                            >
                                 Home
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/concept"}
+                                to="/concept"
+                            >
                                 Concept
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/roadmap"}
+                                to="/roadmap"
+                            >
                                 Roadmap
                             </SiteMenuItem>
+                            <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
+                                <Button
+                                    onClick={e => toggleScroll(false)}
+                                    type="a"
+                                    to="/tryit"
+                                    color="primary"
+                                    className="try-now"
+                                >
+                                    Try now
+                                </Button>
+                            </div>
                         </StyleNavList>
                     </StyledNavLeftSide>
-                    <Button
-                        type="a"
-                        data-testid="useAEurButton"
-                        to={!showConnection && isConnected ? "/account" : "/tryit"}
-                        color="primary"
-                        style={{ margin: "0", position: "absolute", top: "9px", right: "8px" }}
-                        onClick={e => toggleScroll(false)}
-                    >
-                        My Account
-                    </Button>
+
+                    <StyledNavRightSide>
+                        <Button type="a" to="/tryit" color="primary" className="try-now">
+                            Try now
+                        </Button>
+                        <Button
+                            type="a"
+                            data-testid="useAEurButton"
+                            to={!showConnection && isConnected ? "/account" : "/tryit"}
+                            color="primary"
+                            style={{ marginLeft: "15px" }}
+                            onClick={e => toggleScroll(false)}
+                        >
+                            My Account
+                        </Button>
+                    </StyledNavRightSide>
+
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
                 <StyledLogoContainer>

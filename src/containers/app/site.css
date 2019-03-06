@@ -12,6 +12,10 @@
 
 .noScroll {
     overflow: hidden;
+    max-height: 100vh;
+    position: fixed;
+    left: 0;
+    right: 0;
 }
 
 .Site {

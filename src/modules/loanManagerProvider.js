@@ -32,9 +32,15 @@ export default () => {
 
 const setupListeners = () => {
     const loanManager = store.getState().contracts.latest.loanManager.ethersInstance;
-    loanManager.onnewloan = onNewLoan;
-    loanManager.onloanrepayed = onLoanRepayed;
-    loanManager.onloancollected = onLoanCollected;
+    loanManager.on("NewLoan", (...args) => {
+        onNewLoan(...args);
+    });
+    loanManager.on("LoanRepayed", (...args) => {
+        onLoanRepayed(...args);
+    });
+    loanManager.on("LoanCollected", (...args) => {
+        onLoanCollected(...args);
+    });
     // TODO: add & handle loanproduct change events
 };
 
@@ -62,7 +68,7 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, repaymentAmount) => {
+const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, repaymentAmount, eventObject) => {
     // event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount, uint repaymentAmount);
     console.debug(
         "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
@@ -85,7 +91,7 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
     }
 };
 
-const onLoanRepayed = (loanId, borrower) => {
+const onLoanRepayed = (loanId, borrower, eventObject) => {
     // event LoanRepayed(uint loanId, address borrower);
     console.debug(
         "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
@@ -107,7 +113,7 @@ const onLoanRepayed = (loanId, borrower) => {
     }
 };
 
-const onLoanCollected = (loanId, borrower) => {
+const onLoanCollected = (loanId, borrower, eventObject) => {
     // event LoanCollected(uint loanId, address borrower);
     console.debug(
         "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"

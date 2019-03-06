@@ -53,9 +53,11 @@ export const fetchAllData = () => {
             type: METRICS_DATA_REFRESH_REQUESTED
         });
         try {
-            const augmintTokenInfo = await fetchAllTokensInfo();
-            const loansData = await fetchAllLoansInfo();
-            const monetarySupervisorInfo = await fetchAllMonetarySupervisorInfo();
+            const [augmintTokenInfo, loansData, monetarySupervisorInfo] = await Promise.all([
+                fetchAllTokensInfo(),
+                fetchAllLoansInfo(),
+                fetchAllMonetarySupervisorInfo()
+            ]);
 
             return dispatch({
                 type: METRICS_DATA_REFRESH_SUCCESS,
