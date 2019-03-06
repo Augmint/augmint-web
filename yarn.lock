@@ -1091,9 +1091,9 @@
     "@types/sinon" "*"
 
 "@types/sinon@*":
-  version "7.0.8"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-7.0.8.tgz#7bf01f2967d0d6d2cd84ce63e08696eb076e8dc0"
-  integrity sha512-v8HKmpYANbS3y0cWji16uk/CV9v2CqpI+wxeW7WVZPU2E8MAcvBYbCBpeukhaWPRHbTO3tu8m6vb2IXWCbEUOQ==
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-7.0.9.tgz#981593ea396a4fb1b69e3d8ba04de0a420fd4b16"
+  integrity sha512-PS102Fj4BAa9B8C0qLp677UiW9sdI+9ZhsD6GdPbcNKNdymyKKRJ1Bsc5Uk5pQV7jTtLozTQdxzgnQx+aH8Pvg==
 
 "@types/sinon@7.0.0":
   version "7.0.0"
@@ -9011,10 +9011,10 @@ pretty-format@^23.6.0:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-pretty-quick@1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-1.9.0.tgz#d42fa46d7a4f1a6029bb12c5f74da95331691d00"
-  integrity sha512-PEaDsM5tA+33b4JdnQ7348Qkew9BMqZGrcpRJpWVA1IN31HjJD8GTDTS060d92RW5T4uYOdy0TJW4o1/JsIYSA==
+pretty-quick@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/pretty-quick/-/pretty-quick-1.10.0.tgz#d86cc46fe92ed8cfcfba6a082ec5949c53858198"
+  integrity sha512-uNvm2N3UWmnZRZrClyQI45hIbV20f5BpSyZY51Spbvn4APp9+XLyX4bCjWRGT3fGyVyQ/2/iw7dbQq1UUaq7SQ==
   dependencies:
     chalk "^2.3.0"
     execa "^0.8.0"
@@ -9334,9 +9334,9 @@ react-ga@2.5.6:
   integrity sha512-g04dz6zrbdHRxVaURPWT3RUbjLflh74sS6dCuhGeZupj7ii+UEt9lwTjALb2ST2w+7wAmzG1YqYlNX4yvRXe1g==
 
 react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.2:
-  version "16.8.3"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.3.tgz#4ad8b029c2a718fc0cfc746c8d4e1b7221e5387d"
-  integrity sha512-Y4rC1ZJmsxxkkPuMLwvKvlL1Zfpbcu+Bf4ZigkHup3v9EfdYhAlWAaVyA19olXq2o2mGn0w+dFKvk3pVVlYcIA==
+  version "16.8.4"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
+  integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -9593,10 +9593,10 @@ redux@3.7.2:
     loose-envify "^1.1.0"
     symbol-observable "^1.0.3"
 
-regenerate-unicode-properties@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-7.0.0.tgz#107405afcc4a190ec5ed450ecaa00ed0cafa7a4c"
-  integrity sha512-s5NGghCE4itSlUS+0WUj88G6cfMVMmH8boTPNvABf8od+2dhT9WDlWu8n01raQAJZMOK8Ch6jSexaRO7swd6aw==
+regenerate-unicode-properties@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.0.1.tgz#58a4a74e736380a7ab3c5f7e03f303a941b31289"
+  integrity sha512-HTjMafphaH5d5QDHuwW8Me6Hbc/GhXg8luNqTkPVwZ/oCZhnoifjWhGYsu2BzepMELTlbnoVcXvV0f+2uDDvoQ==
   dependencies:
     regenerate "^1.4.0"
 
@@ -9657,16 +9657,16 @@ regexpu-core@^1.0.0:
     regjsparser "^0.1.4"
 
 regexpu-core@^4.1.3, regexpu-core@^4.2.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-4.4.0.tgz#8d43e0d1266883969720345e70c275ee0aec0d32"
-  integrity sha512-eDDWElbwwI3K0Lo6CqbQbA6FwgtCz4kYTarrri1okfkRLZAqstU+B3voZBCjg8Fl6iq0gXrJG6MvRgLthfvgOA==
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-4.5.3.tgz#72f572e03bb8b9f4f4d895a0ccc57e707f4af2e4"
+  integrity sha512-LON8666bTAlViVEPXMv65ZqiaR3rMNLz36PIaQ7D+er5snu93k0peR7FSvO0QteYbZ3GOkvfHKbGr/B1xDu9FA==
   dependencies:
     regenerate "^1.4.0"
-    regenerate-unicode-properties "^7.0.0"
+    regenerate-unicode-properties "^8.0.1"
     regjsgen "^0.5.0"
     regjsparser "^0.6.0"
     unicode-match-property-ecmascript "^1.0.4"
-    unicode-match-property-value-ecmascript "^1.0.2"
+    unicode-match-property-value-ecmascript "^1.1.0"
 
 regjsgen@^0.2.0:
   version "0.2.0"
@@ -10033,9 +10033,9 @@ sax@^1.2.4, sax@~1.2.4:
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
 scheduler@^0.13.3:
-  version "0.13.3"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.3.tgz#bed3c5850f62ea9c716a4d781f9daeb9b2a58896"
-  integrity sha512-UxN5QRYWtpR1egNWzJcVLk8jlegxAugswQc984lD3kU7NuobsO37/sRfbpTdBjtnD5TBNFA2Q2oLV5+UmPSmEQ==
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.4.tgz#8fef05e7a3580c76c0364d2df5e550e4c9140298"
+  integrity sha512-cvSOlRPxOHs5dAhP9yiS/6IDmVAVxmk33f0CtTJRkmUWcb1Us+t7b1wqdzoC0REw2muC9V5f1L/w5R5uKGaepA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -11304,15 +11304,15 @@ unicode-match-property-ecmascript@^1.0.4:
     unicode-canonical-property-names-ecmascript "^1.0.4"
     unicode-property-aliases-ecmascript "^1.0.4"
 
-unicode-match-property-value-ecmascript@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/unicode-match-property-value-ecmascript/-/unicode-match-property-value-ecmascript-1.0.2.tgz#9f1dc76926d6ccf452310564fd834ace059663d4"
-  integrity sha512-Rx7yODZC1L/T8XKo/2kNzVAQaRE88AaMvI1EF/Xnj3GW2wzN6fop9DDWuFAKUVFH7vozkz26DzP0qyWLKLIVPQ==
+unicode-match-property-value-ecmascript@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/unicode-match-property-value-ecmascript/-/unicode-match-property-value-ecmascript-1.1.0.tgz#5b4b426e08d13a80365e0d657ac7a6c1ec46a277"
+  integrity sha512-hDTHvaBk3RmFzvSl0UVrUmC3PuW9wKVnpoUDYH0JDkSIovzw+J5viQmeYHxVSBptubnr7PbH2e0fnpDRQnQl5g==
 
 unicode-property-aliases-ecmascript@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.0.4.tgz#5a533f31b4317ea76f17d807fa0d116546111dd0"
-  integrity sha512-2WSLa6OdYd2ng8oqiGIWnJqyFArvhn+5vgx5GTxMbUYjCYKUcuKS62YLFF0R/BDGlB1yzXjQOLtPAfHsgirEpg==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.0.5.tgz#a9cc6cc7ce63a0a3023fc99e341b94431d405a57"
+  integrity sha512-L5RAqCfXqAwR3RriF8pM0lU0w4Ryf/GgzONwi6KnL1taJQa7x1TCxdJnILX59WIGOwR57IVxn7Nej0fz1Ny6fw==
 
 unified@^7.0.2:
   version "7.1.0"
