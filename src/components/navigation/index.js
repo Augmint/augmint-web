@@ -59,21 +59,36 @@ export default class SiteMenu extends React.Component {
                             className={this.props.showMenu ? "opened" : ""}
                         />
                         {showConnection && <AugmintIcon className="augmint" />}
-                        <StyleNavList
-                            className={this.props.showMenu ? "show" : "hidden"}
-                            onClick={e => toggleScroll(false)}
-                        >
-                            <SiteMenuItem isActive={() => currentLocation === "/"} to="/">
+                        <StyleNavList className={this.props.showMenu ? "show" : "hidden"}>
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/"}
+                                to="/"
+                            >
                                 Home
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/concept"} to="/concept">
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/concept"}
+                                to="/concept"
+                            >
                                 Concept
                             </SiteMenuItem>
-                            <SiteMenuItem isActive={() => currentLocation === "/roadmap"} to="/roadmap">
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/roadmap"}
+                                to="/roadmap"
+                            >
                                 Roadmap
                             </SiteMenuItem>
                             <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
-                                <Button type="a" to="/tryit" color="primary" className="try-now">
+                                <Button
+                                    onClick={e => toggleScroll(false)}
+                                    type="a"
+                                    to="/tryit"
+                                    color="primary"
+                                    className="try-now"
+                                >
                                     Try now
                                 </Button>
                             </div>
