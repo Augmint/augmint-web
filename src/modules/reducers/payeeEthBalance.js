@@ -1,8 +1,8 @@
 import store from "modules/store";
 
-export const RECIPIENT_ETH_BALANCE_REQUESTED = "recipientEthBalance/ETH_BALANCE_REQUESTED";
-export const RECIPIENT_ETH_BALANCE_RECEIVED = "recipientEthBalance/ETH_BALANCE_RECEIVED";
-export const RECIPIENT_ETH_BALANCE_ERROR = "recipientEthBalance/ETH_BALANCE_ERROR";
+export const PAYEE_ETH_BALANCE_REQUESTED = "payeeEthBalance/ETH_BALANCE_REQUESTED";
+export const PAYEE_ETH_BALANCE_RECEIVED = "payeeEthBalance/ETH_BALANCE_RECEIVED";
+export const PAYEE_ETH_BALANCE_ERROR = "payeetEthBalance/ETH_BALANCE_ERROR";
 
 const initialState = {
     isLoading: false,
@@ -17,21 +17,21 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case RECIPIENT_ETH_BALANCE_REQUESTED:
+        case PAYEE_ETH_BALANCE_REQUESTED:
             return {
                 ...state,
                 isLoading: true,
                 recipientAccount: action.address
             };
 
-        case RECIPIENT_ETH_BALANCE_RECEIVED:
+        case PAYEE_ETH_BALANCE_RECEIVED:
             return {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
                 recipientAccount: action.recipientAccount
             };
-        case RECIPIENT_ETH_BALANCE_ERROR:
+        case PAYEE_ETH_BALANCE_ERROR:
             return {
                 ...state,
                 isLoading: false,
@@ -46,18 +46,18 @@ export default (state = initialState, action) => {
 export const refreshRecipientsEthBalance = recipientAddress => {
     return async dispatch => {
         dispatch({
-            type: RECIPIENT_ETH_BALANCE_REQUESTED,
+            type: PAYEE_ETH_BALANCE_REQUESTED,
             address: recipientAddress
         });
         try {
             const recipientAccount = await getRecipientsEthBalance(recipientAddress);
 
-            return dispatch({ type: RECIPIENT_ETH_BALANCE_RECEIVED, recipientAccount });
+            return dispatch({ type: PAYEE_ETH_BALANCE_RECEIVED, recipientAccount });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
                 return Promise.reject(error);
             }
-            return dispatch({ type: RECIPIENT_ETH_BALANCE_ERROR, error });
+            return dispatch({ type: PAYEE_ETH_BALANCE_ERROR, error });
         }
     };
 };

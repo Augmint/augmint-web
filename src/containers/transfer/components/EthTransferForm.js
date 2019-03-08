@@ -13,7 +13,8 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 // import { getTransferFee } from "modules/ethereum/transferTransactions";
-import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
+// import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
+import { transferEth, ETH_TRANSFER_SUCCESS } from "modules/reducers/ethTransfer";
 import theme from "styles/theme";
 
 class EthTransferForm extends React.Component {
@@ -24,8 +25,8 @@ class EthTransferForm extends React.Component {
             // feeAmount: "0",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onEthAmountChange = this.onEthAmountChange.bind(this);
-        this.setFeeByEthAmount = this.setFeeByEthAmount.bind(this);
+        // this.onEthAmountChange = this.onEthAmountChange.bind(this);
+        // this.setFeeByEthAmount = this.setFeeByEthAmount.bind(this);
     }
 
     // onEthAmountChange(e) {
@@ -35,7 +36,7 @@ class EthTransferForm extends React.Component {
     //     } catch (error) {
     //         return;
     //     }
-    //     this.setFeeByEthAmount(amount);
+    //     // this.setFeeByEthAmount(amount);
     // }
 
     // setFeeByEthAmount(amount) {
@@ -44,15 +45,14 @@ class EthTransferForm extends React.Component {
     // }
 
     async handleSubmit(values) {
-        const tokenAmount = parseFloat(values.tokenAmount);
+        const ethAmount = parseFloat(values.ethAmount);
         const res = await store.dispatch(
-            transferToken({
+            transferEth({
                 payee: values.payee,
-                tokenAmount,
-                narrative: values.narrative
+                ethAmount
             })
         );
-        if (res.type !== TOKEN_TRANSFER_SUCCESS) {
+        if (res.type !== ETH_TRANSFER_SUCCESS) {
             throw new SubmissionError({
                 _error: res.error
             });
@@ -60,8 +60,8 @@ class EthTransferForm extends React.Component {
             this.setState({
                 result: res.result,
                 to: values.payee,
-                tokenAmount,
-                feeAmount: "0"
+                ethAmount
+                // feeAmount: "0"
             });
         }
     }
@@ -85,12 +85,12 @@ class EthTransferForm extends React.Component {
             <div style={isFunctional && { display: "inline" }}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
-                        header="Token transfer submitted"
+                        header="ETH transfer submitted"
                         result={this.state.result}
                         onDismiss={() => reset()}
                     >
                         <p>
-                            Transfer {this.state.tokenAmount} ETH to {this.state.to}
+                            Transfer {this.state.ethAmount} ETH to {this.state.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
@@ -103,7 +103,7 @@ class EthTransferForm extends React.Component {
                         {error && (
                             <EthSubmissionErrorPanel
                                 error={error}
-                                header="Transfer failed"
+                                header="ETH transfer failed"
                                 onDismiss={() => {
                                     clearSubmitErrors();
                                 }}
@@ -116,21 +116,17 @@ class EthTransferForm extends React.Component {
                                     Send a small amount enough for a few transactions:
                                 </p>
                                 <Field
+                                    name="ethAmount"
                                     component={Form.Field}
                                     as={Form.Input}
-                                    type={isFunctional ? "hidden" : "number"}
-                                    name="ethAmount"
+                                    type="number"
                                     placeholder="0.01"
                                     inputmode="numeric"
                                     step="any"
                                     min="0"
-                                    onChange={this.onEthAmountChange}
-                                    validate={[
-                                        Validations.required,
-                                        Validations.tokenAmount,
-                                        Validations.userTokenBalanceWithTransferFee
-                                    ]}
-                                    normalize={Normalizations.twoDecimals}
+                                    // onChange={this.onEthAmountChange}
+                                    validate={[Validations.required, Validations.ethAmount, Validations.ethUserBalance]}
+                                    normalize={Normalizations.fiveDecimals}
                                     disabled={submitting || !augmintToken.isLoaded}
                                     data-testid="ethTransferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left }}
@@ -139,13 +135,6 @@ class EthTransferForm extends React.Component {
                                 <p style={{ display: "block", marginBottom: 10 }}>
                                     Approx. €0.9 (covers 2 to 5 transactions)
                                 </p>
-                                {(augmintToken.info.feeMax !== 0 ||
-                                    augmintToken.info.feeMin !== 0 ||
-                                    augmintToken.info.feePt !== 0) && (
-                                    <p style={{ display: "block", marginBottom: 10 }}>
-                                        Fee: <span data-testid="ethTransferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                                    </p>
-                                )}
                             </div>
                         )}
                         <Button
@@ -155,7 +144,7 @@ class EthTransferForm extends React.Component {
                             data-testid="submitEthTransferButton"
                             className={submitting ? "loading" : ""}
                         >
-                            {submitting ? "Submitting..." : submitText || "Transfer"}
+                            {submitting ? "Submitting..." : submitText || "Transfer ETH"}
                         </Button>
                     </Form>
                 )}
