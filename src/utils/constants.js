@@ -8,6 +8,8 @@ export const DECIMALS = 2;
 
 export const PPM_DIV = 1000000;
 
+export const ETHEUR = "ETHEUR";
+
 /* used for newer contracts where CHUNK_SIZE is a param for query fxs.
     for older contracts CHUNK_SIZE available via contracts getters but we don't use those anymore (won't change chunkSize in legacy contracts)  */
 export const LEGACY_CONTRACTS_CHUNK_SIZE = 100; // Chunksize how legacy contracts were deployed (can't be changed here!)

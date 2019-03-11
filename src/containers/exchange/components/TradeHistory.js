@@ -4,6 +4,8 @@ import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
 import { CustomTable } from "components/Table";
 
+import { ETHEUR } from "utils/constants";
+
 export default class TradeHistory extends React.Component {
     render() {
         const { header } = this.props;
@@ -27,7 +29,7 @@ export default class TradeHistory extends React.Component {
             pricePt: "Price",
             ethAmountRounded: "Eth Amount",
             tokenAmount: "Token Amount",
-            publishedRate: "ETH/€ rate"
+            publishedRate: ETHEUR + " rate"
         };
 
         return (
