@@ -18,9 +18,9 @@ export default class TradeHistory extends React.Component {
             "pricePt",
             "ethAmountRounded",
             "tokenAmount",
-            "publishedRate"
+            "effectiveRate"
         ];
-        const unit = ["", "", "", "", "", "ETH", "A€", "A€"];
+        const unit = ["", "", "", "", "", "ETH", "A€", "A€", ""];
         const headerData = {
             orderId: "Order ID",
             blockTimeStampText: "Date",
@@ -29,7 +29,7 @@ export default class TradeHistory extends React.Component {
             pricePt: "Price",
             ethAmountRounded: "Eth Amount",
             tokenAmount: "Token Amount",
-            publishedRate: ETHEUR + " rate"
+            effectiveRate: "Effective ETHEUR RATE"
         };
 
         return (
