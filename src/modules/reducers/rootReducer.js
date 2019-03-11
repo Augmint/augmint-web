@@ -23,6 +23,7 @@ import legacyLoanManagers from "modules/reducers/legacyLoanManagers";
 import stabilityBoardProxy from "modules/reducers/stabilityBoardProxy";
 import preToken from "modules/reducers/preToken";
 import metrics from "modules/reducers/metrics";
+import ipfs from "modules/reducers/ipfs";
 
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
@@ -54,5 +55,6 @@ export default history =>
         stabilityBoardProxy,
         preToken,
         metrics,
-        form: formReducer
+        form: formReducer,
+        ipfs
     });

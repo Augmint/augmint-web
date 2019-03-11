@@ -12,6 +12,7 @@ import { EthereumState } from "containers/app/EthereumState";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { Menu } from "components/augmint-ui/menu";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
+import AugmintTxList from "./AugmintTx.js";
 
 class underTheHood extends React.Component {
     constructor(props) {
@@ -107,6 +108,14 @@ class underTheHood extends React.Component {
                                 >
                                     PreToken
                                 </Menu.Item>
+                                <Menu.Item
+                                    data-testid="augmintTx"
+                                    active={selectedGroup === "augmintTx"}
+                                    name="AugmintTx"
+                                    onClick={this.handleSelectGroup}
+                                >
+                                    Augmint TX
+                                </Menu.Item>
                             </Menu>
 
                             {selectedGroup === "baseinfo" && <BaseInfoGroup />}
@@ -116,6 +125,7 @@ class underTheHood extends React.Component {
                             {selectedGroup === "exchange" && <ExchangeInfoGroup />}
                             {selectedGroup === "stabilityBoard" && <StabilityBoardInfoGroup />}
                             {selectedGroup === "preToken" && <PreTokenInfoGroup />}
+                            {selectedGroup === "AugmintTx" && <AugmintTxList />}
                         </Pgrid.Column>
                     </Pgrid.Row>
                 </Psegment>
