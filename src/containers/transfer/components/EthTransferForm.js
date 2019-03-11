@@ -78,7 +78,7 @@ class EthTransferForm extends React.Component {
             augmintToken,
             isFunctional,
             submitText,
-            recipientEth
+            payeeEthBalance
         } = this.props;
 
         return (

@@ -14,6 +14,7 @@ import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
+import { refreshPayeesEthBalance, PAYEE_ETH_BALANCE_RECEIVED } from "modules/reducers/payeeEthBalance";
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
 
@@ -72,6 +73,17 @@ class TokenTransferForm extends React.Component {
 
     async handleSubmit(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
+
+        const payeeEthBalance = await store.dispatch(refreshPayeesEthBalance(values.payee));
+
+        if (payeeEthBalance.type !== PAYEE_ETH_BALANCE_RECEIVED) {
+            throw new SubmissionError({
+                _error: payeeEthBalance.error
+            });
+        } else {
+            payeeEthBalance.result(); // pass up
+        }
+
         const res = await store.dispatch(
             transferToken({
                 payee: values.payee,

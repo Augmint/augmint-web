@@ -1,5 +1,5 @@
 /*
-    TODO: separate transfer from here to tackle isLoading race conditions
+    TODO: maybe add it to userTransfers/ethTransfers{} ?
 */
 import store from "modules/store";
 import { transferEthTx } from "modules/ethereum/transferTransactions";

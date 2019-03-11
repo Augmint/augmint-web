@@ -43,6 +43,26 @@ export function getMaxTransfer(amount) {
     return maxAmount;
 }
 
+export async function transferEthTx(payload) {
+    const { payee, ethAmount } = payload;
+
+    const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+
+    // const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
+    const amount = ethAmount;
+
+    const txName = "ETH transfer";
+    const tx = augmintToken.methods.transfer(payee, amount).send({
+        from: userAccount,
+        gas: gasEstimate
+    });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, null, payload);
+    return { txName, transactionHash };
+}
+
 export async function transferTokenTx(payload) {
     const { payee, tokenAmount, narrative } = payload;
 

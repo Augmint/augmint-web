@@ -37,14 +37,22 @@ class TransferPage extends React.Component {
                                 >
                                     <TokenTransferForm />
                                 </Pblock>
-                                {/* <Pblock
+
+                                {/*TODO: where should payeeEthBalance come from?
+                                - state
+                                - prop from TokenTransferForm */}
+
+                                {/*TODO: what should be checked for loading EthTransferForm Pblock? */}
+
+                                {/* { payeeEthBalance || payeeEthBalance === 0 && 
+                                <Pblock
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    header="The recipient needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                    header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
                                 >
                                     <EthTransferForm />
-                                </Pblock> */}
+                                </Pblock> } */}
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

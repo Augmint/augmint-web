@@ -8,7 +8,7 @@ const initialState = {
     isLoading: false,
     isLoaded: false,
     error: null,
-    recipientAccount: {
+    payeeAccount: {
         address: "?",
         ethBalance: "?",
         bn_ethBalance: null
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                recipientAccount: action.address
+                payeeAccount: action.address
             };
 
         case PAYEE_ETH_BALANCE_RECEIVED:
@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
-                recipientAccount: action.recipientAccount
+                payeeAccount: action.payeeAccount
             };
         case PAYEE_ETH_BALANCE_ERROR:
             return {
@@ -43,16 +43,16 @@ export default (state = initialState, action) => {
     }
 };
 
-export const refreshRecipientsEthBalance = recipientAddress => {
+export const refreshPayeesEthBalance = payeeAddress => {
     return async dispatch => {
         dispatch({
             type: PAYEE_ETH_BALANCE_REQUESTED,
-            address: recipientAddress
+            address: payeeAddress
         });
         try {
-            const recipientAccount = await getRecipientsEthBalance(recipientAddress);
+            const payeeAccount = await getPayeesEthBalance(payeeAddress);
 
-            return dispatch({ type: PAYEE_ETH_BALANCE_RECEIVED, recipientAccount });
+            return dispatch({ type: PAYEE_ETH_BALANCE_RECEIVED, payeeAccount });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
                 return Promise.reject(error);
@@ -62,10 +62,10 @@ export const refreshRecipientsEthBalance = recipientAddress => {
     };
 };
 
-async function getRecipientsEthBalance(recipientAddress) {
+async function getPayeesEthBalance(payeeAddress) {
     const web3 = store.getState().web3Connect.web3Instance;
 
-    const bn_weiBalance = await Promise(web3.eth.getBalance(recipientAddress._address));
+    const bn_weiBalance = await Promise(web3.eth.getBalance(payeeAddress._address));
 
     return {
         bn_ethBalance: bn_weiBalance,
