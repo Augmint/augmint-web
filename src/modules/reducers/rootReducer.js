@@ -24,7 +24,7 @@ import stabilityBoardProxy from "modules/reducers/stabilityBoardProxy";
 import preToken from "modules/reducers/preToken";
 import metrics from "modules/reducers/metrics";
 import ipfs from "modules/reducers/ipfs";
-
+import augmintTx from "modules/reducers/augmintTx";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
 
@@ -56,5 +56,6 @@ export default history =>
         preToken,
         metrics,
         form: formReducer,
-        ipfs
+        ipfs,
+        augmintTx
     });
