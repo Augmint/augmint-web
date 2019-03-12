@@ -22,14 +22,14 @@ export default class TradeHistory extends React.Component {
         ];
         const unit = ["", "", "", "", "", "ETH", "A€", "A€", ""];
         const headerData = {
-            orderId: "Order ID",
+            orderId: "ID",
             blockTimeStampText: "Date",
             type: "Type",
             direction: "Direction",
             pricePt: "Price",
             ethAmountRounded: "Eth Amount",
-            tokenAmount: "Token Amount",
-            effectiveRate: "Effective ETHEUR RATE"
+            tokenAmount: "A€ Amount",
+            effectiveRate: ETHEUR + " RATE"
         };
 
         return (

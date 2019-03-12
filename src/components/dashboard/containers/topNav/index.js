@@ -105,7 +105,7 @@ class TopNav extends React.Component {
                     <StyledTopNavLi>
                         <StyledPrice>
                             <span className="price">
-                                {ETHEUR} {this.props.rates.info.ethFiatRate}
+                                {ETHEUR}: {this.props.rates.info.ethFiatRate}
                             </span>
                         </StyledPrice>
                     </StyledTopNavLi>
