@@ -103,7 +103,8 @@ class TokenTransferForm extends React.Component {
             reset,
             augmintToken,
             isFunctional,
-            submitText
+            submitText,
+            delegated
         } = this.props;
 
         return (
@@ -158,13 +159,33 @@ class TokenTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="A-EUR"
                                 />
-                                {(augmintToken.info.feeMax !== 0 ||
-                                    augmintToken.info.feeMin !== 0 ||
-                                    augmintToken.info.feePt !== 0) && (
-                                    <small style={{ display: "block", marginBottom: 10 }}>
-                                        Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
-                                        <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
-                                    </small>
+                                {delegated ? (
+                                    <Field
+                                        component={Form.Field}
+                                        as={Form.Input}
+                                        label="Transfer fee:"
+                                        size="small"
+                                        data-testid="delegatedTransferFee"
+                                        name="delegatedTransferFee"
+                                        type={isFunctional ? "hidden" : "text"}
+                                        parse={Parsers.trim}
+                                        validate={[
+                                            Validations.required,
+                                            Validations.address,
+                                            Validations.notOwnAddress
+                                        ]}
+                                        placeholder="0.1"
+                                        disabled={submitting || !augmintToken.isLoaded}
+                                    />
+                                ) : (
+                                    (augmintToken.info.feeMax !== 0 ||
+                                        augmintToken.info.feeMin !== 0 ||
+                                        augmintToken.info.feePt !== 0) && (
+                                        <small style={{ display: "block", marginBottom: 10 }}>
+                                            Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
+                                            <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
+                                        </small>
+                                    )
                                 )}
 
                                 <Field
@@ -207,6 +228,10 @@ class TokenTransferForm extends React.Component {
         );
     }
 }
+
+TokenTransferForm.defaultProps = {
+    delegated: false
+};
 
 const mapStateToProps = state => ({
     augmintToken: state.augmintToken,

@@ -7,15 +7,54 @@ import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
+import { Menu } from "components/augmint-ui/menu/index.jsx";
+
+const DELEGATED = 1;
+const NOT_DELEGATED = 0;
 
 class TransferPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { delegated: false };
+        this.onTypeChange = this.onTypeChange.bind(this);
+    }
+
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
     }
 
+    onTypeChange(e) {
+        this.setState({ delegated: +e.target.attributes["data-index"].value === DELEGATED });
+    }
+
     render() {
         const { augmintToken } = this.props;
+        const { delegated } = this.state;
+        const header = (
+            <div>
+                <Menu style={{ marginBottom: -11 }}>
+                    <Menu.Item
+                        active={!delegated}
+                        data-index={NOT_DELEGATED}
+                        onClick={this.onTypeChange}
+                        data-testid="tokenTransfer"
+                        className={"buySell"}
+                    >
+                        Send A-EUR
+                    </Menu.Item>
+                    <Menu.Item
+                        active={delegated}
+                        data-index={DELEGATED}
+                        onClick={this.onTypeChange}
+                        data-testid="delegatedTokenTransfer"
+                        className={"buySell"}
+                    >
+                        Send via ATX
+                    </Menu.Item>
+                </Menu>
+            </div>
+        );
 
         return (
             <EthereumState>
@@ -32,9 +71,9 @@ class TransferPage extends React.Component {
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    header="Send A-EUR"
+                                    header={header}
                                 >
-                                    <TokenTransferForm />
+                                    <TokenTransferForm delegated={delegated} />
                                 </Pblock>
                             </Pgrid.Column>
                         </Pgrid.Row>
