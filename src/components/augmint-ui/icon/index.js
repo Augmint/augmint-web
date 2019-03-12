@@ -70,6 +70,9 @@ export default function Icon(props) {
         case "empty":
             className += " empty";
             break;
+        case "plus":
+            className += " fa fa-plus";
+            break;
         default:
             break;
     }

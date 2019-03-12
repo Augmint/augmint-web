@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { dismissTx } from "modules/reducers/submittedTransactions";
+import { watchAsset } from "modules/watchAsset.js";
 
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -73,6 +74,13 @@ class TopNav extends React.Component {
         let _style = {
             visibility: "hidden"
         };
+
+        let isMetamask = null;
+
+        if (accountInfoData.web3Connect.web3Instance) {
+            const metamask = accountInfoData.web3Connect.web3Instance.currentProvider._metamask;
+            isMetamask = metamask ? metamask.isEnabled() : null;
+        }
 
         Object.keys(transactions).forEach(e => {
             if (transactions[e].event === "transactionHash" || transactions[e].event === "receipt") {
@@ -173,6 +181,23 @@ class TopNav extends React.Component {
                             <span>{this.props.web3Connect.network.name}</span>
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
+
+                    {tokenBalance && isMetamask && (
+                        <StyledTopNavLi className="navLinkRight">
+                            <StyledTopNavLinkRight
+                                title="add asset"
+                                to=""
+                                onClick={e => {
+                                    e.preventDefault();
+                                    watchAsset();
+                                }}
+                                className="addAsset"
+                            >
+                                <Icon name="plus" />
+                                <span>Add asset</span>
+                            </StyledTopNavLinkRight>
+                        </StyledTopNavLi>
+                    )}
                 </StyledTopNavUl>
             </StyledTopNav>
         );

@@ -134,6 +134,7 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     display: flex;
     flex-direction: column;
     font-size: 11px;
+    border-right: solid 1px #cccccc;
 
     &:not(.accountDetails) {
         &:not(.notifications) {
@@ -151,10 +152,13 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
 
     &.notifications {
         border-left: solid 1px #fff;
-        border-right: solid 1px #cccccc;
         :hover {
             border-right: solid 1px #fff;
         }
+    }
+
+    &.addAsset {
+        border-right: none;
     }
 `;
 
