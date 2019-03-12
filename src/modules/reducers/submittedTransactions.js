@@ -59,7 +59,7 @@ export const updateTx = tx => {
             transactions[tx.transactionHash] = updatedTx;
 
             if (
-                transactions[tx.transactionHash].confirmationNumber === 0 &&
+                transactions[tx.transactionHash].confirmationNumber <= 1 &&
                 transactions[tx.transactionHash].event === "confirmation"
             ) {
                 transactions[tx.transactionHash].isDismissed = undefined;
