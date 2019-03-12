@@ -14,6 +14,7 @@ export default (state = initialState, action) => {
             const newMessage = action.result;
             if (isValidMessage(newMessage)) {
                 persistMessage(newMessage);
+                console.debug("[augmint tx] listener: ", newMessage);
                 state.messages = [newMessage, ...state.messages];
                 return {
                     ...state,
