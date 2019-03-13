@@ -45,20 +45,22 @@ class AccountHome extends React.Component {
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
                                     locks={this.props.locks}
-                                />
-                                <div style={{ textAlign: "left" }}>
-                                    {isMetamask && this.props.userAccount.tokenBalance && (
-                                        <Button
-                                            className="ghost"
-                                            onClick={() => {
-                                                watchAsset();
-                                            }}
-                                        >
-                                            {/*<Icon style={{marginRight: "7px"}} name="plus" />*/}
-                                            Add Augmint token to your wallet
-                                        </Button>
-                                    )}
-                                </div>
+                                >
+                                    <div style={{ marginTop: "25px" }}>
+                                        {isMetamask && this.props.userAccount.tokenBalance && (
+                                            <Button
+                                                className="primary"
+                                                style={{ padding: "15px" }}
+                                                onClick={() => {
+                                                    watchAsset();
+                                                }}
+                                            >
+                                                <Icon style={{ marginRight: "7px" }} name="plus" />
+                                                Add A€ asset to your wallet
+                                            </Button>
+                                        )}
+                                    </div>
+                                </Balance>
                             </Pgrid.Column>
                             <Pgrid.Column size={{ tablet: 3 / 5 }}>
                                 <div style={{ textAlign: "right" }}>

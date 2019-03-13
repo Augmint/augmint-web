@@ -121,6 +121,10 @@ class TopNav extends React.Component {
                             onClick={e => this.toggleAccInfo(e, true)}
                             className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
                         >
+                            <StyledPrice className="accountInfoContainer">
+                                <span className="accountDetailsInfo">{shortAddress}</span>
+                            </StyledPrice>
+                            <StyledSeparator />
                             <Icon
                                 name="account"
                                 className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
@@ -135,10 +139,6 @@ class TopNav extends React.Component {
                                 <span className="accountDetailsInfo">
                                     {tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€
                                 </span>
-                            </StyledPrice>
-                            <StyledSeparator />
-                            <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
@@ -155,9 +155,27 @@ class TopNav extends React.Component {
                             />
                         </StyledAccount>
                     </StyledTopNavLi>
+                    {tokenBalance && isMetamask && (
+                        <StyledTopNavLi className="navLinkRight">
+                            <StyledTopNavLinkRight
+                                title="add asset"
+                                to=""
+                                style={{ borderRight: "solid 1px #cccccc" }}
+                                onClick={e => {
+                                    e.preventDefault();
+                                    watchAsset();
+                                }}
+                                className="addAsset"
+                            >
+                                <Icon name="plus" />
+                                <span>Add A€</span>
+                            </StyledTopNavLinkRight>
+                        </StyledTopNavLi>
+                    )}
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"
+                            style={{ borderRight: "solid 1px #cccccc" }}
                             to=""
                             onClick={e => {
                                 this.toggleNotificationPanel(e);
@@ -176,28 +194,12 @@ class TopNav extends React.Component {
                             title="Under the hood"
                             to="/under-the-hood"
                             data-testid="underTheHoodLink"
+                            className="connected-network"
                         >
                             <Icon name="connect" />
                             <span>{this.props.web3Connect.network.name}</span>
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
-
-                    {tokenBalance && isMetamask && (
-                        <StyledTopNavLi className="navLinkRight">
-                            <StyledTopNavLinkRight
-                                title="add asset"
-                                to=""
-                                onClick={e => {
-                                    e.preventDefault();
-                                    watchAsset();
-                                }}
-                                className="addAsset"
-                            >
-                                <Icon name="plus" />
-                                <span>Add asset</span>
-                            </StyledTopNavLinkRight>
-                        </StyledTopNavLi>
-                    )}
                 </StyledTopNavUl>
             </StyledTopNav>
         );

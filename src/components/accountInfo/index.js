@@ -6,6 +6,7 @@ import AccountAddress from "components/accountAddress";
 import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
 import { watchAsset } from "modules/watchAsset.js";
+import Button from "components/augmint-ui/button";
 
 export class AccountInfo extends React.Component {
     render() {
@@ -72,18 +73,18 @@ export class AccountInfo extends React.Component {
                 </StyledAccInfoLink>
 
                 {isMetamask && data.account.tokenBalance && (
-                    <StyledAccInfoLink
-                        title="add asset"
-                        to=""
-                        onClick={e => {
-                            e.preventDefault();
-                            watchAsset();
-                        }}
-                        className="addAsset"
-                    >
-                        <Icon name="plus" />
-                        Add Augmint token to wallet
-                    </StyledAccInfoLink>
+                    <div style={{ textAlign: "center" }}>
+                        <Button
+                            className="primary"
+                            style={{ padding: "15px", marginTop: "40px" }}
+                            onClick={() => {
+                                watchAsset();
+                            }}
+                        >
+                            <Icon style={{ marginRight: "7px" }} name="plus" />
+                            Add A€ asset to your wallet
+                        </Button>
+                    </div>
                 )}
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
