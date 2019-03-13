@@ -5,8 +5,8 @@ import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
 import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
-import { watchAsset } from "modules/watchAsset.js";
 import Button from "components/augmint-ui/button";
+import WatchAssetButton from "components/watchAssetButton.js";
 
 export class AccountInfo extends React.Component {
     render() {
@@ -20,14 +20,6 @@ export class AccountInfo extends React.Component {
             className,
             toggleAccInfo
         } = this.props;
-
-        const web3 = data.web3Connect;
-        let isMetamask = null;
-
-        if (web3 && web3.web3Instance) {
-            const metamask = web3.web3Instance.currentProvider._metamask;
-            isMetamask = metamask ? metamask.isEnabled() : null;
-        }
 
         return (
             <StyledAccountInfo
@@ -72,20 +64,7 @@ export class AccountInfo extends React.Component {
                     {data.web3Connect.network.name}
                 </StyledAccInfoLink>
 
-                {isMetamask && data.account.tokenBalance && (
-                    <div style={{ textAlign: "center" }}>
-                        <Button
-                            className="primary"
-                            style={{ padding: "15px", marginTop: "40px" }}
-                            onClick={() => {
-                                watchAsset();
-                            }}
-                        >
-                            <Icon style={{ marginRight: "7px" }} name="plus" />
-                            Add A€ asset to your wallet
-                        </Button>
-                    </div>
-                )}
+                <WatchAssetButton />
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
         );

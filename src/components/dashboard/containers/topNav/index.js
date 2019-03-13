@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { dismissTx } from "modules/reducers/submittedTransactions";
-import { watchAsset } from "modules/watchAsset.js";
 
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -155,23 +154,6 @@ class TopNav extends React.Component {
                             />
                         </StyledAccount>
                     </StyledTopNavLi>
-                    {tokenBalance && isMetamask && (
-                        <StyledTopNavLi className="navLinkRight">
-                            <StyledTopNavLinkRight
-                                title="add asset"
-                                to=""
-                                style={{ borderRight: "solid 1px #cccccc" }}
-                                onClick={e => {
-                                    e.preventDefault();
-                                    watchAsset();
-                                }}
-                                className="addAsset"
-                            >
-                                <Icon name="plus" />
-                                <span>Add A€</span>
-                            </StyledTopNavLinkRight>
-                        </StyledTopNavLi>
-                    )}
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"

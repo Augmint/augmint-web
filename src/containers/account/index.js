@@ -13,7 +13,7 @@ import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
-import { watchAsset } from "modules/watchAsset.js";
+import WatchAssetButton from "components/watchAssetButton.js";
 import Icon from "components/augmint-ui/icon";
 
 class AccountHome extends React.Component {
@@ -47,18 +47,7 @@ class AccountHome extends React.Component {
                                     locks={this.props.locks}
                                 >
                                     <div style={{ marginTop: "25px" }}>
-                                        {isMetamask && this.props.userAccount.tokenBalance && (
-                                            <Button
-                                                className="primary"
-                                                style={{ padding: "15px" }}
-                                                onClick={() => {
-                                                    watchAsset();
-                                                }}
-                                            >
-                                                <Icon style={{ marginRight: "7px" }} name="plus" />
-                                                Add A€ asset to your wallet
-                                            </Button>
-                                        )}
+                                        <WatchAssetButton />
                                     </div>
                                 </Balance>
                             </Pgrid.Column>

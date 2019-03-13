@@ -1,39 +1,33 @@
-import store from "modules/store";
+import { setCookie } from "utils/cookie.js";
 
-export const watchAsset = () => {
-    const augmint = store.getState().augmintToken.info;
-    const currentProvider = store.getState().web3Connect.web3Instance.currentProvider;
-    const contracts = store.getState().contracts;
-
+export const watchAsset = (address, augmint, provider, cookie) => {
     const tokenType = "ERC20";
     const image = "https://www.augmint.org/augmint-token-image.png"; // only works after deploy
     const id = Math.round(Math.random() * 100000); // TODO
 
     const method = "wallet_watchAsset";
     const options = {
-        address: contracts.latest.augmintToken.address,
-        symbol: augmint.symbol,
-        decimals: augmint.decimals,
+        address: address,
+        symbol: augmint.info.symbol,
+        decimals: augmint.info.decimals,
         image: image
     };
 
-    if (augmint && contracts && currentProvider) {
-        currentProvider.sendAsync(
-            {
-                method: method,
-                params: {
-                    type: tokenType,
-                    options: options
-                },
-                id: id
+    provider.sendAsync(
+        {
+            method: method,
+            params: {
+                type: tokenType,
+                options: options
             },
-            (err, added) => {
-                if (added) {
-                    console.log("Token added to your Metamask wallet");
-                } else {
-                    console.error(err);
-                }
+            id: id
+        },
+        (err, added) => {
+            if (added) {
+                setCookie("watchAsset", cookie);
+            } else {
+                console.error(err);
             }
-        );
-    }
+        }
+    );
 };
