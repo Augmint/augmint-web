@@ -17,21 +17,23 @@ export const watchAsset = () => {
         image: image
     };
 
-    currentProvider.sendAsync(
-        {
-            method: method,
-            params: {
-                type: tokenType,
-                options: options
+    if (augmint && contracts && currentProvider) {
+        currentProvider.sendAsync(
+            {
+                method: method,
+                params: {
+                    type: tokenType,
+                    options: options
+                },
+                id: id
             },
-            id: id
-        },
-        (err, added) => {
-            if (added) {
-                console.log("TOKEN ADDED");
-            } else {
-                console.error(err);
+            (err, added) => {
+                if (added) {
+                    console.log("Token added to your Metamask wallet");
+                } else {
+                    console.error(err);
+                }
             }
-        }
-    );
+        );
+    }
 };
