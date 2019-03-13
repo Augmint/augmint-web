@@ -13,6 +13,8 @@ import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
+import { watchAsset } from "modules/watchAsset.js";
+import Icon from "components/augmint-ui/icon";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -22,6 +24,12 @@ class AccountHome extends React.Component {
         augmintTokenProvider();
     }
     render() {
+        const web3 = this.props.web3;
+        let isMetamask = null;
+        if (web3 && web3.web3Instance) {
+            const metamask = web3.web3Instance.currentProvider._metamask;
+            isMetamask = metamask ? metamask.isEnabled() : null;
+        }
         return (
             <EthereumState>
                 <Psegment>
@@ -38,6 +46,19 @@ class AccountHome extends React.Component {
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 />
+                                <div style={{ textAlign: "left" }}>
+                                    {isMetamask && this.props.userAccount.tokenBalance && (
+                                        <Button
+                                            className="ghost"
+                                            onClick={() => {
+                                                watchAsset();
+                                            }}
+                                        >
+                                            {/*<Icon style={{marginRight: "7px"}} name="plus" />*/}
+                                            Add Augmint token to your wallet
+                                        </Button>
+                                    )}
+                                </div>
                             </Pgrid.Column>
                             <Pgrid.Column size={{ tablet: 3 / 5 }}>
                                 <div style={{ textAlign: "right" }}>
@@ -75,7 +96,8 @@ class AccountHome extends React.Component {
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
-    locks: state.locks
+    locks: state.locks,
+    web3: state.web3Connect
 });
 
 export default connect(mapStateToProps)(AccountHome);

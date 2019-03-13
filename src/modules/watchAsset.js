@@ -6,7 +6,7 @@ export const watchAsset = () => {
     const contracts = store.getState().contracts;
 
     const tokenType = "ERC20";
-    const image = "https://www.augmint.org/apple-touch-icon.png"; // TODO
+    const image = "https://www.augmint.org/augmint-token-image.png"; // only works after deploy
     const id = Math.round(Math.random() * 100000); // TODO
 
     const method = "wallet_watchAsset";
