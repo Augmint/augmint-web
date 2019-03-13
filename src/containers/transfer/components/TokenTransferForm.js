@@ -15,6 +15,7 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
+import { transferTokenDelegated } from "modules/reducers/augmintTx.js";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
@@ -70,6 +71,28 @@ class TokenTransferForm extends React.Component {
     }
 
     async handleSubmit(values) {
+        const delegated = this.props.delegated || false;
+        if (!delegated) {
+            await this.handleSubmitWithETH(values);
+        } else {
+            await this.handleSubmitWithAugmintTx(values);
+        }
+    }
+
+    async handleSubmitWithAugmintTx(values) {
+        const tokenAmount = parseFloat(values.tokenAmount);
+        const res = await store.dispatch(
+            transferTokenDelegated({
+                amount: tokenAmount,
+                to: values.payee,
+                narrative: values.narrative,
+                maxExecutorFee: values.delegatedTransferFee
+            })
+        );
+        console.debug(res);
+    }
+
+    async handleSubmitWithETH(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
         const res = await store.dispatch(
             transferToken({
@@ -169,11 +192,7 @@ class TokenTransferForm extends React.Component {
                                         name="delegatedTransferFee"
                                         type={isFunctional ? "hidden" : "text"}
                                         parse={Parsers.trim}
-                                        validate={[
-                                            Validations.required,
-                                            Validations.address,
-                                            Validations.notOwnAddress
-                                        ]}
+                                        validate={[Validations.required, Validations.tokenAmount]}
                                         placeholder="0.1"
                                         disabled={submitting || !augmintToken.isLoaded}
                                     />
