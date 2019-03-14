@@ -78,16 +78,16 @@ export class WatchAssetButton extends React.Component {
         }
 
         return (
-            <div style={{ textAlign: "center", marginTop: "25px" }}>
+            <div style={{ textAlign: "center" }}>
                 {showButton && !this.state.added && (
                     <Button
                         className="primary"
-                        style={{ padding: "15px" }}
+                        style={{ padding: "15px", marginTop: "25px" }}
                         onClick={() => {
                             this.addAsset();
                         }}
                     >
-                        Add A€ asset to your wallet
+                        Watch AEUR in your wallet
                     </Button>
                 )}
             </div>
