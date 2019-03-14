@@ -17,13 +17,14 @@ const BaseModal = `
 export const StyledModal = styled.div`
     ${BaseModal};
     ${media.desktop`
-          width: 680px;
+        width: 680px;
     `};
     ${media.tablet`
         width: 75%;
     `};
     ${media.mobile`
         width: 85%;
+        height: 60%;
     `};
 `;
 
@@ -58,5 +59,4 @@ export const StyledCloseButton = styled.button`
     position: absolute;
     top: -25px;
     right: -25px;
-}
 `;
