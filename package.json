@@ -4,6 +4,10 @@
   "description": "Augmint Stable Tokens",
   "homepage": ".",
   "private": true,
+  "engines": {
+    "node": "10.15.3",
+    "yarn": "1.13.0"
+  },
   "dependencies": {
     "bignumber.js": "5.0.0",
     "chart.js": "2.8.0",
