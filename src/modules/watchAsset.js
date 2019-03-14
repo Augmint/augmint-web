@@ -13,21 +13,26 @@ export const watchAsset = (address, augmint, provider, cookie) => {
         image: image
     };
 
-    provider.sendAsync(
-        {
-            method: method,
-            params: {
-                type: tokenType,
-                options: options
+    let promise = new Promise((resolve, reject) => {
+        provider.sendAsync(
+            {
+                method: method,
+                params: {
+                    type: tokenType,
+                    options: options
+                },
+                id: id
             },
-            id: id
-        },
-        (err, added) => {
-            if (added) {
-                setCookie("watchAsset", cookie);
-            } else {
-                console.error(err);
+            (err, added) => {
+                if (added.result) {
+                    setCookie("watchAsset", cookie);
+                    resolve(added.result);
+                } else if (err || added.error) {
+                    resolve(false);
+                }
             }
-        }
-    );
+        );
+    });
+
+    return promise;
 };
