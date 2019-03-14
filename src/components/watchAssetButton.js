@@ -47,6 +47,8 @@ export class WatchAssetButton extends React.Component {
                 this.newCookie = [...this.cookies];
                 this.newCookie.push(this.value);
                 this.isAssetAdded = false;
+            } else {
+                this.isAssetAdded = true;
             }
         } else {
             this.newCookie = [this.value];
@@ -80,7 +82,7 @@ export class WatchAssetButton extends React.Component {
                 {showButton && !this.state.added && (
                     <Button
                         className="primary"
-                        style={{ padding: "15px", marginTop: "40px" }}
+                        style={{ padding: "15px" }}
                         onClick={() => {
                             this.addAsset();
                         }}
