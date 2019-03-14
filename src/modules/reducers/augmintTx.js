@@ -15,7 +15,10 @@ const initialState = {
     newMessage: null,
     messages: [],
     currentTopic: "",
-    currentTransfer: Promise.resolve()
+    currentTransfer: Promise.resolve(),
+    ipfs: null,
+    networkId: null,
+    tokenAddress: null
 };
 
 const signDelegatedTransfer = async tx => {
@@ -46,20 +49,24 @@ const isValidMessage = msg => true;
 const persistMessage = msg => true;
 
 const changeTopic = (state, action) => {
-    const rootState = store.getState();
-    let ipfs = rootState.ipfs.node;
-    let network = rootState.web3Connect.network;
-    let latestContracts = rootState.contracts.latest;
+    const nextState = { ...state };
+    let ipfs = state.ipfs;
+    let networkId = state.networkId;
+    let tokenAddress = state.tokenAddress;
     if (action.type === IPFS_READY) {
         ipfs = action.result;
+        nextState.ipfs = ipfs;
     } else if (action.type === WEB3_SETUP_SUCCESS) {
-        network = action.network;
+        networkId = action.network.id;
+        nextState.networkId = networkId;
     } else if (action.type === CONTRACTS_CONNECT_SUCCESS) {
-        latestContracts = action.contracts;
+        tokenAddress = action.contracts.augmintToken.address;
+        nextState.tokenAddress = tokenAddress;
     }
-    if (ipfs && network.id && latestContracts.augmintToken && latestContracts.augmintToken.address) {
-        const newTopic = `${latestContracts.augmintToken.address}-${network.id}`;
+    if (ipfs && networkId && tokenAddress) {
+        const newTopic = `${tokenAddress}-${networkId}`;
         if (state.currentTopic !== newTopic) {
+            nextState.currentTopic = newTopic;
             let unsubscribe = Promise.resolve();
             if (state.currentTopic !== "") {
                 unsubscribe = ipfs.pubsub.unsubscribe(state.currentTopic);
@@ -82,13 +89,9 @@ const changeTopic = (state, action) => {
                 )
             );
         }
-        return {
-            ...state,
-            currentTopic: newTopic
-        };
     }
 
-    return state;
+    return nextState;
 };
 
 export default (state = initialState, action) => {
