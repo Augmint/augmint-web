@@ -1,88 +1,164 @@
 import store from "../store/index.js";
+import { IPFS_READY } from "./ipfs.js";
+import { WEB3_SETUP_SUCCESS } from "./web3Connect.js";
+import { CONTRACTS_CONNECT_SUCCESS } from "./contracts.js";
+import { DECIMALS } from "utils/constants";
+import { floatNumberConverter } from "utils/converter";
 
 export const NEW_AUGMINT_TX_MESSAGE = "augmintTx/NEW_MESSAGE";
-export const NEW_AUGMINT_TX_TRANSFER = "augmintTx/NEW_TRANSFER";
+export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
+export const AUGMINT_TX_TRANSFER_SIGN = "augmintTx/TRANSFER_SIGN";
+export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
+export const AUGMINT_TX_TRANSFER_ERROR = "augmintTx/TRANSFER_ERROR";
 
 const initialState = {
     newMessage: null,
-    messages: []
+    messages: [],
+    currentTopic: "",
+    currentTransfer: Promise.resolve()
 };
 
-const signDelegatedTransfer = async clientParams => {
-    let txHash;
+const signDelegatedTransfer = async tx => {
+    let transactionHash;
     const web3 = store.getState().web3Connect.web3Instance;
-
-    if (clientParams.narrative === "") {
+    console.debug(tx);
+    if (tx.narrative === "") {
         // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
-        txHash = web3.utils.soliditySha3(
-            clientParams.from,
-            clientParams.to,
-            clientParams.amount,
-            clientParams.maxExecutorFee,
-            clientParams.nonce
-        );
+        transactionHash = web3.utils.soliditySha3(tx.from, tx.to, tx.amount, tx.maxExecutorFee, tx.nonce);
     } else {
-        txHash = web3.utils.soliditySha3(
-            clientParams.from,
-            clientParams.to,
-            clientParams.amount,
-            clientParams.narrative,
-            clientParams.maxExecutorFee,
-            clientParams.nonce
-        );
+        transactionHash = web3.utils.soliditySha3(tx.from, tx.to, tx.amount, tx.narrative, tx.maxExecutorFee, tx.nonce);
     }
 
-    const signature = await web3.eth.sign(txHash, clientParams.from);
+    const signature = await web3.eth.sign(transactionHash, tx.from);
 
-    return signature;
+    return { signature, transactionHash };
+};
+const publishMessage = async (payload, signature) => {
+    const ipfs = store.getState().ipfs.node;
+    const topic = store.getState().augmintTx.currentTopic;
+
+    const msg = { payload, signature };
+    const result = await ipfs.pubsub.publish(topic, Buffer.from(JSON.stringify(msg)));
+    return result;
 };
 
 const isValidMessage = msg => true;
 const persistMessage = msg => true;
 
+const changeTopic = (state, action) => {
+    const rootState = store.getState();
+    let ipfs = rootState.ipfs.node;
+    let network = rootState.web3Connect.network;
+    let latestContracts = rootState.contracts.latest;
+    if (action.type === IPFS_READY) {
+        ipfs = action.result;
+    } else if (action.type === WEB3_SETUP_SUCCESS) {
+        network = action.network;
+    } else if (action.type === CONTRACTS_CONNECT_SUCCESS) {
+        latestContracts = action.contracts;
+    }
+    if (ipfs && network.id && latestContracts.augmintToken && latestContracts.augmintToken.address) {
+        const newTopic = `${latestContracts.augmintToken.address}-${network.id}`;
+        if (state.currentTopic !== newTopic) {
+            let unsubscribe = Promise.resolve();
+            if (state.currentTopic !== "") {
+                unsubscribe = ipfs.pubsub.unsubscribe(state.currentTopic);
+            }
+            unsubscribe.then(() =>
+                ipfs.pubsub.subscribe(
+                    newTopic,
+                    msg => {
+                        store.dispatch({
+                            type: NEW_AUGMINT_TX_MESSAGE,
+                            result: msg.data.toString()
+                        });
+                    },
+                    err => {
+                        if (err) {
+                            return console.error(`failed to subscribe to ${newTopic}`, err);
+                        }
+                        console.debug(`subscribed to ${newTopic}`);
+                    }
+                )
+            );
+        }
+        return {
+            ...state,
+            currentTopic: newTopic
+        };
+    }
+
+    return state;
+};
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case NEW_AUGMINT_TX_MESSAGE:
-            const newMessage = action.result;
-            if (isValidMessage(newMessage)) {
-                persistMessage(newMessage);
-                console.debug("[augmint tx] listener: ", newMessage);
-                state.messages = [newMessage, ...state.messages];
-                return {
-                    ...state,
-                    newMessage
-                };
+            try {
+                const newMessage = JSON.parse(action.result);
+                if (isValidMessage(newMessage)) {
+                    persistMessage(newMessage);
+                    console.debug("[augmint tx] listener: ", newMessage);
+                    return {
+                        ...state,
+                        messages: [newMessage.payload, ...state.messages]
+                    };
+                }
+                return state;
+            } catch {
+                return state;
             }
-            return state;
-        case NEW_AUGMINT_TX_TRANSFER:
-            return new Promise(resolve => {
-                const web3 = store.getState().web3Connect.web3Instance;
-                const { amount, maxExecutorFee, narrative, to } = action.payload;
-                const from = store.getState().web3Connect.userAccount;
-                const nonce = web3.utils.randomHex(32);
-                const payload = {
-                    from,
-                    to,
-                    amount,
-                    maxExecutorFee,
-                    narrative,
-                    nonce
-                };
-                signDelegatedTransfer(payload).then(signature => {
-                    console.debug(payload, signature);
-                    resolve({
-                        txName: "A-EUR transfer with delegate",
-                        payload,
-                        signature
-                    });
-                });
-            });
+        case IPFS_READY:
+        case WEB3_SETUP_SUCCESS:
+        case CONTRACTS_CONNECT_SUCCESS:
+            return changeTopic(state, action);
+        case AUGMINT_TX_TRANSFER_REQUESTED:
+        case AUGMINT_TX_TRANSFER_SUCCESS:
+        case AUGMINT_TX_TRANSFER_ERROR:
         default:
             return state;
     }
 };
 
-export const transferTokenDelegated = payload => ({
-    type: NEW_AUGMINT_TX_TRANSFER,
-    payload
-});
+export const transferTokenDelegated = payload => {
+    const web3 = store.getState().web3Connect.web3Instance;
+    const { amount, maxExecutorFee, narrative, to } = payload;
+    const from = store.getState().web3Connect.userAccount;
+    const nonce = web3.utils.padLeft(web3.utils.randomHex(32), 64);
+    const tx = {
+        from,
+        to,
+        amount: floatNumberConverter(amount, DECIMALS).toFixed(),
+        maxExecutorFee: floatNumberConverter(maxExecutorFee, DECIMALS).toFixed(),
+        narrative,
+        nonce
+    };
+
+    return async dispatch => {
+        dispatch({
+            type: AUGMINT_TX_TRANSFER_REQUESTED,
+            payload
+        });
+
+        try {
+            const { signature, transactionHash } = await signDelegatedTransfer(tx);
+            const result = await publishMessage(tx, signature);
+            console.debug(tx, signature, transactionHash, result);
+            return dispatch({
+                type: AUGMINT_TX_TRANSFER_SUCCESS,
+                result: {
+                    txName: "A-EUR transfer with delegate",
+                    payload,
+                    signature,
+                    transactionHash
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            return dispatch({
+                type: AUGMINT_TX_TRANSFER_ERROR,
+                error
+            });
+        }
+    };
+};

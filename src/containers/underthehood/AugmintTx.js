@@ -2,17 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
-import augmintTxProvider from "modules/augmintTxProvider";
 
 class AugmintTxList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-        augmintTxProvider();
-    }
-
     render() {
         const isLoading = false;
         let transfers = this.props.messages;
@@ -30,21 +21,15 @@ class AugmintTxList extends React.Component {
                     </StyleThead>
                     <StyleTbody>
                         {transfers.map(tx => (
-                            <StyleTr
-                                key={`txRow-${tx.key}`}
-                                data-testid={`transferListItem-${tx.data.transactionHash}`}
-                            >
-                                <StyleTd className={"hide-xs"}>{tx.date}</StyleTd>
-                                <StyleTd>
-                                    <div className={"show-xs"}>{tx.date}</div>
-                                    {tx.info}
-                                </StyleTd>
-                                <StyleTd style={{ textAlign: "right" }}>
+                            <StyleTr key={`txRow-${tx.key}`} data-testid={`transferListItem-${tx.hash}`}>
+                                <StyleTd className={"hide-xs"}>Hash</StyleTd>
+                                <StyleTd>{tx.from}</StyleTd>
+                                <StyleTd>{tx.to}</StyleTd>
+                                <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     {tx.amount}
-                                    <div className={"show-xs"}>= {tx.balance}</div>
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                    {tx.balance}
+                                    Status
                                 </StyleTd>
                             </StyleTr>
                         ))}
@@ -60,7 +45,7 @@ AugmintTxList.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    messages: state.messages
+    messages: state.augmintTx.messages
 });
 
 export default connect(mapStateToProps)(AugmintTxList);
