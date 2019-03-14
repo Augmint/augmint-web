@@ -46,9 +46,7 @@ class AccountHome extends React.Component {
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 >
-                                    <div style={{ marginTop: "25px" }}>
-                                        <WatchAssetButton />
-                                    </div>
+                                    <WatchAssetButton />
                                 </Balance>
                             </Pgrid.Column>
                             <Pgrid.Column size={{ tablet: 3 / 5 }}>

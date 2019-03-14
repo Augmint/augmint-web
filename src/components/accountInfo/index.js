@@ -64,9 +64,7 @@ export class AccountInfo extends React.Component {
                     {data.web3Connect.network.name}
                 </StyledAccInfoLink>
 
-                <div style={{ marginTop: "40px" }}>
-                    <WatchAssetButton />
-                </div>
+                <WatchAssetButton />
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
         );

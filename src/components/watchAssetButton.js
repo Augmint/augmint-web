@@ -78,7 +78,7 @@ export class WatchAssetButton extends React.Component {
         }
 
         return (
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "25px" }}>
                 {showButton && !this.state.added && (
                     <Button
                         className="primary"
