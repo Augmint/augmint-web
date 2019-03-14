@@ -14,7 +14,6 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
 import WatchAssetButton from "components/watchAssetButton.js";
-import Icon from "components/augmint-ui/icon";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -24,12 +23,6 @@ class AccountHome extends React.Component {
         augmintTokenProvider();
     }
     render() {
-        const web3 = this.props.web3;
-        let isMetamask = null;
-        if (web3 && web3.web3Instance) {
-            const metamask = web3.web3Instance.currentProvider._metamask;
-            isMetamask = metamask ? metamask.isEnabled() : null;
-        }
         return (
             <EthereumState>
                 <Psegment>
@@ -85,8 +78,7 @@ class AccountHome extends React.Component {
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
-    locks: state.locks,
-    web3: state.web3Connect
+    locks: state.locks
 });
 
 export default connect(mapStateToProps)(AccountHome);
