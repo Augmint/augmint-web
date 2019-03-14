@@ -150,12 +150,11 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     }
 
     &.notifications {
+        border-left: solid 1px #fff;
+        border-right: solid 1px #cccccc;
         :hover {
             border-right: solid 1px #fff;
         }
-    }
-    &.addAsset {
-        border-left: solid 1px #fff;
     }
 `;
 
@@ -164,7 +163,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    padding: 0 12px;
+    margin: 0 11px;
     font-size: ${remCalc(14)};
 
     &.accountInfoContainer {

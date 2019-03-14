@@ -5,7 +5,6 @@ import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
 import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
-import Button from "components/augmint-ui/button";
 import WatchAssetButton from "components/watchAssetButton.js";
 
 export class AccountInfo extends React.Component {

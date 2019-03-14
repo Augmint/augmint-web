@@ -74,13 +74,6 @@ class TopNav extends React.Component {
             visibility: "hidden"
         };
 
-        let isMetamask = null;
-
-        if (accountInfoData.web3Connect.web3Instance) {
-            const metamask = accountInfoData.web3Connect.web3Instance.currentProvider._metamask;
-            isMetamask = metamask ? metamask.isEnabled() : null;
-        }
-
         Object.keys(transactions).forEach(e => {
             if (transactions[e].event === "transactionHash" || transactions[e].event === "receipt") {
                 notiIcon = "circle notched";
@@ -120,10 +113,6 @@ class TopNav extends React.Component {
                             onClick={e => this.toggleAccInfo(e, true)}
                             className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
                         >
-                            <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">{shortAddress}</span>
-                            </StyledPrice>
-                            <StyledSeparator />
                             <Icon
                                 name="account"
                                 className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
@@ -138,6 +127,10 @@ class TopNav extends React.Component {
                                 <span className="accountDetailsInfo">
                                     {tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€
                                 </span>
+                            </StyledPrice>
+                            <StyledSeparator />
+                            <StyledPrice className="accountInfoContainer">
+                                <span className="accountDetailsInfo">{shortAddress}</span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
@@ -157,7 +150,6 @@ class TopNav extends React.Component {
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"
-                            style={{ borderRight: "solid 1px #cccccc" }}
                             to=""
                             onClick={e => {
                                 this.toggleNotificationPanel(e);
@@ -176,7 +168,6 @@ class TopNav extends React.Component {
                             title="Under the hood"
                             to="/under-the-hood"
                             data-testid="underTheHoodLink"
-                            className="connected-network"
                         >
                             <Icon name="connect" />
                             <span>{this.props.web3Connect.network.name}</span>
