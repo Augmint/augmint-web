@@ -7,7 +7,6 @@ const initialState = {
     newMessage: null,
     messages: []
 };
-const nonce = "0x0000000000000000000000000000000000000000000000000000000000000003"; // to be a random hash with proper entrophy
 
 const signDelegatedTransfer = async clientParams => {
     let txHash;
@@ -20,7 +19,7 @@ const signDelegatedTransfer = async clientParams => {
             clientParams.to,
             clientParams.amount,
             clientParams.maxExecutorFee,
-            clientParams.nonce || nonce
+            clientParams.nonce
         );
     } else {
         txHash = web3.utils.soliditySha3(
@@ -29,7 +28,7 @@ const signDelegatedTransfer = async clientParams => {
             clientParams.amount,
             clientParams.narrative,
             clientParams.maxExecutorFee,
-            clientParams.nonce || nonce
+            clientParams.nonce
         );
     }
 
@@ -57,18 +56,22 @@ export default (state = initialState, action) => {
             return state;
         case NEW_AUGMINT_TX_TRANSFER:
             return new Promise(resolve => {
+                const web3 = store.getState().web3Connect.web3Instance;
                 const { amount, maxExecutorFee, narrative, to } = action.payload;
                 const from = store.getState().web3Connect.userAccount;
+                const nonce = web3.utils.randomHex(32);
                 const payload = {
                     from,
                     to,
                     amount,
                     maxExecutorFee,
-                    narrative
+                    narrative,
+                    nonce
                 };
                 signDelegatedTransfer(payload).then(signature => {
                     console.debug(payload, signature);
                     resolve({
+                        txName: "A-EUR transfer with delegate",
                         payload,
                         signature
                     });

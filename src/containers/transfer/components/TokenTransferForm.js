@@ -81,7 +81,7 @@ class TokenTransferForm extends React.Component {
 
     async handleSubmitWithAugmintTx(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
-        const res = await store.dispatch(
+        const result = await store.dispatch(
             transferTokenDelegated({
                 amount: tokenAmount,
                 to: values.payee,
@@ -89,7 +89,12 @@ class TokenTransferForm extends React.Component {
                 maxExecutorFee: values.delegatedTransferFee
             })
         );
-        console.debug(res);
+        this.setState({
+            result,
+            to: values.payee,
+            tokenAmount,
+            feeAmount: values.delegatedTransferFee
+        });
     }
 
     async handleSubmitWithETH(values) {
