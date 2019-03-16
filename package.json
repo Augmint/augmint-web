@@ -21,7 +21,7 @@
     "react-dom": "16.8.4",
     "react-ga": "2.5.7",
     "react-redux": "6.0.1",
-    "react-router-dom": "4.3.1",
+    "react-router-dom": "4.4.0",
     "react-scripts": "2.1.8",
     "react-scrollchor": "6.0.0",
     "react-tooltip": "3.10.0",
