@@ -2,11 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
-import { setupTopicWatch } from "modules/augmintTxProvider";
+import { setupTopicWatch, startRepeating } from "modules/augmintTxProvider";
 
 class AugmintTxList extends React.Component {
     componentDidMount() {
         setupTopicWatch();
+        startRepeating();
     }
 
     render() {
@@ -26,12 +27,12 @@ class AugmintTxList extends React.Component {
                     </StyleThead>
                     <StyleTbody>
                         {transfers.map(tx => (
-                            <StyleTr key={`txRow-${tx.key}`} data-testid={`transferListItem-${tx.hash}`}>
-                                <StyleTd className={"hide-xs"}>Hash</StyleTd>
-                                <StyleTd>{tx.from}</StyleTd>
-                                <StyleTd>{tx.to}</StyleTd>
+                            <StyleTr key={`txRow-${tx.hash}`} data-testid={`transferListItem-${tx.hash}`}>
+                                <StyleTd className={"hide-xs"}>{tx.hash}</StyleTd>
+                                <StyleTd>{tx.payload.from}</StyleTd>
+                                <StyleTd>{tx.payload.to}</StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                    {tx.amount}
+                                    {tx.payload.amount}
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     Status

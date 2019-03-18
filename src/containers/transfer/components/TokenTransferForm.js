@@ -16,7 +16,7 @@ import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintT
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
 import { transferTokenDelegated } from "modules/reducers/augmintTx";
-import { setupTopicWatch } from "modules/augmintTxProvider";
+import { setupTopicWatch, startRepeating } from "modules/augmintTxProvider";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
@@ -33,6 +33,7 @@ class TokenTransferForm extends React.Component {
 
     componentDidMount() {
         setupTopicWatch();
+        startRepeating();
     }
 
     componentDidUpdate() {
