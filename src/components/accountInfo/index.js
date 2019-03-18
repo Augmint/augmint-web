@@ -64,6 +64,7 @@ export class AccountInfo extends React.Component {
                 </StyledAccInfoLink>
 
                 <WatchAssetButton />
+
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
         );

@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { watchAsset } from "modules/watchAsset.js";
 import Button from "components/augmint-ui/button";
-import { getCookie } from "utils/cookie.js";
+import store from "modules/store";
+import { watchAssetChange } from "modules/reducers/web3Connect";
 
 export class WatchAssetButton extends React.Component {
     constructor(props) {
@@ -12,9 +13,6 @@ export class WatchAssetButton extends React.Component {
         this.cookies = null;
         this.newCookie = null;
         this.value = null;
-        this.state = {
-            added: false
-        };
 
         this.isAssetAdded = true;
         this.isMetamask = false;
@@ -26,13 +24,14 @@ export class WatchAssetButton extends React.Component {
         const provider = this.props.web3.web3Instance.currentProvider;
         watchAsset(address, this.props.augmint, provider, this.newCookie).then(res => {
             if (res) {
-                this.setState({ added: true });
+                store.dispatch(watchAssetChange(this.newCookie));
             }
         });
     }
 
-    watchAssetCookie() {
-        if (this.cookies) {
+    isAssetAlreadyAdded() {
+        let isAssetAdded;
+        if (this.cookies && this.cookies.length) {
             let contains = this.cookies.filter(c => {
                 let equal = true;
                 Object.keys(c).forEach(key => {
@@ -46,23 +45,24 @@ export class WatchAssetButton extends React.Component {
             if (!contains || !contains.length) {
                 this.newCookie = [...this.cookies];
                 this.newCookie.push(this.value);
-                this.isAssetAdded = false;
+                isAssetAdded = false;
             } else {
-                this.isAssetAdded = true;
+                isAssetAdded = true;
             }
         } else {
             this.newCookie = [this.value];
-            this.isAssetAdded = false;
+            isAssetAdded = false;
         }
-        return this.isAssetAdded;
+        return isAssetAdded;
     }
 
     render() {
         const { web3, contracts, augmint, user } = this.props;
-        this.cookies = getCookie("watchAsset");
         let showButton = false;
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
+            this.cookies = web3.watchAsset;
+
             this.value = {
                 tokenAddress: contracts.latest.augmintToken.address,
                 network: web3.network.name,
@@ -73,16 +73,16 @@ export class WatchAssetButton extends React.Component {
             this.isMetamask = metamask ? metamask.isEnabled() : null;
             this.hasAugmint = user.account.tokenBalance > 0;
 
-            this.watchAssetCookie();
+            this.isAssetAdded = this.isAssetAlreadyAdded();
             showButton = this.isMetamask && !this.isAssetAdded && this.hasAugmint;
         }
 
         return (
             <div style={{ textAlign: "center" }}>
-                {showButton && !this.state.added && (
+                {showButton && (
                     <Button
                         className="primary"
-                        style={{ padding: "15px", marginTop: "25px" }}
+                        style={{ padding: "15px 20px", marginTop: "25px" }}
                         onClick={() => {
                             this.addAsset();
                         }}

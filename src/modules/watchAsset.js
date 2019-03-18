@@ -1,5 +1,3 @@
-import { setCookie } from "utils/cookie.js";
-
 export const watchAsset = (address, augmint, provider, cookie) => {
     const tokenType = "ERC20";
     const image = "https://www.augmint.org/augmint-token-image.png"; // only works after deploy
@@ -25,7 +23,6 @@ export const watchAsset = (address, augmint, provider, cookie) => {
             },
             (err, added) => {
                 if (added.result) {
-                    setCookie("watchAsset", cookie);
                     resolve(added.result);
                 } else if (err || added.error) {
                     resolve(false);
