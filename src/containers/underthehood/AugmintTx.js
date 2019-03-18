@@ -2,8 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
+import { setupTopicWatch } from "modules/augmintTxProvider";
 
 class AugmintTxList extends React.Component {
+    componentDidMount() {
+        setupTopicWatch();
+    }
+
     render() {
         const isLoading = false;
         let transfers = this.props.messages;

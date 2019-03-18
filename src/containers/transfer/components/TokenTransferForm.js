@@ -15,7 +15,8 @@ import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
-import { transferTokenDelegated } from "modules/reducers/augmintTx.js";
+import { transferTokenDelegated } from "modules/reducers/augmintTx";
+import { setupTopicWatch } from "modules/augmintTxProvider";
 
 class TokenTransferForm extends React.Component {
     constructor(props) {
@@ -28,6 +29,10 @@ class TokenTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
+    }
+
+    componentDidMount() {
+        setupTopicWatch();
     }
 
     componentDidUpdate() {

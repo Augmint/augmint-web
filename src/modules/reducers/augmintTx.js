@@ -1,7 +1,4 @@
-import store from "../store/index.js";
-import { IPFS_READY } from "./ipfs.js";
-import { WEB3_SETUP_SUCCESS } from "./web3Connect.js";
-import { CONTRACTS_CONNECT_SUCCESS } from "./contracts.js";
+import store from "modules/store";
 import { DECIMALS } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
@@ -10,21 +7,18 @@ export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
 export const AUGMINT_TX_TRANSFER_SIGN = "augmintTx/TRANSFER_SIGN";
 export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
 export const AUGMINT_TX_TRANSFER_ERROR = "augmintTx/TRANSFER_ERROR";
+export const AUGMINT_TX_CHANGE_TOPIC = "augmintTx/CHANGE_TOPIC";
 
 const initialState = {
     newMessage: null,
     messages: [],
     currentTopic: "",
-    currentTransfer: Promise.resolve(),
-    ipfs: null,
-    networkId: null,
-    tokenAddress: null
+    currentTransfer: Promise.resolve()
 };
 
-const signDelegatedTransfer = async tx => {
+async function signDelegatedTransfer(tx) {
     let transactionHash;
     const web3 = store.getState().web3Connect.web3Instance;
-    console.debug(tx);
     if (tx.narrative === "") {
         // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
         transactionHash = web3.utils.soliditySha3(tx.from, tx.to, tx.amount, tx.maxExecutorFee, tx.nonce);
@@ -35,38 +29,24 @@ const signDelegatedTransfer = async tx => {
     const signature = await web3.eth.sign(transactionHash, tx.from);
 
     return { signature, transactionHash };
-};
-const publishMessage = async (payload, signature) => {
+}
+
+async function publishMessage(payload, signature) {
     const ipfs = store.getState().ipfs.node;
     const topic = store.getState().augmintTx.currentTopic;
 
     const msg = { payload, signature };
     const result = await ipfs.pubsub.publish(topic, Buffer.from(JSON.stringify(msg)));
     return result;
-};
+}
 
 const isValidMessage = msg => true;
 const persistMessage = msg => true;
 
-const changeTopic = (state, action) => {
-    const nextState = { ...state };
-    let ipfs = state.ipfs;
-    let networkId = state.networkId;
-    let tokenAddress = state.tokenAddress;
-    if (action.type === IPFS_READY) {
-        ipfs = action.result;
-        nextState.ipfs = ipfs;
-    } else if (action.type === WEB3_SETUP_SUCCESS) {
-        networkId = action.network.id;
-        nextState.networkId = networkId;
-    } else if (action.type === CONTRACTS_CONNECT_SUCCESS) {
-        tokenAddress = action.contracts.augmintToken.address;
-        nextState.tokenAddress = tokenAddress;
-    }
-    if (ipfs && networkId && tokenAddress) {
-        const newTopic = `${tokenAddress}-${networkId}`;
-        if (state.currentTopic !== newTopic) {
-            nextState.currentTopic = newTopic;
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case AUGMINT_TX_CHANGE_TOPIC:
+            const { newTopic, ipfs } = action.payload;
             let unsubscribe = Promise.resolve();
             if (state.currentTopic !== "") {
                 unsubscribe = ipfs.pubsub.unsubscribe(state.currentTopic);
@@ -88,14 +68,10 @@ const changeTopic = (state, action) => {
                     }
                 )
             );
-        }
-    }
-
-    return nextState;
-};
-
-export default (state = initialState, action) => {
-    switch (action.type) {
+            return {
+                ...state,
+                currentTopic: newTopic
+            };
         case NEW_AUGMINT_TX_MESSAGE:
             try {
                 const newMessage = JSON.parse(action.result);
@@ -111,10 +87,6 @@ export default (state = initialState, action) => {
             } catch {
                 return state;
             }
-        case IPFS_READY:
-        case WEB3_SETUP_SUCCESS:
-        case CONTRACTS_CONNECT_SUCCESS:
-            return changeTopic(state, action);
         case AUGMINT_TX_TRANSFER_REQUESTED:
         case AUGMINT_TX_TRANSFER_SUCCESS:
         case AUGMINT_TX_TRANSFER_ERROR:
@@ -123,7 +95,7 @@ export default (state = initialState, action) => {
     }
 };
 
-export const transferTokenDelegated = payload => {
+export function transferTokenDelegated(payload) {
     const web3 = store.getState().web3Connect.web3Instance;
     const { amount, maxExecutorFee, narrative, to } = payload;
     const from = store.getState().web3Connect.userAccount;
@@ -164,4 +136,4 @@ export const transferTokenDelegated = payload => {
             });
         }
     };
-};
+}
