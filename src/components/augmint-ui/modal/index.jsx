@@ -22,13 +22,15 @@ export default class Modal extends React.Component {
     }
 
     handleKeyUp(e) {
-        const { onCloseRequest } = this.props;
+        const { onCloseRequest, noEsc } = this.props;
         const keys = {
             27: () => {
                 e.preventDefault();
-                onCloseRequest();
-                window.removeEventListener("keyup", this.handleKeyUp, false);
-                this.body.classList.remove("noScroll");
+                if (!noEsc) {
+                    onCloseRequest();
+                    window.removeEventListener("keyup", this.handleKeyUp, false);
+                    this.body.classList.remove("noScroll");
+                }
             }
         };
 

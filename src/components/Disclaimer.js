@@ -96,7 +96,7 @@ export default class Disclaimer extends React.Component {
     render() {
         return (
             !this.state.dismissed && (
-                <Modal onCloseRequest={this.close}>
+                <Modal onCloseRequest={this.close} noEsc={true}>
                     <ModalContent style={{ height: "calc(100% - 112px)" }}>
                         <ModalHeader>
                             <h3 style={{ marginTop: 0 }}>Augmint Disclaimer</h3>
@@ -135,7 +135,7 @@ export default class Disclaimer extends React.Component {
                                 className={_className}
                             />
                             <Styledlabel for="disclaimer-chcekbox" className={_className}>
-                                I have read and agree to Augmint's <Link to="/disclaimer">Disclaimer</Link>.
+                                I have read and agree to Augmint's Disclaimer.
                             </Styledlabel>
                         </StyledSection>
                     </ModalContent>
