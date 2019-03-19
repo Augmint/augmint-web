@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import { StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import { setupTopicWatch, startRepeating } from "modules/augmintTxProvider";
+import { decimalNumberConverter } from "utils/converter";
+import { DECIMALS } from "utils/constants";
+import moment from "moment";
 
 class AugmintTxList extends React.Component {
     componentDidMount() {
@@ -18,21 +21,43 @@ class AugmintTxList extends React.Component {
                 <StyleTable>
                     <StyleThead>
                         <StyleTr>
-                            <StyleTh className={"hide-xs"}>Hash</StyleTh>
-                            <StyleTh>From</StyleTh>
-                            <StyleTh>To</StyleTh>
+                            <StyleTh className={"hide-xs"}>Message</StyleTh>
                             <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
+                            <StyleTh style={{ textAlign: "right" }}>Fee</StyleTh>
                             <StyleTh style={{ textAlign: "right" }}>Status</StyleTh>
                         </StyleTr>
                     </StyleThead>
                     <StyleTbody>
                         {transfers.map(tx => (
                             <StyleTr key={`txRow-${tx.hash}`} data-testid={`transferListItem-${tx.hash}`}>
-                                <StyleTd className={"hide-xs"}>{tx.hash}</StyleTd>
-                                <StyleTd>{tx.payload.from}</StyleTd>
-                                <StyleTd>{tx.payload.to}</StyleTd>
+                                <StyleTd>
+                                    <div>
+                                        <b>Hash:</b>
+                                        {tx.hash}
+                                    </div>
+                                    <div>
+                                        <b>From:</b>
+                                        {tx.payload.from}
+                                    </div>
+                                    <div>
+                                        <b>To:</b>
+                                        {tx.payload.to}
+                                    </div>
+                                    <div>
+                                        <i>{tx.payload.narrative}</i>
+                                    </div>
+                                    <hr />
+                                    <div>
+                                        <b>Last seen:</b>
+                                        {tx.lastSeen.id} @{" "}
+                                        {moment.unix(tx.lastSeen.date / 1000).format("D MMM YYYY HH:mm")}
+                                    </div>
+                                </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                    {tx.payload.amount}
+                                    {decimalNumberConverter(tx.payload.amount, DECIMALS)}
+                                </StyleTd>
+                                <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
+                                    {decimalNumberConverter(tx.payload.maxExecutorFee, DECIMALS)}
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     Status

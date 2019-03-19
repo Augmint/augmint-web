@@ -2,7 +2,7 @@ import store from "modules/store";
 import { DECIMALS } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
-export const NEW_AUGMINT_TX_MESSAGE = "augmintTx/NEW_MESSAGE";
+export const AUGMINT_TX_NEW_MESSAGE = "augmintTx/NEW_MESSAGE";
 export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
 export const AUGMINT_TX_TRANSFER_SIGN = "augmintTx/TRANSFER_SIGN";
 export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
@@ -10,9 +10,11 @@ export const AUGMINT_TX_TRANSFER_ERROR = "augmintTx/TRANSFER_ERROR";
 export const AUGMINT_TX_CHANGE_TOPIC = "augmintTx/CHANGE_TOPIC";
 export const AUGMINT_TX_REPEAT = "augmintTx/REPEAT";
 export const AUGMINT_TX_REPEAT_END = "augmintTx/REPEAT_END";
+export const AUGMINT_TX_NEW_LIST = "augmintTx/NEW_LIST";
+export const AUGMINT_TX_NEW_MESSAGE_ERROR = "augmintTx/NEW_MESSAGE_ERROR";
 
-const REPEAT_SLICE = 10;
-const REPEAT_TIMEOUT = 10 * 1000;
+const REPEAT_SLICE = 1000;
+const REPEAT_TIMEOUT = 5 * 1000;
 
 const initialState = {
     newMessage: null,
@@ -38,12 +40,16 @@ function hashMessage(tx) {
 
 async function signDelegatedTransfer(tx) {
     const web3 = store.getState().web3Connect.web3Instance;
-
     const transactionHash = hashMessage(tx);
-
-    const signature = await web3.eth.sign(transactionHash, tx.from);
-
+    const signature = await web3.eth.personal.sign(transactionHash, tx.from);
     return { signature, transactionHash };
+}
+
+async function recoverFrom(tx, signature) {
+    const web3 = store.getState().web3Connect.web3Instance;
+    const transactionHash = hashMessage(tx);
+    const from = await web3.eth.personal.ecRecover(transactionHash, signature);
+    return { from, transactionHash };
 }
 
 async function publishMessage(payload, signature, hash) {
@@ -66,9 +72,54 @@ function repeatMessage(msg) {
     }, REPEAT_TIMEOUT);
 }
 
-const isValidMessage = msg => true;
-const persistMessage = msg => true;
-const isExists = (msg, all = []) => !!all.find(item => item.hash === msg.hash);
+function transformMessage(rawMessage) {
+    const newMessage = JSON.parse(rawMessage.data.toString());
+    newMessage.lastSeen = {
+        id: rawMessage.from,
+        date: Date.now()
+    };
+    return newMessage;
+}
+
+function addMessage(newMessage, messages) {
+    return async function(dispatch) {
+        dispatch({ type: AUGMINT_TX_NEW_MESSAGE });
+        try {
+            const msg = transformMessage(newMessage);
+            const { from, transactionHash } = await recoverFrom(msg.payload, msg.signature);
+
+            if (
+                msg.payload.from.toLowerCase() === from.toLowerCase() &&
+                msg.hash.toLowerCase() === transactionHash.toLowerCase()
+            ) {
+                let updated = false;
+                const newMessageList = messages.map(item => {
+                    if (item.hash === msg.hash) {
+                        updated = true;
+                        return msg;
+                    }
+                    return item;
+                });
+
+                dispatch({
+                    type: AUGMINT_TX_NEW_LIST,
+                    list: updated ? newMessageList : [msg, ...newMessageList]
+                });
+            } else {
+                console.error("Message Error: ", msg, from, transactionHash);
+                dispatch({
+                    type: AUGMINT_TX_NEW_MESSAGE_ERROR,
+                    error: { msg, from, transactionHash }
+                });
+            }
+        } catch (e) {
+            dispatch({
+                type: AUGMINT_TX_NEW_MESSAGE_ERROR,
+                error: { newMessage, e }
+            });
+        }
+    };
+}
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -98,10 +149,7 @@ export default (state = initialState, action) => {
                 ipfs.pubsub.subscribe(
                     newTopic,
                     msg => {
-                        store.dispatch({
-                            type: NEW_AUGMINT_TX_MESSAGE,
-                            result: msg.data.toString()
-                        });
+                        store.dispatch(addMessage(msg, state.messages));
                     },
                     err => {
                         if (err) {
@@ -115,22 +163,15 @@ export default (state = initialState, action) => {
                 ...state,
                 currentTopic: newTopic
             };
-        case NEW_AUGMINT_TX_MESSAGE:
-            try {
-                const newMessage = JSON.parse(action.result);
-                console.debug("[augmint tx] listener: ", newMessage);
-                if (isValidMessage(newMessage) && !isExists(newMessage, state.messages)) {
-                    persistMessage(newMessage);
-                    return {
-                        ...state,
-                        repeats: [newMessage, ...state.repeats].slice(0, REPEAT_SLICE),
-                        messages: [newMessage, ...state.messages]
-                    };
-                }
-                return state;
-            } catch {
-                return state;
-            }
+        case AUGMINT_TX_NEW_LIST:
+            return {
+                ...state,
+                repeats: action.list.slice(0, REPEAT_SLICE),
+                messages: action.list
+            };
+
+        case AUGMINT_TX_NEW_MESSAGE:
+        case AUGMINT_TX_NEW_MESSAGE_ERROR:
         case AUGMINT_TX_TRANSFER_REQUESTED:
         case AUGMINT_TX_TRANSFER_SUCCESS:
         case AUGMINT_TX_TRANSFER_ERROR:
