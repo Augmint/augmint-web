@@ -30,9 +30,24 @@ function hashMessage(tx) {
     const web3 = store.getState().web3Connect.web3Instance;
     if (tx.narrative === "") {
         // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
-        transactionHash = web3.utils.soliditySha3(tx.from, tx.to, tx.amount, tx.maxExecutorFee, tx.nonce);
+        transactionHash = web3.utils.soliditySha3(
+            tx.tokenAddress,
+            tx.from,
+            tx.to,
+            tx.amount,
+            tx.maxExecutorFee,
+            tx.nonce
+        );
     } else {
-        transactionHash = web3.utils.soliditySha3(tx.from, tx.to, tx.amount, tx.narrative, tx.maxExecutorFee, tx.nonce);
+        transactionHash = web3.utils.soliditySha3(
+            tx.tokenAddress,
+            tx.from,
+            tx.to,
+            tx.amount,
+            tx.narrative,
+            tx.maxExecutorFee,
+            tx.nonce
+        );
     }
 
     return transactionHash;
@@ -181,11 +196,14 @@ export default (state = initialState, action) => {
 };
 
 export function transferTokenDelegated(payload) {
-    const web3 = store.getState().web3Connect.web3Instance;
+    const state = store.getState();
+    const web3 = state.web3Connect.web3Instance;
     const { amount, maxExecutorFee, narrative, to } = payload;
-    const from = store.getState().web3Connect.userAccount;
+    const from = state.web3Connect.userAccount;
     const nonce = web3.utils.padLeft(web3.utils.randomHex(32), 64);
+    const tokenAddress = state.contracts.latest.augmintToken.address;
     const tx = {
+        tokenAddress,
         from,
         to,
         amount: floatNumberConverter(amount, DECIMALS).toFixed(),

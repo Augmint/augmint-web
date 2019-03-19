@@ -23,7 +23,13 @@ class AugmintTxList extends React.Component {
                         <StyleTr>
                             <StyleTh className={"hide-xs"}>Message</StyleTh>
                             <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
-                            <StyleTh style={{ textAlign: "right" }}>Fee</StyleTh>
+                            <StyleTh style={{ textAlign: "right" }}>
+                                Maximum
+                                <br />
+                                Executor
+                                <br />
+                                Fee
+                            </StyleTh>
                             <StyleTh style={{ textAlign: "right" }}>Status</StyleTh>
                         </StyleTr>
                     </StyleThead>
@@ -52,6 +58,7 @@ class AugmintTxList extends React.Component {
                                         {tx.lastSeen.id} @{" "}
                                         {moment.unix(tx.lastSeen.date / 1000).format("D MMM YYYY HH:mm")}
                                     </div>
+                                    <textarea defaultValue={JSON.stringify(tx)} />
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     {decimalNumberConverter(tx.payload.amount, DECIMALS)}
@@ -59,9 +66,7 @@ class AugmintTxList extends React.Component {
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     {decimalNumberConverter(tx.payload.maxExecutorFee, DECIMALS)}
                                 </StyleTd>
-                                <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                    Status
-                                </StyleTd>
+                                <StyleTd style={{ textAlign: "right" }} className={"hide-xs"} />
                             </StyleTr>
                         ))}
                     </StyleTbody>
