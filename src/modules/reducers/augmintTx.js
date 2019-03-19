@@ -58,7 +58,7 @@ async function publishMessage(payload, signature, hash) {
 function repeatMessage(msg) {
     setTimeout(async () => {
         if (msg) {
-            console.debug("[augmint tx] repeat", msg);
+            console.debug("[augmint tx] repeat", msg.hash);
             await publishMessage(msg.payload, msg.signature, msg.hash);
         }
         store.dispatch({ type: AUGMINT_TX_REPEAT_END });
@@ -75,10 +75,10 @@ export default (state = initialState, action) => {
         case AUGMINT_TX_REPEAT:
             if (!state.repeating) {
                 const msg = state.repeats.pop();
-                repeatMessage(msg);
+                repeatMessage(msg, state.repeating);
                 return {
                     ...state,
-                    repeating: true,
+                    repeating: msg,
                     repeats: [msg, ...state.repeats]
                 };
             }
