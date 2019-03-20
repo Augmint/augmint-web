@@ -102,7 +102,7 @@ export default class SiteMenu extends React.Component {
                         <Button
                             type="a"
                             data-testid="useAEurButton"
-                            to={!showConnection && isConnected ? "/account" : "/tryit"}
+                            to="/account"
                             color="primary"
                             style={{ marginLeft: "15px" }}
                             onClick={e => toggleScroll(false)}
