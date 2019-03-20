@@ -156,7 +156,9 @@ export default class Disclaimer extends React.Component {
                                     I have read and agree to Augmint's Disclaimer.
                                 </Styledlabel>
                             </div>
-                            <p className={_className}>To continue agree to Augmint's Disclaimer.</p>
+                            <p className={_className}>
+                                Please indicate that you read and agree to Augmint's Disclaimer.
+                            </p>
                         </StyledSection>
                         <Button onClick={this.handleClick} data-testid="disclaimerCloseButton">
                             Continue
