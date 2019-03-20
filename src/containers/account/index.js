@@ -45,7 +45,7 @@ class AccountHome extends React.Component {
                                         Buy / Sell A-EUR
                                     </Button>
                                     <Button to="/transfer" className="primary" data-testid="transferButton">
-                                        Transfer A-EUR
+                                        Send A-EUR
                                     </Button>
                                 </div>
                             </Pgrid.Column>
