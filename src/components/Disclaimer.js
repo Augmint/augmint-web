@@ -113,7 +113,7 @@ export default class Disclaimer extends React.Component {
                     {/* <ModalContent style={{ height: "calc(100% - 112px)" }}> */}
                     <ModalContent className="disclaimer-modal">
                         <ModalHeader>
-                            <h3 style={{ marginTop: 0, maringBottom: "20px" }}>Augmint Disclaimer</h3>
+                            <h3 style={{ marginTop: 0, marginBottom: "20px" }}>Augmint Disclaimer</h3>
                         </ModalHeader>
                         <StyledDiv>
                             <p>
@@ -149,6 +149,7 @@ export default class Disclaimer extends React.Component {
                                     type="checkbox"
                                     id="disclaimer-chcekbox"
                                     name="disclaimer"
+                                    data-testid="disclaimer-chcekbox"
                                     className={_className}
                                 />
                                 <Styledlabel for="disclaimer-chcekbox" className={_className}>
