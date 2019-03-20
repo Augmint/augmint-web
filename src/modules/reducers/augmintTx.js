@@ -1,10 +1,9 @@
 import store from "modules/store";
-import { DECIMALS } from "utils/constants";
+import { DECIMALS, DELEGATED_TRANSPORT_REPEAT_SLICE, DELEGATED_TRANSPORT_REPEAT_TIMEOUT } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 export const AUGMINT_TX_NEW_MESSAGE = "augmintTx/NEW_MESSAGE";
 export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
-export const AUGMINT_TX_TRANSFER_SIGN = "augmintTx/TRANSFER_SIGN";
 export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
 export const AUGMINT_TX_TRANSFER_ERROR = "augmintTx/TRANSFER_ERROR";
 export const AUGMINT_TX_CHANGE_TOPIC = "augmintTx/CHANGE_TOPIC";
@@ -13,8 +12,65 @@ export const AUGMINT_TX_REPEAT_END = "augmintTx/REPEAT_END";
 export const AUGMINT_TX_NEW_LIST = "augmintTx/NEW_LIST";
 export const AUGMINT_TX_NEW_MESSAGE_ERROR = "augmintTx/NEW_MESSAGE_ERROR";
 
-const REPEAT_SLICE = 1000;
-const REPEAT_TIMEOUT = 5 * 1000;
+const MESSAGE_STATUS = {
+    WAITING: 1,
+    IN_PROGRESS: 2,
+    COMPLETED: 3
+};
+
+const MESSAGE_STATUS_TEXT = [undefined, "waiting for transfer", "in progress", "completed"];
+
+class Message {
+    hash = null;
+    signature = "";
+    payload = null;
+    status = 0;
+    lastSeen = null;
+
+    get statusText() {
+        return MESSAGE_STATUS_TEXT[this.status];
+    }
+
+    constructor(o) {
+        Object.assign(this, o);
+    }
+
+    makeHash(web3) {
+        const tx = this.payload;
+        if (tx.narrative === "") {
+            // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
+            this.hash = web3.utils.soliditySha3(
+                tx.tokenAddress,
+                tx.from,
+                tx.to,
+                tx.amount,
+                tx.maxExecutorFee,
+                tx.nonce
+            );
+        } else {
+            this.hash = web3.utils.soliditySha3(
+                tx.tokenAddress,
+                tx.from,
+                tx.to,
+                tx.amount,
+                tx.narrative,
+                tx.maxExecutorFee,
+                tx.nonce
+            );
+        }
+    }
+
+    async sign(web3) {
+        this.makeHash(web3);
+        this.signature = await web3.eth.personal.sign(this.hash, this.payload.from);
+    }
+
+    async verify(web3) {
+        this.makeHash(web3);
+        const from = await web3.eth.personal.ecRecover(this.hash, this.signature);
+        return this.payload.from.toLowerCase() === from.toLowerCase();
+    }
+}
 
 const initialState = {
     newMessage: null,
@@ -25,53 +81,10 @@ const initialState = {
     currentTransfer: Promise.resolve()
 };
 
-function hashMessage(tx) {
-    let transactionHash;
-    const web3 = store.getState().web3Connect.web3Instance;
-    if (tx.narrative === "") {
-        // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
-        transactionHash = web3.utils.soliditySha3(
-            tx.tokenAddress,
-            tx.from,
-            tx.to,
-            tx.amount,
-            tx.maxExecutorFee,
-            tx.nonce
-        );
-    } else {
-        transactionHash = web3.utils.soliditySha3(
-            tx.tokenAddress,
-            tx.from,
-            tx.to,
-            tx.amount,
-            tx.narrative,
-            tx.maxExecutorFee,
-            tx.nonce
-        );
-    }
-
-    return transactionHash;
-}
-
-async function signDelegatedTransfer(tx) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const transactionHash = hashMessage(tx);
-    const signature = await web3.eth.personal.sign(transactionHash, tx.from);
-    return { signature, transactionHash };
-}
-
-async function recoverFrom(tx, signature) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const transactionHash = hashMessage(tx);
-    const from = await web3.eth.personal.ecRecover(transactionHash, signature);
-    return { from, transactionHash };
-}
-
-async function publishMessage(payload, signature, hash) {
+async function publishMessage(msg) {
     const ipfs = store.getState().ipfs.node;
     const topic = store.getState().augmintTx.currentTopic;
 
-    const msg = { payload, signature, hash };
     const result = await ipfs.pubsub.publish(topic, Buffer.from(JSON.stringify(msg)));
     return result;
 }
@@ -80,15 +93,15 @@ function repeatMessage(msg) {
     setTimeout(async () => {
         if (msg) {
             console.debug("[augmint tx] repeat", msg.hash);
-            await publishMessage(msg.payload, msg.signature, msg.hash);
+            await publishMessage(msg);
         }
         store.dispatch({ type: AUGMINT_TX_REPEAT_END });
         store.dispatch({ type: AUGMINT_TX_REPEAT });
-    }, REPEAT_TIMEOUT);
+    }, DELEGATED_TRANSPORT_REPEAT_TIMEOUT);
 }
 
 function transformMessage(rawMessage) {
-    const newMessage = JSON.parse(rawMessage.data.toString());
+    const newMessage = new Message(JSON.parse(rawMessage.data.toString()));
     newMessage.lastSeen = {
         id: rawMessage.from,
         date: Date.now()
@@ -97,16 +110,15 @@ function transformMessage(rawMessage) {
 }
 
 function addMessage(newMessage, messages) {
+    const state = store.getState();
+    const web3 = state.web3Connect.web3Instance;
+
     return async function(dispatch) {
         dispatch({ type: AUGMINT_TX_NEW_MESSAGE });
         try {
             const msg = transformMessage(newMessage);
-            const { from, transactionHash } = await recoverFrom(msg.payload, msg.signature);
 
-            if (
-                msg.payload.from.toLowerCase() === from.toLowerCase() &&
-                msg.hash.toLowerCase() === transactionHash.toLowerCase()
-            ) {
+            if (msg.verify(web3)) {
                 let updated = false;
                 const newMessageList = messages.map(item => {
                     if (item.hash === msg.hash) {
@@ -121,10 +133,9 @@ function addMessage(newMessage, messages) {
                     list: updated ? newMessageList : [msg, ...newMessageList]
                 });
             } else {
-                console.error("Message Error: ", msg, from, transactionHash);
                 dispatch({
                     type: AUGMINT_TX_NEW_MESSAGE_ERROR,
-                    error: { msg, from, transactionHash }
+                    error: { msg }
                 });
             }
         } catch (e) {
@@ -181,7 +192,7 @@ export default (state = initialState, action) => {
         case AUGMINT_TX_NEW_LIST:
             return {
                 ...state,
-                repeats: action.list.slice(0, REPEAT_SLICE),
+                repeats: action.list.slice(0, DELEGATED_TRANSPORT_REPEAT_SLICE),
                 messages: action.list
             };
 
@@ -219,17 +230,15 @@ export function transferTokenDelegated(payload) {
         });
 
         try {
-            const { signature, transactionHash } = await signDelegatedTransfer(tx);
-            const result = await publishMessage(tx, signature, transactionHash);
-            console.debug(tx, signature, transactionHash, result);
+            const newMessage = new Message({
+                payload: tx,
+                status: MESSAGE_STATUS.WAITING
+            });
+            await newMessage.sign(web3);
+            await publishMessage(newMessage);
             return dispatch({
                 type: AUGMINT_TX_TRANSFER_SUCCESS,
-                result: {
-                    txName: "A-EUR transfer with delegate",
-                    payload,
-                    signature,
-                    transactionHash
-                }
+                result: newMessage
             });
         } catch (error) {
             console.error(error);

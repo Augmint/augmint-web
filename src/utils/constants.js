@@ -164,3 +164,6 @@ export const NETWORKS = {
     4447: "TruffleLocal",
     1976: "PrivateChain"
 };
+
+export const DELEGATED_TRANSPORT_REPEAT_SLICE = 1000;
+export const DELEGATED_TRANSPORT_REPEAT_TIMEOUT = 2 * 1000;
