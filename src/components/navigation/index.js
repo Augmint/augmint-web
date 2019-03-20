@@ -96,12 +96,12 @@ export default class SiteMenu extends React.Component {
                     </StyledNavLeftSide>
 
                     <StyledNavRightSide>
-                        <Button type="a" to="/tryit" color="primary" className="try-now">
+                        <Button type="a" to="/tryit" color="primary" className="try-now" data-testid="tryItButton">
                             Try now
                         </Button>
                         <Button
                             type="a"
-                            data-testid="useAEurButton"
+                            data-testid="myAccountButton"
                             to="/account"
                             color="primary"
                             style={{ marginLeft: "15px" }}
