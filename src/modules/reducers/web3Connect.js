@@ -3,11 +3,13 @@ import { default as Web3 } from "web3";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
 import { ethers } from "ethers";
+import { getCookie, setCookie } from "utils/cookie.js";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
 export const WEB3_SETUP_ERROR = "WEB3_SETUP_ERROR";
 export const WEB3_ACCOUNT_CHANGE = "WEB3_ACCOUNT_CHANGE";
+export const WEB3_WATCH_ASSET_CHANGE = "WEB3_WATCH_ASSET_CHANGE";
 
 const initialState = {
     error: null,
@@ -18,7 +20,8 @@ const initialState = {
     isLoading: false,
     isConnected: false,
     network: { id: "?", name: "?" },
-    ethers: { provider: null, signer: null }
+    ethers: { provider: null, signer: null },
+    watchAsset: getCookie("watchAsset") || []
 };
 
 var web3;
@@ -59,6 +62,12 @@ export default (state = initialState, action) => {
                 ...state,
                 accounts: action.accounts,
                 userAccount: action.userAccount
+            };
+
+        case WEB3_WATCH_ASSET_CHANGE:
+            return {
+                ...state,
+                watchAsset: action.watchAsset
             };
 
         default:
@@ -142,5 +151,13 @@ export const accountChange = newAccounts => {
         userAccount: newAccounts[0],
         accounts: newAccounts,
         ethers: { signer, provider }
+    };
+};
+
+export const watchAssetChange = value => {
+    setCookie("watchAsset", value);
+    return {
+        type: WEB3_WATCH_ASSET_CHANGE,
+        watchAsset: value
     };
 };
