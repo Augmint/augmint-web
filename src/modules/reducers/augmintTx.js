@@ -1,6 +1,7 @@
 import store from "modules/store";
 import { DECIMALS, DELEGATED_TRANSPORT_REPEAT_SLICE, DELEGATED_TRANSPORT_REPEAT_TIMEOUT } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
+import { transferTokenDelegatedTx } from "modules/ethereum/transferTransactions";
 
 export const AUGMINT_TX_NEW_MESSAGE = "augmintTx/NEW_MESSAGE";
 export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
@@ -32,6 +33,11 @@ class Message {
     get statusText() {
         return MESSAGE_STATUS_TEXT[this.status];
     }
+
+    transfer = async () => {
+        const tx = await transferTokenDelegatedTx(this.payload, this.signature);
+        console.debug(DEBUG, "delegated", tx);
+    };
 
     constructor(o) {
         Object.assign(this, o);

@@ -62,7 +62,7 @@ class AugmintTxList extends React.Component {
                                     <hr />
                                     <div>{tx.statusText}</div>
                                     <div>
-                                        <Button>Transfer!</Button>
+                                        <Button onClick={tx.transfer}>Transfer!</Button>
                                     </div>
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>

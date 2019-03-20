@@ -72,6 +72,28 @@ export async function transferTokenTx(payload) {
     return { txName, transactionHash };
 }
 
+export async function transferTokenDelegatedTx(payload, signature) {
+    const { from, to, amount, narrative, maxExecutorFee, nonce } = payload;
+    const gasEstimate = cost.DELEGATED_TRANSFER_AUGMINT_TOKEN_GAS;
+    const userAccount = store.getState().web3Connect.userAccount;
+    const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+
+    const tx = augmintToken.methods
+        .delegatedTransfer(from, to, amount, narrative, maxExecutorFee, nonce, signature, maxExecutorFee)
+        .send({
+            from: userAccount,
+            gas: gasEstimate
+        });
+    const txName = "A-EUR delegated transfer";
+    const transactionHash = await processTx(tx, txName, gasEstimate, null, {
+        payee: to,
+        tokenAmount: amount,
+        narrative
+    });
+
+    return { txName, transactionHash };
+}
+
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
         const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;

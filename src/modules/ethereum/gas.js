@@ -8,6 +8,7 @@ export const cost = {
     TRANSFER_AUGMINT_TOKEN_GAS: 100000, // on testrpc: first: 75189 - 75405, rinkeby first: 76629
     //consecutive : no narr: 45405 - 60405 (higher when sent to account which never received)
     // w narrative: 46733 - 56693
+    DELEGATED_TRANSFER_AUGMINT_TOKEN_GAS: 100000 * 2, // double of normal transfer
 
     PLACE_ORDER_GAS: 200000,
     MATCH_ORDERS_GAS: 150000,
