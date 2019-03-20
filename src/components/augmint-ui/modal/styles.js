@@ -26,6 +26,15 @@ export const StyledModal = styled.div`
         width: 85%;
         height: 60%;
     `};
+
+    &.disclaimer-modal {
+        display: flex;
+        flex-direction: column;
+
+        ${media.tablet`
+            max-height: 70%;
+        `};
+    }
 `;
 
 export const StyledOverlay = styled.div`
@@ -43,6 +52,11 @@ export const StyledModalContent = styled.div`
     font-size: ${remCalc(14)};
     line-height: 1.4;
     padding: ${remCalc(21)};
+
+    &.disclaimer-modal {
+        display: flex;
+        flex-direction: column;
+    }
 `;
 
 export const StyledModalActions = styled.div`

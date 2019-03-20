@@ -1,20 +1,14 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
 import { default as Modal, ModalActions, ModalContent, ModalHeader } from "./augmint-ui/modal";
 import Button from "./augmint-ui/button";
 import styled from "styled-components";
-import { media } from "styles/media";
+import theme from "styles/theme";
 
 const dismissedCookie = "disclaimerDismissed=true";
 
 const StyledDiv = styled.div`
     overflow: scroll;
-    margin-bottom: 10px;
-
-    ${media.mobile`
-        height: 60%;
-    `};
 
     > p {
         font-size: 0.9rem;
@@ -32,18 +26,35 @@ const StyledDiv = styled.div`
 
 const StyledSection = styled.div`
     display: flex;
-    padding: 5px 2px;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: ${theme.colors.secondaryLight};
+    margin-bottom: 5px;
+    text-align: left;
 
     &.error {
-        /* background-color: coral; */
-        border-radius: 4px;
-        border: 2px solid red;
+        background-color: ${theme.colors.mediumRed};
+    }
+
+    > div {
+        display: flex;
+    }
+
+    > p {
+        display: none;
+        margin: 10px 25px 0;
+
+        &.error {
+            display: inline;
+            color: ${theme.colors.darkRed};
+        }
     }
 `;
 
 const StyledInput = styled.input`
     margin-right: 10px;
-    margin-top: 4px;
+    margin-top: 5px;
 `;
 
 const Styledlabel = styled.label`
@@ -71,7 +82,9 @@ export default class Disclaimer extends React.Component {
     }
 
     validate() {
+        console.log("FUT");
         const checkbox = document.getElementById("disclaimer-chcekbox");
+        console.log(checkbox.checked);
         if (checkbox.checked) {
             this.setState({ checkbox: "checked" });
             return true;
@@ -96,10 +109,11 @@ export default class Disclaimer extends React.Component {
     render() {
         return (
             !this.state.dismissed && (
-                <Modal onCloseRequest={this.close} noEsc={true}>
-                    <ModalContent style={{ height: "calc(100% - 112px)" }}>
+                <Modal onCloseRequest={this.close} noEsc={true} className="disclaimer-modal">
+                    {/* <ModalContent style={{ height: "calc(100% - 112px)" }}> */}
+                    <ModalContent className="disclaimer-modal">
                         <ModalHeader>
-                            <h3 style={{ marginTop: 0 }}>Augmint Disclaimer</h3>
+                            <h3 style={{ marginTop: 0, maringBottom: "20px" }}>Augmint Disclaimer</h3>
                         </ModalHeader>
                         <StyledDiv>
                             <p>
@@ -127,19 +141,22 @@ export default class Disclaimer extends React.Component {
                                 above text.
                             </p>
                         </StyledDiv>
-                        <StyledSection className={_className}>
-                            <StyledInput
-                                type="checkbox"
-                                id="disclaimer-chcekbox"
-                                name="disclaimer"
-                                className={_className}
-                            />
-                            <Styledlabel for="disclaimer-chcekbox" className={_className}>
-                                I have read and agree to Augmint's Disclaimer.
-                            </Styledlabel>
-                        </StyledSection>
                     </ModalContent>
                     <ModalActions>
+                        <StyledSection className={_className}>
+                            <div>
+                                <StyledInput
+                                    type="checkbox"
+                                    id="disclaimer-chcekbox"
+                                    name="disclaimer"
+                                    className={_className}
+                                />
+                                <Styledlabel for="disclaimer-chcekbox" className={_className}>
+                                    I have read and agree to Augmint's Disclaimer.
+                                </Styledlabel>
+                            </div>
+                            <p className={_className}>To continue agree to Augmint's Disclaimer.</p>
+                        </StyledSection>
                         <Button onClick={this.handleClick} data-testid="disclaimerCloseButton">
                             Continue
                         </Button>

@@ -42,9 +42,11 @@ export default class Modal extends React.Component {
     render() {
         const { onCloseRequest, children, showClose } = this.props;
 
+        const _className = this.props.className;
+
         return (
             <StyledOverlay className="overlay">
-                <StyledModal className="modal">
+                <StyledModal className={_className + " modal"}>
                     {children}
                     {showClose && (
                         <StyledCloseButton type="button" className="close" onClick={onCloseRequest}>
