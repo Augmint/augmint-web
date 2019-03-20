@@ -12,6 +12,8 @@ export const AUGMINT_TX_REPEAT_END = "augmintTx/REPEAT_END";
 export const AUGMINT_TX_NEW_LIST = "augmintTx/NEW_LIST";
 export const AUGMINT_TX_NEW_MESSAGE_ERROR = "augmintTx/NEW_MESSAGE_ERROR";
 
+const DEBUG = "[augmint-tx]";
+
 const MESSAGE_STATUS = {
     WAITING: 1,
     IN_PROGRESS: 2,
@@ -24,7 +26,7 @@ class Message {
     hash = null;
     signature = "";
     payload = null;
-    status = 0;
+    status = MESSAGE_STATUS.WAITING;
     lastSeen = null;
 
     get statusText() {
@@ -37,18 +39,12 @@ class Message {
 
     makeHash(web3) {
         const tx = this.payload;
+        let hash = "";
         if (tx.narrative === "") {
             // workaround b/c solidity keccak256 results different txHAsh with empty string than web3
-            this.hash = web3.utils.soliditySha3(
-                tx.tokenAddress,
-                tx.from,
-                tx.to,
-                tx.amount,
-                tx.maxExecutorFee,
-                tx.nonce
-            );
+            hash = web3.utils.soliditySha3(tx.tokenAddress, tx.from, tx.to, tx.amount, tx.maxExecutorFee, tx.nonce);
         } else {
-            this.hash = web3.utils.soliditySha3(
+            hash = web3.utils.soliditySha3(
                 tx.tokenAddress,
                 tx.from,
                 tx.to,
@@ -58,16 +54,22 @@ class Message {
                 tx.nonce
             );
         }
+
+        this.hash = hash.toLowerCase();
+        console.debug(DEBUG, "hash", this);
     }
 
     async sign(web3) {
         this.makeHash(web3);
-        this.signature = await web3.eth.personal.sign(this.hash, this.payload.from);
+        const signature = await web3.eth.personal.sign(this.hash, this.payload.from);
+        this.signature = signature.toLowerCase();
+        console.debug(DEBUG, "sign", this);
     }
 
     async verify(web3) {
         this.makeHash(web3);
         const from = await web3.eth.personal.ecRecover(this.hash, this.signature);
+        console.debug(DEBUG, "verify", this.hash, this.payload.from.toLowerCase(), from.toLowerCase());
         return this.payload.from.toLowerCase() === from.toLowerCase();
     }
 }
@@ -84,7 +86,7 @@ const initialState = {
 async function publishMessage(msg) {
     const ipfs = store.getState().ipfs.node;
     const topic = store.getState().augmintTx.currentTopic;
-
+    console.debug(DEBUG, "published:", msg);
     const result = await ipfs.pubsub.publish(topic, Buffer.from(JSON.stringify(msg)));
     return result;
 }
@@ -92,7 +94,7 @@ async function publishMessage(msg) {
 function repeatMessage(msg) {
     setTimeout(async () => {
         if (msg) {
-            console.debug("[augmint tx] repeat", msg.hash);
+            console.debug(DEBUG, "repeat", msg.hash);
             await publishMessage(msg);
         }
         store.dispatch({ type: AUGMINT_TX_REPEAT_END });
@@ -109,14 +111,15 @@ function transformMessage(rawMessage) {
     return newMessage;
 }
 
-function addMessage(newMessage, messages) {
+function addMessage(newMessage) {
     const state = store.getState();
     const web3 = state.web3Connect.web3Instance;
-
     return async function(dispatch) {
+        const messages = store.getState().augmintTx.messages;
         dispatch({ type: AUGMINT_TX_NEW_MESSAGE });
         try {
             const msg = transformMessage(newMessage);
+            console.debug(DEBUG, "received:", msg);
 
             if (msg.verify(web3)) {
                 let updated = false;
@@ -181,7 +184,7 @@ export default (state = initialState, action) => {
                         if (err) {
                             return console.error(`failed to subscribe to ${newTopic}`, err);
                         }
-                        console.debug(`subscribed to ${newTopic}`);
+                        console.debug(DEBUG, `subscribed to ${newTopic}`);
                     }
                 )
             );

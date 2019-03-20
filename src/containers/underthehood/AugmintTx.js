@@ -7,7 +7,6 @@ import { decimalNumberConverter } from "utils/converter";
 import { DECIMALS } from "utils/constants";
 import moment from "moment";
 import Button from "components/augmint-ui/button";
-import { MESSAGE_STATUS_TEXT } from "modules/reducers/augmintTx";
 
 class AugmintTxList extends React.Component {
     componentDidMount() {
