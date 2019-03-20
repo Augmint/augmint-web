@@ -60,6 +60,7 @@ async function _formatTradeLog(account, txData, args, type) {
     const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
     const price = parseFloat(args.price / PPM_DIV);
     const publishedRate = args.publishedRate && parseFloat(args.publishedRate / DECIMALS_DIV).toFixed(2);
+    const effectiveRate = args.publishedRate && parseFloat((args.publishedRate / DECIMALS_DIV) * price).toFixed(2);
 
     let orderId;
     if (args.orderId) {
@@ -89,6 +90,7 @@ async function _formatTradeLog(account, txData, args, type) {
         price: price ? price : "",
         pricePt: price ? floatNumberConverter(price, DECIMALS).toFixed(2) + "%" : "",
         publishedRate,
+        effectiveRate,
         orderId,
         type: txData.event
     });

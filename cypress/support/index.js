@@ -10,7 +10,7 @@ before(function() {
     cy.issueTo(100000); // to make tests independent. issue to accounts[0] by default (amount with token decimals)
 
     cy.visit("/");
-    cy.get("[data-testid=useAEurButton]").click();
+    cy.get("[data-testid=tryItButton]").click();
     cy.get("[data-testid=TryItConnectedPanel]").should("contain", "You are connected");
     cy.get("[data-testid=disclaimerCloseButton").click();
 });
