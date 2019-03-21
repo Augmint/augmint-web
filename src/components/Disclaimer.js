@@ -153,11 +153,11 @@ export default class Disclaimer extends React.Component {
                                     className={_className}
                                 />
                                 <Styledlabel for="disclaimer-chcekbox" className={_className}>
-                                    I have read and agree to Augmint's Disclaimer.
+                                    I have read and accept Augmint's Disclaimer.
                                 </Styledlabel>
                             </div>
                             <p className={_className}>
-                                Please indicate that you read and agree to Augmint's Disclaimer.
+                                Please indicate that you have read and accepted Augmint's Disclaimer.
                             </p>
                         </StyledSection>
                         <Button onClick={this.handleClick} data-testid="disclaimerCloseButton">
