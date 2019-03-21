@@ -14,6 +14,7 @@ const theme = {
         opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
         primaryLight: "#2e3438",
+        secondaryLight: "#f9db9c",
         secondary: "#ffad00",
         // secondaryDark: "#d99300",
         secondaryDark: "#e29a00",
@@ -21,6 +22,8 @@ const theme = {
         darkCyan: "#276f86",
         red: "#eb5757",
         lightRed: "#fff6f6",
+        mediumRed: "#ffa9a9",
+        // ffbbbb
         darkRed: "#9f3a38",
         green: "green",
         lightGreen: "#fcfff5",

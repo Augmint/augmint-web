@@ -12,6 +12,7 @@ before(function() {
     cy.visit("/");
     cy.get("[data-testid=tryItButton]").click();
     cy.get("[data-testid=TryItConnectedPanel]").should("contain", "You are connected");
+    cy.get("[data-testid=disclaimer-chcekbox").click();
     cy.get("[data-testid=disclaimerCloseButton").click();
 });
 

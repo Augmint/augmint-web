@@ -22,13 +22,15 @@ export default class Modal extends React.Component {
     }
 
     handleKeyUp(e) {
-        const { onCloseRequest } = this.props;
+        const { onCloseRequest, noEsc } = this.props;
         const keys = {
             27: () => {
                 e.preventDefault();
-                onCloseRequest();
-                window.removeEventListener("keyup", this.handleKeyUp, false);
-                this.body.classList.remove("noScroll");
+                if (!noEsc) {
+                    onCloseRequest();
+                    window.removeEventListener("keyup", this.handleKeyUp, false);
+                    this.body.classList.remove("noScroll");
+                }
             }
         };
 
@@ -40,9 +42,11 @@ export default class Modal extends React.Component {
     render() {
         const { onCloseRequest, children, showClose } = this.props;
 
+        const _className = this.props.className;
+
         return (
             <StyledOverlay className="overlay">
-                <StyledModal className="modal">
+                <StyledModal className={_className + " modal"}>
                     {children}
                     {showClose && (
                         <StyledCloseButton type="button" className="close" onClick={onCloseRequest}>
