@@ -1,6 +1,5 @@
 import store from "./store/index.js";
 import { AUGMINT_TX_CHANGE_TOPIC } from "./reducers/augmintTx.js";
-import { AUGMINT_TX_REPEAT } from "./reducers/augmintTx";
 
 let watching = false;
 
@@ -29,8 +28,4 @@ export function setupTopicWatch() {
         watching = true;
         store.subscribe(changeTopic);
     }
-}
-
-export function startRepeating() {
-    store.dispatch({ type: AUGMINT_TX_REPEAT });
 }

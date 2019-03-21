@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
-import { setupTopicWatch, startRepeating } from "modules/augmintTxProvider";
+import { setupTopicWatch } from "modules/augmintTxProvider";
 import { decimalNumberConverter } from "utils/converter";
 import { DECIMALS } from "utils/constants";
 import moment from "moment";
@@ -11,7 +11,6 @@ import Button from "components/augmint-ui/button";
 class AugmintTxList extends React.Component {
     componentDidMount() {
         setupTopicWatch();
-        startRepeating();
     }
 
     render() {
