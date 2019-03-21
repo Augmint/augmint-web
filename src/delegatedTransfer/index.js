@@ -10,6 +10,7 @@ const getTopicPath = Symbol("getTopicPath");
 const receiveMessage = Symbol("receiveMessage");
 const verifyMessage = Symbol("verifyMessage");
 const notifyChange = Symbol("notifyChange");
+const checkDone = Symbol("checkDone");
 
 const MESSAGE_STATUS = {
     WAITING: "waiting",
@@ -101,13 +102,13 @@ export default class TransferProcessor extends EventEmmitter {
             if (hasPath) {
                 this[REPEATING] = true;
                 let changed = false;
-                console.debug("[delegator] repeat start");
+                console.debug("[delegator] repeat start", topicPath);
                 const ipfs = this[IPFS];
                 const files = await ipfs.files.ls(dir);
                 for (let file of files) {
-                    if (file.type === "file") {
+                    if (file.type === 0) {
                         const msg = await ipfs.files.read(`${dir}/${file.name}`);
-                        const isDone = await this.isDone(msg);
+                        const isDone = await this[checkDone](msg);
                         if (!isDone) {
                             await ipfs.pubsub.publish(topic, msg);
                         } else {
@@ -161,6 +162,11 @@ export default class TransferProcessor extends EventEmmitter {
 
     isDone(msg) {
         return Promise.resolve(false);
+    }
+
+    [checkDone](msg) {
+        const msgObj = JSON.parse(msg.toString());
+        return this.isDone(msgObj);
     }
 
     [getTopicPath](topic) {
@@ -220,6 +226,6 @@ export default class TransferProcessor extends EventEmmitter {
     }
 
     [notifyChange]() {
-        this.emit("changed");
+        this.emit("change");
     }
 }

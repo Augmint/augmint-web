@@ -4,13 +4,11 @@ import { floatNumberConverter } from "utils/converter";
 import { transferTokenDelegatedTx } from "modules/ethereum/transferTransactions";
 import TransferProcessor from "../../delegatedTransfer";
 
-export const AUGMINT_TX_NEW_MESSAGE = "augmintTx/NEW_MESSAGE";
 export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
 export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
 export const AUGMINT_TX_TRANSFER_ERROR = "augmintTx/TRANSFER_ERROR";
 export const AUGMINT_TX_CHANGE_TOPIC = "augmintTx/CHANGE_TOPIC";
 export const AUGMINT_TX_NEW_LIST = "augmintTx/NEW_LIST";
-export const AUGMINT_TX_NEW_MESSAGE_ERROR = "augmintTx/NEW_MESSAGE_ERROR";
 
 const DEBUG = "[augmint-tx]";
 
@@ -51,7 +49,7 @@ class Message {
         }
 
         this.hash = hash.toLowerCase();
-        console.debug(DEBUG, "hash", this);
+        console.debug(DEBUG, "hash", this.hash);
     }
 
     async sign(web3) {
@@ -123,8 +121,6 @@ export default (state = initialState, action) => {
                 messages: action.list
             };
         case AUGMINT_TX_TRANSFER_SUCCESS:
-        case AUGMINT_TX_NEW_MESSAGE:
-        case AUGMINT_TX_NEW_MESSAGE_ERROR:
         case AUGMINT_TX_TRANSFER_REQUESTED:
         case AUGMINT_TX_TRANSFER_ERROR:
         default:
