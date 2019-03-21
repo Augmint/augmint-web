@@ -206,6 +206,12 @@ export default class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
+                        <SideNavLink to="/transfer" activeClassName="active" data-testid="trasnferMenuLink">
+                            <Icon name="send" />
+                            <span>Send</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi>
                         <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
                             <Icon name="loan" />
                             <span>Loan</span>

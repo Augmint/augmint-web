@@ -11,7 +11,7 @@ import BigNumber from "bignumber.js";
 import styled from "styled-components";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS, DECIMALS_DIV } from "utils/constants";
+import { DECIMALS, DECIMALS_DIV, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const StyledSpan = styled.span`
@@ -59,16 +59,16 @@ const OrderItem = props => {
                 {order.direction === TOKEN_SELL && (
                     <p>
                         Sell A€ order: <br />
-                        {order.amount} A€ @{displayPrice}% of current ETH/€ = <br />
-                        {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} €/ETH = <br />
+                        {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
+                        {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
                         {actualValue} ETH
                     </p>
                 )}
                 {order.direction === TOKEN_BUY && (
                     <p>
                         Buy A€ Order: <br />
-                        {order.amount} ETH @{displayPrice}% of current ETH/€ = <br />
-                        {order.amount} ETH * {ethFiatRate} €/ETH / {order.price} €/A€ = <br />
+                        {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
+                        {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
                         {actualValue} A€
                     </p>
                 )}
@@ -85,7 +85,7 @@ const OrderItem = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(5));
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0)).toFixed(5);
     const totalEthSellAmount = sellOrders
         .reduce((sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum), 0)
         .toFixed(5);
@@ -135,7 +135,7 @@ const OrderList = props => {
                     <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
                 </Col>
                 <Col style={{ textAlign: "right" }} width={3}>
-                    <strong>Est. ETH/€ rate</strong>
+                    <strong>Est. {ETHEUR}</strong>
                 </Col>
                 <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
             </Row>

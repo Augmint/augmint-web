@@ -9,7 +9,7 @@ import CancelOrderButton from "./CancelOrderButton";
 import BigNumber from "bignumber.js";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS } from "utils/constants";
+import { DECIMALS, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
@@ -48,16 +48,16 @@ const OrderItem = props => {
                     {order.direction === TOKEN_SELL && (
                         <p>
                             Sell A€ order: <br />
-                            {order.amount} A€ @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} €/ETH = <br />
+                            {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
                             {actualValue} ETH
                         </p>
                     )}
                     {order.direction === TOKEN_BUY && (
                         <p>
                             Buy A€ Order: <br />
-                            {order.amount} ETH @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} ETH * {ethFiatRate} €/ETH / {order.price} €/A€ = <br />
+                            {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
                             {actualValue} A€
                         </p>
                     )}
