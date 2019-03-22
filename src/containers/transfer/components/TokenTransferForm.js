@@ -196,7 +196,7 @@ class TokenTransferForm extends React.Component {
                                     <Field
                                         component={Form.Field}
                                         as={Form.Input}
-                                        label="Transfer fee:"
+                                        label="Maximum Transfer Bounty:"
                                         size="small"
                                         data-testid="delegatedTransferFee"
                                         name="delegatedTransferFee"

@@ -17,6 +17,9 @@ export const MESSAGE_STATUS = {
     DONE: "done"
 };
 
+const FILE = 0;
+const DIR = 1;
+
 export default class TransferProcessor extends EventEmmitter {
     repeatInterval = 5000;
 
@@ -41,12 +44,20 @@ export default class TransferProcessor extends EventEmmitter {
         return this[ID];
     }
 
+    async getFiles(dir) {
+        const ipfs = this[IPFS];
+        const files = await ipfs.files.ls(dir, { long: true });
+        return files.filter(file => file.type === FILE);
+    }
+
     async readAllFiles(dir, fileList) {
         const ipfs = this[IPFS];
         const result = [];
         for (let file of fileList) {
-            const fileContent = await ipfs.files.read(`${dir}/${file.name}`);
-            result.push(JSON.parse(fileContent.toString()));
+            if (file.size !== 0) {
+                const fileContent = await ipfs.files.read(`${dir}/${file.name}`);
+                result.push(JSON.parse(fileContent.toString()));
+            }
         }
         return result;
     }
@@ -66,18 +77,17 @@ export default class TransferProcessor extends EventEmmitter {
             topic = this[TOPIC];
         }
 
-        const ipfs = this[IPFS];
         const topicPath = `${this[getTopicPath](topic)}`;
         const waitingDir = `${topicPath}/${MESSAGE_STATUS.WAITING}`;
         const doneDir = `${topicPath}/${MESSAGE_STATUS.DONE}`;
         const hasWaiting = await this.hasPath(waitingDir);
         const hasDone = await this.hasPath(doneDir);
         if (hasWaiting) {
-            const waitingFiles = await ipfs.files.ls(waitingDir);
+            const waitingFiles = await this.getFiles(waitingDir);
             result[MESSAGE_STATUS.WAITING] = await this.readAllFiles(waitingDir, waitingFiles);
         }
         if (hasDone) {
-            const doneFiles = await ipfs.files.ls(doneDir);
+            const doneFiles = await this.getFiles(doneDir);
             result[MESSAGE_STATUS.DONE] = await this.readAllFiles(doneDir, doneFiles);
         }
 
@@ -103,26 +113,26 @@ export default class TransferProcessor extends EventEmmitter {
             if (hasPath) {
                 this[REPEATING] = true;
                 let changed = false;
-                console.debug("[delegator] repeat start", topicPath);
                 const ipfs = this[IPFS];
-                const files = await ipfs.files.ls(dir);
+                const files = await this.getFiles(dir);
                 for (let file of files) {
-                    if (file.type === 0) {
-                        const msg = await ipfs.files.read(`${dir}/${file.name}`);
-                        const isDone = await this[checkDone](msg);
-                        if (!isDone) {
-                            await ipfs.pubsub.publish(topic, msg);
-                        } else {
-                            await ipfs.files.mv(
-                                `${topicPath}/${MESSAGE_STATUS.WAITING}/${file.name}`,
-                                `${topicPath}/${MESSAGE_STATUS.DONE}/${file.name}`,
-                                { parents: true, flush: true }
-                            );
-                            changed = true;
+                    const msg = await ipfs.files.read(`${dir}/${file.name}`);
+                    const isDone = await this[checkDone](msg);
+                    if (!isDone) {
+                        await ipfs.pubsub.publish(topic, msg);
+                    } else {
+                        const hasPath = await this.hasPath(`${topicPath}/${MESSAGE_STATUS.DONE}`);
+                        if (!hasPath) {
+                            await ipfs.files.mkdir(`${topicPath}/${MESSAGE_STATUS.DONE}`, { parents: true });
                         }
+                        await ipfs.files.mv(
+                            `${topicPath}/${MESSAGE_STATUS.WAITING}/${file.name}`,
+                            `${topicPath}/${MESSAGE_STATUS.DONE}/`,
+                            { parents: true, flush: true }
+                        );
+                        changed = true;
                     }
                 }
-                console.log("[delegator] repeat end");
                 this[REPEATING] = false;
                 if (changed) {
                     this[notifyChange](topic);
@@ -227,7 +237,10 @@ export default class TransferProcessor extends EventEmmitter {
         return this.verify(msg);
     }
 
-    [notifyChange]() {
+    async [notifyChange]() {
+        const ipfs = this[IPFS];
+        const result = await ipfs.files.stat("/");
+        console.debug("MFS root:", result.hash);
         this.emit("change");
     }
 }

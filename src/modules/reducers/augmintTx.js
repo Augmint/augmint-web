@@ -66,6 +66,14 @@ function createDelegator(ipfs) {
         const myMessage = new Message(msg);
         return myMessage.verify(web3);
     };
+
+    delegator.isDone = async msg => {
+        const state = store.getState();
+        const token = state.contracts.latest.augmintToken.web3ContractInstance;
+
+        return token.methods.delegatedTxHashesUsed(msg.hash).call();
+    };
+
     delegator.on("change", async () => {
         const exportList = await delegator.exportTopic();
         const result = Object.keys(MESSAGE_STATUS).reduce((prev, current) => {

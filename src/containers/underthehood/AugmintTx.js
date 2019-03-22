@@ -20,8 +20,8 @@ class AugmintTxList extends React.Component {
     }
 
     renderButtonRow(tx, hasEth) {
-        if (hasEth) {
-            if (tx.status === MESSAGE_STATUS.WAITING) {
+        if (tx.status === MESSAGE_STATUS.WAITING) {
+            if (hasEth) {
                 return (
                     <div>
                         <hr />
@@ -32,15 +32,15 @@ class AugmintTxList extends React.Component {
                     </div>
                 );
             } else {
-                return (
-                    <div>
-                        <hr />
-                        <div>Completed!</div>
-                    </div>
-                );
+                return <div />;
             }
         } else {
-            return <div />;
+            return (
+                <div>
+                    <hr />
+                    <div>Completed!</div>
+                </div>
+            );
         }
     }
 
@@ -61,7 +61,7 @@ class AugmintTxList extends React.Component {
                                 <br />
                                 Executor
                                 <br />
-                                Fee
+                                Bounty
                             </StyleTh>
                         </StyleTr>
                     </StyleThead>
