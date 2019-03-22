@@ -3,6 +3,7 @@ import { DECIMALS } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 import { transferTokenDelegatedTx } from "modules/ethereum/transferTransactions";
 import TransferProcessor from "../../delegatedTransfer";
+import { MESSAGE_STATUS } from "../../delegatedTransfer";
 
 export const AUGMINT_TX_TRANSFER_REQUESTED = "augmintTx/TRANSFER_REQUEST";
 export const AUGMINT_TX_TRANSFER_SUCCESS = "augmintTx/TRANSFER_SUCCESS";
@@ -16,10 +17,6 @@ class Message {
     hash = null;
     signature = "";
     payload = null;
-
-    get statusText() {
-        return "??";
-    }
 
     transfer = async () => {
         const tx = await transferTokenDelegatedTx(this.payload, this.signature);
@@ -77,13 +74,20 @@ function createDelegator(ipfs) {
     };
     delegator.on("change", async () => {
         const exportList = await delegator.exportTopic();
-        console.debug(exportList);
-        /*
+        const result = Object.keys(MESSAGE_STATUS).reduce((prev, current) => {
+            const key = MESSAGE_STATUS[current];
+            return prev.concat(
+                exportList[key].map(item => {
+                    item.status = key;
+                    return item;
+                })
+            );
+        }, []);
+        console.debug(result);
         store.dispatch({
             type: AUGMINT_TX_NEW_LIST,
-            list: exportList
+            list: result
         });
-        */
     });
 
     window.delegator = delegator;

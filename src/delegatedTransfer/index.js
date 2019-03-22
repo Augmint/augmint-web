@@ -12,7 +12,7 @@ const verifyMessage = Symbol("verifyMessage");
 const notifyChange = Symbol("notifyChange");
 const checkDone = Symbol("checkDone");
 
-const MESSAGE_STATUS = {
+export const MESSAGE_STATUS = {
     WAITING: "waiting",
     DONE: "done"
 };
@@ -58,6 +58,7 @@ export default class TransferProcessor extends EventEmmitter {
         };
 
         if (!topic && !this[TOPIC]) {
+            console.debug("missing topic!");
             return result;
         }
 
@@ -150,6 +151,7 @@ export default class TransferProcessor extends EventEmmitter {
             }
         );
         this[TOPIC] = topic;
+        this[notifyChange]();
     }
 
     publish(msg) {

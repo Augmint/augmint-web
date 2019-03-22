@@ -7,10 +7,16 @@ import { decimalNumberConverter } from "utils/converter";
 import { DECIMALS } from "utils/constants";
 import moment from "moment";
 import Button from "components/augmint-ui/button";
+import { MESSAGE_STATUS } from "../../delegatedTransfer";
+import { transferTokenDelegatedTx } from "modules/ethereum/transferTransactions";
 
 class AugmintTxList extends React.Component {
     componentDidMount() {
         setupTopicWatch();
+    }
+
+    transfer(tx) {
+        transferTokenDelegatedTx(tx.payload, tx.signature);
     }
 
     render() {
@@ -49,6 +55,7 @@ class AugmintTxList extends React.Component {
                                         {tx.payload.to}
                                     </div>
                                     <div>
+                                        <br />
                                         <i>{tx.payload.narrative}</i>
                                     </div>
                                     <hr />
@@ -58,11 +65,17 @@ class AugmintTxList extends React.Component {
                                         {moment.unix(tx.lastSeen.date / 1000).format("D MMM YYYY HH:mm")}
                                     </div>
                                     <textarea defaultValue={JSON.stringify(tx)} />
-                                    <hr />
-                                    <div>{tx.statusText}</div>
-                                    <div>
-                                        <Button onClick={tx.transfer}>Transfer!</Button>
-                                    </div>
+                                    {tx.status === MESSAGE_STATUS.WAITING ? (
+                                        <div>
+                                            <hr />
+                                            <div>{tx.status}</div>
+                                            <div>
+                                                <Button onClick={() => this.transfer(tx)}>Transfer!</Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>Completed! {tx.status}</div>
+                                    )}
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     {decimalNumberConverter(tx.payload.amount, DECIMALS)}
