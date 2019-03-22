@@ -32,7 +32,7 @@ export const StyledModal = styled.div`
         flex-direction: column;
 
         ${media.tablet`
-            max-height: 70  %;
+            max-height: 70%;
         `};
     }
 `;
