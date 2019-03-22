@@ -19,9 +19,36 @@ class AugmintTxList extends React.Component {
         transferTokenDelegatedTx(tx.payload, tx.signature);
     }
 
+    renderButtonRow(tx, hasEth) {
+        if (hasEth) {
+            if (tx.status === MESSAGE_STATUS.WAITING) {
+                return (
+                    <div>
+                        <hr />
+                        <div>{tx.status}</div>
+                        <div>
+                            <Button onClick={() => this.transfer(tx)}>Transfer!</Button>
+                        </div>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <hr />
+                        <div>Completed!</div>
+                    </div>
+                );
+            }
+        } else {
+            return <div />;
+        }
+    }
+
     render() {
         const isLoading = false;
+        const { ethBalance } = this.props.userAccount;
         let transfers = this.props.messages;
+        const hasEth = ethBalance > 0;
         return (
             <Segment loading={isLoading} style={{ color: "black" }}>
                 <StyleTable>
@@ -65,17 +92,7 @@ class AugmintTxList extends React.Component {
                                         {moment.unix(tx.lastSeen.date / 1000).format("D MMM YYYY HH:mm")}
                                     </div>
                                     <textarea defaultValue={JSON.stringify(tx)} />
-                                    {tx.status === MESSAGE_STATUS.WAITING ? (
-                                        <div>
-                                            <hr />
-                                            <div>{tx.status}</div>
-                                            <div>
-                                                <Button onClick={() => this.transfer(tx)}>Transfer!</Button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div>Completed! {tx.status}</div>
-                                    )}
+                                    {this.renderButtonRow(tx, hasEth)}
                                 </StyleTd>
                                 <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
                                     {decimalNumberConverter(tx.payload.amount, DECIMALS)}
@@ -97,6 +114,7 @@ AugmintTxList.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+    userAccount: state.userBalances.account,
     messages: state.augmintTx.messages
 });
 
