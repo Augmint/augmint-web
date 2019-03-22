@@ -27,5 +27,6 @@ export function setupTopicWatch() {
     if (!watching) {
         watching = true;
         store.subscribe(changeTopic);
+        changeTopic();
     }
 }

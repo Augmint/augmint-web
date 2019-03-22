@@ -1,7 +1,6 @@
 import store from "modules/store";
 import { DECIMALS } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
-import { transferTokenDelegatedTx } from "modules/ethereum/transferTransactions";
 import TransferProcessor from "../../delegatedTransfer";
 import { MESSAGE_STATUS } from "../../delegatedTransfer";
 
@@ -17,11 +16,6 @@ class Message {
     hash = null;
     signature = "";
     payload = null;
-
-    transfer = async () => {
-        const tx = await transferTokenDelegatedTx(this.payload, this.signature);
-        console.debug(DEBUG, "delegated", tx);
-    };
 
     constructor(o) {
         Object.assign(this, o);
@@ -53,7 +47,7 @@ class Message {
         this.makeHash(web3);
         const signature = await web3.eth.personal.sign(this.hash, this.payload.from);
         this.signature = signature.toLowerCase();
-        console.debug(DEBUG, "sign", this);
+        console.debug(DEBUG, "sign", this.signature);
     }
 
     async verify(web3) {
@@ -83,7 +77,6 @@ function createDelegator(ipfs) {
                 })
             );
         }, []);
-        console.debug(result);
         store.dispatch({
             type: AUGMINT_TX_NEW_LIST,
             list: result
