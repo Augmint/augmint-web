@@ -146,8 +146,8 @@ async function getLoanManagerInfo(loanManagerInstance) {
         loanManagerInstance.methods.rates().call(),
         loanManagerInstance.methods.monetarySupervisor().call(),
 
-        web3.eth.getBalance(loanManagerInstance._address),
-        augmintTokenInstance.methods.balanceOf(loanManagerInstance._address).call()
+        web3.eth.getBalance(loanManagerInstance.options.address),
+        augmintTokenInstance.methods.balanceOf(loanManagerInstance.options.address).call()
     ]);
 
     return {

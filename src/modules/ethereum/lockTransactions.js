@@ -66,7 +66,7 @@ export async function newLockTx(productId, lockAmount) {
 
     const txName = "New lock";
 
-    const lockManagerAddress = store.getState().contracts.latest.lockManager.web3ContractInstance._address;
+    const lockManagerAddress = store.getState().contracts.latest.lockManager.web3ContractInstance.options.address;
     const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const userAccount = store.getState().web3Connect.userAccount;

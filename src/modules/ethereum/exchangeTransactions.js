@@ -162,7 +162,7 @@ export async function placeOrderTx(orderDirection, amount, price) {
             submitAmount = new BigNumber(amount).mul(DECIMALS_DIV);
             txName = "Sell token order";
             tx = augmintTokenInstance.methods
-                .transferAndNotify(exchangeInstance._address, submitAmount.toString(), submitPrice.toString())
+                .transferAndNotify(exchangeInstance.options.address, submitAmount.toString(), submitPrice.toString())
                 .send({ from: userAccount, gas: gasEstimate });
             break;
 

@@ -69,8 +69,8 @@ async function getExchangeInfo(exchangeInstance) {
     const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
     const [bn_weiBalance, bn_tokenBalance, orderCount] = await Promise.all([
-        web3.eth.getBalance(exchangeInstance._address),
-        augmintToken.methods.balanceOf(exchangeInstance._address).call(),
+        web3.eth.getBalance(exchangeInstance.options.address),
+        augmintToken.methods.balanceOf(exchangeInstance.options.address).call(),
         exchangeInstance.methods.getActiveOrderCounts().call()
     ]);
 
