@@ -2,6 +2,7 @@ import React from "react";
 import { Pblock } from "components/PageLayout";
 import { NoOrdersToolTip } from "./ExchangeToolTips";
 import { ConnectionStatus } from "components/MsgPanels";
+import { ETHEUR } from "utils/constants";
 
 export default class ExchangeSummary extends React.Component {
     render() {
@@ -10,7 +11,7 @@ export default class ExchangeSummary extends React.Component {
             <Pblock loading={rates.isLoading} {...other}>
                 <ConnectionStatus contract={rates} />
 
-                {rates.isLoaded ? <p>1 ETH = {rates.info.ethFiatRate} A-EUR</p> : <h5>Loading ETH/EUR rates...</h5>}
+                {rates.isLoaded ? <p>1 ETH = {rates.info.ethFiatRate} A-EUR</p> : <h5>Loading {ETHEUR} rates...</h5>}
 
                 <ConnectionStatus contract={exchange} />
 

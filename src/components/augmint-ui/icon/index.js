@@ -28,6 +28,9 @@ export default function Icon(props) {
         case "exchange":
             className += " fas fa-exchange-alt";
             break;
+        case "send":
+            className += " fas fa-arrow-right";
+            break;
         case "lock":
             className += " fas fa-lock";
             break;
@@ -69,6 +72,9 @@ export default function Icon(props) {
             break;
         case "empty":
             className += " empty";
+            break;
+        case "plus":
+            className += " fa fa-plus";
             break;
         default:
             break;
