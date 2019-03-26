@@ -19,8 +19,7 @@ const OrderItem = props => {
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
-    const amountRounded =
-        order.direction === TOKEN_SELL ? order.amountRounded.toFixed(2) : order.amountRounded.toFixed(5);
+    const amountRounded = order.direction === TOKEN_SELL ? order.amount.toFixed(2) : order.amount.toFixed(5);
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -125,9 +124,9 @@ export default class OrderBook extends React.Component {
         const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o2.id - o1.id);
 
         const totalBuyAmount = orders
-            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
+            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0).toFixed(6))
             : "?";
-        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toFixed(2) : "?";
+        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.amount + sum, 0).toFixed(2) : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>

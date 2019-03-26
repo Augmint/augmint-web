@@ -3,14 +3,7 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
-import {
-    ONE_ETH_IN_WEI,
-    DECIMALS_DIV,
-    PPM_DIV,
-    DECIMALS,
-    LEGACY_CONTRACTS_CHUNK_SIZE,
-    CHUNK_SIZE
-} from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, LEGACY_CONTRACTS_CHUNK_SIZE, CHUNK_SIZE } from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -82,40 +75,18 @@ async function getOrders(exchangeInstance, orderDirection, offset) {
                     bn_amount
                 };
 
+                parsed.price = parsed.bn_price / PPM_DIV;
+
                 if (orderDirection === TOKEN_BUY) {
                     parsed.direction = TOKEN_BUY;
-                    parsed.tokenValue = parseFloat(
-                        parsed.bn_amount
-                            .mul(parsed.bn_price)
-                            .div(ONE_ETH_IN_WEI)
-                            .round(0, BigNumber.ROUND_HALF_DOWN)
-                            .div(DECIMALS_DIV)
-                            .toFixed(DECIMALS)
-                    );
-                    parsed.bn_weiValue = parsed.bn_amount;
-                } else {
-                    parsed.direction = TOKEN_SELL;
-                    parsed.tokenValue = parseFloat(parsed.bn_amount / DECIMALS_DIV);
-                    parsed.bn_weiValue = parsed.bn_amount
-                        .mul(ONE_ETH_IN_WEI)
-                        .div(parsed.bn_price)
-                        .round(0, BigNumber.ROUND_HALF_UP);
-                }
+                    parsed.bn_ethAmount = parsed.bn_amount.div(ONE_ETH_IN_WEI);
+                    parsed.amount = parseFloat(parsed.bn_ethAmount);
 
-                parsed.price = parsed.bn_price / PPM_DIV;
-                parsed.bn_ethValue = parsed.bn_weiValue.div(ONE_ETH_IN_WEI);
-                parsed.ethValue = parsed.bn_ethValue.toString();
-                parsed.ethValueRounded = parseFloat(parsed.bn_ethValue.toFixed(6));
-
-                if (orderDirection === TOKEN_BUY) {
-                    parsed.amount = parsed.ethValue;
-                    parsed.amountRounded = parsed.ethValueRounded;
-                    // parsed.aeurValue = ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
                     res.buyOrders.push(parsed);
                 } else {
-                    // parsed.aeurValue = parsed.tokenValue;
-                    parsed.amount = parsed.tokenValue;
-                    parsed.amountRounded = parsed.tokenValue;
+                    parsed.direction = TOKEN_SELL;
+                    parsed.amount = parseFloat((parsed.bn_amount / DECIMALS_DIV).toFixed(2));
+
                     res.sellOrders.push(parsed);
                 }
             }
