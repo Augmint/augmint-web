@@ -52,6 +52,7 @@ function parseProducts(productsArray) {
                 minimumLockAmount: bn_minimumLockAmount / DECIMALS_DIV,
                 maxLockAmount: bn_maxLockAmount / DECIMALS_DIV,
                 interestRatePa,
+                interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
                 isActive: parseInt(bn_isActive, 10) === 1
             });
         }
@@ -182,6 +183,7 @@ function parseLocks(locksArray) {
                 lockedUntilText,
                 perTermInterest,
                 interestRatePa,
+                interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
                 durationInSecs,
                 durationInDays,
                 durationText,

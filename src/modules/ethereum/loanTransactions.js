@@ -88,6 +88,7 @@ function parseProducts(productsArray) {
                 termText: moment.duration(termInSecs, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
                 bn_discountRate,
                 interestRatePa,
+                interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
                 discountRate,
                 bn_collateralRatio,
                 collateralRatio: bn_collateralRatio / PPM_DIV,
@@ -191,8 +192,8 @@ export async function collectLoansTx(loanManagerInstance, loansToCollect) {
             typeof receipt.events.LoanCollected === "undefined"
                 ? 0
                 : Array.isArray(receipt.events.LoanCollected)
-                    ? receipt.events.LoanCollected.length
-                    : 1;
+                ? receipt.events.LoanCollected.length
+                : 1;
 
         if (loanCollectedEventsCount !== loansToCollect.length) {
             throw new EthereumTransactionError(
