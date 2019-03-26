@@ -62,7 +62,7 @@ export class Pcolumn extends React.Component {
 
 Pcolumn.defaultProps = {
     style: {
-        padding: "1rem"
+        // padding: "1rem"
     }
 };
 

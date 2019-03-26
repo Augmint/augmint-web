@@ -7,6 +7,7 @@ import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import {
     StyledContainer,
     StyledInput,
+    StyledSelect,
     StyledLabel,
     StyledFormField,
     StyledError
@@ -142,6 +143,32 @@ export const Normalizations = {
     }
 };
 
+export function Select(props) {
+    console.log(props, "ppp");
+    const { children, value, type, placeholder, touched, error, input, options, ...other } = props;
+
+    function addOptionsToSelect(options) {
+        console.log(options);
+        let result = [];
+        options.forEach((product, i) => {
+            result.push(
+                <option key={product.id} value={product.id} id={"selectLoanProduct-" + product.id}>
+                    {product.termText}
+                </option>
+            );
+        });
+
+        console.log(result, "result");
+        return result;
+    }
+
+    return (
+        <StyledSelect value={value} {...input} placeholder={placeholder} error={touched && error ? "true" : "false"}>
+            {addOptionsToSelect(options)}
+        </StyledSelect>
+    );
+}
+
 export const formField = ({
     children,
     input,
@@ -151,6 +178,9 @@ export const formField = ({
     labelAlignRight,
     oneLine,
     placeholder,
+    info,
+    isSelect,
+    selectOptions,
     meta: { touched, error, warning },
     ...props
 }) => {
@@ -160,16 +190,31 @@ export const formField = ({
             {label && <StyledLabel>{label}</StyledLabel>}
             <StyledContainer className={oneLine ? "oneLine" : ""}>
                 {labelAlignLeft && <StyleLabel align="left">{labelAlignLeft}</StyleLabel>}
-                <StyledInput
-                    {...props}
-                    value={input.value}
-                    {...input}
-                    type={type}
-                    placeholder={placeholder}
-                    error={touched && error ? "true" : "false"}
-                />
-                {labelAlignRight && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
+                {!isSelect && (
+                    <StyledInput
+                        {...props}
+                        value={input.value}
+                        {...input}
+                        type={type}
+                        placeholder={placeholder}
+                        error={touched && error ? "true" : "false"}
+                    />
+                )}
+                {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
+
+                {isSelect && (
+                    <Select
+                        {...props}
+                        value={input.value}
+                        {...input}
+                        options={selectOptions}
+                        placeholder={placeholder}
+                        error={touched && error ? "true" : "false"}
+                    />
+                )}
             </StyledContainer>
+            {info && <div style={{ color: "gray", display: "block" }}>{info}</div>}
+
             {touched &&
                 ((error && <StyledError>{error}</StyledError>) ||
                     (warning && (

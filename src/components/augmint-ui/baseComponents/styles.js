@@ -4,7 +4,6 @@ import { remCalc } from "styles/theme";
 
 export const StyledContainer = styled.div`
     display: inline-flex;
-    margin: 0 0 ${remCalc(16)};
     width: 100%;
 
     &.oneLine,
@@ -27,8 +26,18 @@ export const StyledInput = styled.input`
     border: 1px solid ${theme.colors.opacGrey};
     border-radius: ${theme.borderRadius.all};
     border-right: none;
-    padding: ${remCalc(10)} ${remCalc(16)};
+    padding: ${remCalc(20)} ${remCalc(16)};
     width: 100%;
+    outline: none;
+`;
+
+export const StyledSelect = styled.select`
+    border: 1px solid ${theme.colors.opacGrey};
+    border-radius: 3px;
+    padding: ${remCalc(20)} ${remCalc(16)};
+    width: 100%;
+    outline: none;
+    background-color: white;
 `;
 
 export const StyledLabel = styled.label`
@@ -42,6 +51,7 @@ export const StyledError = styled.span`
 `;
 
 export const StyledFormField = styled.div`
+    margin: 0 0 ${remCalc(16)};
     &.error {
         color: ${theme.colors.darkRed};
 
