@@ -144,11 +144,7 @@ export const Normalizations = {
 };
 
 export function Select(props) {
-    console.log(props, "ppp");
-    const { children, value, type, placeholder, touched, error, input, options, ...other } = props;
-
     function addOptionsToSelect(options) {
-        console.log(options);
         let result = [];
         options.forEach((product, i) => {
             result.push(
@@ -157,14 +153,12 @@ export function Select(props) {
                 </option>
             );
         });
-
-        console.log(result, "result");
         return result;
     }
 
     return (
-        <StyledSelect value={value} {...input} placeholder={placeholder} error={touched && error ? "true" : "false"}>
-            {addOptionsToSelect(options)}
+        <StyledSelect {...props} placeholder={props.placeholder}>
+            {addOptionsToSelect(props.options)}
         </StyledSelect>
     );
 }
@@ -204,12 +198,11 @@ export const formField = ({
 
                 {isSelect && (
                     <Select
+                        {...input}
                         {...props}
                         value={input.value}
-                        {...input}
                         options={selectOptions}
                         placeholder={placeholder}
-                        error={touched && error ? "true" : "false"}
                     />
                 )}
             </StyledContainer>

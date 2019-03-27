@@ -146,8 +146,8 @@ class NewLoanForm extends React.Component {
     }
 
     onSelectedLoanChange(e) {
-        console.log(e, "eeee");
         let product = this.products[e.target.value];
+        console.log(product, "product");
 
         this.setState(
             {
@@ -257,7 +257,6 @@ class NewLoanForm extends React.Component {
                                         disabled={submitting || !loanManager.isLoaded}
                                         onChange={this.onSelectedLoanChange}
                                         data-testid="loanTermSelect"
-                                        style={{ borderRadius: theme.borderRadius.left }}
                                         info="Repay by ... TODO"
                                         className="field-big"
                                         isSelect="true"

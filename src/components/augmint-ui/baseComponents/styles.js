@@ -34,10 +34,15 @@ export const StyledInput = styled.input`
 export const StyledSelect = styled.select`
     border: 1px solid ${theme.colors.opacGrey};
     border-radius: 3px;
-    padding: ${remCalc(20)} ${remCalc(16)};
     width: 100%;
     outline: none;
     background-color: white;
+    font-size: 1rem;
+    color: ${theme.colors.mediumGrey};
+    font-weight: 400;
+    height: 60px;
+    text-indent: 16px;
+    appearance: menulist !important;
 `;
 
 export const StyledLabel = styled.label`
