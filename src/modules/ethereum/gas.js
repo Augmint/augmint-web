@@ -10,7 +10,7 @@ export const cost = {
     // w narrative: 46733 - 56693
 
     PLACE_ORDER_GAS: 200000,
-    CANCEL_ORDER_GAS: 80000, // TODO: revisit after tx refactor done
+
     MATCH_ORDERS_GAS: 150000, // a single matchOrders
 
     // base cost for matchMultipleOrders
@@ -21,10 +21,12 @@ export const cost = {
     // actual on ganache: 2nd: +57760. then between 45652-47767, sometimes 5783?
     MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS: 50000,
 
+    CANCEL_ORDER_GAS: 60000, // actuals on ganache: sell cancel: 31891-43725 / buy cancel: 24264-28470
+
     LEGACY_BALANCE_CONVERT_GAS: 200000,
 
-    NEW_LOCK_GAS: 200000, // TODO: check
-    NEW_FIRST_LOCK_GAS: 240000,
+    NEW_LOCK_GAS: 200000, // actual on ganache: 176761
+    NEW_FIRST_LOCK_GAS: 240000, // actual on ganache: 206761
 
-    RELEASE_LOCK_GAS: 200000 // TODO: check
+    RELEASE_LOCK_GAS: 100000 // actual on ganache: 62515
 };
