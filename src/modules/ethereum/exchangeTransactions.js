@@ -186,44 +186,48 @@ export async function matchOrdersTx(buyId, sellId) {
 export async function matchMultipleOrdersTx() {
     const txName = "Match orders";
     const userAccount = store.getState().web3Connect.userAccount;
+    const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
     const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
     const bn_ethFiatRate = store.getState().rates.info.bn_ethFiatRate;
     const orders = store.getState().orders.orders;
 
-    const [buyIds, sellIds] = calculateMatchingOrders(orders.BuyOrders, orders.sellOrders, bn_ethFiatRate);
+    const matches = calculateMatchingOrders(orders.buyOrders, orders.sellOrders, bn_ethFiatRate, blockGasLimit);
 
-    if (sellIds.length === 0) {
+    if (matches.sellIds.length === 0) {
         throw new Error("no matching orders found"); // UI shouldn't allow to be called in this case
     }
 
-    const gasEstimate =
-        cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS * (sellIds.length - 1);
+    console.debug(`matchMultipleOrdersTx matchCount: ${matches.sellIds.length} gasEstimate: ${matches.gasEstimate}
+        Buy: ${matches.buyIds}
+        Sell: ${matches.sellIds}`);
 
-    console.debug(
-        `matchMultipleOrdersTx matchCount: ${sellIds.length} gasEstimate: ${gasEstimate}`,
-        `Buy: ${buyIds} Sell: ${sellIds}`
-    );
+    const tx = exchange.methods
+        .matchMultipleOrders(matches.buyIds, matches.sellIds)
+        .send({ from: userAccount, gas: matches.gasEstimate });
 
-    const tx = exchange.methods.matchMultipleOrders(buyIds, sellIds).send({ from: userAccount, gas: gasEstimate });
-
-    const transactionHash = await processTx(tx, txName, gasEstimate);
+    const transactionHash = await processTx(tx, txName, matches.gasEstimate);
 
     return { txName, transactionHash };
 }
 
 /*********************************************************************************
-calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate)
+calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate, gasLimit)
 returns matching pairs from ordered ordebook for sending in Exchange.matchMultipleOrders ethereum tx
     input:
         buyOrders[ { id, price, bn_ethAmount }]
             must be ordered by price descending then by id ascending
         sellOrders[ {id, price, amount }]
             must be ordered by price ascending then by id ascending
-        bn_ethFiatRate: current ETHEUR rate
+        bn_ethFiatRate:
+            current ETHEUR rate
+        gasLimit:
+            return as many matches as it fits to gasLimit based on gas cost estimate.
+            returns all matches if 0 passed for gasLimit
+
     returns: pairs of matching order id , ordered by execution sequence
-        [ [buyIds], [sellIds] ]
+        { buyIds: [], sellIds: [], gasEstimate }
 *********************************************************************************/
-export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate) {
+export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate, gasLimit) {
     const sellIds = [];
     const buyIds = [];
 
@@ -242,14 +246,14 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate)
 
     let buyIdx = 0;
     let sellIdx = 0;
-    let matchCount = 0;
+    let gasEstimateWithNextMatch = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS;
+
     while (
         buyIdx < buyOrders.length &&
         sellIdx < sellOrders.length &&
         buyOrders[buyIdx].price >= sellOrders[sellIdx].price && // we already filtered but just in case...
-        matchCount < 100 // to make sure gas cost won't be over block gas limit even in edge scenarios
+        (gasEstimateWithNextMatch <= gasLimit || gasLimit === 0) // to make sure gas cost won't be over block gas limit even in edge scenarios
     ) {
-        matchCount++;
         const sellOrder = sellOrders[sellIdx];
         const buyOrder = buyOrders[buyIdx];
         sellIds.push(sellOrder.id);
@@ -302,9 +306,16 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate)
         if (sellOrder.bn_tokenAmount.eq(0)) {
             sellIdx++;
         }
+
+        gasEstimateWithNextMatch += cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
     }
 
-    return [buyIds, sellIds];
+    const gasEstimate =
+        sellIds.length === 0
+            ? 0
+            : cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + (sellIds.length - 1) * cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
+
+    return { buyIds, sellIds, gasEstimate };
 }
 
 export async function cancelOrderTx(exchange, orderDirection, orderId) {

@@ -1,12 +1,14 @@
 import { calculateMatchingOrders } from "modules/ethereum/exchangeTransactions";
 import BigNumber from "bignumber.js";
+import { cost } from "./gas";
 
 describe("getMatchingOrders", () => {
     const ETHEUR_RATE = new BigNumber(500);
     const BN_ONE = new BigNumber(1);
+    const GAS_LIMIT = 0;
 
     test("should return no match if no orders", () => {
-        const [buyIds, sellIds] = calculateMatchingOrders([], [], ETHEUR_RATE);
+        const [buyIds, sellIds] = calculateMatchingOrders([], [], ETHEUR_RATE, GAS_LIMIT);
         expect(sellIds).toHaveLength(0);
         expect(buyIds).toHaveLength(0);
     });
@@ -22,10 +24,11 @@ describe("getMatchingOrders", () => {
             { id: 5, price: 1.01, amount: 10 } //
         ];
 
-        const [buyIds, sellIds] = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE);
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, GAS_LIMIT);
 
-        expect(buyIds).toHaveLength(0);
-        expect(sellIds).toHaveLength(0);
+        expect(matches.buyIds).toHaveLength(0);
+        expect(matches.sellIds).toHaveLength(0);
+        expect(matches.gasEstimate).toBe(0);
     });
 
     test("should return matching orders (two matching)", () => {
@@ -39,10 +42,11 @@ describe("getMatchingOrders", () => {
             { id: 5, price: 1.05, amount: 10 } //
         ];
 
-        const [buyIds, sellIds] = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE);
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, GAS_LIMIT);
 
-        expect(buyIds).toEqual([2]);
-        expect(sellIds).toEqual([4]);
+        expect(matches.buyIds).toEqual([2]);
+        expect(matches.sellIds).toEqual([4]);
+        expect(matches.gasEstimate).toBe(cost.MATCH_MULTIPLE_FIRST_MATCH_GAS);
     });
 
     test("should return matching orders (1 buy filled w/ 2 sells)", () => {
@@ -57,10 +61,13 @@ describe("getMatchingOrders", () => {
             { id: 6, price: 1.04, amount: 10 } // no fill...
         ];
 
-        const [buyIds, sellIds] = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE);
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, GAS_LIMIT);
 
-        expect(buyIds).toEqual([2, 2]);
-        expect(sellIds).toEqual([4, 5]);
+        expect(matches.buyIds).toEqual([2, 2]);
+        expect(matches.sellIds).toEqual([4, 5]);
+        expect(matches.gasEstimate).toBe(
+            cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS
+        );
     });
 
     test("should return matching orders (2 buys filled w/ 3 sells)", () => {
@@ -77,9 +84,34 @@ describe("getMatchingOrders", () => {
             { id: 6, price: 1.08, amount: 10 } // no matching because no more left in matching buy orders..
         ];
 
-        const [buyIds, sellIds] = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE);
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, GAS_LIMIT);
 
-        expect(buyIds).toEqual([11, 3, 3]);
-        expect(sellIds).toEqual([9, 4, 2]);
+        expect(matches.buyIds).toEqual([11, 3, 3]);
+        expect(matches.sellIds).toEqual([9, 4, 2]);
+        expect(matches.gasEstimate).toBe(
+            cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + 2 * cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS
+        );
+    });
+
+    test("should return as many matches as fits to gasLimit passed", () => {
+        const buyOrders = [
+            { id: 1, price: 1, bn_ethAmount: BN_ONE },
+            { id: 2, price: 1, bn_ethAmount: BN_ONE },
+            { id: 3, price: 1, bn_ethAmount: BN_ONE }
+        ];
+
+        const sellOrders = [
+            { id: 5, price: 1, amount: 500 },
+            { id: 6, price: 1, amount: 500 },
+            { id: 7, price: 1, amount: 500 }
+        ];
+
+        const gasLimit = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
+
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, gasLimit);
+
+        expect(matches.buyIds).toEqual([1, 2]);
+        expect(matches.sellIds).toEqual([5, 6]);
+        expect(matches.gasEstimate).toBe(gasLimit);
     });
 });
