@@ -104,7 +104,8 @@ export function isOrderBetter(o1, o2) {
     }
 
     const dir = o1.direction === TOKEN_SELL ? 1 : -1;
-    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id) || -1;
+
+    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id) ? 1 : -1;
 }
 
 export async function placeOrderTx(orderDirection, amount, price) {
