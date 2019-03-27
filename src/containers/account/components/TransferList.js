@@ -90,48 +90,49 @@ class TransferList extends React.Component {
                 {!transfers || transfers.length === 0 ? (
                     noItemMessage
                 ) : (
-                    <StyleTable>
-                        <StyleThead>
-                            <StyleTr>
-                                <StyleTh className={"hide-xs"}>Date</StyleTh>
-                                <StyleTh>Transaction</StyleTh>
-                                <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
-                                <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
-                                    Balance
-                                </StyleTh>
-                            </StyleTr>
-                        </StyleThead>
-                        <StyleTbody>
-                            {transfers.map(tx => (
-                                <StyleTr
-                                    key={`txRow-${tx.key}`}
-                                    data-testid={`transferListItem-${tx.data.transactionHash}`}
-                                >
-                                    <StyleTd className={"hide-xs"}>{tx.date}</StyleTd>
-                                    <StyleTd>
-                                        <div className={"show-xs"}>{tx.date}</div>
-                                        {tx.info}
-                                    </StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }}>
-                                        {tx.amount}
-                                        <div className={"show-xs"}>= {tx.balance}</div>
-                                    </StyleTd>
-                                    <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                        {tx.balance}
-                                    </StyleTd>
+                    <div style={{ overflow: "auto" }}>
+                        <StyleTable>
+                            <StyleThead>
+                                <StyleTr>
+                                    <StyleTh className={"hide-xs"}>Date</StyleTh>
+                                    <StyleTh>Transaction</StyleTh>
+                                    <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
+                                    <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
+                                        Balance
+                                    </StyleTh>
                                 </StyleTr>
-                            ))}
-                        </StyleTbody>
-                    </StyleTable>
+                            </StyleThead>
+                            <StyleTbody>
+                                {transfers.map(tx => (
+                                    <StyleTr
+                                        key={`txRow-${tx.key}`}
+                                        data-testid={`transferListItem-${tx.data.transactionHash}`}
+                                    >
+                                        <StyleTd className={"hide-xs"}>{tx.date}</StyleTd>
+                                        <StyleTd>
+                                            <div className={"show-xs"}>{tx.date}</div>
+                                            {tx.info}
+                                        </StyleTd>
+                                        <StyleTd style={{ textAlign: "right" }}>
+                                            {tx.amount}
+                                            <div className={"show-xs"}>= {tx.balance}</div>
+                                        </StyleTd>
+                                        <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
+                                            {tx.balance}
+                                        </StyleTd>
+                                    </StyleTr>
+                                ))}
+                            </StyleTbody>
+                        </StyleTable>
+                    </div>
                 )}
-                {transfers &&
-                    !this.isLastPage() && (
-                        <div style={{ marginTop: 20 }}>
-                            <Button onClick={this.showMore} className="ghost">
-                                Show older
-                            </Button>
-                        </div>
-                    )}
+                {transfers && !this.isLastPage() && (
+                    <div style={{ marginTop: 20, paddingLeft: 20 }}>
+                        <Button onClick={this.showMore} className="ghost">
+                            Show older
+                        </Button>
+                    </div>
+                )}
             </Segment>
         );
     }
@@ -139,7 +140,7 @@ class TransferList extends React.Component {
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p>There was nothing lately.</p>,
+    noItemMessage: <p style={{ paddingLeft: 20 }}>There was nothing lately.</p>,
     header: null,
     limit: 5
 };
