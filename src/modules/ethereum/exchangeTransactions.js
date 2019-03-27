@@ -251,7 +251,6 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
     while (
         buyIdx < buyOrders.length &&
         sellIdx < sellOrders.length &&
-        buyOrders[buyIdx].price >= sellOrders[sellIdx].price && // we already filtered but just in case...
         (gasEstimateWithNextMatch <= gasLimit || gasLimit === 0) // to make sure gas cost won't be over block gas limit even in edge scenarios
     ) {
         const sellOrder = sellOrders[sellIdx];
