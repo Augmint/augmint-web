@@ -5,13 +5,14 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
+import moment from "moment";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import RadioInput from "components/augmint-ui/RadioInput";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import ToolTip from "components/toolTip";
-import LoanProductDetails from "containers/loan/components/LoanProductDetails";
+import { LoanProductDetails } from "containers/loan/components/LoanProductDetails";
 import { Pgrid } from "components/PageLayout";
 
 import theme from "styles/theme";
@@ -106,6 +107,7 @@ class NewLoanForm extends React.Component {
 
         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
         this.setState({
+            ethAmount: ethAmount.toFixed(ETH_DECIMALS),
             loanTokenAmount: amount,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
             amountChanged: "A-EURO"
@@ -139,6 +141,7 @@ class NewLoanForm extends React.Component {
 
         this.props.change("loanTokenAmount", loanTokenAmount / DECIMALS_DIV);
         this.setState({
+            loanTokenAmount: loanTokenAmount / DECIMALS_DIV,
             ethAmount: amount,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
             amountChanged: "ETH"
@@ -147,8 +150,6 @@ class NewLoanForm extends React.Component {
 
     onSelectedLoanChange(e) {
         let product = this.products[e.target.value];
-        console.log(product, "product");
-
         this.setState(
             {
                 productId: e.target.value,
@@ -172,6 +173,10 @@ class NewLoanForm extends React.Component {
         const { error, handleSubmit, pristine, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
         const { rates } = this.props;
         const isRatesAvailable = rates && rates.info.bn_ethFiatRate * 1 > 0;
+        const depositInEur = rates.info.ethFiatRate * this.state.ethAmount || 0;
+        const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
+        const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
+
         return (
             <div>
                 {error && (
@@ -200,7 +205,7 @@ class NewLoanForm extends React.Component {
                                         inputmode="numeric"
                                         step="any"
                                         min="0"
-                                        placeholder="amount taken to escrow"
+                                        placeholder="todo init num"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[
                                             Validations.required,
@@ -212,7 +217,7 @@ class NewLoanForm extends React.Component {
                                         data-testid="ethAmountInput"
                                         style={{ borderRadius: theme.borderRadius.left }}
                                         labelAlignRight="ETH collateral"
-                                        info="Approx. TODO calc amount EUR"
+                                        info={`Approx. ${depositInEur} EUR`}
                                         className="field-big"
                                     />
                                 </Pgrid.Column>
@@ -242,7 +247,7 @@ class NewLoanForm extends React.Component {
                                         data-testid="loanTokenAmountInput"
                                         style={{ borderRadius: theme.borderRadius.left }}
                                         labelAlignRight="A-EUR loan"
-                                        info="Based on 60% loan-to-value ratio"
+                                        info={`Based on ${collateralRatio}% loan-to-value ratio`}
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>
@@ -257,7 +262,7 @@ class NewLoanForm extends React.Component {
                                         disabled={submitting || !loanManager.isLoaded}
                                         onChange={this.onSelectedLoanChange}
                                         data-testid="loanTermSelect"
-                                        info="Repay by ... TODO"
+                                        info={`Repay by ${repayBefore}`}
                                         className="field-big"
                                         isSelect="true"
                                         selectOptions={this.activeProducts}
@@ -266,16 +271,34 @@ class NewLoanForm extends React.Component {
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <LoanProductDetails
-                            product={this.state.product}
-                            repaymentAmount={this.state.repaymentAmount || 0}
-                        />
                         <div
+                            className="form-summary"
                             style={{
-                                textAlign: "right",
-                                width: "100%"
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "space- between"
                             }}
                         >
+                            <div
+                                style={{
+                                    width: "50%",
+                                    textAlign: "left"
+                                }}
+                            >
+                                <p data-testid="repaymentAmount">
+                                    <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
+                                </p>
+                                <p>Total repayment</p>
+                            </div>
+                            <div style={{ width: "50%", textAlign: "left" }}>
+                                <p>
+                                    <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
+                                </p>
+                                <p>Annual interest rate</p>
+                            </div>
+                        </div>
+
+                        <div style={{ width: "100%" }}>
                             <Button
                                 size="big"
                                 data-testid="submitBtn"
@@ -284,7 +307,8 @@ class NewLoanForm extends React.Component {
                                 type="submit"
                                 style={{
                                     height: "auto",
-                                    padding: "10px 55px"
+                                    padding: "10px 55px",
+                                    width: "100%"
                                 }}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}

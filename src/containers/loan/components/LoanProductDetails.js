@@ -3,7 +3,7 @@ import moment from "moment";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 import { LoanInterestRatePaToolTip, LoanCollateralRatioToolTip, DefaultingFeeTooltip } from "./LoanToolTips";
 
-export default function LoanProductDetails(props) {
+const LoanProductDetails = function(props) {
     const prod = props.product;
     const repaymentAmount = props.repaymentAmount;
     const collateralRatio = Number((prod.collateralRatio * 100).toFixed(2));
@@ -57,4 +57,6 @@ export default function LoanProductDetails(props) {
             </Row>
         </MyGridTable>
     );
-}
+};
+
+export { LoanProductDetails };
