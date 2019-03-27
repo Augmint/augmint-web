@@ -40,10 +40,6 @@ describe("isOrderBetter", () => {
     test("the direction of the two orders should be same", () => {
         const o1 = { direction: TOKEN_SELL, price: 2, id: 2 };
         const o2 = { direction: TOKEN_BUY, price: 1, id: 1 };
-        try {
-            isOrderBetter(o1, o2);
-        } catch (e) {
-            expect(e).not.toBeUndefined();
-        }
+        expect(() => isOrderBetter(o1, o2)).toThrow(/order directions must be the same/);
     });
 });
