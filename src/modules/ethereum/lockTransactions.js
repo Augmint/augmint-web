@@ -52,7 +52,8 @@ function parseProducts(productsArray) {
                 minimumLockAmount: bn_minimumLockAmount / DECIMALS_DIV,
                 maxLockAmount: bn_maxLockAmount / DECIMALS_DIV,
                 interestRatePa,
-                interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
+                // using floor for the "advertised" interest rate to ensure that the actual interest will be higher even with small amount
+                interestRatePaPt: Math.floor(interestRatePa * 10000) / 100,
                 isActive: parseInt(bn_isActive, 10) === 1
             });
         }
@@ -183,6 +184,7 @@ function parseLocks(locksArray) {
                 lockedUntilText,
                 perTermInterest,
                 interestRatePa,
+                // this is the actual interest rate (can be higher than advertised because of rounding up in contract code)
                 interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
                 durationInSecs,
                 durationInDays,
