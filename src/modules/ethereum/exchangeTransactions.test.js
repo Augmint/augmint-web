@@ -16,8 +16,16 @@ describe("isOrderBetter", () => {
     });
 
     test("o2 should be better when o1 same as o2", () => {
+        // same id for two orders, it shouldn't happen
         const o1 = { direction: TOKEN_SELL, price: 1, id: 1 };
         const o2 = { direction: TOKEN_SELL, price: 1, id: 1 };
+        const result = isOrderBetter(o1, o2);
+        expect(result).toBe(-1);
+    });
+
+    test("o1 should be better when o1 same as o2 but o1.id < o2.id", () => {
+        const o1 = { direction: TOKEN_SELL, price: 1, id: 1 };
+        const o2 = { direction: TOKEN_SELL, price: 1, id: 2 };
         const result = isOrderBetter(o1, o2);
         expect(result).toBe(-1);
     });
