@@ -31,7 +31,7 @@ export const StyledModal = styled.div`
         flex-direction: column;
 
         ${media.tablet`
-            max-height: 90%;
+            max-height: 80%;
         `};
     }
 `;
