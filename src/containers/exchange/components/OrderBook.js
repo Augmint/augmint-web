@@ -41,7 +41,7 @@ const OrderItem = props => {
 
     const ret = [
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <StyledSpan>{order.amount} A€</StyledSpan>}
+            {order.direction === TOKEN_SELL && <StyledSpan>{order.amount.toFixed(2)} A€</StyledSpan>}
             {order.direction === TOKEN_BUY && <StyledSpan>{actualValue} A€</StyledSpan>}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
