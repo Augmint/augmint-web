@@ -21,7 +21,9 @@ export const cost = {
     // actual on ganache: 2nd: +57760. then between 45652-47767, sometimes 5783?
     MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS: 50000,
 
-    CANCEL_ORDER_GAS: 60000, // actuals on ganache: sell cancel: 31891-43725 / buy cancel: 24264-28470
+    // actuals on ganache: sell cancel: 31891-43725 / buy cancel: 24264-28470
+    //    last sell order cancel reverts in ganache with 60000 gas limit despite it runs w/ 31891 gas... likely a ganache bug
+    CANCEL_ORDER_GAS: 70000,
 
     LEGACY_BALANCE_CONVERT_GAS: 200000,
 
