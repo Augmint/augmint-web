@@ -10,8 +10,16 @@ export const cost = {
     // w narrative: 46733 - 56693
 
     PLACE_ORDER_GAS: 200000,
-    MATCH_ORDERS_GAS: 150000,
     CANCEL_ORDER_GAS: 80000, // TODO: revisit after tx refactor done
+    MATCH_ORDERS_GAS: 150000, // a single matchOrders
+
+    // base cost for matchMultipleOrders
+    // actual on ganache: 80667 but requires higher b/c Exchange contract's matchMultipleOrders stops matching if gasLeft < 100k
+    MATCH_MULTIPLE_FIRST_MATCH_GAS: 200000,
+
+    // additional cost for each match for matchMultipleOrder.
+    // actual on ganache: 2nd: +57760. then between 45652-47767, sometimes 5783?
+    MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS: 50000,
 
     LEGACY_BALANCE_CONVERT_GAS: 200000,
 

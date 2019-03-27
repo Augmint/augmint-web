@@ -182,6 +182,111 @@ export async function matchOrdersTx(buyId, sellId) {
     return { txName, transactionHash };
 }
 
+export async function matchMultipleOrdersTx() {
+    const txName = "Match orders";
+    const userAccount = store.getState().web3Connect.userAccount;
+    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
+    const bn_ethFiatRate = store.getState().rates.info.bn_ethFiatRate;
+    const orders = store.getState().orders.orders;
+    const lowestSellPrice = orders.sellOrders[0].price;
+    const highestBuyPrice = orders.buyOrders[0].price;
+
+    const buyOrders = orders.buyOrders
+        .filter(o => o.price >= lowestSellPrice)
+        .map(o => ({ id: o.id, price: o.price, bn_ethAmount: o.bn_ethAmount }));
+    const sellOrders = orders.sellOrders
+        .filter(o => o.price <= highestBuyPrice)
+        .map(o => ({ id: o.id, price: o.price, bn_tokenAmount: new BigNumber(o.amount) }));
+
+    const sellIds = [];
+    const buyIds = [];
+    let buyIdx = 0;
+    let sellIdx = 0;
+    let matchCount = 0;
+    while (
+        buyIdx < buyOrders.length &&
+        sellIdx < sellOrders.length &&
+        buyOrders[buyIdx].price >= sellOrders[sellIdx].price && // we already filtered but just in case...
+        matchCount < 100 // to make sure gas cost won't be over block gas limit even in edge scenarios
+    ) {
+        matchCount++;
+        const sellOrder = sellOrders[sellIdx];
+        const buyOrder = buyOrders[buyIdx];
+        sellIds.push(sellOrder.id);
+        buyIds.push(buyOrder.id);
+
+        let tradedEth;
+        let tradedTokens;
+
+        const matchPrice = buyOrder.id > sellOrder.id ? sellOrder.price : buyOrder.price;
+
+        buyOrder.bn_tokenValue = bn_ethFiatRate
+            .div(matchPrice)
+            .mul(buyOrder.bn_ethAmount)
+            .round(2);
+
+        sellOrder.bn_ethValue = sellOrder.bn_tokenAmount
+            .mul(matchPrice)
+            .div(bn_ethFiatRate)
+            .round(18);
+
+        if (sellOrder.bn_tokenAmount.lt(buyOrder.bn_tokenValue)) {
+            tradedEth = sellOrder.bn_ethValue;
+            tradedTokens = sellOrder.bn_tokenAmount;
+        } else {
+            tradedEth = buyOrder.bn_ethAmount;
+            tradedTokens = buyOrder.bn_tokenValue;
+        }
+
+        buyOrder.bn_ethAmount = buyOrder.bn_ethAmount.sub(tradedEth);
+        buyOrder.bn_tokenValue = buyOrder.bn_tokenValue.sub(tradedTokens);
+
+        if (buyOrder.bn_ethAmount.eq(0)) {
+            buyIdx++;
+        }
+
+        sellOrder.bn_ethValue = sellOrder.bn_ethValue.sub(tradedEth);
+        sellOrder.bn_tokenAmount = sellOrder.bn_tokenAmount.sub(tradedTokens);
+        if (sellOrder.bn_tokenAmount.eq(0)) {
+            sellIdx++;
+        }
+    }
+
+    if (matchCount === 0) {
+        throw new Error("no matching orders found"); // UI shouldn't allow to be called in this case
+    }
+
+    const gasEstimate =
+        cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS * (matchCount - 1);
+
+    console.debug(
+        "matchMultipleOrdersTx matchCount:",
+        matchCount,
+        "gasEstimate:",
+        gasEstimate,
+        "Buy: ",
+        buyIds,
+        "Sell:",
+        sellIds
+    );
+
+    // for debugging
+    // buyOrders.forEach(order => {
+    //     order.ethAmount = order.bn_ethAmount.toString();
+    //     order.tokenValue = order.bn_tokenValue ? order.bn_tokenValue.toString() : "NEVER REACHED";
+    // });
+    // sellOrders.forEach(order => {
+    //     order.tokenAmount = order.bn_tokenAmount.toString();
+    //     order.ethValue = order.bn_ethValue ? order.bn_ethValue.toString() : "NEVER REACHED";
+    // });
+
+    const tx = exchange.methods.matchMultipleOrders(buyIds, sellIds).send({ from: userAccount, gas: gasEstimate });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate);
+
+    return { txName, transactionHash };
+}
+
 export async function cancelOrderTx(exchange, orderDirection, orderId) {
     const gasEstimate = cost.CANCEL_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
