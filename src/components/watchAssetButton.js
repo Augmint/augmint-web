@@ -57,8 +57,10 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user } = this.props;
+        const { web3, contracts, augmint, user, className } = this.props;
         let showButton = false;
+
+        let _className = className + " primary watchAssetBtn";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
             this.cookies = web3.watchAsset;
@@ -81,7 +83,7 @@ export class WatchAssetButton extends React.Component {
             <div style={{ textAlign: "center" }}>
                 {showButton && (
                     <Button
-                        className="primary watchAssetBtn"
+                        className={_className}
                         onClick={() => {
                             this.addAsset();
                         }}

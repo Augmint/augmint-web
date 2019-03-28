@@ -79,7 +79,11 @@ export const BaseButton = styledComponent => styledComponent`
 
       &.watchAssetBtn {
         margin-top: 25px;
-               
+
+        &.noMargin {
+          margin-top: 0;
+        }
+
         ${media.tabletMin`
           padding: 15px 20px;
         `};

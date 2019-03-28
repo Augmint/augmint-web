@@ -39,14 +39,21 @@ class AccountHome extends React.Component {
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 >
-                                    <WatchAssetButton />
-                                    <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
-                                        <Button to="/exchange" className="primary myAcc">
-                                            Buy / Sell A-EUR
-                                        </Button>
-                                        <Button to="/transfer" className="primary myAcc" data-testid="transferButton">
-                                            Send A-EUR
-                                        </Button>
+                                    <div style={{ marginTop: 20 }}>
+                                        <WatchAssetButton className={"noMargin"} />
+                                        <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
+                                            <Button to="/exchange" className="primary myAcc">
+                                                Buy / Sell A-EUR
+                                            </Button>
+                                            <Button
+                                                to="/transfer"
+                                                className="primary myAcc"
+                                                data-testid="transferButton"
+                                                style={{ marginBottom: 20 }}
+                                            >
+                                                Send A-EUR
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Balance>
                             </Pgrid.Column>
