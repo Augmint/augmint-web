@@ -29,6 +29,10 @@ export const BaseButton = styledComponent => styledComponent`
       outline: 0;
       background-color: ${theme.colors.grey};
       color: ${theme.colors.white};
+
+      &.primary {
+        color: ${theme.colors.primary};
+      }
     }
 
     &[disabled] {
