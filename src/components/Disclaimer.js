@@ -82,9 +82,7 @@ export default class Disclaimer extends React.Component {
     }
 
     validate() {
-        console.log("FUT");
         const checkbox = document.getElementById("disclaimer-chcekbox");
-        console.log(checkbox.checked);
         if (checkbox.checked) {
             this.setState({ checkbox: "checked" });
             return true;
