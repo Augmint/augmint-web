@@ -19,10 +19,6 @@ export const BaseButton = styledComponent => styledComponent`
     font-size: 13px;
     letter-spacing: normal;
     border: 0;
-    
-    // & + & {
-    //   margin-left: 1em;
-    // }
 
     &:hover,
     &:focus {
