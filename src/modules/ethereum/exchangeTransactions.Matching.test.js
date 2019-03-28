@@ -93,7 +93,7 @@ describe("getMatchingOrders", () => {
         );
     });
 
-    test("should return as many matches as fits to gasLimit passed", () => {
+    test("should return as many matches as fits to gasLimit passed (exact)", () => {
         const buyOrders = [
             { id: 1, price: 1, bn_ethAmount: BN_ONE },
             { id: 2, price: 1, bn_ethAmount: BN_ONE },
@@ -107,6 +107,28 @@ describe("getMatchingOrders", () => {
         ];
 
         const gasLimit = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
+
+        const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, gasLimit);
+        console.log(matches, gasLimit);
+        expect(matches.buyIds).toEqual([1, 2]);
+        expect(matches.sellIds).toEqual([5, 6]);
+        expect(matches.gasEstimate).toBe(gasLimit);
+    });
+
+    test("should return as many matches as fits to gasLimit passed (almost)", () => {
+        const buyOrders = [
+            { id: 1, price: 1, bn_ethAmount: BN_ONE },
+            { id: 2, price: 1, bn_ethAmount: BN_ONE },
+            { id: 3, price: 1, bn_ethAmount: BN_ONE }
+        ];
+
+        const sellOrders = [
+            { id: 5, price: 1, amount: 500 },
+            { id: 6, price: 1, amount: 500 },
+            { id: 7, price: 1, amount: 500 }
+        ];
+
+        const gasLimit = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + 2 * cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS - 1;
 
         const matches = calculateMatchingOrders(buyOrders, sellOrders, ETHEUR_RATE, gasLimit);
 
