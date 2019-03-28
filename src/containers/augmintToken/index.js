@@ -127,9 +127,7 @@ class AugmintToken extends React.Component {
                         {product.isActive && (
                             <StyledRow halign="justify">
                                 <StyledCol width={1 / 2}>{product.termText}</StyledCol>
-                                <StyledCol width={1 / 2}>
-                                    {Math.floor(product.interestRatePa * 10000) / 100 + "%"}
-                                </StyledCol>
+                                <StyledCol width={1 / 2}>{product.interestRatePaPt}%</StyledCol>
                             </StyledRow>
                         )}
                     </div>
@@ -153,9 +151,7 @@ class AugmintToken extends React.Component {
                                 <StyledCol width={1 / 2} className="alignLeft">
                                     {product.durationText}
                                 </StyledCol>
-                                <StyledCol width={1 / 2}>
-                                    {Math.floor(product.interestRatePa * 10000) / 100 + "%"}
-                                </StyledCol>
+                                <StyledCol width={1 / 2}>{product.interestRatePaPt}%</StyledCol>
                             </StyledRow>
                         )}
                     </div>

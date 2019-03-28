@@ -37,7 +37,7 @@ const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIM
 
 export default class Balance extends React.Component {
     render() {
-        const { userAccount, loans, locks } = this.props;
+        const { userAccount, loans, locks, children } = this.props;
         const activeLoans = loans.loans && loans.loans.filter(loan => loan.isRepayable);
         const activeLocks = locks.locks && locks.locks.filter(lock => lock.isReleasebale || lock.isActive);
         const loansAmount = sum(pick(activeLoans, "loanAmount"));
@@ -70,6 +70,7 @@ export default class Balance extends React.Component {
                     <Label>ETH balance</Label>
                     <div>{userAccount.ethBalance} ETH</div>
                 </EthAmount>
+                {children}
             </Pblock>
         );
     }

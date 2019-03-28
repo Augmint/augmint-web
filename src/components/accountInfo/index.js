@@ -5,6 +5,7 @@ import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
 import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
 import Icon from "components/augmint-ui/icon";
+import WatchAssetButton from "components/watchAssetButton.js";
 
 export class AccountInfo extends React.Component {
     render() {
@@ -18,6 +19,7 @@ export class AccountInfo extends React.Component {
             className,
             toggleAccInfo
         } = this.props;
+
         return (
             <StyledAccountInfo
                 data-testid={!hideTestId && "accountInfoBlock"}
@@ -60,6 +62,9 @@ export class AccountInfo extends React.Component {
                     <Icon name="connect" />
                     {data.web3Connect.network.name}
                 </StyledAccInfoLink>
+
+                <WatchAssetButton />
+
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>
         );
