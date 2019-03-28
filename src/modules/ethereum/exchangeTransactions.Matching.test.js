@@ -5,7 +5,7 @@ import { cost } from "./gas";
 describe("getMatchingOrders", () => {
     const ETHEUR_RATE = new BigNumber(500);
     const BN_ONE = new BigNumber(1);
-    const GAS_LIMIT = 0;
+    const GAS_LIMIT = Number.MAX_SAFE_INTEGER;
 
     test("should return no match if no orders", () => {
         const [buyIds, sellIds] = calculateMatchingOrders([], [], ETHEUR_RATE, GAS_LIMIT);

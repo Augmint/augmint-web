@@ -222,7 +222,6 @@ returns matching pairs from ordered ordebook for sending in Exchange.matchMultip
             current ETHEUR rate
         gasLimit:
             return as many matches as it fits to gasLimit based on gas cost estimate.
-            returns all matches if 0 passed for gasLimit
 
     returns: pairs of matching order id , ordered by execution sequence
         { buyIds: [], sellIds: [], gasEstimate }
@@ -246,13 +245,9 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
 
     let buyIdx = 0;
     let sellIdx = 0;
-    let gasEstimateWithNextMatch = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS;
+    let gasEstimate = 0;
 
-    while (
-        buyIdx < buyOrders.length &&
-        sellIdx < sellOrders.length &&
-        (gasEstimateWithNextMatch <= gasLimit || gasLimit === 0) // to make sure gas cost won't be over block gas limit even in edge scenarios
-    ) {
+    while (buyIdx < buyOrders.length && sellIdx < sellOrders.length && gasEstimate < gasLimit) {
         const sellOrder = sellOrders[sellIdx];
         const buyOrder = buyOrders[buyIdx];
         sellIds.push(sellOrder.id);
@@ -306,13 +301,8 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
             sellIdx++;
         }
 
-        gasEstimateWithNextMatch += cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
+        gasEstimate += !gasEstimate ? cost.MATCH_MULTIPLE_FIRST_MATCH_GAS : cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
     }
-
-    const gasEstimate =
-        sellIds.length === 0
-            ? 0
-            : cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + (sellIds.length - 1) * cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
 
     return { buyIds, sellIds, gasEstimate };
 }
