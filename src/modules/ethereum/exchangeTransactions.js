@@ -246,8 +246,9 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
     let buyIdx = 0;
     let sellIdx = 0;
     let gasEstimate = 0;
+    let nextGasEstimate = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS;
 
-    while (buyIdx < buyOrders.length && sellIdx < sellOrders.length && gasEstimate < gasLimit) {
+    while (buyIdx < buyOrders.length && sellIdx < sellOrders.length && nextGasEstimate <= gasLimit) {
         const sellOrder = sellOrders[sellIdx];
         const buyOrder = buyOrders[buyIdx];
         sellIds.push(sellOrder.id);
@@ -301,7 +302,8 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
             sellIdx++;
         }
 
-        gasEstimate += !gasEstimate ? cost.MATCH_MULTIPLE_FIRST_MATCH_GAS : cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
+        gasEstimate = nextGasEstimate;
+        nextGasEstimate += cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
     }
 
     return { buyIds, sellIds, gasEstimate };

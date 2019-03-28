@@ -134,6 +134,8 @@ describe("getMatchingOrders", () => {
 
         expect(matches.buyIds).toEqual([1, 2]);
         expect(matches.sellIds).toEqual([5, 6]);
-        expect(matches.gasEstimate).toBe(gasLimit);
+        expect(matches.gasEstimate).toBe(
+            cost.MATCH_MULTIPLE_FIRST_MATCH_GAS + cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS
+        );
     });
 });
