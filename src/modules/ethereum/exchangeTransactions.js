@@ -40,8 +40,8 @@ export async function fetchOrders(_exchangeInstance) {
         sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
     }
 
-    buyOrders.sort((o1, o2) => isOrderBetter(o1, o2));
-    sellOrders.sort((o1, o2) => isOrderBetter(o1, o2));
+    buyOrders.sort(isOrderBetter);
+    sellOrders.sort(isOrderBetter);
 
     return { buyOrders, sellOrders };
 }
