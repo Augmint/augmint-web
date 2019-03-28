@@ -20,9 +20,9 @@ export const BaseButton = styledComponent => styledComponent`
     letter-spacing: normal;
     border: 0;
     
-    & + & {
-      margin-left: 1em;
-    }
+    // & + & {
+    //   margin-left: 1em;
+    // }
 
     &:hover,
     &:focus {
@@ -61,11 +61,31 @@ export const BaseButton = styledComponent => styledComponent`
       text-transform: none;
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
-
+      
       ${media.tabletMin`
         padding: 20px 30px;
         font-size: ${remCalc(16)};
       `};
+
+      &.myAcc {
+        width: 203px;
+        align-self: center;
+        margin-top: 10px;
+
+        ${media.tabletMin`
+          width: 183px;
+        `};
+      }
+
+      &.watchAssetBtn {
+        margin-top: 25px;
+               
+        ${media.tabletMin`
+          padding: 15px 20px;
+        `};
+      }
+
+
     }
 
     &.ghost {

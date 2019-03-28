@@ -13,7 +13,7 @@ import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
-import WatchAssetButton from "components/watchAssetButton.js";
+import WatchAssetButton from "components/watchAssetButton";
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -40,17 +40,15 @@ class AccountHome extends React.Component {
                                     locks={this.props.locks}
                                 >
                                     <WatchAssetButton />
+                                    <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
+                                        <Button to="/exchange" className="primary myAcc">
+                                            Buy / Sell A-EUR
+                                        </Button>
+                                        <Button to="/transfer" className="primary myAcc" data-testid="transferButton">
+                                            Send A-EUR
+                                        </Button>
+                                    </div>
                                 </Balance>
-                            </Pgrid.Column>
-                            <Pgrid.Column size={{ tablet: 3 / 5 }}>
-                                <div style={{ textAlign: "right" }}>
-                                    <Button to="/exchange" className="primary">
-                                        Buy / Sell A-EUR
-                                    </Button>
-                                    <Button to="/transfer" className="primary" data-testid="transferButton">
-                                        Send A-EUR
-                                    </Button>
-                                </div>
                             </Pgrid.Column>
                         </Pgrid.Row>
 

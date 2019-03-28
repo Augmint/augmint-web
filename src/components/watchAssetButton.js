@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { watchAsset } from "modules/watchAsset.js";
+import { watchAsset } from "modules/watchAsset";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { watchAssetChange } from "modules/reducers/web3Connect";
@@ -81,8 +81,7 @@ export class WatchAssetButton extends React.Component {
             <div style={{ textAlign: "center" }}>
                 {showButton && (
                     <Button
-                        className="primary"
-                        style={{ padding: "15px 20px", marginTop: "25px" }}
+                        className="primary watchAssetBtn"
                         onClick={() => {
                             this.addAsset();
                         }}
