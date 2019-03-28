@@ -82,9 +82,7 @@ export default class Disclaimer extends React.Component {
     }
 
     validate() {
-        console.log("FUT");
         const checkbox = document.getElementById("disclaimer-chcekbox");
-        console.log(checkbox.checked);
         if (checkbox.checked) {
             this.setState({ checkbox: "checked" });
             return true;
@@ -152,7 +150,7 @@ export default class Disclaimer extends React.Component {
                                     data-testid="disclaimer-chcekbox"
                                     className={_className}
                                 />
-                                <Styledlabel for="disclaimer-chcekbox" className={_className}>
+                                <Styledlabel htmlFor="disclaimer-chcekbox" className={_className}>
                                     I have read and accept Augmint's Disclaimer.
                                 </Styledlabel>
                             </div>

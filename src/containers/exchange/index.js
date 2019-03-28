@@ -11,7 +11,7 @@ import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
-import MatchOrdersButton from "./components/MatchOrdersButton";
+import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import { TOKEN_SELL } from "modules/reducers/orders";
@@ -66,10 +66,10 @@ class ExchangeHome extends React.Component {
 
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
                                 {orders.orders && (
-                                    <MatchOrdersButton
+                                    <MatchMultipleOrdersButton
                                         buyOrder={orders.orders.buyOrders[0]}
                                         sellOrder={orders.orders.sellOrders[0]}
-                                        label="Match top sell and buy order"
+                                        label="Match orders"
                                     />
                                 )}
                                 <OrderBook
