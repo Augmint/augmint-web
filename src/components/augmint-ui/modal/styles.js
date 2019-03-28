@@ -17,7 +17,7 @@ const BaseModal = `
 export const StyledModal = styled.div`
     ${BaseModal};
     ${media.desktop`
-          width: 680px;
+        width: 680px;
     `};
     ${media.tablet`
         width: 75%;
@@ -25,6 +25,15 @@ export const StyledModal = styled.div`
     ${media.mobile`
         width: 85%;
     `};
+
+    &.disclaimer-modal {
+        display: flex;
+        flex-direction: column;
+
+        ${media.tablet`
+            max-height: 80%;
+        `};
+    }
 `;
 
 export const StyledOverlay = styled.div`
@@ -42,6 +51,12 @@ export const StyledModalContent = styled.div`
     font-size: ${remCalc(14)};
     line-height: 1.4;
     padding: ${remCalc(21)};
+
+    &.disclaimer-modal {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
 `;
 
 export const StyledModalActions = styled.div`
@@ -58,5 +73,4 @@ export const StyledCloseButton = styled.button`
     position: absolute;
     top: -25px;
     right: -25px;
-}
 `;
