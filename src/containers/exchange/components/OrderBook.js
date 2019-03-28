@@ -46,7 +46,7 @@ const OrderItem = props => {
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
             {order.direction === TOKEN_SELL && <StyledSpan>{actualValue} ETH</StyledSpan>}
-            {order.direction === TOKEN_BUY && <StyledSpan>{order.amountRounded.toFixed(5)} ETH</StyledSpan>}
+            {order.direction === TOKEN_BUY && <StyledSpan>{order.amount.toFixed(5)} ETH</StyledSpan>}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
             <StyledSpan>{displayPrice}%</StyledSpan>
@@ -85,7 +85,7 @@ const OrderItem = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0)).toFixed(5);
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0)).toFixed(5);
     const totalEthSellAmount = sellOrders
         .reduce((sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum), 0)
         .toFixed(5);

@@ -24,7 +24,6 @@ export const StyledModal = styled.div`
     `};
     ${media.mobile`
         width: 85%;
-        height: 60%;
     `};
 
     &.disclaimer-modal {
@@ -32,7 +31,7 @@ export const StyledModal = styled.div`
         flex-direction: column;
 
         ${media.tablet`
-            max-height: 70  %;
+            max-height: 80%;
         `};
     }
 `;
@@ -56,6 +55,7 @@ export const StyledModalContent = styled.div`
     &.disclaimer-modal {
         display: flex;
         flex-direction: column;
+        overflow: auto;
     }
 `;
 
