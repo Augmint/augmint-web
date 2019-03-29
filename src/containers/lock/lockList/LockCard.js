@@ -115,7 +115,7 @@ export default function LockCard(props) {
                             <DataRow>
                                 <DataLabel>Interest amount:</DataLabel>
                                 <DataValue>
-                                    {lock.interestEarned} A-EUR ({lock.interestRatePa} % p.a)
+                                    {lock.interestEarned} A-EUR ({lock.interestRatePaPt} % p.a)
                                 </DataValue>
                             </DataRow>
                         </DataGroup>
