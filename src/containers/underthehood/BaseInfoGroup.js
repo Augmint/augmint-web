@@ -5,7 +5,6 @@ import Web3ConnectionInfo from "./components/Web3ConnectionInfo";
 import ContractConnectionsInfo from "./components/ContractConnectionsInfo";
 import { UserAccountInfo } from "./components/UserAccountInfo";
 import { SystemInfo } from "./components/SystemInfo";
-import HWWallets from "./components/HWWallets";
 import { ArrayDump } from "./components/ArrayDump";
 import { Pgrid } from "components/PageLayout";
 
@@ -27,7 +26,6 @@ class BaseInfoGroup extends React.Component {
                 </Pgrid.Column>
                 <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
                     <ArrayDump header="Accounts" items={this.props.accounts} />
-                    <HWWallets />
                 </Pgrid.Column>
             </Pgrid.Row>
         );
