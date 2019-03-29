@@ -111,6 +111,9 @@ class LockContainer extends React.Component {
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
+                            inputmode="numeric"
+                            step="any"
+                            min="0"
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
                                 Validations.required,
@@ -170,9 +173,7 @@ class LockContainer extends React.Component {
                                                     <TermTableCell>
                                                         {Math.floor(product.maxLockAmount)} A€
                                                     </TermTableCell>
-                                                    <TermTableCell>
-                                                        {Math.floor(product.interestRatePa * 10000) / 100} %
-                                                    </TermTableCell>
+                                                    <TermTableCell>{product.interestRatePaPt} %</TermTableCell>
                                                     <TermTableCell style={{ textAlign: "right" }}>
                                                         {this.props.lockAmount &&
                                                             `${Math.ceil(

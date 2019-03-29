@@ -16,7 +16,7 @@ import { Pgrid } from "components/PageLayout";
 
 import theme from "styles/theme";
 
-import { ONE_ETH_IN_WEI, PPM_DIV } from "utils/constants";
+import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -185,7 +185,7 @@ class NewLoanForm extends React.Component {
                     />
                 )}
                 {!isRatesAvailable && (
-                    <ErrorPanel>No ETH/EUR rates available. Can't get a loan at the moment. Try agin later</ErrorPanel>
+                    <ErrorPanel>No {ETHEUR} rates available. Can't get a loan at the moment. Try agin later</ErrorPanel>
                 )}
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -206,6 +206,9 @@ class NewLoanForm extends React.Component {
                                         as={Form.Input}
                                         name="loanTokenAmount"
                                         type="number"
+                                        inputmode="numeric"
+                                        step="any"
+                                        min="0"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[
                                             Validations.required,
@@ -225,9 +228,9 @@ class NewLoanForm extends React.Component {
                                     <label>
                                         ETH amount to collateral
                                         <ToolTip id={"collateral"}>
-                                            ETH to be held as collateral = A-EUR Loan Amount / ETHEUR rate x (1 /
+                                            ETH to be held as collateral = A-EUR Loan Amount / {ETHEUR} rate x (1 /
                                             Coverage ratio)
-                                            <br />( ETH/EUR Rate ={" "}
+                                            <br />( {ETHEUR} Rate ={" "}
                                             {Math.round(this.props.rates.info.ethFiatRate * 100) / 100} )
                                         </ToolTip>
                                     </label>
@@ -236,6 +239,9 @@ class NewLoanForm extends React.Component {
                                         as={Form.Input}
                                         name="ethAmount"
                                         type="number"
+                                        inputmode="numeric"
+                                        step="any"
+                                        min="0"
                                         placeholder="amount taken to escrow"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[

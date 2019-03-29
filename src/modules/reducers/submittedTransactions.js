@@ -6,6 +6,7 @@ export const UPDATE_TX_ERROR = "submittedTransactions/UPDATE_TX_ERROR";
 
 export const DISMISS_TX_SUCCESS = "submittedTransactions/DISMISS_TX_SUCCESS";
 export const DISMISS_TX_ERROR = "submittedTransactions/DISMISS_TX_ERROR";
+export const ADD_NONCE = "submittedTransactions/ADD_NONCE";
 
 const initialState = {
     transactions: {}
@@ -13,6 +14,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case ADD_NONCE:
+            return {
+                ...state,
+                transactions: action.result
+            };
         case UPDATE_TX_SUCCESS:
         case DISMISS_TX_SUCCESS:
             return {
@@ -32,6 +38,19 @@ export default (state = initialState, action) => {
     }
 };
 
+export const updateTxNonce = ({ nonce, transactionHash }) => {
+    const transactions = Object.assign({}, store.getState().submittedTransactions.transactions);
+    const updatedTx = Object.assign({}, store.getState().submittedTransactions.transactions[transactionHash], {
+        nonce: nonce
+    });
+    transactions[transactionHash] = updatedTx;
+
+    return {
+        type: ADD_NONCE,
+        result: transactions
+    };
+};
+
 export const updateTx = tx => {
     return async dispatch => {
         try {
@@ -40,7 +59,7 @@ export const updateTx = tx => {
             transactions[tx.transactionHash] = updatedTx;
 
             if (
-                transactions[tx.transactionHash].confirmationNumber === 0 &&
+                transactions[tx.transactionHash].confirmationNumber <= 1 &&
                 transactions[tx.transactionHash].event === "confirmation"
             ) {
                 transactions[tx.transactionHash].isDismissed = undefined;

@@ -14,7 +14,7 @@ describe("Augmint exchange", function() {
 
         cy.get("[data-testid=exchangeMenuLink]").click();
 
-        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
         cy.get("@tradeHistoryTbody")
             .then(() => {
                 cy.get("@tradeHistoryTbody")
@@ -131,7 +131,7 @@ describe("Augmint exchange", function() {
         cy.get("[data-testid=exchangeMenuLink]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
-        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
         cy.get("@tradeHistoryTbody")
             .then(() => {
                 cy.get("@tradeHistoryTbody")
@@ -272,7 +272,7 @@ describe("Augmint exchange", function() {
             .then(() => {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
-                cy.get("[data-testid=matchTopOrdersButton]").click();
+                cy.get("[data-testid=matchMultipleOrdersButton]").click();
 
                 cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Order match submitted");
                 cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]").click();
@@ -281,7 +281,7 @@ describe("Augmint exchange", function() {
                 cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                     .click()
                     .then(() => {
-                        cy.get("[data-testid=trade-history] tbody").as("tradeHistoryTbody");
+                        cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
                         cy.get("@tradeHistoryTbody").then(() => {
                             cy.get("@tradeHistoryTbody").should("contain", "OrderFill");
                         });

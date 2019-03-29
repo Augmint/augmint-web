@@ -9,15 +9,17 @@ import CancelOrderButton from "./CancelOrderButton";
 import BigNumber from "bignumber.js";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS } from "utils/constants";
+import { DECIMALS, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 
 const OrderItem = props => {
     const { order, ethFiatRate } = props;
 
-    const bn_ethFiatRate = new BigNumber(ethFiatRate);
+    const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
-    const displayPrice = floatNumberConverter(order.price, DECIMALS);
+    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
+
+    const amountRounded = order.direction === TOKEN_SELL ? order.amount.toFixed(2) : order.amount.toFixed(5);
 
     const actualValue =
         order.direction === TOKEN_SELL
@@ -29,32 +31,32 @@ const OrderItem = props => {
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_BUY && `${order.amountRounded} ETH`}
+                {order.direction === TOKEN_BUY && `${amountRounded} ETH`}
                 {order.direction === TOKEN_SELL && `(${actualValue} ETH)`}
             </Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_SELL && `${order.amountRounded} A€`}
+                {order.direction === TOKEN_SELL && `${amountRounded} A€`}
                 {order.direction === TOKEN_BUY && `(${actualValue} A€)`}
             </Col>
 
-            <Col width={2}>{displayPrice} %</Col>
+            <Col width={2}>{displayPrice}%</Col>
 
             <Col width={2}>
                 <MoreInfoTip id={"my_order_more_info-" + order.id}>
                     {order.direction === TOKEN_SELL && (
                         <p>
                             Sell A€ order: <br />
-                            {order.amount} A€ @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} €/ETH = <br />
+                            {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
                             {actualValue} ETH
                         </p>
                     )}
                     {order.direction === TOKEN_BUY && (
                         <p>
                             Buy A€ Order: <br />
-                            {order.amount} ETH @{displayPrice}% of current ETH/€ = <br />
-                            {order.amount} ETH * {ethFiatRate} €/ETH / {order.price} €/A€ = <br />
+                            {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
                             {actualValue} A€
                         </p>
                     )}
@@ -122,16 +124,17 @@ export default class OrderBook extends React.Component {
         const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o2.id - o1.id);
 
         const totalBuyAmount = orders
-            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethValue.add(sum), 0).toFixed(6))
+            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0).toFixed(6))
             : "?";
-        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.tokenValue + sum, 0).toString() : "?";
+        const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.amount + sum, 0).toFixed(2) : "?";
 
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && <ErrorPanel header="Error while fetching orders">{refreshError.message}</ErrorPanel>}
                 {orders == null && !isLoading && <p>Connecting...</p>}
                 <p>
-                    Total: {totalBuyAmount} ETH + {totalSellAmount} A€
+                    Total: <strong>{totalBuyAmount} ETH </strong>Buy Order + <strong>{totalSellAmount} A€</strong> Sell
+                    Order
                 </p>
                 {isLoading ? (
                     <p>Refreshing orders...</p>

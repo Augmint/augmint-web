@@ -19,6 +19,9 @@ export const StyleNavList = styled.ul`
       left: 0;
       right: 0;
     `};
+    & .segment {
+        display: none;
+    }
 `;
 
 export const StyleNavLink = styled(NavLink)`
@@ -79,6 +82,19 @@ export const StyledNavLeftSide = styled.div`
     }
 `;
 
+export const StyledNavRightSide = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: auto;
+
+    ${breakpoint`
+    & a:first-child {
+      display: none
+    }
+  `}
+`;
+
 export const StyledLogo = styled.img`
     margin-top: 80px;
 `;
@@ -112,5 +128,9 @@ export const StyledNavContainer = styled.div`
     & ${StyleNavList}.show {
         display: flex;
         flex-direction: column;
+
+        & .segment {
+            display: block;
+        }
     }
 `;

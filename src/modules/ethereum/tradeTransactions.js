@@ -1,5 +1,4 @@
 import store from "modules/store";
-import ethers from "ethers";
 import moment from "moment";
 import BigNumber from "bignumber.js";
 import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, DECIMALS } from "utils/constants";
@@ -7,44 +6,20 @@ import { floatNumberConverter } from "utils/converter";
 
 export async function fetchTradesTx(account, fromBlock, toBlock) {
     try {
-        const exchangeInstance = store.getState().contracts.latest.exchange.ethersInstance;
-        const NewOrder = exchangeInstance.interface.events.NewOrder;
-        const OrderFill = exchangeInstance.interface.events.OrderFill;
-        const CancelledOrder = exchangeInstance.interface.events.CancelledOrder;
-        const provider = store.getState().web3Connect.ethers.provider;
+        const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
-        const paddedAccount = ethers.utils.hexlify(ethers.utils.padZeros(account, 32));
         const [logsNewOrder, logsOrderFillBuy, logsOrderFillSell, logsCanceledOrder] = await Promise.all([
-            provider.getLogs({
-                fromBlock: fromBlock,
-                toBlock: toBlock,
-                address: exchangeInstance.address,
-                topics: [NewOrder.topics[0], null, paddedAccount]
-            }),
-            provider.getLogs({
-                fromBlock: fromBlock,
-                toBlock: toBlock,
-                address: exchangeInstance.address,
-                topics: [OrderFill.topics[0], paddedAccount]
-            }),
-            provider.getLogs({
-                fromBlock: fromBlock,
-                toBlock: toBlock,
-                address: exchangeInstance.address,
-                topics: [OrderFill.topics[0], null, paddedAccount]
-            }),
-            provider.getLogs({
-                fromBlock: fromBlock,
-                toBlock: toBlock,
-                address: exchangeInstance.address,
-                topics: [CancelledOrder.topics[0], null, paddedAccount]
-            })
+            exchange.getPastEvents("NewOrder", { filter: { maker: account }, fromBlock, toBlock }),
+            exchange.getPastEvents("OrderFill", { filter: { tokenBuyer: account }, fromBlock, toBlock }),
+            exchange.getPastEvents("OrderFill", { filter: { tokenSeller: account }, fromBlock, toBlock }),
+            exchange.getPastEvents("CancelledOrder", { filter: { maker: account }, fromBlock, toBlock })
         ]);
+
         const logs = await Promise.all([
-            ...logsNewOrder.map(eventLog => _formatTradeLog(NewOrder, account, eventLog)),
-            ...logsCanceledOrder.map(eventLog => _formatTradeLog(CancelledOrder, account, eventLog)),
-            ...logsOrderFillBuy.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, "buy")),
-            ...logsOrderFillSell.map(eventLog => _formatTradeLog(OrderFill, account, eventLog, "sell"))
+            ...logsNewOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
+            ...logsCanceledOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
+            ...logsOrderFillBuy.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "buy")),
+            ...logsOrderFillSell.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "sell"))
         ]);
 
         logs.sort((log1, log2) => {
@@ -57,52 +32,67 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
     }
 }
 
-export async function processNewTradeTx(eventName, account, eventLog, type) {
-    const exchangeInstance = store.getState().contracts.latest.exchange.ethersInstance;
-    const event = exchangeInstance.interface.events[eventName];
-
-    return _formatTradeLog(event, account, eventLog, type);
+// called from exchangeProvider, arguments are in ethers event listener format
+export async function processNewTradeTx(account, eventObject, type) {
+    return _formatTradeLog(account, eventObject, eventObject.args, type);
 }
 
-async function _formatTradeLog(event, account, eventLog, type) {
+// get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
+async function _formatTradeLog(account, txData, args, type) {
     let blockData;
-    if (typeof eventLog.getBlock === "function") {
-        // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
-        blockData = await eventLog.getBlock();
+    if (typeof txData.getBlock === "function") {
+        // called from event - need to use eventObject.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
+        blockData = await txData.getBlock();
     } else {
-        // not from event, provider.getBlock should work
-        const provider = store.getState().web3Connect.ethers.provider;
-        blockData = await provider.getBlock(eventLog.blockNumber);
+        // not from event, web3.getBlock  works
+        const web3 = store.getState().web3Connect.web3Instance;
+        blockData = await web3.eth.getBlock(txData.blockNumber);
     }
 
-    const parsedData = event.parse(eventLog.topics, eventLog.data);
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
-    const bn_weiAmount = new BigNumber(parsedData.weiAmount.toString());
-    const bn_tokenAmount = parsedData.tokenAmount;
+    const bn_weiAmount = new BigNumber(args.weiAmount.toString());
+    const bn_tokenAmount = args.tokenAmount;
     const bn_ethAmount = bn_weiAmount.div(ONE_ETH_IN_WEI);
 
     const ethAmount = bn_ethAmount.toString();
-    const ethAmountRounded = parseFloat(bn_ethAmount.toFixed(6));
+    const ethAmountRounded = parseFloat(bn_ethAmount).toFixed(5);
     const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
-    const price = parseFloat(parsedData.price / PPM_DIV);
+    const price = parseFloat(args.price / PPM_DIV);
+    const publishedRate = args.publishedRate && parseFloat(args.publishedRate / DECIMALS_DIV).toFixed(2);
+    const effectiveRate = args.publishedRate && parseFloat((args.publishedRate / DECIMALS_DIV) * price).toFixed(2);
+
+    let orderId;
+    if (args.orderId) {
+        orderId = args.orderId;
+    } else {
+        orderId = tokenAmount === 0 ? args.buyTokenOrderId : args.sellTokenOrderId;
+    }
+    if (typeof orderId.toNumber === "function") {
+        // event listener from ethers returns BigNumber
+        orderId = orderId.toNumber();
+    }
+
     let direction = tokenAmount === 0 ? "buy" : "sell";
-    if (event.name === "OrderFill") {
+    if (txData.event === "OrderFill") {
         direction = type;
     }
 
-    const logData = Object.assign({ args: parsedData }, eventLog, {
+    const logData = Object.assign({ args }, txData, {
         blockData,
         direction,
-        blockTimeStampText: blockTimeStampText,
-        bn_weiAmount: bn_weiAmount,
-        bn_tokenAmount: bn_tokenAmount,
-        tokenAmount: tokenAmount ? tokenAmount : "",
-        ethAmount: ethAmount,
-        ethAmountRounded: ethAmountRounded ? ethAmountRounded : "",
+        blockTimeStampText,
+        bn_weiAmount,
+        bn_tokenAmount,
+        tokenAmount: tokenAmount ? tokenAmount.toFixed(2) : "",
+        ethAmount,
+        ethAmountRounded: ethAmount !== "0" ? ethAmountRounded : "",
         price: price ? price : "",
-        pricePt: price ? floatNumberConverter(price, DECIMALS) + " %" : "",
-        type: event.name
+        pricePt: price ? floatNumberConverter(price, DECIMALS).toFixed(2) + "%" : "",
+        publishedRate,
+        effectiveRate,
+        orderId,
+        type: txData.event
     });
 
     return logData;

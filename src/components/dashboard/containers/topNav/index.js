@@ -8,6 +8,7 @@ import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
 import { shortAccountAddresConverter } from "utils/converter";
+import { ETHEUR } from "utils/constants";
 import { CloseIcon } from "./styles";
 import close from "assets/images/close.svg";
 import { theme } from "styles/media";
@@ -103,7 +104,9 @@ class TopNav extends React.Component {
                 <StyledTopNavUl>
                     <StyledTopNavLi>
                         <StyledPrice>
-                            <span className="price">€/ETH {this.props.rates.info.ethFiatRate}</span>
+                            <span className="price">
+                                {ETHEUR}: {this.props.rates.info.ethFiatRate}
+                            </span>
                         </StyledPrice>
                     </StyledTopNavLi>
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>

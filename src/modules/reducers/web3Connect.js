@@ -2,12 +2,14 @@ import store from "modules/store";
 import { default as Web3 } from "web3";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
-import ethers from "ethers";
+import { ethers } from "ethers";
+import { getCookie, setCookie } from "utils/cookie.js";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
 export const WEB3_SETUP_ERROR = "WEB3_SETUP_ERROR";
 export const WEB3_ACCOUNT_CHANGE = "WEB3_ACCOUNT_CHANGE";
+export const WEB3_WATCH_ASSET_CHANGE = "WEB3_WATCH_ASSET_CHANGE";
 
 const initialState = {
     error: null,
@@ -18,7 +20,8 @@ const initialState = {
     isLoading: false,
     isConnected: false,
     network: { id: "?", name: "?" },
-    ethers: { provider: null, signer: null }
+    ethers: { provider: null, signer: null },
+    watchAsset: getCookie("watchAsset") || []
 };
 
 var web3;
@@ -59,6 +62,12 @@ export default (state = initialState, action) => {
                 ...state,
                 accounts: action.accounts,
                 userAccount: action.userAccount
+            };
+
+        case WEB3_WATCH_ASSET_CHANGE:
+            return {
+                ...state,
+                watchAsset: action.watchAsset
             };
 
         default:
@@ -108,13 +117,13 @@ export const setupWeb3 = () => {
             const web3Version = web3.version.api ? web3.version.api : web3.version;
 
             // ethers is used as a workaround for at least two issues w/ web3: event handling and filtering events
-            const provider = new ethers.providers.Web3Provider(web3.currentProvider, {
+            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider, {
                 name: network.name,
                 chainId: network.id
             });
             // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
             //  provider = ethers.providers.getDefaultProvider(); // TODO: https://github.com/ethers-io/ethers.js/issues/108
-            const signer = network.id === 999 ? null : provider.getSigner(); // only null signer works on local ganache
+            const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
             const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
@@ -122,7 +131,7 @@ export const setupWeb3 = () => {
                 userAccount,
                 accounts,
                 network,
-                ethers: { signer, provider },
+                ethers: { signer: ethersSigner, provider: ethersProvider },
                 info: { web3Version, gasLimit: lastBlock.gasLimit, gasPrice }
             });
         } catch (error) {
@@ -142,5 +151,13 @@ export const accountChange = newAccounts => {
         userAccount: newAccounts[0],
         accounts: newAccounts,
         ethers: { signer, provider }
+    };
+};
+
+export const watchAssetChange = value => {
+    setCookie("watchAsset", value);
+    return {
+        type: WEB3_WATCH_ASSET_CHANGE,
+        watchAsset: value
     };
 };
