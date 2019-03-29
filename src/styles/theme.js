@@ -16,7 +16,6 @@ const theme = {
         primaryLight: "#2e3438",
         secondaryLight: "#f9db9c",
         secondary: "#ffad00",
-        // secondaryDarkVar: "#d99300",
         secondaryDark: "#e29a00",
         lightCyan: "#f8ffff",
         darkCyan: "#276f86",
