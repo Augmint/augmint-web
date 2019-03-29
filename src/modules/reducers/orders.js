@@ -1,5 +1,11 @@
 import store from "modules/store";
-import { fetchOrders, placeOrderTx, matchOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
+import {
+    fetchOrders,
+    placeOrderTx,
+    matchOrdersTx,
+    matchMultipleOrdersTx,
+    cancelOrderTx
+} from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -15,6 +21,10 @@ export const PLACE_ORDER_SUCCESS = "orders/PLACE_ORDER_SUCCESS";
 export const MATCH_ORDERS_REQUESTED = "orders/MATCH_ORDERS_REQUESTED";
 export const MATCH_ORDERS_ERROR = "orders/MATCH_ORDERS_ERROR";
 export const MATCH_ORDERS_SUCCESS = "orders/MATCH_ORDERS_SUCCESS";
+
+export const MATCH_MULTIPLE_ORDERS_REQUESTED = "orders/MATCH_MULTIPLE_ORDERS_REQUESTED";
+export const MATCH_MULTIPLE_ORDERS_ERROR = "orders/MATCH_MULTIPLE_ORDERS_ERROR";
+export const MATCH_MULTIPLE_ORDERS_SUCCESS = "orders/MATCH_MULTIPLE_ORDERS_SUCCESS";
 
 export const CANCEL_ORDER_REQUESTED = "orders/CANCEL_ORDER_REQUESTED";
 export const CANCEL_ORDER_ERROR = "orders/CANCEL_ORDER_ERROR";
@@ -161,6 +171,25 @@ export function matchOrders(buyOrder, sellOrder) {
         } catch (error) {
             return dispatch({
                 type: MATCH_ORDERS_ERROR,
+                error: error
+            });
+        }
+    };
+}
+
+export function matchMultipleOrders() {
+    return async dispatch => {
+        dispatch({ type: MATCH_MULTIPLE_ORDERS_REQUESTED });
+
+        try {
+            const result = await matchMultipleOrdersTx();
+            return dispatch({
+                type: MATCH_MULTIPLE_ORDERS_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: MATCH_MULTIPLE_ORDERS_ERROR,
                 error: error
             });
         }
