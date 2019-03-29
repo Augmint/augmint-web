@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { watchAsset } from "modules/watchAsset.js";
+import { watchAsset } from "modules/watchAsset";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { watchAssetChange } from "modules/reducers/web3Connect";
@@ -57,8 +57,10 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user } = this.props;
+        const { web3, contracts, augmint, user, className } = this.props;
         let showButton = false;
+
+        let _className = className + " primary watchAssetBtn";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
             this.cookies = web3.watchAsset;
@@ -81,8 +83,7 @@ export class WatchAssetButton extends React.Component {
             <div style={{ textAlign: "center" }}>
                 {showButton && (
                     <Button
-                        className="primary"
-                        style={{ padding: "15px 20px", marginTop: "25px" }}
+                        className={_className}
                         onClick={() => {
                             this.addAsset();
                         }}
