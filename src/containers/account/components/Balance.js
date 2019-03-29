@@ -8,7 +8,7 @@ const Label = styled.div`
     font-size: ${remCalc(14)};
     color: ${theme.colors.mediumGrey};
     &.balance {
-        text-align: left;
+        text-align: center;
     }
 `;
 
