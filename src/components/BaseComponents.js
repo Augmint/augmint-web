@@ -178,6 +178,7 @@ export const formField = ({
     meta: { touched, error, warning },
     ...props
 }) => {
+    console.log(StyleLabel, "label");
     return (
         <StyledFormField className={touched && error ? "error" : ""}>
             {children}
@@ -206,7 +207,7 @@ export const formField = ({
                     />
                 )}
             </StyledContainer>
-            {info && <div style={{ color: "gray", display: "block" }}>{info}</div>}
+            {info && <div style={{ fontSize: "12px", color: "gray", display: "block" }}>{info}</div>}
 
             {touched &&
                 ((error && <StyledError>{error}</StyledError>) ||

@@ -11,14 +11,17 @@ export const StyledContainer = styled.div`
         width: auto;
     }
 
-    & label,
-    & input {
+    & label {
         font-size: ${remCalc(16)};
         font-weight: 400;
+        line-height: ${remCalc(20)};
+        height: 22px;
     }
 
-    & label {
-        line-height: ${remCalc(16)};
+    & input {
+        font-size: 22px;
+        color: ${theme.colors.primary};
+        font-weight: 600;
     }
 `;
 
@@ -26,9 +29,12 @@ export const StyledInput = styled.input`
     border: 1px solid ${theme.colors.opacGrey};
     border-radius: ${theme.borderRadius.all};
     border-right: none;
-    padding: ${remCalc(20)} ${remCalc(16)};
+    padding: ${remCalc(0)} ${remCalc(16)};
     width: 100%;
     outline: none;
+    font-size: 24px;
+    font-weight;
+    height: 60px;
 `;
 
 export const StyledSelect = styled.select`
@@ -37,16 +43,17 @@ export const StyledSelect = styled.select`
     width: 100%;
     outline: none;
     background-color: white;
-    font-size: 1rem;
-    color: ${theme.colors.mediumGrey};
-    font-weight: 400;
+    font-size: 22px;
+    color: ${theme.colors.primary};
+    font-weight: 600;
     height: 60px;
-    text-indent: 16px;
+    text-indent: 10px;
     appearance: menulist !important;
+    text-transform: capitalize;
 `;
 
 export const StyledLabel = styled.label`
-    font-size: ${remCalc(15)};
+    font-size: ${remCalc(16)};
     font-weight: 700;
     line-height: ${remCalc(20)};
 `;

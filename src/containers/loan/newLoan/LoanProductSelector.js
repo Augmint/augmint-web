@@ -9,10 +9,10 @@ class LoanProductSelector extends React.Component {
         return (
             <Pgrid>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ tablet: 1, desktop: 10 / 16 }}>
+                    <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
                         <LoanProductList products={this.props.loanProducts} header="Get a new A-EUR loan" />
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ tablet: 1, desktop: 6 / 16 }}>
+                    <Pgrid.Column size={{ tablet: 1, desktop: 1 / 2 }}>
                         <Message info style={{ margin: 0 }}>
                             <p>You can get A-EUR for placing your ETH in escrow (collateral).</p>
                             <p>

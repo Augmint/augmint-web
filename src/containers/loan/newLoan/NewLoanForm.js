@@ -205,7 +205,6 @@ class NewLoanForm extends React.Component {
                                         inputmode="numeric"
                                         step="any"
                                         min="0"
-                                        placeholder="todo init num"
                                         disabled={submitting || !loanManager.isLoaded}
                                         validate={[
                                             Validations.required,
@@ -216,7 +215,7 @@ class NewLoanForm extends React.Component {
                                         onChange={this.onEthAmountChange}
                                         data-testid="ethAmountInput"
                                         style={{ borderRadius: theme.borderRadius.left }}
-                                        labelAlignRight="ETH collateral"
+                                        labelAlignRight="ETH"
                                         info={`Approx. ${depositInEur} EUR`}
                                         className="field-big"
                                     />
@@ -225,7 +224,7 @@ class NewLoanForm extends React.Component {
 
                             <Pgrid.Row>
                                 <Pgrid.Column>
-                                    <label>You get...</label>
+                                    <label>You borrow...</label>
                                     <Field
                                         component={Form.Field}
                                         as={Form.Input}
@@ -243,10 +242,9 @@ class NewLoanForm extends React.Component {
                                         ]}
                                         normalize={Normalizations.twoDecimals}
                                         onChange={this.onLoanTokenAmountChange}
-                                        placeholder="pay out"
                                         data-testid="loanTokenAmountInput"
                                         style={{ borderRadius: theme.borderRadius.left }}
-                                        labelAlignRight="A-EUR loan"
+                                        labelAlignRight="A-EUR"
                                         info={`Based on ${collateralRatio}% loan-to-value ratio`}
                                     />
                                 </Pgrid.Column>
@@ -258,7 +256,6 @@ class NewLoanForm extends React.Component {
                                     <Field
                                         component={Form.Field}
                                         name="loanTerm"
-                                        placeholder="Repay loan after ..."
                                         disabled={submitting || !loanManager.isLoaded}
                                         onChange={this.onSelectedLoanChange}
                                         data-testid="loanTermSelect"
@@ -282,23 +279,24 @@ class NewLoanForm extends React.Component {
                             <div
                                 style={{
                                     width: "50%",
-                                    textAlign: "left"
+                                    textAlign: "left",
+                                    marginBottom: "48px"
                                 }}
                             >
-                                <p data-testid="repaymentAmount">
+                                <p data-testid="repaymentAmount" style={{ margin: "0" }}>
                                     <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
                                 </p>
-                                <p>Total repayment</p>
+                                <p style={{ margin: "0" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p>
+                                <p style={{ margin: "0" }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
-                                <p>Annual interest rate</p>
+                                <p style={{ margin: "0" }}>Annual interest rate</p>
                             </div>
                         </div>
 
-                        <div style={{ width: "100%" }}>
+                        <div style={{ width: "100%", textAlign: "center" }}>
                             <Button
                                 size="big"
                                 data-testid="submitBtn"
@@ -308,7 +306,8 @@ class NewLoanForm extends React.Component {
                                 style={{
                                     height: "auto",
                                     padding: "10px 55px",
-                                    width: "100%"
+                                    width: "100%",
+                                    maxWidth: "500px"
                                 }}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}

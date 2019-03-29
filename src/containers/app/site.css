@@ -50,6 +50,10 @@
     min-height: calc(100vh - 50px);
 }
 
+label {
+    font-size: 14px;
+}
+
 @media (max-width: 992px) {
     .Site-content.App-content {
         padding-left: 0;
