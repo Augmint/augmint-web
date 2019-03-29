@@ -19,16 +19,16 @@ export const BaseButton = styledComponent => styledComponent`
     font-size: 13px;
     letter-spacing: normal;
     border: 0;
-    
-    & + & {
-      margin-left: 1em;
-    }
 
     &:hover,
     &:focus {
       outline: 0;
       background-color: ${theme.colors.grey};
       color: ${theme.colors.white};
+
+      &.primary {
+        color: ${theme.colors.primary};
+      }
     }
 
     &[disabled] {
@@ -61,11 +61,35 @@ export const BaseButton = styledComponent => styledComponent`
       text-transform: none;
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
-
+      
       ${media.tabletMin`
         padding: 20px 30px;
         font-size: ${remCalc(16)};
       `};
+
+      &.myAcc {
+        width: 203px;
+        align-self: center;
+        margin-top: 10px;
+
+        ${media.tabletMin`
+          width: 183px;
+        `};
+      }
+
+      &.watchAssetBtn {
+        margin-top: 25px;
+
+        &.noMargin {
+          margin-top: 0;
+        }
+
+        ${media.tabletMin`
+          padding: 15px 20px;
+        `};
+      }
+
+
     }
 
     &.ghost {
