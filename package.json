@@ -15,7 +15,7 @@
     "ethereumjs-util": "6.1.0",
     "ethers": "4.0.27",
     "moment": "2.24.0",
-    "parse": "2.2.1",
+    "parse": "2.3.1",
     "react": "16.8.5",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.5",
