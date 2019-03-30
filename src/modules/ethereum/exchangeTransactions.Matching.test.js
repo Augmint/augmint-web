@@ -11,7 +11,7 @@ describe("getMatchingOrders", () => {
         const matches = calculateMatchingOrders([], [], ETHEUR_RATE, GAS_LIMIT);
         expect(matches.buyIds).toHaveLength(0);
         expect(matches.sellIds).toHaveLength(0);
-        expect(matches.gasEstimate).toBeUndefined();
+        expect(matches.gasEstimate).toBe(0);
     });
 
     test("should return empty arrays if no matching orders", () => {

@@ -231,7 +231,7 @@ export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate,
     const buyIds = [];
 
     if (_buyOrders.length === 0 || _sellOrders.length === 0) {
-        return { buyIds, sellIds };
+        return { buyIds, sellIds, gasEstimate: 0 };
     }
     const lowestSellPrice = _sellOrders[0].price;
     const highestBuyPrice = _buyOrders[0].price;
