@@ -3,13 +3,33 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import TokenTransferForm from "./components/TokenTransferForm";
-// import EthTransferForm from "./components/EthTransferForm";
+import EthTransferForm from "./components/EthTransferForm";
 import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 
 class TransferPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            payeeEthBalance: 0, // nem biztos h kell, lehet elég az address: csak akkor van ha kell kuldeni?
+            payeeEthAddress: ""
+        };
+    }
+
+    setEthBalance(payeeEthBalance) {
+        this.setState({
+            payeeEthBalance
+        });
+    }
+
+    setPayeeAddress(payeeEthAddress) {
+        this.setState({
+            payeeEthAddress
+        });
+    }
+
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
@@ -34,6 +54,9 @@ class TransferPage extends React.Component {
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
                                     header="Send A-EUR"
+                                    style={{ marginBottom: 1 }}
+                                    setEthBalance={this.setEthBalance}
+                                    setPayeeAddress={this.setPayeeAddress}
                                 >
                                     <TokenTransferForm />
                                 </Pblock>
@@ -44,15 +67,17 @@ class TransferPage extends React.Component {
 
                                 {/*TODO: what should be checked for loading EthTransferForm Pblock? */}
 
-                                {/* { payeeEthBalance || payeeEthBalance === 0 && 
+                                {/* { this.state.payeeEthBalance !== 0 &&  */}
                                 <Pblock
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
                                     header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                    style={{ marginTop: 0, backgroundColor: "#f9db9c" }}
                                 >
-                                    <EthTransferForm />
-                                </Pblock> } */}
+                                    <EthTransferForm address={this.state.payeeEthAddress} />
+                                </Pblock>
+                                {/* } */}
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

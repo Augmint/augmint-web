@@ -29,6 +29,8 @@ class TokenTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
+        this.setPayeeAddress = this.setPayeeAddress.bind(this);
+        this.setEthBalance = this.setEthBalance.bind(this);
     }
 
     componentDidUpdate() {
@@ -71,10 +73,21 @@ class TokenTransferForm extends React.Component {
         this.setState({ feeAmount: fee });
     }
 
+    setEthBalance(payeeEthAmount) {
+        this.props.setEthBalance(payeeEthAmount);
+    }
+
+    setPayeeAddress(payeeEthAddress) {
+        this.props.setPayeeAddress(payeeEthAddress);
+    }
+
     async handleSubmit(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
 
         const payeeEthBalance = await store.dispatch(refreshPayeesEthBalance(values.payee));
+
+        // console.log("balance: ", payeeEthBalance);
+        console.log("payee: ", values.payee);
 
         if (payeeEthBalance.type !== PAYEE_ETH_BALANCE_RECEIVED) {
             throw new SubmissionError({
@@ -96,6 +109,7 @@ class TokenTransferForm extends React.Component {
                 _error: res.error
             });
         } else {
+            this.setPayeeAddress(values.payee);
             this.setState({
                 result: res.result,
                 to: values.payee,
@@ -212,7 +226,7 @@ class TokenTransferForm extends React.Component {
                             data-testid="submitTransferButton"
                             className={submitting ? "loading" : ""}
                         >
-                            {submitting ? "Submitting..." : submitText || "Transfer"}
+                            {submitting ? "Submitting..." : submitText || "Send"}
                         </Button>
                     </Form>
                 )}

@@ -20,35 +20,35 @@ import theme from "styles/theme";
 class EthTransferForm extends React.Component {
     constructor(props) {
         super(props);
+        this.placeholder = 0.01;
         this.state = {
-            result: null
-            // feeAmount: "0",
+            result: null,
+            amount: this.placeholder
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.onEthAmountChange = this.onEthAmountChange.bind(this);
-        // this.setFeeByEthAmount = this.setFeeByEthAmount.bind(this);
+        this.onEthAmountChange = this.onEthAmountChange.bind(this);
     }
 
-    // onEthAmountChange(e) {
-    //     let amount;
-    //     try {
-    //         amount = parseFloat(e.target.value);
-    //     } catch (error) {
-    //         return;
-    //     }
-    //     // this.setFeeByEthAmount(amount);
-    // }
-
-    // setFeeByEthAmount(amount) {
-    //     const fee = getTransferFee(amount);
-    //     this.setState({ feeAmount: fee });
-    // }
+    onEthAmountChange(e) {
+        let amount;
+        try {
+            amount = parseFloat(e.target.value);
+            if (isNaN(amount)) {
+                amount = 0;
+            } else {
+                amount = parseFloat(e.target.value);
+            }
+        } catch (error) {
+            return;
+        }
+        this.setState({ amount });
+    }
 
     async handleSubmit(values) {
         const ethAmount = parseFloat(values.ethAmount);
         const res = await store.dispatch(
             transferEth({
-                payee: values.payee,
+                payee: this.props.payeeEthAddress,
                 ethAmount
             })
         );
@@ -59,9 +59,8 @@ class EthTransferForm extends React.Component {
         } else {
             this.setState({
                 result: res.result,
-                to: values.payee,
+                to: this.props.payeeEthAddress,
                 ethAmount
-                // feeAmount: "0"
             });
         }
     }
@@ -77,9 +76,10 @@ class EthTransferForm extends React.Component {
             reset,
             augmintToken,
             isFunctional,
-            submitText,
-            payeeEthBalance
+            submitText
         } = this.props;
+
+        const amountInEur = (this.props.rates.info.ethFiatRate * this.state.amount).toFixed(2);
 
         return (
             <div style={isFunctional && { display: "inline" }}>
@@ -112,7 +112,7 @@ class EthTransferForm extends React.Component {
 
                         {!isFunctional && (
                             <div>
-                                <p style={{ display: "block", marginBottom: 10 }}>
+                                <p style={{ display: "block", marginTop: 0, marginBottom: 10, marginLeft: 2 }}>
                                     Send a small amount enough for a few transactions:
                                 </p>
                                 <Field
@@ -120,11 +120,11 @@ class EthTransferForm extends React.Component {
                                     component={Form.Field}
                                     as={Form.Input}
                                     type="number"
-                                    placeholder="0.01"
+                                    placeholder={this.placeholder}
                                     inputmode="numeric"
                                     step="any"
                                     min="0"
-                                    // onChange={this.onEthAmountChange}
+                                    onChange={this.onEthAmountChange}
                                     validate={[Validations.required, Validations.ethAmount, Validations.ethUserBalance]}
                                     normalize={Normalizations.fiveDecimals}
                                     disabled={submitting || !augmintToken.isLoaded}
@@ -132,8 +132,8 @@ class EthTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="ETH"
                                 />
-                                <p style={{ display: "block", marginBottom: 10 }}>
-                                    Approx. €0.9 (covers 2 to 5 transactions)
+                                <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
+                                    Approx. €{amountInEur} (covers 2 to 5 transactions)
                                 </p>
                             </div>
                         )}
@@ -144,7 +144,7 @@ class EthTransferForm extends React.Component {
                             data-testid="submitEthTransferButton"
                             className={submitting ? "loading" : ""}
                         >
-                            {submitting ? "Submitting..." : submitText || "Transfer ETH"}
+                            {submitting ? "Submitting..." : submitText || "Send ETH"}
                         </Button>
                     </Form>
                 )}
@@ -157,7 +157,8 @@ const mapStateToProps = state => ({
     augmintToken: state.augmintToken,
     tokenBalance: state.userBalances.account.tokenBalance,
     userAccount: state.web3Connect.userAccount,
-    web3: state.web3Connect.web3Instance
+    web3: state.web3Connect.web3Instance,
+    rates: state.rates
 });
 
 EthTransferForm = connect(mapStateToProps)(EthTransferForm);
