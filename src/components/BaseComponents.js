@@ -178,7 +178,6 @@ export const formField = ({
     meta: { touched, error, warning },
     ...props
 }) => {
-    console.log(StyleLabel, "label");
     return (
         <StyledFormField className={touched && error ? "error" : ""}>
             {children}
