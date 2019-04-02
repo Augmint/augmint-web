@@ -1,4 +1,4 @@
-import { calculateTransfersBalance, processTransfersTx } from "modules/ethereum/transferTransactions";
+import { calculateTransfersBalance, processTransferEvents } from "modules/ethereum/transferTransactions";
 import { MAKEEVENTCONST, makeEvents, filterEvents } from "mocks/events";
 
 const { LOAN, ALICE, BOB, CAROL, DELEGATED_MSG } = MAKEEVENTCONST;
@@ -6,7 +6,7 @@ const { LOAN, ALICE, BOB, CAROL, DELEGATED_MSG } = MAKEEVENTCONST;
 describe("transfers", () => {
     test("ALICE gets a loan", () => {
         const aliceEvents = filterEvents(makeEvents([[1, LOAN, 100, ALICE, "", 0], [2, ALICE, 1, BOB]]), ALICE);
-        let transfers = processTransfersTx(aliceEvents, ALICE);
+        let transfers = processTransferEvents(aliceEvents, ALICE);
         expect(transfers.length).toBe(2);
         calculateTransfersBalance(transfers, 98.98 * 100);
         const lastItem = transfers.pop();
@@ -20,7 +20,7 @@ describe("delegated transfers", () => {
             makeEvents([[1, LOAN, 100, ALICE], [2, ALICE, 1, BOB], [2, ALICE, 0.01, CAROL, DELEGATED_MSG, 0]]),
             ALICE
         );
-        let transfers = processTransfersTx(aliceEvents, ALICE);
+        let transfers = processTransferEvents(aliceEvents, ALICE);
         expect(aliceEvents.length).toBe(3);
         expect(transfers.length).toBe(2);
         calculateTransfersBalance(transfers, 9897);
@@ -33,7 +33,7 @@ describe("delegated transfers", () => {
             makeEvents([[1, LOAN, 100, ALICE], [2, ALICE, 1, BOB], [2, ALICE, 0.01, ALICE, DELEGATED_MSG, 0]]),
             ALICE
         );
-        let transfers = processTransfersTx(aliceEvents, ALICE);
+        let transfers = processTransferEvents(aliceEvents, ALICE);
         expect(aliceEvents.length).toBe(4);
         expect(transfers.length).toBe(2);
         calculateTransfersBalance(transfers, 9898);
@@ -46,7 +46,7 @@ describe("delegated transfers", () => {
             makeEvents([[1, LOAN, 100, ALICE], [2, ALICE, 1, BOB], [3, ALICE, 1, CAROL, DELEGATED_MSG]]),
             ALICE
         );
-        let transfers = processTransfersTx(aliceEvents, ALICE);
+        let transfers = processTransferEvents(aliceEvents, ALICE);
         expect(aliceEvents.length).toBe(3);
         expect(transfers.length).toBe(3);
         calculateTransfersBalance(transfers, 9796);
@@ -64,7 +64,7 @@ describe("delegated transfers", () => {
             ]),
             ALICE
         );
-        let transfers = processTransfersTx(aliceEvents, ALICE);
+        let transfers = processTransferEvents(aliceEvents, ALICE);
         expect(aliceEvents.length).toBe(2);
         expect(transfers.length).toBe(2);
         calculateTransfersBalance(transfers, 10001);

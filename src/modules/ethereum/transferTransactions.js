@@ -94,20 +94,20 @@ export async function transferTokenDelegatedTx(payload, signature) {
     return { txName, transactionHash };
 }
 
-async function getBlockTimestamp(txData, web3) {
+async function lookupBlockTimestamp(event, web3) {
     let blockData;
-    if (typeof txData.getBlock === "function") {
+    if (typeof event.getBlock === "function") {
         // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
-        blockData = await txData.getBlock();
+        blockData = await event.getBlock();
     } else {
         // not from event, web3.getBlock  works
-        blockData = await web3.eth.getBlock(txData.blockNumber);
+        blockData = await web3.eth.getBlock(event.blockNumber);
     }
 
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
-    txData.blockData = blockData;
-    txData.blockTimeStampText = blockTimeStampText;
-    return txData;
+    event.blockData = blockData;
+    event.blockTimeStampText = blockTimeStampText;
+    return event;
 }
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
@@ -120,16 +120,18 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
             augmintToken.getPastEvents("AugmintTransfer", { filter: { to: account }, fromBlock, toBlock })
         ]);
 
-        const logs = await Promise.all([...logsFrom, ...logsTo].map(async logData => getBlockTimestamp(logData, web3)));
+        const logs = await Promise.all(
+            [...logsFrom, ...logsTo].map(async logData => lookupBlockTimestamp(logData, web3))
+        );
 
-        return processTransfersTx(logs, account);
+        return processTransferEvents(logs, account);
     } catch (error) {
         throw new Error("fetchTransferList failed.\n" + error);
     }
 }
 
-export function processTransfersTx(logs, account) {
-    let transfers = logs.map(logData => _formatTransferLog(account, logData, logData.returnValues));
+export function processTransferEvents(eventList, account) {
+    let transfers = eventList.map(event => formatEvent(account, event, event.returnValues));
     transfers = Array.from(new Set(aggregateSameHashes(transfers)));
     transfers.sort((a, b) => b.blockNumber - a.blockNumber);
     return transfers;
@@ -138,14 +140,14 @@ export function processTransfersTx(logs, account) {
 // called from augminTokenProvider, arguments are in ethers event listener format
 export async function processNewTransferTx(account, eventObject) {
     const web3 = store.getState().web3Connect.web3Instance;
-    eventObject = await getBlockTimestamp(eventObject, web3);
-    return _formatTransferLog(account, eventObject, eventObject.args);
+    eventObject = await lookupBlockTimestamp(eventObject, web3);
+    return formatEvent(account, eventObject, eventObject.args);
 }
 
 const DELEGATED_NARRATIVE = "Delegated transfer fee";
 
 // get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
-function _formatTransferLog(account, txData, args) {
+function formatEvent(account, txData, args) {
     const logData = Object.assign({ args }, txData, {
         from: args.from.toLowerCase(),
         to: args.to.toLowerCase(),
