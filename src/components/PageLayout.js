@@ -36,7 +36,7 @@ Pcontainer.defaultProps = {
 
 export class Psegment extends React.Component {
     render() {
-        const { children, ...other } = this.props;
+        const { children, left, ...other } = this.props;
         return <Segment {...other}>{children}</Segment>;
     }
 }
@@ -59,12 +59,6 @@ export class Pcolumn extends React.Component {
         return <Grid.Unit {...other}>{children}</Grid.Unit>;
     }
 }
-
-Pcolumn.defaultProps = {
-    style: {
-        // padding: "1rem"
-    }
-};
 
 Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid;

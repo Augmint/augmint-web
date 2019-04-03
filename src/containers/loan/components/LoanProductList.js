@@ -21,7 +21,7 @@ export default function LoanProductList(props) {
     }
 
     return (
-        <Pblock>
+        <Pblock className="loan-product-list">
             {listItems}
             {!listItems && <NewLoanPage />}
         </Pblock>

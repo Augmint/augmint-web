@@ -329,7 +329,7 @@ class NewLoanForm extends React.Component {
                                 disabled={pristine && !this.state.initialized}
                                 type="submit"
                                 style={{
-                                    height: "auto",
+                                    height: "50px",
                                     padding: "10px 55px",
                                     width: "100%",
                                     maxWidth: "500px"
