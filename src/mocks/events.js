@@ -9,7 +9,7 @@ export const MAKEEVENTCONST = {
     DELEGATED_MSG: "Delegated transfer fee"
 };
 
-class Event {
+class AugmintTransferEvent {
     constructor(from, amount, to, narrative = "", blockNumber, fee = FEE) {
         this.returnValues = {
             from,
@@ -24,13 +24,12 @@ class Event {
     }
 }
 
-export function makeEvents(transferList) {
-    return transferList.map(
-        transfer => new Event(transfer[1], transfer[2], transfer[3], transfer[4], transfer[0], transfer[5])
+export function makeEventsFor(account, transferList) {
+    const eventList = transferList.map(
+        transfer =>
+            new AugmintTransferEvent(transfer[1], transfer[2], transfer[3], transfer[4], transfer[0], transfer[5])
     );
-}
 
-export function filterEvents(eventList, account) {
     return [].concat(
         eventList.filter(event => event.returnValues.from === account),
         eventList.filter(event => event.returnValues.to === account)
