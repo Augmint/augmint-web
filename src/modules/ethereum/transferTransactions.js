@@ -196,9 +196,13 @@ export function aggregateSameHashes(transfers) {
 
 export function calculateTransfersBalance(transfers, currentBalance = 0) {
     return transfers.reduce((balance, tx, index, all) => {
-        const amount = index > 0 ? all[index - 1].amount : 0;
-        const fee = index > 0 ? all[index - 1].fee : 0;
-        tx.balance = balance - amount - fee;
+        if (index === 0) {
+            tx.balance = balance;
+        } else {
+            const amount = all[index - 1].amount;
+            const fee = all[index - 1].fee;
+            tx.balance = balance - amount - fee;
+        }
         return tx.balance;
     }, currentBalance);
 }
