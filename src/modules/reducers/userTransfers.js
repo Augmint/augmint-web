@@ -74,14 +74,14 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
         });
         try {
             const transfers = await fetchTransfersTx(account, fromBlock, toBlock);
-
             transfers.sort((a, b) => {
                 return b.blockNumber - a.blockNumber;
             });
 
             return dispatch({
                 type: FETCH_TRANSFERS_RECEIVED,
-                result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers
+                result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers,
+                fectchedLength: transfers.length
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {

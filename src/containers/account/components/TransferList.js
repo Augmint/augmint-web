@@ -17,6 +17,7 @@ class TransferList extends React.Component {
     }
 
     showMore() {
+        const currentLimit = this.state.page * this.props.limit;
         const page = this.state.page + 1;
         const limit = page * this.props.limit;
         const nextPage = () => {
@@ -25,15 +26,19 @@ class TransferList extends React.Component {
         const fetchData = () => {
             store.dispatch(fetchLatestTransfers(this.props.userAccount.address, true)).then(res => {
                 if (res.type === "userTransfers/FETCH_TRANSFERS_RECEIVED") {
-                    if (this.isLastPage() || limit <= res.result.length) {
+                    console.log("fetched length:", res.fectchedLength);
+                    if (this.isLastPage() || currentLimit <= res.result.length) {
                         nextPage();
                     } else {
-                        fetchData();
+                        if (res.fectchedLength === 0) {
+                            fetchData();
+                        }
                     }
                 }
             });
         };
 
+        console.log(page, limit, this.props.userTransfers.transfers.length);
         if (limit < this.props.userTransfers.transfers.length) {
             nextPage();
         } else {
