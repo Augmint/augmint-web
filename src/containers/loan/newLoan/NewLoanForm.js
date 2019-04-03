@@ -280,14 +280,16 @@ class NewLoanForm extends React.Component {
                                     <label>Repay loan after...</label>
                                     <Field
                                         component={Form.Field}
-                                        name="loanTerm"
+                                        name="productId"
                                         disabled={submitting || !loanManager.isLoaded}
                                         onChange={this.onSelectedLoanChange}
-                                        data-testid="loanTermSelect"
+                                        data-testid={"selectedLoanProduct-" + this.activeProducts[0].id}
                                         info={`Repay by ${repayBefore}`}
                                         className="field-big"
                                         isSelect="true"
                                         selectOptions={this.activeProducts}
+                                        id={"selectedLoanProduct-" + this.activeProducts[0].id}
+                                        defaultValue={this.activeProducts[0].id}
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>
@@ -311,13 +313,13 @@ class NewLoanForm extends React.Component {
                                 <p data-testid="repaymentAmount" style={{ margin: "0" }}>
                                     <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
                                 </p>
-                                <p style={{ margin: "0" }}>Total repayment</p>
+                                <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0" }}>
+                                <p style={{ margin: "0", color: theme.colors.secondaryDark }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
-                                <p style={{ margin: "0" }}>Annual interest rate</p>
+                                <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
                             </div>
                         </div>
 

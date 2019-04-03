@@ -4,18 +4,17 @@ import LoanProductList from "containers/loan/components/LoanProductList";
 import { Pgrid } from "components/PageLayout";
 import Message from "components/augmint-ui/message";
 
+import "./styles.css";
+
 class LoanProductSelector extends React.Component {
     render() {
         return (
             <Pgrid id="loan-product-selector">
                 <Pgrid.Row>
-                    <Pgrid.Column
-                        size={{ tablet: 1, desktop: 2 / 5 }}
-                        style={{ maxWidth: "490px", flexBasis: "490px", padding: "60px 30px 60px 60px" }}
-                    >
+                    <Pgrid.Column size={{ tablet: 1, desktop: 2 / 5 }} className="loan column left">
                         <LoanProductList products={this.props.loanProducts} header="Get a new A-EUR loan" />
                     </Pgrid.Column>
-                    <Pgrid.Column style={{ padding: "60px 60px 60px 30px" }} size={{ tablet: 1, desktop: 2 / 5 }}>
+                    <Pgrid.Column className="loan column right" size={{ tablet: 1, desktop: 2 / 5 }}>
                         <Message info style={{ margin: 0 }}>
                             <p>You can get A-EUR for placing your ETH in escrow (collateral).</p>
                             <p>
