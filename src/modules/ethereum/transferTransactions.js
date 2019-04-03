@@ -125,13 +125,13 @@ export async function processNewTransferTx(account, eventObject) {
 const DELEGATED_NARRATIVE = "Delegated transfer fee";
 
 // get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
-function formatEvent(account, txData, args) {
-    const logData = Object.assign({ args }, txData, {
-        from: args.from.toLowerCase(),
-        to: args.to.toLowerCase(),
-        fee: args.fee * -1,
-        amount: args.amount * 1,
-        narrative: args.narrative,
+function formatEvent(account, txData, augmintTransferEvent) {
+    const logData = Object.assign({ args: augmintTransferEvent }, txData, {
+        from: augmintTransferEvent.from.toLowerCase(),
+        to: augmintTransferEvent.to.toLowerCase(),
+        fee: augmintTransferEvent.fee * -1,
+        amount: augmintTransferEvent.amount * 1,
+        narrative: augmintTransferEvent.narrative,
         key: `${txData.transactionHash}-${txData.transactionIndex}`
     });
 
