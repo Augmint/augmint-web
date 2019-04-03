@@ -93,7 +93,7 @@ class TransferList extends React.Component {
         }
 
         return (
-            <Segment loading={isLoading} style={{ color: "black" }}>
+            <Segment style={{ color: "black" }}>
                 {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {!transfers || transfers.length === 0 ? (
@@ -136,11 +136,13 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <div style={{ marginTop: 20, paddingLeft: 20 }}>
-                        <Button onClick={this.showMore} className="ghost">
-                            Show older
-                        </Button>
-                    </div>
+                    <Segment loading={isLoading} style={{ color: "black" }}>
+                        <div style={{ marginTop: 20, paddingLeft: 20 }}>
+                            <Button onClick={this.showMore} className="ghost">
+                                Show older
+                            </Button>
+                        </div>
+                    </Segment>
                 )}
             </Segment>
         );
