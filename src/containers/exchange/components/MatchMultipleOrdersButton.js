@@ -52,17 +52,20 @@ class MatchMultipleOrdersButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!isMatching && isLoaded && <p>No matching orders</p>}
-
                 {!submitSucceeded && isMatching && isLoaded && (
-                    <Button
-                        size={size}
-                        data-testid="matchMultipleOrdersButton"
-                        disabled={submitting === 0}
-                        onClick={this.handleClick}
-                    >
-                        {submitting ? "Submitting..." : label}
-                    </Button>
+                    <p>
+                        There are matching orders. Automatch will run soon. If it takes too long then match orders
+                        yourself.
+                        <br />
+                        <Button
+                            size={size}
+                            data-testid="matchMultipleOrdersButton"
+                            disabled={submitting === 0}
+                            onClick={this.handleClick}
+                        >
+                            {submitting ? "Submitting..." : label}
+                        </Button>
+                    </p>
                 )}
 
                 {submitSucceeded && (
