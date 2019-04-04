@@ -1,37 +1,35 @@
 {
-  "contractName": "FeeAccount",
-  "latestAbiHash": "67db260db12738df3cced3511d34c65c",
-  "deployedAbis": {
-    "67db260db12738df3cced3511d34c65c": {
-      "latestDeployedAddress": "0xaa16ede9093bb4140e2715ed9a1e41cdfd9d9c29",
-      "deployments": {
-        "0xb77f9cdda72eec47a57793be088c7b523f6b5014": {
-          "generatedAt": "2018-10-18T13:35:02.354Z",
-          "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.893Z",
-          "deployTransactionHash": "0x9fe716e506b3f5f797496ae5d4035724a698dc8b2aa606d9106d532990958c75",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "7f27e332912911a33f3a5831a478a40e",
-          "deployedBytecodeHash": "62169a6a5b1bc79360f85c7d6b7cbadf",
-          "sourceHash": "d8975a5e1941ad79313f4b7bb0be9f95",
-          "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity 0.4.24;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(address permissionGranterContract, uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    public SystemAccount(permissionGranterContract) {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () external payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"StabilityBoard\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoTransferFee\"] && !permissions[to][\"NoTransferFee\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
-        },
-        "0xaa16ede9093bb4140e2715ed9a1e41cdfd9d9c29": {
-          "generatedAt": "2018-10-29T15:52:43.259Z",
-          "truffleContractFileUpdatedAt": "2018-10-19T15:49:10.747Z",
-          "deployTransactionHash": "0x798c51bacfabcba263aceb1ea92f2cd6992b799e1654b11d3ac7e36a45aeb9bb",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "7f27e332912911a33f3a5831a478a40e",
-          "deployedBytecodeHash": "62169a6a5b1bc79360f85c7d6b7cbadf",
-          "sourceHash": "d8975a5e1941ad79313f4b7bb0be9f95",
-          "source": "/* Contract to collect fees from system\n    TODO: calculateExchangeFee + Exchange params and setters\n*/\n\npragma solidity 0.4.24;\nimport \"./generic/SafeMath.sol\";\nimport \"./generic/SystemAccount.sol\";\nimport \"./interfaces/TransferFeeInterface.sol\";\n\n\ncontract FeeAccount is SystemAccount, TransferFeeInterface {\n\n    using SafeMath for uint256;\n\n    struct TransferFee {\n        uint pt;  // in parts per million (ppm) , ie. 2,000 = 0.2%\n        uint min; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n        uint max; // with base unit of augmint token, eg. 2 decimals for token, eg. 310 = 3.1 ACE\n    }\n\n    TransferFee public transferFee;\n\n    event TransferFeesChanged(uint transferFeePt, uint transferFeeMin, uint transferFeeMax);\n\n    constructor(address permissionGranterContract, uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    public SystemAccount(permissionGranterContract) {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function () external payable { // solhint-disable-line no-empty-blocks\n        // to accept ETH sent into feeAccount (defaulting fee in ETH )\n    }\n\n    function setTransferFees(uint transferFeePt, uint transferFeeMin, uint transferFeeMax)\n    external restrict(\"StabilityBoard\") {\n        transferFee = TransferFee(transferFeePt, transferFeeMin, transferFeeMax);\n        emit TransferFeesChanged(transferFeePt, transferFeeMin, transferFeeMax);\n    }\n\n    function calculateTransferFee(address from, address to, uint amount) external view returns (uint256 fee) {\n        if (!permissions[from][\"NoTransferFee\"] && !permissions[to][\"NoTransferFee\"]) {\n            fee = amount.mul(transferFee.pt).div(1000000);\n            if (fee > transferFee.max) {\n                fee = transferFee.max;\n            } else if (fee < transferFee.min) {\n                fee = transferFee.min;\n            }\n        }\n        return fee;\n    }\n\n    function calculateExchangeFee(uint weiAmount) external view returns (uint256 weiFee) {\n        /* TODO: to be implemented and use in Exchange.sol. always revert for now */\n        require(weiAmount != weiAmount, \"not yet implemented\");\n        weiFee = transferFee.max; // to silence compiler warnings until it's implemented\n    }\n\n}\n"
+    "contractName": "FeeAccount",
+    "latestAbiHash": "67db260db12738df3cced3511d34c65c",
+    "deployedAbis": {
+        "67db260db12738df3cced3511d34c65c": {
+            "latestDeployedAddress": "0xaa16ede9093bb4140e2715ed9a1e41cdfd9d9c29",
+            "deployments": {
+                "0xb77f9cdda72eec47a57793be088c7b523f6b5014": {
+                    "generatedAt": "2018-10-18T13:35:02.354Z",
+                    "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.893Z",
+                    "deployTransactionHash": "0x9fe716e506b3f5f797496ae5d4035724a698dc8b2aa606d9106d532990958c75",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "7f27e332912911a33f3a5831a478a40e",
+                    "deployedBytecodeHash": "62169a6a5b1bc79360f85c7d6b7cbadf",
+                    "sourceHash": "d8975a5e1941ad79313f4b7bb0be9f95"
+                },
+                "0xaa16ede9093bb4140e2715ed9a1e41cdfd9d9c29": {
+                    "generatedAt": "2018-10-29T15:52:43.259Z",
+                    "truffleContractFileUpdatedAt": "2018-10-19T15:49:10.747Z",
+                    "deployTransactionHash": "0x798c51bacfabcba263aceb1ea92f2cd6992b799e1654b11d3ac7e36a45aeb9bb",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "7f27e332912911a33f3a5831a478a40e",
+                    "deployedBytecodeHash": "62169a6a5b1bc79360f85c7d6b7cbadf",
+                    "sourceHash": "d8975a5e1941ad79313f4b7bb0be9f95"
+                }
+            }
         }
-      }
     }
-  }
 }

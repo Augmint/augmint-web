@@ -1,37 +1,35 @@
 {
-  "contractName": "TokenAEur",
-  "latestAbiHash": "2ea91d34a7bfefc8f38ef0e8a5ae24a5",
-  "deployedAbis": {
-    "2ea91d34a7bfefc8f38ef0e8a5ae24a5": {
-      "latestDeployedAddress": "0x79065a165ec09e6a89d584a14872802717fe12a3",
-      "deployments": {
-        "0x0557183334edc23a666201edc6b0aa2787e2ad3f": {
-          "generatedAt": "2018-10-18T13:35:02.366Z",
-          "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.871Z",
-          "deployTransactionHash": "0x4d8b7e1eff4e7237355399cf154526e73c7716887173a0cedb81fb0434613507",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "0398a39cdab3b394103910ea6b28eef7",
-          "deployedBytecodeHash": "2916088286d725e884630bc95fc19dbf",
-          "sourceHash": "04025a37ea64acbc6f0ea2ec8a6f3e4d",
-          "source": "/* Augmint Euro token (A-EUR) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
-        },
-        "0x79065a165ec09e6a89d584a14872802717fe12a3": {
-          "generatedAt": "2018-10-29T15:52:43.268Z",
-          "truffleContractFileUpdatedAt": "2018-10-19T15:49:10.721Z",
-          "deployTransactionHash": "0x81e6c73a51dfcff2ca2424db2f08c13692416bb52f028de012ac631e97d0b631",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "0398a39cdab3b394103910ea6b28eef7",
-          "deployedBytecodeHash": "2916088286d725e884630bc95fc19dbf",
-          "sourceHash": "04025a37ea64acbc6f0ea2ec8a6f3e4d",
-          "source": "/* Augmint Euro token (A-EUR) implementation */\npragma solidity 0.4.24;\nimport \"./interfaces/TransferFeeInterface.sol\";\nimport \"./generic/AugmintToken.sol\";\n\n\ncontract TokenAEur is AugmintToken {\n    constructor(address _permissionGranterContract, TransferFeeInterface _feeAccount)\n    public AugmintToken(_permissionGranterContract, \"Augmint Euro\", \"AEUR\", \"EUR\", 2, _feeAccount)\n    {} // solhint-disable-line no-empty-blocks\n\n}\n"
+    "contractName": "TokenAEur",
+    "latestAbiHash": "2ea91d34a7bfefc8f38ef0e8a5ae24a5",
+    "deployedAbis": {
+        "2ea91d34a7bfefc8f38ef0e8a5ae24a5": {
+            "latestDeployedAddress": "0x79065a165ec09e6a89d584a14872802717fe12a3",
+            "deployments": {
+                "0x0557183334edc23a666201edc6b0aa2787e2ad3f": {
+                    "generatedAt": "2018-10-18T13:35:02.366Z",
+                    "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.871Z",
+                    "deployTransactionHash": "0x4d8b7e1eff4e7237355399cf154526e73c7716887173a0cedb81fb0434613507",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "0398a39cdab3b394103910ea6b28eef7",
+                    "deployedBytecodeHash": "2916088286d725e884630bc95fc19dbf",
+                    "sourceHash": "04025a37ea64acbc6f0ea2ec8a6f3e4d"
+                },
+                "0x79065a165ec09e6a89d584a14872802717fe12a3": {
+                    "generatedAt": "2018-10-29T15:52:43.268Z",
+                    "truffleContractFileUpdatedAt": "2018-10-19T15:49:10.721Z",
+                    "deployTransactionHash": "0x81e6c73a51dfcff2ca2424db2f08c13692416bb52f028de012ac631e97d0b631",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "0398a39cdab3b394103910ea6b28eef7",
+                    "deployedBytecodeHash": "2916088286d725e884630bc95fc19dbf",
+                    "sourceHash": "04025a37ea64acbc6f0ea2ec8a6f3e4d"
+                }
+            }
         }
-      }
     }
-  }
 }
