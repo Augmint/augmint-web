@@ -134,13 +134,13 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <Segment loading={isLoading} style={{ color: "black" }}>
-                        <div style={{ marginTop: 20, paddingLeft: 20 }}>
+                    <div style={{ marginTop: 20, paddingLeft: 20 }}>
+                        <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
                             <Button onClick={this.showMore} className="ghost">
                                 Show older
                             </Button>
-                        </div>
-                    </Segment>
+                        </Segment>
+                    </div>
                 )}
             </Segment>
         );
