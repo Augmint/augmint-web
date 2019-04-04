@@ -146,7 +146,7 @@ export const Normalizations = {
 export function Select(props) {
     function addOptionsToSelect(options) {
         let result = [];
-        options.forEach((product, i) => {
+        options.forEach(product => {
             result.push(
                 <option key={product.id} value={product.id} id={"selectLoanProduct-" + product.id}>
                     {product.termText}
@@ -156,11 +156,7 @@ export function Select(props) {
         return result;
     }
 
-    return (
-        <StyledSelect {...props} placeholder={props.placeholder}>
-            {addOptionsToSelect(props.options)}
-        </StyledSelect>
-    );
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options)}</StyledSelect>;
 }
 
 export const formField = ({
@@ -196,15 +192,7 @@ export const formField = ({
                 )}
                 {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
 
-                {isSelect && (
-                    <Select
-                        {...input}
-                        {...props}
-                        value={input.value}
-                        options={selectOptions}
-                        placeholder={placeholder}
-                    />
-                )}
+                {isSelect && <Select {...input} {...props} value={input.value} options={selectOptions} />}
             </StyledContainer>
             {info && <div style={{ fontSize: "12px", color: "gray", display: "block" }}>{info}</div>}
 

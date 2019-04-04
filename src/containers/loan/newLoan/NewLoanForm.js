@@ -43,7 +43,7 @@ class NewLoanForm extends React.Component {
             minToken: Validations.minTokenAmount(this.product.minDisbursedAmountInToken),
             maxLoanAmount: Validations.maxLoanAmount(this.product.maxLoanAmount),
             repaymentAmount: 0,
-            amountChanged: "",
+            amountChanged: "ETH",
             initialized: false,
             ethAmount: 100
         };
@@ -53,15 +53,20 @@ class NewLoanForm extends React.Component {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
         }
-        if (prevProps.rates !== this.props.rates && !this.state.initialized) {
-            const initialValues = this.calculateFromEth(this.state.ethAmount);
-            this.props.initialize({
-                ethAmount: initialValues.ethAmount,
-                loanTokenAmount: initialValues.loanTokenAmount
-            });
-            this.setState({ repaymentAmount: initialValues.repaymentAmount });
-            this.setState({ initialized: true });
+        if (!this.props.rates.isLoading && !this.state.initialized) {
+            this.initForm();
         }
+    }
+
+    initForm() {
+        const initialValues = this.calculateFromEth(this.state.ethAmount);
+        this.props.initialize({
+            ethAmount: initialValues.ethAmount,
+            loanTokenAmount: initialValues.loanTokenAmount,
+            productId: this.activeProducts[0].id
+        });
+        this.setState({ repaymentAmount: initialValues.repaymentAmount });
+        this.setState({ initialized: true });
     }
 
     componentDidMount() {
@@ -72,6 +77,10 @@ class NewLoanForm extends React.Component {
         let productId = this.activeProducts[0].id;
         this.props.change("productId", productId);
         return productId;
+    }
+
+    componentWillUnmount() {
+        this.setState({ initialized: false });
     }
 
     setProduct() {
@@ -289,7 +298,6 @@ class NewLoanForm extends React.Component {
                                         isSelect="true"
                                         selectOptions={this.activeProducts}
                                         id={"selectedLoanProduct-" + this.activeProducts[0].id}
-                                        defaultValue={this.activeProducts[0].id}
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>

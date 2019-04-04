@@ -23,12 +23,15 @@ function LoanList(props) {
             })
             .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
 
+    if (listItems && listItems.length === 0) {
+        // props.history.push('/loan/new')
+    }
+
     return (
         <Psegment>
             <TopNavTitlePortal>
                 <Pheader header="My loans" />
             </TopNavTitlePortal>
-
             <Segment className="block">
                 <Menu>
                     <Menu.Item exact to="/loan" activeClassName="active">
