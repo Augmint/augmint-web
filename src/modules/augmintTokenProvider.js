@@ -3,7 +3,7 @@ import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
-import { fetchTransfers, fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
+import { fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 let isWatchSetup = false;
@@ -76,7 +76,7 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
         );
         store.dispatch(fetchUserBalance(newVal));
         // TODO: default fromBlock should be the blockNumber of the contract deploy (retrieve it in SolidityContract)
-        store.dispatch(fetchTransfers(newVal, augmintToken.deployedAtBlock, "latest"));
+        store.dispatch(fetchLatestTransfers(newVal));
     }
 };
 
