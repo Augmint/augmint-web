@@ -149,7 +149,7 @@ class TransferList extends React.Component {
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p style={{ paddingLeft: 20 }}>There was nothing lately.</p>,
+    noItemMessage: <p style={{ paddingLeft: 20 }}>No recent transactions found.</p>,
     header: null,
     limit: 5
 };
