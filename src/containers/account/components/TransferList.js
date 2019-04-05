@@ -29,7 +29,7 @@ class TransferList extends React.Component {
                     if (this.isLastPage() || currentLimit <= res.result.length) {
                         nextPage();
                     } else {
-                        if (res.fectchedLength === 0) {
+                        if (res.fetchedLength === 0) {
                             fetchData();
                         }
                     }

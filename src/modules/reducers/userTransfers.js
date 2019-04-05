@@ -81,7 +81,7 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
             return dispatch({
                 type: FETCH_TRANSFERS_RECEIVED,
                 result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers,
-                fectchedLength: transfers.length
+                fetchedLength: transfers.length
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
