@@ -58,13 +58,6 @@ export default (state = initialState, action) => {
 };
 
 export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
-    if (!isAdditional) {
-        // reset transfer state
-        store.getState().userTransfers.fromBlock = null;
-        store.getState().userTransfers.toBlock = null;
-        store.getState().userTransfers.transfers = null;
-    }
-
     return async dispatch => {
         dispatch({
             type: FETCH_TRANSFERS_REQUESTED,
@@ -96,6 +89,13 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
 }
 
 export function fetchLatestTransfers(account, isAdditional) {
+    if (!isAdditional) {
+        // reset transfer state
+        store.getState().userTransfers.fromBlock = null;
+        store.getState().userTransfers.toBlock = null;
+        store.getState().userTransfers.transfers = null;
+    }
+
     const blockLimit = Math.round((30 * 24 * 60 * 60) / AVG_BLOCK_TIME); // 30 days
     const lastBlock = store.getState().contracts.latest.augmintToken.deployedAtBlock;
 

@@ -145,6 +145,12 @@ class TransferList extends React.Component {
             </Segment>
         );
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.userAccount !== this.props.userAccount) {
+            this.setState({ page: 1 });
+        }
+    }
 }
 
 TransferList.defaultProps = {
