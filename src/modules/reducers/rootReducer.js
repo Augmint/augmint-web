@@ -56,5 +56,7 @@ export default history =>
         stabilityBoardProxy,
         preToken,
         metrics,
-        form: formReducer
+        form: formReducer,
+        payeeEthBalance
+        // ethTransfer
     });

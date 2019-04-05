@@ -13,16 +13,18 @@ class TransferPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            payeeEthBalance: 0, // nem biztos h kell, lehet elég az address: csak akkor van ha kell kuldeni?
+            // payeeEthBalance: 0, // nem biztos h kell, lehet elég az address: csak akkor van ha kell kuldeni?
             payeeEthAddress: ""
         };
+        this.setPayeeAddress = this.setPayeeAddress.bind(this);
+        // this.setEthBalance = this.setEthBalance.bind(this);
     }
 
-    setEthBalance(payeeEthBalance) {
-        this.setState({
-            payeeEthBalance
-        });
-    }
+    // setEthBalance(payeeEthBalance) {
+    //     this.setState({
+    //         payeeEthBalance
+    //     });
+    // }
 
     setPayeeAddress(payeeEthAddress) {
         this.setState({
@@ -55,29 +57,24 @@ class TransferPage extends React.Component {
                                     }
                                     header="Send A-EUR"
                                     style={{ marginBottom: 1 }}
-                                    setEthBalance={this.setEthBalance}
-                                    setPayeeAddress={this.setPayeeAddress}
                                 >
-                                    <TokenTransferForm />
+                                    <TokenTransferForm
+                                        // setEthBalance={this.setEthBalance}
+                                        setPayeeAddress={this.setPayeeAddress}
+                                    />
                                 </Pblock>
-
-                                {/*TODO: where should payeeEthBalance come from?
-                                - state
-                                - prop from TokenTransferForm */}
-
-                                {/*TODO: what should be checked for loading EthTransferForm Pblock? */}
-
-                                {/* { this.state.payeeEthBalance !== 0 &&  */}
-                                <Pblock
-                                    loading={
-                                        augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
-                                    }
-                                    header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
-                                    style={{ marginTop: 0, backgroundColor: "#f9db9c" }}
-                                >
-                                    <EthTransferForm address={this.state.payeeEthAddress} />
-                                </Pblock>
-                                {/* } */}
+                                {this.state.payeeEthAddress !== "" && (
+                                    <Pblock
+                                        loading={
+                                            augmintToken.isLoading ||
+                                            (!augmintToken.isLoaded && !augmintToken.loadError)
+                                        }
+                                        header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                        style={{ marginTop: 0, backgroundColor: "#f9db9c" }}
+                                    >
+                                        <EthTransferForm address={this.state.payeeEthAddress} />
+                                    </Pblock>
+                                )}
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>

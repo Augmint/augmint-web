@@ -8,7 +8,7 @@ const initialState = {
     isLoading: false,
     isLoaded: false,
     error: null,
-    payeeAccount: {
+    payeeBalance: {
         address: "?",
         ethBalance: "?",
         bn_ethBalance: null
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                payeeAccount: action.address
+                payeeBalance: action.address
             };
 
         case PAYEE_ETH_BALANCE_RECEIVED:
@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isLoaded: true,
-                payeeAccount: action.payeeAccount
+                payeeBalance: action.payeeBalance
             };
         case PAYEE_ETH_BALANCE_ERROR:
             return {
@@ -50,14 +50,20 @@ export const refreshPayeesEthBalance = payeeAddress => {
             address: payeeAddress
         });
         try {
-            const payeeAccount = await getPayeesEthBalance(payeeAddress);
+            const payeeBalance = await getPayeesEthBalance(payeeAddress);
 
-            return dispatch({ type: PAYEE_ETH_BALANCE_RECEIVED, payeeAccount });
+            return dispatch({
+                type: PAYEE_ETH_BALANCE_RECEIVED,
+                payeeBalance
+            });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
                 return Promise.reject(error);
             }
-            return dispatch({ type: PAYEE_ETH_BALANCE_ERROR, error });
+            return dispatch({
+                type: PAYEE_ETH_BALANCE_ERROR,
+                error
+            });
         }
     };
 };
@@ -65,7 +71,7 @@ export const refreshPayeesEthBalance = payeeAddress => {
 async function getPayeesEthBalance(payeeAddress) {
     const web3 = store.getState().web3Connect.web3Instance;
 
-    const bn_weiBalance = await Promise(web3.eth.getBalance(payeeAddress._address));
+    const bn_weiBalance = await web3.eth.getBalance(payeeAddress);
 
     return {
         bn_ethBalance: bn_weiBalance,
