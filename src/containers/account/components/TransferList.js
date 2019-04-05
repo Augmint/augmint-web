@@ -102,7 +102,7 @@ class TransferList extends React.Component {
                             <StyleThead>
                                 <StyleTr>
                                     <StyleTh className={"hide-xs"}>Date</StyleTh>
-                                    <StyleTh style={{ textAlign: "center" }}>Transaction</StyleTh>
+                                    <StyleTh style={{ textAlign: "right" }}>Transaction</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
                                         Balance
