@@ -134,7 +134,7 @@ Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
 
     cy.get("[data-testid=userAEurBalance]")
         .invoke("text")
-        .should("equal", balance.toString());
+        .should("equal", balance.toFixed(2));
 });
 
 // assert user balance on UI.

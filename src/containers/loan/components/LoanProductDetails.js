@@ -27,11 +27,11 @@ const LoanProductDetails = function(props) {
                 <Col>
                     Interest p.a.:{" "}
                     <LoanInterestRatePaToolTip
-                        interestRatePa={prod.interestRatePa}
+                        interestRatePaPt={prod.interestRatePaPt}
                         id={"Loan_interest_rate_pa_tooltip"}
                     />
                 </Col>
-                <Col>{Math.round(prod.interestRatePa * 10000) / 100}%</Col>
+                <Col>{prod.interestRatePaPt}%</Col>
             </Row>
             <Row>
                 <Col>
