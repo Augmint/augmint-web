@@ -76,6 +76,9 @@ export default function Icon(props) {
         case "plus":
             className += " fa fa-plus";
             break;
+        case "arrow-down":
+            className += " fa fa-arrow-down";
+            break;
         default:
             break;
     }

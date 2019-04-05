@@ -9,11 +9,14 @@ import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
+import LoanProductSelector from "./../newLoan/LoanProductSelector";
 
 function LoanList(props) {
     const { location } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
+    const isNewLoan = location.pathname === "/loan/new";
+
     const listItems =
         loans &&
         loans
@@ -23,8 +26,11 @@ function LoanList(props) {
             })
             .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
 
-    if (listItems && listItems.length === 0) {
-        // props.history.push('/loan/new')
+    let content = null;
+    if (isNewLoan) {
+        content = <LoanProductSelector />;
+    } else {
+        content = listItems;
     }
 
     return (
@@ -34,15 +40,18 @@ function LoanList(props) {
             </TopNavTitlePortal>
             <Segment className="block">
                 <Menu>
+                    <Menu.Item exact to="/loan/new" activeClassName="active">
+                        New loan
+                    </Menu.Item>
                     <Menu.Item exact to="/loan" activeClassName="active">
-                        My active loans
+                        Active loans
                     </Menu.Item>
                     <Menu.Item exact to="/loan/archive" activeClassName="active">
-                        My old loans
+                        Old loans
                     </Menu.Item>
                 </Menu>
 
-                <div className={isLoading ? "loading" : ""}>
+                <div className={isLoading ? "loading" : "loans"}>
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
                     {listItems && listItems.length === 0 ? (
                         <NoItems title={isActivePage ? "You have no active loans." : "You have no old loans."}>
@@ -57,11 +66,13 @@ function LoanList(props) {
                             </div>
                         </NoItems>
                     ) : (
-                        <div>{listItems}</div>
+                        <div>{content}</div>
                     )}
-                    <div style={{ textAlign: "center" }}>
-                        <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
-                    </div>
+                    {!isNewLoan && (
+                        <div style={{ textAlign: "center" }}>
+                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
+                        </div>
+                    )}
                 </div>
             </Segment>
         </Psegment>

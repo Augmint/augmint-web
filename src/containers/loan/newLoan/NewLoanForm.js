@@ -12,6 +12,7 @@ import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pgrid } from "components/PageLayout";
+import Icon from "components/augmint-ui/icon";
 // import RadioInput from "components/augmint-ui/RadioInput";
 // import ToolTip from "components/toolTip";
 // import { LoanProductDetails } from "containers/loan/components/LoanProductDetails";
@@ -229,7 +230,7 @@ class NewLoanForm extends React.Component {
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Pgrid>
                             <Pgrid.Row halign="justify">
-                                <Pgrid.Column>
+                                <Pgrid.Column style={{ marginBottom: "-10px" }}>
                                     <label>You deposit...</label>
                                     <Field
                                         component={Form.Field}
@@ -255,6 +256,22 @@ class NewLoanForm extends React.Component {
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>
+
+                            <div
+                                style={{
+                                    border: `1px solid ${theme.colors.mediumGrey}`,
+                                    borderRadius: "100%",
+                                    padding: "4px",
+                                    width: "16px",
+                                    height: "16px",
+                                    justifyContent: "center",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    margin: "0 auto"
+                                }}
+                            >
+                                <Icon color="grey" name="arrow-down" />
+                            </div>
 
                             <Pgrid.Row>
                                 <Pgrid.Column>
@@ -284,8 +301,17 @@ class NewLoanForm extends React.Component {
                                 </Pgrid.Column>
                             </Pgrid.Row>
 
+                            <div
+                                style={{
+                                    width: "70px",
+                                    height: "1px",
+                                    backgroundColor: `${theme.colors.mediumGrey}`,
+                                    margin: "10px auto 10px auto"
+                                }}
+                            />
+
                             <Pgrid.Row halign="justify">
-                                <Pgrid.Column>
+                                <Pgrid.Column style={{ marginBottom: "10px" }}>
                                     <label>Repay loan after...</label>
                                     <Field
                                         component={Form.Field}
@@ -315,7 +341,7 @@ class NewLoanForm extends React.Component {
                                 style={{
                                     width: "50%",
                                     textAlign: "left",
-                                    marginBottom: "48px"
+                                    marginBottom: "30px"
                                 }}
                             >
                                 <p data-testid="repaymentAmount" style={{ margin: "0" }}>

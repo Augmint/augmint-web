@@ -163,6 +163,8 @@ export default class SiteNav extends React.Component {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
+        this.hasLoan = false; // todo brigi
+        console.log(props, "props");
     }
 
     toggleMenu(e, noScroll) {
@@ -212,7 +214,11 @@ export default class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
+                        <SideNavLink
+                            to={this.hasLoan ? "/loan" : "/loan/new"}
+                            activeClassName="active"
+                            data-testid="loanMenuLink"
+                        >
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>
