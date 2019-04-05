@@ -158,7 +158,6 @@ class NewLoanForm extends React.Component {
 
         return {
             error: err,
-            fiatValue: fiatValue,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
             loanTokenAmount: loanTokenAmount / DECIMALS_DIV,
             ethAmount: amount
@@ -167,7 +166,7 @@ class NewLoanForm extends React.Component {
 
     onEthAmountChange(e) {
         const amount = e ? e.target.value : this.state.ethAmount;
-        const { error, loanTokenAmount, fiatValue, repaymentAmount, ethAmount } = this.calculateFromEth(amount);
+        const { error, loanTokenAmount, repaymentAmount, ethAmount } = this.calculateFromEth(amount);
 
         if (error) {
             this.props.change("loanTokenAmount", "");

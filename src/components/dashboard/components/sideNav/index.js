@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { NavLink } from "react-router-dom";
 
@@ -158,13 +159,11 @@ export const SideNavLink = styled(NavLink)`
     }
 `;
 
-export default class SiteNav extends React.Component {
+class SiteNav extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
         this.toggleNotificationPanel = this.toggleNotificationPanel.bind(this);
-        this.hasLoan = false; // todo brigi
-        console.log(props, "props");
     }
 
     toggleMenu(e, noScroll) {
@@ -178,6 +177,12 @@ export default class SiteNav extends React.Component {
     }
 
     render() {
+        const loans = this.props.loans;
+        let hasActiveLoan = false;
+        if (loans.isLoaded) {
+            hasActiveLoan = loans.loans.filter(loan => loan.isRepayable).length;
+        }
+
         return (
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
@@ -215,7 +220,7 @@ export default class SiteNav extends React.Component {
                     </SideNavLi>
                     <SideNavLi>
                         <SideNavLink
-                            to={this.hasLoan ? "/loan" : "/loan/new"}
+                            to={hasActiveLoan ? "/loan" : "/loan/new"}
                             activeClassName="active"
                             data-testid="loanMenuLink"
                         >
@@ -254,3 +259,11 @@ export default class SiteNav extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    return {
+        loans: state.loans
+    };
+};
+
+export default connect(mapStateToProps)(SiteNav);
