@@ -21,9 +21,11 @@ export default function LoanProductList(props) {
     }
 
     return (
-        <Pblock className="loan-product-list">
-            {listItems}
-            {!listItems && <NewLoanPage />}
-        </Pblock>
+        <div style={{ margin: "-1rem" }}>
+            <Pblock className="loan-product-list">
+                {listItems}
+                {!listItems && <NewLoanPage />}
+            </Pblock>
+        </div>
     );
 }

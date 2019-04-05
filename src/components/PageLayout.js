@@ -77,7 +77,7 @@ function DashBlock(props) {
         : { overflow: "auto", borderRadius: "4px" };
 
     return (
-        <Segment basic {...rest} style={{ borderRadius: "4px" }}>
+        <Segment basic {...rest} style={{ borderRadius: "4px", margin: "1rem" }}>
             {header ? (
                 <div className="dashblock__head" style={{ borderRadius: "4px 4px 0 0" }}>
                     <Header as="h2" content={header} />
