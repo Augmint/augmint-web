@@ -91,7 +91,7 @@ class TransferList extends React.Component {
         }
 
         return (
-            <Segment style={{ color: "black" }}>
+            <Segment loading={isLoading && !transfers} style={{ color: "black" }}>
                 {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {!transfers || transfers.length === 0 ? (
