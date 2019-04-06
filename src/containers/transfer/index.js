@@ -66,7 +66,7 @@ class TransferPage extends React.Component {
                                 {this.state.payeeEthAddress !== "" && (
                                     <Pblock
                                         loading={
-                                            augmintToken.isLoading ||
+                                            augmintToken.isLoading || // TODO change augmintToken to something else
                                             (!augmintToken.isLoaded && !augmintToken.loadError)
                                         }
                                         header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"

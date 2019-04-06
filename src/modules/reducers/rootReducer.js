@@ -23,7 +23,7 @@ import legacyLoanManagers from "modules/reducers/legacyLoanManagers";
 import stabilityBoardProxy from "modules/reducers/stabilityBoardProxy";
 import preToken from "modules/reducers/preToken";
 import metrics from "modules/reducers/metrics";
-import payeeEthBalance from "modules/reducers/payeeEthBalance";
+// import payeeEthBalance from "modules/reducers/payeeEthBalance";
 import ethTransfer from "modules/reducers/ethTransfer";
 
 import { reducer as formReducer } from "redux-form";
@@ -57,6 +57,6 @@ export default history =>
         preToken,
         metrics,
         form: formReducer,
-        payeeEthBalance
-        // ethTransfer
+        // payeeEthBalance,
+        ethTransfer
     });

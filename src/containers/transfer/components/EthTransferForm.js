@@ -1,10 +1,3 @@
-/*
-????
-TODO: form client side validation. eg:
-    - address checksum and format check
-TODO: input formatting: decimals, thousand separators
-*/
-
 import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
@@ -12,8 +5,6 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-// import { getTransferFee } from "modules/ethereum/transferTransactions";
-// import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
 import { transferEth, ETH_TRANSFER_SUCCESS } from "modules/reducers/ethTransfer";
 import theme from "styles/theme";
 
