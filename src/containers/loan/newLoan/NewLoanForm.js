@@ -349,7 +349,7 @@ class NewLoanForm extends React.Component {
                                 <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", color: theme.colors.secondaryDark }}>
+                                <p style={{ margin: "0", color: theme.colors.secondary }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
