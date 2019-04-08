@@ -22,9 +22,9 @@ class NewLock extends React.Component {
                     <Pheader header="Lock A-EUR" />
                 </TopNavTitlePortal>
 
-                <Pgrid>
+                <Pgrid className="new-lock">
                     <Pgrid.Row columns={1}>
-                        <Pgrid.Column>
+                        <Pgrid.Column size={{ tablet: 1, desktop: 2 / 5 }}>
                             <LockForm lockManager={lockManager} lockProducts={lockProducts} />
                         </Pgrid.Column>
                     </Pgrid.Row>

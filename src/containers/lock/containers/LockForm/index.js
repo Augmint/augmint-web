@@ -10,10 +10,7 @@ import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
-import RadioInput from "components/augmint-ui/RadioInput";
-import ToolTip from "components/toolTip";
 
-import { TermTable, TermTableBody, TermTableRow, TermTableCell, TermTableHeadCell, TermTableHeader } from "./styles";
 import theme from "styles/theme";
 
 class LockContainer extends React.Component {
@@ -22,20 +19,97 @@ class LockContainer extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.lockAmountValidation = this.lockAmountValidation.bind(this);
         this.defaultProductId = this.defaultProductId.bind(this);
+        this.lockTermChange = this.lockTermChange.bind(this);
+        this.lockAmountChange = this.lockAmountChange.bind(this);
+
+        this.state = {
+            initialized: false,
+            activeProducts: [],
+            defaultId: null,
+            selectedProductId: null,
+            selectedProduct: null,
+            lockAmount: null,
+            result: null
+        };
+    }
+
+    componentDidUpdate(prevProps, props) {
+        if (this.props.lockProducts && this.props.lockProducts.length && !this.state.initialized) {
+            this.initForm();
+        }
+    }
+
+    initForm() {
+        console.log("INIT");
+        const activeProducts = this.filterActiveProducts();
+        const defaultId = this.defaultProductId();
+        const selectedProduct = activeProducts.find(product => product.id === defaultId);
+        const initAmount = 100;
+
+        this.props.initialize({
+            lockAmount: initAmount,
+            lockTerms: defaultId
+        });
+
+        this.setState({
+            initialized: true,
+            lockAmount: initAmount,
+            selectedProductId: defaultId,
+            selectedProduct: selectedProduct
+        });
+    }
+
+    filterActiveProducts() {
+        const activeProducts = this.props.lockProducts
+            .filter(product => product.isActive)
+            .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs);
+
+        this.setState({
+            activeProducts: activeProducts
+        });
+        return activeProducts;
     }
 
     defaultProductId() {
-        let productId = this.defaultId;
+        let productId = this.state.defaultId;
 
         if (!productId) {
-            productId = this.props.lockProducts
-                .filter(product => product.isActive)
-                .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs)[0].id;
+            if (this.state.activeProducts && this.state.activeProducts.length) {
+                productId = this.state.activeProducts[0].id;
+            } else {
+                productId = this.filterActiveProducts()[0].id;
+            }
             this.setState({
                 defaultId: productId
             });
         }
         return productId;
+    }
+
+    earnAmount() {
+        let result = 0;
+        let amount = this.state.lockAmount;
+        let product = this.state.selectedProduct;
+        if (product && amount) {
+            result = Math.ceil(amount * product.perTermInterest * 100) / 100;
+        }
+        return result;
+    }
+
+    lockTermChange(e) {
+        let id = parseInt(e.target.value);
+        const selectedProduct = this.state.activeProducts.find(product => product.id === id);
+
+        this.setState({
+            selectedProductId: id,
+            selectedProduct: selectedProduct
+        });
+    }
+
+    lockAmountChange(e) {
+        this.setState({
+            lockAmount: e.target.value || 0
+        });
     }
 
     lockAmountValidation(value, allValues) {
@@ -55,7 +129,7 @@ class LockContainer extends React.Component {
 
     async onSubmit(values) {
         let amount,
-            productId = this.props.productId ? this.props.productId : this.defaultProductId();
+            productId = this.state.selectedProductId ? this.state.selectedProductId : this.state.defaultId;
         try {
             amount = parseFloat(values.lockAmount);
         } catch (error) {
@@ -82,11 +156,20 @@ class LockContainer extends React.Component {
     }
 
     render() {
-        const { lockProducts, lockManager } = this.props;
+        const { lockManager } = this.props;
         const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
+        let earnAmount = 0;
+        let interest = "";
+
+        if (this.state.lockAmount && this.state.selectedProductId && this.state.activeProducts.length) {
+            earnAmount = this.earnAmount();
+        }
+        if (this.state.selectedProduct) {
+            interest = this.state.selectedProduct.interestRatePaPt;
+        }
 
         return (
-            <Pblock loading={lockManager.isLoading} header="Lock" style={{ maxWidth: "700px" }}>
+            <Pblock loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="New Lock submitted"
@@ -105,7 +188,7 @@ class LockContainer extends React.Component {
                             />
                         )}
 
-                        <label>Amount to lock:</label>
+                        <label>You lock ...</label>
                         <Field
                             name="lockAmount"
                             component={Form.Field}
@@ -114,6 +197,7 @@ class LockContainer extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
                                 Validations.required,
@@ -126,72 +210,59 @@ class LockContainer extends React.Component {
                             data-testid="lockAmountInput"
                         />
 
-                        <label>Select term:</label>
-                        {(lockManager.isLoading || !lockManager.isLoaded) && <h5>Loading lock products...</h5>}
-                        <TermTable>
-                            <TermTableHeader>
-                                <TermTableRow>
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell />
-                                    <TermTableHeadCell>Min lock</TermTableHeadCell>
-                                    <TermTableHeadCell>Max lock</TermTableHeadCell>
-                                    <TermTableHeadCell>
-                                        Interest p.a.
-                                        <ToolTip header="Lock Interest per Annum" id={"lock_interest"}>
-                                            The annualised interest rate of the lock. It's calculated using a simple
-                                            (non-compound) method and with a 365 day year.
-                                            <br />
-                                            <br />
-                                            Note: For small lock amounts the actual interest per annum can be slightly
-                                            higher than displayed (additonal 0.01 A-EUR in interest due to rounding)
-                                        </ToolTip>
-                                    </TermTableHeadCell>
-                                    <TermTableHeadCell style={{ textAlign: "right" }}>You earn</TermTableHeadCell>
-                                </TermTableRow>
-                            </TermTableHeader>
-                            <TermTableBody>
-                                {lockProducts &&
-                                    lockProducts
-                                        .filter(product => product.isActive)
-                                        .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs)
-                                        .map((product, index) => {
-                                            return (
-                                                <TermTableRow key={`lock-term-${product.id}`}>
-                                                    <TermTableCell>
-                                                        <Field
-                                                            name="productId"
-                                                            data-testid={"selectLockProduct-" + product.id}
-                                                            val={product.id}
-                                                            defaultChecked={!index}
-                                                            component={RadioInput}
-                                                        />
-                                                    </TermTableCell>
-                                                    <TermTableCell>
-                                                        <label>{product.durationText}</label>
-                                                    </TermTableCell>
-                                                    <TermTableCell>{product.minimumLockAmount} A€</TermTableCell>
-                                                    <TermTableCell>
-                                                        {Math.floor(product.maxLockAmount)} A€
-                                                    </TermTableCell>
-                                                    <TermTableCell>{product.interestRatePaPt} %</TermTableCell>
-                                                    <TermTableCell style={{ textAlign: "right" }}>
-                                                        {this.props.lockAmount &&
-                                                            `${Math.ceil(
-                                                                this.props.lockAmount * product.perTermInterest * 100
-                                                            ) / 100} A€`}
-                                                    </TermTableCell>
-                                                </TermTableRow>
-                                            );
-                                        })}
-                            </TermTableBody>
-                        </TermTable>
+                        <label>For ...</label>
+                        <Field
+                            component={Form.Field}
+                            disabled={submitting || !lockManager.isLoaded}
+                            onChange={this.lockTermChange}
+                            info={`Unlock by..todo`}
+                            className="field-big"
+                            isSelect="true"
+                            selectOptions={this.state.activeProducts || []}
+                            id="selectedLockProduct"
+                            name="lockTerms"
+                        />
+
+                        <div
+                            className="form-summary"
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "space- between"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: "50%",
+                                    textAlign: "left",
+                                    marginBottom: "30px"
+                                }}
+                            >
+                                <p data-testid="repaymentAmount" style={{ margin: "0" }}>
+                                    <strong>{earnAmount + " A-EUR"}</strong>
+                                </p>
+                                <p style={{ margin: "0", fontSize: "14px" }}>You earn</p>
+                            </div>
+                            <div style={{ width: "50%", textAlign: "left" }}>
+                                <p style={{ margin: "0", color: theme.colors.secondaryDark }}>
+                                    <strong>{interest + "%"}</strong>
+                                </p>
+                                <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
+                            </div>
+                        </div>
 
                         <Button
                             size="big"
-                            disabled={pristine}
+                            disabled={pristine && !this.state.initialized}
                             loading={submitting}
                             data-testid="submitButton"
                             type="submit"
+                            style={{
+                                height: "50px",
+                                padding: "10px 55px",
+                                width: "100%",
+                                maxWidth: "500px"
+                            }}
                         >
                             {submitting ? "Submitting..." : "Lock"}
                         </Button>

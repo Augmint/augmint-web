@@ -149,7 +149,7 @@ export function Select(props) {
         options.forEach(product => {
             result.push(
                 <option key={product.id} value={product.id} id={"selectLoanProduct-" + product.id}>
-                    {product.termText}
+                    {product.termText || product.durationText}
                 </option>
             );
         });
