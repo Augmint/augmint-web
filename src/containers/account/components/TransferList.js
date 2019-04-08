@@ -17,6 +17,7 @@ class TransferList extends React.Component {
     }
 
     showMore() {
+        const currentLimit = this.state.page * this.props.limit;
         const page = this.state.page + 1;
         const limit = page * this.props.limit;
         const nextPage = () => {
@@ -25,10 +26,12 @@ class TransferList extends React.Component {
         const fetchData = () => {
             store.dispatch(fetchLatestTransfers(this.props.userAccount.address, true)).then(res => {
                 if (res.type === "userTransfers/FETCH_TRANSFERS_RECEIVED") {
-                    if (this.isLastPage() || limit <= res.result.length) {
+                    if (this.isLastPage() || currentLimit <= res.result.length) {
                         nextPage();
                     } else {
-                        fetchData();
+                        if (res.fetchedLength === 0) {
+                            fetchData();
+                        }
                     }
                 }
             });
@@ -88,7 +91,7 @@ class TransferList extends React.Component {
         }
 
         return (
-            <Segment loading={isLoading} style={{ color: "black" }}>
+            <Segment loading={isLoading && !transfers} style={{ color: "black" }}>
                 {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {!transfers || transfers.length === 0 ? (
@@ -99,7 +102,7 @@ class TransferList extends React.Component {
                             <StyleThead>
                                 <StyleTr>
                                     <StyleTh className={"hide-xs"}>Date</StyleTh>
-                                    <StyleTh style={{ textAlign: "center" }}>Transaction</StyleTh>
+                                    <StyleTh style={{ textAlign: "right" }}>Transaction</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
                                         Balance
@@ -132,19 +135,27 @@ class TransferList extends React.Component {
                 )}
                 {transfers && !this.isLastPage() && (
                     <div style={{ marginTop: 20, paddingLeft: 20 }}>
-                        <Button onClick={this.showMore} className="ghost">
-                            Show older
-                        </Button>
+                        <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
+                            <Button onClick={this.showMore} className="ghost">
+                                Show older
+                            </Button>
+                        </Segment>
                     </div>
                 )}
             </Segment>
         );
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.userAccount !== this.props.userAccount) {
+            this.setState({ page: 1 });
+        }
+    }
 }
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p style={{ paddingLeft: 20 }}>There was nothing lately.</p>,
+    noItemMessage: <p style={{ paddingLeft: 20 }}>No recent transactions found.</p>,
     header: null,
     limit: 5
 };
