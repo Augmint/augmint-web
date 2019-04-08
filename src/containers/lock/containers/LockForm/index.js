@@ -13,6 +13,7 @@ import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 
 import theme from "styles/theme";
+import "./styles.css";
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -119,6 +120,7 @@ class LockContainer extends React.Component {
         });
     }
 
+    // todo refact
     lockAmountValidation(value, allValues) {
         const productId = allValues.productId || this.defaultProductId();
         const minValue = this.props.lockProducts[productId].minimumLockAmount;
@@ -126,9 +128,9 @@ class LockContainer extends React.Component {
         const val = parseFloat(value);
 
         if (val < minValue) {
-            return `Minimum lockable amount is ${minValue} A-EUR for selected product`;
+            return `Minimum lockable amount is ${minValue} A-EUR for selected lock term`;
         } else if (val > maxValue) {
-            return `Currently maximum ${maxValue} A-EUR is available for lock with selected product`;
+            return `Currently maximum ${maxValue} A-EUR is available for lock with selected lock term`;
         } else {
             return undefined;
         }
@@ -178,7 +180,7 @@ class LockContainer extends React.Component {
         }
 
         return (
-            <Pblock loading={lockManager.isLoading && !this.state.initialize}>
+            <Pblock id="lock-form" loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="New Lock submitted"

@@ -28,7 +28,7 @@ export default class LockContainer extends React.Component {
                     <Switch>
                         <Route exact path="/lock" component={lockList} />
                         <Route exact path="/lock/archive" component={lockList} />
-                        <Route path="/lock/new" component={newLock} />
+                        <Route path="/lock/new" component={lockList} />
                         <Route path="/lock/:lockId" component={lockDetails} />
                         <Route component={PageNotFound} />
                     </Switch>

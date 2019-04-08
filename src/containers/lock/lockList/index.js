@@ -9,11 +9,14 @@ import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LockCard from "./LockCard";
+import NewLock from "./../newLock";
 
 function LockList(props) {
     const { location } = props;
     const { isLoading, error, locks } = props.locks;
     const isActivePage = location.pathname === "/lock";
+    const isNewLock = location.pathname === "/lock/new";
+
     const listItems =
         locks &&
         locks
@@ -23,6 +26,13 @@ function LockList(props) {
             })
             .map(lock => <LockCard key={`lock-${lock.id}`} lock={lock} />);
 
+    let content = null;
+    if (isNewLock) {
+        content = <NewLock />;
+    } else {
+        content = listItems;
+    }
+
     return (
         <Psegment>
             <TopNavTitlePortal>
@@ -31,11 +41,14 @@ function LockList(props) {
 
             <Segment className="block">
                 <Menu>
+                    <Menu.Item exact to="/lock/new" activeClassName="active">
+                        New lock
+                    </Menu.Item>
                     <Menu.Item exact to="/lock" activeClassName="active">
-                        My active locks
+                        Active locks
                     </Menu.Item>
                     <Menu.Item exact to="/lock/archive" activeClassName="active">
-                        My old locks
+                        Old locks
                     </Menu.Item>
                 </Menu>
 
@@ -50,13 +63,15 @@ function LockList(props) {
                             </div>
                         </NoItems>
                     ) : (
-                        <div>{listItems}</div>
+                        <div>{content}</div>
                     )}
-                    <div style={{ textAlign: "center" }}>
-                        <Button style={{ marginLeft: "auto" }} to="/lock/new" data-testid="newLockLink">
-                            Lock A-EUR
-                        </Button>
-                    </div>
+                    {!isNewLock && (
+                        <div style={{ textAlign: "center" }}>
+                            <Button style={{ marginLeft: "auto" }} to="/lock/new" data-testid="newLockLink">
+                                Lock A-EUR
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </Segment>
         </Psegment>

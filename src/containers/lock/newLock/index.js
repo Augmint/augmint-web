@@ -18,10 +18,6 @@ class NewLock extends React.Component {
 
         return (
             <Psegment>
-                <TopNavTitlePortal>
-                    <Pheader header="Lock A-EUR" />
-                </TopNavTitlePortal>
-
                 <Pgrid className="new-lock">
                     <Pgrid.Row columns={1}>
                         <Pgrid.Column size={{ tablet: 1, desktop: 2 / 5 }}>
