@@ -5,7 +5,6 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import FiatExchange from "./components/FiatExchange";
 import AddWithdrawForm from "./components/AddWithdrawForm";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
@@ -41,19 +40,14 @@ class WithdrawHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Add & Withdraw AEUR/EUR" />
+                        <Pheader header="Add & Withdraw funds" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <FiatExchange
-                                    header="€ &harr; A€ on partner exchange"
-                                    web3Connect={this.props.web3Connect}
-                                />
                                 <AddWithdrawForm
-                                    orders={orders}
                                     exchange={exchange}
                                     rates={rates}
                                     toggleOrderBook={this.toggleOrderBook}

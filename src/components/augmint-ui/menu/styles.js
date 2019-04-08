@@ -21,6 +21,11 @@ export const StyledMenu = styled.div`
             margin-top: -10px;
         }
     }
+
+    &.withdraw {
+        border: 0;
+        margin-bottom: 10px;
+    }
 `;
 
 export const BaseMenuItem = styledComponent => styledComponent`
@@ -30,6 +35,12 @@ export const BaseMenuItem = styledComponent => styledComponent`
     cursor: pointer;
     line-height: ${remCalc(18)};
     padding: ${remCalc(16)} ${remCalc(25)};
+    
+    &.withdraw {
+      background-color: ${theme.colors.lightGrey};
+      width: 50%;
+    }
+    
     
     &.active {
       color: ${theme.colors.opacBlack};
@@ -50,6 +61,20 @@ export const BaseMenuItem = styledComponent => styledComponent`
           border-radius: 0;
           border-bottom: 5px solid ${theme.colors.secondary}
           color: ${theme.colors.black};
+          
+          &.withdraw {
+            background-color: ${theme.colors.secondary};
+            border-bottom: none;
+            margin-bottom: 0;
+          }
+        }
+        
+        &.withdraw:first-of-type {
+          border-radius: 3px 0 0 3px;
+        }
+        
+        &.withdraw:last-of-type {
+          border-radius: 0 3px 3px 0;
         }
     }
 `;

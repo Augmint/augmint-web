@@ -9,6 +9,7 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
+import FundList from "./FundList";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
@@ -23,6 +24,14 @@ const Styledlabel = styled.label`
     display: inline-block;
     margin-bottom: 5px;
 `;
+
+const FUNDS = [
+    {
+        name: "Mr. Coin",
+        features: ["1:1 exchange rate", "0% banking fee", "0.25% exchange fee"],
+        image: ""
+    }
+];
 
 class AddWithdrawForm extends React.Component {
     constructor(props) {
@@ -175,26 +184,26 @@ class AddWithdrawForm extends React.Component {
         }
 
         const header = (
-            <div>
+            <div style={{ paddingTop: "10px" }}>
                 {mainHeader}
-                <Menu style={{ marginBottom: -11 }}>
+                <Menu className={"withdraw"}>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
                         onClick={this.onOrderDirectionChange}
-                        data-testid="buyMenuLink"
-                        className={"buySell"}
+                        data-testid="addFund"
+                        className={"withdraw"}
                     >
-                        Buy A-EUR
+                        Add Fund
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === TOKEN_SELL}
                         data-index={TOKEN_SELL}
                         onClick={this.onOrderDirectionChange}
-                        data-testid="sellMenuLink"
-                        className={"buySell"}
+                        data-testid="withdrawFund"
+                        className={"withdraw"}
                     >
-                        Sell A-EUR
+                        Withdraw
                     </Menu.Item>
                 </Menu>
             </div>
@@ -221,65 +230,10 @@ class AddWithdrawForm extends React.Component {
                             onDismiss={() => clearSubmitErrors()}
                         />
 
-                        <Styledlabel>
-                            <strong>
-                                {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
-                            </strong>
-                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
-                        </Styledlabel>
-                        <Field
-                            name="tokenAmount"
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            inputmode="numeric"
-                            step="any"
-                            min="0"
-                            disabled={submitting || !exchange.isLoaded}
-                            onChange={this.onTokenAmountChange}
-                            validate={tokenAmountValidations}
-                            normalize={Normalizations.twoDecimals}
-                            data-testid="tokenAmountInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="A-EUR"
-                        />
-                        <Field
-                            name="price"
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            inputmode="numeric"
-                            step="any"
-                            min="0"
-                            disabled={submitting || !exchange.isLoaded}
-                            onChange={this.onPriceChange}
-                            validate={Validations.price}
-                            normalize={Normalizations.twoDecimals}
-                            data-testid="priceInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="%"
-                        />
-                        <div
-                            style={{
-                                marginTop: -10,
-                                marginBottom: 10,
-                                color: "#999",
-                                fontSize: "small",
-                                textAlign: "right"
-                            }}
-                        >
-                            calculated on current rate 1 ETH ={" "}
-                            {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
-                        </div>
-
-                        <Styledlabel>
-                            {orderDirection === TOKEN_BUY
-                                ? "ETH amount to sell"
-                                : "ETH amount to buy (calculated on current rate)"}
-                        </Styledlabel>
+                        <Styledlabel>Fund from bank account</Styledlabel>
 
                         <Field
-                            name="ethAmount"
+                            name="eurToAdd"
                             component={Form.Field}
                             as={Form.Input}
                             type="number"
@@ -290,21 +244,12 @@ class AddWithdrawForm extends React.Component {
                             onChange={this.onEthAmountChange}
                             validate={ethAmountValidations}
                             normalize={Normalizations.fiveDecimals}
-                            data-testid="ethAmountInput"
+                            data-testid="eurToAddInput"
                             style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="ETH"
+                            labelAlignRight="EUR"
                         />
-                        <Button
-                            size="big"
-                            loading={submitting}
-                            disabled={pristine}
-                            data-testid="submitButton"
-                            type="submit"
-                        >
-                            {submitting && "Submitting..."}
-                            {!submitting &&
-                                (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
-                        </Button>
+                        <Styledlabel>Fund from bank account</Styledlabel>
+                        <FundList funds={FUNDS} />
                     </Form>
                 )}
             </Pblock>
