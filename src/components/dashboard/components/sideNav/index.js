@@ -213,6 +213,12 @@ class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
+                        <SideNavLink to="/withdraw" activeClassName="active" data-testid="withdrawMenuLink">
+                            <Icon name="exchange" />
+                            <span>Add/Withdraw</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi>
                         <SideNavLink to="/transfer" activeClassName="active" data-testid="trasnferMenuLink">
                             <Icon name="send" />
                             <span>Send</span>
