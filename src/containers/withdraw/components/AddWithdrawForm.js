@@ -12,7 +12,6 @@ import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
-// import { PriceToolTip } from "./ExchangeToolTips";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -244,11 +243,6 @@ class AddWithdrawForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                         />
-
-                        {/*<Styledlabel>*/}
-                        {/*Price <PriceToolTip id={"place_order_form"} />*/}
-                        {/*</Styledlabel>*/}
-
                         <Field
                             name="price"
                             component={Form.Field}
