@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { connectRouter } from "connected-react-router";
 import web3Connect from "modules/reducers/web3Connect";
 import contracts from "modules/reducers/contracts";
 import rates from "modules/reducers/rates";
@@ -27,32 +26,30 @@ import metrics from "modules/reducers/metrics";
 import { reducer as formReducer } from "redux-form";
 import submittedTransactions from "modules/reducers/submittedTransactions";
 
-export default history =>
-    combineReducers({
-        router: connectRouter(history),
-        web3Connect,
-        contracts,
-        rates,
-        augmintToken,
-        monetarySupervisor,
-        loanManager,
-        loanTransactions,
-        lockManager,
-        userBalances,
-        userTransfers,
-        exchange,
-        orders,
-        trades,
-        loans,
-        locks,
-        subscriptions,
-        submittedTransactions,
-        legacyBalances,
-        legacyExchanges,
-        legacyLockers,
-        legacyLoanManagers,
-        stabilityBoardProxy,
-        preToken,
-        metrics,
-        form: formReducer
-    });
+export default combineReducers({
+    web3Connect,
+    contracts,
+    rates,
+    augmintToken,
+    monetarySupervisor,
+    loanManager,
+    loanTransactions,
+    lockManager,
+    userBalances,
+    userTransfers,
+    exchange,
+    orders,
+    trades,
+    loans,
+    locks,
+    subscriptions,
+    submittedTransactions,
+    legacyBalances,
+    legacyExchanges,
+    legacyLockers,
+    legacyLoanManagers,
+    stabilityBoardProxy,
+    preToken,
+    metrics,
+    form: formReducer
+});
