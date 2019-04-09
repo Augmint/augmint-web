@@ -4,202 +4,71 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import { Menu } from "components/augmint-ui/menu";
-import Button from "components/augmint-ui/button";
-import store from "modules/store";
-import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
-import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
-import { Form, Validations, Normalizations } from "components/BaseComponents";
-import FundList from "./FundList";
-import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
+import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
+import { Field, formValueSelector, reduxForm } from "redux-form";
+import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
+import FundList from "./FundList/index";
 
 import theme from "styles/theme";
 import styled from "styled-components";
 
-const ETH_DECIMALS = 5;
-const TOKEN_DECIMALS = 2;
+export const WITHDRAW = "withdraw";
+export const ADDFUND = "addFund";
 
 const Styledlabel = styled.label`
     display: inline-block;
     margin-bottom: 5px;
 `;
 
-const FUNDS = [
-    {
-        name: "Mr. Coin",
-        features: ["1:1 exchange rate", "0% banking fee", "0.25% exchange fee"],
-        image: ""
-    }
-];
-
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { result: null, orderDirection: TOKEN_BUY, lastChangedAmountField: "" };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
-        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-        this.onEthAmountChange = this.onEthAmountChange.bind(this);
+        this.state = { orderDirection: ADDFUND, amount: "" };
+        this.onMenuClick = this.onMenuClick.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
-        this.toggleOrderBook = this.toggleOrderBook.bind(this);
-    }
-
-    componentDidUpdate(prevProps) {
-        // recaluclate amounts displayed when published ETH/EUR rates changed
-        if (prevProps.rates && prevProps.rates.info.ethFiatRate !== this.props.rates.info.ethFiatRate) {
-            this.reCalcAmounts(
-                this.state.lastChangedAmountField,
-                this.props.price,
-                this.props.tokenAmount,
-                this.props.ethAmount
-            );
-        }
-    }
-
-    toggleOrderBook(e) {
-        const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
-        this.props.toggleOrderBook(direction);
-    }
-
-    onOrderDirectionChange(e) {
-        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
-        this.toggleOrderBook(+e.target.attributes["data-index"].value);
-    }
-
-    onTokenAmountChange(e) {
-        try {
-            const lastChangedAmountField = "tokenAmount";
-            this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, e.target.value, null);
-        } catch (error) {
-            this.props.change("ethAmount", "");
-        }
-    }
-
-    onEthAmountChange(e) {
-        try {
-            const lastChangedAmountField = "ethAmount";
-            this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, null, e.target.value);
-        } catch (error) {
-            this.props.change("tokenAmount", "");
-        }
     }
 
     onPriceChange(e) {
-        this.reCalcAmounts(
-            this.state.lastChangedAmountField,
-            e.target.value,
-            this.props.tokenAmount,
-            this.props.ethAmount
-        );
+        this.setState({
+            amount: e.target.value
+        });
     }
 
-    reCalcAmounts(lastChangedAmountField, _price, _tokenAmount, _ethAmount) {
-        const price = this.parsePrice(_price);
-
-        if (lastChangedAmountField === "ethAmount") {
-            const ethAmount = parseFloat(_ethAmount);
-            if (!isNaN(ethAmount) && isFinite(ethAmount)) {
-                const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
-                this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
-            } else {
-                //  ethAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        } else {
-            const tokenAmount = parseFloat(_tokenAmount);
-            if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
-                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
-                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
-            } else {
-                // tokenAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        }
-    }
-
-    async handleSubmit(values) {
-        let amount, price;
-        const orderDirection = this.state.orderDirection;
-
-        try {
-            price = this.parsePrice(values.price);
-            if (orderDirection === TOKEN_BUY) {
-                amount = parseFloat(values.ethAmount);
-            } else {
-                amount = parseFloat(values.tokenAmount);
-            }
-        } catch (error) {
-            throw new SubmissionError({
-                _error: {
-                    title: "Invalid amount",
-                    details: error
-                }
-            });
-        }
-
-        const res = await store.dispatch(placeOrder(orderDirection, amount, price));
-
-        if (res.type !== PLACE_ORDER_SUCCESS) {
-            throw new SubmissionError({
-                _error: res.error
+    onMenuClick(e) {
+        if (e.target.attributes["data-index"].value === ADDFUND) {
+            this.setState({
+                orderDirection: ADDFUND
             });
         } else {
             this.setState({
-                result: res.result
+                orderDirection: WITHDRAW
             });
-            return;
         }
-    }
-
-    parsePrice(price) {
-        return Math.round(price * 100) / 10000;
     }
 
     render() {
-        const {
-            header: mainHeader,
-            rates,
-            exchange,
-            error,
-            handleSubmit,
-            pristine,
-            submitting,
-            submitSucceeded,
-            clearSubmitErrors,
-            reset
-        } = this.props;
-        const { orderDirection } = this.state;
+        const { error, user } = this.props;
 
-        const ethAmountValidations = [Validations.required, Validations.ethAmount];
-        if (orderDirection === TOKEN_BUY) {
-            ethAmountValidations.push(Validations.ethUserBalance);
-        }
-
-        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
-        if (orderDirection === TOKEN_SELL) {
-            tokenAmountValidations.push(Validations.userTokenBalance);
-        }
+        const { orderDirection, amount } = this.state;
 
         const header = (
             <div style={{ paddingTop: "10px" }}>
-                {mainHeader}
                 <Menu className={"withdraw"}>
                     <Menu.Item
-                        active={orderDirection === TOKEN_BUY}
-                        data-index={TOKEN_BUY}
-                        onClick={this.onOrderDirectionChange}
+                        active={orderDirection === ADDFUND}
+                        data-index={ADDFUND}
+                        onClick={this.onMenuClick}
                         data-testid="addFund"
                         className={"withdraw"}
                     >
                         Add Fund
                     </Menu.Item>
                     <Menu.Item
-                        active={orderDirection === TOKEN_SELL}
-                        data-index={TOKEN_SELL}
-                        onClick={this.onOrderDirectionChange}
+                        active={orderDirection === WITHDRAW}
+                        data-index={WITHDRAW}
+                        onClick={this.onMenuClick}
                         data-testid="withdrawFund"
                         className={"withdraw"}
                     >
@@ -210,27 +79,17 @@ class AddWithdrawForm extends React.Component {
         );
 
         return (
-            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
+            <Pblock>
                 <ConnectionStatus contract={this.props.exchange} />
+                {header}
 
-                {submitSucceeded && (
-                    <EthSubmissionSuccessPanel
-                        header="Order submitted"
-                        result={this.state.result}
-                        onDismiss={() => reset()}
-                        data-test-orderid={this.state.result.orderId}
-                    />
-                )}
+                {
+                    <Form error={error ? "true" : "false"}>
+                        <EthSubmissionErrorPanel error={error} />
 
-                {!submitSucceeded && this.props.rates.isLoaded && (
-                    <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
-                        <EthSubmissionErrorPanel
-                            error={error}
-                            header="Place Order failed"
-                            onDismiss={() => clearSubmitErrors()}
-                        />
-
-                        <Styledlabel>Fund from bank account</Styledlabel>
+                        <Styledlabel>
+                            {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw from fund"}
+                        </Styledlabel>
 
                         <Field
                             name="eurToAdd"
@@ -240,18 +99,17 @@ class AddWithdrawForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            disabled={submitting || !exchange.isLoaded}
-                            onChange={this.onEthAmountChange}
-                            validate={ethAmountValidations}
+                            onChange={this.onPriceChange}
                             normalize={Normalizations.fiveDecimals}
                             data-testid="eurToAddInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="EUR"
                         />
-                        <Styledlabel>Fund from bank account</Styledlabel>
-                        <FundList funds={FUNDS} />
+                        <Styledlabel>Available exchange partners:</Styledlabel>
+
+                        <FundList user={user} order={orderDirection} amount={amount} />
                     </Form>
-                )}
+                }
             </Pblock>
         );
     }

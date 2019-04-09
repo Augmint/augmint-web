@@ -47,11 +47,7 @@ class WithdrawHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <AddWithdrawForm
-                                    exchange={exchange}
-                                    rates={rates}
-                                    toggleOrderBook={this.toggleOrderBook}
-                                />
+                                <AddWithdrawForm exchange={exchange} rates={rates} user={userAccount} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
