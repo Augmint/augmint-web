@@ -1,11 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
+import { Pblock, Pgrid, Pheader, Psegment } from "components/PageLayout";
 import Header from "components/augmint-ui/header";
-import exchangeProvider from "modules/exchangeProvider";
-import ratesProvider from "modules/ratesProvider";
-import augmintTokenProvider from "modules/augmintTokenProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
@@ -15,17 +12,10 @@ import { TOKEN_SELL } from "modules/reducers/orders";
 class WithdrawHome extends React.Component {
     constructor(props) {
         super(props);
-        this.toggleOrderBook = this.toggleOrderBook.bind(this);
-        this.state = {
-            orderBookDirection: TOKEN_SELL
-        };
     }
 
     componentDidMount() {
         connectWeb3();
-        augmintTokenProvider();
-        exchangeProvider();
-        ratesProvider();
     }
 
     toggleOrderBook(direction) {
@@ -35,7 +25,7 @@ class WithdrawHome extends React.Component {
     }
 
     render() {
-        const { userAccount, exchange, rates } = this.props;
+        const { userAccount } = this.props;
 
         return (
             <EthereumState>
@@ -51,7 +41,7 @@ class WithdrawHome extends React.Component {
                                 <Pblock header="€ &harr; A€ on partner exchange">
                                     <Header />
                                 </Pblock>
-                                <AddWithdrawForm exchange={exchange} rates={rates} user={userAccount} />
+                                <AddWithdrawForm user={userAccount} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
@@ -63,11 +53,7 @@ class WithdrawHome extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    userAccount: state.userBalances.account,
-    exchange: state.exchange,
-    orders: state.orders,
-    rates: state.rates,
-    trades: state.trades
+    userAccount: state.userBalances.account
 });
 
 export default connect(mapStateToProps)(WithdrawHome);
