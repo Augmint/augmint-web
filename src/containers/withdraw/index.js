@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pblock, Pgrid, Pheader, Psegment } from "components/PageLayout";
+import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
 import Header from "components/augmint-ui/header";
+import exchangeProvider from "modules/exchangeProvider";
+import augmintTokenProvider from "modules/augmintTokenProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
-import { TOKEN_SELL } from "modules/reducers/orders";
 
 class WithdrawHome extends React.Component {
     constructor(props) {
@@ -16,16 +17,12 @@ class WithdrawHome extends React.Component {
 
     componentDidMount() {
         connectWeb3();
-    }
-
-    toggleOrderBook(direction) {
-        this.setState({
-            orderBookDirection: direction
-        });
+        augmintTokenProvider();
+        exchangeProvider();
     }
 
     render() {
-        const { userAccount } = this.props;
+        const { userAccount, exchange } = this.props;
 
         return (
             <EthereumState>
@@ -41,7 +38,7 @@ class WithdrawHome extends React.Component {
                                 <Pblock header="€ &harr; A€ on partner exchange">
                                     <Header />
                                 </Pblock>
-                                <AddWithdrawForm user={userAccount} />
+                                <AddWithdrawForm exchange={exchange} user={userAccount} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
@@ -53,7 +50,9 @@ class WithdrawHome extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    userAccount: state.userBalances.account
+    userAccount: state.userBalances.account,
+    exchange: state.exchange,
+    trades: state.trades
 });
 
 export default connect(mapStateToProps)(WithdrawHome);

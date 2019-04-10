@@ -34,6 +34,7 @@ class AddWithdrawForm extends React.Component {
         this.setState({
             amount: e.target.value
         });
+        console.log(this.state.amount);
     }
 
     onMenuClick(e) {
@@ -51,7 +52,7 @@ class AddWithdrawForm extends React.Component {
     render() {
         const { error, user } = this.props;
 
-        const { orderDirection, amount } = this.state;
+        const { orderDirection } = this.state;
 
         const header = (
             <div style={{ paddingTop: "10px" }}>
@@ -107,7 +108,7 @@ class AddWithdrawForm extends React.Component {
                         />
                         <Styledlabel>Available exchange partners:</Styledlabel>
 
-                        <FundList user={user} order={orderDirection} amount={amount} />
+                        <FundList user={user} order={orderDirection} />
                     </Form>
                 }
             </Pblock>
