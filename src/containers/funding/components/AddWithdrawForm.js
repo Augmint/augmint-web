@@ -3,6 +3,7 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { Menu } from "components/augmint-ui/menu";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Field, formValueSelector, reduxForm } from "redux-form";
@@ -55,7 +56,7 @@ class AddWithdrawForm extends React.Component {
 
         const header = (
             <div style={{ paddingTop: "10px" }}>
-                <Menu className={"withdraw"}>
+                <Menu className={"filled"}>
                     <Menu.Item
                         active={orderDirection === ADDFUND}
                         data-index={ADDFUND}
@@ -63,7 +64,7 @@ class AddWithdrawForm extends React.Component {
                         data-testid="addFund"
                         className={"filled"}
                     >
-                        Add Fund
+                        Add funds
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === WITHDRAW}
@@ -88,7 +89,7 @@ class AddWithdrawForm extends React.Component {
                         <EthSubmissionErrorPanel error={error} />
 
                         <Styledlabel>
-                            {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw from fund"}
+                            {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
                         </Styledlabel>
 
                         <Field
@@ -101,13 +102,17 @@ class AddWithdrawForm extends React.Component {
                             min="0"
                             onChange={this.onPriceChange}
                             normalize={Normalizations.fiveDecimals}
-                            data-testid="eurToAddInput"
+                            data-testid="fundingInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                         />
                         <Styledlabel>Available exchange partners:</Styledlabel>
 
                         <FundList user={user} amount={amount} direction={orderDirection} />
+
+                        <p style={{ fontSize: "14px" }}>
+                            Interested in becoming an Augmint exchange partner? <Link to="contact">Contact us.</Link>
+                        </p>
                     </Form>
                 }
             </Pblock>

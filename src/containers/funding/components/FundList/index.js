@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
-import { Button } from "components/augmint-ui/button";
+import Button from "components/augmint-ui/button";
 
 import "./styles.css";
 import { FUNDS } from "./funds.js";
@@ -9,9 +9,9 @@ import { ADDFUND } from "../AddWithdrawForm";
 
 const FundItem = props => {
     const { fund, user, direction, amount } = props;
-    const { name, buyUrl, sellUrl, features, image } = fund;
+    const { name, buyUrl, sellUrl, image } = fund;
     const url = direction === ADDFUND ? `${buyUrl}${user.address}` : `${sellUrl}${user.address}`;
-
+    const features = direction === ADDFUND ? fund.addFeatures : fund.withdrawFeatures;
     return (
         <li className="fund-item">
             <Pgrid>
@@ -31,9 +31,15 @@ const FundItem = props => {
                     </Pgrid>
                 </Pgrid.Row>
                 <Pgrid.Row>
-                    <a className="goToFund" href={`${url}&amount=${amount}`} target="_blank">
-                        Go to {name}
-                    </a>
+                    <Button
+                        content={`Go to ${name}`}
+                        href={`${url}&amount=${amount}`}
+                        target="_blank"
+                        labelposition="center"
+                        size="large"
+                        className="primary"
+                        style={{ width: "100%", padding: "15px 20px" }}
+                    />
                 </Pgrid.Row>
             </Pgrid>
         </li>

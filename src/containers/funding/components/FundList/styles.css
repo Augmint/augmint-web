@@ -7,11 +7,11 @@
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 3px;
-    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
 .fund-item .img-wrapper {
-    width: 80px;
+    width: 70px;
 }
 
 .fund-item h3 {
@@ -36,7 +36,7 @@
 .fund-features li::before {
     content: "";
     position: absolute;
-    top: calc(50% - 4px);
+    top: 4px;
     left: -20px;
     width: 8px;
     height: 8px;

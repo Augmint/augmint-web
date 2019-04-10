@@ -79,6 +79,9 @@ export default function Icon(props) {
         case "arrow-down":
             className += " fa fa-arrow-down";
             break;
+        case "balance-scale":
+            className += " fa fa-balance-scale";
+            break;
         default:
             break;
     }
