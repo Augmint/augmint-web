@@ -107,7 +107,7 @@ class AddWithdrawForm extends React.Component {
                         />
                         <Styledlabel>Available exchange partners:</Styledlabel>
 
-                        <FundList user={user} amount={amount} order={orderDirection} />
+                        <FundList user={user} amount={amount} direction={orderDirection} />
                     </Form>
                 }
             </Pblock>

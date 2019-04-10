@@ -8,9 +8,9 @@ import { FUNDS } from "./funds.js";
 import { ADDFUND } from "../AddWithdrawForm";
 
 const FundItem = props => {
-    const { fund, user, order, amount } = props;
+    const { fund, user, direction, amount } = props;
     const { name, buyUrl, sellUrl, features, image } = fund;
-    const url = order === ADDFUND ? `${buyUrl}${user.address}` : `${sellUrl}${user.address}`;
+    const url = direction === ADDFUND ? `${buyUrl}${user.address}` : `${sellUrl}${user.address}`;
 
     return (
         <li className="fund-item">
@@ -41,12 +41,12 @@ const FundItem = props => {
 };
 
 export default function FundList(props) {
-    const { user, amount, order } = props;
-    console.log("amount", amount);
+    const { user, amount, direction } = props;
+
     return (
         <ul id="fundlist">
             {FUNDS.map(fund => (
-                <FundItem fund={fund} user={user} order={order} amount={amount} />
+                <FundItem fund={fund} user={user} direction={direction} amount={amount} />
             ))}
         </ul>
     );
