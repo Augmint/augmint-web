@@ -6,6 +6,9 @@ const BaseLabel = `
     color: rgba(0,0,0,.6);
     padding: 20px;
     white-space:nowrap;
+    width: 85px;
+    height: 100%;
+    text-align: center;
 `;
 
 export const StyleLabel = styled.label`

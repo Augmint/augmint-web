@@ -270,8 +270,7 @@ class PlaceOrderForm extends React.Component {
                                 marginTop: -10,
                                 marginBottom: 10,
                                 color: "#999",
-                                fontSize: "small",
-                                textAlign: "right"
+                                fontSize: "small"
                             }}
                         >
                             calculated on current rate 1 ETH ={" "}
@@ -306,6 +305,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={pristine}
                             data-testid="submitButton"
                             type="submit"
+                            style={{ width: "100%", height: "50px" }}
                         >
                             {submitting && "Submitting..."}
                             {!submitting &&
