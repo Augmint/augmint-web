@@ -41,7 +41,7 @@ function LockList(props) {
 
             <Segment className="block">
                 <Menu>
-                    <Menu.Item exact to="/lock/new" activeClassName="active">
+                    <Menu.Item data-testid="newLockLink" exact to="/lock/new" activeClassName="active">
                         New lock
                     </Menu.Item>
                     <Menu.Item exact to="/lock" activeClassName="active">

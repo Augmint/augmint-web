@@ -40,7 +40,7 @@ function LoanList(props) {
             </TopNavTitlePortal>
             <Segment className="block">
                 <Menu>
-                    <Menu.Item exact to="/loan/new" activeClassName="active">
+                    <Menu.Item data-testid="newLoanLink" exact to="/loan/new" activeClassName="active">
                         New loan
                     </Menu.Item>
                     <Menu.Item exact to="/loan" activeClassName="active">
