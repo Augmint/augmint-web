@@ -5,7 +5,6 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import lockList from "./lockList";
-import newLock from "./newLock";
 import lockDetails from "./lockDetailsPage";
 
 import { EthereumState } from "containers/app/EthereumState";

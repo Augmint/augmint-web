@@ -182,6 +182,11 @@ class SiteNav extends React.Component {
         if (loans.isLoaded) {
             hasActiveLoan = loans.loans.filter(loan => loan.isRepayable).length;
         }
+        const locks = this.props.locks;
+        let hasActiveLock = false;
+        if (!locks.isLoading) {
+            hasActiveLock = locks.locks.filter(lock => lock.isActive).length;
+        }
 
         return (
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
@@ -229,7 +234,11 @@ class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink">
+                        <SideNavLink
+                            to={hasActiveLock ? "/lock" : "/lock/new"}
+                            activeClassName="active"
+                            data-testid="lockMenuLink"
+                        >
                             <Icon name="lock" />
                             <span>Lock</span>
                         </SideNavLink>
@@ -262,7 +271,8 @@ class SiteNav extends React.Component {
 
 const mapStateToProps = function(state) {
     return {
-        loans: state.loans
+        loans: state.loans,
+        locks: state.locks
     };
 };
 

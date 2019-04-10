@@ -23,6 +23,7 @@ class LockContainer extends React.Component {
         this.defaultProductId = this.defaultProductId.bind(this);
         this.lockTermChange = this.lockTermChange.bind(this);
         this.lockAmountChange = this.lockAmountChange.bind(this);
+        this.reset = this.props.reset;
 
         this.state = {
             initialized: false,
@@ -39,6 +40,11 @@ class LockContainer extends React.Component {
         if (this.props.lockProducts && this.props.lockProducts.length && !this.state.initialized) {
             this.initForm();
         }
+    }
+
+    resetAndInitForm() {
+        this.reset();
+        this.initForm();
     }
 
     initForm() {
@@ -166,7 +172,7 @@ class LockContainer extends React.Component {
 
     render() {
         const { lockManager } = this.props;
-        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
+        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors } = this.props;
         let earnAmount = 0;
         let interest = "";
         let unlockBy = "...";
@@ -185,7 +191,7 @@ class LockContainer extends React.Component {
                     <EthSubmissionSuccessPanel
                         header="New Lock submitted"
                         result={this.state.result}
-                        onDismiss={() => reset()}
+                        onDismiss={() => this.resetAndInitForm()}
                     />
                 )}
 

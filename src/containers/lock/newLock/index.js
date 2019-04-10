@@ -1,10 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Pgrid, Pheader, Psegment } from "components/PageLayout";
+import { Pgrid, Psegment } from "components/PageLayout";
 import LockForm from "../containers/LockForm";
-
-import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 
 export const StyledButtonContainer = styled.div`
     display: flex;
