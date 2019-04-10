@@ -21,6 +21,7 @@ before_script:
   - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
   - yarn start & wait-on http-get://localhost:3000
 script:
+  - yarn test # jest tests
   - yarn cypress:runrecord
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_script: greenkeeper-lockfile-upload

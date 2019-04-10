@@ -14,7 +14,7 @@ export default function LockDetails(props) {
             <Row>
                 <Col>Interest amount:</Col>
                 <Col>
-                    {lock.interestEarned} A-EUR ({(lock.interestRatePa * 100).toFixed(2)} % p.a)
+                    {lock.interestEarned} A-EUR ({lock.interestRatePaPt} % p.a)
                 </Col>
             </Row>
 
