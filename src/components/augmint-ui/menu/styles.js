@@ -22,7 +22,7 @@ export const StyledMenu = styled.div`
         }
     }
 
-    &.withdraw {
+    &.filled {
         border: 0;
         margin-bottom: 10px;
     }
@@ -36,7 +36,7 @@ export const BaseMenuItem = styledComponent => styledComponent`
     line-height: ${remCalc(18)};
     padding: ${remCalc(16)} ${remCalc(25)};
     
-    &.withdraw {
+    &.filled {
       background-color: ${theme.colors.lightGrey};
       width: 50%;
     }
@@ -62,18 +62,18 @@ export const BaseMenuItem = styledComponent => styledComponent`
           border-bottom: 5px solid ${theme.colors.secondary}
           color: ${theme.colors.black};
           
-          &.withdraw {
+          &.filled {
             background-color: ${theme.colors.secondary};
             border-bottom: none;
             margin-bottom: 0;
           }
         }
         
-        &.withdraw:first-of-type {
+        &.filled:first-of-type {
           border-radius: 3px 0 0 3px;
         }
         
-        &.withdraw:last-of-type {
+        &.filled:last-of-type {
           border-radius: 0 3px 3px 0;
         }
     }

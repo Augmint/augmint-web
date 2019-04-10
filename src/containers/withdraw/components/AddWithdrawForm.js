@@ -34,7 +34,6 @@ class AddWithdrawForm extends React.Component {
         this.setState({
             amount: e.target.value
         });
-        console.log(this.state.amount);
     }
 
     onMenuClick(e) {
@@ -52,7 +51,7 @@ class AddWithdrawForm extends React.Component {
     render() {
         const { error, user } = this.props;
 
-        const { orderDirection } = this.state;
+        const { orderDirection, amount } = this.state;
 
         const header = (
             <div style={{ paddingTop: "10px" }}>
@@ -62,7 +61,7 @@ class AddWithdrawForm extends React.Component {
                         data-index={ADDFUND}
                         onClick={this.onMenuClick}
                         data-testid="addFund"
-                        className={"withdraw"}
+                        className={"filled"}
                     >
                         Add Fund
                     </Menu.Item>
@@ -71,7 +70,7 @@ class AddWithdrawForm extends React.Component {
                         data-index={WITHDRAW}
                         onClick={this.onMenuClick}
                         data-testid="withdrawFund"
-                        className={"withdraw"}
+                        className={"filled"}
                     >
                         Withdraw
                     </Menu.Item>
@@ -104,11 +103,11 @@ class AddWithdrawForm extends React.Component {
                             normalize={Normalizations.fiveDecimals}
                             data-testid="eurToAddInput"
                             style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight="EUR"
+                            labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                         />
                         <Styledlabel>Available exchange partners:</Styledlabel>
 
-                        <FundList user={user} order={orderDirection} />
+                        <FundList user={user} amount={amount} order={orderDirection} />
                     </Form>
                 }
             </Pblock>
@@ -116,14 +115,14 @@ class AddWithdrawForm extends React.Component {
     }
 }
 
-const selector = formValueSelector("PlaceOrderForm");
+const selector = formValueSelector("AddWithdrawForm");
 AddWithdrawForm = connect(state => {
     const { ethAmount, tokenAmount, price } = selector(state, "ethAmount", "tokenAmount", "price");
     return { ethAmount, tokenAmount, price }; // to get amounts for orderHelpText in render
 })(AddWithdrawForm);
 
 AddWithdrawForm = reduxForm({
-    form: "PlaceOrderForm",
+    form: "AddWithdrawForm",
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check

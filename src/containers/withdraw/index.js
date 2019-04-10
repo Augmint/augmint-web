@@ -35,9 +35,6 @@ class WithdrawHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <Pblock header="€ &harr; A€ on partner exchange">
-                                    <Header />
-                                </Pblock>
                                 <AddWithdrawForm exchange={exchange} user={userAccount} />
                             </Pgrid.Column>
                         </Pgrid.Row>
