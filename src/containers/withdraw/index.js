@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
+import Header from "components/augmint-ui/header";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
@@ -34,7 +35,7 @@ class WithdrawHome extends React.Component {
     }
 
     render() {
-        const { userAccount, orders, exchange, rates, trades } = this.props;
+        const { userAccount, exchange, rates } = this.props;
 
         return (
             <EthereumState>
@@ -47,6 +48,9 @@ class WithdrawHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
+                                <Pblock header="€ &harr; A€ on partner exchange">
+                                    <Header />
+                                </Pblock>
                                 <AddWithdrawForm exchange={exchange} rates={rates} user={userAccount} />
                             </Pgrid.Column>
                         </Pgrid.Row>
