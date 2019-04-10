@@ -157,11 +157,12 @@ class TokenTransferForm extends React.Component {
                                     data-testid="transferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="A-EUR"
+                                    style={{ marginBottom: "0" }}
                                 />
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||
                                     augmintToken.info.feePt !== 0) && (
-                                    <small style={{ display: "block", marginBottom: 10 }}>
+                                    <small style={{ display: "block", marginBottom: 10, marginTop: "-1rem" }}>
                                         Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
                                         <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
                                     </small>
@@ -169,6 +170,7 @@ class TokenTransferForm extends React.Component {
 
                                 <Field
                                     component={Form.Field}
+                                    className="nolabel"
                                     as={Form.Input}
                                     label="To:"
                                     size="small"
@@ -183,6 +185,7 @@ class TokenTransferForm extends React.Component {
                                 <Field
                                     component={Form.Field}
                                     as={Form.Input}
+                                    className="nolabel"
                                     data-testid="transferNarrativeField"
                                     label="Reference:"
                                     name="narrative"

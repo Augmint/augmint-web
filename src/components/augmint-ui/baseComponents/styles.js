@@ -73,6 +73,9 @@ export const StyledFormField = styled.div`
             color: ${theme.colors.darkRed};
         }
     }
+    & input.nolabel {
+        border-right: 1px solid ${theme.colors.opacGrey};
+    }
 `;
 
 export const StyledStatusBox = styled.div`
