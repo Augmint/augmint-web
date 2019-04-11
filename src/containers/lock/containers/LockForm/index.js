@@ -1,6 +1,7 @@
 import React from "react";
 import store from "modules/store";
 import { connect } from "react-redux";
+import moment from "moment";
 
 import { newLock, LOCKTRANSACTIONS_NEWLOCK_CREATED } from "modules/reducers/lockTransactions";
 
@@ -12,6 +13,7 @@ import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 
 import theme from "styles/theme";
+import "./styles.css";
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -21,6 +23,7 @@ class LockContainer extends React.Component {
         this.defaultProductId = this.defaultProductId.bind(this);
         this.lockTermChange = this.lockTermChange.bind(this);
         this.lockAmountChange = this.lockAmountChange.bind(this);
+        this.reset = this.props.reset;
 
         this.state = {
             initialized: false,
@@ -39,8 +42,12 @@ class LockContainer extends React.Component {
         }
     }
 
+    resetAndInitForm() {
+        this.reset();
+        this.initForm();
+    }
+
     initForm() {
-        console.log("INIT");
         const activeProducts = this.filterActiveProducts();
         const defaultId = this.defaultProductId();
         const selectedProduct = activeProducts.find(product => product.id === defaultId);
@@ -62,7 +69,14 @@ class LockContainer extends React.Component {
     filterActiveProducts() {
         const activeProducts = this.props.lockProducts
             .filter(product => product.isActive)
-            .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs);
+            .sort((p1, p2) => p2.durationInSecs - p1.durationInSecs)
+            .map(product => {
+                const end = moment()
+                    .add(product.durationInDays, "days")
+                    .format("D MMM YYYY HH:mm");
+                product.unlockByDatestring = end;
+                return product;
+            });
 
         this.setState({
             activeProducts: activeProducts
@@ -112,6 +126,7 @@ class LockContainer extends React.Component {
         });
     }
 
+    // todo refact
     lockAmountValidation(value, allValues) {
         const productId = allValues.productId || this.defaultProductId();
         const minValue = this.props.lockProducts[productId].minimumLockAmount;
@@ -119,9 +134,9 @@ class LockContainer extends React.Component {
         const val = parseFloat(value);
 
         if (val < minValue) {
-            return `Minimum lockable amount is ${minValue} A-EUR for selected product`;
+            return `Minimum lockable amount is ${minValue} A-EUR for selected lock term`;
         } else if (val > maxValue) {
-            return `Currently maximum ${maxValue} A-EUR is available for lock with selected product`;
+            return `Currently maximum ${maxValue} A-EUR is available for lock with selected lock term`;
         } else {
             return undefined;
         }
@@ -157,24 +172,26 @@ class LockContainer extends React.Component {
 
     render() {
         const { lockManager } = this.props;
-        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors, reset } = this.props;
+        const { error, handleSubmit, pristine, submitting, submitSucceeded, clearSubmitErrors } = this.props;
         let earnAmount = 0;
         let interest = "";
+        let unlockBy = "...";
 
         if (this.state.lockAmount && this.state.selectedProductId && this.state.activeProducts.length) {
             earnAmount = this.earnAmount();
         }
         if (this.state.selectedProduct) {
             interest = this.state.selectedProduct.interestRatePaPt;
+            unlockBy = this.state.selectedProduct.unlockByDatestring;
         }
 
         return (
-            <Pblock loading={lockManager.isLoading && !this.state.initialize}>
+            <Pblock id="lock-form" loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="New Lock submitted"
                         result={this.state.result}
-                        onDismiss={() => reset()}
+                        onDismiss={() => this.resetAndInitForm()}
                     />
                 )}
 
@@ -215,7 +232,7 @@ class LockContainer extends React.Component {
                             component={Form.Field}
                             disabled={submitting || !lockManager.isLoaded}
                             onChange={this.lockTermChange}
-                            info={`Unlock by..todo`}
+                            info={`Unlock by ${unlockBy}`}
                             className="field-big"
                             isSelect="true"
                             selectOptions={this.state.activeProducts || []}
@@ -244,7 +261,7 @@ class LockContainer extends React.Component {
                                 <p style={{ margin: "0", fontSize: "14px" }}>You earn</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", color: theme.colors.secondaryDark }}>
+                                <p style={{ margin: "0", color: theme.colors.secondary }}>
                                     <strong>{interest + "%"}</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>

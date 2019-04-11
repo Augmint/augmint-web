@@ -44,29 +44,29 @@ export default class Balance extends React.Component {
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
         return (
-            <Pblock style={{ textAlign: "center" }}>
-                <div>
+            <Pblock className="balance">
+                <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
                         {userAccount.tokenBalance}
                         <span className="currency"> A€</span>
                     </TokenBalance>
                 </div>
-                <Pgrid.Row>
-                    <Pgrid.Column size={1 / 2}>
+                <Pgrid.Row style={{ textAlign: "center" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem" }}>
                         <Label>My total loans</Label>
                         <TokenAmount>
                             {loansAmount} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 2}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem" }}>
                         <Label>My total locks</Label>
                         <TokenAmount>
                             {locksAmount} <span className="currency">A€</span>
                         </TokenAmount>
                     </Pgrid.Column>
                 </Pgrid.Row>
-                <EthAmount>
+                <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
                     <div>{userAccount.ethBalance} ETH</div>
                 </EthAmount>
