@@ -144,6 +144,7 @@ class TokenTransferForm extends React.Component {
                                     inputmode="numeric"
                                     step="any"
                                     min="0"
+                                    label="Amount ..."
                                     name="tokenAmount"
                                     placeholder="Amount"
                                     onChange={this.onTokenAmountChange}
@@ -162,7 +163,15 @@ class TokenTransferForm extends React.Component {
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||
                                     augmintToken.info.feePt !== 0) && (
-                                    <small style={{ display: "block", marginBottom: 10, marginTop: "-1rem" }}>
+                                    <small
+                                        style={{
+                                            display: "block",
+                                            marginBottom: "1rem",
+                                            marginTop: "-14px",
+                                            color: "#999",
+                                            fontSize: "12px"
+                                        }}
+                                    >
                                         Fee: <span data-testid="transferFeeAmount">{this.state.feeAmount}</span> A€{" "}
                                         <TransferFeeToolTip augmintTokenInfo={augmintToken.info} />
                                     </small>
@@ -172,7 +181,7 @@ class TokenTransferForm extends React.Component {
                                     component={Form.Field}
                                     className="nolabel"
                                     as={Form.Input}
-                                    label="To:"
+                                    label="To ..."
                                     size="small"
                                     data-testid="transferToAddressField"
                                     name="payee"
@@ -182,21 +191,25 @@ class TokenTransferForm extends React.Component {
                                     placeholder="0x0..."
                                     disabled={submitting || !augmintToken.isLoaded}
                                 />
-                                <Field
-                                    component={Form.Field}
-                                    as={Form.Input}
-                                    className="nolabel"
-                                    data-testid="transferNarrativeField"
-                                    label="Reference:"
-                                    name="narrative"
-                                    type={isFunctional ? "hidden" : "text"}
-                                    placeholder="short narrative (optional)"
-                                    disabled={submitting || !augmintToken.isLoaded}
-                                />
+
+                                <div style={{ marginTop: "1rem" }}>
+                                    <Field
+                                        component={Form.Field}
+                                        as={Form.Input}
+                                        className="nolabel"
+                                        data-testid="transferNarrativeField"
+                                        label="Reference ..."
+                                        name="narrative"
+                                        type={isFunctional ? "hidden" : "text"}
+                                        placeholder="short narrative (optional)"
+                                        disabled={submitting || !augmintToken.isLoaded}
+                                    />
+                                </div>
                             </div>
                         )}
                         <Button
                             type="submit"
+                            style={{ width: "100%", height: 50, marginTop: "1rem" }}
                             loading={submitting}
                             disabled={!isFunctional && pristine}
                             data-testid="submitTransferButton"

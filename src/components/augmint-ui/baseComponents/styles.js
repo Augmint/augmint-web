@@ -53,8 +53,7 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledLabel = styled.label`
-    font-size: ${remCalc(16)};
-    font-weight: 700;
+    font-size: 14px;
     line-height: ${remCalc(20)};
 `;
 
