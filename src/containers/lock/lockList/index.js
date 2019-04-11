@@ -54,7 +54,7 @@ function LockList(props) {
 
                 <div className={isLoading ? "loading" : ""}>
                     {error && <ErrorPanel header="Error while fetching lock list">{error.message}</ErrorPanel>}
-                    {listItems && listItems.length === 0 ? (
+                    {listItems && listItems.length === 0 && !isNewLock ? (
                         <NoItems title={isActivePage ? "You have no active locks." : "You have no old locks."}>
                             <div style={{ margin: "30px 0" }}>
                                 <p>

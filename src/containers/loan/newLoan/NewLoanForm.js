@@ -66,8 +66,11 @@ class NewLoanForm extends React.Component {
             loanTokenAmount: initialValues.loanTokenAmount,
             productId: this.activeProducts[0].id
         });
-        this.setState({ repaymentAmount: initialValues.repaymentAmount });
-        this.setState({ initialized: true });
+        this.setState({
+            repaymentAmount: initialValues.repaymentAmount,
+            initialized: true,
+            productId: this.activeProducts[0].id
+        });
     }
 
     componentDidMount() {
@@ -211,6 +214,8 @@ class NewLoanForm extends React.Component {
         const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
         const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
 
+        let init = this.state.initialized;
+
         return (
             <div>
                 {error && (
@@ -312,18 +317,20 @@ class NewLoanForm extends React.Component {
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column style={{ marginBottom: "10px" }}>
                                     <label>Repay loan after...</label>
-                                    <Field
-                                        component={Form.Field}
-                                        name="productId"
-                                        disabled={submitting || !loanManager.isLoaded}
-                                        onChange={this.onSelectedLoanChange}
-                                        data-testid={"selectedLoanProduct-" + this.activeProducts[0].id}
-                                        info={`Repay by ${repayBefore}`}
-                                        className="field-big"
-                                        isSelect="true"
-                                        selectOptions={this.activeProducts}
-                                        id={"selectedLoanProduct-" + this.activeProducts[0].id}
-                                    />
+                                    {this.state.productId && (
+                                        <Field
+                                            component={Form.Field}
+                                            name="productId"
+                                            disabled={submitting || !loanManager.isLoaded}
+                                            onChange={this.onSelectedLoanChange}
+                                            data-testid={"label-selectedLoanProduct-" + this.state.productId}
+                                            info={`Repay by ${repayBefore}`}
+                                            className="field-big"
+                                            isSelect="true"
+                                            selectOptions={this.activeProducts}
+                                            id={"selectedLoanProduct-" + this.state.productId}
+                                        />
+                                    )}
                                 </Pgrid.Column>
                             </Pgrid.Row>
                         </Pgrid>

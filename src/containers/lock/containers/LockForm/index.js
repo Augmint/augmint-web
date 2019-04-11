@@ -238,6 +238,7 @@ class LockContainer extends React.Component {
                             selectOptions={this.state.activeProducts || []}
                             id="selectedLockProduct"
                             name="lockTerms"
+                            data-testid={`selectLockProduct-${this.state.selectedProductId}`}
                         />
 
                         <div
