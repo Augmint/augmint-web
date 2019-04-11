@@ -214,7 +214,13 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                             <Icon name="exchange" />
-                            <span>Buy/Sell</span>
+                            <span>Crypto exchange</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi>
+                        <SideNavLink to="/funding" activeClassName="active" data-testid="fundingMenuLink">
+                            <Icon name="reserves" />
+                            <span>Funding</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
@@ -245,7 +251,7 @@ class SiteNav extends React.Component {
                     </SideNavLi>
                     <SideNavLi>
                         <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
-                            <Icon name="reserves" />
+                            <Icon name="balance-scale" />
                             <span>Stability</span>
                         </SideNavLink>
                     </SideNavLi>

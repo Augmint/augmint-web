@@ -22,6 +22,7 @@ import TransferPage from "containers/transfer";
 import CreateTransferRequest from "containers/transfer/request/CreateTransferRequest";
 import ShowTransferRequest from "containers/transfer/request/ShowTransferRequest";
 import ExchangeHome from "containers/exchange";
+import FundingHome from "containers/funding";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
 import Concept from "containers/home/concept";
@@ -180,6 +181,7 @@ class App extends React.Component {
                 "account",
                 "transfer",
                 "exchange",
+                "funding",
                 "loan",
                 "stability",
                 "lock",
@@ -247,6 +249,7 @@ class App extends React.Component {
                         <Route exact path="/transfer/request" component={CreateTransferRequest} />
                         <Route exact path="/transfer/:requestId" component={ShowTransferRequest} />
                         <Route exact path="/exchange" component={ExchangeHome} />
+                        <Route exact path="/funding" component={FundingHome} />
                         <Route exact path="/stability" component={AugmintToken} />
                         <Route exact path="/how-to-get" component={HowToGet} />
                         <Route path="/loan" component={LoanMain} />

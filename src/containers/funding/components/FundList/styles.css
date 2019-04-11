@@ -1,0 +1,53 @@
+#fundlist {
+    list-style: none;
+    padding: 0;
+}
+
+.fund-item {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+.fund-item .img-wrapper {
+    width: 70px;
+}
+
+.fund-item h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 40px 20px;
+}
+
+.fund-item img {
+    width: 100%;
+}
+
+.fund-features {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.fund-features li {
+    position: relative;
+}
+
+.fund-features li::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: -20px;
+    width: 8px;
+    height: 8px;
+    background: url("../../../../assets/images/bullet-point.svg") center / contain no-repeat transparent;
+}
+
+.goToFund {
+    width: 100%;
+    padding: 10px 40px;
+    text-align: center;
+    color: #fff;
+    background-color: #051d2d;
+    border-radius: 3px;
+}
