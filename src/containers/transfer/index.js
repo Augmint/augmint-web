@@ -27,7 +27,7 @@ class TransferPage extends React.Component {
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid className="transfer">
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <Pblock
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
