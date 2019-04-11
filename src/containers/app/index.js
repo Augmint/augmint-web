@@ -9,7 +9,7 @@ import "styles/global";
 
 import React from "react";
 import { connect } from "react-redux";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import ReactGA from "react-ga";
 import store from "modules/store";
 import { createGlobalStyle } from "styled-components";
@@ -190,8 +190,21 @@ class App extends React.Component {
                 "how-to-get",
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
+
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
+                {/*
+                    REDIRECT urls with trailing slash to non trailing slash pathname
+                */
+                this.props.location.pathname.length > 1 &&
+                    this.props.location.pathname.charAt(this.props.location.pathname.length - 1) === "/" && (
+                        <Redirect
+                            strict
+                            exact
+                            from={this.props.location.pathname}
+                            to={this.props.location.pathname.substr(0, this.props.location.pathname.length - 1)}
+                        />
+                    )}
                 <ScrollToTop />
                 {showConnection && <DisclaimerModal />}
                 <TopNav
@@ -217,7 +230,6 @@ class App extends React.Component {
                         toggleNotificationPanel={this.toggleNotificationPanel}
                     />
                 )}
-
                 <div className={showConnection ? "Site-content App-content" : "Site-content"}>
                     {showConnection && (
                         <NotificationPanel
