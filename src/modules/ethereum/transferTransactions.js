@@ -45,17 +45,23 @@ export function getMaxTransfer(amount) {
 export async function transferEthTx(payload) {
     const { payee, ethAmount } = payload;
 
-    const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS;
+    const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS; // TODO MAYBE change to & check ETH_GAS?
     const userAccount = store.getState().web3Connect.userAccount;
-    const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
+    const web3 = store.getState().web3Connect.web3Instance;
 
     // const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
-    const amount = ethAmount;
+    const amount = ethAmount.toString(); // TODO check if it's good
+
+    console.log("amount: ", amount);
+
+    const weiAmount = web3.utils.toWei(amount); // TODO check if amount is in good form
 
     const txName = "ETH transfer";
-    const tx = augmintToken.methods.transfer(payee, amount).send({
+    const tx = web3.eth.sendTransaction({
+        // TODO check web3.eth.sendTransaction({
         from: userAccount,
-        gas: gasEstimate
+        to: payee, // TODO check if this is right
+        value: weiAmount
     });
 
     const transactionHash = await processTx(tx, txName, gasEstimate, null, payload);

@@ -13,18 +13,10 @@ class TransferPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // payeeEthBalance: 0, // nem biztos h kell, lehet elég az address: csak akkor van ha kell kuldeni?
             payeeEthAddress: ""
         };
         this.setPayeeAddress = this.setPayeeAddress.bind(this);
-        // this.setEthBalance = this.setEthBalance.bind(this);
     }
-
-    // setEthBalance(payeeEthBalance) {
-    //     this.setState({
-    //         payeeEthBalance
-    //     });
-    // }
 
     setPayeeAddress(payeeEthAddress) {
         this.setState({
