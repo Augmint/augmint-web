@@ -75,6 +75,10 @@ export const BaseMenuItem = styledComponent => styledComponent`
           }
         }
         
+        &.filled {
+            padding: 20px 10px;
+        }
+        
         &.filled:first-of-type {
           border-radius: 4px 0 0 4px;
         }

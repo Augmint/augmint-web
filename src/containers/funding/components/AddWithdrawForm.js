@@ -16,7 +16,7 @@ import theme from "styles/theme";
 import styled from "styled-components";
 
 export const WITHDRAW = "withdraw";
-export const ADDFUND = "addFund";
+export const ADDFUND = "addFunds";
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -59,7 +59,7 @@ class AddWithdrawForm extends React.Component {
                 <Menu className={"filled"}>
                     <Menu.Item
                         active={orderDirection === ADDFUND}
-                        data-index={ADDFUND}
+                        data-index={`${ADDFUND}-tab`}
                         onClick={this.onMenuClick}
                         data-testid="addFund"
                         className={"filled"}
@@ -68,7 +68,7 @@ class AddWithdrawForm extends React.Component {
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === WITHDRAW}
-                        data-index={WITHDRAW}
+                        data-index={`${WITHDRAW}-tab`}
                         onClick={this.onMenuClick}
                         data-testid="withdrawFund"
                         className={"filled"}
@@ -85,10 +85,13 @@ class AddWithdrawForm extends React.Component {
                 <Form error={error ? "true" : "false"}>
                     <EthSubmissionErrorPanel error={error} />
 
+                    <Styledlabel data-testid={`%{orderDirection}Label`}>
+                        {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
+                    </Styledlabel>
+
                     <Field
                         name="eurToAdd"
                         component={Form.Field}
-                        label={orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
                         as={Form.Input}
                         type="number"
                         inputmode="numeric"
@@ -100,9 +103,9 @@ class AddWithdrawForm extends React.Component {
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                     />
-                    <Styledlabel style={{ marginTop: "1rem" }}>Available exchange partners:</Styledlabel>
+                    <Styledlabel>Available exchange partners:</Styledlabel>
 
-                    <FundList style={{ marginTop: 0 }} user={user} amount={amount} direction={orderDirection} />
+                    <FundList user={user} amount={amount} direction={orderDirection} />
 
                     <p style={{ fontSize: "14px" }}>
                         Interested in becoming an Augmint exchange partner? <Link to="contact">Contact us.</Link>

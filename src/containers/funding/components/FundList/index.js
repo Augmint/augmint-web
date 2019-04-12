@@ -21,7 +21,7 @@ const FundItem = props => {
                             <img src={image} />
                         </div>
                     )}
-                    <Pgrid style={{ paddingTop: "25px" }}>
+                    <Pgrid style={{ paddingTop: "25px", width: "calc(100% - 70px)" }}>
                         <h3>{name}</h3>
                         <ul className="fund-features">
                             {features.map(feat => (
