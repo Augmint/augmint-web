@@ -20,19 +20,23 @@ import {
 } from "components/Icons";
 
 import petrovics from "assets/images/team/ppetrovics.jpg";
-import bdebreczeni from "assets/images/team/bdebreczeni.jpg";
 import kszabo from "assets/images/team/kszabo.jpg";
-import bjackson from "assets/images/team/bjackson.jpg";
-import emarton from "assets/images/team/emarton.jpg";
-import lheves from "assets/images/team/lheves.jpg";
+
+// team
+import bdebreczeni from "assets/images/team/bdebreczeni.jpg";
 import vszathmary from "assets/images/team/vszathmary.jpg";
+import aridovics from "assets/images/team/aridovics.jpg";
+
+// contributors
+import emarton from "assets/images/team/emarton.jpg";
+import bjackson from "assets/images/team/bjackson.jpg";
 import thume from "assets/images/team/thume.jpg";
+import lheves from "assets/images/team/lheves.jpg";
 import vkontra from "assets/images/team/vkontra.jpg";
 import gycsado from "assets/images/team/gycsado.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
 import dkovacs from "assets/images/team/dkovacs.jpg";
-import aridovics from "assets/images/team/aridovics.jpg";
 
 import decentlabs from "assets/images/decentlabs.png";
 
@@ -209,18 +213,8 @@ export const founders = [
 
 export const teamMembers = [
     {
-        pk: "team-3",
-        firstName: "Marton",
-        lastName: "Elek",
-        imgSrc: emarton,
-        title: "Marketing, PR strategy",
-        linkedinUrl: "https://www.linkedin.com/in/marton-elek",
-        description:
-            "Network building specialist with creative marketing and PR strategy skills. 25 years startup building experience with focus on UX  and conscious branding"
-    },
-    {
         pk: "team-4",
-        firstName: "Barnabas",
+        firstName: "Barnabás",
         lastName: "Debreczeni",
         imgSrc: bdebreczeni,
         title: "Cryptocurrency specialist, Shinrai founder",
@@ -238,6 +232,29 @@ export const teamMembers = [
         githubUrl: "https://github.com/phraktle",
         description:
             "Software developer, entrepreneur, angel investor. Founder of decent.org, a non-profit organization researching and promoting decentralized technologies. 20 years of experience in building startups."
+    },
+    {
+        pk: "team-14",
+        firstName: "Ádám",
+        lastName: "Ridovics",
+        imgSrc: aridovics,
+        title: "Frontend developer, designer",
+        linkedinUrl: "https://www.linkedin.com/in/adamridovics/",
+        description:
+            "Frontend developer, creative & designer with years of experience in visual communication, ui, ux & product design and building & managing products/startups from the ground up."
+    }
+];
+
+export const contributors = [
+    {
+        pk: "team-3",
+        firstName: "Márton",
+        lastName: "Elek",
+        imgSrc: emarton,
+        title: "Marketing, PR strategy",
+        linkedinUrl: "https://www.linkedin.com/in/marton-elek",
+        description:
+            "Network building specialist with creative marketing and PR strategy skills. 25 years startup building experience with focus on UX  and conscious branding"
     },
     {
         pk: "team-6",
@@ -263,7 +280,7 @@ export const teamMembers = [
     },
     {
         pk: "team-8",
-        firstName: "Laszlo",
+        firstName: "László",
         lastName: "Heves",
         imgSrc: lheves,
         title: "Frontend, UX developer",
@@ -283,8 +300,8 @@ export const teamMembers = [
     },
     {
         pk: "team-10",
-        firstName: "Gyorgy",
-        lastName: "Csado",
+        firstName: "György",
+        lastName: "Csadó",
         imgSrc: gycsado,
         title: "Frontend developer",
         linkedinUrl: "https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb",
@@ -294,7 +311,7 @@ export const teamMembers = [
     },
     {
         pk: "team-11",
-        firstName: "Tamas",
+        firstName: "Tamás",
         lastName: "Nadrai",
         imgSrc: tnadrai,
         title: "Full stack developer",
@@ -305,7 +322,7 @@ export const teamMembers = [
     },
     {
         pk: "team-12",
-        firstName: "Peter",
+        firstName: "Péter",
         lastName: "Kolcza",
         imgSrc: pkolcza,
         title: "IT consultant, backend developer",
@@ -315,23 +332,13 @@ export const teamMembers = [
     },
     {
         pk: "team-13",
-        firstName: "David",
-        lastName: "Kovacs",
+        firstName: "Dávid",
+        lastName: "Kovács",
         imgSrc: dkovacs,
         title: "Project management",
         linkedinUrl: "https://www.linkedin.com/in/kovacsd/",
         description:
             "David’s background is in Project Management - he has lived in several countries, having most recently spent 2 years in San Francisco in the tech startup scene. Outside of work, he is a triathlete and ultra runner."
-    },
-    {
-        pk: "team-14",
-        firstName: "Adam",
-        lastName: "Ridovics",
-        imgSrc: aridovics,
-        title: "Frontend developer, designer",
-        linkedinUrl: "https://www.linkedin.com/in/adamridovics/",
-        description:
-            "Frontend developer, creative & designer with years of experience in visual communication, ui, ux & product design and building & managing products/startups from the ground up."
     }
 ];
 

@@ -9,7 +9,7 @@ import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, contributors, partners } from "./helpers.js";
 import { Member } from "./member.js";
 
 import { theme } from "styles/media";
@@ -272,6 +272,31 @@ export default class NotConnectedHome extends React.Component {
                             <Grid className="grid">
                                 {teamMembers.map(member => (
                                     <Member member={member} key={member.pk} />
+                                ))}
+                            </Grid>
+                        </ThemeProvider>
+
+                        <Header as="h4">Contributors</Header>
+                        <ThemeProvider theme={theme}>
+                            <Grid className="grid">
+                                {contributors.map(e => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={e.pk}
+                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <img
+                                            src={e.imgSrc}
+                                            style={{ width: "60px", height: "60px", marginBottom: "30px" }}
+                                            alt={e.pk}
+                                        />
+                                        <strong>
+                                            {e.firstName} {e.lastName}
+                                        </strong>
+                                        <br />
+                                        <small>{e.title}</small>
+                                    </Grid.Unit>
                                 ))}
                             </Grid>
                         </ThemeProvider>
