@@ -281,6 +281,17 @@ export const teamMembers = [
         description: "Finance professional with 5+ years of experience in valuation, financial modeling and analysis."
     },
     {
+        pk: "team-10",
+        firstName: "Gyorgy",
+        lastName: "Csado",
+        imgSrc: gycsado,
+        title: "Frontend developer",
+        linkedinUrl: "https://www.linkedin.com/in/gy%C3%B6rgy-csad%C3%B3-771739bb",
+        githubUrl: "https://github.com/gyurka00",
+        description:
+            "Gyurka is experienced making sites work as good as they look. He works on Augmint<a href='https://euedge.com' target='_blank'> from EU Edge.</a>"
+    },
+    {
         pk: "team-11",
         firstName: "Tamas",
         lastName: "Nadrai",
