@@ -28,6 +28,7 @@ import lheves from "assets/images/team/lheves.jpg";
 import vszathmary from "assets/images/team/vszathmary.jpg";
 import thume from "assets/images/team/thume.jpg";
 import vkontra from "assets/images/team/vkontra.jpg";
+import gycsado from "assets/images/team/gycsado.jpg";
 import tnadrai from "assets/images/team/tnadrai.jpg";
 import pkolcza from "assets/images/team/pkolcza.jpg";
 import dkovacs from "assets/images/team/dkovacs.jpg";
