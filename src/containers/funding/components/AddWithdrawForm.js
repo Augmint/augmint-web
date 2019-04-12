@@ -16,7 +16,7 @@ import theme from "styles/theme";
 import styled from "styled-components";
 
 export const WITHDRAW = "withdraw";
-export const ADDFUND = "addFund";
+export const ADDFUND = "addFunds";
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -59,7 +59,7 @@ class AddWithdrawForm extends React.Component {
                 <Menu className={"filled"}>
                     <Menu.Item
                         active={orderDirection === ADDFUND}
-                        data-index={ADDFUND}
+                        data-index={`${ADDFUND}-tab`}
                         onClick={this.onMenuClick}
                         data-testid="addFund"
                         className={"filled"}
@@ -68,7 +68,7 @@ class AddWithdrawForm extends React.Component {
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === WITHDRAW}
-                        data-index={WITHDRAW}
+                        data-index={`${WITHDRAW}-tab`}
                         onClick={this.onMenuClick}
                         data-testid="withdrawFund"
                         className={"filled"}
@@ -81,40 +81,36 @@ class AddWithdrawForm extends React.Component {
 
         return (
             <Pblock>
-                <ConnectionStatus contract={this.props.exchange} />
                 {header}
+                <Form error={error ? "true" : "false"}>
+                    <EthSubmissionErrorPanel error={error} />
 
-                {
-                    <Form error={error ? "true" : "false"}>
-                        <EthSubmissionErrorPanel error={error} />
+                    <Styledlabel data-testid={`%{orderDirection}Label`}>
+                        {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
+                    </Styledlabel>
 
-                        <Styledlabel>
-                            {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
-                        </Styledlabel>
+                    <Field
+                        name="eurToAdd"
+                        component={Form.Field}
+                        as={Form.Input}
+                        type="number"
+                        inputmode="numeric"
+                        step="any"
+                        min="0"
+                        onChange={this.onPriceChange}
+                        normalize={Normalizations.fiveDecimals}
+                        data-testid="fundingInput"
+                        style={{ borderRadius: theme.borderRadius.left }}
+                        labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
+                    />
+                    <Styledlabel>Available exchange partners:</Styledlabel>
 
-                        <Field
-                            name="eurToAdd"
-                            component={Form.Field}
-                            as={Form.Input}
-                            type="number"
-                            inputmode="numeric"
-                            step="any"
-                            min="0"
-                            onChange={this.onPriceChange}
-                            normalize={Normalizations.fiveDecimals}
-                            data-testid="fundingInput"
-                            style={{ borderRadius: theme.borderRadius.left }}
-                            labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
-                        />
-                        <Styledlabel>Available exchange partners:</Styledlabel>
+                    <FundList user={user} amount={amount} direction={orderDirection} />
 
-                        <FundList user={user} amount={amount} direction={orderDirection} />
-
-                        <p style={{ fontSize: "14px" }}>
-                            Interested in becoming an Augmint exchange partner? <Link to="contact">Contact us.</Link>
-                        </p>
-                    </Form>
-                }
+                    <p style={{ fontSize: "14px" }}>
+                        Interested in becoming an Augmint exchange partner? <Link to="contact">Contact us.</Link>
+                    </p>
+                </Form>
             </Pblock>
         );
     }

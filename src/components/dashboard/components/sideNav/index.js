@@ -101,7 +101,7 @@ export const SideNavLi = styled.li`
     margin-bottom: 10px;
     width: 100%;
     ${breakpoint`
-        max-width: 150px;
+        max-width: 230px;
         margin: auto;
         text-align: left;
     `};
