@@ -283,7 +283,7 @@ export default class NotConnectedHome extends React.Component {
                                         className="column"
                                         size={{ tablet: 1, desktop: 5 / 16 }}
                                         key={e.pk}
-                                        style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
+                                        style={{ padding: 40, paddingBottom: 0, textAlign: "left" }}
                                     >
                                         <img
                                             src={e.imgSrc}
