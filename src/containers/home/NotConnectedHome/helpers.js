@@ -25,7 +25,7 @@ import kszabo from "assets/images/team/kszabo.jpg";
 import bjackson from "assets/images/team/bjackson.jpg";
 import emarton from "assets/images/team/emarton.jpg";
 import lheves from "assets/images/team/lheves.jpg";
-import vszatmahry from "assets/images/team/vszatmahry.jpg";
+import vszathmary from "assets/images/team/vszathmary.jpg";
 import thume from "assets/images/team/thume.jpg";
 import vkontra from "assets/images/team/vkontra.jpg";
 import gycsado from "assets/images/team/gycsado.jpg";
@@ -232,8 +232,8 @@ export const teamMembers = [
         pk: "team-5",
         firstName: "Viktor",
         lastName: "Szathmáry",
-        imgSrc: vszatmahry,
-        title: "Blockchain expert / development",
+        imgSrc: vszathmary,
+        title: "Strategic Advisor",
         linkedinUrl: "https://www.linkedin.com/in/phraktle",
         githubUrl: "https://github.com/phraktle",
         description:
