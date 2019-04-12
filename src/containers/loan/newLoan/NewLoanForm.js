@@ -317,17 +317,18 @@ class NewLoanForm extends React.Component {
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column style={{ marginBottom: "10px" }}>
                                     <label>Repay loan after...</label>
-                                    {this.state.productId && (
+                                    {this.state.productId !== null && this.state.productId !== undefined && (
                                         <Field
                                             component={Form.Field}
                                             name="productId"
                                             disabled={submitting || !loanManager.isLoaded}
                                             onChange={this.onSelectedLoanChange}
-                                            data-testid={"label-selectedLoanProduct-" + this.state.productId}
+                                            data-testid="loan-product-selector"
                                             info={`Repay by ${repayBefore}`}
                                             className="field-big"
                                             isSelect="true"
                                             selectOptions={this.activeProducts}
+                                            selectTestId="loan-product"
                                             id={"selectedLoanProduct-" + this.state.productId}
                                         />
                                     )}

@@ -67,7 +67,7 @@ function LockList(props) {
                     )}
                     {!isNewLock && (
                         <div style={{ textAlign: "center" }}>
-                            <Button style={{ marginLeft: "auto" }} to="/lock/new" data-testid="newLockLink">
+                            <Button style={{ marginLeft: "auto" }} to="/lock/new" data-testid="newLockLinkbtn">
                                 Lock A-EUR
                             </Button>
                         </div>

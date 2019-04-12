@@ -144,11 +144,16 @@ export const Normalizations = {
 };
 
 export function Select(props) {
-    function addOptionsToSelect(options) {
+    function addOptionsToSelect(options, testId) {
         let result = [];
         options.forEach(product => {
             result.push(
-                <option key={product.id} value={product.id} id={"selectLoanProduct-" + product.id}>
+                <option
+                    style={{ width: "100%", height: 50 }}
+                    key={product.id}
+                    value={product.id}
+                    data-testid={`${testId}-${product.id}`}
+                >
                     {product.termText || product.durationText}
                 </option>
             );
@@ -156,7 +161,7 @@ export function Select(props) {
         return result;
     }
 
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
 }
 
 export const formField = ({
@@ -171,6 +176,7 @@ export const formField = ({
     info,
     isSelect,
     selectOptions,
+    selectTestId,
     meta: { touched, error, warning },
     ...props
 }) => {
@@ -192,7 +198,9 @@ export const formField = ({
                 )}
                 {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
 
-                {isSelect && <Select {...input} {...props} value={input.value} options={selectOptions} />}
+                {isSelect && (
+                    <Select {...input} {...props} value={input.value} testId={selectTestId} options={selectOptions} />
+                )}
             </StyledContainer>
             {info && <div style={{ fontSize: "12px", color: "gray", display: "block" }}>{info}</div>}
 
