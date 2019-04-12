@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pgrid } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 
 import "./styles.css";
@@ -18,14 +18,14 @@ const FundItem = props => {
                 <Pgrid.Row>
                     {image && (
                         <div className="img-wrapper">
-                            <img src={image} />
+                            <img alt="mr-coin" src={image} />
                         </div>
                     )}
                     <Pgrid style={{ paddingTop: "25px", width: "calc(100% - 70px)" }}>
                         <h3>{name}</h3>
                         <ul className="fund-features">
-                            {features.map(feat => (
-                                <li>{feat}</li>
+                            {features.map((feat, i) => (
+                                <li key={i}>{feat}</li>
                             ))}
                         </ul>
                     </Pgrid>
@@ -51,8 +51,8 @@ export default function FundList(props) {
 
     return (
         <ul id="fundlist" style={{ marginTop: 0 }}>
-            {FUNDS.map(fund => (
-                <FundItem fund={fund} user={user} direction={direction} amount={amount} />
+            {FUNDS.map((fund, i) => (
+                <FundItem key={i} fund={fund} user={user} direction={direction} amount={amount} />
             ))}
         </ul>
     );

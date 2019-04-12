@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pblock, Pgrid, Pheader, Psegment } from "components/PageLayout";
+import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
 import { EthereumState } from "containers/app/EthereumState";
@@ -9,10 +9,6 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 
 class WithdrawHome extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();

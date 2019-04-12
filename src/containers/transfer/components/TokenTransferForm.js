@@ -156,9 +156,8 @@ class TokenTransferForm extends React.Component {
                                     normalize={Normalizations.twoDecimals}
                                     disabled={submitting || !augmintToken.isLoaded}
                                     data-testid="transferAmountInput"
-                                    style={{ borderRadius: theme.borderRadius.left }}
+                                    style={{ borderRadius: theme.borderRadius.left, marginBottom: "0" }}
                                     labelAlignRight="A-EUR"
-                                    style={{ marginBottom: "0" }}
                                 />
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||

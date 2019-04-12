@@ -5,10 +5,9 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "components/augmint-ui/menu";
-import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { Field, formValueSelector, reduxForm } from "redux-form";
-import { Form, Normalizations, Validations } from "components/BaseComponents";
-import { connect } from "react-redux";
+import { EthSubmissionErrorPanel } from "components/MsgPanels";
+import { Field, reduxForm } from "redux-form";
+import { Form, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
 import FundList from "./FundList/index";
 

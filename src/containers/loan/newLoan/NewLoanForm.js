@@ -13,9 +13,6 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pgrid } from "components/PageLayout";
 import Icon from "components/augmint-ui/icon";
-// import RadioInput from "components/augmint-ui/RadioInput";
-// import ToolTip from "components/toolTip";
-// import { LoanProductDetails } from "containers/loan/components/LoanProductDetails";
 
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
@@ -213,8 +210,6 @@ class NewLoanForm extends React.Component {
         const depositInEur = rates.info.ethFiatRate * this.state.ethAmount || 0;
         const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
         const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
-
-        let init = this.state.initialized;
 
         return (
             <div>
