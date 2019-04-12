@@ -20,19 +20,8 @@ import slackIcon from "assets/images/slack-icon.svg";
 export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
-
-        teamMembers.sort(function(a, b) {
-            var nameA = a.lastName.toUpperCase();
-            var nameB = b.lastName.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            // names must be equal
-            return 0;
-        });
+        const byLastName = (a, b) => a.lastName.localeCompare(b.lastName);
+        teamMembers.sort(byLastName);
     }
 
     render() {
