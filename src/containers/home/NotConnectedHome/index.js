@@ -15,7 +15,6 @@ import { Member } from "./member.js";
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
-import slackIcon from "assets/images/slack-icon.svg";
 
 export default class NotConnectedHome extends React.Component {
     constructor() {
@@ -321,16 +320,6 @@ export default class NotConnectedHome extends React.Component {
                                                 dangerouslySetInnerHTML={{ __html: partner.description }}
                                                 style={{ marginBottom: 3 }}
                                             />
-                                        )}
-                                        {partner.slackUrl && (
-                                            <a href={partner.slackUrl} target="_blank" rel="noopener noreferrer">
-                                                <img
-                                                    alt="slack icon"
-                                                    src={slackIcon}
-                                                    style={{ height: 14, marginRight: 10, width: 14 }}
-                                                />
-                                                {partner.slackText || "Join our slack."}
-                                            </a>
                                         )}
                                     </Grid.Unit>
                                 ))}
