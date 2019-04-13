@@ -21,7 +21,9 @@ install:
 before_script:
   - greenkeeper-lockfile-update
   - yarn ganache:start > /dev/null &
-  - yarn start & wait-on http-get://localhost:3000
+  - yarn start &
+  - wait-on http-get://localhost:3000 # webserver
+  - wait-on tcp:localhost:8545 # ganache
 script:
   - yarn test # jest tests
   - yarn cypress:runrecord
