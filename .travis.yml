@@ -18,7 +18,6 @@ install:
     else
       echo Normal build using .yarnrc and --frozen-lockfile option; yarn install --frozen-lockfile;
     fi
-  - cd augmint-contracts && yarn install && cd ..
 before_script:
   - greenkeeper-lockfile-update
   - yarn docker:start
