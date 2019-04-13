@@ -71,7 +71,7 @@ export default () => (
                                 Parameters for the new loans, the use of the reserves for market interventions are
                                 decided by transparent and open governance processes.
                             </p>
-                            <p>A-EUR is the first Augmint token to be implemented. A-EUR will be targeted to EUR.</p>
+                            <p>A-EUR is the first Augmint token implemented. A-EUR is targeted to EUR.</p>
                         </div>
                     </Grid.Unit>
                 </Grid>
