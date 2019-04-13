@@ -4,22 +4,21 @@
 
 These instructions are about the dev environment for frontend development. For contract development see [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
 
-[![Osx setup video](./devenvvideo_thumbnail.png)](https://www.youtube.com/watch?v=agu5LxOcy1c)
-
 ### OSX / Linux
 
 1.  [Git](https://git-scm.com/download)
-1.  [Ethereum CLI](https://www.ethereum.org/cli)
-1.  Install [nodejs](https://nodejs.org/en/download/) - _tested with v10.15.3_
+1.  Install [nodejs](https://nodejs.org/en/download/)  
+    NB: check supported `node` version in [package.json](../package.json)
 
     or install nodejs with [n node version manager](https://github.com/tj/n):
 
     ```
     npm install -g n
-    n 10.15.3
+    n <node version, eg: 10.15.3>
     ```
 
-1.  Install yarn if you don't have it: `npm install -g yarn@1.13.0`
+1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>`  
+    NB: check required `yarn` version in [package.json](../package.json)
 1.  ```
     git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
     cd augmint-web
@@ -36,16 +35,16 @@ _Note: windows install was not tested since a while, update on it is welcome_
 1.  [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
 1.  [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
 1.  [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
-1.  [nodejs](https://nodejs.org/en/download/)
+1.  [nodejs](https://nodejs.org/en/download/) NB: check supported node version in [package.json](../package.json)
 
     or install nodejs with [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases):
 
     ```
-    nvm install 10.15.3
+    nvm install <node version number, eg: 10.15.3>
     nvm use 10.15.3
     ```
 
-1.  Install yarn if you don't have it: `npm install -g yarn@1.13.0`
+1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>` NB: check required yarn version in [package.json](../package.json)
 1.  in Git bash:
     ```
     git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
@@ -58,7 +57,7 @@ _Note: windows install was not tested since a while, update on it is welcome_
 
 ## Launch
 
-### 1. Update to latest augmint-web
+### Update to latest augmint-web
 
 ```
 git pull
@@ -92,19 +91,25 @@ Make sure you don't check in changes in `src/contractsBuild` folder (rather rais
 
 _NB: If you are using Metamask on local chain and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
 
-## UI development
-
-UI is built with [styled-components](https://www.styled-components.com/).
-
 ## Tests
+
+### Jest only
+
+```
+yarn test
+```
 
 ### FrontEnd - E2E
 
-_Note: Frontend tests are experimental and unfinished yet. Also [ganache crashes occasionally](https://github.com/trufflesuite/ganache-cli/issues/453#issuecomment-359954713) so CI is not running it for now_
-
-- Start interactive: `yarn cypress:open`
-- Start command line: `yarn cypress:run`
+- interactive: `yarn cypress:open`
+- command line: `yarn cypress:run`
 
 ## Non ganache launches/deploys
 
 See [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
+
+## Etc.
+
+An outdated video of local dev install:
+
+[![Osx setup video](./devenvvideo_thumbnail.png)](https://www.youtube.com/watch?v=agu5LxOcy1c)
