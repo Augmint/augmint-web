@@ -20,7 +20,7 @@ install:
     fi
 before_script:
   - greenkeeper-lockfile-update
-  - yarn docker:start > /dev/null &
+  - yarn ganache:start > /dev/null &
   - yarn start & wait-on http-get://localhost:3000
 script:
   - yarn test # jest tests

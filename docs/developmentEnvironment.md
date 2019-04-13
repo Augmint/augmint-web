@@ -61,14 +61,14 @@ yarn install # if there were any node package changes in packages.json
 
 ### Start & stop ganache-cli (formerly testrpc) - Optional but required for tests
 
-- `yarn docker:start`
-- `yarn docker:stop`
+- `yarn ganache:start`
+- `yarn ganache:stop`
 
 ### Launch local dev server
 
 `yarn start`
 
-_NB: If you are using Metamask on local chain (docker) and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
+_NB: If you are using Metamask on local chain (e.g. ganache in docker) and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
 
 ## Tests
 
