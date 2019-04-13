@@ -1,5 +1,7 @@
 dist: xenial # https://docs.travis-ci.com/user/reference/xenial/
 language: node_js
+services:
+  - docker
 cache:
   directories:
     - "~/.cache" # based on: https://docs.cypress.io/guides/guides/continuous-integration.html#Travis
@@ -19,14 +21,13 @@ install:
   - cd augmint-contracts && yarn install && cd ..
 before_script:
   - greenkeeper-lockfile-update
-  - yarn ganache:run > ganache.out &
-  - yarn contracts:migrate --reset # Migrations.sol might be deployed to different address than address in checked in json-s
+  - yarn docker:start
   - yarn start & wait-on http-get://localhost:3000
 script:
   - yarn test # jest tests
   - yarn cypress:runrecord
-# discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_script: greenkeeper-lockfile-upload
+# discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_success:
   - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

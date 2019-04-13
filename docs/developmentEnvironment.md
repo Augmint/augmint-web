@@ -19,12 +19,10 @@ These instructions are about the dev environment for frontend development. For c
 
 1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>`  
     NB: check required `yarn` version in [package.json](../package.json)
+1.  [Docker cli](https://hub.docker.com/search/?type=edition&offering=community) - Optional but required for running tests
 1.  ```
-    git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
+    git clone https://github.com/Augmint/augmint-web.git
     cd augmint-web
-    yarn install
-    cd augmint-contracts
-    git checkout master
     yarn install
     ```
 
@@ -32,9 +30,8 @@ These instructions are about the dev environment for frontend development. For c
 
 _Note: windows install was not tested since a while, update on it is welcome_
 
-1.  [Git Bash](https://git-for-windows.github.io/) (required for truffle & yarn start)
+1.  [Git Bash](https://git-for-windows.github.io/)
 1.  [Git](https://git-scm.com/download) (if you haven't installed it as part of Git Bash in previous step)
-1.  [Ethereum CLI](https://www.ethereum.org/cli) - including development tools
 1.  [nodejs](https://nodejs.org/en/download/) NB: check supported node version in [package.json](../package.json)
 
     or install nodejs with [Node Version Manager(NVM)](https://github.com/coreybutler/nvm-windows/releases):
@@ -45,13 +42,11 @@ _Note: windows install was not tested since a while, update on it is welcome_
     ```
 
 1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>` NB: check required yarn version in [package.json](../package.json)
+1.  If you want to run on local test blockchain (eg. for tests) then Install [docker cli](https://hub.docker.com/search/?type=edition&offering=community)
 1.  in Git bash:
     ```
-    git clone https://github.com/Augmint/augmint-web.git --recurse-submodules
+    git clone https://github.com/Augmint/augmint-web.git
     cd augmint-web
-    yarn install
-    cd augmint-contracts
-    git checkout master
     yarn install
     ```
 
@@ -64,32 +59,16 @@ git pull
 yarn install # if there were any node package changes in packages.json
 ```
 
-### 2. Update to latest augmint contract
+### Start & stop ganache-cli (formerly testrpc) - Optional but required for tests
 
-```
-cd augmint-contracts
-git checkout master
-git pull
-yarn install # if there were any node package changes in packages.json
-```
+- `yarn docker:start`
+- `yarn docker:stop`
 
-### 3. Launch
-
-#### 3.1 Start ganache-cli (formerly testrpc)
-
-`yarn contracts:runmigrate`  
-or  
-`yarn ganache:run` and in separate console:  
-`yarn contracts:migrate`
-
-NB: if you have connection error on the UI then likely `src/contractsBuild` is not up to date: restart ganache and run `yarn contracts:migratecopy`  
-Make sure you don't check in changes in `src/contractsBuild` folder (rather raise an issue so we can fix it)
-
-#### 3.2. Launch local dev server
+### Launch local dev server
 
 `yarn start`
 
-_NB: If you are using Metamask on local chain and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
+_NB: If you are using Metamask on local chain (docker) and you restart the local chain then your consecutive transactions will fail with [`Invalid nonce` error](https://github.com/MetaMask/metamask-extension/issues/1999). You will need to [reset your account in Metamask](http://metamask.helpscoutdocs.com/article/36-resetting-an-account)._
 
 ## Tests
 
