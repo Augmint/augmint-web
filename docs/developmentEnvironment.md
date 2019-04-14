@@ -86,9 +86,3 @@ yarn test
 ## Non ganache launches/deploys
 
 See [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
-
-## Etc.
-
-An outdated video of local dev install:
-
-[![Osx setup video](./devenvvideo_thumbnail.png)](https://www.youtube.com/watch?v=agu5LxOcy1c)
