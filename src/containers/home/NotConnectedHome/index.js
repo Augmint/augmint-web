@@ -9,7 +9,7 @@ import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, contributors, partners } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, management, teamMembers, contributors, partners } from "./helpers.js";
 import { Member } from "./member.js";
 
 import { theme } from "styles/media";
@@ -262,7 +262,7 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ marginBottom: 75 }}>
-                                {founders.map(member => (
+                                {management.map(member => (
                                     <Member member={member} key={member.pk} />
                                 ))}
                             </Grid>

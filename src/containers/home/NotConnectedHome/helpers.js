@@ -19,13 +19,18 @@ import {
     PremiumIcon
 } from "components/Icons";
 
+// mgmt
 import petrovics from "assets/images/team/ppetrovics.jpg";
 import kszabo from "assets/images/team/kszabo.jpg";
-
-// team
 import bdebreczeni from "assets/images/team/bdebreczeni.jpg";
 import vszathmary from "assets/images/team/vszathmary.jpg";
+
+// team
 import aridovics from "assets/images/team/aridovics.jpg";
+import ztreer from "assets/images/team/ztreer.jpg";
+import rszaloki from "assets/images/team/rszaloki.jpg";
+import bforrai from "assets/images/team/bforrai.jpg";
+import jero from "assets/images/team/jero.jpg";
 
 // contributors
 import emarton from "assets/images/team/emarton.jpg";
@@ -187,43 +192,30 @@ export const howItWorks = [
     }
 ];
 
-export const founders = [
+export const management = [
     {
-        pk: "team-1",
+        pk: "petrovics",
         firstName: "Peter",
         lastName: "Petrovics",
         imgSrc: petrovics,
-        title: "Co-Founder, technologist",
+        title: "Co-founder, technologist",
         linkedinUrl: "https://www.linkedin.com/in/petrovics",
         githubUrl: "https://github.com/szerintedmi",
         description:
             "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook."
     },
     {
-        pk: "team-2",
+        pk: "kszabo",
         firstName: "Karoly",
         lastName: "Szabo",
         imgSrc: kszabo,
-        title: "Co-Founder, economist",
+        title: "Co-founder, economist",
         githubUrl: "https://github.com/krosza",
         description:
             "Károly is an entrepreneur with 30+ years management and financial experience. He managed and set up government agencies and business companies, supervised IT development projects. He worked a decade as a managing director of one of the largest Hungarian banks."
-    }
-];
-
-export const teamMembers = [
-    {
-        pk: "team-4",
-        firstName: "Barnabás",
-        lastName: "Debreczeni",
-        imgSrc: bdebreczeni,
-        title: "Cryptocurrency specialist, Shinrai founder",
-        linkedinUrl: "https://www.linkedin.com/in/bdebreczeni",
-        description:
-            "Pioneer of decentralised cryptocurrencies, active member of blockchain community, officer of the Hungarian Blockchain Society and organizer of blockchain meetups."
     },
     {
-        pk: "team-5",
+        pk: "vszathmary",
         firstName: "Viktor",
         lastName: "Szathmáry",
         imgSrc: vszathmary,
@@ -234,7 +226,20 @@ export const teamMembers = [
             "Software developer, entrepreneur, angel investor. Founder of decent.org, a non-profit organization researching and promoting decentralized technologies. 20 years of experience in building startups."
     },
     {
-        pk: "team-14",
+        pk: "bdebreczeni",
+        firstName: "Barnabás",
+        lastName: "Debreczeni",
+        imgSrc: bdebreczeni,
+        title: "Cryptocurrency specialist, Shinrai founder",
+        linkedinUrl: "https://www.linkedin.com/in/bdebreczeni",
+        description:
+            "Pioneer of decentralised cryptocurrencies, active member of blockchain community, officer of the Hungarian Blockchain Society and organizer of blockchain meetups."
+    }
+];
+
+export const teamMembers = [
+    {
+        pk: "aridovics",
         firstName: "Ádám",
         lastName: "Ridovics",
         imgSrc: aridovics,
@@ -242,6 +247,41 @@ export const teamMembers = [
         linkedinUrl: "https://www.linkedin.com/in/adamridovics/",
         description:
             "Frontend developer, creative & designer with years of experience in visual communication, ui, ux & product design and building & managing products/startups from the ground up."
+    },
+    {
+        pk: "ztreer",
+        firstName: "Zoltán",
+        lastName: "Treer",
+        imgSrc: ztreer,
+        title: "Blockchain developer",
+        description: ""
+    },
+    {
+        pk: "rszaloki",
+        firstName: "Róbert",
+        lastName: "Szalóki",
+        imgSrc: rszaloki,
+        title: "Frontend developer",
+        linkedinUrl: "https://www.linkedin.com/in/robertszaloki/",
+        description: ""
+    },
+    {
+        pk: "bforrai",
+        firstName: "Brigitta",
+        lastName: "Forrai",
+        imgSrc: bforrai,
+        title: "Frontend developer, designer",
+        linkedinUrl: "https://www.linkedin.com/in/brigitta-forrai-6639b152/",
+        description: ""
+    },
+    {
+        pk: "jero",
+        firstName: "Júlia",
+        lastName: "Erő",
+        imgSrc: jero,
+        title: "Frontend developer",
+        linkedinUrl: "https://www.linkedin.com/in//",
+        description: ""
     }
 ];
 
