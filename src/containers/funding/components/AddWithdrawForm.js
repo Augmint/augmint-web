@@ -7,13 +7,16 @@ import { connect } from "react-redux";
 
 import { Menu } from "components/augmint-ui/menu";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
+import Button from "components/augmint-ui/button";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import { Pblock } from "components/PageLayout";
+import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
 
 import theme from "styles/theme";
 import styled from "styled-components";
+
+import { FUNDS } from "./FundList/funds.js";
 
 export const WITHDRAW = "withdraw";
 export const ADDFUND = "addFunds";
@@ -105,6 +108,11 @@ class AddWithdrawForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const linkToGo =
+            orderDirection === ADDFUND
+                ? `${FUNDS[0].buyUrl}${user.address}&amount=${amount}`
+                : `${FUNDS[0].sellUrl}${user.address}&amount=${amount}`;
+
         const header = (
             <div style={{ marginBottom: "2rem" }}>
                 <Menu className={"filled"}>
@@ -128,6 +136,21 @@ class AddWithdrawForm extends React.Component {
                     </Menu.Item>
                 </Menu>
             </div>
+        );
+
+        const buttonToGo = (
+            <Pgrid.Row>
+                <Button
+                    content={`Go to ${FUNDS[0].name}`}
+                    href={linkToGo}
+                    target="_blank"
+                    labelposition="center"
+                    size="large"
+                    className="primary"
+                    data-testid={orderDirection === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
+                    style={{ width: "100%", padding: "15px 20px" }}
+                />
+            </Pgrid.Row>
         );
 
         return (
@@ -158,6 +181,8 @@ class AddWithdrawForm extends React.Component {
                     <Styledlabel>Available exchange partner:</Styledlabel>
 
                     <FundList user={user} amount={amount} direction={orderDirection} />
+
+                    {buttonToGo}
 
                     <p style={{ fontSize: "14px" }}>
                         Interested in becoming an Augmint exchange partner?{" "}
