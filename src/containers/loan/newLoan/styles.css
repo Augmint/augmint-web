@@ -1,23 +1,21 @@
 #loan-product-selector {
     margin-top: 30px;
 }
-
-.loan.column {
+.loan.column.left {
+    padding: 0 30px 30px 0;
     max-width: 440px;
     flex-basis: 440px;
 }
-.loan.column.left {
-    padding: 30px 30px 60px 0;
-}
 .loan.column.right {
-    padding: 30px 0 60px 30px;
+    max-width: 410px;
+    flex-basis: 410px;
 }
 
 /* tablet */
 @media (max-width: 768px) {
     .loan.column.left,
     .loan.column.right {
-        padding: 0;
+        padding: 0 0 30px 0;
         margin-left: auto;
         margin-right: auto;
         max-width: 400px;
@@ -28,7 +26,7 @@
 @media (max-width: 376px) {
     .loan.column.left,
     .loan.column.right {
-        padding: 0;
+        padding: 0 0 30px 0;
         width: 100%;
     }
 }

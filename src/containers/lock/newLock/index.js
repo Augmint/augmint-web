@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Pgrid, Psegment } from "components/PageLayout";
 import LockForm from "../containers/LockForm";
 
+import "./styles.css";
+
 export const StyledButtonContainer = styled.div`
     display: flex;
     height: 100%;
@@ -18,7 +20,7 @@ class NewLock extends React.Component {
             <Psegment>
                 <Pgrid className="new-lock">
                     <Pgrid.Row columns={1}>
-                        <Pgrid.Column size={{ tablet: 1, desktop: 2 / 5 }}>
+                        <Pgrid.Column className="column" size={{ tablet: 1, desktop: 2 / 5 }}>
                             <LockForm lockManager={lockManager} lockProducts={lockProducts} />
                         </Pgrid.Column>
                     </Pgrid.Row>
