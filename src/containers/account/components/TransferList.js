@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { fetchLatestTransfers } from "modules/reducers/userTransfers";
-import { TxDate, TxInfo, TxPrice, TxAmount } from "components/transaction";
+import { TxDate, TxInfo, TxPrice } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { calculateTransfersBalance } from "modules/ethereum/transferTransactions";
+import { AEur } from "components/augmint-ui/aeurDisplay";
 
 class TransferList extends React.Component {
     constructor(props) {
@@ -61,7 +62,7 @@ class TransferList extends React.Component {
             const feeOrBounty = amount => (
                 <TxPrice>
                     <small data-testid="txFee">
-                        <TxAmount amount={amount} showPlusSign={true} divide={true} />
+                        <AEur amount={amount} showPlusSign={true} divide={true} />
                         {amount > 0 ? " bounty" : " fee"}
                     </small>
                 </TxPrice>
@@ -76,14 +77,14 @@ class TransferList extends React.Component {
                     amount: (
                         <span>
                             <TxPrice className={`${tx.amount < 0 ? "minus" : "plus"}`} data-testid="txPrice">
-                                <TxAmount amount={tx.amount} showPlusSign={true} divide={true} />
+                                <AEur amount={tx.amount} showPlusSign={true} divide={true} />
                             </TxPrice>
                             {tx.fee !== 0 && feeOrBounty(tx.fee)}
                         </span>
                     ),
                     balance: (
                         <TxPrice>
-                            <TxAmount amount={tx.balance} divide={true} />
+                            <AEur amount={tx.balance} divide={true} />
                         </TxPrice>
                     )
                 };
