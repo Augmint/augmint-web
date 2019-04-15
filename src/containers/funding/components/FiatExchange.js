@@ -6,7 +6,9 @@ import { MrCoinBuyLink, MrCoinSellLink } from "components/ExchangeLinks";
 export default function FiatExchange(props) {
     return (
         <Pblock header={props.header}>
-            <Header as="h4" className={"tertiaryColor"} />
+            <Header as="h4" className={"tertiaryColor"}>
+                Buy or sell A-EUR for EUR
+            </Header>
         </Pblock>
     );
 }

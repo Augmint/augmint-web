@@ -3,10 +3,12 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+import { connect } from "react-redux";
+
 import { Menu } from "components/augmint-ui/menu";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
-import { Form, Normalizations } from "components/BaseComponents";
+import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
 import FundList from "./FundList/index";
 
@@ -15,6 +17,9 @@ import styled from "styled-components";
 
 export const WITHDRAW = "withdraw";
 export const ADDFUND = "addFunds";
+
+const ETH_DECIMALS = 5;
+const TOKEN_DECIMALS = 2;
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -27,23 +32,64 @@ class AddWithdrawForm extends React.Component {
         this.state = { orderDirection: ADDFUND, amount: "" };
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
+        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
     onPriceChange(e) {
+        const amount = e.target.value;
         this.setState({
-            amount: e.target.value
+            amount
         });
+
+        if (e.target.attributes["name"].value === WITHDRAW) {
+            this.onTokenAmountChange(amount);
+        }
+    }
+
+    onTokenAmountChange(amount) {
+        try {
+            const lastChangedAmountField = "tokenAmount";
+            this.setState({ lastChangedAmountField });
+            this.reCalcAmounts(lastChangedAmountField, this.props.price, amount, null);
+        } catch (error) {
+            this.props.change("ethAmount", "");
+        }
+    }
+
+    reCalcAmounts(lastChangedAmountField, _price, _tokenAmount, _ethAmount) {
+        const price = this.parsePrice(_price);
+
+        if (lastChangedAmountField === "ethAmount") {
+            const ethAmount = parseFloat(_ethAmount);
+            if (!isNaN(ethAmount) && isFinite(ethAmount)) {
+                const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
+                this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
+            } else {
+                //  ethAmount is not entered yet
+                this.props.change("tokenAmount", "");
+            }
+        } else {
+            const tokenAmount = parseFloat(_tokenAmount);
+            if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
+                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
+                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
+            } else {
+                // tokenAmount is not entered yet
+                this.props.change("tokenAmount", "");
+            }
+        }
+    }
+
+    parsePrice(price) {
+        return Math.round(price * 100) / 10000;
     }
 
     onMenuClick(e) {
         if (e.target.attributes["data-index"].value === ADDFUND) {
-            console.debug("go to add");
             this.setState({
                 orderDirection: ADDFUND
             });
         } else {
-            console.debug("go to withdraw");
-
             this.setState({
                 orderDirection: WITHDRAW
             });
@@ -52,8 +98,12 @@ class AddWithdrawForm extends React.Component {
 
     render() {
         const { error, user } = this.props;
-
         const { orderDirection, amount } = this.state;
+
+        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
+        if (orderDirection === WITHDRAW) {
+            tokenAmountValidations.push(Validations.userTokenBalance);
+        }
 
         const header = (
             <div style={{ marginBottom: "2rem" }}>
@@ -86,12 +136,12 @@ class AddWithdrawForm extends React.Component {
                 <Form error={error ? "true" : "false"}>
                     <EthSubmissionErrorPanel error={error} />
 
-                    <Styledlabel data-testid={`%{orderDirection}Label`}>
+                    <Styledlabel data-testid={`${orderDirection}Label`}>
                         {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
                     </Styledlabel>
 
                     <Field
-                        name="eurToAdd"
+                        name={orderDirection}
                         component={Form.Field}
                         as={Form.Input}
                         type="number"
@@ -99,12 +149,13 @@ class AddWithdrawForm extends React.Component {
                         step="any"
                         min="0"
                         onChange={this.onPriceChange}
+                        validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}
-                        data-testid="fundingInput"
+                        data-testid={`${orderDirection}Input`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                     />
-                    <Styledlabel>Available exchange partners:</Styledlabel>
+                    <Styledlabel>Available exchange partner:</Styledlabel>
 
                     <FundList user={user} amount={amount} direction={orderDirection} />
 
@@ -131,5 +182,11 @@ AddWithdrawForm = reduxForm({
         return true;
     }
 })(AddWithdrawForm);
+
+function mapStateToProps(state, ownProps) {
+    return { initialValues: { price: 100 } };
+}
+
+AddWithdrawForm = connect(mapStateToProps)(AddWithdrawForm);
 
 export default AddWithdrawForm;

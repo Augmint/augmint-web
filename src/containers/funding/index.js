@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
 import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import augmintTokenProvider from "modules/augmintTokenProvider";
+import ratesProvider from "modules/ratesProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
+import FiatExchange from "./components/FiatExchange";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
@@ -12,10 +14,11 @@ class WithdrawHome extends React.Component {
     componentDidMount() {
         connectWeb3();
         augmintTokenProvider();
+        ratesProvider();
     }
 
     render() {
-        const { userAccount } = this.props;
+        const { userAccount, rates } = this.props;
 
         return (
             <EthereumState>
@@ -28,7 +31,7 @@ class WithdrawHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
-                                <AddWithdrawForm user={userAccount} />
+                                <AddWithdrawForm user={userAccount} rates={rates} />
                             </Pgrid.Column>
                         </Pgrid.Row>
                     </Pgrid>
@@ -40,7 +43,8 @@ class WithdrawHome extends React.Component {
 
 const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
-    userAccount: state.userBalances.account
+    userAccount: state.userBalances.account,
+    rates: state.rates
 });
 
 export default connect(mapStateToProps)(WithdrawHome);
