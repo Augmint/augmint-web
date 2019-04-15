@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Pblock } from "components/PageLayout";
-import { MyListGroup, MyListGroupRow as Row, MyListGroupColumn as Col, MyGridTable } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/toolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
@@ -16,17 +15,21 @@ import { floatNumberConverter } from "utils/converter";
 import { AEUR } from "components/augmint-ui/aeurDisplay";
 import { ETH } from "components/augmint-ui/ethDisplay";
 
-const StyledSpan = styled.span`
-    display: block;
+const StyledTable = styled.table`
+    border-spacing: 10px 0;
+    white-space: nowrap;
     text-align: right;
-`;
-
-const Totals = styled.p`
-    margin: 15px 0;
-    text-align: right;
-    & .AEUR,
-    & .ETH {
-        font-weight: bold;
+    tr td:last-child {
+        text-align: left;
+    }
+    tfoot {
+        td {
+            padding-top: 10px;
+        }
+        .AEUR,
+        .ETH {
+            font-weight: bold;
+        }
     }
 `;
 
@@ -34,60 +37,77 @@ const OrderItem = props => {
     const { order, ethFiatRate, userAccountAddress } = props;
     const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
+    const myOrder = order.maker.toLowerCase() === userAccountAddress.toLowerCase();
     const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
     function parsePrice(price) {
         return Math.round(price * 100) / 10000;
     }
+    const rate = ethFiatRate / parsePrice(displayPrice);
 
-    const actualValue =
-        order.direction === TOKEN_SELL
-            ? (order.amount * order.price) / bn_ethFiatRate
-            : (bn_ethFiatRate / order.price) * order.amount;
+    if (order.direction === TOKEN_SELL) {
+        const ethValue = (order.amount * order.price) / bn_ethFiatRate;
+        return (
+            <tr>
+                <td>
+                    <AEUR raw amount={order.amount} />
+                </td>
+                <td>
+                    <ETH raw amount={ethValue} />
+                </td>
+                <td>{displayPrice}%</td>
+                <td>
+                    <AEUR raw amount={rate} />
+                </td>
+                <td>
+                    <MoreInfoTip id={"more_info-" + order.id}>
+                        <p>
+                            Sell A€ order: <br />
+                            {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
+                            {ethValue} ETH
+                        </p>
+                        Maker: {order.maker}
+                        <br />
+                        Order Id: {order.id}
+                    </MoreInfoTip>
+                    {myOrder && <CancelOrderButton order={order} />}
+                </td>
+            </tr>
+        );
+    } else {
+        // TOKEN_BUY
 
-    const ret = [
-        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <AEUR raw amount={order.amount} />}
-            {order.direction === TOKEN_BUY && <AEUR raw amount={actualValue} />}
-        </Col>,
-        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
-            {order.direction === TOKEN_SELL && <ETH raw amount={actualValue} />}
-            {order.direction === TOKEN_BUY && <ETH raw amount={order.amount} />}
-        </Col>,
-        <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
-            <StyledSpan>{displayPrice}%</StyledSpan>
-        </Col>,
-        <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-rate`}>
-            <StyledSpan>
-                <AEUR raw amount={ethFiatRate / parsePrice(displayPrice)} />
-            </StyledSpan>
-        </Col>,
-        <Col style={{ padding: ".1em 0 0 5px" }} width={2} key={`${order.direction}-action`}>
-            <MoreInfoTip id={"more_info-" + order.id}>
-                {order.direction === TOKEN_SELL && (
-                    <p>
-                        Sell A€ order: <br />
-                        {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
-                        {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
-                        {actualValue} ETH
-                    </p>
-                )}
-                {order.direction === TOKEN_BUY && (
-                    <p>
-                        Buy A€ Order: <br />
-                        {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
-                        {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
-                        {actualValue} A€
-                    </p>
-                )}
-                Maker: {order.maker}
-                <br />
-                Order Id: {order.id}
-            </MoreInfoTip>
-            {order.maker.toLowerCase() === userAccountAddress.toLowerCase() && <CancelOrderButton order={order} />}
-        </Col>
-    ];
-    return ret;
+        const aeurValue = (bn_ethFiatRate / order.price) * order.amount;
+        return (
+            <tr>
+                <td>
+                    <AEUR raw amount={aeurValue} />
+                </td>
+                <td>
+                    <ETH raw amount={order.amount} />
+                </td>
+                <td>{displayPrice}%</td>
+                <td>
+                    <AEUR raw amount={rate} />
+                </td>
+                <td>
+                    <MoreInfoTip id={"more_info-" + order.id}>
+                        <p>
+                            Buy A€ Order: <br />
+                            {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
+                            {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
+                            {aeurValue} A€
+                        </p>
+                        Maker: {order.maker}
+                        <br />
+                        Order Id: {order.id}
+                    </MoreInfoTip>
+                    {myOrder && <CancelOrderButton order={order} />}
+                </td>
+            </tr>
+        );
+    }
 };
 
 const OrderList = props => {
@@ -106,82 +126,49 @@ const OrderList = props => {
         0
     );
 
-    const listLen = Math.max(buyOrders.length, sellOrders.length);
-    const itemList = [];
+    const isSell = orderDirection === TOKEN_SELL;
+    const orders = isSell ? sellOrders : buyOrders;
 
-    for (let i = 0; i < listLen; i++) {
-        itemList.push(
-            <Row key={`ordersRow-${i}`} valign="top">
-                {orderDirection === TOKEN_SELL ? (
-                    i < sellOrders.length ? (
-                        <OrderItem
-                            order={sellOrders[i]}
-                            ethFiatRate={ethFiatRate}
-                            userAccountAddress={userAccountAddress}
-                        />
-                    ) : (
-                        <Col width={13} />
-                    )
-                ) : i < buyOrders.length ? (
-                    <OrderItem order={buyOrders[i]} ethFiatRate={ethFiatRate} userAccountAddress={userAccountAddress} />
-                ) : (
-                    <Col width={13} />
-                )}
-            </Row>
-        );
+    if (orders.length == 0) {
+        return <div>No {isSell ? "sellers" : "buyers"}</div>;
     }
 
     return (
-        <MyListGroup>
-            <Row wrap={false} halign="center" valign="top">
-                <Col style={{ textAlign: "right" }} width={3}>
-                    <strong> {orderDirection === TOKEN_SELL ? "A-EUR amount" : "Est. A-EUR amount"} </strong>
-                </Col>
-                <Col style={{ textAlign: "right" }} width={3}>
-                    <strong> {orderDirection === TOKEN_SELL ? "Est. ETH amount" : "ETH amount"} </strong>
-                </Col>
-                <Col style={{ textAlign: "right" }} width={2}>
-                    <strong>Price</strong>
-                    <PriceToolTip id={orderDirection === TOKEN_SELL ? "price_sell" : "price_buy"} />
-                </Col>
-                <Col style={{ textAlign: "right" }} width={3}>
-                    <strong>Est. {ETHEUR}</strong>
-                </Col>
-                <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
-            </Row>
-            {itemList}
-            <Row halign="center" valign="top">
-                <Col width={3} style={{ textAlign: "center" }}>
-                    {orderDirection === TOKEN_SELL
-                        ? totalAeurSellAmount > 0 && (
-                              <Totals>
-                                  Total: <AEUR raw amount={totalAeurSellAmount} />
-                              </Totals>
-                          )
-                        : totalAeurBuyAmount > 0 && (
-                              <Totals>
-                                  Total: <AEUR raw amount={totalAeurBuyAmount} />
-                              </Totals>
-                          )}
-                </Col>
-                <Col width={3} style={{ textAlign: "center" }}>
-                    {orderDirection === TOKEN_SELL
-                        ? totalEthSellAmount > 0 && (
-                              <Totals>
-                                  <ETH raw amount={totalEthSellAmount} />
-                              </Totals>
-                          )
-                        : totalEthBuyAmount > 0 && (
-                              <Totals>
-                                  <ETH raw amount={totalEthBuyAmount} />
-                              </Totals>
-                          )}
-                </Col>
-                <Col width={2} />
-                <Col width={3} />
-                <Col width={2} style={{ padding: ".1em 0 0 5px" }} />
-            </Row>
-        </MyListGroup>
+        <StyledTable>
+            <thead>
+                <tr>
+                    <th>{isSell ? "A-EUR amount" : "Est. A-EUR amount"}</th>
+                    <th>{isSell ? "Est. ETH amount" : "ETH amount"}</th>
+                    <th>
+                        Price
+                        <PriceToolTip id={isSell ? "price_sell" : "price_buy"} />
+                    </th>
+                    <th>Est. {ETHEUR}</th>
+                    <th />
+                </tr>
+            </thead>
+
+            <tbody>
+                {orders.map(order => (
+                    <OrderItem
+                        key={order.id}
+                        order={order}
+                        ethFiatRate={ethFiatRate}
+                        userAccountAddress={userAccountAddress}
+                    />
+                ))}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        Total:{" "}
+                        {isSell ? <AEUR raw amount={totalAeurSellAmount} /> : <AEUR raw amount={totalAeurBuyAmount} />}
+                    </td>
+                    <td>{isSell ? <ETH raw amount={totalEthSellAmount} /> : <ETH raw amount={totalEthBuyAmount} />}</td>
+                    <td colSpan="3" />
+                </tr>
+            </tfoot>
+        </StyledTable>
     );
 };
 
@@ -245,16 +232,14 @@ export default class OrderBook extends React.Component {
                 {isLoading ? (
                     <p>Refreshing orders...</p>
                 ) : (
-                    <MyGridTable>
-                        <OrderList
-                            buyOrders={buyOrders}
-                            sellOrders={sellOrders}
-                            ethFiatRate={ethFiatRate}
-                            userAccountAddress={userAccountAddress}
-                            rates={rates}
-                            orderDirection={orderDirection}
-                        />
-                    </MyGridTable>
+                    <OrderList
+                        buyOrders={buyOrders}
+                        sellOrders={sellOrders}
+                        ethFiatRate={ethFiatRate}
+                        userAccountAddress={userAccountAddress}
+                        rates={rates}
+                        orderDirection={orderDirection}
+                    />
                 )}
             </Pblock>
         );
