@@ -6,12 +6,11 @@
   "private": true,
   "engines": {
     "node": "10.15.3",
-    "yarn": "^1.13.0"
+    "yarn": "1.15.2"
   },
   "dependencies": {
     "bignumber.js": "5.0.0",
     "chart.js": "2.8.0",
-    "connected-react-router": "6.3.2",
     "ethereumjs-util": "6.1.0",
     "ethers": "4.0.27",
     "moment": "2.24.0",
@@ -21,7 +20,7 @@
     "react-dom": "16.8.5",
     "react-ga": "2.5.7",
     "react-redux": "6.0.1",
-    "react-router-dom": "4.3.1",
+    "react-router-dom": "5.0.0",
     "react-scripts": "2.1.8",
     "react-scrollchor": "6.0.0",
     "react-tooltip": "3.10.0",
@@ -44,9 +43,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
-    "contracts:migrate": "cd augmint-contracts && yarn migrate",
-    "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
+    "ganache:start": "docker start ganache || docker run --init --name ganache -p 8545:8545 augmint/contracts:v1.0.4 --db ./dockerLocalchaindb --gasLimit 0x47D5DE --gasPrice 1000000000 --networkId 999 -m \"hello build tongue rack parade express shine salute glare rate spice stock\"",
+    "ganache:stop": "docker stop ganache"
   },
   "devDependencies": {
     "cypress": "3.2.0",

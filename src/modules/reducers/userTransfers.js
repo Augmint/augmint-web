@@ -58,13 +58,6 @@ export default (state = initialState, action) => {
 };
 
 export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
-    if (!isAdditional) {
-        // reset transfer state
-        store.getState().userTransfers.fromBlock = null;
-        store.getState().userTransfers.toBlock = null;
-        store.getState().userTransfers.transfers = null;
-    }
-
     return async dispatch => {
         dispatch({
             type: FETCH_TRANSFERS_REQUESTED,
@@ -74,14 +67,14 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
         });
         try {
             const transfers = await fetchTransfersTx(account, fromBlock, toBlock);
-
             transfers.sort((a, b) => {
                 return b.blockNumber - a.blockNumber;
             });
 
             return dispatch({
                 type: FETCH_TRANSFERS_RECEIVED,
-                result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers
+                result: isAdditional ? store.getState().userTransfers.transfers.concat(transfers) : transfers,
+                fetchedLength: transfers.length
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -96,6 +89,13 @@ export function fetchTransfers(account, fromBlock, toBlock, isAdditional) {
 }
 
 export function fetchLatestTransfers(account, isAdditional) {
+    if (!isAdditional) {
+        // reset transfer state
+        store.getState().userTransfers.fromBlock = null;
+        store.getState().userTransfers.toBlock = null;
+        store.getState().userTransfers.transfers = null;
+    }
+
     const blockLimit = Math.round((30 * 24 * 60 * 60) / AVG_BLOCK_TIME); // 30 days
     const lastBlock = store.getState().contracts.latest.augmintToken.deployedAtBlock;
 
@@ -110,7 +110,7 @@ export function fetchLatestTransfers(account, isAdditional) {
         });
 }
 
-export function processNewTransfer(account, eventLog, parsedData) {
+export function processNewTransfer(account, eventLog) {
     return async dispatch => {
         dispatch({
             type: PROCESS_NEW_TRANSFER_REQUESTED,
@@ -118,7 +118,7 @@ export function processNewTransfer(account, eventLog, parsedData) {
         });
 
         try {
-            const newTransfer = await processNewTransferTx(account, eventLog, parsedData);
+            const newTransfer = await processNewTransferTx(account, eventLog);
             let transfers = store.getState().userTransfers.transfers;
             if (!transfers) {
                 transfers = [];
