@@ -5,7 +5,7 @@ import Button from "components/augmint-ui/button";
 
 import "./styles.css";
 import { FUNDS } from "./funds.js";
-import { ADDFUND } from "../AddWithdrawForm";
+import { ADDFUND, WITHDRAW } from "../AddWithdrawForm";
 
 const FundItem = props => {
     const { fund, user, direction, amount } = props;
@@ -38,7 +38,7 @@ const FundItem = props => {
                         labelposition="center"
                         size="large"
                         className="primary"
-                        data-testid={direction === ADDFUND ? "addFundLink" : "withdrawLink"}
+                        data-testid={direction === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
                         style={{ width: "100%", padding: "15px 20px" }}
                     />
                 </Pgrid.Row>
