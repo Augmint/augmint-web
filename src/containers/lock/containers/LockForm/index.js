@@ -177,7 +177,11 @@ class LockContainer extends React.Component {
         let interest = "";
         let unlockBy = "...";
 
-        if (this.state.lockAmount && this.state.selectedProductId && this.state.activeProducts.length) {
+        if (
+            this.state.lockAmount &&
+            typeof this.state.selectedProductId === "number" &&
+            this.state.activeProducts.length
+        ) {
             earnAmount = this.earnAmount();
         }
         if (this.state.selectedProduct) {
