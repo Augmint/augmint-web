@@ -207,7 +207,7 @@ class NewLoanForm extends React.Component {
         const { error, handleSubmit, pristine, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
         const { rates } = this.props;
         const isRatesAvailable = rates && rates.info.bn_ethFiatRate * 1 > 0;
-        const depositInEur = rates.info.ethFiatRate * this.state.ethAmount || 0;
+        const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
         const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
         const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
 
