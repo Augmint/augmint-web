@@ -39,10 +39,13 @@ class AddWithdrawForm extends React.Component {
 
     onMenuClick(e) {
         if (e.target.attributes["data-index"].value === ADDFUND) {
+            console.debug("go to add");
             this.setState({
                 orderDirection: ADDFUND
             });
         } else {
+            console.debug("go to withdraw");
+
             this.setState({
                 orderDirection: WITHDRAW
             });
@@ -59,18 +62,18 @@ class AddWithdrawForm extends React.Component {
                 <Menu className={"filled"}>
                     <Menu.Item
                         active={orderDirection === ADDFUND}
-                        data-index={`${ADDFUND}-tab`}
+                        data-index={`${ADDFUND}`}
                         onClick={this.onMenuClick}
-                        data-testid="addFund"
+                        data-testid={`${ADDFUND}-tab`}
                         className={"filled"}
                     >
                         Add funds
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === WITHDRAW}
-                        data-index={`${WITHDRAW}-tab`}
+                        data-index={`${WITHDRAW}`}
                         onClick={this.onMenuClick}
-                        data-testid="withdrawFund"
+                        data-testid={`${WITHDRAW}-tab`}
                         className={"filled"}
                     >
                         Withdraw
