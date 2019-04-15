@@ -93,6 +93,8 @@ class EthereumTxStatus extends React.Component {
 
                     const gasUsed = tx.receipt ? tx.receipt.gasUsed : "waiting for receipt...";
 
+                    console.log(tx);
+
                     if (tx.receipt && tx.receipt.events.NewLoan) {
                         const vals = tx.receipt.events.NewLoan.returnValues;
 

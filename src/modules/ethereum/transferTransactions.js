@@ -52,15 +52,16 @@ export async function transferEthTx(payload) {
     // const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
     const amount = ethAmount.toString(); // TODO check if it's good
 
-    console.log("amount: ", amount);
-
     const weiAmount = web3.utils.toWei(amount); // TODO check if amount is in good form
+
+    console.log("amount: ", amount);
+    console.log("to: ", payee);
+    console.log("value: ", weiAmount);
 
     const txName = "ETH transfer";
     const tx = web3.eth.sendTransaction({
-        // TODO check web3.eth.sendTransaction({
         from: userAccount,
-        to: payee, // TODO check if this is right
+        to: payee,
         value: weiAmount
     });
 

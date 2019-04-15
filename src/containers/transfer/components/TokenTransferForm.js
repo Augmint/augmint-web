@@ -89,6 +89,7 @@ class TokenTransferForm extends React.Component {
         // const payeeEthBalance = await store.dispatch(refreshPayeesEthBalance(values.payee));
         const payeeEthBalance = await getPayeesEthBalance(values.payee);
         console.log("balance: ", payeeEthBalance);
+        console.log("payee: ", values.payee);
 
         // if (payeeEthBalance.type !== PAYEE_ETH_BALANCE_RECEIVED) {
         //     throw new SubmissionError({

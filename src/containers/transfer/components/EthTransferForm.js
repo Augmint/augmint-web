@@ -37,9 +37,10 @@ class EthTransferForm extends React.Component {
 
     async handleSubmit(values) {
         const ethAmount = parseFloat(values.ethAmount);
+        console.log("payeeEthAddress", this.props.address);
         const res = await store.dispatch(
             transferEth({
-                payee: this.props.payeeEthAddress,
+                payee: this.props.address,
                 ethAmount
             })
         );
@@ -50,7 +51,7 @@ class EthTransferForm extends React.Component {
         } else {
             this.setState({
                 result: res.result,
-                to: this.props.payeeEthAddress,
+                to: this.props.address,
                 ethAmount
             });
         }
