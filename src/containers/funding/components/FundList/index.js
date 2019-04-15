@@ -38,6 +38,7 @@ const FundItem = props => {
                         labelposition="center"
                         size="large"
                         className="primary"
+                        data-testid={direction === ADDFUND ? "addFundLink" : "withdrawLink"}
                         style={{ width: "100%", padding: "15px 20px" }}
                     />
                 </Pgrid.Row>

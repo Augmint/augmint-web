@@ -3,7 +3,6 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import { Link } from "react-router-dom";
 import { Menu } from "components/augmint-ui/menu";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
@@ -63,7 +62,7 @@ class AddWithdrawForm extends React.Component {
                         active={orderDirection === ADDFUND}
                         data-index={`${ADDFUND}`}
                         onClick={this.onMenuClick}
-                        data-testid={`${ADDFUND}-tab`}
+                        data-testid={`${ADDFUND}Tab`}
                         className={"filled"}
                     >
                         Add funds
@@ -72,7 +71,7 @@ class AddWithdrawForm extends React.Component {
                         active={orderDirection === WITHDRAW}
                         data-index={`${WITHDRAW}`}
                         onClick={this.onMenuClick}
-                        data-testid={`${WITHDRAW}-tab`}
+                        data-testid={`${WITHDRAW}Tab`}
                         className={"filled"}
                     >
                         Withdraw
@@ -110,7 +109,8 @@ class AddWithdrawForm extends React.Component {
                     <FundList user={user} amount={amount} direction={orderDirection} />
 
                     <p style={{ fontSize: "14px" }}>
-                        Interested in becoming an Augmint exchange partner? <Link to="contact">Contact us.</Link>
+                        Interested in becoming an Augmint exchange partner?{" "}
+                        <a href="mailto:hello@augmint.cc">Contact us.</a>
                     </p>
                 </Form>
             </Pblock>
