@@ -40,6 +40,8 @@ export const TitleWrapper = styled.div`
     ${StyledHeaderH1} {
         font-size: ${remCalc("20")};
         margin: 0;
+        font-weight: 700;
+        color: ${theme.colors.primary};
 
         ${media.tablet`
             font-size: 1.1rem;

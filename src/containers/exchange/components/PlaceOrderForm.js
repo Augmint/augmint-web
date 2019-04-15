@@ -178,7 +178,7 @@ class PlaceOrderForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu style={{ marginBottom: -11 }}>
+                <Menu>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
@@ -222,7 +222,7 @@ class PlaceOrderForm extends React.Component {
                             onDismiss={() => clearSubmitErrors()}
                         />
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: 0 }}>
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
                             </strong>
@@ -245,7 +245,7 @@ class PlaceOrderForm extends React.Component {
                             labelAlignRight="A-EUR"
                         />
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: "5px 0 0 0" }}>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
 
@@ -267,17 +267,17 @@ class PlaceOrderForm extends React.Component {
                         />
                         <div
                             style={{
-                                marginTop: -10,
-                                marginBottom: 10,
+                                marginTop: -15,
+                                marginBottom: 20,
                                 color: "#999",
-                                fontSize: "small"
+                                fontSize: "12px"
                             }}
                         >
                             calculated on current rate 1 ETH ={" "}
                             {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
                         </div>
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: 0 }}>
                             {orderDirection === TOKEN_BUY
                                 ? "ETH amount to sell"
                                 : "ETH amount to buy (calculated on current rate)"}
@@ -305,7 +305,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={pristine}
                             data-testid="submitButton"
                             type="submit"
-                            style={{ width: "100%", height: "50px" }}
+                            style={{ width: "100%", height: "50px", marginTop: "1rem" }}
                         >
                             {submitting && "Submitting..."}
                             {!submitting &&

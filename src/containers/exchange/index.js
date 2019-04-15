@@ -50,7 +50,7 @@ class ExchangeHome extends React.Component {
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}
@@ -59,7 +59,7 @@ class ExchangeHome extends React.Component {
                                 />
                             </Pgrid.Column>
 
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
                                 {orders.orders && (
                                     <MatchMultipleOrdersButton
                                         buyOrder={orders.orders.buyOrders[0]}

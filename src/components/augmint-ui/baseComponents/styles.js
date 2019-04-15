@@ -53,8 +53,7 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledLabel = styled.label`
-    font-size: ${remCalc(16)};
-    font-weight: 700;
+    font-size: 14px;
     line-height: ${remCalc(20)};
 `;
 
@@ -64,6 +63,9 @@ export const StyledError = styled.span`
 
 export const StyledFormField = styled.div`
     margin: 0 0 ${remCalc(16)};
+    & input.nolabel {
+        border-right: 1px solid ${theme.colors.opacGrey};
+    }
     &.error {
         color: ${theme.colors.darkRed};
 
@@ -72,9 +74,6 @@ export const StyledFormField = styled.div`
             border: 2px solid ${theme.colors.darkRed};
             color: ${theme.colors.darkRed};
         }
-    }
-    & input.nolabel {
-        border-right: 1px solid ${theme.colors.opacGrey};
     }
 `;
 

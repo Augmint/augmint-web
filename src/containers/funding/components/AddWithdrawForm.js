@@ -5,10 +5,9 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "components/augmint-ui/menu";
-import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { Field, formValueSelector, reduxForm } from "redux-form";
-import { Form, Normalizations, Validations } from "components/BaseComponents";
-import { connect } from "react-redux";
+import { EthSubmissionErrorPanel } from "components/MsgPanels";
+import { Field, reduxForm } from "redux-form";
+import { Form, Normalizations } from "components/BaseComponents";
 import { Pblock } from "components/PageLayout";
 import FundList from "./FundList/index";
 
@@ -58,7 +57,7 @@ class AddWithdrawForm extends React.Component {
         const { orderDirection, amount } = this.state;
 
         const header = (
-            <div style={{ paddingTop: "10px" }}>
+            <div style={{ marginBottom: "2rem" }}>
                 <Menu className={"filled"}>
                     <Menu.Item
                         active={orderDirection === ADDFUND}
@@ -119,12 +118,6 @@ class AddWithdrawForm extends React.Component {
     }
 }
 
-const selector = formValueSelector("AddWithdrawForm");
-AddWithdrawForm = connect(state => {
-    const { ethAmount, tokenAmount, price } = selector(state, "ethAmount", "tokenAmount", "price");
-    return { ethAmount, tokenAmount, price }; // to get amounts for orderHelpText in render
-})(AddWithdrawForm);
-
 AddWithdrawForm = reduxForm({
     form: "AddWithdrawForm",
     shouldValidate: params => {
@@ -138,11 +131,5 @@ AddWithdrawForm = reduxForm({
         return true;
     }
 })(AddWithdrawForm);
-
-function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: 100 } };
-}
-
-AddWithdrawForm = connect(mapStateToProps)(AddWithdrawForm);
 
 export default AddWithdrawForm;

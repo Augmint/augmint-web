@@ -3,9 +3,13 @@ describe("Loans", function() {
         cy.get("[data-testid=loanMenuLink]").click();
         cy.get("[data-testid=newLoanLink]").click();
 
-        cy.get(`[data-testid=label-selectLoanProduct-${prodId}]`).click();
+        cy.wait(50);
+        cy.get(`[data-testid=loan-product-selector]`)
+            .select(prodId, { force: true })
+            .should("have.value", prodId);
 
         cy.get("[data-testid=loanTokenAmountInput]")
+            .clear()
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
@@ -32,7 +36,7 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(8, 50, 50.01, 0.05062).then(res => {
+        getLoan("8", 50, 50.01, 0.05062).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                 .first()
                 .click({
@@ -61,7 +65,7 @@ describe("Loans", function() {
     });
 
     it("Should repay a loan", function() {
-        getLoan(0, 51, 59.68, 0.10873).then(() => {
+        getLoan("0", 51, 59.68, 0.10873).then(() => {
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
             cy.contains("this loan's page")

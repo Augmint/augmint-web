@@ -53,7 +53,7 @@ function LoanList(props) {
 
                 <div className={isLoading ? "loading" : "loans"}>
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
-                    {listItems && listItems.length === 0 ? (
+                    {listItems && listItems.length === 0 && !isNewLoan ? (
                         <NoItems title={isActivePage ? "You have no active loans." : "You have no old loans."}>
                             <div style={{ margin: "30px 0" }}>
                                 <p>
@@ -70,7 +70,7 @@ function LoanList(props) {
                     )}
                     {!isNewLoan && (
                         <div style={{ textAlign: "center" }}>
-                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
+                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLinkBtn" />
                         </div>
                     )}
                 </div>

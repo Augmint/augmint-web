@@ -18,21 +18,20 @@ class TransferPage extends React.Component {
         const { augmintToken } = this.props;
 
         return (
-            <EthereumState>
+            <EthereumState className="transfer-page">
                 <Psegment>
                     <TopNavTitlePortal>
                         <Pheader header="Transfer A-EUR" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
-                    <Pgrid>
+                    <Pgrid className="transfer">
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <Pblock
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    header="Send A-EUR"
                                 >
                                     <TokenTransferForm />
                                 </Pblock>

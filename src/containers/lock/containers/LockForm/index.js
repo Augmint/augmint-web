@@ -235,9 +235,11 @@ class LockContainer extends React.Component {
                             info={`Unlock by ${unlockBy}`}
                             className="field-big"
                             isSelect="true"
+                            selectTestId="lock-product"
                             selectOptions={this.state.activeProducts || []}
                             id="selectedLockProduct"
                             name="lockTerms"
+                            data-testid="lock-product-selector"
                         />
 
                         <div
