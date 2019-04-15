@@ -44,7 +44,7 @@ class ExchangeHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Buy & Sell A-EUR" />
+                        <Pheader header="Exchange crypto" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
