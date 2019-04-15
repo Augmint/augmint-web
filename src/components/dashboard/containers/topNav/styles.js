@@ -34,7 +34,7 @@ export const StyledTopNav = styled.nav`
 `;
 
 export const TitleWrapper = styled.div`
-    margin-left: 200px;
+    margin-left: 230px;
     max-width: 60%;
 
     ${StyledHeaderH1} {

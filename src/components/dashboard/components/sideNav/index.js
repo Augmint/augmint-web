@@ -45,7 +45,7 @@ export const SideNav = styled.nav`
     flex-direction: column;
     top: 0;
     left: 0;
-    width: 180px;
+    width: 210px;
     height: 100%;
     z-index: 104;
     padding: 20px 0;
@@ -90,6 +90,7 @@ export const SideNavUl = styled.ul`
     ${breakpoint`
       display: block;
       visibility: visible;
+      margin-top: 50px;
       &.hidden {
         display: none;
         visibility: hidden;
@@ -101,7 +102,7 @@ export const SideNavLi = styled.li`
     margin-bottom: 10px;
     width: 100%;
     ${breakpoint`
-        max-width: 230px;
+        max-width: 260px;
         margin: auto;
         text-align: left;
     `};
@@ -153,8 +154,8 @@ export const SideNavLink = styled(NavLink)`
         text-transform: uppercase;
         font-size: 12px;
         ${breakpoint`
-            font-size: ${remCalc(20)};
-            line-height: 2.4rem;
+            font-size: ${remCalc(18)};
+            line-height: 2rem;
         `};
     }
 `;
@@ -220,7 +221,7 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/funding" activeClassName="active" data-testid="fundingMenuLink">
                             <Icon name="reserves" />
-                            <span>Funding</span>
+                            <span>Add fund / withdraw</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
