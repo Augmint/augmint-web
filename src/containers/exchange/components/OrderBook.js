@@ -13,6 +13,8 @@ import styled from "styled-components";
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS, DECIMALS_DIV, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
+import { AEUR } from "components/augmint-ui/aeurDisplay";
+import { ETH } from "components/augmint-ui/ethDisplay";
 
 const StyledSpan = styled.span`
     display: block;
@@ -41,12 +43,12 @@ const OrderItem = props => {
 
     const ret = [
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <StyledSpan>{order.amount.toFixed(2)} A€</StyledSpan>}
-            {order.direction === TOKEN_BUY && <StyledSpan>{actualValue} A€</StyledSpan>}
+            {order.direction === TOKEN_SELL && <AEUR amount={order.amount} raw={true} />}
+            {order.direction === TOKEN_BUY && <AEUR amount={actualValue} raw={true} />}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
-            {order.direction === TOKEN_SELL && <StyledSpan>{actualValue} ETH</StyledSpan>}
-            {order.direction === TOKEN_BUY && <StyledSpan>{order.amount.toFixed(5)} ETH</StyledSpan>}
+            {order.direction === TOKEN_SELL && <ETH amount={actualValue} raw={true} />}
+            {order.direction === TOKEN_BUY && <ETH amount={order.amount} raw={true} />}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
             <StyledSpan>{displayPrice}%</StyledSpan>
@@ -85,16 +87,18 @@ const OrderItem = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0)).toFixed(5);
-    const totalEthSellAmount = sellOrders
-        .reduce((sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum), 0)
-        .toFixed(5);
-    const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0))
-        .div(DECIMALS_DIV)
-        .toFixed(2);
-    const totalAeurBuyAmount = buyOrders
-        .reduce((sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum), 0)
-        .toFixed(2);
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0));
+    const totalEthSellAmount = sellOrders.reduce(
+        (sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum),
+        0
+    );
+    const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0)).div(
+        DECIMALS_DIV
+    );
+    const totalAeurBuyAmount = buyOrders.reduce(
+        (sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum),
+        0
+    );
 
     const listLen = Math.max(buyOrders.length, sellOrders.length);
     const itemList = [];
@@ -145,25 +149,35 @@ const OrderList = props => {
                     {orderDirection === TOKEN_SELL
                         ? totalAeurSellAmount > 0 && (
                               <StyledP>
-                                  Total: <strong>{totalAeurSellAmount} A€</strong>
+                                  Total:{" "}
+                                  <strong>
+                                      <AEUR amount={totalAeurSellAmount} raw={true} />
+                                  </strong>
                               </StyledP>
                           )
                         : totalAeurBuyAmount > 0 && (
                               <StyledP>
-                                  Total: <strong>{totalAeurBuyAmount} A€</strong>
+                                  Total:{" "}
+                                  <strong>
+                                      <AEUR amount={totalAeurBuyAmount} raw={true} />
+                                  </strong>
                               </StyledP>
                           )}
                 </Col>
                 <Col width={3} style={{ textAlign: "center" }}>
                     {orderDirection === TOKEN_SELL
-                        ? totalAeurSellAmount > 0 && (
+                        ? totalEthSellAmount > 0 && (
                               <StyledP>
-                                  <strong>{totalEthSellAmount} ETH</strong>
+                                  <strong>
+                                      <ETH amount={totalEthSellAmount} raw={true} />
+                                  </strong>
                               </StyledP>
                           )
                         : totalEthBuyAmount > 0 && (
                               <StyledP>
-                                  <strong>{totalEthBuyAmount} ETH</strong>
+                                  <strong>
+                                      <ETH amount={totalEthBuyAmount} raw={true} />
+                                  </strong>
                               </StyledP>
                           )}
                 </Col>
@@ -197,6 +211,8 @@ export default class OrderBook extends React.Component {
         const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
         const { ethFiatRate } = this.props.rates.info;
         const orderDirection = orderBookDirection;
+
+        console.log("rates info", this.props.rates.info);
 
         const header = (
             <div>

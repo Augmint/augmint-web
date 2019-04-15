@@ -2,13 +2,46 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { fetchLatestTransfers } from "modules/reducers/userTransfers";
-import { TxDate, TxInfo, TxPrice } from "components/transaction";
+import { TxDate, TxInfo } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { calculateTransfersBalance } from "modules/ethereum/transferTransactions";
-import { AEur } from "components/augmint-ui/aeurDisplay";
+import { AEUR } from "components/augmint-ui/aeurDisplay";
+import styled from "styled-components";
+import { default as theme } from "styles/theme";
+
+const Transfer = styled.span`
+    .positive::before {
+        content: "+";
+    }
+
+    .delta.positive {
+        color: ${theme.colors.green};
+    }
+
+    .delta.negative {
+        color: ${theme.colors.red};
+    }
+
+    .feeOrBounty {
+        font-size: smaller;
+        display: block;
+
+        &.zero {
+            display: none;
+        }
+
+        &.positive::after {
+            content: " bounty";
+        }
+
+        &.negative::after {
+            content: " fee";
+        }
+    }
+`;
 
 class TransferList extends React.Component {
     constructor(props) {
@@ -59,15 +92,6 @@ class TransferList extends React.Component {
 
             calculateTransfersBalance(transfers, userAccount.tokenBalance * 100);
 
-            const feeOrBounty = amount => (
-                <TxPrice>
-                    <small data-testid="txFee">
-                        <AEur amount={amount} showPlusSign={true} divide={true} />
-                        {amount > 0 ? " bounty" : " fee"}
-                    </small>
-                </TxPrice>
-            );
-
             transfers = transfers.map(tx => {
                 return {
                     data: tx,
@@ -75,18 +99,12 @@ class TransferList extends React.Component {
                     date: <TxDate>{tx.blockTimeStampText}</TxDate>,
                     info: <TxInfo tx={tx} />,
                     amount: (
-                        <span>
-                            <TxPrice className={`${tx.amount < 0 ? "minus" : "plus"}`} data-testid="txPrice">
-                                <AEur amount={tx.amount} showPlusSign={true} divide={true} />
-                            </TxPrice>
-                            {tx.fee !== 0 && feeOrBounty(tx.fee)}
-                        </span>
+                        <Transfer>
+                            <AEUR amount={tx.amount} className="delta" data-testid="txPrice" />
+                            <AEUR amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
+                        </Transfer>
                     ),
-                    balance: (
-                        <TxPrice>
-                            <AEur amount={tx.balance} divide={true} />
-                        </TxPrice>
-                    )
+                    balance: <AEUR amount={tx.balance} />
                 };
             });
         }
