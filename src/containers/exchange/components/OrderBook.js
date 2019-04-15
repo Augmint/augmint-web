@@ -21,9 +21,13 @@ const StyledSpan = styled.span`
     text-align: right;
 `;
 
-const StyledP = styled.p`
+const Totals = styled.p`
     margin: 15px 0;
     text-align: right;
+    & .AEUR,
+    & .ETH {
+        font-weight: bold;
+    }
 `;
 
 const OrderItem = props => {
@@ -38,23 +42,25 @@ const OrderItem = props => {
 
     const actualValue =
         order.direction === TOKEN_SELL
-            ? ((order.amount * order.price) / bn_ethFiatRate).toFixed(5)
-            : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
+            ? (order.amount * order.price) / bn_ethFiatRate
+            : (bn_ethFiatRate / order.price) * order.amount;
 
     const ret = [
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-amount`}>
-            {order.direction === TOKEN_SELL && <AEUR amount={order.amount} raw={true} />}
-            {order.direction === TOKEN_BUY && <AEUR amount={actualValue} raw={true} />}
+            {order.direction === TOKEN_SELL && <AEUR raw amount={order.amount} />}
+            {order.direction === TOKEN_BUY && <AEUR raw amount={actualValue} />}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-est_amount`}>
-            {order.direction === TOKEN_SELL && <ETH amount={actualValue} raw={true} />}
-            {order.direction === TOKEN_BUY && <ETH amount={order.amount} raw={true} />}
+            {order.direction === TOKEN_SELL && <ETH raw amount={actualValue} />}
+            {order.direction === TOKEN_BUY && <ETH raw amount={order.amount} />}
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={2} key={`${order.direction}-price`}>
             <StyledSpan>{displayPrice}%</StyledSpan>
         </Col>,
         <Col style={{ padding: ".1em 0" }} width={3} key={`${order.direction}-rate`}>
-            <StyledSpan>{(ethFiatRate / parsePrice(displayPrice)).toFixed(2)} A€</StyledSpan>
+            <StyledSpan>
+                <AEUR raw amount={ethFiatRate / parsePrice(displayPrice)} />
+            </StyledSpan>
         </Col>,
         <Col style={{ padding: ".1em 0 0 5px" }} width={2} key={`${order.direction}-action`}>
             <MoreInfoTip id={"more_info-" + order.id}>
@@ -148,37 +154,27 @@ const OrderList = props => {
                 <Col width={3} style={{ textAlign: "center" }}>
                     {orderDirection === TOKEN_SELL
                         ? totalAeurSellAmount > 0 && (
-                              <StyledP>
-                                  Total:{" "}
-                                  <strong>
-                                      <AEUR amount={totalAeurSellAmount} raw={true} />
-                                  </strong>
-                              </StyledP>
+                              <Totals>
+                                  Total: <AEUR raw amount={totalAeurSellAmount} />
+                              </Totals>
                           )
                         : totalAeurBuyAmount > 0 && (
-                              <StyledP>
-                                  Total:{" "}
-                                  <strong>
-                                      <AEUR amount={totalAeurBuyAmount} raw={true} />
-                                  </strong>
-                              </StyledP>
+                              <Totals>
+                                  Total: <AEUR raw amount={totalAeurBuyAmount} />
+                              </Totals>
                           )}
                 </Col>
                 <Col width={3} style={{ textAlign: "center" }}>
                     {orderDirection === TOKEN_SELL
                         ? totalEthSellAmount > 0 && (
-                              <StyledP>
-                                  <strong>
-                                      <ETH amount={totalEthSellAmount} raw={true} />
-                                  </strong>
-                              </StyledP>
+                              <Totals>
+                                  <ETH raw amount={totalEthSellAmount} />
+                              </Totals>
                           )
                         : totalEthBuyAmount > 0 && (
-                              <StyledP>
-                                  <strong>
-                                      <ETH amount={totalEthBuyAmount} raw={true} />
-                                  </strong>
-                              </StyledP>
+                              <Totals>
+                                  <ETH raw amount={totalEthBuyAmount} />
+                              </Totals>
                           )}
                 </Col>
                 <Col width={2} />
