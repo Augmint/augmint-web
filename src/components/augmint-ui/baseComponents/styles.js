@@ -23,6 +23,9 @@ export const StyledContainer = styled.div`
         color: ${theme.colors.primary};
         font-weight: 600;
     }
+    & input.small-text {
+        font-size: 18px;
+    }
 `;
 
 export const StyledInput = styled.input`

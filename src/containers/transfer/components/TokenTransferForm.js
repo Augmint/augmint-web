@@ -178,7 +178,7 @@ class TokenTransferForm extends React.Component {
 
                                 <Field
                                     component={Form.Field}
-                                    className="nolabel"
+                                    className="nolabel small-text"
                                     as={Form.Input}
                                     label="To ..."
                                     size="small"
