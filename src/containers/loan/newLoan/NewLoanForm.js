@@ -230,7 +230,7 @@ class NewLoanForm extends React.Component {
                         <Pgrid>
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column style={{ marginBottom: "-10px" }}>
-                                    <label>You deposit...</label>
+                                    <label>You deposit ...</label>
                                     <Field
                                         component={Form.Field}
                                         as={Form.Input}
@@ -274,7 +274,7 @@ class NewLoanForm extends React.Component {
 
                             <Pgrid.Row>
                                 <Pgrid.Column>
-                                    <label>You borrow...</label>
+                                    <label>You borrow ...</label>
                                     <Field
                                         component={Form.Field}
                                         as={Form.Input}
@@ -311,7 +311,7 @@ class NewLoanForm extends React.Component {
 
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column style={{ marginBottom: "10px" }}>
-                                    <label>Repay loan after...</label>
+                                    <label>Repay loan after ...</label>
                                     {this.state.productId !== null && this.state.productId !== undefined && (
                                         <Field
                                             component={Form.Field}

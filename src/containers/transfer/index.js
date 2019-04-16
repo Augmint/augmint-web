@@ -8,6 +8,8 @@ import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 
+import "./styles.css";
+
 class TransferPage extends React.Component {
     componentDidMount() {
         connectWeb3();
@@ -27,8 +29,9 @@ class TransferPage extends React.Component {
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid className="transfer">
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>
                                 <Pblock
+                                    noMargin={true}
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }

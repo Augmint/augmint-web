@@ -221,7 +221,7 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/funding" activeClassName="active" data-testid="fundingMenuLink">
                             <Icon name="reserves" />
-                            <span>Add fund / withdraw</span>
+                            <span>Add / withdraw fund</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>

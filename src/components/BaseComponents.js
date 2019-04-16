@@ -202,7 +202,7 @@ export const formField = ({
                     <Select {...input} {...props} value={input.value} testId={selectTestId} options={selectOptions} />
                 )}
             </StyledContainer>
-            {info && <div style={{ fontSize: "12px", color: "gray", display: "block" }}>{info}</div>}
+            {info && <div style={{ fontSize: "14px", color: "gray", display: "block" }}>{info}</div>}
 
             {touched &&
                 ((error && <StyledError>{error}</StyledError>) ||

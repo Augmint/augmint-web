@@ -26,7 +26,7 @@ export const StyledContainer = styled.div`
     }
     & input.small-text,
     & input.small-text::placeholder {
-        font-size: 18px;
+        font-size: 16px;
     }
 `;
 
@@ -58,7 +58,7 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledLabel = styled.label`
-    font-size: 14px;
+    font-size: 16px;
     line-height: ${remCalc(20)};
 `;
 

@@ -1,12 +1,12 @@
-#funding .column {
+.transfer .column {
     margin: 1em;
-    max-width: 400px;
-    flex-basis: 400px;
+    max-width: 470px;
+    flex-basis: 470px;
 }
 
 /* tablet */
 @media (max-width: 768px) {
-    #funding .column {
+    .transfer .column {
         margin: 1em auto 1em auto;
         max-width: 400px;
     }
@@ -14,7 +14,7 @@
 
 /* mobile */
 @media (max-width: 376px) {
-    #funding .column {
+    .transfer .column {
         width: 100%;
         margin: 1em 0;
     }

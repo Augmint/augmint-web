@@ -160,7 +160,7 @@ class AddWithdrawForm extends React.Component {
                     <EthSubmissionErrorPanel error={error} />
 
                     <Styledlabel data-testid={`${orderDirection}Label`}>
-                        {orderDirection === ADDFUND ? "Fund from bank account" : "Withdraw to bank account"}
+                        {orderDirection === ADDFUND ? "Fund from bank account ..." : "Withdraw to bank account ..."}
                     </Styledlabel>
 
                     <Field
