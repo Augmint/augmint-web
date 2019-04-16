@@ -59,7 +59,7 @@ class TransferPage extends React.Component {
                                             (!augmintToken.isLoaded && !augmintToken.loadError)
                                         }
                                         header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
-                                        style={{ marginTop: 0, backgroundColor: "#f9db9c" }}
+                                        style={{ marginTop: 0, backgroundColor: "#ffefce" }}
                                     >
                                         <EthTransferForm address={this.state.payeeEthAddress} />
                                     </Pblock>
