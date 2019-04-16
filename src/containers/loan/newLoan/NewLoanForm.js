@@ -43,7 +43,7 @@ class NewLoanForm extends React.Component {
             repaymentAmount: 0,
             amountChanged: "ETH",
             initialized: false,
-            ethAmount: 100
+            ethAmount: 1
         };
     }
 

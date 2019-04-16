@@ -54,7 +54,6 @@ export const StyledSelect = styled.select`
     height: 60px;
     text-indent: 10px;
     appearance: menulist !important;
-    text-transform: capitalize;
 `;
 
 export const StyledLabel = styled.label`

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import theme from "styles/theme";
 import { remCalc } from "styles/theme";
+import { media } from "styles/media";
 
 export const StyledMenu = styled.div`
     border-bottom: 1px solid ${theme.colors.white};
@@ -35,8 +36,20 @@ export const BaseMenuItem = styledComponent => styledComponent`
     color: ${theme.colors.white};
     cursor: pointer;
     line-height: ${remCalc(18)};
-    padding: ${remCalc(16)} ${remCalc(16)};
-    
+    text-align: center;
+    width: auto;
+
+    ${media.mobileMin`
+      padding: ${remCalc(16)} ${remCalc(16)};
+      font-size: 18px;
+    `};
+
+    ${media.mobile`
+      padding: ${remCalc(14)} 10px};
+      font-size: 15px;
+    `};
+
+
     &.filled {
       background-color: ${theme.colors.lightGrey};
       width: 50%;
@@ -47,43 +60,43 @@ export const BaseMenuItem = styledComponent => styledComponent`
       padding-bottom: 20px;
       box-sizing: border-box;
     }
-    
-    
+
+
     &.active {
       color: ${theme.colors.opacBlack};
       background-color: ${theme.colors.white};
       border-radius: ${theme.borderRadius.top};
     }
-    
+
     .App & {
         color: ${theme.colors.mediumGrey};
 
         &:hover {
           color: ${theme.colors.black};
         }
-        
+
         &.active {
           margin-bottom: -1px;
           background-color: ${theme.colors.white};
           border-radius: 0;
           border-bottom: 5px solid ${theme.colors.secondary}
           color: ${theme.colors.black};
-          
+
           &.filled {
             background-color: ${theme.colors.secondary};
             border-bottom: none;
             margin-bottom: 0;
           }
         }
-        
+
         &.filled {
             padding: 20px 10px;
         }
-        
+
         &.filled:first-of-type {
           border-radius: 4px 0 0 4px;
         }
-        
+
         &.filled:last-of-type {
           border-radius: 0 4px 4px 0;
         }
