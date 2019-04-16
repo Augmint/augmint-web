@@ -129,7 +129,7 @@ const OrderList = props => {
     const isSell = orderDirection === TOKEN_SELL;
     const orders = isSell ? sellOrders : buyOrders;
 
-    if (orders.length == 0) {
+    if (orders.length === 0) {
         return <div style={{ textAlign: "center", margin: "20px" }}>No {isSell ? "sell" : "buy"} orders</div>;
     }
 
