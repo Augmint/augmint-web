@@ -8,7 +8,7 @@ import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, Style
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { calculateTransfersBalance } from "modules/ethereum/transferTransactions";
-import { AEUR } from "components/augmint-ui/aeurDisplay";
+import { AEUR } from "components/augmint-ui/currencies";
 import styled from "styled-components";
 import { default as theme } from "styles/theme";
 

@@ -12,11 +12,11 @@ import styled from "styled-components";
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS, DECIMALS_DIV, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
-import { AEUR } from "components/augmint-ui/aeurDisplay";
-import { ETH } from "components/augmint-ui/ethDisplay";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 const StyledTable = styled.table`
-    border-spacing: 10px 0;
+    width: 100%;
+    border-spacing: 10px 2px;
     white-space: nowrap;
     text-align: right;
     tr td:last-child {
@@ -130,7 +130,7 @@ const OrderList = props => {
     const orders = isSell ? sellOrders : buyOrders;
 
     if (orders.length == 0) {
-        return <div>No {isSell ? "sellers" : "buyers"}</div>;
+        return <div style={{ textAlign: "center", margin: "20px" }}>No {isSell ? "sell" : "buy"} orders</div>;
     }
 
     return (
