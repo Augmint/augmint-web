@@ -39,14 +39,12 @@ class AugmintToken extends React.Component {
     };
 
     render() {
-        let loansCollected = "?",
-            amountOwnedByUsers = "?",
-            amountOwnedByUsersLiquid = "?",
-            loanCollateralCoverageRatio = "?",
-            collateralInEscrow = "?",
-            availableForMarketIntervention = "?",
-            bn_collateralInEscrowEth = 1,
-            bn_outstandingLoansAmount = 1;
+        let bn_loansCollected,
+            bn_amountOwnedByUsers,
+            bn_amountOwnedByUsersLiquid,
+            bn_loanCollateralCoverageRatio,
+            bn_collateralInEscrow,
+            bn_availableForMarketIntervention;
 
         const { metrics, monetarySupervisor, rates, loanManager, lockManager, augmintToken } = this.props;
 
@@ -55,9 +53,9 @@ class AugmintToken extends React.Component {
         const stabilityRatiosError = rates.loadError || metrics.error || monetarySupervisor.loadError;
 
         if (Object.keys(metrics.loansData).length) {
-            loansCollected = new BigNumber(metrics.loansData.collectedLoansAmount.toFixed(15))
-                .plus(metrics.loansData.defaultedLoansAmount)
-                .toNumber();
+            bn_loansCollected = metrics.loansData.bn_collectedLoansAmount.plus(
+                metrics.loansData.bn_defaultedLoansAmount
+            );
         }
 
         if (
@@ -66,40 +64,33 @@ class AugmintToken extends React.Component {
             metrics.augmintTokenInfo.feeAccountTokenBalance !== undefined &&
             metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance !== undefined
         ) {
-            const bn_amountOwnedByUsers = new BigNumber(metrics.augmintTokenInfo.totalSupply.toFixed(15))
+            bn_amountOwnedByUsers = new BigNumber(metrics.augmintTokenInfo.totalSupply)
                 .minus(metrics.monetarySupervisorInfo.reserveTokenBalance)
                 .minus(metrics.augmintTokenInfo.feeAccountTokenBalance)
                 .minus(metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance);
 
-            amountOwnedByUsers = bn_amountOwnedByUsers.toFixed(2);
-            amountOwnedByUsersLiquid = bn_amountOwnedByUsers
-                .minus(monetarySupervisor.info.totalLockedAmount)
-                .toFixed(2);
+            bn_amountOwnedByUsersLiquid = bn_amountOwnedByUsers.minus(monetarySupervisor.info.totalLockedAmount);
         }
 
         if (
-            metrics.loansData.collateralInEscrowEth &&
-            metrics.loansData.outstandingLoansAmount &&
+            metrics.loansData.bn_collateralInEscrowEth &&
+            metrics.loansData.bn_outstandingLoansAmount &&
             rates.info.bn_ethFiatRate
         ) {
-            bn_collateralInEscrowEth = new BigNumber(metrics.loansData.collateralInEscrowEth.toFixed(15));
-            bn_outstandingLoansAmount = new BigNumber(metrics.loansData.outstandingLoansAmount.toFixed(15));
-            let bn_collateralInEscrow = rates.info.bn_ethFiatRate.mul(bn_collateralInEscrowEth);
-            collateralInEscrow = bn_collateralInEscrow.toFixed(2);
+            bn_collateralInEscrow = rates.info.bn_ethFiatRate.mul(metrics.loansData.bn_collateralInEscrowEth);
 
-            loanCollateralCoverageRatio = bn_collateralInEscrow
-                .div(bn_outstandingLoansAmount)
-                .mul(100)
-                .toFixed(2);
+            bn_loanCollateralCoverageRatio = bn_collateralInEscrow
+                .div(metrics.loansData.bn_outstandingLoansAmount)
+                .mul(100);
         }
 
         if (
             metrics.monetarySupervisorInfo.reserveEthBalance !== undefined &&
             metrics.augmintTokenInfo.feeAccountEthBalance !== undefined
         ) {
-            availableForMarketIntervention = new BigNumber(metrics.monetarySupervisorInfo.reserveEthBalance.toFixed(15))
-                .plus(metrics.augmintTokenInfo.feeAccountEthBalance)
-                .toNumber();
+            bn_availableForMarketIntervention = new BigNumber(metrics.monetarySupervisorInfo.reserveEthBalance).plus(
+                metrics.augmintTokenInfo.feeAccountEthBalance
+            );
         }
 
         let loanLimit = 0;
@@ -149,8 +140,8 @@ class AugmintToken extends React.Component {
                 );
             });
         if (
-            metrics.loansData.outstandingLoansAmount > -1 &&
-            loansCollected > -1 &&
+            metrics.loansData.bn_outstandingLoansAmount > -1 &&
+            bn_loansCollected > -1 &&
             metrics.monetarySupervisorInfo.issuedByStabilityBoard > -1 &&
             document.getElementById("marketSupply-1")
         ) {
@@ -163,8 +154,8 @@ class AugmintToken extends React.Component {
                         {
                             label: " A€",
                             data: [
-                                metrics.loansData.outstandingLoansAmount,
-                                loansCollected,
+                                metrics.loansData.bn_outstandingLoansAmount,
+                                bn_loansCollected,
                                 metrics.monetarySupervisorInfo.issuedByStabilityBoard
                             ],
                             backgroundColor: [theme.chartColors.blue, theme.chartColors.orange, theme.chartColors.red],
@@ -185,7 +176,7 @@ class AugmintToken extends React.Component {
             metrics.augmintTokenInfo.feeAccountTokenBalance > -1 &&
             metrics.monetarySupervisorInfo.interestEarnedAccountTokenBalance > -1 &&
             monetarySupervisor.info.totalLockedAmount > -1 &&
-            amountOwnedByUsersLiquid > -1 &&
+            bn_amountOwnedByUsersLiquid > -1 &&
             document.getElementById("marketSupply-2")
         ) {
             let ctx = document.getElementById("marketSupply-2").getContext("2d");
@@ -200,7 +191,7 @@ class AugmintToken extends React.Component {
                     datasets: [
                         {
                             label: " A€",
-                            data: [data, monetarySupervisor.info.totalLockedAmount, amountOwnedByUsersLiquid],
+                            data: [data, monetarySupervisor.info.totalLockedAmount, bn_amountOwnedByUsersLiquid],
                             backgroundColor: [theme.chartColors.orange, theme.chartColors.red, theme.chartColors.green],
                             borderColor: [theme.chartColors.orange, theme.chartColors.red, theme.chartColors.green],
                             borderWidth: 0
@@ -237,8 +228,8 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>+ Loans Outstanding</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.outstandingLoansAmount !== undefined
-                                                        ? Number(metrics.loansData.outstandingLoansAmount).toFixed(0)
+                                                    {(metrics.loansData.bn_outstandingLoansAmount !== undefined
+                                                        ? metrics.loansData.bn_outstandingLoansAmount.toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info blue" />
                                                 </StyledCol>
@@ -248,9 +239,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(loansCollected !== "?"
-                                                        ? Number(loansCollected).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    {(bn_loansCollected ? bn_loansCollected.toFixed(0) : "?") + " A€"}
                                                     <div className="chart-info orange" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -330,9 +319,8 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(amountOwnedByUsers !== "?"
-                                                        ? Number(amountOwnedByUsers).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    {(bn_amountOwnedByUsers ? bn_amountOwnedByUsers.toFixed(0) : "?") +
+                                                        " A€"}
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -352,8 +340,8 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(amountOwnedByUsersLiquid !== "?"
-                                                        ? Number(amountOwnedByUsersLiquid).toFixed(0)
+                                                    {(bn_amountOwnedByUsersLiquid
+                                                        ? bn_amountOwnedByUsersLiquid.toFixed(0)
                                                         : "?") + " A€"}
                                                     <div className="chart-info green" />
                                                 </StyledCol>
@@ -402,8 +390,8 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Total</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(availableForMarketIntervention !== "?"
-                                                        ? Number(availableForMarketIntervention).toFixed(4)
+                                                    {(bn_availableForMarketIntervention
+                                                        ? bn_availableForMarketIntervention.toFixed(4)
                                                         : "?") + " ETH"}
                                                 </StyledCol>
                                             </StyledRow>
@@ -429,8 +417,8 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="result">
                                                 <StyledCol width={2 / 3}>Collateral Coverage Ratio</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(loanCollateralCoverageRatio !== "?"
-                                                        ? loanCollateralCoverageRatio
+                                                    {(bn_loanCollateralCoverageRatio
+                                                        ? bn_loanCollateralCoverageRatio.toFixed(2)
                                                         : "? ") + "%"}
                                                 </StyledCol>
                                             </StyledRow>
@@ -441,8 +429,8 @@ class AugmintToken extends React.Component {
                                                     Loans Outstanding
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.outstandingLoansAmount !== undefined
-                                                        ? Number(metrics.loansData.outstandingLoansAmount).toFixed(0)
+                                                    {(metrics.loansData.bn_outstandingLoansAmount !== undefined
+                                                        ? metrics.loansData.bn_outstandingLoansAmount.toFixed(0)
                                                         : "?") + " A€"}
                                                 </StyledCol>
                                             </StyledRow>
@@ -453,13 +441,13 @@ class AugmintToken extends React.Component {
                                                     Collateral in escrow
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.collateralInEscrowEth !== undefined
-                                                        ? Number(metrics.loansData.collateralInEscrowEth).toFixed(4)
+                                                    {(metrics.loansData.bn_collateralInEscrowEth !== undefined
+                                                        ? metrics.loansData.bn_collateralInEscrowEth.toFixed(4)
                                                         : "?") + " ETH "}
                                                     <span className="collateralInEscrow">
                                                         (
-                                                        {(collateralInEscrow !== "?"
-                                                            ? Number(collateralInEscrow).toFixed(0)
+                                                        {(bn_collateralInEscrow
+                                                            ? bn_collateralInEscrow.toFixed(0)
                                                             : "?") + " A€"}
                                                         )
                                                     </span>
