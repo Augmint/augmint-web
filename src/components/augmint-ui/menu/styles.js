@@ -30,7 +30,7 @@ export const BaseMenuItem = styledComponent => styledComponent`
     color: ${theme.colors.white};
     cursor: pointer;
     line-height: ${remCalc(18)};
-    padding: ${remCalc(16)} ${remCalc(25)};
+    padding: ${remCalc(16)} ${remCalc(16)};
     
     &.active {
       color: ${theme.colors.opacBlack};
