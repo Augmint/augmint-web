@@ -30,11 +30,12 @@ export const StyledMenu = styled.div`
 
 export const BaseMenuItem = styledComponent => styledComponent`
     align-items: center;
+    white-space: nowrap;
     font-family: ${theme.typography.fontFamilies.title};
     color: ${theme.colors.white};
     cursor: pointer;
     line-height: ${remCalc(18)};
-    padding: ${remCalc(16)} ${remCalc(25)};
+    padding: ${remCalc(16)} ${remCalc(16)};
     
     &.filled {
       background-color: ${theme.colors.lightGrey};

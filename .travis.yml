@@ -26,7 +26,7 @@ before_script:
   - wait-on tcp:localhost:8545 # ganache
 script:
   - yarn test # jest tests
-  - yarn cypress:runrecord
+  - yarn cypress:run
 after_script: greenkeeper-lockfile-upload
 # discord webhooks hack until this is released: https://github.com/travis-ci/travis-tasks/pull/71
 after_success:

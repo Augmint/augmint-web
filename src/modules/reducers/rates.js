@@ -79,7 +79,6 @@ export const refreshRates = () => {
                     ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
                     bn_tokenBalance,
                     tokenBalance: bn_tokenBalance / DECIMALS_DIV,
-
                     bn_ethFiatRate: new BigNumber(bn_ethFiatRate / DECIMALS_DIV),
                     ethFiatRate: bn_ethFiatRate / DECIMALS_DIV,
                     fiatEthRate: (1 / bn_ethFiatRate) * DECIMALS_DIV
