@@ -18,12 +18,14 @@ export const StyledContainer = styled.div`
         height: 22px;
     }
 
-    & input {
+    & input,
+    & input::placeholder {
         font-size: 22px;
         color: ${theme.colors.primary};
         font-weight: 600;
     }
-    & input.small-text {
+    & input.small-text,
+    & input.small-text::placeholder {
         font-size: 18px;
     }
 `;
