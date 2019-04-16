@@ -50,10 +50,7 @@ class TransferPage extends React.Component {
                                     header="Send A-EUR"
                                     style={{ marginBottom: 1 }}
                                 >
-                                    <TokenTransferForm
-                                        // setEthBalance={this.setEthBalance}
-                                        setPayeeAddress={this.setPayeeAddress}
-                                    />
+                                    <TokenTransferForm setPayeeAddress={this.setPayeeAddress} />
                                 </Pblock>
                                 {this.state.payeeEthAddress !== "" && (
                                     <Pblock

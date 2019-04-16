@@ -72,6 +72,7 @@ class EthTransferForm extends React.Component {
         } = this.props;
 
         const amountInEur = (this.props.rates.info.ethFiatRate * this.state.amount).toFixed(2);
+        const coverdTxs = (this.state.amount / this.placeholder) * 5;
 
         return (
             <div style={isFunctional && { display: "inline" }}>
@@ -125,7 +126,7 @@ class EthTransferForm extends React.Component {
                                     labelAlignRight="ETH"
                                 />
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
-                                    Approx. €{amountInEur} (covers 2 to 5 transactions)
+                                    Approx. €{amountInEur} (covers ~{coverdTxs} transactions)
                                 </p>
                             </div>
                         )}

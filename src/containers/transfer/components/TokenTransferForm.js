@@ -14,7 +14,6 @@ import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
-// import { refreshPayeesEthBalance, PAYEE_ETH_BALANCE_RECEIVED } from "modules/reducers/payeeEthBalance";
 import { getPayeesEthBalance } from "modules/payeeEthBalance";
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
@@ -31,7 +30,6 @@ class TokenTransferForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
         this.setPayeeAddress = this.setPayeeAddress.bind(this);
-        // this.setEthBalance = this.setEthBalance.bind(this);
     }
 
     componentDidUpdate() {
@@ -74,22 +72,13 @@ class TokenTransferForm extends React.Component {
         this.setState({ feeAmount: fee });
     }
 
-    // setEthBalance(payeeEthAmount) {
-    //     this.props.setEthBalance(payeeEthAmount);
-    // }
-
     setPayeeAddress(payeeEthAddress) {
         this.props.setPayeeAddress(payeeEthAddress);
     }
 
     async handleSubmit(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
-        // console.log("payee: ", values.payee);
-
-        // const payeeEthBalance = await store.dispatch(refreshPayeesEthBalance(values.payee));
         const payeeEthBalance = await getPayeesEthBalance(values.payee);
-        console.log("balance: ", payeeEthBalance);
-        console.log("payee: ", values.payee);
 
         // if (payeeEthBalance.type !== PAYEE_ETH_BALANCE_RECEIVED) {
         //     throw new SubmissionError({
@@ -109,7 +98,7 @@ class TokenTransferForm extends React.Component {
                 _error: res.error
             });
         } else {
-            if (!payeeEthBalance.error && payeeEthBalance.ethBalance !== 0) {
+            if (!payeeEthBalance.error && payeeEthBalance.ethBalance === "0") {
                 this.setPayeeAddress(values.payee);
             }
 
