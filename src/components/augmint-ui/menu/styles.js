@@ -25,6 +25,7 @@ export const StyledMenu = styled.div`
 
 export const BaseMenuItem = styledComponent => styledComponent`
     align-items: center;
+    white-space: nowrap;
     font-family: ${theme.typography.fontFamilies.title};
     color: ${theme.colors.white};
     cursor: pointer;
