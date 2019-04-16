@@ -443,7 +443,7 @@ class AugmintToken extends React.Component {
                                                 <StyledCol width={1 / 3}>
                                                     <ETH raw amount={metrics.loansData.bn_collateralInEscrowEth} />
                                                     <span className="collateralInEscrow">
-                                                        <AEUR raw amount={bn_collateralInEscrow} decimals={0} />
+                                                        (<AEUR raw amount={bn_collateralInEscrow} decimals={0} />)
                                                     </span>
                                                 </StyledCol>
                                             </StyledRow>
