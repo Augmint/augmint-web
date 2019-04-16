@@ -13,11 +13,15 @@ const NoWrap = styled.span`
  */
 export class AEUR extends React.Component {
     render() {
-        const { amount, raw, className } = this.props;
+        const { amount, raw, className, ...rest } = this.props;
         const amt = raw ? amount : amount / Math.pow(10, DECIMALS);
         const sign = amt === 0 ? "zero" : amt > 0 ? "positive" : "negative";
         const cls = ["AEUR", className, sign].join(" ");
-        return <NoWrap className={cls}>{amt.toFixed(DECIMALS)} A€</NoWrap>;
+        return (
+            <NoWrap className={cls} {...rest}>
+                {amt.toFixed(DECIMALS)} A€
+            </NoWrap>
+        );
     }
 }
 
@@ -28,10 +32,14 @@ export class AEUR extends React.Component {
  */
 export class ETH extends React.Component {
     render() {
-        const { amount, raw, className, decimals = 5 } = this.props;
+        const { amount, raw, className, decimals = 5, ...rest } = this.props;
         const amt = raw ? amount : utils.fromWei(amount);
         const sign = amt === 0 ? "zero" : amt > 0 ? "positive" : "negative";
         const cls = ["ETH", className, sign].join(" ");
-        return <NoWrap className={cls}>{amt.toFixed(decimals)} ETH</NoWrap>;
+        return (
+            <NoWrap className={cls} {...rest}>
+                {amt.toFixed(decimals)} ETH
+            </NoWrap>
+        );
     }
 }
