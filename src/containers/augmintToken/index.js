@@ -17,6 +17,7 @@ import { MyListGroup } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
@@ -228,9 +229,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>+ Loans Outstanding</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.bn_outstandingLoansAmount !== undefined
-                                                        ? metrics.loansData.bn_outstandingLoansAmount.toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={metrics.loansData.bn_outstandingLoansAmount}
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info blue" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -239,7 +242,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>+ Loans Collected</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(bn_loansCollected ? bn_loansCollected.toFixed(0) : "?") + " A€"}
+                                                    <AEUR raw amount={bn_loansCollected} decimals={0} />
                                                     <div className="chart-info orange" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -248,11 +251,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>+ Issued by Stability Board (Net)</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(monetarySupervisor.info.issuedByStabilityBoard !== "?"
-                                                        ? Number(
-                                                              monetarySupervisor.info.issuedByStabilityBoard
-                                                          ).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={monetarySupervisor.info.issuedByStabilityBoard}
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info red" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -261,9 +264,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Total</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.augmintTokenInfo.totalSupply !== undefined
-                                                        ? Number(metrics.augmintTokenInfo.totalSupply).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={metrics.augmintTokenInfo.totalSupply}
+                                                        decimals={0}
+                                                    />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -278,11 +283,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- A-EUR Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.monetarySupervisorInfo.reserveTokenBalance !== undefined
-                                                        ? Number(
-                                                              metrics.monetarySupervisorInfo.reserveTokenBalance
-                                                          ).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={metrics.monetarySupervisorInfo.reserveTokenBalance}
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info orange" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -291,11 +296,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Fees Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.augmintTokenInfo.feeAccountTokenBalance !== undefined
-                                                        ? Number(
-                                                              metrics.augmintTokenInfo.feeAccountTokenBalance
-                                                          ).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={metrics.augmintTokenInfo.feeAccountTokenBalance}
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info orange" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -304,13 +309,14 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Earned Interest Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.monetarySupervisorInfo
-                                                        .interestEarnedAccountTokenBalance !== undefined
-                                                        ? Number(
-                                                              metrics.monetarySupervisorInfo
-                                                                  .interestEarnedAccountTokenBalance
-                                                          ).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={
+                                                            metrics.monetarySupervisorInfo
+                                                                .interestEarnedAccountTokenBalance
+                                                        }
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info orange" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -319,8 +325,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Amount Owned by Users</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(bn_amountOwnedByUsers ? bn_amountOwnedByUsers.toFixed(0) : "?") +
-                                                        " A€"}
+                                                    <AEUR raw amount={bn_amountOwnedByUsers} decimals={0} />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -329,9 +334,11 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>- Locked-in Amount</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(monetarySupervisor.info.totalLockedAmount !== "?"
-                                                        ? Number(monetarySupervisor.info.totalLockedAmount).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={monetarySupervisor.info.totalLockedAmount}
+                                                        decimals={0}
+                                                    />
                                                     <div className="chart-info red" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -340,9 +347,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Amount Owned by Users (Liquid)</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(bn_amountOwnedByUsersLiquid
-                                                        ? bn_amountOwnedByUsersLiquid.toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR raw amount={bn_amountOwnedByUsersLiquid} decimals={0} />
                                                     <div className="chart-info green" />
                                                 </StyledCol>
                                             </StyledRow>
@@ -366,11 +371,10 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Market Intervention Reserve</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.monetarySupervisorInfo.reserveEthBalance !== undefined
-                                                        ? Number(
-                                                              metrics.monetarySupervisorInfo.reserveEthBalance
-                                                          ).toFixed(4)
-                                                        : "?") + " ETH"}
+                                                    <ETH
+                                                        raw
+                                                        amount={metrics.monetarySupervisorInfo.reserveEthBalance}
+                                                    />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -378,11 +382,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify">
                                                 <StyledCol width={2 / 3}>ETH Fees</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.augmintTokenInfo.feeAccountEthBalance !== undefined
-                                                        ? Number(metrics.augmintTokenInfo.feeAccountEthBalance).toFixed(
-                                                              4
-                                                          )
-                                                        : "?") + " ETH"}
+                                                    <ETH raw amount={metrics.augmintTokenInfo.feeAccountEthBalance} />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -390,9 +390,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="borderTop result">
                                                 <StyledCol width={2 / 3}>Total</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(bn_availableForMarketIntervention
-                                                        ? bn_availableForMarketIntervention.toFixed(4)
-                                                        : "?") + " ETH"}
+                                                    <ETH raw amount={bn_availableForMarketIntervention} />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -429,9 +427,11 @@ class AugmintToken extends React.Component {
                                                     Loans Outstanding
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.bn_outstandingLoansAmount !== undefined
-                                                        ? metrics.loansData.bn_outstandingLoansAmount.toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={metrics.loansData.bn_outstandingLoansAmount}
+                                                        decimals={0}
+                                                    />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -441,15 +441,9 @@ class AugmintToken extends React.Component {
                                                     Collateral in escrow
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(metrics.loansData.bn_collateralInEscrowEth !== undefined
-                                                        ? metrics.loansData.bn_collateralInEscrowEth.toFixed(4)
-                                                        : "?") + " ETH "}
+                                                    <ETH raw amount={metrics.loansData.bn_collateralInEscrowEth} />
                                                     <span className="collateralInEscrow">
-                                                        (
-                                                        {(bn_collateralInEscrow
-                                                            ? bn_collateralInEscrow.toFixed(0)
-                                                            : "?") + " A€"}
-                                                        )
+                                                        <AEUR raw amount={bn_collateralInEscrow} decimals={0} />
                                                     </span>
                                                 </StyledCol>
                                             </StyledRow>
@@ -458,7 +452,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="result">
                                                 <StyledCol width={2 / 3}>Loan To Lock-in Ratio</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(monetarySupervisor.info.ltdPercent !== "?"
+                                                    {(monetarySupervisor.info.ltdPercent
                                                         ? ((monetarySupervisor.info.ltdPercent * 10000) / 100).toFixed(
                                                               2
                                                           )
@@ -472,9 +466,11 @@ class AugmintToken extends React.Component {
                                                     Active Loans
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(monetarySupervisor.info.totalLoanAmount !== "?"
-                                                        ? Number(monetarySupervisor.info.totalLoanAmount).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={monetarySupervisor.info.totalLoanAmount}
+                                                        decimals={0}
+                                                    />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -484,9 +480,11 @@ class AugmintToken extends React.Component {
                                                     Active Lock-ins
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {(monetarySupervisor.info.totalLockedAmount !== "?"
-                                                        ? Number(monetarySupervisor.info.totalLockedAmount).toFixed(0)
-                                                        : "?") + " A€"}
+                                                    <AEUR
+                                                        raw
+                                                        amount={monetarySupervisor.info.totalLockedAmount}
+                                                        decimals={0}
+                                                    />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -519,7 +517,9 @@ class AugmintToken extends React.Component {
                                                         </StyledRow>
                                                         <StyledRow halign="justify">
                                                             <StyledCol width={3 / 5}>Loan Limit</StyledCol>
-                                                            <StyledCol width={2 / 5}>{loanLimit + " A€"}</StyledCol>
+                                                            <StyledCol width={2 / 5}>
+                                                                <AEUR raw amount={loanLimit} decimals={0} />
+                                                            </StyledCol>
                                                         </StyledRow>
                                                         <br />
                                                         <StyledRow halign="justify" className="result smaller">
@@ -546,7 +546,9 @@ class AugmintToken extends React.Component {
                                                             <StyledCol width={3 / 5} className="alignLeft">
                                                                 Lock-in Limit
                                                             </StyledCol>
-                                                            <StyledCol width={2 / 5}>{lockLimit + " A€"}</StyledCol>
+                                                            <StyledCol width={2 / 5}>
+                                                                <AEUR raw amount={lockLimit} decimals={0} />
+                                                            </StyledCol>
                                                         </StyledRow>
                                                         <br />
                                                         <StyledRow halign="justify" className="result smaller">
