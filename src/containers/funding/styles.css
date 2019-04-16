@@ -1,0 +1,21 @@
+#funding .column {
+    margin: 1em;
+    max-width: 440px;
+    flex-basis: 440px;
+}
+
+/* tablet */
+@media (max-width: 768px) {
+    #funding .column {
+        margin: 1em auto 1em auto;
+        max-width: 400px;
+    }
+}
+
+/* mobile */
+@media (max-width: 376px) {
+    #funding .column {
+        width: 100%;
+        margin: 1em 0;
+    }
+}

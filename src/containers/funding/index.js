@@ -9,6 +9,8 @@ import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 
+import "./styles.css";
+
 class WithdrawHome extends React.Component {
     componentDidMount() {
         connectWeb3();
@@ -27,9 +29,9 @@ class WithdrawHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
-                    <Pgrid>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
+                    <Pgrid id="funding">
+                        <Pgrid.Row className="row">
+                            <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>
                                 <AddWithdrawForm user={userAccount} rates={rates} />
                             </Pgrid.Column>
                         </Pgrid.Row>

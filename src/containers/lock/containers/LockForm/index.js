@@ -13,7 +13,6 @@ import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
 
 import theme from "styles/theme";
-import "./styles.css";
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -190,7 +189,7 @@ class LockContainer extends React.Component {
         }
 
         return (
-            <Pblock id="lock-form" loading={lockManager.isLoading && !this.state.initialize}>
+            <Pblock id="lock-form" noMargin={true} loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
                     <EthSubmissionSuccessPanel
                         header="New Lock submitted"

@@ -154,7 +154,7 @@ class AddWithdrawForm extends React.Component {
         );
 
         return (
-            <Pblock>
+            <Pblock noMargin={true}>
                 {header}
                 <Form error={error ? "true" : "false"}>
                     <EthSubmissionErrorPanel error={error} />
