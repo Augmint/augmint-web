@@ -228,50 +228,6 @@ class NewLoanForm extends React.Component {
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Pgrid>
-                            <Pgrid.Row halign="justify">
-                                <Pgrid.Column style={{ marginBottom: "-10px" }}>
-                                    <label>You deposit ...</label>
-                                    <Field
-                                        component={Form.Field}
-                                        as={Form.Input}
-                                        name="ethAmount"
-                                        type="number"
-                                        inputmode="numeric"
-                                        step="any"
-                                        min="0"
-                                        disabled={submitting || !loanManager.isLoaded}
-                                        validate={[
-                                            Validations.required,
-                                            Validations.ethAmount,
-                                            Validations.ethUserBalance
-                                        ]}
-                                        normalize={Normalizations.fiveDecimals}
-                                        onChange={this.onEthAmountChange}
-                                        data-testid="ethAmountInput"
-                                        style={{ borderRadius: theme.borderRadius.left }}
-                                        labelAlignRight="ETH"
-                                        info={`Approx. ${depositInEur} EUR`}
-                                        className="field-big"
-                                    />
-                                </Pgrid.Column>
-                            </Pgrid.Row>
-
-                            <div
-                                style={{
-                                    border: `1px solid ${theme.colors.mediumGrey}`,
-                                    borderRadius: "100%",
-                                    padding: "4px",
-                                    width: "16px",
-                                    height: "16px",
-                                    justifyContent: "center",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    margin: "0 auto"
-                                }}
-                            >
-                                <Icon color="grey" name="arrow-down" />
-                            </div>
-
                             <Pgrid.Row>
                                 <Pgrid.Column>
                                     <label>You borrow ...</label>
@@ -296,6 +252,34 @@ class NewLoanForm extends React.Component {
                                         style={{ borderRadius: theme.borderRadius.left }}
                                         labelAlignRight="A-EUR"
                                         info={`Based on ${collateralRatio}% loan-to-value ratio`}
+                                    />
+                                </Pgrid.Column>
+                            </Pgrid.Row>
+
+                            <Pgrid.Row halign="justify">
+                                <Pgrid.Column style={{ marginBottom: "-10px" }}>
+                                    <label>You deposit ...</label>
+                                    <Field
+                                        component={Form.Field}
+                                        as={Form.Input}
+                                        name="ethAmount"
+                                        type="number"
+                                        inputmode="numeric"
+                                        step="any"
+                                        min="0"
+                                        disabled={submitting || !loanManager.isLoaded}
+                                        validate={[
+                                            Validations.required,
+                                            Validations.ethAmount,
+                                            Validations.ethUserBalance
+                                        ]}
+                                        normalize={Normalizations.fiveDecimals}
+                                        onChange={this.onEthAmountChange}
+                                        data-testid="ethAmountInput"
+                                        style={{ borderRadius: theme.borderRadius.left }}
+                                        labelAlignRight="ETH"
+                                        info={`Approx. ${depositInEur} EUR`}
+                                        className="field-big"
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>
@@ -352,7 +336,7 @@ class NewLoanForm extends React.Component {
                                 <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", color: theme.colors.secondary }}>
+                                <p style={{ margin: "0" }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
