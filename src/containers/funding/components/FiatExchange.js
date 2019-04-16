@@ -1,7 +1,6 @@
 import React from "react";
 import { Pblock } from "components/PageLayout";
 import Header from "components/augmint-ui/header";
-import { MrCoinBuyLink, MrCoinSellLink } from "components/ExchangeLinks";
 
 export default function FiatExchange(props) {
     return (

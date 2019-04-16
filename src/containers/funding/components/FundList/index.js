@@ -4,11 +4,11 @@ import { Pgrid } from "components/PageLayout";
 
 import "./styles.css";
 import { FUNDS } from "./funds.js";
-import { ADDFUND, WITHDRAW } from "../AddWithdrawForm";
+import { ADDFUND } from "../AddWithdrawForm";
 
 const FundItem = props => {
-    const { fund, user, direction, amount } = props;
-    const { name, buyUrl, sellUrl, image } = fund;
+    const { fund, direction } = props;
+    const { name, image } = fund;
     const features = direction === ADDFUND ? fund.addFeatures : fund.withdrawFeatures;
     return (
         <li className="fund-item">

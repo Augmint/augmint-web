@@ -5,7 +5,6 @@ import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
-import FiatExchange from "./components/FiatExchange";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
