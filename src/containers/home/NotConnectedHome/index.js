@@ -265,10 +265,6 @@ export default class NotConnectedHome extends React.Component {
                                 {management.map(member => (
                                     <Member member={member} key={member.pk} />
                                 ))}
-                            </Grid>
-                        </ThemeProvider>
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid">
                                 {teamMembers.map(member => (
                                     <Member member={member} key={member.pk} />
                                 ))}
