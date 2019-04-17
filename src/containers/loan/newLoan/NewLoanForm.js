@@ -274,16 +274,33 @@ class NewLoanForm extends React.Component {
 
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column>
+                                    {this.state.productId !== null && this.state.productId !== undefined && (
+                                        <Field
+                                            component={Form.Field}
+                                            name="productId"
+                                            disabled={submitting || !loanManager.isLoaded}
+                                            onChange={this.onSelectedLoanChange}
+                                            data-testid="loan-product-selector"
+                                            className="field-big"
+                                            isSelect="true"
+                                            selectOptions={this.activeProducts}
+                                            selectTestId="loan-product"
+                                            id={"selectedLoanProduct-" + this.state.productId}
+                                        />
+                                    )}
+                                </Pgrid.Column>
+                            </Pgrid.Row>
+
+                            <Pgrid.Row halign="justify">
+                                <Pgrid.Column>
                                     <div
                                         style={{
                                             border: "1px solid #e8e8e8",
-                                            borderTop: 0,
                                             borderRadius: 3,
                                             boxSizing: "border-box",
                                             width: "100%",
                                             padding: 20,
                                             marginBottom: 20,
-                                            marginTop: "-22px",
                                             background: "rgba(232, 232, 232, 0.3)"
                                         }}
                                     >
@@ -302,26 +319,6 @@ class NewLoanForm extends React.Component {
                                         </div>
                                     </div>
                                     <label> </label>
-                                </Pgrid.Column>
-                            </Pgrid.Row>
-
-                            <Pgrid.Row halign="justify">
-                                <Pgrid.Column style={{ marginBottom: "10px" }}>
-                                    <label>When do you want to repay your loan?</label>
-                                    {this.state.productId !== null && this.state.productId !== undefined && (
-                                        <Field
-                                            component={Form.Field}
-                                            name="productId"
-                                            disabled={submitting || !loanManager.isLoaded}
-                                            onChange={this.onSelectedLoanChange}
-                                            data-testid="loan-product-selector"
-                                            className="field-big"
-                                            isSelect="true"
-                                            selectOptions={this.activeProducts}
-                                            selectTestId="loan-product"
-                                            id={"selectedLoanProduct-" + this.state.productId}
-                                        />
-                                    )}
                                 </Pgrid.Column>
                             </Pgrid.Row>
                         </Pgrid>

@@ -154,7 +154,7 @@ export function Select(props) {
                     value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
-                    {product.termText ? "After " + product.termText : product.durationText}
+                    {product.termText ? "Repay in " + product.termText : product.durationText}
                 </option>
             );
         });
