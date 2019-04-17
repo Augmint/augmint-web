@@ -27,7 +27,11 @@ class NewLoanForm extends React.Component {
         this.products = this.props.loanManager.products;
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
-            .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
+            .sort((p1, p2) => p2.termInSecs - p1.termInSecs)
+            .map(product => {
+                product.termText = "After " + product.termText;
+                return product;
+            });
         this.product = props.loanManager.products[this.defaultProductId()];
         this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
@@ -230,7 +234,7 @@ class NewLoanForm extends React.Component {
                         <Pgrid>
                             <Pgrid.Row>
                                 <Pgrid.Column>
-                                    <label>You borrow ...</label>
+                                    <label>How much would you like to borrow?</label>
                                     <Field
                                         component={Form.Field}
                                         as={Form.Input}
@@ -251,51 +255,49 @@ class NewLoanForm extends React.Component {
                                         data-testid="loanTokenAmountInput"
                                         style={{ borderRadius: theme.borderRadius.left }}
                                         labelAlignRight="A-EUR"
-                                        info={`Based on ${collateralRatio}% loan-to-value ratio`}
                                     />
                                 </Pgrid.Column>
                             </Pgrid.Row>
 
                             <Pgrid.Row halign="justify">
-                                <Pgrid.Column style={{ marginBottom: "-10px" }}>
-                                    <label>You deposit ...</label>
-                                    <Field
-                                        component={Form.Field}
-                                        as={Form.Input}
-                                        name="ethAmount"
-                                        type="number"
-                                        inputmode="numeric"
-                                        step="any"
-                                        min="0"
-                                        disabled={submitting || !loanManager.isLoaded}
-                                        validate={[
-                                            Validations.required,
-                                            Validations.ethAmount,
-                                            Validations.ethUserBalance
-                                        ]}
-                                        normalize={Normalizations.fiveDecimals}
-                                        onChange={this.onEthAmountChange}
-                                        data-testid="ethAmountInput"
-                                        style={{ borderRadius: theme.borderRadius.left }}
-                                        labelAlignRight="ETH"
-                                        info={`Approx. ${depositInEur} EUR`}
-                                        className="field-big"
-                                    />
+                                <Pgrid.Column>
+                                    <div
+                                        style={{
+                                            border: "1px solid #e8e8e8",
+                                            borderTop: 0,
+                                            borderRadius: 3,
+                                            boxSizing: "border-box",
+                                            width: "100%",
+                                            padding: 20,
+                                            marginBottom: 20,
+                                            marginTop: "-22px",
+                                            background: "rgba(232, 232, 232, 0.3)"
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                fontSize: 14,
+                                                marginBottom: 20,
+                                                lineHeight: "150%",
+                                                color: "rgba(0,0,0,0.7)"
+                                            }}
+                                        >
+                                            The ETH collateral required <br /> to borrow will be...
+                                        </div>
+                                        <div style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(0,0,0,0.7)" }}>
+                                            <span style={{ color: "black", fontSize: 24, fontWeight: 600 }}>
+                                                {this.state.ethAmount}
+                                            </span>{" "}
+                                            ETH
+                                        </div>
+                                    </div>
+                                    <label> </label>
                                 </Pgrid.Column>
                             </Pgrid.Row>
-
-                            <div
-                                style={{
-                                    width: "70px",
-                                    height: "1px",
-                                    backgroundColor: `${theme.colors.mediumGrey}`,
-                                    margin: "10px auto 10px auto"
-                                }}
-                            />
 
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column style={{ marginBottom: "10px" }}>
-                                    <label>Repay loan after ...</label>
+                                    <label>When do you want to repay your loan?</label>
                                     {this.state.productId !== null && this.state.productId !== undefined && (
                                         <Field
                                             component={Form.Field}
@@ -303,7 +305,6 @@ class NewLoanForm extends React.Component {
                                             disabled={submitting || !loanManager.isLoaded}
                                             onChange={this.onSelectedLoanChange}
                                             data-testid="loan-product-selector"
-                                            info={`Repay by ${repayBefore}`}
                                             className="field-big"
                                             isSelect="true"
                                             selectOptions={this.activeProducts}
@@ -330,13 +331,13 @@ class NewLoanForm extends React.Component {
                                     marginBottom: "30px"
                                 }}
                             >
-                                <p data-testid="repaymentAmount" style={{ margin: "0" }}>
+                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 20 }}>
                                     <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0" }}>
+                                <p style={{ margin: "0", fontSize: 20 }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>

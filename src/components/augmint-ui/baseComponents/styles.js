@@ -66,7 +66,7 @@ export const StyledError = styled.span`
 `;
 
 export const StyledFormField = styled.div`
-    margin: 0 0 ${remCalc(16)};
+    margin: 0 0 ${remCalc(22)};
     & input.nolabel {
         border-right: 1px solid ${theme.colors.opacGrey};
     }
