@@ -11,6 +11,7 @@ import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
+import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 
 import theme from "styles/theme";
 
@@ -263,7 +264,9 @@ class LockContainer extends React.Component {
                                 }}
                             >
                                 <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>{earnAmount + " A-EUR"}</strong>
+                                    <strong>
+                                        <AEUR amount={earnAmount} />
+                                    </strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>You earn</p>
                             </div>
