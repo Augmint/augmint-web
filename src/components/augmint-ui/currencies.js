@@ -42,7 +42,7 @@ export class AEUR extends React.Component {
  */
 export class ETH extends React.Component {
     render() {
-        const { amount, raw, className, decimals = 5, ...rest } = this.props;
+        const { amount, raw, className, decimals = 4, ...rest } = this.props;
         const amt = amount === undefined || raw ? amount : utils.fromWei(amount);
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
