@@ -23,14 +23,14 @@ function format(n, decimals) {
 }
 
 /*
-    amount: amount to display (an integer in the smallest unit of account)
-    raw: set to true, if amount is a floating point num (the number will be printed without unit conversion)
+    amount: amount to display
+    raw: set to true, if amount is an integer in the smallest unit of account
     decimals: default to token decimals
  */
 export class AEUR extends React.Component {
     render() {
         const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
-        const amt = amount === undefined || raw ? amount : amount / Math.pow(10, DECIMALS);
+        const amt = amount === undefined || raw ? amount / Math.pow(10, DECIMALS) : amount;
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
@@ -41,14 +41,14 @@ export class AEUR extends React.Component {
 }
 
 /*
-    amount: amount to display (an integer in the smallest unit of account, Wei)
-    raw: set to true, if amount is a floating point num (the number will be printed without unit conversion)
+    amount: amount to display
+    raw: set to true, if amount is an integer in the smallest unit of account (wei)
     decimals: default to 5
  */
 export class ETH extends React.Component {
     render() {
         const { amount, raw, className, decimals = 4, ...rest } = this.props;
-        const amt = amount === undefined || raw ? amount : utils.fromWei(amount);
+        const amt = amount === undefined || raw ? utils.fromWei(amount) : amount;
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
