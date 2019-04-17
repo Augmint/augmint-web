@@ -29,7 +29,7 @@ function format(n, decimals) {
 export class AEUR extends React.Component {
     render() {
         const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
-        const amt = amount === undefined || raw ? amount / Math.pow(10, DECIMALS) : amount;
+        const amt = amount === undefined || (raw ? amount / Math.pow(10, DECIMALS) : amount);
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
@@ -47,7 +47,7 @@ export class AEUR extends React.Component {
 export class ETH extends React.Component {
     render() {
         const { amount, raw, className, decimals = 4, ...rest } = this.props;
-        const amt = amount === undefined || raw ? amount / Math.pow(10, 18) : amount;
+        const amt = amount === undefined || (raw ? amount / Math.pow(10, 18) : amount);
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
