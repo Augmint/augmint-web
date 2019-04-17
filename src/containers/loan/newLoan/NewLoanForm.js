@@ -27,11 +27,7 @@ class NewLoanForm extends React.Component {
         this.products = this.props.loanManager.products;
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
-            .sort((p1, p2) => p2.termInSecs - p1.termInSecs)
-            .map(product => {
-                product.termText = "After " + product.termText;
-                return product;
-            });
+            .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
         this.product = props.loanManager.products[this.defaultProductId()];
         this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
@@ -331,13 +327,13 @@ class NewLoanForm extends React.Component {
                                     marginBottom: "30px"
                                 }}
                             >
-                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 20 }}>
+                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
                                     <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", fontSize: 20 }}>
+                                <p style={{ margin: "0", fontSize: 18 }}>
                                     <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
