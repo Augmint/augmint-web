@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { DECIMALS } from "utils/constants";
-import utils from "web3";
 
 const NoWrap = styled.span`
     white-space: nowrap;
@@ -48,7 +47,7 @@ export class AEUR extends React.Component {
 export class ETH extends React.Component {
     render() {
         const { amount, raw, className, decimals = 4, ...rest } = this.props;
-        const amt = amount === undefined || raw ? utils.fromWei(amount) : amount;
+        const amt = amount === undefined || raw ? amount / Math.pow(10, 18) : amount;
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
