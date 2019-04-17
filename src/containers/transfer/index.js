@@ -31,7 +31,7 @@ class TransferPage extends React.Component {
     }
 
     render() {
-        const { augmintToken } = this.props;
+        const { augmintToken, userBalances } = this.props;
 
         return (
             <EthereumState>
@@ -55,10 +55,7 @@ class TransferPage extends React.Component {
                                 </Pblock>
                                 {this.state.payeeEthAddress !== "" && (
                                     <Pblock
-                                        loading={
-                                            augmintToken.isLoading || // TODO change augmintToken to something else
-                                            (!augmintToken.isLoaded && !augmintToken.loadError)
-                                        }
+                                        loading={userBalances.isLoading}
                                         header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
                                         style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
                                     >
@@ -76,7 +73,7 @@ class TransferPage extends React.Component {
 
 const mapStateToProps = state => ({
     augmintToken: state.augmintToken,
-    userAccount: state.userBalances.account
+    userBalances: state.userBalances
 });
 
 export default connect(mapStateToProps)(TransferPage);

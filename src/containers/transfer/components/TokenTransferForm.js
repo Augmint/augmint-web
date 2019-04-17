@@ -80,12 +80,6 @@ class TokenTransferForm extends React.Component {
         const tokenAmount = parseFloat(values.tokenAmount);
         const payeeEthBalance = await getPayeesEthBalance(values.payee);
 
-        // if (payeeEthBalance.type !== PAYEE_ETH_BALANCE_RECEIVED) {
-        //     throw new SubmissionError({
-        //         _error: payeeEthBalance.error
-        //     });
-        // }
-
         const res = await store.dispatch(
             transferToken({
                 payee: values.payee,

@@ -72,7 +72,7 @@ class EthTransferForm extends React.Component {
         } = this.props;
 
         const amountInEur = (this.props.rates.info.ethFiatRate * this.state.amount).toFixed(2);
-        const coverdTxs = (this.state.amount / this.placeholder) * 5;
+        const coverdTxs = Math.round((this.state.amount / this.placeholder) * 5);
 
         return (
             <div style={isFunctional && { display: "inline" }}>
