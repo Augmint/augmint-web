@@ -272,6 +272,7 @@ class NewLoanForm extends React.Component {
                                             <Pgrid.Column
                                                 size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}
                                                 style={{ padding: "5px 0" }}
+                                                key={product.id}
                                             >
                                                 <Field
                                                     name="productId"
