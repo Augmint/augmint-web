@@ -1,5 +1,8 @@
 .node-xmlhttprequest-sync-*
 
+# editor settings
+.idea/
+
 # we are using yarn.lock
 package-lock.json
 
