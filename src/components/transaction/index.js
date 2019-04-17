@@ -31,21 +31,6 @@ export const TxPrice = styled.span`
     }
 `;
 
-export class TxAmount extends React.Component {
-    render() {
-        const { amount, showPlusSign, divide } = this.props;
-        let txAmount = amount;
-        if (divide) {
-            txAmount = txAmount / Math.pow(10, DECIMALS);
-        }
-        let text = `${txAmount.toFixed(DECIMALS)} A€`;
-        if (showPlusSign) {
-            text = txAmount > 0 ? `+${text}` : text;
-        }
-        return <span>{text}</span>;
-    }
-}
-
 class TxInfo extends React.Component {
     getAddressType(address) {
         const props = this.props;
