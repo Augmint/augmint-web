@@ -65,11 +65,6 @@ export const StyledCol = styled(Col)`
         text-align: left;
     }
 
-    .collateralInEscrow {
-        display: inline-block;
-        font-size: ${remCalc(12)};
-    }
-
     & > div.chart-info {
         background: black;
         content: "";

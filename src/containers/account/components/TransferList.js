@@ -100,11 +100,11 @@ class TransferList extends React.Component {
                     info: <TxInfo tx={tx} />,
                     amount: (
                         <Transfer>
-                            <AEUR amount={tx.amount} className="delta" data-testid="txPrice" />
-                            <AEUR amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
+                            <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
+                            <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
                         </Transfer>
                     ),
-                    balance: <AEUR amount={tx.balance} />
+                    balance: <AEUR raw amount={tx.balance} />
                 };
             });
         }

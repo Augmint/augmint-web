@@ -4,7 +4,6 @@ import { default as theme, remCalc } from "styles/theme";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 import { connect } from "react-redux";
-import { DECIMALS } from "utils/constants";
 
 export const TxDate = styled.span`
     font-size: ${remCalc(12)};

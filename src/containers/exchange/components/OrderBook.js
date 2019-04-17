@@ -50,14 +50,14 @@ const OrderItem = props => {
         return (
             <tr>
                 <td>
-                    <AEUR raw amount={order.amount} />
+                    <AEUR amount={order.amount} />
                 </td>
                 <td>
-                    <ETH raw amount={ethValue} />
+                    <ETH amount={ethValue} />
                 </td>
                 <td>{displayPrice}%</td>
                 <td>
-                    <AEUR raw amount={rate} />
+                    <AEUR amount={rate} />
                 </td>
                 <td>
                     <MoreInfoTip id={"more_info-" + order.id}>
@@ -82,14 +82,14 @@ const OrderItem = props => {
         return (
             <tr>
                 <td>
-                    <AEUR raw amount={aeurValue} />
+                    <AEUR amount={aeurValue} />
                 </td>
                 <td>
-                    <ETH raw amount={order.amount} />
+                    <ETH amount={order.amount} />
                 </td>
                 <td>{displayPrice}%</td>
                 <td>
-                    <AEUR raw amount={rate} />
+                    <AEUR amount={rate} />
                 </td>
                 <td>
                     <MoreInfoTip id={"more_info-" + order.id}>
@@ -161,10 +161,9 @@ const OrderList = props => {
             <tfoot>
                 <tr>
                     <td>
-                        Total:{" "}
-                        {isSell ? <AEUR raw amount={totalAeurSellAmount} /> : <AEUR raw amount={totalAeurBuyAmount} />}
+                        Total: {isSell ? <AEUR amount={totalAeurSellAmount} /> : <AEUR amount={totalAeurBuyAmount} />}
                     </td>
-                    <td>{isSell ? <ETH raw amount={totalEthSellAmount} /> : <ETH raw amount={totalEthBuyAmount} />}</td>
+                    <td>{isSell ? <ETH amount={totalEthSellAmount} /> : <ETH amount={totalEthBuyAmount} />}</td>
                     <td colSpan="3" />
                 </tr>
             </tfoot>
