@@ -6,13 +6,13 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
-import moment from "moment";
+// import moment from "moment";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pgrid } from "components/PageLayout";
-import Icon from "components/augmint-ui/icon";
+import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
@@ -41,9 +41,10 @@ class NewLoanForm extends React.Component {
             minToken: Validations.minTokenAmount(this.product.minDisbursedAmountInToken),
             maxLoanAmount: Validations.maxLoanAmount(this.product.maxLoanAmount),
             repaymentAmount: 0,
-            amountChanged: "ETH",
+            amountChanged: "A-EUR",
             initialized: false,
-            ethAmount: 1
+            ethAmount: null,
+            loanTokenAmount: 100
         };
     }
 
@@ -57,15 +58,15 @@ class NewLoanForm extends React.Component {
     }
 
     initForm() {
-        const initialValues = this.calculateFromEth(this.state.ethAmount);
+        const initialValues = this.calculateFromToken(this.state.loanTokenAmount);
         this.props.initialize({
-            ethAmount: initialValues.ethAmount,
             loanTokenAmount: initialValues.loanTokenAmount,
             productId: this.activeProducts[0].id
         });
         this.setState({
             repaymentAmount: initialValues.repaymentAmount,
             initialized: true,
+            ethAmount: initialValues.ethAmount,
             productId: this.activeProducts[0].id
         });
     }
@@ -100,14 +101,30 @@ class NewLoanForm extends React.Component {
     }
 
     onLoanTokenAmountChange(e) {
-        let val;
         const amount = e ? e.target.value : this.state.loanTokenAmount;
+        const { error, loanTokenAmount, repaymentAmount, ethAmount } = this.calculateFromToken(amount);
+
+        if (error) {
+            this.props.change("ethAmount", "");
+            this.setState({ repaymentAmount: "" });
+        } else {
+            this.props.change("ethAmount", ethAmount);
+            this.setState({
+                ethAmount: ethAmount,
+                loanTokenAmount: loanTokenAmount,
+                repaymentAmount: repaymentAmount,
+                amountChanged: "A-EURO"
+            });
+        }
+    }
+
+    calculateFromToken(amount) {
+        let val;
+        let err;
         try {
             val = new BigNumber(amount).mul(DECIMALS_DIV);
         } catch (error) {
-            this.props.change("ethAmount", "");
-            this.setState({ repaymentAmount: "" });
-            return;
+            return { error: error };
         }
 
         const repaymentAmount = val
@@ -122,15 +139,15 @@ class NewLoanForm extends React.Component {
             .div(this.state.product.bn_collateralRatio)
             .mul(PPM_DIV)
             .round(0, BigNumber.ROUND_DOWN);
+
         const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
 
-        this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
-        this.setState({
-            ethAmount: ethAmount.toFixed(ETH_DECIMALS),
-            loanTokenAmount: amount,
+        return {
+            error: err,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
-            amountChanged: "A-EURO"
-        });
+            loanTokenAmount: amount,
+            ethAmount: ethAmount.toFixed(ETH_DECIMALS)
+        };
     }
 
     calculateFromEth(amount) {
@@ -207,9 +224,9 @@ class NewLoanForm extends React.Component {
         const { error, handleSubmit, pristine, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
         const { rates } = this.props;
         const isRatesAvailable = rates && rates.info.bn_ethFiatRate * 1 > 0;
-        const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
-        const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
-        const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
+        // const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
+        // const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
+        // const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
 
         return (
             <div>
@@ -278,13 +295,10 @@ class NewLoanForm extends React.Component {
                                                 color: "rgba(0,0,0,0.7)"
                                             }}
                                         >
-                                            The ETH collateral required <br /> to borrow will be...
+                                            ETH collateral required <br /> to borrow will be...
                                         </div>
-                                        <div style={{ fontSize: "1rem", fontWeight: 400, color: "rgba(0,0,0,0.7)" }}>
-                                            <span style={{ color: "black", fontSize: 24, fontWeight: 600 }}>
-                                                {this.state.ethAmount}
-                                            </span>{" "}
-                                            ETH
+                                        <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
+                                            <ETH amount={this.state.ethAmount} />
                                         </div>
                                     </div>
                                     <label> </label>
@@ -330,7 +344,9 @@ class NewLoanForm extends React.Component {
                                 }}
                             >
                                 <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>{this.state.repaymentAmount || 0} A-EUR</strong>
+                                    <strong>
+                                        <AEUR amount={this.state.repaymentAmount || 0} />
+                                    </strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
                             </div>

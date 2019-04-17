@@ -24,11 +24,6 @@ export const ADDFUND = "addFunds";
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
 
-const Styledlabel = styled.label`
-    display: inline-block;
-    margin-bottom: 5px;
-`;
-
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
