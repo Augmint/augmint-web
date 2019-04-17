@@ -8,6 +8,7 @@ import { Pheader, Psegment, Pgrid, Pblock } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
+import theme from "styles/theme";
 
 class TransferPage extends React.Component {
     constructor(props) {
@@ -59,7 +60,7 @@ class TransferPage extends React.Component {
                                             (!augmintToken.isLoaded && !augmintToken.loadError)
                                         }
                                         header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
-                                        style={{ marginTop: 0, backgroundColor: "#ffefce" }}
+                                        style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
                                     >
                                         <EthTransferForm address={this.state.payeeEthAddress} />
                                     </Pblock>
