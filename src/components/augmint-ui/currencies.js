@@ -26,9 +26,10 @@ export class AEUR extends React.Component {
         const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
         const amt = amount === undefined || raw ? amount : amount / Math.pow(10, DECIMALS);
         const cls = ["AEUR", className, signum(amt)].join(" ");
+        const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         return (
             <NoWrap className={cls} {...rest}>
-                {amt !== undefined && `${amt.toFixed(decimals)} A€`}
+                {amt !== undefined && `${fmt.format(amt)} A€`}
             </NoWrap>
         );
     }
