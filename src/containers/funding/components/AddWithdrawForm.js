@@ -159,9 +159,9 @@ class AddWithdrawForm extends React.Component {
                 <Form error={error ? "true" : "false"}>
                     <EthSubmissionErrorPanel error={error} />
 
-                    <Styledlabel data-testid={`${orderDirection}Label`}>
+                    <label data-testid={`${orderDirection}Label`}>
                         {orderDirection === ADDFUND ? "Fund from bank account ..." : "Withdraw to bank account ..."}
-                    </Styledlabel>
+                    </label>
 
                     <Field
                         name={orderDirection}
@@ -178,7 +178,7 @@ class AddWithdrawForm extends React.Component {
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                     />
-                    <Styledlabel>Available exchange partner:</Styledlabel>
+                    <label>Available exchange partner:</label>
 
                     <FundList user={user} amount={amount} direction={orderDirection} />
 

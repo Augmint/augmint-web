@@ -250,7 +250,9 @@ class LockContainer extends React.Component {
                             style={{
                                 width: "100%",
                                 display: "flex",
-                                justifyContent: "space- between"
+                                justifyContent: "space-between",
+                                padding: 3,
+                                boxSizing: "border-box"
                             }}
                         >
                             <div
@@ -260,13 +262,13 @@ class LockContainer extends React.Component {
                                     marginBottom: "30px"
                                 }}
                             >
-                                <p data-testid="repaymentAmount" style={{ margin: "0" }}>
+                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
                                     <strong>{earnAmount + " A-EUR"}</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>You earn</p>
                             </div>
                             <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", color: theme.colors.secondary }}>
+                                <p style={{ margin: "0", fontSize: 18 }}>
                                     <strong>{interest + "%"}</strong>
                                 </p>
                                 <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
