@@ -6,7 +6,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import BigNumber from "bignumber.js";
-// import moment from "moment";
+import moment from "moment";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
@@ -226,7 +226,7 @@ class NewLoanForm extends React.Component {
         const isRatesAvailable = rates && rates.info.bn_ethFiatRate * 1 > 0;
         // const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
         // const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
-        // const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
+        const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
 
         return (
             <div>
@@ -300,7 +300,6 @@ class NewLoanForm extends React.Component {
                                             boxSizing: "border-box",
                                             width: "100%",
                                             padding: 20,
-                                            marginBottom: 20,
                                             background: "rgba(232, 232, 232, 0.3)"
                                         }}
                                     >
@@ -312,7 +311,7 @@ class NewLoanForm extends React.Component {
                                                 color: "rgba(0,0,0,0.7)"
                                             }}
                                         >
-                                            ETH collateral required <br /> to borrow will be...
+                                            Collateral required <br /> to borrow will be...
                                         </div>
                                         <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
                                             <ETH amount={this.state.ethAmount} />
@@ -323,36 +322,12 @@ class NewLoanForm extends React.Component {
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div
-                            className="form-summary"
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "space- between",
-                                padding: 3,
-                                boxSizing: "border-box"
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: "50%",
-                                    textAlign: "left",
-                                    marginBottom: "30px"
-                                }}
-                            >
-                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>
-                                        <AEUR amount={this.state.repaymentAmount || 0} />
-                                    </strong>
-                                </p>
-                                <p style={{ margin: "0", fontSize: "14px" }}>Total repayment</p>
-                            </div>
-                            <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>{Math.round(this.state.product.interestRatePa * 10000) / 100}%</strong>
-                                </p>
-                                <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
-                            </div>
+                        <div style={{ marginBottom: 20, lineHeight: 1.5 }}>
+                            Repay{" "}
+                            <strong>
+                                <AEUR amount={this.state.repaymentAmount || 0} />
+                            </strong>{" "}
+                            by <strong>{repayBefore}</strong> to get your collateral back.
                         </div>
 
                         <div style={{ width: "100%", textAlign: "center" }}>
