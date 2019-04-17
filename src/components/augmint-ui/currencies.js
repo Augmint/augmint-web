@@ -7,13 +7,19 @@ const NoWrap = styled.span`
     white-space: nowrap;
 `;
 
+function isEmpty(n) {
+    return n === undefined || n === null;
+}
+
 function signum(n) {
-    if (n === undefined || n === null) {
-        return "empty";
-    }
     /*eslint eqeqeq: 0*/
-    return n == 0 ? "zero" : n > 0 ? "positive" : "negative";
+    return isEmpty(n) ? "empty" : n == 0 ? "zero" : n > 0 ? "positive" : "negative";
     /*eslint eqeqeq: 1*/
+}
+
+function format(n, decimals) {
+    const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    return fmt.format(n);
 }
 
 /*
@@ -26,10 +32,9 @@ export class AEUR extends React.Component {
         const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
         const amt = amount === undefined || raw ? amount : amount / Math.pow(10, DECIMALS);
         const cls = ["AEUR", className, signum(amt)].join(" ");
-        const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         return (
             <NoWrap className={cls} {...rest}>
-                {amt !== undefined && `${fmt.format(amt)} A€`}
+                {!isEmpty(amt) && `${format(amt, decimals)} A€`}
             </NoWrap>
         );
     }
@@ -47,7 +52,7 @@ export class ETH extends React.Component {
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt !== undefined && `${amt.toFixed(decimals)} ETH`}
+                {!isEmpty(amt) && `${format(amt, decimals)} ETH`}
             </NoWrap>
         );
     }
