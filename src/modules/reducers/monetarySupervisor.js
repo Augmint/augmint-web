@@ -13,31 +13,7 @@ const initialState = {
     isLoading: false,
     isLoaded: false,
     loadError: null,
-    info: {
-        augmintToken: null,
-        interestEarnedAccount: null,
-        augmintReserves: null,
-
-        issuedByStabilityBoard: "?",
-
-        totalLoanAmount: "?",
-        totalLockedAmount: "?",
-        ltdPercent: "?",
-
-        ltdLoanDifferenceLimit: "?",
-        ltdLockDifferenceLimit: "?",
-        allowedLtdDifferenceAmount: "?",
-
-        maxLoanByLtd: "?",
-        maxLockByLtd: "?",
-
-        reserveEthBalance: "?",
-        bn_reserveWeiBalance: null,
-
-        reserveTokenBalance: "?",
-
-        interestEarnedAccountTokenBalance: "?"
-    }
+    info: {}
 };
 
 export default (state = initialState, action) => {
