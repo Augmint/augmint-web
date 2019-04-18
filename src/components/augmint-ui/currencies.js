@@ -20,7 +20,7 @@ function format(n, decimals, symbol, symbolStyle) {
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     return [
         fmt.format(n),
-        <span class="symbol" style={symbolStyle}>
+        <span className="symbol" style={symbolStyle}>
             {" "}
             {symbol}
         </span>

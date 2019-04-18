@@ -4,9 +4,9 @@
     flex-basis: 380px;
 }
 .loan.column.right {
-    padding-top: 1em;
-    max-width: 410px;
-    flex-basis: 410px;
+    padding: 1em 30px 30px 0;
+    max-width: 380px;
+    flex-basis: 380px;
 }
 
 /* tablet */

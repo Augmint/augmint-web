@@ -143,6 +143,7 @@ export const Normalizations = {
     }
 };
 
+// todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
 export function Select(props) {
     function addOptionsToSelect(options, testId) {
         let result = [];
@@ -154,7 +155,7 @@ export function Select(props) {
                     value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
-                    {product.termText ? "Repay in " + product.termText : product.durationText}
+                    {product.termText ? "Repay in " + product.termText : "Lock for " + product.durationText}
                 </option>
             );
         });

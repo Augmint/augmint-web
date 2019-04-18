@@ -14,7 +14,6 @@ import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
 
 import theme from "styles/theme";
-import styled from "styled-components";
 
 import { FUNDS } from "./FundList/funds.js";
 

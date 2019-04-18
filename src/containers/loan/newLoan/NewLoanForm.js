@@ -11,7 +11,6 @@ import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-import { Pgrid } from "components/PageLayout";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import styled from "styled-components";
 
@@ -270,81 +269,63 @@ class NewLoanForm extends React.Component {
                 )}{" "}
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
-                        <Pgrid>
-                            <Pgrid.Row>
-                                <Pgrid.Column>
-                                    <StyledBox>
-                                        <div className="box-header">Get a new crypto-backed loan at</div>
-                                        <div className="box-val">
-                                            <span>{`${interestRate}% `}</span>
-                                            <span className="val-sym">APR</span>
-                                        </div>
-                                    </StyledBox>
-                                </Pgrid.Column>
-                            </Pgrid.Row>
+                        <StyledBox>
+                            <div className="box-header">Get a new crypto-backed loan at</div>
+                            <div className="box-val">
+                                <span>{`${interestRate}% `}</span>
+                                <span className="val-sym">APR</span>
+                            </div>
+                        </StyledBox>
 
-                            <Pgrid.Row>
-                                <Pgrid.Column>
-                                    <label>How much would you like to borrow?</label>
-                                    <Field
-                                        component={Form.Field}
-                                        as={Form.Input}
-                                        name="loanTokenAmount"
-                                        type="number"
-                                        inputmode="numeric"
-                                        step="any"
-                                        min="0"
-                                        disabled={submitting || !loanManager.isLoaded}
-                                        validate={[
-                                            Validations.required,
-                                            Validations.tokenAmount,
-                                            this.state.maxLoanAmount,
-                                            this.state.minToken
-                                        ]}
-                                        normalize={Normalizations.twoDecimals}
-                                        onChange={this.onLoanTokenAmountChange}
-                                        data-testid="loanTokenAmountInput"
-                                        style={{ borderRadius: theme.borderRadius.left }}
-                                        labelAlignRight="A-EUR"
-                                    />
-                                </Pgrid.Column>
-                            </Pgrid.Row>
+                        <label>How much would you like to borrow?</label>
+                        <Field
+                            component={Form.Field}
+                            as={Form.Input}
+                            name="loanTokenAmount"
+                            type="number"
+                            inputmode="numeric"
+                            step="any"
+                            min="0"
+                            disabled={submitting || !loanManager.isLoaded}
+                            validate={[
+                                Validations.required,
+                                Validations.tokenAmount,
+                                this.state.maxLoanAmount,
+                                this.state.minToken
+                            ]}
+                            normalize={Normalizations.twoDecimals}
+                            onChange={this.onLoanTokenAmountChange}
+                            data-testid="loanTokenAmountInput"
+                            style={{ borderRadius: theme.borderRadius.left }}
+                            labelAlignRight="A-EUR"
+                        />
 
-                            <Pgrid.Row>
-                                <Pgrid.Column>
-                                    {this.state.productId !== null && this.state.productId !== undefined && (
-                                        <Field
-                                            component={Form.Field}
-                                            name="productId"
-                                            disabled={submitting || !loanManager.isLoaded}
-                                            onChange={this.onSelectedLoanChange}
-                                            data-testid="loan-product-selector"
-                                            className="field-big"
-                                            isSelect="true"
-                                            selectOptions={this.activeProducts}
-                                            selectTestId="loan-product"
-                                            id={"selectedLoanProduct-" + this.state.productId}
-                                        />
-                                    )}
-                                </Pgrid.Column>
-                            </Pgrid.Row>
+                        {this.state.productId !== null && this.state.productId !== undefined && (
+                            <Field
+                                component={Form.Field}
+                                name="productId"
+                                disabled={submitting || !loanManager.isLoaded}
+                                onChange={this.onSelectedLoanChange}
+                                data-testid="loan-product-selector"
+                                className="field-big"
+                                isSelect="true"
+                                selectOptions={this.activeProducts}
+                                selectTestId="loan-product"
+                                id={"selectedLoanProduct-" + this.state.productId}
+                            />
+                        )}
 
-                            <Pgrid.Row halign="justify">
-                                <Pgrid.Column>
-                                    <StyledBox>
-                                        <div className="box-header">
-                                            <span>Collateral required to borrow will be...</span>
-                                        </div>
-                                        <div className="box-val">
-                                            <ETH
-                                                amount={this.state.ethAmount}
-                                                symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
-                                            />
-                                        </div>
-                                    </StyledBox>
-                                </Pgrid.Column>
-                            </Pgrid.Row>
-                        </Pgrid>
+                        <StyledBox>
+                            <div className="box-header">
+                                <span>Collateral required to borrow will be...</span>
+                            </div>
+                            <div className="box-val">
+                                <ETH
+                                    amount={this.state.ethAmount}
+                                    symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
+                                />
+                            </div>
+                        </StyledBox>
 
                         <div>
                             <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>

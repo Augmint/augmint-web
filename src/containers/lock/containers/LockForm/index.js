@@ -11,9 +11,34 @@ import { Pblock } from "components/PageLayout";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Form, Validations } from "components/BaseComponents";
 import Button from "components/augmint-ui/button";
-import { AEUR, ETH } from "components/augmint-ui/currencies.js";
+import { AEUR } from "components/augmint-ui/currencies.js";
 
+import styled from "styled-components";
 import theme from "styles/theme";
+
+const StyledBox = styled.div`
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: rgba(232, 232, 232, 0.3);
+
+    & .box-header {
+        font-size: 14px;
+        margin-bottom: 5px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.7);
+    }
+    & .box-val {
+        font-size: 22px;
+        font-weight: 800;
+        & .val-sym {
+            font-size: 14px;
+            font-weight: 400;
+        }
+    }
+`;
 
 class LockContainer extends React.Component {
     constructor(props) {
@@ -73,7 +98,7 @@ class LockContainer extends React.Component {
             .map(product => {
                 const end = moment()
                     .add(product.durationInDays, "days")
-                    .format("D MMM YYYY HH:mm");
+                    .format("D MMM YYYY");
                 product.unlockByDatestring = end;
                 return product;
             });
@@ -209,7 +234,15 @@ class LockContainer extends React.Component {
                             />
                         )}
 
-                        <label>You lock ...</label>
+                        <StyledBox>
+                            <div className="box-header">Lock crypto currency at</div>
+                            <div className="box-val">
+                                <span>{`${interest}% `}</span>
+                                <span className="val-sym">APR</span>
+                            </div>
+                        </StyledBox>
+
+                        <label>How much A-EUR would you like to lock?</label>
                         <Field
                             name="lockAmount"
                             component={Form.Field}
@@ -231,12 +264,10 @@ class LockContainer extends React.Component {
                             data-testid="lockAmountInput"
                         />
 
-                        <label>For ...</label>
                         <Field
                             component={Form.Field}
                             disabled={submitting || !lockManager.isLoaded}
                             onChange={this.lockTermChange}
-                            info={`Unlock by ${unlockBy}`}
                             className="field-big"
                             isSelect="true"
                             selectTestId="lock-product"
@@ -246,36 +277,22 @@ class LockContainer extends React.Component {
                             data-testid="lock-product-selector"
                         />
 
-                        <div
-                            className="form-summary"
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                padding: 3,
-                                boxSizing: "border-box"
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: "50%",
-                                    textAlign: "left",
-                                    marginBottom: "30px"
-                                }}
-                            >
-                                <p data-testid="repaymentAmount" style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>
-                                        <AEUR amount={earnAmount} />
-                                    </strong>
-                                </p>
-                                <p style={{ margin: "0", fontSize: "14px" }}>You earn</p>
-                            </div>
-                            <div style={{ width: "50%", textAlign: "left" }}>
-                                <p style={{ margin: "0", fontSize: 18 }}>
-                                    <strong>{interest + "%"}</strong>
-                                </p>
-                                <p style={{ margin: "0", fontSize: "14px" }}>Annual interest rate</p>
-                            </div>
+                        <div>
+                            <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                {"Your total earning is "}
+                                <strong>
+                                    <AEUR amount={earnAmount} />
+                                </strong>
+                                {"."}
+                                <br />
+                                {"On "}
+                                <strong>{unlockBy}</strong>
+                                {" you get back "}
+                                <strong>
+                                    <AEUR amount={earnAmount + this.state.lockAmount} />
+                                </strong>
+                                {"."}
+                            </p>
                         </div>
 
                         <Button
