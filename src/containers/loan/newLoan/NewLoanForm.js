@@ -330,7 +330,11 @@ class NewLoanForm extends React.Component {
                         <div>
                             <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
                                 {"Repay "}
-                                <AEUR style={{ fontWeight: 800 }} amount={this.state.repaymentAmount || 0} />
+                                <AEUR
+                                    data-testid={repaymentAmount}
+                                    style={{ fontWeight: 800 }}
+                                    amount={this.state.repaymentAmount || 0}
+                                />
                                 {" by "}
                                 <strong>{repayBefore}</strong>
                                 <br />
