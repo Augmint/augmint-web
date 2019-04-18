@@ -253,7 +253,7 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
                             <Icon name="balance-scale" />
-                            <span>Stability</span>
+                            <span>Stability Report</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi className="notifications">
