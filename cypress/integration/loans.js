@@ -13,7 +13,7 @@ describe("Loans", function() {
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
-        cy.get("[data-testid=ethAmountInput]").should("have.value", ethAmount.toString());
+        cy.get("[data-testid=ethAmount]").should("contain", ethAmount.toString());
 
         cy.get("[data-testid=submitBtn]").click();
         cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New loan submitted");
@@ -36,7 +36,7 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan("8", 50, 50.01, 0.05062).then(res => {
+        getLoan("8", 50, 50.01, 0.0506).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                 .first()
                 .click({
@@ -65,7 +65,7 @@ describe("Loans", function() {
     });
 
     it("Should repay a loan", function() {
-        getLoan("0", 51, 59.68, 0.10873).then(() => {
+        getLoan("0", 51, 59.68, 0.1087).then(() => {
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
             cy.contains("this loan's page")

@@ -68,7 +68,7 @@ class NewLoanForm extends React.Component {
             amountChanged: "A-EUR",
             initialized: false,
             ethAmount: null,
-            loanTokenAmount: 100
+            loanTokenAmount: 0
         };
     }
 
@@ -315,33 +315,36 @@ class NewLoanForm extends React.Component {
                             />
                         )}
 
-                        <StyledBox>
-                            <div className="box-header">
-                                <span>Collateral required to borrow will be...</span>
-                            </div>
-                            <div className="box-val">
-                                <ETH
-                                    amount={this.state.ethAmount}
-                                    symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
-                                />
-                            </div>
-                        </StyledBox>
+                        <div className="loan-results">
+                            <StyledBox>
+                                <div className="box-header">
+                                    <span>Collateral required to borrow will be...</span>
+                                </div>
+                                <div className="box-val">
+                                    <ETH
+                                        data-testid="ethAmount"
+                                        amount={this.state.ethAmount}
+                                        symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
+                                    />
+                                </div>
+                            </StyledBox>
 
-                        <div>
-                            <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
-                                {"Repay "}
-                                <AEUR
-                                    data-testid="repaymentAmount"
-                                    style={{ fontWeight: 800 }}
-                                    amount={this.state.repaymentAmount || 0}
-                                />
-                                {" by "}
-                                <strong>{repayBefore}</strong>
-                                <br />
-                                {"to get your "}
-                                <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
-                                {" collateral back."}
-                            </p>
+                            <div>
+                                <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                    {"Repay "}
+                                    <AEUR
+                                        data-testid="repaymentAmount"
+                                        style={{ fontWeight: 800 }}
+                                        amount={this.state.repaymentAmount || 0}
+                                    />
+                                    {" by "}
+                                    <strong>{repayBefore}</strong>
+                                    <br />
+                                    {"to get your "}
+                                    <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
+                                    {" collateral back."}
+                                </p>
+                            </div>
                         </div>
 
                         <div style={{ width: "100%", textAlign: "center" }}>
