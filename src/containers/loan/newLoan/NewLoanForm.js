@@ -245,6 +245,36 @@ class NewLoanForm extends React.Component {
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Pgrid>
+                            <Pgrid.Row halign="justify">
+                                <Pgrid.Column>
+                                    <div
+                                        style={{
+                                            borderRadius: 3,
+                                            boxSizing: "border-box",
+                                            width: "100%",
+                                            padding: 15,
+                                            marginBottom: 20,
+                                            background: "rgba(232, 232, 232, 0.3)"
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                fontSize: 14,
+                                                marginBottom: 5,
+                                                lineHeight: "150%",
+                                                color: "rgba(0,0,0,0.7)"
+                                            }}
+                                        >
+                                            Get a new crypto-backed loan at
+                                        </div>
+                                        <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
+                                            {Math.round(this.state.product.interestRatePa * 10000) / 100}%{" "}
+                                            <span style={{ fontSize: 14, fontWeight: 400 }}>APR</span>
+                                        </div>
+                                    </div>
+                                </Pgrid.Column>
+                            </Pgrid.Row>
+
                             <Pgrid.Row>
                                 <Pgrid.Column>
                                     <label>How much would you like to borrow?</label>
@@ -295,39 +325,44 @@ class NewLoanForm extends React.Component {
                                 <Pgrid.Column>
                                     <div
                                         style={{
-                                            border: "1px solid #e8e8e8",
                                             borderRadius: 3,
                                             boxSizing: "border-box",
                                             width: "100%",
-                                            padding: 20,
-                                            background: "rgba(232, 232, 232, 0.3)"
+                                            padding: 15,
+                                            background: "rgba(232, 232, 232, 0.3)",
+                                            marginBottom: 20
                                         }}
                                     >
                                         <div
                                             style={{
                                                 fontSize: 14,
-                                                marginBottom: 20,
+                                                marginBottom: 5,
                                                 lineHeight: "150%",
                                                 color: "rgba(0,0,0,0.7)"
                                             }}
                                         >
-                                            Collateral required <br /> to borrow will be...
+                                            Collateral required to borrow will be...
                                         </div>
                                         <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
                                             <ETH amount={this.state.ethAmount} />
                                         </div>
                                     </div>
-                                    <label> </label>
                                 </Pgrid.Column>
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div style={{ marginBottom: 20, lineHeight: 1.5 }}>
+                        <div style={{ marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
                             Repay{" "}
                             <strong>
                                 <AEUR amount={this.state.repaymentAmount || 0} />
                             </strong>{" "}
-                            by <strong>{repayBefore}</strong> to get your collateral back.
+                            by <strong>{repayBefore}</strong>
+                            <br />
+                            to get your{" "}
+                            <strong>
+                                <ETH amount={this.state.ethAmount} />
+                            </strong>{" "}
+                            collateral back.
                         </div>
 
                         <div style={{ width: "100%", textAlign: "center" }}>
