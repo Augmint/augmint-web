@@ -9,6 +9,7 @@
     "yarn": "1.15.2"
   },
   "dependencies": {
+    "@augmint/js": "0.0.3",
     "bignumber.js": "5.0.0",
     "chart.js": "2.8.0",
     "ethereumjs-util": "6.1.0",
@@ -43,8 +44,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
-    "ganache:start": "docker start ganache || docker run --init --name ganache -p 8545:8545 augmint/contracts:v1.0.4 --db ./dockerLocalchaindb --gasLimit 0x47D5DE --gasPrice 1000000000 --networkId 999 -m \"hello build tongue rack parade express shine salute glare rate spice stock\"",
-    "ganache:stop": "docker stop ganache"
+    "ganache:start": "yarn augmint-cli ganache start",
+    "ganache:stop": "yarn augmint-cli ganache stop"
   },
   "devDependencies": {
     "cypress": "3.2.0",

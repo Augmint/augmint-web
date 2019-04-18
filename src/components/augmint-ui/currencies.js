@@ -16,9 +16,9 @@ function signum(n) {
     /*eslint eqeqeq: 1*/
 }
 
-function format(n, decimals) {
+function format(n, decimals, symbol) {
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-    return fmt.format(n);
+    return [fmt.format(n), <span class="symbol"> {symbol}</span>];
 }
 
 /*
@@ -33,7 +33,7 @@ export class AEUR extends React.Component {
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {!isEmpty(amt) && `${format(amt, decimals)} A€`}
+                {!isEmpty(amt) && format(amt, decimals, "A€")}
             </NoWrap>
         );
     }
@@ -51,7 +51,7 @@ export class ETH extends React.Component {
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {!isEmpty(amt) && `${format(amt, decimals)} ETH`}
+                {!isEmpty(amt) && format(amt, decimals, "ETH")}
             </NoWrap>
         );
     }
