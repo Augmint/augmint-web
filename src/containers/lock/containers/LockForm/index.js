@@ -238,7 +238,7 @@ class LockContainer extends React.Component {
                             <div className="box-header">Lock crypto currency at</div>
                             <div className="box-val">
                                 <span>{`${interest}% `}</span>
-                                <span className="val-sym">APR</span>
+                                <span className="val-sym">per year (APR)</span>
                             </div>
                         </StyledBox>
 

@@ -273,7 +273,7 @@ class NewLoanForm extends React.Component {
                             <div className="box-header">Get a new crypto-backed loan at</div>
                             <div className="box-val">
                                 <span>{`${interestRate}% `}</span>
-                                <span className="val-sym">APR</span>
+                                <span className="val-sym">per year (APR)</span>
                             </div>
                         </StyledBox>
 
