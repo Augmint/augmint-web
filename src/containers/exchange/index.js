@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
 import PlaceOrderForm from "./components/PlaceOrderForm";
+import SimpleBuyForm from "./components/SimpleBuyForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
@@ -52,10 +52,7 @@ class ExchangeHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <FiatExchange
-                                    header="€ &harr; A€ on partner exchange"
-                                    web3Connect={this.props.web3Connect}
-                                />
+                                <SimpleBuyForm orders={orders} toggleOrderBook={this.toggleOrderBook} rates={rates} />
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}
