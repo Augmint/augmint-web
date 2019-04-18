@@ -343,26 +343,32 @@ class NewLoanForm extends React.Component {
                                         >
                                             Collateral required to borrow will be...
                                         </div>
-                                        <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
-                                            <ETH amount={this.state.ethAmount} />
+                                        <div style={{ color: "black", fontSize: 22, fontWeight: 800 }}>
+                                            <ETH
+                                                amount={this.state.ethAmount}
+                                                symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
+                                            />
                                         </div>
                                     </div>
                                 </Pgrid.Column>
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div style={{ marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
-                            Repay{" "}
-                            <strong>
-                                <AEUR amount={this.state.repaymentAmount || 0} />
-                            </strong>{" "}
-                            by <strong>{repayBefore}</strong>
+                        <div
+                            style={{
+                                marginBottom: 20,
+                                lineHeight: 1.5,
+                                textAlign: "center"
+                            }}
+                        >
+                            {"Repay "}
+                            <AEUR style={{ fontWeight: 800 }} amount={this.state.repaymentAmount || 0} />
+                            {" by "}
+                            <strong>{repayBefore}</strong>
                             <br />
-                            to get your{" "}
-                            <strong>
-                                <ETH amount={this.state.ethAmount} />
-                            </strong>{" "}
-                            collateral back.
+                            {"to get your "}
+                            <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
+                            {" collateral back."}
                         </div>
 
                         <div style={{ width: "100%", textAlign: "center" }}>
