@@ -13,6 +13,7 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pgrid } from "components/PageLayout";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
+import styled from "styled-components";
 
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
@@ -20,6 +21,30 @@ import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
 const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
+
+const StyledBox = styled.div`
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: rgba(232, 232, 232, 0.3);
+
+    & .box-header {
+        font-size: 14px;
+        margin-bottom: 5px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.7);
+    }
+    & .box-val {
+        font-size: 22px;
+        font-weight: 800;
+        & .val-sym {
+            font-size: 14px;
+            font-weight: 400;
+        }
+    }
+`;
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -227,6 +252,7 @@ class NewLoanForm extends React.Component {
         // const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
         // const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
         const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
+        const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
 
         return (
             <div>
@@ -245,33 +271,15 @@ class NewLoanForm extends React.Component {
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Pgrid>
-                            <Pgrid.Row halign="justify">
+                            <Pgrid.Row>
                                 <Pgrid.Column>
-                                    <div
-                                        style={{
-                                            borderRadius: 3,
-                                            boxSizing: "border-box",
-                                            width: "100%",
-                                            padding: 15,
-                                            marginBottom: 20,
-                                            background: "rgba(232, 232, 232, 0.3)"
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                fontSize: 14,
-                                                marginBottom: 5,
-                                                lineHeight: "150%",
-                                                color: "rgba(0,0,0,0.7)"
-                                            }}
-                                        >
-                                            Get a new crypto-backed loan at
+                                    <StyledBox>
+                                        <div className="box-header">Get a new crypto-backed loan at</div>
+                                        <div className="box-val">
+                                            <span>{`${interestRate}% `}</span>
+                                            <span className="val-sym">APR</span>
                                         </div>
-                                        <div style={{ color: "black", fontSize: 22, fontWeight: 600 }}>
-                                            {Math.round(this.state.product.interestRatePa * 10000) / 100}%{" "}
-                                            <span style={{ fontSize: 14, fontWeight: 400 }}>APR</span>
-                                        </div>
-                                    </div>
+                                    </StyledBox>
                                 </Pgrid.Column>
                             </Pgrid.Row>
 
@@ -302,7 +310,7 @@ class NewLoanForm extends React.Component {
                                 </Pgrid.Column>
                             </Pgrid.Row>
 
-                            <Pgrid.Row halign="justify">
+                            <Pgrid.Row>
                                 <Pgrid.Column>
                                     {this.state.productId !== null && this.state.productId !== undefined && (
                                         <Field
@@ -323,52 +331,32 @@ class NewLoanForm extends React.Component {
 
                             <Pgrid.Row halign="justify">
                                 <Pgrid.Column>
-                                    <div
-                                        style={{
-                                            borderRadius: 3,
-                                            boxSizing: "border-box",
-                                            width: "100%",
-                                            padding: 15,
-                                            background: "rgba(232, 232, 232, 0.3)",
-                                            marginBottom: 20
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                fontSize: 14,
-                                                marginBottom: 5,
-                                                lineHeight: "150%",
-                                                color: "rgba(0,0,0,0.7)"
-                                            }}
-                                        >
-                                            Collateral required to borrow will be...
+                                    <StyledBox>
+                                        <div className="box-header">
+                                            <span>Collateral required to borrow will be...</span>
                                         </div>
-                                        <div style={{ color: "black", fontSize: 22, fontWeight: 800 }}>
+                                        <div className="box-val">
                                             <ETH
                                                 amount={this.state.ethAmount}
                                                 symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
                                             />
                                         </div>
-                                    </div>
+                                    </StyledBox>
                                 </Pgrid.Column>
                             </Pgrid.Row>
                         </Pgrid>
 
-                        <div
-                            style={{
-                                marginBottom: 20,
-                                lineHeight: 1.5,
-                                textAlign: "center"
-                            }}
-                        >
-                            {"Repay "}
-                            <AEUR style={{ fontWeight: 800 }} amount={this.state.repaymentAmount || 0} />
-                            {" by "}
-                            <strong>{repayBefore}</strong>
-                            <br />
-                            {"to get your "}
-                            <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
-                            {" collateral back."}
+                        <div>
+                            <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                {"Repay "}
+                                <AEUR style={{ fontWeight: 800 }} amount={this.state.repaymentAmount || 0} />
+                                {" by "}
+                                <strong>{repayBefore}</strong>
+                                <br />
+                                {"to get your "}
+                                <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
+                                {" collateral back."}
+                            </p>
                         </div>
 
                         <div style={{ width: "100%", textAlign: "center" }}>
@@ -380,9 +368,7 @@ class NewLoanForm extends React.Component {
                                 type="submit"
                                 style={{
                                     height: "50px",
-                                    padding: "10px 55px",
-                                    width: "100%",
-                                    maxWidth: "500px"
+                                    width: "100%"
                                 }}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}
