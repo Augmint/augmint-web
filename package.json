@@ -6,12 +6,12 @@
   "private": true,
   "engines": {
     "node": "10.15.3",
-    "yarn": "^1.13.0"
+    "yarn": "1.15.2"
   },
   "dependencies": {
+    "@augmint/js": "0.0.3",
     "bignumber.js": "5.0.0",
     "chart.js": "2.8.0",
-    "connected-react-router": "6.3.2",
     "ethereumjs-util": "6.1.0",
     "ethers": "4.0.27",
     "moment": "2.24.0",
@@ -44,9 +44,8 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
-    "contracts:migrate": "cd augmint-contracts && yarn migrate",
-    "ganache:run": "cd augmint-contracts && yarn ganache:run",
-    "contracts:runmigrate": "cd augmint-contracts && yarn runmigrate"
+    "ganache:start": "yarn augmint-cli ganache start",
+    "ganache:stop": "yarn augmint-cli ganache stop"
   },
   "devDependencies": {
     "cypress": "3.2.0",

@@ -2,12 +2,46 @@ import React from "react";
 import { connect } from "react-redux";
 import store from "modules/store";
 import { fetchLatestTransfers } from "modules/reducers/userTransfers";
-import { TxDate, TxInfo, TxPrice, TxAmount } from "components/transaction";
+import { TxDate, TxInfo } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
 import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { calculateTransfersBalance } from "modules/ethereum/transferTransactions";
+import { AEUR } from "components/augmint-ui/currencies";
+import styled from "styled-components";
+import { default as theme } from "styles/theme";
+
+const Transfer = styled.span`
+    .positive::before {
+        content: "+";
+    }
+
+    .delta.positive {
+        color: ${theme.colors.green};
+    }
+
+    .delta.negative {
+        color: ${theme.colors.red};
+    }
+
+    .feeOrBounty {
+        font-size: smaller;
+        display: block;
+
+        &.zero {
+            display: none;
+        }
+
+        &.positive::after {
+            content: " bounty";
+        }
+
+        &.negative::after {
+            content: " fee";
+        }
+    }
+`;
 
 class TransferList extends React.Component {
     constructor(props) {
@@ -17,6 +51,7 @@ class TransferList extends React.Component {
     }
 
     showMore() {
+        const currentLimit = this.state.page * this.props.limit;
         const page = this.state.page + 1;
         const limit = page * this.props.limit;
         const nextPage = () => {
@@ -25,10 +60,12 @@ class TransferList extends React.Component {
         const fetchData = () => {
             store.dispatch(fetchLatestTransfers(this.props.userAccount.address, true)).then(res => {
                 if (res.type === "userTransfers/FETCH_TRANSFERS_RECEIVED") {
-                    if (this.isLastPage() || limit <= res.result.length) {
+                    if (this.isLastPage() || currentLimit <= res.result.length) {
                         nextPage();
                     } else {
-                        fetchData();
+                        if (res.fetchedLength === 0) {
+                            fetchData();
+                        }
                     }
                 }
             });
@@ -55,15 +92,6 @@ class TransferList extends React.Component {
 
             calculateTransfersBalance(transfers, userAccount.tokenBalance * 100);
 
-            const feeOrBounty = amount => (
-                <TxPrice>
-                    <small data-testid="txFee">
-                        <TxAmount amount={amount} showPlusSign={true} divide={true} />
-                        {amount > 0 ? " bounty" : " fee"}
-                    </small>
-                </TxPrice>
-            );
-
             transfers = transfers.map(tx => {
                 return {
                     data: tx,
@@ -71,24 +99,18 @@ class TransferList extends React.Component {
                     date: <TxDate>{tx.blockTimeStampText}</TxDate>,
                     info: <TxInfo tx={tx} />,
                     amount: (
-                        <span>
-                            <TxPrice className={`${tx.amount < 0 ? "minus" : "plus"}`} data-testid="txPrice">
-                                <TxAmount amount={tx.amount} showPlusSign={true} divide={true} />
-                            </TxPrice>
-                            {tx.fee !== 0 && feeOrBounty(tx.fee)}
-                        </span>
+                        <Transfer>
+                            <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
+                            <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
+                        </Transfer>
                     ),
-                    balance: (
-                        <TxPrice>
-                            <TxAmount amount={tx.balance} divide={true} />
-                        </TxPrice>
-                    )
+                    balance: <AEUR raw amount={tx.balance} />
                 };
             });
         }
 
         return (
-            <Segment loading={isLoading} style={{ color: "black" }}>
+            <Segment loading={isLoading && !transfers} style={{ color: "black" }}>
                 {header && <StyleTitle>{header}</StyleTitle>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {!transfers || transfers.length === 0 ? (
@@ -99,7 +121,7 @@ class TransferList extends React.Component {
                             <StyleThead>
                                 <StyleTr>
                                     <StyleTh className={"hide-xs"}>Date</StyleTh>
-                                    <StyleTh style={{ textAlign: "center" }}>Transaction</StyleTh>
+                                    <StyleTh style={{ textAlign: "right" }}>Transaction</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
                                     <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
                                         Balance
@@ -132,19 +154,27 @@ class TransferList extends React.Component {
                 )}
                 {transfers && !this.isLastPage() && (
                     <div style={{ marginTop: 20, paddingLeft: 20 }}>
-                        <Button onClick={this.showMore} className="ghost">
-                            Show older
-                        </Button>
+                        <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
+                            <Button onClick={this.showMore} className="ghost">
+                                Show older
+                            </Button>
+                        </Segment>
                     </div>
                 )}
             </Segment>
         );
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.userAccount !== this.props.userAccount) {
+            this.setState({ page: 1 });
+        }
+    }
 }
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p style={{ paddingLeft: 20 }}>There was nothing lately.</p>,
+    noItemMessage: <p style={{ paddingLeft: 20 }}>No recent transactions found.</p>,
     header: null,
     limit: 5
 };

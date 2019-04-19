@@ -32,10 +32,10 @@ function LoanList(props) {
             <Segment className="block">
                 <Menu>
                     <Menu.Item exact to="/loan" activeClassName="active">
-                        My active loans
+                        Active loans
                     </Menu.Item>
                     <Menu.Item exact to="/loan/archive" activeClassName="active">
-                        My old loans
+                        Old loans
                     </Menu.Item>
                 </Menu>
 
