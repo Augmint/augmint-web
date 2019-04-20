@@ -24,16 +24,17 @@ const StyledBox = styled.div`
     margin-bottom: 20px;
     background: rgba(232, 232, 232, 0.3);
 
-    & .box-header {
-        font-size: 14px;
-        margin-bottom: 5px;
-        line-height: 150%;
-        color: rgba(0, 0, 0, 0.7);
-    }
+    text-align: center;
+    font-size: 14px;
+    line-height: 200%;
+    color: rgba(0, 0, 0, 0.7);
+
     & .box-val {
+        display: block;
         font-size: 22px;
         font-weight: 800;
-        & .val-sym {
+        margin-bottom: -4px;
+        & .symbol {
             font-size: 14px;
             font-weight: 400;
         }
@@ -235,10 +236,10 @@ class LockContainer extends React.Component {
                         )}
 
                         <StyledBox>
-                            <div className="box-header">Lock crypto currency at</div>
+                            Lock A-EUR at
                             <div className="box-val">
-                                <span>{`${interest}% `}</span>
-                                <span className="val-sym">per year (APR)</span>
+                                {`${interest}% `}
+                                <span className="symbol">per year (APR)</span>
                             </div>
                         </StyledBox>
 
@@ -279,17 +280,17 @@ class LockContainer extends React.Component {
 
                         <div>
                             <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
-                                {"Your total earning is "}
-                                <strong>
-                                    <AEUR amount={earnAmount} />
-                                </strong>
-                                {"."}
-                                <br />
                                 {"On "}
                                 <strong>{unlockBy}</strong>
                                 {" you get back "}
                                 <strong>
                                     <AEUR amount={earnAmount + parseFloat(this.state.lockAmount)} />
+                                </strong>
+                                {","}
+                                <br />
+                                {"earning "}
+                                <strong>
+                                    <AEUR amount={earnAmount} />
                                 </strong>
                                 {"."}
                             </p>

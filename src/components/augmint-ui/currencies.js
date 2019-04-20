@@ -16,15 +16,9 @@ function signum(n) {
     /*eslint eqeqeq: 1*/
 }
 
-function format(n, decimals, symbol, symbolStyle) {
+function format(n, decimals, symbol) {
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-    return [
-        fmt.format(n),
-        <span className="symbol" style={symbolStyle}>
-            {" "}
-            {symbol}
-        </span>
-    ];
+    return [fmt.format(n), <span className="symbol"> {symbol}</span>];
 }
 
 /*
@@ -34,12 +28,12 @@ function format(n, decimals, symbol, symbolStyle) {
  */
 export class AEUR extends React.Component {
     render() {
-        const { amount, raw, className, decimals = DECIMALS, symbolStyle, ...rest } = this.props;
+        const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
         const amt = amount === undefined || (raw ? amount / Math.pow(10, DECIMALS) : amount);
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {!isEmpty(amt) && format(amt, decimals, "A€", symbolStyle)}
+                {!isEmpty(amt) && format(amt, decimals, "A€")}
             </NoWrap>
         );
     }
@@ -52,12 +46,12 @@ export class AEUR extends React.Component {
  */
 export class ETH extends React.Component {
     render() {
-        const { amount, raw, className, decimals = 4, symbolStyle, ...rest } = this.props;
+        const { amount, raw, className, decimals = 4, ...rest } = this.props;
         const amt = amount === undefined || (raw ? amount / Math.pow(10, 18) : amount);
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {!isEmpty(amt) && format(amt, decimals, "ETH", symbolStyle)}
+                {!isEmpty(amt) && format(amt, decimals, "ETH")}
             </NoWrap>
         );
     }

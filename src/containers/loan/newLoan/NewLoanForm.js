@@ -29,16 +29,18 @@ const StyledBox = styled.div`
     margin-bottom: 20px;
     background: rgba(232, 232, 232, 0.3);
 
-    & .box-header {
-        font-size: 14px;
-        margin-bottom: 5px;
-        line-height: 150%;
-        color: rgba(0, 0, 0, 0.7);
-    }
+    text-align: center;
+    font-size: 14px;
+    line-height: 200%;
+    color: rgba(0, 0, 0, 0.7);
+
     & .box-val {
+        display: block;
+        color: black;
         font-size: 22px;
         font-weight: 800;
-        & .val-sym {
+        margin-bottom: -4px;
+        & .symbol {
             font-size: 14px;
             font-weight: 400;
         }
@@ -270,10 +272,10 @@ class NewLoanForm extends React.Component {
                 {isRatesAvailable && (
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <StyledBox>
-                            <div className="box-header">Get a new crypto-backed loan at</div>
+                            Get a new crypto-backed loan at
                             <div className="box-val">
-                                <span>{`${interestRate}% `}</span>
-                                <span className="val-sym">per year (APR)</span>
+                                {`${interestRate}% `}
+                                <span className="symbol">per year (APR)</span>
                             </div>
                         </StyledBox>
 
@@ -317,16 +319,9 @@ class NewLoanForm extends React.Component {
 
                         <div className="loan-results">
                             <StyledBox>
-                                <div className="box-header">
-                                    <span>Collateral required to borrow will be...</span>
-                                </div>
-                                <div className="box-val">
-                                    <ETH
-                                        data-testid="ethAmount"
-                                        amount={this.state.ethAmount}
-                                        symbolStyle={{ paddingLeft: 3, fontSize: 14, fontWeight: 400 }}
-                                    />
-                                </div>
+                                You will need to transfer
+                                <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
+                                as collateral to secure this loan.
                             </StyledBox>
 
                             <div>
