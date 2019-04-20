@@ -289,7 +289,7 @@ class LockContainer extends React.Component {
                                 <strong>{unlockBy}</strong>
                                 {" you get back "}
                                 <strong>
-                                    <AEUR amount={earnAmount + this.state.lockAmount} />
+                                    <AEUR amount={earnAmount + parseFloat(this.state.lockAmount)} />
                                 </strong>
                                 {"."}
                             </p>
