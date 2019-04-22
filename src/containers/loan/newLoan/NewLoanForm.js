@@ -17,7 +17,7 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
 
-const ETH_DECIMALS = 5;
+const ETH_DECIMALS = 4;
 const TOKEN_DECIMALS = 2;
 const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
 
@@ -70,7 +70,7 @@ class NewLoanForm extends React.Component {
             amountChanged: "A-EUR",
             initialized: false,
             ethAmount: null,
-            loanTokenAmount: 0
+            loanTokenAmount: null
         };
     }
 
@@ -254,6 +254,7 @@ class NewLoanForm extends React.Component {
         // const collateralRatio = Number((this.state.product.collateralRatio * 100).toFixed(2));
         const repayBefore = moment.unix(this.state.product.termInSecs + moment.utc().unix()).format("D MMM YYYY");
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
+        const showResults = this.state.repaymentAmount ? true : false;
 
         return (
             <div>
@@ -317,30 +318,32 @@ class NewLoanForm extends React.Component {
                             />
                         )}
 
-                        <div className="loan-results">
-                            <StyledBox>
-                                You will need to transfer
-                                <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
-                                as collateral to secure this loan.
-                            </StyledBox>
+                        {showResults && (
+                            <div className="loan-results">
+                                <StyledBox>
+                                    You will need to transfer
+                                    <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
+                                    as collateral to secure this loan.
+                                </StyledBox>
 
-                            <div>
-                                <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
-                                    {"Repay "}
-                                    <AEUR
-                                        data-testid="repaymentAmount"
-                                        style={{ fontWeight: 800 }}
-                                        amount={this.state.repaymentAmount || 0}
-                                    />
-                                    {" by "}
-                                    <strong>{repayBefore}</strong>
-                                    <br />
-                                    {"to get your "}
-                                    <ETH style={{ fontWeight: 800 }} amount={this.state.ethAmount} />
-                                    {" collateral back."}
-                                </p>
+                                <div>
+                                    <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                        {"Repay "}
+                                        <AEUR
+                                            data-testid="repaymentAmount"
+                                            style={{ fontWeight: 800 }}
+                                            amount={this.state.repaymentAmount}
+                                        />
+                                        {" by "}
+                                        <strong>{repayBefore}</strong>
+                                        <br />
+                                        {"to get your "}
+                                        <ETH amount={this.state.ethAmount} />
+                                        {" collateral back."}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <div style={{ width: "100%", textAlign: "center" }}>
                             <Button
