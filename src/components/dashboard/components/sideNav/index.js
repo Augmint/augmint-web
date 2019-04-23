@@ -215,13 +215,13 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                             <Icon name="exchange" />
-                            <span>Crypto exchange</span>
+                            <span>Exchange Crypto</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/funding" activeClassName="active" data-testid="fundingMenuLink">
+                        <SideNavLink to="/exchangeFiat" activeClassName="active" data-testid="fundingMenuLink">
                             <Icon name="reserves" />
-                            <span>Add / withdraw funds</span>
+                            <span>Exchange Fiat</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>

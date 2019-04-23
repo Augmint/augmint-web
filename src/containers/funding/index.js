@@ -25,7 +25,7 @@ class WithdrawHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Add / withdraw funds" />
+                        <Pheader header="Exchange Fiat" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
