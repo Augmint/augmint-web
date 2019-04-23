@@ -28,7 +28,7 @@ function format(n, decimals, symbol) {
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account
-    decimals: default to token decimals
+    decimals: defaults to token decimals
  */
 export class AEUR extends React.Component {
     render() {
@@ -37,7 +37,7 @@ export class AEUR extends React.Component {
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt && format(amt, decimals, "A€")}
+                {amt !== null && format(amt, decimals, "A€")}
             </NoWrap>
         );
     }
@@ -46,7 +46,7 @@ export class AEUR extends React.Component {
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account (wei)
-    decimals: default to 5
+    decimals: defaults to 4
  */
 export class ETH extends React.Component {
     render() {
@@ -55,7 +55,7 @@ export class ETH extends React.Component {
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt && format(amt, decimals, "ETH")}
+                {amt !== null && format(amt, decimals, "ETH")}
             </NoWrap>
         );
     }
