@@ -4,7 +4,6 @@ import { default as theme, remCalc } from "styles/theme";
 import AccountAddress from "components/accountAddress";
 import HashURL from "components/hash";
 import { connect } from "react-redux";
-import { DECIMALS } from "utils/constants";
 
 export const TxDate = styled.span`
     font-size: ${remCalc(12)};
@@ -30,21 +29,6 @@ export const TxPrice = styled.span`
         color: ${theme.colors.green};
     }
 `;
-
-export class TxAmount extends React.Component {
-    render() {
-        const { amount, showPlusSign, divide } = this.props;
-        let txAmount = amount;
-        if (divide) {
-            txAmount = txAmount / Math.pow(10, DECIMALS);
-        }
-        let text = `${txAmount.toFixed(DECIMALS)} A€`;
-        if (showPlusSign) {
-            text = txAmount > 0 ? `+${text}` : text;
-        }
-        return <span>{text}</span>;
-    }
-}
 
 class TxInfo extends React.Component {
     getAddressType(address) {
