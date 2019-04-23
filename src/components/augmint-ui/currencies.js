@@ -28,7 +28,7 @@ function format(n, decimals, symbol) {
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account
-    decimals: default to token decimals
+    decimals: defaults to token decimals
  */
 export class AEUR extends React.Component {
     render() {
@@ -46,7 +46,7 @@ export class AEUR extends React.Component {
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account (wei)
-    decimals: default to 5
+    decimals: defaults to 4
  */
 export class ETH extends React.Component {
     render() {
