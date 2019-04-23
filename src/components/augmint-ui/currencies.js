@@ -37,7 +37,7 @@ export class AEUR extends React.Component {
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt && format(amt, decimals, "A€")}
+                {amt !== null && format(amt, decimals, "A€")}
             </NoWrap>
         );
     }
@@ -55,7 +55,7 @@ export class ETH extends React.Component {
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt && format(amt, decimals, "ETH")}
+                {amt !== null && format(amt, decimals, "ETH")}
             </NoWrap>
         );
     }
