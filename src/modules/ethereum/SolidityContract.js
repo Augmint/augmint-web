@@ -5,6 +5,9 @@ import { ethers } from "ethers";
 TODO: consolidate to use one library (likely web3 will be enough once websocket works with Metamask) */
 export default class SolidityContract {
     constructor(connection, contractAddress, abiFile) {
+        // TODO: web3.eth.Contract is async now. catch errors
+        //   to find source of  "Uncaught (in promise) Error: Couldn't decode uint256 from ABI: 0x"
+        //  error in console when incorrect contract address is passed
         this.web3ContractInstance = new connection.web3Instance.eth.Contract(abiFile.abi, contractAddress);
 
         const provider = connection.ethers.provider;

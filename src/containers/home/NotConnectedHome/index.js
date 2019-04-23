@@ -9,30 +9,18 @@ import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
+import { keyFeatures, keyBenefits, howItWorks, management, teamMembers, contributors, partners } from "./helpers.js";
 import { Member } from "./member.js";
 
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
-import slackIcon from "assets/images/slack-icon.svg";
 
 export default class NotConnectedHome extends React.Component {
     constructor() {
         super();
-
-        teamMembers.sort(function(a, b) {
-            var nameA = a.lastName.toUpperCase();
-            var nameB = b.lastName.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            // names must be equal
-            return 0;
-        });
+        const byLastName = (a, b) => a.lastName.localeCompare(b.lastName);
+        teamMembers.sort(byLastName);
     }
 
     render() {
@@ -274,15 +262,36 @@ export default class NotConnectedHome extends React.Component {
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ marginBottom: 75 }}>
-                                {founders.map(member => (
+                                {management.map(member => (
+                                    <Member member={member} key={member.pk} />
+                                ))}
+                                {teamMembers.map(member => (
                                     <Member member={member} key={member.pk} />
                                 ))}
                             </Grid>
                         </ThemeProvider>
+
+                        <Header as="h4">Contributors</Header>
                         <ThemeProvider theme={theme}>
                             <Grid className="grid">
-                                {teamMembers.map(member => (
-                                    <Member member={member} key={member.pk} />
+                                {contributors.map(e => (
+                                    <Grid.Unit
+                                        className="column"
+                                        size={{ tablet: 1, desktop: 5 / 16 }}
+                                        key={e.pk}
+                                        style={{ padding: 40, paddingBottom: 0, textAlign: "left" }}
+                                    >
+                                        <img
+                                            src={e.imgSrc}
+                                            style={{ width: "60px", height: "60px", marginBottom: "30px" }}
+                                            alt={e.pk}
+                                        />
+                                        <strong>
+                                            {e.firstName} {e.lastName}
+                                        </strong>
+                                        <br />
+                                        <small>{e.title}</small>
+                                    </Grid.Unit>
                                 ))}
                             </Grid>
                         </ThemeProvider>
@@ -307,16 +316,6 @@ export default class NotConnectedHome extends React.Component {
                                                 dangerouslySetInnerHTML={{ __html: partner.description }}
                                                 style={{ marginBottom: 3 }}
                                             />
-                                        )}
-                                        {partner.slackUrl && (
-                                            <a href={partner.slackUrl} target="_blank" rel="noopener noreferrer">
-                                                <img
-                                                    alt="slack icon"
-                                                    src={slackIcon}
-                                                    style={{ height: 14, marginRight: 10, width: 14 }}
-                                                />
-                                                {partner.slackText || "Join our slack."}
-                                            </a>
                                         )}
                                     </Grid.Unit>
                                 ))}

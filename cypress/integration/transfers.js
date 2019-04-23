@@ -49,7 +49,7 @@ describe("Transfers", function() {
                 cy.get("[data-testid=myAccountMenuLink]").click();
                 cy.get(`[data-testid=transferListItem-${this.txHash}]`).within(() => {
                     cy.contains("[data-testid=txDetails]", "To: " + toAddressShort);
-                    cy.contains("[data-testid=txPrice]", "- " + amount);
+                    cy.contains("[data-testid=txPrice]", "-" + amount);
                     cy.contains("[data-testid=txFee]", fee);
                     cy.contains("[data-testid=txDetails]", narrative);
                 });
