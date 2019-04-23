@@ -31,7 +31,7 @@ class SimpleBuyForm extends React.Component {
             result: null,
             orderDirection: TOKEN_BUY,
             orders: [],
-            orderlist: []
+            orderList: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
@@ -48,10 +48,8 @@ class SimpleBuyForm extends React.Component {
         this.setState({
             orderDirection,
             orders,
-            orderlist: []
+            orderList: []
         });
-
-        console.debug(orders, orderDirection, TOKEN_BUY, this.state.orderDirection, "state orders");
     }
 
     calcMatchResults(token) {
@@ -63,10 +61,10 @@ class SimpleBuyForm extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
-        if (this.state.orderlist.length) {
-            return matchOrders(token, this.state.orderlist);
+        if (this.state.orderList.length) {
+            return matchOrders(token, this.state.orderList);
         } else {
-            const orderlist = orders.map(order => {
+            const orderList = orders.map(order => {
                 if (this.state.orderDirection === TOKEN_BUY) {
                     order.ethers = (order.amount * order.price) / bn_ethFiatRate;
                 } else {
@@ -76,18 +74,17 @@ class SimpleBuyForm extends React.Component {
 
                 return order;
             });
-            this.setState({ orderlist });
+            this.setState({ orderList });
 
-            console.debug(matchOrders(token, orderlist, this.state.orderDirection));
-            return matchOrders(token, orderlist, this.state.orderDirection);
+            return matchOrders(token, orderList, this.state.orderDirection);
         }
     }
 
     handleSubmit(values) {
         const { simpleTokenAmount } = values;
-        const result = this.calcMatchResults(simpleTokenAmount);
+        const result = this.calcMatchResults(parseFloat(simpleTokenAmount));
 
-        console.log(result);
+        console.debug("match result", result);
 
         this.setState({
             result

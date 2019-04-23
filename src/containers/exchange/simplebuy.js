@@ -5,52 +5,39 @@ export function matchOrders(n, orders, direction) {
     let prices = { total: 0, list: [] };
     let index = 0;
 
-    let sorted;
+    let sorted = direction === 0 ? orders.sort(sortOrders) : orders.sort(sortOrders).reverse();
 
-    if (direction === 0) {
-        sorted = orders.sort(sortOrders);
-
-        sorted.forEach(i => {
-            if (i.amount + tokens <= n) {
-                tokens += i.amount;
-                prices.total += i.price;
-                prices.list.push(i.price);
-                ethers += i.ethers;
-                index++;
-            } else {
-                tokens += i.amount - (tokens - n);
+    sorted.forEach(i => {
+        let amount = 0;
+        if (tokens < n) {
+            if (i.amount >= n + tokens) {
+                amount = n;
+            } else if (i.amount < n + tokens && n - tokens < i.amount) {
+                amount = n - tokens;
+            } else if (i.amount < n + tokens && n - tokens >= i.amount) {
+                amount = i.amount;
             }
-        });
-    } else {
-        sorted = orders.sort(sortOrders).reverse();
+            tokens += amount;
+            prices.total += i.price * amount;
+            prices.list.push(i.price);
+            ethers += i.ethers;
+            index++;
+        }
+    });
 
-        sorted.forEach(i => {
-            if (i.amount + tokens <= n) {
-                tokens += i.amount;
-                prices.total += i.price;
-                prices.list.push(i.price);
-                ethers += i.ethers;
-                index++;
-            } else {
-                tokens += i.amount - (tokens - n);
-            }
-        });
-    }
-
-    const book = sorted.slice(index);
+    // const book = sorted.slice(index); // to remain in the book, the rest will be erased
 
     tokens = parseFloat(tokens.toFixed(2));
     ethers = parseFloat(ethers.toFixed(5));
 
-    const averagePrice = parseFloat((prices.total / prices.list.length).toFixed(3));
-    const limitPrice = Math.max(...prices.list);
+    const averagePrice = parseFloat((prices.total / tokens).toFixed(3));
+    const limitPrice = direction === 0 ? Math.max(...prices.list) : Math.min(...prices.list);
 
     return {
         tokens,
         ethers,
         limitPrice,
-        averagePrice,
-        book
+        averagePrice
     };
 }
 

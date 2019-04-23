@@ -4,60 +4,60 @@ const rate = 142;
 
 const buyerOrders = [
     {
-        ether: 0.012,
+        ethers: 0.012,
         price: 0.91
     },
     {
-        ether: 0.017,
+        ethers: 0.017,
         price: 0.9
     },
     {
-        ether: 0.027,
+        ethers: 0.027,
         price: 0.85
     }
 ].map(i => {
-    i.token = i.ether * rate * i.price;
+    i.amount = i.ethers * rate * i.price;
     return i;
 });
 
 const sellerOrders = [
     {
-        token: 1,
+        amount: 1,
         price: 0.99
     },
     {
-        token: 1.8,
+        amount: 1.8,
         price: 0.96
     },
     {
-        token: 1.2,
+        amount: 1.2,
         price: 1
     }
 ].map(i => {
-    i.ether = (i.token * i.price) / rate;
+    i.ethers = (i.amount * i.price) / rate;
     return i;
 });
 
 describe("matching orders", () => {
     it("match toBuy AEUR", () => {
         const result = {
-            tokens: 2.8,
-            ethers: 0.01914,
-            limitPrice: 0.99,
+            tokens: 3,
+            ethers: 0.02759,
+            limitPrice: 0.96,
             averagePrice: 0.975
         };
 
-        expect(matchOrders(3, sellerOrders)).toEqual(result);
+        expect(matchOrders(3, sellerOrders, 0)).toEqual(result);
     });
 
     it("match toSell AEUR", () => {
         const result = {
-            tokens: 5.43,
-            ethers: 0.044,
-            limitPrice: 0.9,
-            averagePrice: 0.875
+            tokens: 2,
+            ethers: 0.029,
+            limitPrice: 1,
+            averagePrice: 0.973
         };
 
-        expect(matchOrders(6, buyerOrders)).toEqual(result);
+        expect(matchOrders(2, buyerOrders, 1)).toEqual(result);
     });
 });
