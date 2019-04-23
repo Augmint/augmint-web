@@ -22,16 +22,16 @@ const buyerOrders = [
 
 const sellerOrders = [
     {
+        amount: 1.2,
+        price: 1
+    },
+    {
         amount: 1,
         price: 0.99
     },
     {
         amount: 1.8,
         price: 0.96
-    },
-    {
-        amount: 1.2,
-        price: 1
     }
 ].map(i => {
     i.ethers = (i.amount * i.price) / rate;
@@ -43,8 +43,8 @@ describe("matching orders", () => {
         const result = {
             tokens: 3,
             ethers: 0.02759,
-            limitPrice: 0.96,
-            averagePrice: 0.975
+            limitPrice: 1,
+            averagePrice: 0.986
         };
 
         expect(matchOrders(3, sellerOrders, 0)).toEqual(result);
@@ -52,12 +52,12 @@ describe("matching orders", () => {
 
     it("match toSell AEUR", () => {
         const result = {
-            tokens: 2,
-            ethers: 0.029,
-            limitPrice: 1,
-            averagePrice: 0.973
+            tokens: 4,
+            ethers: 0.027,
+            limitPrice: 0.85,
+            averagePrice: 0.85
         };
 
-        expect(matchOrders(2, buyerOrders, 1)).toEqual(result);
+        expect(matchOrders(4, buyerOrders, 1)).toEqual(result);
     });
 });

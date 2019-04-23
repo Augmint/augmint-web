@@ -1,19 +1,23 @@
-export function matchOrders(n, orders, direction) {
+export function matchOrders(n, orders, direction, rate) {
     // buy n amount of aeurotoken for price at rate from orders
     let tokens = 0;
     let ethers = 0;
     let prices = { total: 0, list: [] };
     let index = 0;
+    let remains = [];
 
-    let sorted = direction === 0 ? orders.sort(sortOrders) : orders.sort(sortOrders).reverse();
+    let sorted = direction === 0 ? orders : orders.reverse();
 
     sorted.forEach(i => {
         let amount = 0;
         if (tokens < n) {
+            console.debug(i.amount, tokens);
             if (i.amount >= n + tokens) {
                 amount = n;
+                remains.push({ price: i.price, amount: i.amount - n });
             } else if (i.amount < n + tokens && n - tokens < i.amount) {
                 amount = n - tokens;
+                remains.push({ price: i.price, amount: i.amount - (n - tokens) });
             } else if (i.amount < n + tokens && n - tokens >= i.amount) {
                 amount = i.amount;
             }
@@ -22,10 +26,13 @@ export function matchOrders(n, orders, direction) {
             prices.list.push(i.price);
             ethers += i.ethers;
             index++;
+        } else {
+            remains.push({ price: i.price, amount: i.amount, ethers: i.ethers });
         }
     });
 
-    // const book = sorted.slice(index); // to remain in the book, the rest will be erased
+    // to remain in the book, the rest will be erased
+    let book = reCalcBook(sorted, remains, rate);
 
     tokens = parseFloat(tokens.toFixed(2));
     ethers = parseFloat(ethers.toFixed(5));
@@ -37,18 +44,24 @@ export function matchOrders(n, orders, direction) {
         tokens,
         ethers,
         limitPrice,
-        averagePrice
+        averagePrice,
+        book
     };
 }
 
-function sortOrders(a, b) {
-    if (a.price < b.price) {
-        return -1;
-    }
+function reCalcBook(orders, list, rate) {
+    let prices = list.map(i => i.price);
+    let book = [];
 
-    if (b.price < a.price) {
-        return 1;
-    }
+    orders.forEach(i => {
+        if (prices.indexOf(i.price) >= 0) {
+            let remainPair = list.find(item => item.price === i.price);
 
-    return 0;
+            i.amount = remainPair.amount;
+            i.ethers = remainPair.ethers || (remainPair.amount * i.price) / rate;
+            book.push(i);
+        }
+    });
+
+    return book;
 }

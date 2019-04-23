@@ -64,6 +64,7 @@ class SimpleBuyForm extends React.Component {
         if (this.state.orderList.length) {
             return matchOrders(token, this.state.orderList);
         } else {
+            console.debug("get orderlist");
             const orderList = orders.map(order => {
                 if (this.state.orderDirection === TOKEN_BUY) {
                     order.ethers = (order.amount * order.price) / bn_ethFiatRate;
@@ -76,7 +77,7 @@ class SimpleBuyForm extends React.Component {
             });
             this.setState({ orderList });
 
-            return matchOrders(token, orderList, this.state.orderDirection);
+            return matchOrders(token, orderList, this.state.orderDirection, bn_ethFiatRate);
         }
     }
 
