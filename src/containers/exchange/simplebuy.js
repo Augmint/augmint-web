@@ -11,7 +11,6 @@ export function matchOrders(n, orders, direction, rate) {
     sorted.forEach(i => {
         let amount = 0;
         if (tokens < n) {
-            console.debug(i.amount, tokens);
             if (i.amount >= n + tokens) {
                 amount = n;
                 remains.push({ price: i.price, amount: i.amount - n });

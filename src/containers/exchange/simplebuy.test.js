@@ -47,17 +47,27 @@ describe("matching orders", () => {
             averagePrice: 0.986
         };
 
-        expect(matchOrders(3, sellerOrders, 0)).toEqual(result);
+        const expected = matchOrders(3, sellerOrders, 0);
+
+        expect(expected.tokens).toEqual(result.tokens);
+        expect(expected.ethers).toEqual(result.ethers);
+        expect(expected.limitPrice).toEqual(result.limitPrice);
+        expect(expected.averagePrice).toEqual(result.averagePrice);
     });
 
     it("match toSell AEUR", () => {
         const result = {
             tokens: 4,
-            ethers: 0.027,
+            ethers: 0.044,
             limitPrice: 0.85,
-            averagePrice: 0.85
+            averagePrice: 0.859
         };
 
-        expect(matchOrders(4, buyerOrders, 1)).toEqual(result);
+        const expected = matchOrders(4, buyerOrders, 1);
+
+        expect(expected.tokens).toEqual(result.tokens);
+        expect(expected.ethers).toEqual(result.ethers);
+        expect(expected.limitPrice).toEqual(result.limitPrice);
+        expect(expected.averagePrice).toEqual(result.averagePrice);
     });
 });
