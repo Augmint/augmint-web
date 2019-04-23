@@ -5,8 +5,8 @@ describe("Loans", function() {
 
         cy.wait(50);
         cy.get(`[data-testid=loan-product-selector]`)
-            .select(prodId, { force: true })
-            .should("have.value", prodId);
+            .select(prodId.toString(), { force: true })
+            .should("have.value", prodId.toString());
 
         cy.get("[data-testid=loanTokenAmountInput]")
             .clear()
@@ -36,7 +36,7 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan("8", 50, 50.01, 0.0507).then(res => {
+        getLoan(8, 50, 50.01, 0.0507).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                 .first()
                 .click({

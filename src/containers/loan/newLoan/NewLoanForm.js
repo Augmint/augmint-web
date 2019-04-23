@@ -256,6 +256,9 @@ class NewLoanForm extends React.Component {
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
         const showResults = this.state.repaymentAmount ? true : false;
 
+        console.log(this.activeProducts, "activeee");
+        console.log(this.state.product, "prod");
+
         return (
             <div>
                 {error && (
