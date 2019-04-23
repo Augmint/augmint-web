@@ -32,10 +32,10 @@ function LockList(props) {
             <Segment className="block">
                 <Menu>
                     <Menu.Item exact to="/lock" activeClassName="active">
-                        My active locks
+                        Active locks
                     </Menu.Item>
                     <Menu.Item exact to="/lock/archive" activeClassName="active">
-                        My old locks
+                        Old locks
                     </Menu.Item>
                 </Menu>
 

@@ -1,4 +1,4 @@
-<span style="display:block;text-align:center">![Augmint](http://www.augmint.org/android-chrome-192x192.png)
+<span style="display:block;text-align:center">![Augmint](https://www.augmint.org/android-chrome-192x192.png)
 </span>
 
 # Augmint - Stable Digital Tokens - Web Frontend
@@ -8,27 +8,34 @@
 [![Discord](https://img.shields.io/discord/407574313810788364.svg)](https://discord.gg/PwDmsnu)
 [![license](https://img.shields.io/github/license/Augmint/augmint-web.svg)](https://github.com/Augmint/augmint-web/blob/master/LICENSE)
 
-Decentralised stable cryptocurrency on Ethereum
-
 ## Concept
 
-Augmint provides digital tokens, value of each token targeted to a fiat currency.
+Decentralized stablecoins targeted to fiat currencies built on Ethereum.
 
-The first Augmint token will be A-EUR (Augmint Crypto Euro), targeted to EUR.
+The first Augmint token is AEUR.
 
-The value of 1 A-EUR is always closely around 1 EUR.
+**1 AEUR ≈ 1 EUR.**
 
-Augmint tokens are cryptocurrency tokens with all the benefits of cryptocurrencies: stored securely in a decentralised manner and instantly transferable worldwide.
+- Buy and sell AEUR for ETH or EUR.
+- Get a loan in AEUR by depositing ETH.
+- Lock AEUR to earn a premium.
 
-Read more and try it: **[www.augmint.org](http://www.augmint.org)**
+Try it: **[https://www.augmint.org](http://www.augmint.org)**
 
-**[Our Trello board](https://trello.com/b/RYGAt2so/augmint-documents)** with a collection of documents about the project.
+**[Manifesto](https://www.augmint.org/manifesto)**
 
-**[White paper draft](http://bit.ly/augmint-wp)** - Work in progress. Please feel free to comment it: questions, ideas, suggestions are welcome.
+**[White Paper](http://bit.ly/augmint-wp)**
 
-### Solidity Contracts
+### Related repos
 
-See [augmint-contracts repo](https://github.com/Augmint/augmint-contracts)
+- Augmint javascript library: [augmint-js](https://github.com/Augmint/augmint-js)
+- Solidity contracts: [augmint-contracts](https://github.com/Augmint/augmint-contracts)
+
+## Get in touch
+
+- [hello@augmint.org](mailto:hello@augmint.org)
+- [Discord server](https://discord.gg/PwDmsnu) [![Discord](https://img.shields.io/discord/407574313810788364.svg)](https://discord.gg/PwDmsnu)
+- [Telegram](https://t.me/augmint)
 
 ## Contribution
 
@@ -36,19 +43,15 @@ Augmint is an open and transparent project.
 
 We are seeking for great minds to extend our core team. Contribution in any area is much appreciated: development, testing, UX&UI design, legal, marketing spreading the word etc.
 
-**[Development environment setup](docs/developmentEnvironment.md)**
+[Code of Conduct](CODE_OF_CONDUCT.md)
 
-## Get in touch
-
-Drop us an email: hello@augmint.cc  
- or  
-say hi on our [Discord server](https://discord.gg/PwDmsnu): [![Discord](https://img.shields.io/discord/407574313810788364.svg)](https://discord.gg/PwDmsnu)
+## [Development environment setup](docs/developmentEnvironment.md)
 
 ## Authors
 
-![DECENT](http://www.decent.org/images/logo-voronoi_120x33.png)
+See team on [www.augmint.org](https://www.augmint.org)
 
-The project was born at [DECENT Labs](http://www.decent.org)
+<img src="https://github.com/Augmint/augmint-web/raw/staging/src/assets/images/decentlabs.png" alt="Decentlabs" width="60" height="60"> The project was born at [DECENT Labs](http://www.decent.org)
 
 ### Concept, initial version
 
