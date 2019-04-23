@@ -29,7 +29,7 @@ export const LEGACY_AEUR_CONTRACTS = {
     1: ["0x86a635eccefffa70ff8a6db29da9c8db288e40d0"],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x7f3abcd33ffe83ba7426ee6ec45014364fe1cab4"],
+    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
 
     // rinkeby
     4: ["0x0557183334edc23a666201edc6b0aa2787e2ad3f"]
@@ -41,7 +41,7 @@ export const LEGACY_LOANMANAGER_CONTRACTS = {
     1: ["0xcbefaf199b800deeb9ead61f358ee46e06c54070"],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x5d77f09a3703be84d84810379067a6d9ad759582"],
+    999: ["0xf7b8384c392fc333d3858a506c4f1506af44d53c"],
 
     // rinkeby
     4: ["0x6cb7731c78e677f85942b5f1d646b3485e5820c1"]
@@ -52,7 +52,7 @@ export const LEGACY_LOCKER_CONTRACTS = {
     // mainnet
     1: ["0x095c0F071Fd75875a6b5a1dEf3f3a993F591080c", "0x26438D7c52cE617dFc75A2F02eE816557f01e5Bb"],
     // local ganache (migrations deploys it for manual testing)
-    999: ["0xe6a48098a0a318ccec66bcd8297417e0d74585dc"],
+    999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
 
     // rinkeby
     4: ["0x6d84ab6c385b827e58c358d078ac7b1c61b68821"]
@@ -146,7 +146,7 @@ export const LEGACY_EXCHANGE_CONTRACTS = {
     ],
 
     // local ganache (migrations deploys it for manual testing)
-    999: ["0x9f5420ec1348df8de8c85dab8d240ace122204c5"],
+    999: ["0xef49d863bd9179da0e96fab02dd498efa149dbdc"],
 
     // rinkeby
     4: ["0xdf47d51028daff13424f42523fdac73079ab901b"]
