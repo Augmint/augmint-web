@@ -7,10 +7,11 @@ describe("getMatchingOrders", () => {
     const BN_ONE = new BigNumber(1);
     const GAS_LIMIT = Number.MAX_SAFE_INTEGER;
 
-    test("should return no match if no orders", () => {
-        const [buyIds, sellIds] = calculateMatchingOrders([], [], ETHEUR_RATE, GAS_LIMIT);
-        expect(sellIds).toHaveLength(0);
-        expect(buyIds).toHaveLength(0);
+    test("should return no empty arrays if no orders", () => {
+        const matches = calculateMatchingOrders([], [], ETHEUR_RATE, GAS_LIMIT);
+        expect(matches.buyIds).toHaveLength(0);
+        expect(matches.sellIds).toHaveLength(0);
+        expect(matches.gasEstimate).toBe(0);
     });
 
     test("should return empty arrays if no matching orders", () => {

@@ -11,6 +11,7 @@ import BigNumber from "bignumber.js";
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
 import { DECIMALS, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 const OrderItem = props => {
     const { order, ethFiatRate } = props;
@@ -19,25 +20,23 @@ const OrderItem = props => {
 
     const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
 
-    const amountRounded = order.direction === TOKEN_SELL ? order.amount.toFixed(2) : order.amount.toFixed(5);
-
     const actualValue =
         order.direction === TOKEN_SELL
-            ? ((order.amount * order.price) / bn_ethFiatRate).toFixed(5)
-            : ((bn_ethFiatRate / order.price) * order.amount).toFixed(2);
+            ? (order.amount * order.price) / bn_ethFiatRate
+            : (bn_ethFiatRate / order.price) * order.amount;
 
     return (
         <Row valign="top">
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_BUY && `${amountRounded} ETH`}
-                {order.direction === TOKEN_SELL && `(${actualValue} ETH)`}
+                {order.direction === TOKEN_BUY && <ETH amount={order.amount} />}
+                {order.direction === TOKEN_SELL && <ETH amount={actualValue} />}
             </Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_SELL && `${amountRounded} A€`}
-                {order.direction === TOKEN_BUY && `(${actualValue} A€)`}
+                {order.direction === TOKEN_SELL && <AEUR amount={order.amount} />}
+                {order.direction === TOKEN_BUY && <AEUR amount={actualValue} />}
             </Col>
 
             <Col width={2}>{displayPrice}%</Col>

@@ -1,24 +1,23 @@
 {
-  "contractName": "Migrations",
-  "latestAbiHash": "78141a323f4a8416891b06a0a2b90065",
-  "deployedAbis": {
-    "78141a323f4a8416891b06a0a2b90065": {
-      "latestDeployedAddress": "0xc9a7258b2b1ea36ce735793e4816ad949532c9fd",
-      "deployments": {
-        "0xc9a7258b2b1ea36ce735793e4816ad949532c9fd": {
-          "generatedAt": "2018-10-18T13:35:02.323Z",
-          "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.823Z",
-          "deployTransactionHash": "0xf529f773b4efda519e62d6dcbb71e5e1fa7a0223599f5db5edf792e85a3f9679",
-          "compiler": {
-            "name": "solc",
-            "version": "0.4.24+commit.e67f0147.Emscripten.clang"
-          },
-          "bytecodeHash": "3bd5779c94259890d586374c5db67f2b",
-          "deployedBytecodeHash": "f00491b62e24c57c6d12323c73c1037e",
-          "sourceHash": "16ee1835a27505e14d1b6990cdfa8c2c",
-          "source": "pragma solidity 0.4.24;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration; // solhint-disable-line var-name-mixedcase\n\n    modifier restricted() {\n        if (msg.sender == owner) _;\n    }\n\n    constructor() public {\n        owner = msg.sender;\n    }\n\n    function setCompleted(uint completed) external restricted {\n        last_completed_migration = completed;\n    }\n\n    function upgrade(address newAddress) external restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n"
+    "contractName": "Migrations",
+    "latestAbiHash": "78141a323f4a8416891b06a0a2b90065",
+    "deployedAbis": {
+        "78141a323f4a8416891b06a0a2b90065": {
+            "latestDeployedAddress": "0xc9a7258b2b1ea36ce735793e4816ad949532c9fd",
+            "deployments": {
+                "0xc9a7258b2b1ea36ce735793e4816ad949532c9fd": {
+                    "generatedAt": "2018-10-18T13:35:02.323Z",
+                    "truffleContractFileUpdatedAt": "2018-10-18T11:36:36.823Z",
+                    "deployTransactionHash": "0xf529f773b4efda519e62d6dcbb71e5e1fa7a0223599f5db5edf792e85a3f9679",
+                    "compiler": {
+                        "name": "solc",
+                        "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+                    },
+                    "bytecodeHash": "3bd5779c94259890d586374c5db67f2b",
+                    "deployedBytecodeHash": "f00491b62e24c57c6d12323c73c1037e",
+                    "sourceHash": "16ee1835a27505e14d1b6990cdfa8c2c"
+                }
+            }
         }
-      }
     }
-  }
 }
