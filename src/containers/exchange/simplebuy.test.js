@@ -42,7 +42,7 @@ describe("matching orders", () => {
     it("match toBuy AEUR", () => {
         const result = {
             tokens: 3,
-            ethers: 0.02759,
+            ethers: 0.03625,
             limitPrice: 1,
             averagePrice: 0.986
         };
@@ -53,9 +53,9 @@ describe("matching orders", () => {
     it("match toSell AEUR", () => {
         const result = {
             tokens: 4,
-            ethers: 0.044,
-            limitPrice: 0.85,
-            averagePrice: 0.859
+            ethers: 0.04301,
+            limitPrice: 0.96,
+            averagePrice: 0.979
         };
 
         expect(matchOrders(4, sellerOrders, 1)).toEqual(result);
