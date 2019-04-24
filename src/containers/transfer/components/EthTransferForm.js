@@ -18,6 +18,11 @@ class EthTransferForm extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
+        this.toggleEthTransferForm = this.toggleEthTransferForm.bind(this);
+    }
+
+    toggleEthTransferForm(e) {
+        this.props.toggleEthTransferForm(e);
     }
 
     onEthAmountChange(e) {
@@ -64,7 +69,6 @@ class EthTransferForm extends React.Component {
             submitting,
             submitSucceeded,
             clearSubmitErrors,
-            reset,
             augmintToken,
             isFunctional,
             submitText
@@ -79,7 +83,7 @@ class EthTransferForm extends React.Component {
                     <EthSubmissionSuccessPanel
                         header="ETH transfer submitted"
                         result={this.state.result}
-                        onDismiss={() => reset()}
+                        onDismiss={() => this.toggleEthTransferForm(false)}
                     >
                         <p>
                             Transfer {this.state.ethAmount} ETH to {this.state.to}

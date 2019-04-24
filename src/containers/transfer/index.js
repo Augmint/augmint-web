@@ -14,14 +14,23 @@ class TransferPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            payeeEthAddress: ""
+            payeeEthAddress: "",
+            displayEthTransferForm: false
         };
         this.setPayeeAddress = this.setPayeeAddress.bind(this);
+        this.toggleEthTransferForm = this.toggleEthTransferForm.bind(this);
     }
 
     setPayeeAddress(payeeEthAddress) {
         this.setState({
             payeeEthAddress
+        });
+    }
+
+    toggleEthTransferForm(e, payeeEthAddress) {
+        this.setPayeeAddress(payeeEthAddress);
+        this.setState({
+            displayEthTransferForm: e
         });
     }
 
@@ -51,16 +60,22 @@ class TransferPage extends React.Component {
                                     header="Send A-EUR"
                                     style={{ marginBottom: 1 }}
                                 >
-                                    <TokenTransferForm setPayeeAddress={this.setPayeeAddress} />
+                                    <TokenTransferForm
+                                        setPayeeAddress={this.setPayeeAddress}
+                                        toggleEthTransferForm={this.toggleEthTransferForm}
+                                    />
                                 </Pblock>
-                                {this.state.payeeEthAddress !== "" && (
+                                {this.state.displayEthTransferForm && (
                                     <Pblock
                                         loading={userBalances.isLoading}
                                         // header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
                                         header="Care to help?"
                                         style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
                                     >
-                                        <EthTransferForm address={this.state.payeeEthAddress} />
+                                        <EthTransferForm
+                                            address={this.state.payeeEthAddress}
+                                            toggleEthTransferForm={this.toggleEthTransferForm}
+                                        />
                                     </Pblock>
                                 )}
                             </Pgrid.Column>

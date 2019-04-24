@@ -49,14 +49,9 @@ export async function transferEthTx(payload) {
     const userAccount = store.getState().web3Connect.userAccount;
     const web3 = store.getState().web3Connect.web3Instance;
 
-    // const amount = (tokenAmount * DECIMALS_DIV).toFixed(0);
-    const amount = ethAmount.toString(); // TODO check if it's good
+    const amount = ethAmount.toString();
 
-    const weiAmount = web3.utils.toWei(amount); // TODO check if amount is in good form
-
-    console.log("amount: ", amount);
-    console.log("to: ", payee);
-    console.log("value: ", weiAmount);
+    const weiAmount = web3.utils.toWei(amount);
 
     const txName = "ETH transfer";
     const tx = web3.eth.sendTransaction({

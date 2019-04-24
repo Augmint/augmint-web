@@ -29,7 +29,7 @@ class TokenTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
-        this.setPayeeAddress = this.setPayeeAddress.bind(this);
+        this.toggleEthTransferForm = this.toggleEthTransferForm.bind(this);
     }
 
     componentDidUpdate() {
@@ -72,8 +72,8 @@ class TokenTransferForm extends React.Component {
         this.setState({ feeAmount: fee });
     }
 
-    setPayeeAddress(payeeEthAddress) {
-        this.props.setPayeeAddress(payeeEthAddress);
+    toggleEthTransferForm(e, payeeEthAddress) {
+        this.props.toggleEthTransferForm(e, payeeEthAddress);
     }
 
     async handleSubmit(values) {
@@ -93,7 +93,7 @@ class TokenTransferForm extends React.Component {
             });
         } else {
             if (!payeeEthBalance.error && payeeEthBalance.ethBalance === "0") {
-                this.setPayeeAddress(values.payee);
+                this.toggleEthTransferForm(true, values.payee);
             }
 
             this.setState({
