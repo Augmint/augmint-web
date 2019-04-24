@@ -52,7 +52,12 @@ class ExchangeHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <SimpleBuyForm orders={orders} toggleOrderBook={this.toggleOrderBook} rates={rates} />
+                                <SimpleBuyForm
+                                    orders={orders}
+                                    exchange={exchange}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                    rates={rates}
+                                />
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}

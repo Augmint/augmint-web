@@ -3,10 +3,12 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+import store from "modules/store";
+
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { Field, formValueSelector, reduxForm } from "redux-form";
+import { Field, formValueSelector, reduxForm, SubmissionError } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
@@ -28,6 +30,7 @@ class SimpleBuyForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            simpleResult: null,
             result: null,
             orderDirection: TOKEN_BUY,
             orders: [],
@@ -35,9 +38,7 @@ class SimpleBuyForm extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
-        // this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-        // this.onEthAmountChange = this.onEthAmountChange.bind(this);
-        // this.onPriceChange = this.onPriceChange.bind(this);
+        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
     onOrderDirectionChange(e) {
@@ -64,7 +65,6 @@ class SimpleBuyForm extends React.Component {
         if (this.state.orderList.length) {
             return matchOrders(token, this.state.orderList);
         } else {
-            console.debug("get orderlist");
             const orderList = orders.map(order => {
                 if (this.state.orderDirection === TOKEN_BUY) {
                     order.ethers = (order.amount * order.price) / bn_ethFiatRate;
@@ -81,59 +81,63 @@ class SimpleBuyForm extends React.Component {
         }
     }
 
-    handleSubmit(values) {
-        const { simpleTokenAmount } = values;
-        const result = this.calcMatchResults(parseFloat(simpleTokenAmount));
+    onTokenAmountChange(e) {
+        const value = e.target.value;
+        const simpleResult = value > 0 ? this.calcMatchResults(parseFloat(value)) : null;
 
-        console.debug("match result", result);
+        console.debug("match result", simpleResult);
 
         this.setState({
-            result
+            simpleResult
         });
     }
 
-    // async handleSubmit(values) {
-    //     let amount, price;
-    //     const orderDirection = this.state.orderDirection;
-    //
-    //     try {
-    //         price = this.parsePrice(values.price);
-    //         if (orderDirection === TOKEN_BUY) {
-    //             amount = parseFloat(values.ethAmount);
-    //         } else {
-    //             amount = parseFloat(values.tokenAmount);
-    //         }
-    //     } catch (error) {
-    //         throw new SubmissionError({
-    //             _error: {
-    //                 title: "Invalid amount",
-    //                 details: error
-    //             }
-    //         });
-    //     }
-    //
-    //     const res = await store.dispatch(placeOrder(orderDirection, amount, price));
-    //
-    //     if (res.type !== PLACE_ORDER_SUCCESS) {
-    //         throw new SubmissionError({
-    //             _error: res.error
-    //         });
-    //     } else {
-    //         this.setState({
-    //             result: res.result
-    //         });
-    //         return;
-    //     }
-    // }
-    //
-    // parsePrice(price) {
-    //     return Math.round(price * 100) / 10000;
-    // }
+    async handleSubmit() {
+        let amount, price;
+        const { orderDirection, simpleResult } = this.state;
+
+        if (simpleResult) {
+            try {
+                price = simpleResult.limitPrice;
+                if (orderDirection === TOKEN_BUY) {
+                    amount = simpleResult.ethers;
+                } else {
+                    amount = simpleResult.tokens;
+                }
+            } catch (error) {
+                throw new SubmissionError({
+                    _error: {
+                        title: "Invalid amount",
+                        details: error
+                    }
+                });
+            }
+
+            const res = await store.dispatch(placeOrder(orderDirection, amount, price));
+
+            if (res.type !== PLACE_ORDER_SUCCESS) {
+                throw new SubmissionError({
+                    _error: res.error
+                });
+            } else {
+                this.setState({
+                    result: res.result
+                });
+                return;
+            }
+        } else {
+            throw new SubmissionError({
+                _error: "no amount"
+            });
+        }
+    }
 
     render() {
         const {
             header: mainHeader,
             error,
+            exchange,
+            rates,
             handleSubmit,
             // pristine,
             submitting,
@@ -141,17 +145,17 @@ class SimpleBuyForm extends React.Component {
             clearSubmitErrors,
             reset
         } = this.props;
-        const { orderDirection, result } = this.state;
-        //
-        // const ethAmountValidations = [Validations.required, Validations.ethAmount];
-        // if (orderDirection === TOKEN_BUY) {
-        //     ethAmountValidations.push(Validations.ethUserBalance);
-        // }
-        //
-        // const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
-        // if (orderDirection === TOKEN_SELL) {
-        //     tokenAmountValidations.push(Validations.userTokenBalance);
-        // }
+        const { orderDirection, result, simpleResult } = this.state;
+
+        const ethAmountValidations = [Validations.required, Validations.ethAmount];
+        if (orderDirection === TOKEN_BUY) {
+            ethAmountValidations.push(Validations.ethUserBalance);
+        }
+
+        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
+        if (orderDirection === TOKEN_SELL) {
+            tokenAmountValidations.push(Validations.userTokenBalance);
+        }
 
         const header = (
             <div>
@@ -181,24 +185,24 @@ class SimpleBuyForm extends React.Component {
 
         return (
             <Pblock header={header}>
-                {/*<ConnectionStatus contract={this.props.exchange} />*/}
+                <ConnectionStatus contract={exchange} />
 
-                {/*{submitSucceeded && (*/}
-                {/*<EthSubmissionSuccessPanel*/}
-                {/*header="Order submitted"*/}
-                {/*result={this.state.result}*/}
-                {/*onDismiss={() => reset()}*/}
-                {/*data-test-orderid={this.state.result.orderId}*/}
-                {/*/>*/}
-                {/*)}*/}
+                {submitSucceeded && (
+                    <EthSubmissionSuccessPanel
+                        header="Order submitted"
+                        result={result}
+                        onDismiss={() => reset()}
+                        data-test-orderid={result.orderId}
+                    />
+                )}
 
-                {
+                {!submitSucceeded && rates.isLoaded && (
                     <Form error={error ? "true" : "false"} onSubmit={handleSubmit(this.handleSubmit)}>
-                        {/*<EthSubmissionErrorPanel*/}
-                        {/*error={error}*/}
-                        {/*header="Place Order failed"*/}
-                        {/*onDismiss={() => clearSubmitErrors()}*/}
-                        {/*/>*/}
+                        <EthSubmissionErrorPanel
+                            error={error}
+                            header="Place Order failed"
+                            onDismiss={() => clearSubmitErrors()}
+                        />
 
                         <Styledlabel>
                             <strong>
@@ -215,8 +219,8 @@ class SimpleBuyForm extends React.Component {
                             step="any"
                             min="0"
                             disabled={submitting}
-                            // onChange={this.onTokenAmountChange}
-                            // validate={tokenAmountValidations}
+                            onChange={this.onTokenAmountChange}
+                            validate={tokenAmountValidations}
                             normalize={Normalizations.twoDecimals}
                             data-testid="simpleTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
@@ -235,19 +239,17 @@ class SimpleBuyForm extends React.Component {
                                 (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
                     </Form>
-                }
-                <Pgrid>
-                    {submitSucceeded && (
-                        <div>
-                            <p>
-                                you could {orderDirection === TOKEN_BUY ? "buy" : "sell"} {result.tokens} a-eur
-                            </p>
-                            <p>for {result.ethers} ethers</p>
-                            <p>with a limitPrice of {result.limitPrice * 100}%</p>
-                            <p>on average {result.averagePrice * 100}%</p>
-                        </div>
-                    )}
-                </Pgrid>
+                )}
+                {simpleResult && (
+                    <Pgrid>
+                        <p>
+                            you can {orderDirection === TOKEN_BUY ? "buy" : "sell"} {simpleResult.tokens} a-eur
+                        </p>
+                        <p>for {simpleResult.ethers} ethers</p>
+                        <p>with a limitPrice of {simpleResult.limitPrice * 100}%</p>
+                        <p>on average {simpleResult.averagePrice * 100}%</p>
+                    </Pgrid>
+                )}
             </Pblock>
         );
     }

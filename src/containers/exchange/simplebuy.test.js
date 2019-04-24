@@ -47,12 +47,7 @@ describe("matching orders", () => {
             averagePrice: 0.986
         };
 
-        const expected = matchOrders(3, sellerOrders, 0);
-
-        expect(expected.tokens).toEqual(result.tokens);
-        expect(expected.ethers).toEqual(result.ethers);
-        expect(expected.limitPrice).toEqual(result.limitPrice);
-        expect(expected.averagePrice).toEqual(result.averagePrice);
+        expect(matchOrders(3, sellerOrders, 0)).toEqual(result);
     });
 
     it("match toSell AEUR", () => {
@@ -63,11 +58,6 @@ describe("matching orders", () => {
             averagePrice: 0.859
         };
 
-        const expected = matchOrders(4, buyerOrders, 1);
-
-        expect(expected.tokens).toEqual(result.tokens);
-        expect(expected.ethers).toEqual(result.ethers);
-        expect(expected.limitPrice).toEqual(result.limitPrice);
-        expect(expected.averagePrice).toEqual(result.averagePrice);
+        expect(matchOrders(4, sellerOrders, 1)).toEqual(result);
     });
 });
