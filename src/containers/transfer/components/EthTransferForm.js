@@ -65,7 +65,6 @@ class EthTransferForm extends React.Component {
         const {
             error,
             handleSubmit,
-            pristine,
             submitting,
             submitSucceeded,
             clearSubmitErrors,
@@ -137,7 +136,6 @@ class EthTransferForm extends React.Component {
                         <Button
                             type="submit"
                             loading={submitting}
-                            disabled={!isFunctional && pristine}
                             data-testid="submitEthTransferButton"
                             className={submitting ? "loading" : ""}
                         >
