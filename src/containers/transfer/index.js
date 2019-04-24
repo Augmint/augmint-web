@@ -56,7 +56,8 @@ class TransferPage extends React.Component {
                                 {this.state.payeeEthAddress !== "" && (
                                     <Pblock
                                         loading={userBalances.isLoading}
-                                        header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                        // header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
+                                        header="Care to help?"
                                         style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
                                     >
                                         <EthTransferForm address={this.state.payeeEthAddress} />

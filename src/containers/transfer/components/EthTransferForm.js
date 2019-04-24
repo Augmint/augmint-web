@@ -106,6 +106,8 @@ class EthTransferForm extends React.Component {
                         {!isFunctional && (
                             <div>
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 10, marginLeft: 2 }}>
+                                    The recipient needs ETH to spend A-EUR, but does not have any...
+                                    <br />
                                     Send a small amount enough for a few transactions:
                                 </p>
                                 <Field
@@ -126,7 +128,7 @@ class EthTransferForm extends React.Component {
                                     labelAlignRight="ETH"
                                 />
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
-                                    Approx. €{amountInEur} (covers ~{coverdTxs} transactions)
+                                    ≈ €{amountInEur} (covers ≈{coverdTxs} transactions)
                                 </p>
                             </div>
                         )}
