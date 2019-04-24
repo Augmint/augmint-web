@@ -139,7 +139,7 @@ class SimpleBuyForm extends React.Component {
             exchange,
             rates,
             handleSubmit,
-            // pristine,
+            pristine,
             submitting,
             submitSucceeded,
             clearSubmitErrors,
@@ -184,7 +184,7 @@ class SimpleBuyForm extends React.Component {
         );
 
         return (
-            <Pblock header={header}>
+            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
                 <ConnectionStatus contract={exchange} />
 
                 {submitSucceeded && (
