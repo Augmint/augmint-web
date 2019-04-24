@@ -11,10 +11,10 @@ import theme from "styles/theme";
 class EthTransferForm extends React.Component {
     constructor(props) {
         super(props);
-        this.placeholder = 0.01;
+        this.initialVal = this.props.initialValues.ethAmount;
         this.state = {
             result: null,
-            amount: this.placeholder
+            amount: this.initialVal
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
@@ -37,7 +37,6 @@ class EthTransferForm extends React.Component {
 
     async handleSubmit(values) {
         const ethAmount = parseFloat(values.ethAmount);
-        console.log("payeeEthAddress", this.props.address);
         const res = await store.dispatch(
             transferEth({
                 payee: this.props.address,
@@ -72,7 +71,7 @@ class EthTransferForm extends React.Component {
         } = this.props;
 
         const amountInEur = (this.props.rates.info.ethFiatRate * this.state.amount).toFixed(2);
-        const coverdTxs = Math.round((this.state.amount / this.placeholder) * 5);
+        const coverdTxs = Math.round((this.state.amount / this.initialVal) * 5);
 
         return (
             <div style={isFunctional && { display: "inline" }}>
@@ -106,7 +105,7 @@ class EthTransferForm extends React.Component {
                         {!isFunctional && (
                             <div>
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 10, marginLeft: 2 }}>
-                                    The recipient needs ETH to spend A-EUR, but does not have any...
+                                    The recipient needs ETH to spend A-EUR, but does not have any.
                                     <br />
                                     Send a small amount enough for a few transactions:
                                 </p>
@@ -115,7 +114,6 @@ class EthTransferForm extends React.Component {
                                     component={Form.Field}
                                     as={Form.Input}
                                     type="number"
-                                    placeholder={this.placeholder}
                                     inputmode="numeric"
                                     step="any"
                                     min="0"
@@ -128,7 +126,7 @@ class EthTransferForm extends React.Component {
                                     labelAlignRight="ETH"
                                 />
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
-                                    ≈ €{amountInEur} (covers ≈{coverdTxs} transactions)
+                                    ≈€{amountInEur} (covers ≈{coverdTxs} transactions)
                                 </p>
                             </div>
                         )}
@@ -159,5 +157,6 @@ const mapStateToProps = state => ({
 EthTransferForm = connect(mapStateToProps)(EthTransferForm);
 
 export default reduxForm({
-    form: "EthTransferForm"
+    form: "EthTransferForm",
+    initialValues: { ethAmount: 0.01 }
 })(EthTransferForm);
