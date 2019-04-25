@@ -45,7 +45,7 @@ class MatchMultipleOrdersButton extends React.Component {
 
         const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
         return (
-            <Pblock>
+            <Pblock style={!isMatching ? { display: "none" } : {}}>
                 {error && (
                     <EthSubmissionErrorPanel error={error} header="Order match failed." onDismiss={this.onDismiss}>
                         <p>Error matching the orders.</p>
