@@ -13,6 +13,7 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
@@ -45,6 +46,14 @@ const StyledBox = styled.div`
             font-weight: 400;
         }
     }
+    &.validation-error {
+      border: 2px solid ${theme.colors.darkRed}
+      background-color: ${theme.colors.lightRed}
+      margin-bottom: 0;
+      & .box-val {
+        color: ${theme.colors.darkRed}
+      }
+    }
 `;
 
 class NewLoanForm extends React.Component {
@@ -67,7 +76,7 @@ class NewLoanForm extends React.Component {
             minToken: Validations.minTokenAmount(this.product.minDisbursedAmountInToken),
             maxLoanAmount: Validations.maxLoanAmount(this.product.maxLoanAmount),
             repaymentAmount: 0,
-            amountChanged: "A-EUR",
+            amountChanged: "",
             initialized: false,
             ethAmount: null,
             loanTokenAmount: null
@@ -78,9 +87,9 @@ class NewLoanForm extends React.Component {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
         }
-        if (!this.props.rates.isLoading && !this.state.initialized) {
-            this.initForm();
-        }
+        // if (!this.props.rates.isLoading && !this.state.initialized) {
+        //     this.initForm();
+        // }
     }
 
     initForm() {
@@ -107,9 +116,9 @@ class NewLoanForm extends React.Component {
         return productId;
     }
 
-    componentWillUnmount() {
-        this.setState({ initialized: false });
-    }
+    // componentWillUnmount() {
+    //     this.setState({ initialized: false });
+    // }
 
     setProduct() {
         // workaround b/c landing directly on URL and from LoanSelector triggers different events.
@@ -172,7 +181,7 @@ class NewLoanForm extends React.Component {
             error: err,
             repaymentAmount: repaymentAmount / DECIMALS_DIV,
             loanTokenAmount: amount,
-            ethAmount: ethAmount.toFixed(ETH_DECIMALS)
+            ethAmount: ethAmount
         };
     }
 
@@ -225,6 +234,14 @@ class NewLoanForm extends React.Component {
         }
     }
 
+    ethValidationError() {
+        let balance = this.props.userBalances;
+        if (!balance.isLoading && this.state.ethAmount) {
+            let ethBalance = balance.account.ethBalance.toFixed(15);
+            return this.state.ethAmount.gt(ethBalance);
+        }
+    }
+
     onSelectedLoanChange(e) {
         let product = this.products[e.target.value];
         this.setState(
@@ -247,7 +264,7 @@ class NewLoanForm extends React.Component {
     }
 
     render() {
-        const { error, handleSubmit, pristine, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
+        const { error, handleSubmit, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
         const { rates } = this.props;
         const isRatesAvailable = rates && rates.info.bn_ethFiatRate * 1 > 0;
         // const depositInEur = (rates.info.ethFiatRate * this.state.ethAmount).toFixed(2) || 0;
@@ -256,8 +273,7 @@ class NewLoanForm extends React.Component {
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
         const showResults = this.state.repaymentAmount ? true : false;
 
-        console.log(this.activeProducts, "activeee");
-        console.log(this.state.product, "prod");
+        const notEnoughEth = this.ethValidationError();
 
         return (
             <div>
@@ -323,11 +339,16 @@ class NewLoanForm extends React.Component {
 
                         {showResults && (
                             <div className="loan-results">
-                                <StyledBox>
+                                <StyledBox className={notEnoughEth ? "validation-error" : ""}>
                                     You will need to transfer
                                     <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
                                     as collateral to secure this loan.
                                 </StyledBox>
+                                {notEnoughEth && (
+                                    <p style={{ color: theme.colors.darkRed, margin: "0 0 20px 0" }}>
+                                        You don't have anough ETH
+                                    </p>
+                                )}
 
                                 <div>
                                     <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
@@ -353,7 +374,7 @@ class NewLoanForm extends React.Component {
                                 size="big"
                                 data-testid="submitBtn"
                                 loading={submitting}
-                                disabled={pristine && !this.state.initialized}
+                                disabled={notEnoughEth || !this.state.loanTokenAmount}
                                 type="submit"
                                 style={{
                                     height: "50px",
@@ -370,5 +391,9 @@ class NewLoanForm extends React.Component {
     }
 }
 
-NewLoanForm = reduxForm({ form: "NewLoanForm", keepDirtyOnReinitialize: true, enableReinitialize: true })(NewLoanForm);
-export default NewLoanForm;
+const mapStateToProps = state => ({
+    userBalances: state.userBalances
+});
+
+NewLoanForm = reduxForm({ form: "NewLoanForm" })(NewLoanForm);
+export default connect(mapStateToProps)(NewLoanForm);
