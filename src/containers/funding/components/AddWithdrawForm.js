@@ -117,7 +117,7 @@ class AddWithdrawForm extends React.Component {
                         data-testid={`${ADDFUND}Tab`}
                         className={"filled"}
                     >
-                        Add funds
+                        Buy A-EUR
                     </Menu.Item>
                     <Menu.Item
                         active={orderDirection === WITHDRAW}
@@ -126,7 +126,7 @@ class AddWithdrawForm extends React.Component {
                         data-testid={`${WITHDRAW}Tab`}
                         className={"filled"}
                     >
-                        Withdraw
+                        Sell A-EUR
                     </Menu.Item>
                 </Menu>
             </div>
@@ -154,7 +154,7 @@ class AddWithdrawForm extends React.Component {
                     <EthSubmissionErrorPanel error={error} />
 
                     <label data-testid={`${orderDirection}Label`}>
-                        {orderDirection === ADDFUND ? "Fund from bank account ..." : "Withdraw to bank account ..."}
+                        {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
 
                     <Field
