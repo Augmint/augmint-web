@@ -144,7 +144,7 @@ class NewLoanForm extends React.Component {
             this.props.change("ethAmount", "");
             this.setState({ repaymentAmount: "" });
         } else {
-            this.props.change("ethAmount", ethAmount);
+            this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
             this.setState({
                 ethAmount: ethAmount,
                 loanTokenAmount: loanTokenAmount,
