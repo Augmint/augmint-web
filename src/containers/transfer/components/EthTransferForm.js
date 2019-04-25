@@ -27,12 +27,7 @@ class EthTransferForm extends React.Component {
     }
 
     onEthAmountChange(e) {
-        let amount;
-        try {
-            amount = parseFloat(e.target.value);
-        } catch (error) {
-            return;
-        }
+        let amount = parseFloat(e.target.value);
         this.setState({ amount });
     }
 
@@ -87,7 +82,7 @@ class EthTransferForm extends React.Component {
                 )}
                 {!submitSucceeded && (
                     <Form
-                        error={error ? "true" : "false"}
+                        error={error}
                         onSubmit={handleSubmit(this.handleSubmit)}
                         style={isFunctional && { display: "inline" }}
                     >

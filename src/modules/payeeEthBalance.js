@@ -5,7 +5,6 @@ export async function getPayeesEthBalance(payeeAddress) {
 
     try {
         const bn_weiBalance = await web3.eth.getBalance(payeeAddress);
-        console.log("Payee_Eth_Balance_Received");
         return {
             bn_ethBalance: bn_weiBalance,
             ethBalance: web3.utils.fromWei(bn_weiBalance)
