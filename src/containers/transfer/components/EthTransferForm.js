@@ -6,6 +6,7 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { transferEth, ETH_TRANSFER_SUCCESS } from "modules/reducers/ethTransfer";
+import { ETH } from "components/augmint-ui/currencies";
 import theme from "styles/theme";
 
 class EthTransferForm extends React.Component {
@@ -29,11 +30,6 @@ class EthTransferForm extends React.Component {
         let amount;
         try {
             amount = parseFloat(e.target.value);
-            if (isNaN(amount)) {
-                amount = 0;
-            } else {
-                amount = parseFloat(e.target.value);
-            }
         } catch (error) {
             return;
         }
@@ -85,7 +81,7 @@ class EthTransferForm extends React.Component {
                         onDismiss={() => this.toggleEthTransferForm(false)}
                     >
                         <p>
-                            Transfer {this.state.ethAmount} ETH to {this.state.to}
+                            Transfer <ETH amount={this.state.ethAmount} /> to {this.state.to}
                         </p>
                     </EthSubmissionSuccessPanel>
                 )}
@@ -128,9 +124,11 @@ class EthTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="ETH"
                                 />
-                                <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
-                                    ≈€{amountInEur} (covers ≈{coverdTxs} transactions)
-                                </p>
+                                {!isNaN(this.state.amount) && (
+                                    <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
+                                        ≈€{amountInEur} (covers ≈{coverdTxs} transactions)
+                                    </p>
+                                )}
                             </div>
                         )}
                         <Button

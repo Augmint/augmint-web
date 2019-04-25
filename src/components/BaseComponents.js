@@ -154,11 +154,13 @@ export const formField = ({
     meta: { touched, error, warning },
     ...props
 }) => {
+    const _className = oneLine ? (error ? "oneLine error" : "oneLine") : error ? "error" : error;
+
     return (
         <StyledFormField className={touched && error ? "error" : ""}>
             {children}
             {label && <StyledLabel>{label}</StyledLabel>}
-            <StyledContainer className={oneLine ? "oneLine" : ""}>
+            <StyledContainer className={_className}>
                 {labelAlignLeft && <StyleLabel align="left">{labelAlignLeft}</StyleLabel>}
                 <StyledInput
                     {...props}

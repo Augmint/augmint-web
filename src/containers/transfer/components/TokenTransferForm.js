@@ -1,5 +1,4 @@
-/*
-????
+/* 
 TODO: form client side validation. eg:
     - address checksum and format check
 TODO: input formatting: decimals, thousand separators

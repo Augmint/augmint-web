@@ -45,7 +45,7 @@ export function getMaxTransfer(amount) {
 export async function transferEthTx(payload) {
     const { payee, ethAmount } = payload;
 
-    const gasEstimate = cost.TRANSFER_AUGMINT_TOKEN_GAS; // TODO MAYBE change to & check ETH_GAS?
+    const gasEstimate = cost.ETH_TRANSFER_GAS; // TODO MAYBE change to & check ETH_GAS?
     const userAccount = store.getState().web3Connect.userAccount;
     const web3 = store.getState().web3Connect.web3Instance;
 

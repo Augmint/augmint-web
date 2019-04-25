@@ -12,6 +12,10 @@ export const StyledContainer = styled.div`
         width: auto;
     }
 
+    &.error {
+        margin: 0 0 5px;
+    }
+
     & label,
     & input {
         font-size: ${remCalc(16)};
@@ -39,6 +43,8 @@ export const StyledLabel = styled.label`
 
 export const StyledError = styled.span`
     color: ${theme.colors.darkRed};
+    display: inline-block;
+    margin: 0 0 5px;
 `;
 
 export const StyledFormField = styled.div`
