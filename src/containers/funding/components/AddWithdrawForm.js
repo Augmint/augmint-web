@@ -1,12 +1,7 @@
-/*
-TODO: input formatting: decimals, thousand separators
-  */
-
 import React from "react";
 import { connect } from "react-redux";
 
 import { Menu } from "components/augmint-ui/menu";
-import { EthSubmissionErrorPanel } from "components/MsgPanels";
 import Button from "components/augmint-ui/button";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
@@ -151,8 +146,6 @@ class AddWithdrawForm extends React.Component {
             <Pblock noMargin={true}>
                 {header}
                 <Form error={error ? "true" : "false"}>
-                    <EthSubmissionErrorPanel error={error} />
-
                     <label data-testid={`${orderDirection}Label`}>
                         {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
