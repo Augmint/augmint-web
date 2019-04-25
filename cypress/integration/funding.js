@@ -17,7 +17,7 @@ describe("Augmint funding", function() {
     it("Should show fund input label when add funds selected", function() {
         getAddFundsTab();
 
-        cy.get("[data-testid=addFundsLabel]").should("contain", "Fund from bank account");
+        cy.get("[data-testid=addFundsLabel]").should("contain", "Send from bank account");
     });
 
     it("Should go to buy link when add funds selected", function() {
@@ -31,7 +31,7 @@ describe("Augmint funding", function() {
     it("Should show withdraw input label when withdraw selected", function() {
         getWithdrawTab();
 
-        cy.get("[data-testid=withdrawLabel]").should("contain", "Withdraw to bank account");
+        cy.get("[data-testid=withdrawLabel]").should("contain", "Send to bank account");
     });
 
     it("Should go to sell link when withdraw selected", function() {

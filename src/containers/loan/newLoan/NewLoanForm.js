@@ -79,7 +79,8 @@ class NewLoanForm extends React.Component {
             amountChanged: "",
             initialized: false,
             ethAmount: null,
-            loanTokenAmount: null
+            loanTokenAmount: null,
+            productId: this.activeProducts[0].id
         };
     }
 

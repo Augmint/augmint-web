@@ -3,15 +3,13 @@ describe("Loans", function() {
         cy.get("[data-testid=loanMenuLink]").click();
         cy.get("[data-testid=newLoanLink]").click();
 
-        cy.wait(50);
-        cy.get(`[data-testid=loan-product-selector]`)
-            .select(prodId.toString(), { force: true })
-            .should("have.value", prodId.toString());
-
         cy.get("[data-testid=loanTokenAmountInput]")
             .clear()
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
+        cy.get(`[data-testid=loan-product-selector]`)
+            .select(prodId.toString(), { force: true })
+            .should("have.value", prodId.toString());
         cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
         cy.get("[data-testid=ethAmount]").should("contain", ethAmount.toString());
 
