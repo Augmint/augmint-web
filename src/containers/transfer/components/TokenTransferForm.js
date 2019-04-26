@@ -1,4 +1,4 @@
-/* 
+/*
 TODO: form client side validation. eg:
     - address checksum and format check
 TODO: input formatting: decimals, thousand separators
@@ -177,7 +177,7 @@ class TokenTransferForm extends React.Component {
                                         style={{
                                             display: "block",
                                             marginBottom: "1rem",
-                                            marginTop: "-14px",
+                                            marginTop: "-22px",
                                             color: "#999",
                                             fontSize: "12px"
                                         }}

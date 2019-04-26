@@ -48,7 +48,7 @@ class TransferPage extends React.Component {
             <EthereumState className="transfer-page">
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Transfer A-EUR" />
+                        <Pheader header="Send A-EUR" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
@@ -60,7 +60,6 @@ class TransferPage extends React.Component {
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    header="Send A-EUR"
                                     style={{ marginBottom: 1 }}
                                 >
                                     <TokenTransferForm
