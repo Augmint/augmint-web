@@ -194,8 +194,6 @@ export default class OrderBook extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         const orderDirection = orderBookDirection;
 
-        console.log("rates info", this.props.rates.info);
-
         const header = (
             <div>
                 {mainHeader}

@@ -68,7 +68,7 @@ export function Pblock(props) {
 }
 
 function DashBlock(props) {
-    const { children, header, className, noMargin, ...other } = props;
+    const { children, header, style, className, noMargin, ...other } = props;
     const newClassName = className ? `${className} dashblock` : `dashblock`;
     const rest = Object.assign({}, { ...other }, { className: newClassName });
 
@@ -78,8 +78,10 @@ function DashBlock(props) {
 
     const marginVal = noMargin ? 0 : "1rem";
 
+    const _style = style ? style : { borderRadius: "4px", margin: marginVal };
+
     return (
-        <Segment basic {...rest} style={{ borderRadius: "4px", margin: marginVal }}>
+        <Segment basic {...rest} style={_style}>
             {header ? (
                 <div className="dashblock__head" style={{ borderRadius: "4px 4px 0 0" }}>
                     <Header as="h2" content={header} />
