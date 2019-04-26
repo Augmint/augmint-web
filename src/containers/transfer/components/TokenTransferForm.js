@@ -1,8 +1,8 @@
-/*
+/* 
 TODO: form client side validation. eg:
     - address checksum and format check
 TODO: input formatting: decimals, thousand separators
-  */
+*/
 
 import React from "react";
 import { connect } from "react-redux";
@@ -13,6 +13,7 @@ import Button from "components/augmint-ui/button";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { getTransferFee } from "modules/ethereum/transferTransactions";
 import { transferToken, TOKEN_TRANSFER_SUCCESS } from "modules/reducers/augmintToken";
+import { getPayeesEthBalance } from "modules/payeeEthBalance";
 import { TransferFeeToolTip } from "./AccountToolTips";
 import theme from "styles/theme";
 
@@ -27,6 +28,7 @@ class TokenTransferForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.setFeeByAmount = this.setFeeByAmount.bind(this);
+        this.toggleEthTransferForm = this.toggleEthTransferForm.bind(this);
     }
 
     componentDidUpdate() {
@@ -69,8 +71,14 @@ class TokenTransferForm extends React.Component {
         this.setState({ feeAmount: fee });
     }
 
+    toggleEthTransferForm(e, payeeEthAddress) {
+        this.props.toggleEthTransferForm(e, payeeEthAddress);
+    }
+
     async handleSubmit(values) {
         const tokenAmount = parseFloat(values.tokenAmount);
+        const payeeEthBalance = await getPayeesEthBalance(values.payee);
+
         const res = await store.dispatch(
             transferToken({
                 payee: values.payee,
@@ -83,6 +91,10 @@ class TokenTransferForm extends React.Component {
                 _error: res.error
             });
         } else {
+            if (!payeeEthBalance.error && payeeEthBalance.ethBalance === "0") {
+                this.toggleEthTransferForm(true, values.payee);
+            }
+
             this.setState({
                 result: res.result,
                 to: values.payee,
@@ -212,7 +224,7 @@ class TokenTransferForm extends React.Component {
                             data-testid="submitTransferButton"
                             className={submitting ? "loading" : ""}
                         >
-                            {submitting ? "Submitting..." : submitText || "Transfer"}
+                            {submitting ? "Submitting..." : submitText || "Send"}
                         </Button>
                     </Form>
                 )}
