@@ -26,7 +26,8 @@ export const StyledContainer = styled.div`
     }
     & input.small-text,
     & input.small-text::placeholder {
-        font-size: 16px;
+        font-size: 10px;
+        color: ${theme.colors.opacLighterGrey};
     }
 `;
 

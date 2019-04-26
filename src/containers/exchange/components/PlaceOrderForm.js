@@ -226,7 +226,6 @@ class PlaceOrderForm extends React.Component {
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
                             </strong>
-                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
                         </Styledlabel>
                         <Field
                             name="tokenAmount"
@@ -257,6 +256,9 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            info={`Calculated on current rate 1 ETH = ${(
+                                rates.info.ethFiatRate / this.parsePrice(this.props.price)
+                            ).toFixed(2)}A€`}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onPriceChange}
                             validate={Validations.price}
@@ -265,22 +267,9 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="%"
                         />
-                        <div
-                            style={{
-                                marginTop: -15,
-                                marginBottom: 20,
-                                color: "#999",
-                                fontSize: "12px"
-                            }}
-                        >
-                            calculated on current rate 1 ETH ={" "}
-                            {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
-                        </div>
 
                         <Styledlabel style={{ margin: 0 }}>
-                            {orderDirection === TOKEN_BUY
-                                ? "ETH amount to sell"
-                                : "ETH amount to buy (calculated on current rate)"}
+                            {orderDirection === TOKEN_BUY ? "ETH amount to sell" : "ETH amount to buy"}
                         </Styledlabel>
 
                         <Field

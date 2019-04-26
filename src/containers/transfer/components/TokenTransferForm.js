@@ -144,9 +144,8 @@ class TokenTransferForm extends React.Component {
                                     inputmode="numeric"
                                     step="any"
                                     min="0"
-                                    label="Amount ..."
+                                    label="Amount to transfer ..."
                                     name="tokenAmount"
-                                    placeholder="Amount"
                                     onChange={this.onTokenAmountChange}
                                     validate={[
                                         Validations.required,
@@ -197,10 +196,9 @@ class TokenTransferForm extends React.Component {
                                         as={Form.Input}
                                         className="nolabel"
                                         data-testid="transferNarrativeField"
-                                        label="Reference ..."
+                                        label="Add narrative (optional) ..."
                                         name="narrative"
                                         type={isFunctional ? "hidden" : "text"}
-                                        placeholder="short narrative (optional)"
                                         disabled={submitting || !augmintToken.isLoaded}
                                     />
                                 </div>

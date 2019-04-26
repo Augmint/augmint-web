@@ -347,7 +347,7 @@ class NewLoanForm extends React.Component {
                                 </StyledBox>
                                 {notEnoughEth && (
                                     <p style={{ color: theme.colors.darkRed, margin: "0 0 20px 0" }}>
-                                        You don't have anough ETH
+                                        You don't have enough ETH
                                     </p>
                                 )}
 
