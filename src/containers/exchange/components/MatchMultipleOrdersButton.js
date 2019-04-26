@@ -54,8 +54,8 @@ class MatchMultipleOrdersButton extends React.Component {
 
                 {!submitSucceeded && isMatching && isLoaded && (
                     <p>
-                        There are matching orders. Automatch will run soon. If it takes too long then match orders
-                        yourself.
+                        Automatic order matching will run soon. If it's taking too long, you may match orders yourself.
+                        <br />
                         <br />
                         <Button
                             size={size}
