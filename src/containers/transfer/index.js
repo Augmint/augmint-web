@@ -56,11 +56,10 @@ class TransferPage extends React.Component {
                         <Pgrid.Row>
                             <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>
                                 <Pblock
-                                    noMargin={true}
+                                    style={{ margin: 0 }}
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    style={{ marginBottom: 1 }}
                                 >
                                     <TokenTransferForm
                                         setPayeeAddress={this.setPayeeAddress}

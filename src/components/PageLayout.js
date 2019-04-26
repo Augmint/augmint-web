@@ -76,9 +76,7 @@ function DashBlock(props) {
         ? { overflow: "auto", borderRadius: "0 0 4px 4px" }
         : { overflow: "auto", borderRadius: "4px" };
 
-    const marginVal = noMargin ? 0 : "1rem";
-
-    const _style = style ? style : { borderRadius: "4px", margin: marginVal };
+    const _style = style ? style : { borderRadius: "4px" };
 
     return (
         <Segment basic {...rest} style={_style}>

@@ -12,6 +12,7 @@ const BaseDiv = `
   margin: 1rem 0;
   padding: 0;
   position: relative;
+  margin: 1rem;
 
   &:first-child {
     margin-top: 0;
@@ -83,4 +84,7 @@ export const StyledDiv = styled.div`
             margin-right: 0;
         }
     `};
+    ${media.mobile`
+      margin: 0;
+    `}
 `;

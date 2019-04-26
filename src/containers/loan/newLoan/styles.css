@@ -2,6 +2,7 @@
     padding: 1em 30px 30px 0;
     max-width: 380px;
     flex-basis: 380px;
+    margin-left: -16px;
 }
 .loan.column.right {
     padding: 1em 30px 30px 0;

@@ -143,7 +143,7 @@ class AddWithdrawForm extends React.Component {
         );
 
         return (
-            <Pblock noMargin={true}>
+            <Pblock style={{ margin: 0 }}>
                 {header}
                 <Form error={error ? "true" : "false"}>
                     <label data-testid={`${orderDirection}Label`}>

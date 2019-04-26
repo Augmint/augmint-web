@@ -16,6 +16,7 @@ import { PriceToolTip } from "./ExchangeToolTips";
 
 import theme from "styles/theme";
 import styled from "styled-components";
+import "./styles.css";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -202,7 +203,11 @@ class PlaceOrderForm extends React.Component {
         );
 
         return (
-            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
+            <Pblock
+                className="placeOrder-form"
+                loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
+                header={header}
+            >
                 <ConnectionStatus contract={this.props.exchange} />
 
                 {submitSucceeded && (

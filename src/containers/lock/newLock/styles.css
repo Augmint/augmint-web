@@ -1,6 +1,7 @@
 .new-lock .column {
     max-width: 350px;
     flex-basis: 350px;
+    margin-left: -16px;
 }
 
 /* tablet */
