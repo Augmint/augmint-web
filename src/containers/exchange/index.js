@@ -65,13 +65,6 @@ class ExchangeHome extends React.Component {
                             </Pgrid.Column>
 
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
-                                {orders.orders && (
-                                    <MatchMultipleOrdersButton
-                                        buyOrder={orders.orders.buyOrders[0]}
-                                        sellOrder={orders.orders.sellOrders[0]}
-                                        label="Match orders"
-                                    />
-                                )}
                                 <OrderBook
                                     testid="allOrdersBlock"
                                     orders={orders}
@@ -81,6 +74,13 @@ class ExchangeHome extends React.Component {
                                     orderBookDirection={this.state.orderBookDirection}
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
+                                {orders.orders && (
+                                    <MatchMultipleOrdersButton
+                                        buyOrder={orders.orders.buyOrders[0]}
+                                        sellOrder={orders.orders.sellOrders[0]}
+                                        label="Match orders"
+                                    />
+                                )}
                             </Pgrid.Column>
                         </Pgrid.Row>
                         <Pgrid.Row>
