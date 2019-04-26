@@ -42,6 +42,28 @@ export function getMaxTransfer(amount) {
     return maxAmount;
 }
 
+export async function transferEthTx(payload) {
+    const { payee, ethAmount } = payload;
+
+    const gasEstimate = cost.ETH_TRANSFER_GAS; // TODO MAYBE change to & check ETH_GAS?
+    const userAccount = store.getState().web3Connect.userAccount;
+    const web3 = store.getState().web3Connect.web3Instance;
+
+    const amount = ethAmount.toString();
+
+    const weiAmount = web3.utils.toWei(amount);
+
+    const txName = "ETH transfer";
+    const tx = web3.eth.sendTransaction({
+        from: userAccount,
+        to: payee,
+        value: weiAmount
+    });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, null, payload);
+    return { txName, transactionHash };
+}
+
 export async function transferTokenTx(payload) {
     const { payee, tokenAmount, narrative } = payload;
 
