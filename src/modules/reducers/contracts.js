@@ -7,6 +7,7 @@ import LoanManager from "abiniser/abis/LoanManager_ABI_fdf5fde95aa940c6dbfb8353c
 import Exchange from "abiniser/abis/Exchange_ABI_d3e7f8a261b756f9c40da097608b21cd.json";
 import StabilityBoardProxy from "abiniser/abis/StabilityBoardProxy_ABI_dd40c0d39ea8bad8a388522667a84687.json";
 import PreToken from "abiniser/abis/PreToken_ABI_7f69e33e7b345c780ac9e43f391437d9.json";
+import { Augmint } from "@augmint/js";
 
 export const CONTRACTS_CONNECT_REQUESTED = "contracts/CONTRACTS_CONNECT_REQUESTED";
 export const CONTRACTS_CONNECT_SUCCESS = "contracts/CONTRACTS_CONNECT_SUCCESS";
@@ -21,6 +22,7 @@ const initialState = {
         loanManager: null,
         lockManager: null,
         exchange: null,
+        _exchange: null, // TODO: rename this once old exchange is phased out
         stabilityBoardProxy: null,
         preToken: null
     },
@@ -75,9 +77,14 @@ export const connectContracts = () => {
             const stabilityBoardProxy = SolidityContract.connectLatest(web3, StabilityBoardProxy);
             const preToken = SolidityContract.connectLatest(web3, PreToken);
 
+            const _exchange = new Augmint.Exchange();
+
+            await _exchange.connect(web3.ethereumConnection);
+
             const [feeAccountAddress, lockManagerMonetarySupervisorAddress] = await Promise.all([
                 augmintToken.web3ContractInstance.methods.feeAccount().call(),
-                lockManager.web3ContractInstance.methods.monetarySupervisor().call()
+                lockManager.web3ContractInstance.methods.monetarySupervisor().call(),
+                _exchange.connect(web3.ethereumConnection)
             ]);
 
             const feeAccount = SolidityContract.connectAt(web3, "FeeAccount", feeAccountAddress);
@@ -95,6 +102,7 @@ export const connectContracts = () => {
                 lockManager,
                 loanManager,
                 exchange,
+                _exchange,
                 stabilityBoardProxy,
                 preToken
             };

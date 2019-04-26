@@ -186,127 +186,25 @@ export async function matchOrdersTx(buyId, sellId) {
 export async function matchMultipleOrdersTx() {
     const txName = "Match orders";
     const userAccount = store.getState().web3Connect.userAccount;
-    const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
-    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
-    const bn_ethFiatRate = store.getState().rates.info.bn_ethFiatRate;
-    const orders = store.getState().orders.orders;
+    const exchange = store.getState().contracts.latest._exchange;
 
-    const matches = calculateMatchingOrders(orders.buyOrders, orders.sellOrders, bn_ethFiatRate, blockGasLimit);
+    const matchingOrders = await exchange.getMatchingOrders();
 
-    if (matches.sellIds.length === 0) {
+    if (matchingOrders.sellIds.length === 0) {
         throw new Error("no matching orders found"); // UI shouldn't allow to be called in this case
     }
 
-    console.debug(`matchMultipleOrdersTx matchCount: ${matches.sellIds.length} gasEstimate: ${matches.gasEstimate}
-        Buy: ${matches.buyIds}
-        Sell: ${matches.sellIds}`);
+    const tx = exchange.matchMultipleOrders(matchingOrders).send({ from: userAccount });
+    processTx(tx, txName, matchingOrders.gasEstimate);
+    const transactionHash = await tx.getTxHash();
 
-    const tx = exchange.methods
-        .matchMultipleOrders(matches.buyIds, matches.sellIds)
-        .send({ from: userAccount, gas: matches.gasEstimate });
-
-    const transactionHash = await processTx(tx, txName, matches.gasEstimate);
+    console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${
+        matchingOrders.gasEstimate
+    }
+        Buy: ${matchingOrders.buyIds}
+        Sell: ${matchingOrders.sellIds}`);
 
     return { txName, transactionHash };
-}
-
-/*********************************************************************************
-calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate, gasLimit)
-returns matching pairs from ordered ordebook for sending in Exchange.matchMultipleOrders ethereum tx
-    input:
-        buyOrders[ { id, price, bn_ethAmount }]
-            must be ordered by price descending then by id ascending
-        sellOrders[ {id, price, amount }]
-            must be ordered by price ascending then by id ascending
-        bn_ethFiatRate:
-            current ETHEUR rate
-        gasLimit:
-            return as many matches as it fits to gasLimit based on gas cost estimate.
-
-    returns: pairs of matching order id , ordered by execution sequence
-        { buyIds: [], sellIds: [], gasEstimate }
-*********************************************************************************/
-export function calculateMatchingOrders(_buyOrders, _sellOrders, bn_ethFiatRate, gasLimit) {
-    const sellIds = [];
-    const buyIds = [];
-
-    if (_buyOrders.length === 0 || _sellOrders.length === 0) {
-        return { buyIds, sellIds, gasEstimate: 0 };
-    }
-    const lowestSellPrice = _sellOrders[0].price;
-    const highestBuyPrice = _buyOrders[0].price;
-
-    const buyOrders = _buyOrders
-        .filter(o => o.price >= lowestSellPrice)
-        .map(o => ({ id: o.id, price: o.price, bn_ethAmount: o.bn_ethAmount }));
-    const sellOrders = _sellOrders
-        .filter(o => o.price <= highestBuyPrice)
-        .map(o => ({ id: o.id, price: o.price, bn_tokenAmount: new BigNumber(o.amount) }));
-
-    let buyIdx = 0;
-    let sellIdx = 0;
-    let gasEstimate = 0;
-    let nextGasEstimate = cost.MATCH_MULTIPLE_FIRST_MATCH_GAS;
-
-    while (buyIdx < buyOrders.length && sellIdx < sellOrders.length && nextGasEstimate <= gasLimit) {
-        const sellOrder = sellOrders[sellIdx];
-        const buyOrder = buyOrders[buyIdx];
-        sellIds.push(sellOrder.id);
-        buyIds.push(buyOrder.id);
-
-        let tradedEth;
-        let tradedTokens;
-
-        const matchPrice = buyOrder.id > sellOrder.id ? sellOrder.price : buyOrder.price;
-
-        buyOrder.bn_tokenValue = bn_ethFiatRate
-            .div(matchPrice)
-            .mul(buyOrder.bn_ethAmount)
-            .round(2);
-
-        sellOrder.bn_ethValue = sellOrder.bn_tokenAmount
-            .mul(matchPrice)
-            .div(bn_ethFiatRate)
-            .round(18);
-
-        if (sellOrder.bn_tokenAmount.lt(buyOrder.bn_tokenValue)) {
-            tradedEth = sellOrder.bn_ethValue;
-            tradedTokens = sellOrder.bn_tokenAmount;
-        } else {
-            tradedEth = buyOrder.bn_ethAmount;
-            tradedTokens = buyOrder.bn_tokenValue;
-        }
-
-        // console.debug(
-        //     `MATCH:  BUY: id: ${buyOrder.id} price: ${
-        //         buyOrder.price
-        //     } Amount: ${buyOrder.bn_ethAmount.toString()} ETH tokenValue: ${buyOrder.bn_tokenValue.toString()}
-        // SELL: id: ${sellOrder.id} price: ${
-        //         sellOrder.price
-        //     } Amount: ${sellOrder.bn_tokenAmount.toString()} AEUR  ethValue: ${sellOrder.bn_ethValue.toString()}
-        // Traded: ${tradedEth.toString()} ETH <-> ${tradedTokens.toString()} AEUR @${(matchPrice * 100).toFixed(
-        //         2
-        //     )}% on ${bn_ethFiatRate.toString()} ETHEUR`
-        // );
-
-        buyOrder.bn_ethAmount = buyOrder.bn_ethAmount.sub(tradedEth);
-        buyOrder.bn_tokenValue = buyOrder.bn_tokenValue.sub(tradedTokens);
-
-        if (buyOrder.bn_ethAmount.eq(0)) {
-            buyIdx++;
-        }
-
-        sellOrder.bn_ethValue = sellOrder.bn_ethValue.sub(tradedEth);
-        sellOrder.bn_tokenAmount = sellOrder.bn_tokenAmount.sub(tradedTokens);
-        if (sellOrder.bn_tokenAmount.eq(0)) {
-            sellIdx++;
-        }
-
-        gasEstimate = nextGasEstimate;
-        nextGasEstimate += cost.MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS;
-    }
-
-    return { buyIds, sellIds, gasEstimate };
 }
 
 export async function cancelOrderTx(exchange, orderDirection, orderId) {
