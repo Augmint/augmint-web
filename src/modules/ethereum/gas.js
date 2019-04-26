@@ -9,6 +9,8 @@ export const cost = {
     //consecutive : no narr: 45405 - 60405 (higher when sent to account which never received)
     // w narrative: 46733 - 56693
 
+    ETH_TRANSFER_GAS: 21000,
+
     PLACE_ORDER_GAS: 200000,
 
     MATCH_ORDERS_GAS: 150000, // a single matchOrders
