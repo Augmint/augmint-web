@@ -243,7 +243,7 @@ class LockContainer extends React.Component {
                             </div>
                         </StyledBox>
 
-                        <label>How much A-EUR would you like to lock?</label>
+                        <label>How much would you like to lock?</label>
                         <Field
                             name="lockAmount"
                             component={Form.Field}
@@ -282,13 +282,12 @@ class LockContainer extends React.Component {
                             <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
                                 {"On "}
                                 <strong>{unlockBy}</strong>
-                                {" you get back "}
+                                {" you get back"}
+                                <br />
                                 <strong>
                                     <AEUR amount={earnAmount + parseFloat(this.state.lockAmount)} />
                                 </strong>
-                                {","}
-                                <br />
-                                {"earning "}
+                                {", earning "}
                                 <strong>
                                     <AEUR amount={earnAmount} />
                                 </strong>
