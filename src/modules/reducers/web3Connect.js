@@ -124,17 +124,19 @@ export const setupWeb3 = () => {
              *   NB: transition to augmint-js in progress.
              *   It's a long journey but once done only EthereumConnection  connection will be required
              ************************************************************************************/
-            const ethereumConnection = new EthereumConnection({
-                provider: web3.currentProvider,
-                // We assume that Metamask/Trustwallet/Metacoin wallet etc. injected provider takes care of reconnections
-                ETHEREUM_CONNECTION_CHECK_INTERVAL: 0
-                // To access via Infura without Metamask:
-                // PROVIDER_URL: "wss://rinkeby.infura.io/ws/v3/", // or wss://rinkeby.infura.io/ws/v3/ or  ws://localhost:8545
-                // PROVIDER_TYPE: "websocket",
-                // INFURA_PROJECT_ID: "cb1b0d436be24b0fa654ca34ae6a3645" // this should come from env.local or hosting env setting
-            });
+            const ethereumConnection = new EthereumConnection(
+                {
+                    // We assume that Metamask/Trustwallet/Metacoin wallet etc. injected provider takes care of reconnections
+                    ETHEREUM_CONNECTION_CHECK_INTERVAL: 0
+                    // To access via Infura without Metamask (and don't pass givenProvider):
+                    // PROVIDER_URL: "wss://rinkeby.infura.io/ws/v3/", // or wss://rinkeby.infura.io/ws/v3/ or  ws://localhost:8545
+                    // PROVIDER_TYPE: "websocket",
+                    // INFURA_PROJECT_ID: "cb1b0d436be24b0fa654ca34ae6a3645" // this should come from env.local or hosting env setting
+                },
+                web3.currentProvider
+            );
 
-            await ethereumConnection.connect().catch(error => console.error(error));
+            await ethereumConnection.connect();
 
             /*************************************************************************************
              * Connect to Ethereum with ethers
