@@ -195,8 +195,7 @@ export async function matchMultipleOrdersTx() {
     }
 
     const tx = exchange.matchMultipleOrders(matchingOrders).send({ from: userAccount });
-    processTx(tx, txName, matchingOrders.gasEstimate);
-    const transactionHash = await tx.getTxHash();
+    const transactionHash = await processTx(tx, txName, matchingOrders.gasEstimate);
 
     console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${
         matchingOrders.gasEstimate
