@@ -3,8 +3,9 @@ import theme from "styles/theme";
 import { remCalc } from "styles/theme";
 
 export const StyledContainer = styled.div`
-    display: inline-flex;
+    display: flex;
     width: 100%;
+    justify-content: flex-start;
 
     &.oneLine,
     &.oneLine input {
@@ -19,7 +20,6 @@ export const StyledContainer = styled.div`
         font-size: ${remCalc(16)};
         font-weight: 400;
         line-height: ${remCalc(20)};
-        height: 22px;
     }
 
     & input,
@@ -40,11 +40,13 @@ export const StyledInput = styled.input`
     border-radius: ${theme.borderRadius.all};
     border-right: none;
     padding: ${remCalc(0)} ${remCalc(16)};
-    width: 100%;
+    max-width: 100%;
+    min-width: 50%;
     outline: none;
     font-size: 24px;
-    font-weight;
     height: 60px;
+    box-sizing: border-box;
+    flex-grow: 1;
 `;
 
 export const StyledSelect = styled.select`
