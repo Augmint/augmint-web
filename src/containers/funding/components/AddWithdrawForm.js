@@ -121,6 +121,7 @@ class AddWithdrawForm extends React.Component {
                         onClick={this.onMenuClick}
                         data-testid={`${ADDFUND}Tab`}
                         className={"filled"}
+                        tabIndex="0"
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -130,6 +131,7 @@ class AddWithdrawForm extends React.Component {
                         onClick={this.onMenuClick}
                         data-testid={`${WITHDRAW}Tab`}
                         className={"filled"}
+                        tabIndex="0"
                     >
                         Sell A-EUR
                     </Menu.Item>

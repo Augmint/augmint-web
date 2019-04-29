@@ -191,6 +191,7 @@ class PlaceOrderForm extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -200,6 +201,7 @@ class PlaceOrderForm extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         Sell A-EUR
                     </Menu.Item>
