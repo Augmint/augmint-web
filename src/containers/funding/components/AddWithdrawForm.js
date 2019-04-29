@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
@@ -25,6 +26,12 @@ class AddWithdrawForm extends React.Component {
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+    }
+
+    componentDidMount() {
+        ReactDOM.findDOMNode(this.input)
+            .getElementsByTagName("input")[0]
+            .focus();
     }
 
     onPriceChange(e) {
@@ -77,6 +84,9 @@ class AddWithdrawForm extends React.Component {
     }
 
     onMenuClick(e) {
+        ReactDOM.findDOMNode(this.input)
+            .getElementsByTagName("input")[0]
+            .focus();
         if (e.target.attributes["data-index"].value === ADDFUND) {
             this.setState({
                 orderDirection: ADDFUND
@@ -143,7 +153,12 @@ class AddWithdrawForm extends React.Component {
         );
 
         return (
-            <Pblock style={{ margin: 0 }}>
+            <Pblock
+                style={{ margin: 0 }}
+                ref={form => {
+                    this.form = form;
+                }}
+            >
                 {header}
                 <Form error={error ? "true" : "false"}>
                     <label data-testid={`${orderDirection}Label`}>
@@ -158,6 +173,10 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
+                        autoFocus="true"
+                        ref={input => {
+                            this.input = input;
+                        }}
                         onChange={this.onPriceChange}
                         validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}

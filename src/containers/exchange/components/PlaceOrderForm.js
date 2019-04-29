@@ -3,6 +3,8 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+import ReactDOM from "react-dom";
+
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
@@ -58,6 +60,9 @@ class PlaceOrderForm extends React.Component {
     onOrderDirectionChange(e) {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
         this.toggleOrderBook(+e.target.attributes["data-index"].value);
+        ReactDOM.findDOMNode(this.input)
+            .getElementsByTagName("input")[0]
+            .focus();
     }
 
     onTokenAmountChange(e) {
@@ -240,6 +245,10 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            autoFocus="true"
+                            ref={input => {
+                                this.input = input;
+                            }}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}

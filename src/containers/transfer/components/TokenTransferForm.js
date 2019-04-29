@@ -158,6 +158,7 @@ class TokenTransferForm extends React.Component {
                                     min="0"
                                     label="Amount to transfer ..."
                                     name="tokenAmount"
+                                    autoFocus="true"
                                     onChange={this.onTokenAmountChange}
                                     validate={[
                                         Validations.required,

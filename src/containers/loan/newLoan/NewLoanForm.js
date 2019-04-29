@@ -88,6 +88,7 @@ class NewLoanForm extends React.Component {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
         }
+
         // if (!this.props.rates.isLoading && !this.state.initialized) {
         //     this.initForm();
         // }
@@ -309,6 +310,10 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            autoFocus="true"
+                            ref={input => {
+                                this.input = input;
+                            }}
                             disabled={submitting || !loanManager.isLoaded}
                             validate={[
                                 Validations.required,
