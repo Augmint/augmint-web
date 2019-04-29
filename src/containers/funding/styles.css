@@ -1,5 +1,6 @@
 #funding .column {
     margin-left: 1rem;
+    margin-top: 1rem;
     max-width: 350px;
     flex-basis: 350px;
 }

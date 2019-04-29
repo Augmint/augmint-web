@@ -61,7 +61,10 @@ class ExchangeHome extends React.Component {
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
                             </Pgrid.Column>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
+                            <Pgrid.Column
+                                style={{ marginTop: "1rem" }}
+                                size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}
+                            >
                                 <OrderBook
                                     testid="allOrdersBlock"
                                     orders={orders}

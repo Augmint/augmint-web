@@ -44,7 +44,7 @@ export default class Balance extends React.Component {
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
         return (
-            <Pblock className="balance">
+            <Pblock className="balance" style={{ marginTop: "1rem" }}>
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
