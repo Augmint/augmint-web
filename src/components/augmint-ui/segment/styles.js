@@ -76,12 +76,7 @@ const BaseDiv = `
 export const StyledDiv = styled.div`
     ${BaseDiv};
     ${media.tablet`
-        margin-left: 0;
-        margin-right: 0;
-
         &.block {
-            margin-left: 0;
-            margin-right: 0;
         }
     `};
     ${media.mobile`

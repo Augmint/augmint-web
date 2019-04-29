@@ -1,6 +1,7 @@
 .segment.dashblock.placeOrder-form {
     max-width: 350px;
     flex-basis: 350px;
+    margin-top: 1rem;
 }
 
 /* mobile */
