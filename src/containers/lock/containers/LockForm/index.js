@@ -31,6 +31,7 @@ const StyledBox = styled.div`
 
     & .box-val {
         display: block;
+        color: black;
         font-size: 22px;
         font-weight: 800;
         margin-bottom: -4px;
