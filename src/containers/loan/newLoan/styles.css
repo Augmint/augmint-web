@@ -36,5 +36,6 @@
     .loan.column.right {
         padding: 1em 0 0 0;
         width: 100%;
+        max-width: 100%;
     }
 }
