@@ -256,7 +256,7 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={e => (this._input = e)}
+                            ref={e => (this.input = e)}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
