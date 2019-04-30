@@ -10,7 +10,7 @@ class LoanProductSelector extends React.Component {
     render() {
         return (
             <Pgrid id="loan-product-selector">
-                <Pgrid.Row>
+                <Pgrid.Row className="row">
                     <Pgrid.Column size={{ tablet: 1, desktop: 2 / 5 }} className="loan column left">
                         <LoanProductList products={this.props.loanProducts} header="Get a new A-EUR loan" />
                     </Pgrid.Column>

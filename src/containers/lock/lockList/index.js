@@ -11,6 +11,8 @@ import { ErrorPanel } from "components/MsgPanels";
 import LockCard from "./LockCard";
 import NewLock from "./../newLock";
 
+import "./styles.css";
+
 function LockList(props) {
     const { location } = props;
     const { isLoading, error, locks } = props.locks;
@@ -34,12 +36,12 @@ function LockList(props) {
     }
 
     return (
-        <Psegment>
+        <Psegment id="locks-segment">
             <TopNavTitlePortal>
                 <Pheader header="My locks" />
             </TopNavTitlePortal>
 
-            <Segment className="block">
+            <Segment className="block locks-block">
                 <Menu>
                     <Menu.Item data-testid="newLockLink" exact to="/lock/new" activeClassName="active">
                         New lock
