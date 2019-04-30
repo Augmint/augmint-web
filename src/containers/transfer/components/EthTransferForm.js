@@ -99,9 +99,12 @@ class EthTransferForm extends React.Component {
                         {!isFunctional && (
                             <div>
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 10, marginLeft: 2 }}>
-                                    The recipient needs ETH to spend A-EUR, but does not have any.
+                                    The recipient needs ETH to spend <br />
+                                    A-EUR, but does not have any.
                                     <br />
-                                    Send a small amount enough for a few transactions:
+                                    Send a small amount enough
+                                    <br />
+                                    for a few transactions:
                                 </p>
                                 <Field
                                     name="ethAmount"
