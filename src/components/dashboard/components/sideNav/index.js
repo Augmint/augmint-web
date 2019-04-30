@@ -214,6 +214,12 @@ class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
+                        <SideNavLink to="/transfer" activeClassName="active" data-testid="transferMenuLink">
+                            <Icon name="send" />
+                            <span>Send A-EUR</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi>
                         <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                             <Icon name="exchange" />
                             <span>Exchange Crypto</span>
@@ -223,12 +229,6 @@ class SiteNav extends React.Component {
                         <SideNavLink to="/exchangeFiat" activeClassName="active" data-testid="fundingMenuLink">
                             <Icon name="reserves" />
                             <span>Exchange Fiat</span>
-                        </SideNavLink>
-                    </SideNavLi>
-                    <SideNavLi>
-                        <SideNavLink to="/transfer" activeClassName="active" data-testid="trasnferMenuLink">
-                            <Icon name="send" />
-                            <span>Send</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>

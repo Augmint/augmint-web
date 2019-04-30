@@ -139,7 +139,7 @@ class ShowTransferRequest extends React.Component {
                                                             <b>Warning:</b> you are making a transfer to an address
                                                             provided by an external site. Make sure the address belongs
                                                             to {request.beneficiary_name}
-                                                            who you are really willing to transfer A-EUR. Funds sent to
+                                                            who you are really willing to send A-EUR. Funds sent to
                                                             wrong address might be lost irreversibly.
                                                         </i>
                                                     </small>
