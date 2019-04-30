@@ -1,4 +1,6 @@
 import React from "react";
+import ReactDOM from "react-dom";
+
 import store from "modules/store";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -66,6 +68,12 @@ class LockContainer extends React.Component {
     componentDidUpdate(prevProps, props) {
         if (this.props.lockProducts && this.props.lockProducts.length && !this.state.initialized) {
             this.initForm();
+        }
+
+        if (this._input) {
+            ReactDOM.findDOMNode(this._input)
+                .getElementsByTagName("input")[0]
+                .focus();
         }
     }
 
@@ -255,7 +263,7 @@ class LockContainer extends React.Component {
                             min="0"
                             autoFocus={true}
                             ref={input => {
-                                this.input = input;
+                                this._input = input;
                             }}
                             onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
@@ -329,5 +337,6 @@ const selector = formValueSelector("LockForm");
 LockContainer = connect(state => selector(state, "productId", "lockAmount"))(LockContainer);
 
 export default reduxForm({
-    form: "LockForm"
+    form: "LockForm",
+    touchOnBlur: false
 })(LockContainer);
