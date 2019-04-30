@@ -1,0 +1,10 @@
+#loans-segment .loans-block {
+    margin: 16px;
+}
+
+/* mobile */
+@media (max-width: 376px) {
+    #loans-segment .loans-block {
+        margin: 16px 0;
+    }
+}

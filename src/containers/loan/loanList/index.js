@@ -11,6 +11,8 @@ import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
 
+import "./styles.css";
+
 function LoanList(props) {
     const { location } = props;
     const { isLoading, error, loans } = props.loans;
@@ -34,11 +36,11 @@ function LoanList(props) {
     }
 
     return (
-        <Psegment>
+        <Psegment id="loans-segment">
             <TopNavTitlePortal>
                 <Pheader header="My loans" />
             </TopNavTitlePortal>
-            <Segment className="block">
+            <Segment className="block loans-block">
                 <Menu>
                     <Menu.Item data-testid="newLoanLink" exact to="/loan/new" activeClassName="active">
                         New loan
