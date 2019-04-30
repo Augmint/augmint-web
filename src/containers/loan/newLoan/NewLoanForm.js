@@ -347,6 +347,10 @@ class NewLoanForm extends React.Component {
                                 selectOptions={this.activeProducts}
                                 selectTestId="loan-product"
                                 id={"selectedLoanProduct-" + this.state.productId}
+                                onBlur={e => {
+                                    console.debug(e);
+                                    return;
+                                }}
                             />
                         )}
 
@@ -408,5 +412,8 @@ const mapStateToProps = state => ({
     userBalances: state.userBalances
 });
 
-NewLoanForm = reduxForm({ form: "NewLoanForm" })(NewLoanForm);
+NewLoanForm = reduxForm({
+    form: "NewLoanForm",
+    touchOnBlur: false
+})(NewLoanForm);
 export default connect(mapStateToProps)(NewLoanForm);

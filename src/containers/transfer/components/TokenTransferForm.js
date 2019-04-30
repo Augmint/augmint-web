@@ -252,5 +252,6 @@ const mapStateToProps = state => ({
 TokenTransferForm = connect(mapStateToProps)(TokenTransferForm);
 
 export default reduxForm({
-    form: "TokenTransferForm"
+    form: "TokenTransferForm",
+    touchOnBlur: false
 })(TokenTransferForm);

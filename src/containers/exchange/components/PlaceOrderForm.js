@@ -66,7 +66,8 @@ class PlaceOrderForm extends React.Component {
     onOrderDirectionChange(e) {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
         this.toggleOrderBook(+e.target.attributes["data-index"].value);
-        ReactDOM.findDOMNode(this.input)
+
+        ReactDOM.findDOMNode(this._input)
             .getElementsByTagName("input")[0]
             .focus();
     }
@@ -335,6 +336,7 @@ PlaceOrderForm = connect(state => {
 
 PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
+    touchOnBlur: false,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
