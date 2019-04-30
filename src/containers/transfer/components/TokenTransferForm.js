@@ -56,9 +56,11 @@ class TokenTransferForm extends React.Component {
             this.setState({ urlResolved: true });
         }
 
-        ReactDOM.findDOMNode(this._input)
-            .getElementsByTagName("input")[0]
-            .focus();
+        if (this._input) {
+            ReactDOM.findDOMNode(this._input)
+                .getElementsByTagName("input")[0]
+                .focus();
+        }
     }
 
     onTokenAmountChange(e) {
