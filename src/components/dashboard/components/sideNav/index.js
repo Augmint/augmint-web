@@ -228,7 +228,7 @@ class SiteNav extends React.Component {
                     <SideNavLi>
                         <SideNavLink to="/transfer" activeClassName="active" data-testid="trasnferMenuLink">
                             <Icon name="send" />
-                            <span>Send</span>
+                            <span>Send A-EUR</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
