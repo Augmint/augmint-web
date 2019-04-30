@@ -278,22 +278,24 @@ class LockContainer extends React.Component {
                             data-testid="lock-product-selector"
                         />
 
-                        <div>
-                            <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
-                                {"On "}
-                                <strong>{unlockBy}</strong>
-                                {" you get back"}
-                                <br />
-                                <strong>
-                                    <AEUR amount={earnAmount + parseFloat(this.state.lockAmount)} />
-                                </strong>
-                                {", earning "}
-                                <strong>
-                                    <AEUR amount={earnAmount} />
-                                </strong>
-                                {"."}
-                            </p>
-                        </div>
+                        {!!this.state.lockAmount && (
+                            <div>
+                                <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                    {"On "}
+                                    <strong>{unlockBy}</strong>
+                                    {" you get back"}
+                                    <br />
+                                    <strong>
+                                        <AEUR amount={earnAmount + parseFloat(this.state.lockAmount)} />
+                                    </strong>
+                                    {", earning "}
+                                    <strong>
+                                        <AEUR amount={earnAmount} />
+                                    </strong>
+                                    {"."}
+                                </p>
+                            </div>
+                        )}
 
                         <Button
                             size="big"
