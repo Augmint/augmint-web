@@ -50,6 +50,12 @@ class PlaceOrderForm extends React.Component {
                 this.props.ethAmount
             );
         }
+
+        if (this._input) {
+            ReactDOM.findDOMNode(this._input)
+                .getElementsByTagName("input")[0]
+                .focus();
+        }
     }
 
     toggleOrderBook(e) {
@@ -247,10 +253,8 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            autoFocus="true"
-                            ref={input => {
-                                this.input = input;
-                            }}
+                            autoFocus={true}
+                            ref={e => (this._input = e)}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
