@@ -5,6 +5,7 @@ TODO: input formatting: decimals, thousand separators
 /* eslint-disable import/first */
 
 import React from "react";
+import ReactDOM from "react-dom";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import Button from "components/augmint-ui/button";
@@ -87,6 +88,12 @@ class NewLoanForm extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
+        }
+
+        if (this._input) {
+            ReactDOM.findDOMNode(this._input)
+                .getElementsByTagName("input")[0]
+                .focus();
         }
 
         // if (!this.props.rates.isLoading && !this.state.initialized) {
@@ -310,9 +317,9 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            autoFocus="true"
+                            autoFocus={true}
                             ref={input => {
-                                this.input = input;
+                                this._input = input;
                             }}
                             disabled={submitting || !loanManager.isLoaded}
                             validate={[

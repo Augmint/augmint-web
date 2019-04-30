@@ -5,6 +5,7 @@ TODO: input formatting: decimals, thousand separators
 */
 
 import React from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
@@ -54,6 +55,10 @@ class TokenTransferForm extends React.Component {
 
             this.setState({ urlResolved: true });
         }
+
+        ReactDOM.findDOMNode(this._input)
+            .getElementsByTagName("input")[0]
+            .focus();
     }
 
     onTokenAmountChange(e) {
@@ -158,7 +163,10 @@ class TokenTransferForm extends React.Component {
                                     min="0"
                                     label="Amount to transfer ..."
                                     name="tokenAmount"
-                                    autoFocus="true"
+                                    autoFocus={true}
+                                    ref={e => {
+                                        this._input = e;
+                                    }}
                                     onChange={this.onTokenAmountChange}
                                     validate={[
                                         Validations.required,

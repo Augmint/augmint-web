@@ -28,7 +28,7 @@ class AddWithdrawForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
         ReactDOM.findDOMNode(this.input)
             .getElementsByTagName("input")[0]
             .focus();
@@ -155,12 +155,7 @@ class AddWithdrawForm extends React.Component {
         );
 
         return (
-            <Pblock
-                style={{ margin: 0 }}
-                ref={form => {
-                    this.form = form;
-                }}
-            >
+            <Pblock style={{ margin: 0 }}>
                 {header}
                 <Form error={error ? "true" : "false"}>
                     <label data-testid={`${orderDirection}Label`}>
@@ -175,7 +170,7 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        autoFocus="true"
+                        autoFocus={true}
                         ref={input => {
                             this.input = input;
                         }}

@@ -125,6 +125,7 @@ export const SideNavLink = styled(NavLink)`
     opacity: 0.9;
     transition: opacity ${theme.transitions.fast};
     border-left: 3px solid transparent;
+    box-sizing: border-box;
 
     &:hover {
         color: ${theme.colors.secondary};
