@@ -79,6 +79,10 @@ export const Validations = {
         }
     },
 
+    minMrCoinTokenAmount: value => {
+        return value < 3 ? `Amount must be at least: 3 A-EUR` : undefined;
+    },
+
     ethUserBalance: value => {
         const userBalance = store.getState().userBalances.account.ethBalance;
         return userBalance < parseFloat(value) ? "Your ETH balance is less than the amount" : undefined;

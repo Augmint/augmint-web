@@ -102,7 +102,11 @@ class AddWithdrawForm extends React.Component {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
 
-        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
+        const tokenAmountValidations = [
+            Validations.required,
+            Validations.tokenAmount,
+            Validations.minMrCoinTokenAmount
+        ];
         if (orderDirection === WITHDRAW) {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
