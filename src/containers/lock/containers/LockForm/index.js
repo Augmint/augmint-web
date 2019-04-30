@@ -77,16 +77,16 @@ class LockContainer extends React.Component {
         const activeProducts = this.filterActiveProducts();
         const defaultId = this.defaultProductId();
         const selectedProduct = activeProducts.find(product => product.id === defaultId);
-        const initAmount = 100;
+        // const initAmount = 100;
 
-        this.props.initialize({
-            lockAmount: initAmount,
-            lockTerms: defaultId
-        });
+        // this.props.initialize({
+        //     lockAmount: initAmount,
+        //     lockTerms: defaultId
+        // });
 
         this.setState({
             initialized: true,
-            lockAmount: initAmount,
+            // lockAmount: initAmount,
             selectedProductId: defaultId,
             selectedProduct: selectedProduct
         });
