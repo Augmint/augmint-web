@@ -23,5 +23,6 @@
     .new-lock .column {
         padding: 0;
         width: 100%;
+        max-width: 100%;
     }
 }
