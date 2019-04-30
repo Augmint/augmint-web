@@ -252,6 +252,10 @@ class LockContainer extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            autoFocus={true}
+                            ref={input => {
+                                this.input = input;
+                            }}
                             onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
