@@ -29,9 +29,7 @@ class AddWithdrawForm extends React.Component {
     }
 
     componentDidUpdate() {
-        ReactDOM.findDOMNode(this.input)
-            .getElementsByTagName("input")[0]
-            .focus();
+        this.focusInput();
     }
 
     onPriceChange(e) {
@@ -84,9 +82,8 @@ class AddWithdrawForm extends React.Component {
     }
 
     onMenuClick(e) {
-        ReactDOM.findDOMNode(this.input)
-            .getElementsByTagName("input")[0]
-            .focus();
+        this.focusInput();
+
         if (e.target.attributes["data-index"].value === ADDFUND) {
             this.setState({
                 orderDirection: ADDFUND
@@ -95,6 +92,14 @@ class AddWithdrawForm extends React.Component {
             this.setState({
                 orderDirection: WITHDRAW
             });
+        }
+    }
+
+    focusInput() {
+        if (this.input && window.innerWidth > 768) {
+            ReactDOM.findDOMNode(this.input)
+                .getElementsByTagName("input")[0]
+                .focus();
         }
     }
 
@@ -174,7 +179,6 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        autoFocus={true}
                         ref={input => {
                             this.input = input;
                         }}

@@ -51,11 +51,7 @@ class PlaceOrderForm extends React.Component {
             );
         }
 
-        if (this._input) {
-            ReactDOM.findDOMNode(this._input)
-                .getElementsByTagName("input")[0]
-                .focus();
-        }
+        this.focusInput();
     }
 
     toggleOrderBook(e) {
@@ -67,9 +63,7 @@ class PlaceOrderForm extends React.Component {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
         this.toggleOrderBook(+e.target.attributes["data-index"].value);
 
-        ReactDOM.findDOMNode(this._input)
-            .getElementsByTagName("input")[0]
-            .focus();
+        this.focusInput();
     }
 
     onTokenAmountChange(e) {
@@ -163,6 +157,14 @@ class PlaceOrderForm extends React.Component {
         return Math.round(price * 100) / 10000;
     }
 
+    focusInput() {
+        if (this.input && window.innerWidth > 768) {
+            ReactDOM.findDOMNode(this.input)
+                .getElementsByTagName("input")[0]
+                .focus();
+        }
+    }
+
     render() {
         const {
             header: mainHeader,
@@ -254,7 +256,6 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            autoFocus={true}
                             ref={e => (this._input = e)}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}

@@ -56,8 +56,8 @@ class TokenTransferForm extends React.Component {
             this.setState({ urlResolved: true });
         }
 
-        if (this._input) {
-            ReactDOM.findDOMNode(this._input)
+        if (this.input && window.innerWidth > 768) {
+            ReactDOM.findDOMNode(this.input)
                 .getElementsByTagName("input")[0]
                 .focus();
         }
@@ -165,9 +165,8 @@ class TokenTransferForm extends React.Component {
                                     min="0"
                                     label="Amount to transfer ..."
                                     name="tokenAmount"
-                                    autoFocus={true}
                                     ref={e => {
-                                        this._input = e;
+                                        this.input = e;
                                     }}
                                     onChange={this.onTokenAmountChange}
                                     validate={[

@@ -90,8 +90,8 @@ class NewLoanForm extends React.Component {
             this.setProduct(); // needed when landing from on URL directly
         }
 
-        if (this._input) {
-            ReactDOM.findDOMNode(this._input)
+        if (this.input && window.innerWidth > 768) {
+            ReactDOM.findDOMNode(this.input)
                 .getElementsByTagName("input")[0]
                 .focus();
         }
@@ -317,9 +317,8 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            autoFocus={true}
                             ref={input => {
-                                this._input = input;
+                                this.input = input;
                             }}
                             disabled={submitting || !loanManager.isLoaded}
                             validate={[

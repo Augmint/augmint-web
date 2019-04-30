@@ -70,8 +70,8 @@ class LockContainer extends React.Component {
             this.initForm();
         }
 
-        if (this._input) {
-            ReactDOM.findDOMNode(this._input)
+        if (this.input && window.innerWidth > 768) {
+            ReactDOM.findDOMNode(this.input)
                 .getElementsByTagName("input")[0]
                 .focus();
         }
@@ -261,9 +261,8 @@ class LockContainer extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            autoFocus={true}
                             ref={input => {
-                                this._input = input;
+                                this.input = input;
                             }}
                             onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
