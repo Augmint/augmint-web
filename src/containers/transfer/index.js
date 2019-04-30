@@ -70,7 +70,7 @@ class TransferPage extends React.Component {
                                     <Pblock
                                         loading={userBalances.isLoading}
                                         header="Care to help?"
-                                        style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
+                                        style={{ margin: "0 0 40px", backgroundColor: theme.colors.secondaryXLight }}
                                     >
                                         <EthTransferForm
                                             address={this.state.payeeEthAddress}
