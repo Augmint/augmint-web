@@ -170,19 +170,6 @@ export async function placeOrderTx(orderDirection, amount, price) {
     return { txName, transactionHash };
 }
 
-export async function matchOrdersTx(buyId, sellId) {
-    const txName = "Match orders";
-    const gasEstimate = cost.MATCH_ORDERS_GAS;
-    const userAccount = store.getState().web3Connect.userAccount;
-    const exchange = store.getState().augmint.latest.exchange.web3ContractInstance;
-
-    const tx = exchange.methods.matchOrders(buyId, sellId).send({ from: userAccount, gas: gasEstimate });
-
-    const transactionHash = await processTx(tx, txName, gasEstimate);
-
-    return { txName, transactionHash };
-}
-
 export async function matchMultipleOrdersTx() {
     const txName = "Match orders";
     const userAccount = store.getState().web3Connect.userAccount;
