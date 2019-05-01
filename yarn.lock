@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@augmint/js@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.1.0.tgz#8a748056d8ceb3797de7fe397b92c821add064e7"
-  integrity sha512-4Uuysx+AiL0PnCCWddvRdd4MOVF7Cq9wUBIYW5TxzEz2cBQGa8A9zy9Rl5tkr1RTq0DtrJ2HWCaJCwMNfmG2IQ==
+"@augmint/js@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.1.1.tgz#cd1b013c8d79324f6f8eecb1ca14cd0fadfeb3fb"
+  integrity sha512-h45KZAi4Qmb/prJ/xTQbc5318n1s0MtF73ROTfEBHT9BohCSF+KHvRU+do2PYJtT4T8bk3gTP768ehXf0CnQhA==
   dependencies:
     bignumber.js "5.0.0"
     dotenv "7.0.0"
