@@ -9,7 +9,7 @@
     "yarn": "1.15.2"
   },
   "dependencies": {
-    "@augmint/js": "0.0.3",
+    "@augmint/js": "0.1.0",
     "bignumber.js": "5.0.0",
     "chart.js": "2.8.0",
     "ethereumjs-util": "6.1.0",
