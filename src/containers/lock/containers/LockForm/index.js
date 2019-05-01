@@ -69,12 +69,6 @@ class LockContainer extends React.Component {
         if (this.props.lockProducts && this.props.lockProducts.length && !this.state.initialized) {
             this.initForm();
         }
-
-        if (this.input && window.innerWidth > 768) {
-            ReactDOM.findDOMNode(this.input)
-                .getElementsByTagName("input")[0]
-                .focus();
-        }
     }
 
     resetAndInitForm() {
@@ -275,6 +269,7 @@ class LockContainer extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                             data-testid="lockAmountInput"
+                            autoFocus={true}
                         />
 
                         <Field
