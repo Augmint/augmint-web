@@ -58,8 +58,8 @@ class TxInfo extends React.Component {
         const map = {
             FROM_LOAN: "New loan",
             TO_LOAN: "Loan repayment",
-            FROM_LOCK: "Lock in release",
-            TO_LOCK: "New lock in",
+            FROM_LOCK: "Lock release",
+            TO_LOCK: "New lock",
             FROM_EXCHANGE: "Incoming from Exchange",
             TO_EXCHANGE: "Sell order",
             FROM_TRANSFER: "Incoming transfer",

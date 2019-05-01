@@ -194,8 +194,6 @@ export default class OrderBook extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         const orderDirection = orderBookDirection;
 
-        console.log("rates info", this.props.rates.info);
-
         const header = (
             <div>
                 {mainHeader}
@@ -206,6 +204,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Sellers
                     </Menu.Item>
@@ -215,6 +214,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Buyers
                     </Menu.Item>

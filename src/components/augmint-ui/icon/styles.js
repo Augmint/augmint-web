@@ -31,6 +31,9 @@ export const StyledIcon = styled.i`
     &[color="grey"] {
         color: ${theme.colors.mediumGrey};
     }
+    &[color="lightGray"] {
+        color: ${theme.colors.lightGrey};
+    }
 
     &.accountIcon {
         color: ${theme.colors.primary};

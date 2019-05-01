@@ -45,9 +45,17 @@
 }
 
 .Site-content.App-content {
-    padding-left: 180px;
+    padding-left: 210px;
     width: auto;
     min-height: calc(100vh - 50px);
+}
+
+label {
+    font-size: 16px;
+    padding-bottom: 5px;
+    padding-left: 3px;
+    display: inline-block;
+    font-weight: 500;
 }
 
 @media (max-width: 992px) {

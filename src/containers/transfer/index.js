@@ -10,6 +10,8 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import theme from "styles/theme";
 
+import "./styles.css";
+
 class TransferPage extends React.Component {
     constructor(props) {
         super(props);
@@ -43,22 +45,21 @@ class TransferPage extends React.Component {
         const { augmintToken, userBalances } = this.props;
 
         return (
-            <EthereumState>
+            <EthereumState className="transfer-page">
                 <Psegment>
                     <TopNavTitlePortal>
                         <Pheader header="Send A-EUR" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
-                    <Pgrid>
+                    <Pgrid className="transfer">
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
+                            <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>
                                 <Pblock
+                                    style={{ margin: 0 }}
                                     loading={
                                         augmintToken.isLoading || (!augmintToken.isLoaded && !augmintToken.loadError)
                                     }
-                                    header="Send A-EUR"
-                                    style={{ marginBottom: 1 }}
                                 >
                                     <TokenTransferForm
                                         setPayeeAddress={this.setPayeeAddress}
@@ -68,9 +69,8 @@ class TransferPage extends React.Component {
                                 {this.state.displayEthTransferForm && (
                                     <Pblock
                                         loading={userBalances.isLoading}
-                                        // header="The recipient/payee needs ETH to cover transaction fees, but does not have any... Care to help?"
                                         header="Care to help?"
-                                        style={{ marginTop: 0, backgroundColor: theme.colors.secondaryXLight }}
+                                        style={{ margin: "0 0 40px", backgroundColor: theme.colors.secondaryXLight }}
                                     >
                                         <EthTransferForm
                                             address={this.state.payeeEthAddress}
