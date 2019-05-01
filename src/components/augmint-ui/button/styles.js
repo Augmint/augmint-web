@@ -85,7 +85,7 @@ export const BaseButton = styledComponent => styledComponent`
         }
 
         ${media.tabletMin`
-          padding: 15px 20px;
+          padding: 20px;
         `};
       }
 

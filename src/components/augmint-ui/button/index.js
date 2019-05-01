@@ -19,6 +19,5 @@ export default function Button(props) {
         _icon = <Icon name={icon} />;
     }
 
-
-    return React.createElement(elementType, {...props, className: _className }, children, content, _icon)
+    return React.createElement(elementType, { ...props, className: _className }, children, content, _icon);
 }

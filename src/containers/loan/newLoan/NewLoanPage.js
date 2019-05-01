@@ -58,7 +58,7 @@ class NewLoanPage extends React.Component {
             return msg;
         }
         return (
-            <Pgrid>
+            <Pgrid className="new-loan-page">
                 <Pgrid.Row wrap={false}>
                     <Pgrid.Column>
                         {!this.state.submitSucceeded && (

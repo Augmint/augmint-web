@@ -3,23 +3,35 @@ import theme from "styles/theme";
 import { remCalc } from "styles/theme";
 
 export const StyledContainer = styled.div`
-    display: inline-flex;
-    margin: 0 0 ${remCalc(16)};
+    display: flex;
     width: 100%;
+    justify-content: flex-start;
 
     &.oneLine,
     &.oneLine input {
         width: auto;
     }
 
-    & label,
-    & input {
-        font-size: ${remCalc(16)};
-        font-weight: 400;
+    &.error {
+        margin: 0 0 5px;
     }
 
     & label {
-        line-height: ${remCalc(16)};
+        font-size: ${remCalc(16)};
+        font-weight: 400;
+        line-height: ${remCalc(20)};
+    }
+
+    & input,
+    & input::placeholder {
+        font-size: 22px;
+        color: ${theme.colors.primary};
+        font-weight: 600;
+    }
+    & input.small-text,
+    & input.small-text::placeholder {
+        font-size: 10px;
+        color: ${theme.colors.opacLighterGrey};
     }
 `;
 
@@ -27,21 +39,46 @@ export const StyledInput = styled.input`
     border: 1px solid ${theme.colors.opacGrey};
     border-radius: ${theme.borderRadius.all};
     border-right: none;
-    padding: ${remCalc(10)} ${remCalc(16)};
+    padding: ${remCalc(0)} ${remCalc(16)};
+    max-width: 100%;
+    min-width: 50%;
+    outline: none;
+    font-size: 24px;
+    height: 60px;
+    box-sizing: border-box;
+    flex-grow: 1;
+`;
+
+export const StyledSelect = styled.select`
+    border: 1px solid ${theme.colors.opacGrey};
+    border-radius: 3px;
     width: 100%;
+    outline: none;
+    background-color: white;
+    font-size: 22px;
+    color: ${theme.colors.primary};
+    font-weight: 600;
+    height: 60px;
+    text-indent: 10px;
+    appearance: menulist !important;
 `;
 
 export const StyledLabel = styled.label`
-    font-size: ${remCalc(15)};
-    font-weight: 700;
+    font-size: 16px;
     line-height: ${remCalc(20)};
 `;
 
 export const StyledError = styled.span`
     color: ${theme.colors.darkRed};
+    display: inline-block;
+    margin: 0 0 5px;
 `;
 
 export const StyledFormField = styled.div`
+    margin: 0 0 ${remCalc(22)};
+    & input.nolabel {
+        border-right: 1px solid ${theme.colors.opacGrey};
+    }
     &.error {
         color: ${theme.colors.darkRed};
 

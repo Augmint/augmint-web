@@ -93,7 +93,7 @@ class EthereumTxStatus extends React.Component {
 
                     const gasUsed = tx.receipt ? tx.receipt.gasUsed : "waiting for receipt...";
 
-                    if (tx.receipt && tx.receipt.events.NewLoan) {
+                    if (tx.receipt && tx.receipt.events && tx.receipt.events.NewLoan) {
                         const vals = tx.receipt.events.NewLoan.returnValues;
 
                         const loanAmount = parseInt(vals.loanAmount, 10) / decimalsDiv;
@@ -121,7 +121,7 @@ class EthereumTxStatus extends React.Component {
                         );
                     }
 
-                    if (tx.receipt && tx.receipt.events.NewOrder) {
+                    if (tx.receipt && tx.receipt.events && tx.receipt.events.NewOrder) {
                         orderId = tx.receipt.events.NewOrder.returnValues.orderId;
                         txInfo = <p>Order id: {orderId}</p>;
                     }

@@ -212,7 +212,7 @@ class AugmintToken extends React.Component {
                 <ThemeProvider theme={mediaTheme}>
                     <StyledContainer>
                         <TopNavTitlePortal>
-                            <Pheader header="Stability Dashboard" />
+                            <Pheader header="Stability Report" />
                         </TopNavTitlePortal>
                         <Segment
                             loading={metrics.isLoading || monetarySupervisor.isLoading || augmintToken.isLoading}

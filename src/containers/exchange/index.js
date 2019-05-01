@@ -5,7 +5,6 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import FiatExchange from "./components/FiatExchange";
 import OrderBook from "./components/OrderBook";
 import MyOrders from "./components/MyOrders";
 import TradeHistory from "./components/TradeHistory";
@@ -45,17 +44,16 @@ class ExchangeHome extends React.Component {
             <EthereumState>
                 <Psegment>
                     <TopNavTitlePortal>
-                        <Pheader header="Buy & Sell A-EUR" />
+                        <Pheader header="Exchange Crypto" />
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <FiatExchange
-                                    header="€ &harr; A€ on partner exchange"
-                                    web3Connect={this.props.web3Connect}
-                                />
+                            <Pgrid.Column
+                                className="placeorder-column"
+                                size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}
+                            >
                                 <PlaceOrderForm
                                     orders={orders}
                                     exchange={exchange}
@@ -63,15 +61,10 @@ class ExchangeHome extends React.Component {
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
                             </Pgrid.Column>
-
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 2 / 3 }}>
-                                {orders.orders && (
-                                    <MatchMultipleOrdersButton
-                                        buyOrder={orders.orders.buyOrders[0]}
-                                        sellOrder={orders.orders.sellOrders[0]}
-                                        label="Match orders"
-                                    />
-                                )}
+                            <Pgrid.Column
+                                style={{ marginTop: "1rem" }}
+                                size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}
+                            >
                                 <OrderBook
                                     testid="allOrdersBlock"
                                     orders={orders}
@@ -81,6 +74,13 @@ class ExchangeHome extends React.Component {
                                     orderBookDirection={this.state.orderBookDirection}
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
+                                {orders.orders && (
+                                    <MatchMultipleOrdersButton
+                                        buyOrder={orders.orders.buyOrders[0]}
+                                        sellOrder={orders.orders.sellOrders[0]}
+                                        label="Match orders"
+                                    />
+                                )}
                             </Pgrid.Column>
                         </Pgrid.Row>
                         <Pgrid.Row>
