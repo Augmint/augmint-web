@@ -85,7 +85,7 @@ export default function LockCard(props) {
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         {lock.isReleasebale ? (
                             <CardStatusInfo className="ReadyToRelease">
                                 <strong>Ready to release</strong>
@@ -100,7 +100,7 @@ export default function LockCard(props) {
                             </CardStatusInfo>
                         )}
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         <DataGroup>
                             <DataRow>
                                 <DataLabel>

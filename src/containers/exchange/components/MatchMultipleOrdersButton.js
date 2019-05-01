@@ -44,6 +44,7 @@ class MatchMultipleOrdersButton extends React.Component {
         const { submitSucceeded, submitting, error, result } = this.state;
 
         const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
+
         return (
             <Pblock style={!isMatching ? { display: "none" } : {}}>
                 {error && (

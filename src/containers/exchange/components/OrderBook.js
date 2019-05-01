@@ -204,6 +204,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Sellers
                     </Menu.Item>
@@ -213,6 +214,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Buyers
                     </Menu.Item>

@@ -1,0 +1,10 @@
+#locks-segment .locks-block {
+    margin: 16px;
+}
+
+/* mobile */
+@media (max-width: 376px) {
+    #locks-segment .locks-block {
+        margin: 16px 0;
+    }
+}

@@ -36,7 +36,7 @@ Pcontainer.defaultProps = {
 
 export class Psegment extends React.Component {
     render() {
-        const { children, ...other } = this.props;
+        const { children, left, ...other } = this.props;
         return <Segment {...other}>{children}</Segment>;
     }
 }
@@ -60,12 +60,6 @@ export class Pcolumn extends React.Component {
     }
 }
 
-Pcolumn.defaultProps = {
-    style: {
-        padding: "1rem"
-    }
-};
-
 Pgrid.Column = Pcolumn;
 Pgrid.Row = Grid;
 
@@ -74,18 +68,24 @@ export function Pblock(props) {
 }
 
 function DashBlock(props) {
-    const { children, header, className, ...other } = props;
+    const { children, header, style, className, noMargin, ...other } = props;
     const newClassName = className ? `${className} dashblock` : `dashblock`;
     const rest = Object.assign({}, { ...other }, { className: newClassName });
 
+    const contentStyles = header
+        ? { overflow: "auto", borderRadius: "0 0 4px 4px" }
+        : { overflow: "auto", borderRadius: "4px" };
+
+    const _style = style ? style : { borderRadius: "4px" };
+
     return (
-        <Segment basic {...rest}>
+        <Segment basic {...rest} style={_style}>
             {header ? (
-                <div className="dashblock__head">
+                <div className="dashblock__head" style={{ borderRadius: "4px 4px 0 0" }}>
                     <Header as="h2" content={header} />
                 </div>
             ) : null}
-            <div className="dashblock__content" style={{ overflow: "auto" }}>
+            <div className="dashblock__content" style={contentStyles}>
                 {children}
             </div>
         </Segment>

@@ -5,6 +5,7 @@ package-lock.json
 
 build
 .DS_Store
+.idea/
 
 # Logs
 logs
