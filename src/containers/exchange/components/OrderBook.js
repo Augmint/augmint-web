@@ -10,7 +10,7 @@ import BigNumber from "bignumber.js";
 import styled from "styled-components";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS, DECIMALS_DIV, ETHEUR } from "utils/constants";
+import { DECIMALS, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 
