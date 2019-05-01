@@ -3,109 +3,17 @@ import BigNumber from "bignumber.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, LEGACY_CONTRACTS_CHUNK_SIZE, CHUNK_SIZE } from "utils/constants";
+import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
 
-export async function fetchOrders(_exchangeInstance) {
-    // TODO: handle when order changes while iterating
-    const exchangeInstance = _exchangeInstance
-        ? _exchangeInstance
-        : store.getState().contracts.latest.exchange.web3ContractInstance;
-    const isLegacyExchangeContract = typeof exchangeInstance.methods.CHUNK_SIZE === "function";
-    const chunkSize = isLegacyExchangeContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+export async function fetchOrders() {
+    const exchange = await store.getState().web3Connect.augmint.exchange;
 
-    const orderCounts = await exchangeInstance.methods.getActiveOrderCounts().call();
-    const buyCount = parseInt(orderCounts.buyTokenOrderCount, 10);
-    const sellCount = parseInt(orderCounts.sellTokenOrderCount, 10);
+    const orderBook = await exchange.getOrderBook();
 
-    // retreive all orders
-    let buyOrders = [];
-    let queryCount = Math.ceil(buyCount / LEGACY_CONTRACTS_CHUNK_SIZE);
-
-    for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = isLegacyExchangeContract
-            ? await getOrders(exchangeInstance, TOKEN_BUY, i * chunkSize)
-            : await getOrders(exchangeInstance, TOKEN_BUY, i * chunkSize, chunkSize);
-        buyOrders = buyOrders.concat(fetchedOrders.buyOrders);
-    }
-
-    let sellOrders = [];
-    queryCount = Math.ceil(sellCount / chunkSize);
-    for (let i = 0; i < queryCount; i++) {
-        const fetchedOrders = isLegacyExchangeContract
-            ? await getOrders(exchangeInstance, TOKEN_SELL, i * chunkSize)
-            : await getOrders(exchangeInstance, TOKEN_SELL, i * chunkSize, chunkSize);
-        sellOrders = sellOrders.concat(fetchedOrders.sellOrders);
-    }
-
-    buyOrders.sort(isOrderBetter);
-    sellOrders.sort(isOrderBetter);
-
-    return { buyOrders, sellOrders };
-}
-
-async function getOrders(exchangeInstance, orderDirection, offset) {
-    const blockGasLimit = Math.floor(store.getState().web3Connect.info.gasLimit * 0.9); // gasLimit was read at connection time, prepare for some variance
-
-    const isLegacyExchangeContract = typeof exchangeInstance.methods.CHUNK_SIZE === "function";
-    const chunkSize = isLegacyExchangeContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
-
-    let result;
-    if (orderDirection === TOKEN_BUY) {
-        result = isLegacyExchangeContract
-            ? await exchangeInstance.methods.getActiveBuyOrders(offset).call({ gas: blockGasLimit })
-            : await exchangeInstance.methods.getActiveBuyOrders(offset, chunkSize).call({ gas: blockGasLimit });
-    } else {
-        result = isLegacyExchangeContract
-            ? await exchangeInstance.methods.getActiveSellOrders(offset).call({ gas: blockGasLimit })
-            : await exchangeInstance.methods.getActiveSellOrders(offset, chunkSize).call({ gas: blockGasLimit });
-    }
-
-    // result format: [id, maker, price, amount]
-    const orders = result.reduce(
-        (res, order, idx) => {
-            const bn_amount = new BigNumber(order[3]);
-            if (!bn_amount.eq(0)) {
-                const parsed = {
-                    id: parseInt(order[0], 10),
-                    maker: "0x" + new BigNumber(order[1]).toString(16).padStart(40, "0"), // leading 0s if address starts with 0
-                    bn_price: new BigNumber(order[2]),
-                    bn_amount
-                };
-
-                parsed.price = parsed.bn_price / PPM_DIV;
-
-                if (orderDirection === TOKEN_BUY) {
-                    parsed.direction = TOKEN_BUY;
-                    parsed.bn_ethAmount = parsed.bn_amount.div(ONE_ETH_IN_WEI);
-                    parsed.amount = parseFloat(parsed.bn_ethAmount);
-
-                    res.buyOrders.push(parsed);
-                } else {
-                    parsed.direction = TOKEN_SELL;
-                    parsed.amount = parseFloat((parsed.bn_amount / DECIMALS_DIV).toFixed(2));
-
-                    res.sellOrders.push(parsed);
-                }
-            }
-            return res;
-        },
-        { buyOrders: [], sellOrders: [] }
-    );
-
-    return orders;
-}
-
-export function isOrderBetter(o1, o2) {
-    if (o1.direction !== o2.direction) {
-        throw new Error("isOrderBetter(): order directions must be the same" + o1 + o2);
-    }
-
-    const dir = o1.direction === TOKEN_SELL ? 1 : -1;
-
-    return o1.price * dir > o2.price * dir || (o1.price === o2.price && o1.id > o2.id) ? 1 : -1;
+    return orderBook;
 }
 
 export async function placeOrderTx(orderDirection, amount, price) {

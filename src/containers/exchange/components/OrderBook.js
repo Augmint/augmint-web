@@ -113,14 +113,14 @@ const OrderItem = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0));
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bnEthAmount.add(sum), 0));
     const totalEthSellAmount = sellOrders.reduce(
         (sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum),
         0
     );
-    const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0)).div(
-        DECIMALS_DIV
-    );
+    const totalAeurSellAmount = sellOrders.reduce((sum, order) => {
+        return order.amount + sum;
+    }, 0);
     const totalAeurBuyAmount = buyOrders.reduce(
         (sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum),
         0
