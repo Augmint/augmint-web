@@ -59,7 +59,19 @@ const setupContractEventListeners = () => {
         }
     });
 
-    // TODO: add & handle loanproduct change events
+    loanManager.events.LoanProductAdded({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewLoanProduct(error, event);
+        }
+    });
+
+    loanManager.events.LoanProductActiveStateChanged({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLoanProductActiveChange(error, event);
+        }
+    });
 };
 
 const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
@@ -84,6 +96,20 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
         const userAccount = store.getState().web3Connect.userAccount;
         store.dispatch(fetchLoansForAddress(userAccount));
     }
+};
+
+const onNewLoanProduct = (error, event) => {
+    // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
+    //                         uint32 minimumLockAmount, bool isActive);
+    console.debug("loanManagerProvider.onNewLoanProduct: dispatching refreshLockManager and fetchLockProducts");
+    store.dispatch(refreshLoanManager()); // to update product count
+    store.dispatch(fetchLoanProducts()); // to fetch new product
+};
+
+const onLoanProductActiveChange = (error, event) => {
+    // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+    console.debug("loanManagerProvider.onLoanProductActiveChange: dispatching fetchLockProducts");
+    store.dispatch(fetchLoanProducts()); // to refresh product list
 };
 
 const onNewLoan = (error, event) => {
