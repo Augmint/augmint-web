@@ -170,5 +170,3 @@ Cypress.Commands.add("issueTo", (tokenAmount, to, options = {}) => {
             );
         });
 });
-        });
-});
