@@ -55,12 +55,6 @@ class TokenTransferForm extends React.Component {
 
             this.setState({ urlResolved: true });
         }
-
-        if (this.input && window.innerWidth > 768) {
-            ReactDOM.findDOMNode(this.input)
-                .getElementsByTagName("input")[0]
-                .focus();
-        }
     }
 
     onTokenAmountChange(e) {
@@ -179,6 +173,7 @@ class TokenTransferForm extends React.Component {
                                     data-testid="transferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left, marginBottom: "0" }}
                                     labelAlignRight="A-EUR"
+                                    autoFocus={true}
                                 />
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||

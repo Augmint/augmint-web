@@ -28,10 +28,6 @@ class AddWithdrawForm extends React.Component {
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
-    componentDidUpdate() {
-        this.focusInput();
-    }
-
     onPriceChange(e) {
         const amount = e.target.value;
         this.setState({
@@ -82,8 +78,6 @@ class AddWithdrawForm extends React.Component {
     }
 
     onMenuClick(e) {
-        this.focusInput();
-
         if (e.target.attributes["data-index"].value === ADDFUND) {
             this.setState({
                 orderDirection: ADDFUND
@@ -92,14 +86,6 @@ class AddWithdrawForm extends React.Component {
             this.setState({
                 orderDirection: WITHDRAW
             });
-        }
-    }
-
-    focusInput() {
-        if (this.input && window.innerWidth > 768) {
-            ReactDOM.findDOMNode(this.input)
-                .getElementsByTagName("input")[0]
-                .focus();
         }
     }
 
@@ -188,6 +174,7 @@ class AddWithdrawForm extends React.Component {
                         data-testid={`${orderDirection}Input`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
+                        autoFocus={true}
                     />
                     <label>Available exchange partner:</label>
 

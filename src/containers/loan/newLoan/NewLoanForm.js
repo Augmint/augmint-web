@@ -90,12 +90,6 @@ class NewLoanForm extends React.Component {
             this.setProduct(); // needed when landing from on URL directly
         }
 
-        if (this.input && window.innerWidth > 768) {
-            ReactDOM.findDOMNode(this.input)
-                .getElementsByTagName("input")[0]
-                .focus();
-        }
-
         // if (!this.props.rates.isLoading && !this.state.initialized) {
         //     this.initForm();
         // }
@@ -332,6 +326,7 @@ class NewLoanForm extends React.Component {
                             data-testid="loanTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            autoFocus={true}
                         />
 
                         {this.state.productId !== null && this.state.productId !== undefined && (
