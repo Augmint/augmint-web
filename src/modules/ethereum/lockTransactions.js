@@ -120,16 +120,16 @@ export async function fetchLocksForAddressTx(lockManagerInstance, account) {
     return locks;
 }
 
-export async function processNewLockTx(account, lockData) {
+export async function processNewLockTx(account, event) {
     // reprdocue an array in same format as getLocksForAddress returnvalue:
     //     [ lockOwner, lockId, amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs]
     const lockArray = [
-        lockData.lockId,
-        lockData.amountLocked,
-        lockData.interestEarned,
-        lockData.lockedUntil, // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
-        lockData.perTermInterest,
-        lockData.durationInSecs,
+        event.returnValues.lockId,
+        event.returnValues.amountLocked,
+        event.returnValues.interestEarned,
+        event.returnValues.lockedUntil, // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
+        event.returnValues.perTermInterest,
+        event.returnValues.durationInSecs,
         new BigNumber(1) // we don't get isActive in event data
     ];
 

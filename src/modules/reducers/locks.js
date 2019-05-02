@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 account: action.account,
-                lockData: action.lockData,
+                event: action.event,
                 isLoading: true
             };
 
@@ -82,27 +82,21 @@ export function fetchLocksForAddress(account) {
     };
 }
 
-export function processNewLock(account, lockData) {
+export function processNewLock(account, event) {
     return async dispatch => {
         dispatch({
             type: PROCESS_NEW_LOCK_REQUESTED,
             account,
-            lockData
+            event
         });
 
         try {
             const locksInStore = store.getState().locks.locks;
-            let locks;
-            if (locksInStore.findIndex(a => a.id === lockData.lockId.toNumber()) >= 0) {
-                // add lock only if it's unique: newLock event retriggered on page load with ganache when new lock is
-                // in the last block. In such case the same lock was already processed by fetchLocksForAddress
-                locks = locksInStore;
-            } else {
-                const newLock = await processNewLockTx(account, lockData);
-                locks = [...locksInStore, newLock].sort((a, b) => {
-                    return b.id - a.id;
-                });
-            }
+
+            const newLock = await processNewLockTx(account, event);
+            const locks = [...locksInStore, newLock].sort((a, b) => {
+                return b.id - a.id;
+            });
 
             return dispatch({
                 type: PROCESS_NEW_LOCK_DONE,
