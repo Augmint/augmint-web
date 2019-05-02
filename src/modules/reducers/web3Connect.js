@@ -95,11 +95,11 @@ export const setupWeb3 = () => {
                 console.debug("Using web3 detected from external source.");
                 web3 = new Web3(window.web3.currentProvider);
             } else {
+                // Connection to locally running node for tests
                 console.debug(
-                    "No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask"
+                    "No web3 detected. Falling back to http://localhost:8545. Don't use this for mainnet transactions (i.e. local geth etc.) becuase it's insecure."
                 );
-                //web3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
-                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+                web3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
             }
 
             //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
