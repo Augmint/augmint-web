@@ -133,7 +133,7 @@ export async function processTransferEvents(_events, account) {
 
 const DELEGATED_NARRATIVE = "Delegated transfer fee";
 
-// get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
+// get txData in format of logData returned from web3.getPastEvents or with event from event listener
 function formatEvent(event, account) {
     const logData = Object.assign({}, event, {
         from: event.returnValues.from.toLowerCase(),

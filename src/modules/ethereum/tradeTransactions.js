@@ -57,10 +57,6 @@ export async function formatTradeEvent(account, event, type) {
     } else {
         orderId = tokenAmount === 0 ? event.returnValues.buyTokenOrderId : event.returnValues.sellTokenOrderId;
     }
-    if (typeof orderId.toNumber === "function") {
-        // event listener from ethers returns BigNumber
-        orderId = orderId.toNumber();
-    }
 
     let direction = tokenAmount === 0 ? "buy" : "sell";
     if (event.name === "OrderFill") {

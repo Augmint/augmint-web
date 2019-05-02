@@ -127,7 +127,7 @@ export async function processNewLockTx(account, event) {
         event.returnValues.lockId,
         event.returnValues.amountLocked,
         event.returnValues.interestEarned,
-        event.returnValues.lockedUntil, // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
+        event.returnValues.lockedUntil,
         event.returnValues.perTermInterest,
         event.returnValues.durationInSecs,
         new BigNumber(1) // we don't get isActive in event data

@@ -1,8 +1,6 @@
-import store from "modules/store";
 import { default as Web3 } from "web3";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
-import { ethers } from "ethers";
 import { getCookie, setCookie } from "utils/cookie.js";
 import { Augmint } from "@augmint/js";
 
@@ -22,7 +20,6 @@ const initialState = {
     isConnected: false,
     network: { id: "?", name: "?" },
     augmint: null,
-    ethers: { provider: null, signer: null },
     watchAsset: getCookie("watchAsset") || []
 };
 
@@ -48,8 +45,7 @@ export default (state = initialState, action) => {
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
                 network: action.network,
-                info: action.info,
-                ethers: action.ethers
+                info: action.info
             };
 
         case WEB3_SETUP_ERROR:
@@ -135,18 +131,6 @@ export const setupWeb3 = () => {
             };
             const augmint = await Augmint.create(connectionConfig);
 
-            /*************************************************************************************
-             * Connect to Ethereum with ethers
-             *  ethers is used as a workaround for at least two issues w/ web3: event handling and filtering events
-             *  Once we migrated to augint-js this could be removed
-             ************************************************************************************/
-            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider, {
-                name: network.name,
-                chainId: network.id
-            });
-            // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
-            //  provider = ethers.providers.getDefaultProvider(); // TODO: https://github.com/ethers-io/ethers.js/issues/108
-            const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
             const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
@@ -155,7 +139,6 @@ export const setupWeb3 = () => {
                 userAccount,
                 accounts,
                 network,
-                ethers: { signer: ethersSigner, provider: ethersProvider },
                 info: { web3Version, gasLimit: lastBlock.gasLimit, gasPrice }
             });
         } catch (error) {
@@ -168,13 +151,10 @@ export const setupWeb3 = () => {
 };
 
 export const accountChange = newAccounts => {
-    const provider = store.getState().web3Connect.ethers.provider;
-    const signer = provider.getSigner(newAccounts[0]);
     return {
         type: WEB3_ACCOUNT_CHANGE,
         userAccount: newAccounts[0],
-        accounts: newAccounts,
-        ethers: { signer, provider }
+        accounts: newAccounts
     };
 };
 
