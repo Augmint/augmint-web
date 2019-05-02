@@ -3,16 +3,16 @@
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
 import store from "modules/store";
-import { fetchTransfersTx, processNewTransferTx } from "modules/ethereum/transferTransactions";
+import { fetchTransfersTx, processTransferEvents } from "modules/ethereum/transferTransactions";
 import { AVG_BLOCK_TIME } from "utils/constants";
 
 export const FETCH_TRANSFERS_REQUESTED = "userTransfers/FETCH_TRANSFERS_REQUESTED";
 export const FETCH_TRANSFERS_ERROR = "userBalances/FETCH_TRANSFERS_ERROR";
 export const FETCH_TRANSFERS_RECEIVED = "userTransfers/FETCH_TRANSFERS_RECEIVED";
 
-export const PROCESS_NEW_TRANSFER_REQUESTED = "userTransfers/PROCESS_NEW_TRANSFER_REQUESTED";
-export const PROCESS_NEW_TRANSFER_ERROR = "userTransfers/PROCESS_NEW_TRANSFER_ERROR";
-export const PROCESS_NEW_TRANSFER_DONE = "userTransfers/PROCESS_NEW_TRANSFER_DONE";
+export const PROCESS_NEW_TRANSFERS_REQUESTED = "userTransfers/PROCESS_NEW_TRANSFERS_REQUESTED";
+export const PROCESS_NEW_TRANSFERS_ERROR = "userTransfers/PROCESS_NEW_TRANSFERS_ERROR";
+export const PROCESS_NEW_TRANSFERS_DONE = "userTransfers/PROCESS_NEW_TRANSFERS_DONE";
 
 const initialState = {
     transfers: null,
@@ -30,14 +30,15 @@ export default (state = initialState, action) => {
                 toBlock: action.toBlock
             };
 
-        case PROCESS_NEW_TRANSFER_REQUESTED:
+        case PROCESS_NEW_TRANSFERS_REQUESTED:
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                events: action.events
             };
 
         case FETCH_TRANSFERS_RECEIVED:
-        case PROCESS_NEW_TRANSFER_DONE:
+        case PROCESS_NEW_TRANSFERS_DONE:
             return {
                 ...state,
                 isLoading: false,
@@ -45,7 +46,7 @@ export default (state = initialState, action) => {
             };
 
         case FETCH_TRANSFERS_ERROR:
-        case PROCESS_NEW_TRANSFER_ERROR:
+        case PROCESS_NEW_TRANSFERS_ERROR:
             return {
                 ...state,
                 isLoading: false,
@@ -110,29 +111,30 @@ export function fetchLatestTransfers(account, isAdditional) {
         });
 }
 
-export function processNewTransfer(account, eventLog) {
+export function processNewTransfer(events, account) {
     return async dispatch => {
         dispatch({
-            type: PROCESS_NEW_TRANSFER_REQUESTED,
-            eventLog: eventLog
+            type: PROCESS_NEW_TRANSFERS_REQUESTED,
+            events
         });
 
         try {
-            const newTransfer = await processNewTransferTx(account, eventLog);
+            const newTransfers = await processTransferEvents(events, account);
             let transfers = store.getState().userTransfers.transfers;
             if (!transfers) {
                 transfers = [];
             }
-
-            if (!transfers.find(a => a.transactionHash === newTransfer.transactionHash)) {
-                transfers.push(newTransfer);
-                transfers.sort((a, b) => {
-                    return b.blockNumber - a.blockNumber;
-                });
-            }
+            newTransfers.forEach(newTransfer => {
+                if (!transfers.find(a => a.transactionHash === newTransfer.transactionHash)) {
+                    transfers.push(newTransfer);
+                    transfers.sort((a, b) => {
+                        return b.blockNumber - a.blockNumber;
+                    });
+                }
+            });
 
             return dispatch({
-                type: PROCESS_NEW_TRANSFER_DONE,
+                type: PROCESS_NEW_TRANSFERS_DONE,
                 result: transfers
             });
         } catch (error) {
@@ -140,7 +142,7 @@ export function processNewTransfer(account, eventLog) {
                 throw new Error(error);
             }
             return dispatch({
-                type: PROCESS_NEW_TRANSFER_ERROR,
+                type: PROCESS_NEW_TRANSFERS_ERROR,
                 error: error
             });
         }
