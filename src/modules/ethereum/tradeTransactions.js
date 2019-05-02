@@ -16,10 +16,10 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
         ]);
 
         const logs = await Promise.all([
-            ...logsNewOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
-            ...logsCanceledOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
-            ...logsOrderFillBuy.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "buy")),
-            ...logsOrderFillSell.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "sell"))
+            ...logsNewOrder.map(async logData => formatTradeEvent(account, logData)),
+            ...logsCanceledOrder.map(async logData => formatTradeEvent(account, logData)),
+            ...logsOrderFillBuy.map(async logData => formatTradeEvent(account, logData, "buy")),
+            ...logsOrderFillSell.map(async logData => formatTradeEvent(account, logData, "sell"))
         ]);
 
         logs.sort((log1, log2) => {
@@ -31,42 +31,31 @@ export async function fetchTradesTx(account, fromBlock, toBlock) {
         throw new Error("fetchTradesTx failed.\n" + error);
     }
 }
-
-// called from exchangeProvider, arguments are in ethers event listener format
-export async function processNewTradeTx(account, eventObject, type) {
-    return _formatTradeLog(account, eventObject, eventObject.args, type);
-}
-
-// get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
-async function _formatTradeLog(account, txData, args, type) {
-    let blockData;
-    if (typeof txData.getBlock === "function") {
-        // called from event - need to use eventObject.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
-        blockData = await txData.getBlock();
-    } else {
-        // not from event, web3.getBlock  works
-        const web3 = store.getState().web3Connect.web3Instance;
-        blockData = await web3.eth.getBlock(txData.blockNumber);
-    }
+export async function formatTradeEvent(account, event, type) {
+    const web3 = store.getState().web3Connect.web3Instance;
+    const blockData = await web3.eth.getBlock(event.blockNumber); // CHECK: block used to be available on Infura later than than tx receipt (Infura node syncing delay). Can't reproduce anymore but requires further tests
 
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
 
-    const bn_weiAmount = new BigNumber(args.weiAmount.toString());
-    const bn_tokenAmount = args.tokenAmount;
+    const bn_weiAmount = new BigNumber(event.returnValues.weiAmount.toString());
+    const bn_tokenAmount = event.returnValues.tokenAmount;
     const bn_ethAmount = bn_weiAmount.div(ONE_ETH_IN_WEI);
 
     const ethAmount = bn_ethAmount.toString();
     const ethAmountRounded = parseFloat(bn_ethAmount).toFixed(5);
     const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
-    const price = parseFloat(args.price / PPM_DIV);
-    const publishedRate = args.publishedRate && parseFloat(args.publishedRate / DECIMALS_DIV).toFixed(2);
-    const effectiveRate = args.publishedRate && parseFloat((args.publishedRate / DECIMALS_DIV) * price).toFixed(2);
+    const price = parseFloat(event.returnValues.price / PPM_DIV);
+    const publishedRate =
+        event.returnValues.publishedRate && parseFloat(event.returnValues.publishedRate / DECIMALS_DIV).toFixed(2);
+    const effectiveRate =
+        event.returnValues.publishedRate &&
+        parseFloat((event.returnValues.publishedRate / DECIMALS_DIV) * price).toFixed(2);
 
     let orderId;
-    if (args.orderId) {
-        orderId = args.orderId;
+    if (event.returnValues.orderId) {
+        orderId = event.returnValues.orderId;
     } else {
-        orderId = tokenAmount === 0 ? args.buyTokenOrderId : args.sellTokenOrderId;
+        orderId = tokenAmount === 0 ? event.returnValues.buyTokenOrderId : event.returnValues.sellTokenOrderId;
     }
     if (typeof orderId.toNumber === "function") {
         // event listener from ethers returns BigNumber
@@ -74,11 +63,11 @@ async function _formatTradeLog(account, txData, args, type) {
     }
 
     let direction = tokenAmount === 0 ? "buy" : "sell";
-    if (txData.event === "OrderFill") {
+    if (event.name === "OrderFill") {
         direction = type;
     }
 
-    const logData = Object.assign({ args }, txData, {
+    const trade = Object.assign({}, event, {
         blockData,
         direction,
         blockTimeStampText,
@@ -92,8 +81,8 @@ async function _formatTradeLog(account, txData, args, type) {
         publishedRate,
         effectiveRate,
         orderId,
-        type: txData.event
+        type: event.event
     });
 
-    return logData;
+    return trade;
 }
