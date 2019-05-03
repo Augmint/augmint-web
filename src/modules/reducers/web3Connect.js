@@ -122,7 +122,8 @@ export const setupWeb3 = () => {
             const connectionConfig = {
                 givenProvider: web3.currentProvider,
                 // We assume that Metamask/Trustwallet/Metacoin wallet etc. injected provider takes care of reconnections
-                ETHEREUM_CONNECTION_CHECK_INTERVAL: 0
+                ETHEREUM_CONNECTION_CHECK_INTERVAL: 0,
+                ETHEREUM_CONNECTION_TIMEOUT: 20000
 
                 // To access via Infura without Metamask (and don't pass givenProvider):
                 // PROVIDER_URL: "wss://rinkeby.infura.io/ws/v3/", // or wss://rinkeby.infura.io/ws/v3/ or  ws://localhost:8545
