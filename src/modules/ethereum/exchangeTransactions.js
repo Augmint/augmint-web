@@ -1,7 +1,7 @@
 import store from "modules/store";
 import BigNumber from "bignumber.js";
 import { cost } from "./gas";
-import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
+import { EthereumTransactionError, processTx, sendAndProcessTx } from "modules/ethereum/ethHelper";
 
 import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
 
@@ -80,7 +80,6 @@ export async function placeOrderTx(orderDirection, amount, price) {
 
 export async function matchMultipleOrdersTx() {
     const txName = "Match orders";
-    const userAccount = store.getState().web3Connect.userAccount;
     const exchange = await store.getState().web3Connect.augmint.exchange;
 
     const matchingOrders = await exchange.getMatchingOrders();
@@ -89,8 +88,8 @@ export async function matchMultipleOrdersTx() {
         throw new Error("no matching orders found"); // UI shouldn't allow to be called in this case
     }
 
-    const tx = exchange.matchMultipleOrders(matchingOrders).send({ from: userAccount });
-    const transactionHash = await processTx(tx, txName, matchingOrders.gasEstimate);
+    const tx = exchange.matchMultipleOrders(matchingOrders);
+    const transactionHash = await sendAndProcessTx(tx, txName);
 
     console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${
         matchingOrders.gasEstimate
@@ -98,6 +97,8 @@ export async function matchMultipleOrdersTx() {
         Buy: ${matchingOrders.buyIds}
         Sell: ${matchingOrders.sellIds}`);
 
+    // const receipt = tx.getConfirmedReceipt(20);
+    // console.log("got confirmed rece", receipt);
     return { txName, transactionHash };
 }
 
