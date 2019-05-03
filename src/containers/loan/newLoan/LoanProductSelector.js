@@ -16,7 +16,11 @@ class LoanProductSelector extends React.Component {
                     </Pgrid.Column>
                     <Pgrid.Column className="loan column right" size={{ tablet: 1, desktop: 2 / 5 }}>
                         <Message info style={{ margin: 0 }}>
+                            <p>
+                                <strong>60% loan-to-value (LTV)</strong>
+                            </p>
                             <p>You can get A-EUR for placing your ETH in escrow (collateral).</p>
+
                             <p>
                                 <strong>Repayment</strong>
                                 <br />

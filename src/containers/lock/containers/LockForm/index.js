@@ -283,6 +283,11 @@ class LockContainer extends React.Component {
                             id="selectedLockProduct"
                             name="lockTerms"
                             data-testid="lock-product-selector"
+                            info={
+                                this.state.selectedProduct
+                                    ? `A-EUR unlock only available after ${this.state.selectedProduct.durationText}`
+                                    : ""
+                            }
                         />
 
                         {!!this.state.lockAmount && (
