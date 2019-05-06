@@ -81,6 +81,13 @@ export default class SiteMenu extends React.Component {
                             >
                                 Roadmap
                             </SiteMenuItem>
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/team"}
+                                to="/team"
+                            >
+                                Team
+                            </SiteMenuItem>
                             <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
                                 <Button
                                     onClick={e => toggleScroll(false)}
