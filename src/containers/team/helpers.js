@@ -112,7 +112,7 @@ export const teamMembers = [
         lastName: "Erő",
         imgSrc: jero,
         title: "Frontend developer",
-        linkedinUrl: "https://www.linkedin.com/in//",
+        linkedinUrl: "https://www.linkedin.com/in/juliaero/",
         description: ""
     }
 ];
