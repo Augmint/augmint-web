@@ -184,7 +184,7 @@ class AddWithdrawForm extends React.Component {
 
                     <p style={{ fontSize: "14px" }}>
                         Interested in becoming an Augmint exchange partner?{" "}
-                        <a href="mailto:hello@augmint.cc">Contact us.</a>
+                        <a href="mailto:hello@augmint.org">Contact us.</a>
                     </p>
                 </Form>
             </Pblock>
