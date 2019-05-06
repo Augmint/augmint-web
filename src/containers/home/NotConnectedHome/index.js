@@ -9,20 +9,13 @@ import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, management, teamMembers, contributors, partners } from "./helpers.js";
-import { Member } from "./member.js";
+import { keyFeatures, keyBenefits, howItWorks } from "./helpers.js";
 
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
 
 export default class NotConnectedHome extends React.Component {
-    constructor() {
-        super();
-        const byLastName = (a, b) => a.lastName.localeCompare(b.lastName);
-        teamMembers.sort(byLastName);
-    }
-
     render() {
         return (
             <article>
@@ -254,73 +247,6 @@ export default class NotConnectedHome extends React.Component {
                                 Try now
                             </Button>
                         </div>
-                    </Container>
-                </section>
-                <section style={{ textAlign: "left" }} className="team segment">
-                    <Container className="homePage wider">
-                        <Header as="h2">Team</Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ marginBottom: 75 }}>
-                                {management.map(member => (
-                                    <Member member={member} key={member.pk} />
-                                ))}
-                                {teamMembers.map(member => (
-                                    <Member member={member} key={member.pk} />
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
-
-                        <Header as="h4">Contributors</Header>
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid">
-                                {contributors.map(e => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        key={e.pk}
-                                        style={{ padding: 40, paddingBottom: 0, textAlign: "left" }}
-                                    >
-                                        <img
-                                            src={e.imgSrc}
-                                            style={{ width: "60px", height: "60px", marginBottom: "30px" }}
-                                            alt={e.pk}
-                                        />
-                                        <strong>
-                                            {e.firstName} {e.lastName}
-                                        </strong>
-                                        <br />
-                                        <small>{e.title}</small>
-                                    </Grid.Unit>
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
-                    </Container>
-                </section>
-                <section className="partner segment" style={{ marginTop: 50, textAlign: "center" }}>
-                    <Container className="homePage wider">
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid">
-                                {partners.map(partner => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
-                                        style={{ textAlign: "left" }}
-                                        key={partner.pk}
-                                    >
-                                        <img src={partner.imgSrc} alt={partner.pk} />
-                                        <Header as="h3">{partner.name}</Header>
-                                        {partner.description && (
-                                            <p
-                                                className="description"
-                                                dangerouslySetInnerHTML={{ __html: partner.description }}
-                                                style={{ marginBottom: 3 }}
-                                            />
-                                        )}
-                                    </Grid.Unit>
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
                     </Container>
                 </section>
             </article>

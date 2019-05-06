@@ -33,6 +33,7 @@ import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
 import Roadmap from "containers/roadmap";
+import Team from "containers/team";
 import SiteMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
@@ -273,6 +274,7 @@ class App extends React.Component {
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/team" component={Team} />
                         <Route path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>
