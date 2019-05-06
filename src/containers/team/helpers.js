@@ -27,19 +27,19 @@ import decentlabs from "assets/images/decentlabs.png";
 export const management = [
     {
         pk: "petrovics",
-        firstName: "Peter",
+        firstName: "Péter",
         lastName: "Petrovics",
         imgSrc: petrovics,
         title: "Co-founder, technologist",
         linkedinUrl: "https://www.linkedin.com/in/petrovics",
         githubUrl: "https://github.com/szerintedmi",
         description:
-            "Peter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook."
+            "Péter is a serial entrepreneur with 20+ years technical, management and financial experience. He ran his own software house for nine years, managed tons of software projects and launched several successful startups, including Hungary's largest social network before Facebook."
     },
     {
         pk: "kszabo",
-        firstName: "Karoly",
-        lastName: "Szabo",
+        firstName: "Károly",
+        lastName: "Szabó",
         imgSrc: kszabo,
         title: "Co-founder, economist",
         githubUrl: "https://github.com/krosza",
