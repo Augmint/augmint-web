@@ -255,9 +255,6 @@ class LockContainer extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={input => {
-                                this.input = input;
-                            }}
                             onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
@@ -337,5 +334,6 @@ LockContainer = connect(state => selector(state, "productId", "lockAmount"))(Loc
 
 export default reduxForm({
     form: "LockForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(LockContainer);

@@ -244,7 +244,6 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={e => (this.input = e)}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
@@ -327,6 +326,7 @@ PlaceOrderForm = connect(state => {
 PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
     touchOnBlur: false,
+    touchOnChange: true,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
