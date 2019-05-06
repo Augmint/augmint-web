@@ -165,9 +165,6 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        ref={input => {
-                            this.input = input;
-                        }}
                         onChange={this.onPriceChange}
                         validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}
@@ -194,6 +191,8 @@ class AddWithdrawForm extends React.Component {
 
 AddWithdrawForm = reduxForm({
     form: "AddWithdrawForm",
+    touchOnChange: true,
+    touchOnBlur: false,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
