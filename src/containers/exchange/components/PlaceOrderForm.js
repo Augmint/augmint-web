@@ -50,8 +50,6 @@ class PlaceOrderForm extends React.Component {
                 this.props.ethAmount
             );
         }
-
-        this.focusInput();
     }
 
     toggleOrderBook(e) {
@@ -62,8 +60,6 @@ class PlaceOrderForm extends React.Component {
     onOrderDirectionChange(e) {
         this.setState({ orderDirection: +e.target.attributes["data-index"].value });
         this.toggleOrderBook(+e.target.attributes["data-index"].value);
-
-        this.focusInput();
     }
 
     onTokenAmountChange(e) {
@@ -155,14 +151,6 @@ class PlaceOrderForm extends React.Component {
 
     parsePrice(price) {
         return Math.round(price * 100) / 10000;
-    }
-
-    focusInput() {
-        if (this.input && window.innerWidth > 768) {
-            ReactDOM.findDOMNode(this.input)
-                .getElementsByTagName("input")[0]
-                .focus();
-        }
     }
 
     render() {
@@ -264,6 +252,7 @@ class PlaceOrderForm extends React.Component {
                             data-testid="tokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            autoFocus={true}
                         />
 
                         <Styledlabel style={{ margin: "5px 0 0 0" }}>
