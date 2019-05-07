@@ -149,29 +149,16 @@ function getTxNonce(transactionHash) {
  * If tx reverts then dispatches updateTx with error
  * @export
  * @param {ITransaction} tx
- * @param {*} txName    tx name displayed to user
+ * @param {string} txName    tx name displayed to user
+ * @param {function} formatReceiptDataCb optional callback fumction to extract and format receipt data
  */
-export async function sendAndProcessTx(tx, txName) {
+export async function sendAndProcessTx(tx, txName, formatReceiptDataCb) {
     const userAccount = store.getState().web3Connect.userAccount;
 
-    console.log(tx, txName);
     const transactionHash = await tx
-        .send({ from: userAccount })
 
-        .onConfirmation((confirmationNumber, rec) => {
-            console.log("WTF", confirmationNumber, rec);
-            store.dispatch(
-                updateTx({
-                    event: "confirmation",
-                    txName,
-                    transactionHash: rec.transactionHash,
-                    confirmationNumber
-                })
-            );
-        })
-
-        .on("confirmation", ccc => {
-            console.log("CONNNN", ccc);
+        .onConfirmation(confirmationNumber => {
+            store.dispatch(updateTx({ event: "confirmation", txName, transactionHash, confirmationNumber }));
         })
 
         .onceTxRevert((error, receipt) => {
@@ -184,17 +171,25 @@ export async function sendAndProcessTx(tx, txName) {
                 `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
                 receipt
             );
+            const formattedReceiptData = formatReceiptDataCb ? formatReceiptDataCb(receipt) : null;
 
-            store.dispatch(updateTx({ event: "receipt", txName, transactionHash: receipt.transactionHash, receipt }));
+            store.dispatch(
+                updateTx({
+                    event: "receipt",
+                    txName,
+                    transactionHash: receipt.transactionHash,
+                    receipt,
+                    formattedReceiptData
+                })
+            );
         })
+
+        .send({ from: userAccount })
 
         .getTxHash();
 
     store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
     getTxNonce(transactionHash); // TODO: implement this in augmint-js
-
-    // const confRec = await tx.getConfirmedReceipt(5);
-    // console.log("got it", confRec);
 
     return transactionHash;
 }

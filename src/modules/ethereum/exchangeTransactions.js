@@ -1,5 +1,5 @@
 import store from "modules/store";
-import BigNumber from "bignumber.js";
+import BN from "bn.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx, sendAndProcessTx } from "modules/ethereum/ethHelper";
 
@@ -17,41 +17,32 @@ export async function fetchOrders() {
 }
 
 export async function placeOrderTx(orderDirection, amount, price) {
-    const gasEstimate = cost.PLACE_ORDER_GAS;
     const userAccount = store.getState().web3Connect.userAccount;
-    const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
+    const exchange = await store.getState().web3Connect.augmint.exchange;
 
-    const submitPrice = new BigNumber(price).mul(PPM_DIV);
+    const submitPrice = new BN(price * PPM_DIV);
     let submitAmount;
     let tx;
     let txName;
 
     switch (orderDirection) {
         case TOKEN_BUY:
-            submitAmount = new BigNumber(amount).mul(ONE_ETH_IN_WEI);
+            submitAmount = new BN(ONE_ETH_IN_WEI * amount);
             txName = "Buy token order";
-            tx = exchangeInstance.methods.placeBuyTokenOrder(submitPrice.toString()).send({
-                value: submitAmount,
-                from: userAccount,
-                gas: gasEstimate
-            });
+            tx = exchange.placeBuyTokenOrder(submitPrice, submitAmount);
             break;
 
         case TOKEN_SELL:
-            const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
-            submitAmount = new BigNumber(amount).mul(DECIMALS_DIV);
+            submitAmount = new BN(amount * DECIMALS_DIV);
             txName = "Sell token order";
-            tx = augmintTokenInstance.methods
-                .transferAndNotify(exchangeInstance._address, submitAmount.toString(), submitPrice.toString())
-                .send({ from: userAccount, gas: gasEstimate });
+            tx = exchange.placeSellTokenOrder(submitPrice, submitAmount);
             break;
 
         default:
             throw new EthereumTransactionError(
                 "Place order failed.",
                 "Unknown orderDirection: " + orderDirection,
-                null,
-                gasEstimate
+                null
             );
     }
 
@@ -60,7 +51,7 @@ export async function placeOrderTx(orderDirection, amount, price) {
         // tokenSell is called on AugmintToken and event emmitted from Exchange is not parsed by web3
         onReceipt = receipt => {
             const web3 = store.getState().web3Connect.web3Instance;
-            const newOrderEventInputs = exchangeInstance.options.jsonInterface.find(val => val.name === "NewOrder")
+            const newOrderEventInputs = exchange.instance.options.jsonInterface.find(val => val.name === "NewOrder")
                 .inputs;
 
             const decodedArgs = web3.eth.abi.decodeLog(
@@ -74,7 +65,7 @@ export async function placeOrderTx(orderDirection, amount, price) {
         };
     }
 
-    const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
+    const transactionHash = await sendAndProcessTx(tx, txName, onReceipt);
     return { txName, transactionHash };
 }
 
