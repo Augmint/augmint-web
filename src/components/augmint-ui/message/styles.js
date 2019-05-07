@@ -76,6 +76,20 @@ const BaseDiv = `
       background: ${theme.colors.lightGreen};
       color: ${theme.colors.darkGreen};
     }
+    
+    .loan & {
+        margin: 0;
+        padding: 20px;
+    }
+    
+    .loan & p {
+        margin-bottom: 10px;
+    }
+    
+    .loan & p strong {
+        display: inline-box;
+        margin-bottom: 5px;
+    }
 `;
 
 export const StyledDiv = styled.div`
