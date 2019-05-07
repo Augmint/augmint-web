@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
