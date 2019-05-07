@@ -3,7 +3,6 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";

@@ -5,7 +5,6 @@ TODO: input formatting: decimals, thousand separators
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
