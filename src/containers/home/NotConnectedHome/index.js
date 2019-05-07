@@ -8,6 +8,7 @@ import Button from "components/augmint-ui/button";
 import Rail from "components/augmint-ui/rail";
 
 import { InterchangeIcon } from "components/Icons";
+import Convertible from "./../convertible.js";
 
 import { keyFeatures, howItWorks } from "./helpers.js";
 
@@ -28,7 +29,7 @@ export default class NotConnectedHome extends React.Component {
                             <StyledLogo src={augmintLogo} alt="Augmint logo" />
                         </StyledLogoContainer>
                         <header className="key-features__header">
-                            <Header textAlign="center" as="h1" size="large" style={{ fontWeight: "bold" }}>
+                            <Header textAlign="center" as="h1" size="large">
                                 Modern money, beyond states.
                             </Header>
                             <Header
@@ -38,7 +39,8 @@ export default class NotConnectedHome extends React.Component {
                                 style={{ fontSize: 20, lineHeight: "120%", margin: "14px 0" }}
                             >
                                 Borderless, secure, transparent.
-                                <br />  Decentralized cryptocurrency without the volatility.
+                                <br />
+                                  Decentralized cryptocurrency without the volatility.
                             </Header>
                             <Header
                                 textAlign="center"
@@ -49,24 +51,7 @@ export default class NotConnectedHome extends React.Component {
                                 Our first token is A-EUR.
                             </Header>
 
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    margin: "0 auto 20px auto",
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <div>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
-                                </div>
-                                <InterchangeIcon />
-                                <div>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>EUR</div>
-                                </div>
-                            </div>
+                            <Convertible from="A-EUR" to="EUR" />
 
                             <a style={{ textDecoration: "underline" }} href="">
                                 Learn more about the Augmint concept
@@ -92,9 +77,7 @@ export default class NotConnectedHome extends React.Component {
                         </a>
                     </Rail>
                     <Container className="homePage">
-                        <Header as="h2" style={{ fontWeight: "bold" }}>
-                            Actually convertible
-                        </Header>
+                        <Header as="h2">Actually convertible</Header>
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-around" }}>
@@ -103,24 +86,9 @@ export default class NotConnectedHome extends React.Component {
                                     size={{ tablet: 1, desktop: 1 / 2 }}
                                     style={{ textAlign: "left", padding: "0 50px 0 0" }}
                                 >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            margin: "0 auto 20px auto",
-                                            justifyContent: "flex-start"
-                                        }}
-                                    >
-                                        <div>
-                                            <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
-                                        </div>
-                                        <InterchangeIcon />
-                                        <div>
-                                            <div style={styles.howItWorksRailBoxSpan}>EUR</div>
-                                        </div>
-                                    </div>
+                                    <Convertible from="A-EUR" to="EUR" left simple />
 
-                                    <p>
+                                    <p className="opac">
                                         Next-day conversion to and from SEPA
                                         <br />
                                         bank accounts via exchange partners.
@@ -135,24 +103,9 @@ export default class NotConnectedHome extends React.Component {
                                     size={{ tablet: 1, desktop: 1 / 2 }}
                                     style={{ textAlign: "left", padding: 0 }}
                                 >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            margin: "0 auto 20px auto",
-                                            justifyContent: "flex-start"
-                                        }}
-                                    >
-                                        <div>
-                                            <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
-                                        </div>
-                                        <InterchangeIcon />
-                                        <div>
-                                            <div style={styles.howItWorksRailBoxSpan}>EUR</div>
-                                        </div>
-                                    </div>
+                                    <Convertible from="A-EUR" to="ETH" left simple />
 
-                                    <p>
+                                    <p className="opac">
                                         Buy or sell A-EUR instantly on our
                                         <br />
                                         decentralized crypto exchange.
