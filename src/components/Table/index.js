@@ -10,23 +10,22 @@ export class CustomTable extends React.Component {
         super(props);
         this.state = {
             initData: this.props.data,
-            dataToShow: this.props.data.slice(0, PAGING)
+            dataToShow: this.props.data.slice(0, PAGING),
+            buttonVisible: true
         };
         this.addData = this.addData.bind(this);
     }
 
     addData() {
-        const { dataToShow, initData } = this.state;
-        const lastIndex = initData.indexOf(dataToShow[dataToShow.length - 1]);
-
         this.setState({
-            dataToShow: initData.slice(0, lastIndex + PAGING)
+            dataToShow: this.state.initData,
+            buttonVisible: false
         });
     }
 
     render() {
         const { datakeys, data, unit, headerdata, title, extraClass, testid, noItemsMessage } = this.props;
-        const { dataToShow } = this.state;
+        const { dataToShow, buttonVisible } = this.state;
 
         return (
             <div className={extraClass}>
@@ -59,14 +58,16 @@ export class CustomTable extends React.Component {
                             ))}
                     </StyleTbody>
                 </StyleTable>
-                <Button
-                    size="big"
-                    className="ghost"
-                    onClick={this.addData}
-                    style={{ marginTop: "1rem", marginLeft: "1rem" }}
-                >
-                    show older
-                </Button>
+                {buttonVisible && (
+                    <Button
+                        size="big"
+                        className="ghost"
+                        onClick={this.addData}
+                        style={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                        Show older
+                    </Button>
+                )}
             </div>
         );
     }
