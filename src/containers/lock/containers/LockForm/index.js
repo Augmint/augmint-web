@@ -310,7 +310,7 @@ class LockContainer extends React.Component {
                                         lineHeight: "120%"
                                     }}
                                 >
-                                    A-EUR unlock only available after <br /> {unlockBy}
+                                    Note: amount cannot be unlocked before <br /> {unlockBy}.
                                 </p>
                             </div>
                         )}
