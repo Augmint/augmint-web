@@ -8,7 +8,7 @@ export async function fetchLegacyExchangeOrders() {
 
     const augmint = store.getState().web3Connect.augmint;
 
-    const legacyExchangeAddresses = Augmint.constants.SUPPORTED_LEGACY_EXCHANGES[augmint.environment];
+    const legacyExchangeAddresses = Augmint.constants.SUPPORTED_LEGACY_EXCHANGES[augmint.deployedEnvironment.name];
 
     const legacyExchanges = augmint.getLegacyExchanges(legacyExchangeAddresses);
 
