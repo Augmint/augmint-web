@@ -45,6 +45,7 @@ export class CustomTable extends React.Component {
                     )}
                     <StyleTbody>
                         {data &&
+                            data.length &&
                             dataToShow &&
                             dataToShow.map((rowData, rowIndex) => (
                                 <StyleTr key={"row_" + rowIndex}>
@@ -58,7 +59,7 @@ export class CustomTable extends React.Component {
                             ))}
                     </StyleTbody>
                 </StyleTable>
-                {buttonVisible && (
+                {data && data.length && buttonVisible && (
                     <Button
                         size="big"
                         className="ghost"
