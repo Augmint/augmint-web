@@ -86,7 +86,7 @@ export function AppFooter(props) {
                         </List.Item>
                     ) : null}
                     <List.Item>
-                        <a href="mailto:hello@augmint.cc">CONTACT</a>
+                        <a href="mailto:hello@augmint.org">CONTACT</a>
                     </List.Item>
                 </List>
                 <Subscribe />

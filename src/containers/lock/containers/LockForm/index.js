@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import store from "modules/store";
 import { connect } from "react-redux";
@@ -280,16 +279,11 @@ class LockContainer extends React.Component {
                             id="selectedLockProduct"
                             name="lockTerms"
                             data-testid="lock-product-selector"
-                            info={
-                                this.state.selectedProduct
-                                    ? `A-EUR unlock only available after ${this.state.selectedProduct.durationText}`
-                                    : ""
-                            }
                         />
 
                         {!!this.state.lockAmount && (
                             <div>
-                                <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                <p style={{ marginTop: 0, marginBottom: 10, lineHeight: 1.5, textAlign: "center" }}>
                                     {"On "}
                                     <strong>{unlockBy}</strong>
                                     {" you get back"}
@@ -302,6 +296,18 @@ class LockContainer extends React.Component {
                                         <AEUR amount={earnAmount} />
                                     </strong>
                                     {"."}
+                                </p>
+                                <p
+                                    style={{
+                                        color: theme.colors.darkRed,
+                                        fontWeight: "bold",
+                                        fontSize: 14,
+                                        margin: "20px auto 20px auto",
+                                        textAlign: "center",
+                                        lineHeight: "120%"
+                                    }}
+                                >
+                                    A-EUR unlock only available after <br /> {unlockBy}
                                 </p>
                             </div>
                         )}
