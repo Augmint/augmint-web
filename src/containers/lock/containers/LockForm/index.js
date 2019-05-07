@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import store from "modules/store";
 import { connect } from "react-redux";

@@ -7,109 +7,74 @@ import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
 import Rail from "components/augmint-ui/rail";
 
-import { BalanceIcon, InterchangeIcon } from "components/Icons";
+import { InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks } from "./helpers.js";
+import { keyFeatures, howItWorks } from "./helpers.js";
 
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
+
+import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
+import augmintLogo from "assets/images/logo/augmint.svg";
 
 export default class NotConnectedHome extends React.Component {
     render() {
         return (
             <article>
                 <Container className="homePage">
-                    <section style={{ textAlign: "center" }} className="key-features large-gap segment">
+                    <section style={{ textAlign: "center" }} className="key-features segment">
+                        <StyledLogoContainer>
+                            <StyledLogo src={augmintLogo} alt="Augmint logo" />
+                        </StyledLogoContainer>
                         <header className="key-features__header">
-                            <Header textAlign="center" as="h4" size="large" style={{ lineHeight: "31px" }}>
-                                Augmint offers digital tokens targeted to a fiat currency.
-                                <br />
-                                The first Augmint token is <nobr>A-Euro</nobr>, targeted to Euro.
-                                <br />
-                                Stored securely and decentralised stable crypto tokens are instantly transferable
-                                worldwide.
+                            <Header textAlign="center" as="h1" size="large" style={{ fontWeight: "bold" }}>
+                                Modern money, beyond states.
                             </Header>
-                            <div className="segment" style={{ margin: "30px 0 140px 0", textAlign: "center" }}>
-                                <Button type="a" to="/tryit" color="primary" className="try-now">
-                                    Try now
-                                </Button>
+                            <Header
+                                textAlign="center"
+                                as="h5"
+                                size="large"
+                                style={{ fontSize: 20, lineHeight: "120%", margin: "14px 0" }}
+                            >
+                                Borderless, secure, transparent.
+                                <br />  Decentralized cryptocurrency without the volatility.
+                            </Header>
+                            <Header
+                                textAlign="center"
+                                as="h5"
+                                size="large"
+                                style={{ fontSize: 20, lineHeight: "120%", margin: "14px 0" }}
+                            >
+                                Our first token is A-EUR.
+                            </Header>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    margin: "0 auto 20px auto",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <div>
+                                    <div>1</div>
+                                    <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
+                                </div>
+                                <InterchangeIcon />
+                                <div>
+                                    <div>1</div>
+                                    <div style={styles.howItWorksRailBoxSpan}>EUR</div>
+                                </div>
                             </div>
+
+                            <a style={{ textDecoration: "underline" }} href="">
+                                Learn more about the Augmint concept
+                            </a>
                         </header>
-
-                        <div className="balance-image">
-                            <BalanceIcon />
-                        </div>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
-                                {keyFeatures.map(feature => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 5 / 16 }}
-                                        style={{ textAlign: "center" }}
-                                        key={feature.title}
-                                    >
-                                        <div style={styles.keyFeaturesSegment} className="segment">
-                                            {feature.image}
-                                        </div>
-                                        <Header as="h3" style={styles.keyFeaturesHeader}>
-                                            {feature.title}
-                                        </Header>
-                                        <p className="opac">{feature.text}</p>
-                                    </Grid.Unit>
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
-                    </section>
-                    <section style={{ textAlign: "center" }} className="advantages segment">
-                        <Header style={{ textAlign: "left" }} as="h2">
-                            Great for business
-                        </Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
-                                {keyBenefits
-                                    .filter(item => item.type === "business")
-                                    .map(item => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            style={{ textAlign: "left" }}
-                                            key={item.pk}
-                                        >
-                                            <div className="list-item">
-                                                <p className="opac">{item.text}</p>
-                                            </div>
-                                        </Grid.Unit>
-                                    ))}
-                            </Grid>
-                        </ThemeProvider>
-
-                        <Header as="h2" style={{ marginTop: "100px", textAlign: "left" }}>
-                            And for individuals
-                        </Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
-                                {keyBenefits
-                                    .filter(item => item.type === "individual")
-                                    .map(item => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            style={{ textAlign: "left" }}
-                                            key={item.pk}
-                                        >
-                                            <div className="list-item">
-                                                <p className="opac">{item.text}</p>
-                                            </div>
-                                        </Grid.Unit>
-                                    ))}
-                            </Grid>
-                        </ThemeProvider>
                     </section>
                 </Container>
+
                 <section className="how-to-use segment">
                     <Rail className="noSmallScreen">
                         <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
@@ -127,126 +92,78 @@ export default class NotConnectedHome extends React.Component {
                         </a>
                     </Rail>
                     <Container className="homePage">
-                        <Header as="h2">Augmint loans</Header>
-                        <p className="opac loans">
-                            Use your cryptocurrencies without
-                            <br />
-                            losing them. Get a loan and spend easily.
-                        </p>
+                        <Header as="h2" style={{ fontWeight: "bold" }}>
+                            Actually convertible
+                        </Header>
 
                         <ThemeProvider theme={theme}>
                             <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks
-                                    .filter(feature => feature.type === "loan")
-                                    .map(feature => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            key={feature.pk}
-                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                        >
-                                            <div className="home-image segment" style={styles.howItWorksImage}>
-                                                {feature.image}
-                                            </div>
-                                            <Header as="h4" style={styles.howToUseHeader}>
-                                                {feature.title}
-                                            </Header>
-                                            <p className="opac">{feature.text}</p>
-                                        </Grid.Unit>
-                                    ))}
+                                <Grid.Unit
+                                    className="column"
+                                    size={{ tablet: 1, desktop: 1 / 2 }}
+                                    style={{ textAlign: "left", padding: "0 50px 0 0" }}
+                                >
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            margin: "0 auto 20px auto",
+                                            justifyContent: "flex-start"
+                                        }}
+                                    >
+                                        <div>
+                                            <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
+                                        </div>
+                                        <InterchangeIcon />
+                                        <div>
+                                            <div style={styles.howItWorksRailBoxSpan}>EUR</div>
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        Next-day conversion to and from SEPA
+                                        <br />
+                                        bank accounts via exchange partners.
+                                    </p>
+                                    <Button type="a" href="https://www.mrcoin.eu/en/buy/aeur" className="ghost">
+                                        Buy A-EUR via partner
+                                    </Button>
+                                </Grid.Unit>
+
+                                <Grid.Unit
+                                    className="column"
+                                    size={{ tablet: 1, desktop: 1 / 2 }}
+                                    style={{ textAlign: "left", padding: 0 }}
+                                >
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            margin: "0 auto 20px auto",
+                                            justifyContent: "flex-start"
+                                        }}
+                                    >
+                                        <div>
+                                            <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
+                                        </div>
+                                        <InterchangeIcon />
+                                        <div>
+                                            <div style={styles.howItWorksRailBoxSpan}>EUR</div>
+                                        </div>
+                                    </div>
+
+                                    <p>
+                                        Buy or sell A-EUR instantly on our
+                                        <br />
+                                        decentralized crypto exchange.
+                                    </p>
+
+                                    <Button type="a" to="/exchange" className="ghost">
+                                        Exchange crypto
+                                    </Button>
+                                </Grid.Unit>
                             </Grid>
                         </ThemeProvider>
-
-                        <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
-                            <Button type="a" to="/tryit" color="primary" className="try-now">
-                                Try now
-                            </Button>
-                        </div>
-                        <Header as="h2">Buy and sell A-Euro</Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks
-                                    .filter(feature => feature.type === "exchange")
-                                    .map(feature => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            key={feature.pk}
-                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                        >
-                                            <div className="home-image segment" style={styles.howItWorksImage}>
-                                                {feature.image}
-                                            </div>
-                                            <Header as="h4" style={styles.howToUseHeader}>
-                                                {feature.title}
-                                            </Header>
-                                            <p className="opac">{feature.text}</p>
-                                        </Grid.Unit>
-                                    ))}
-                            </Grid>
-                        </ThemeProvider>
-
-                        <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
-                            <Button type="a" to="/tryit" color="primary" className="try-now">
-                                Try now
-                            </Button>
-                        </div>
-                        <Header as="h2">How to use your A-Euro</Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="margin grid">
-                                {howItWorks
-                                    .filter(feature => feature.type === "use")
-                                    .map(feature => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            key={feature.pk}
-                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                        >
-                                            <div className="home-image segment" style={styles.howItWorksImage}>
-                                                {feature.image}
-                                            </div>
-                                            <Header as="h4" style={styles.howToUseHeader}>
-                                                {feature.title}
-                                            </Header>
-                                            <p className="opac">{feature.text}</p>
-                                        </Grid.Unit>
-                                    ))}
-                            </Grid>
-                        </ThemeProvider>
-
-                        <Header as="h2">Earn more with A-Euro, get premium by locking</Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                {howItWorks
-                                    .filter(feature => feature.type === "lock")
-                                    .map(feature => (
-                                        <Grid.Unit
-                                            className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
-                                            key={feature.pk}
-                                            style={{ padding: 50, paddingBottom: 0, textAlign: "left" }}
-                                        >
-                                            <div className="home-image segment" style={styles.howItWorksImage}>
-                                                {feature.image}
-                                            </div>
-                                            <Header as="h4" style={styles.howToUseHeader}>
-                                                {feature.title}
-                                            </Header>
-                                            <p className="opac">{feature.text}</p>
-                                        </Grid.Unit>
-                                    ))}
-                            </Grid>
-                        </ThemeProvider>
-
-                        <div className="segment" style={{ margin: "15px 0 70px 0", textAlign: "center" }}>
-                            <Button type="a" to="/tryit" color="primary" className="try-now">
-                                Try now
-                            </Button>
-                        </div>
                     </Container>
                 </section>
             </article>
