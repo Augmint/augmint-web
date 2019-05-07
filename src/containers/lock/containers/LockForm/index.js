@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import store from "modules/store";
 import { connect } from "react-redux";
@@ -308,7 +307,6 @@ class LockContainer extends React.Component {
                                         fontSize: 14,
                                         margin: "20px auto 20px auto",
                                         textAlign: "center",
-                                        width: "90%",
                                         lineHeight: "120%"
                                     }}
                                 >

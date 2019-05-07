@@ -5,7 +5,6 @@ TODO: input formatting: decimals, thousand separators
 /* eslint-disable import/first */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import Button from "components/augmint-ui/button";
