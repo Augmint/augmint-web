@@ -51,7 +51,7 @@ const setupContractEventListeners = async () => {
                     "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
                 );
                 store.dispatch(fetchUserBalance(userAccount));
-                store.dispatch(processNewTransfer([event], userAccount));
+                store.dispatch(processNewTransfer(event, userAccount));
             }
         }
     });

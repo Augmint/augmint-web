@@ -3,7 +3,7 @@
     TODO: do some balance caching. consider selectors for it: https://github.com/reactjs/reselect
 */
 import store from "modules/store";
-import { fetchTransfersTx, processTransferEvents } from "modules/ethereum/transferTransactions";
+import { fetchTransfersTx, processNewTransferEvent } from "modules/ethereum/transferTransactions";
 import { AVG_BLOCK_TIME } from "utils/constants";
 
 export const FETCH_TRANSFERS_REQUESTED = "userTransfers/FETCH_TRANSFERS_REQUESTED";
@@ -111,27 +111,15 @@ export function fetchLatestTransfers(account, isAdditional) {
         });
 }
 
-export function processNewTransfer(events, account) {
+export function processNewTransfer(event, account) {
     return async dispatch => {
         dispatch({
             type: PROCESS_NEW_TRANSFERS_REQUESTED,
-            events
+            events: event
         });
 
         try {
-            const newTransfers = await processTransferEvents(events, account);
-            let transfers = store.getState().userTransfers.transfers;
-            if (!transfers) {
-                transfers = [];
-            }
-            newTransfers.forEach(newTransfer => {
-                if (!transfers.find(a => a.transactionHash === newTransfer.transactionHash)) {
-                    transfers.push(newTransfer);
-                    transfers.sort((a, b) => {
-                        return b.blockNumber - a.blockNumber;
-                    });
-                }
-            });
+            const transfers = await processNewTransferEvent(event, account);
 
             return dispatch({
                 type: PROCESS_NEW_TRANSFERS_DONE,

@@ -105,6 +105,7 @@ async function lookupBlockTimestamp(event, web3) {
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
+        const web3 = store.getState().web3Connect.web3Instance;
         const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
         const [logsFrom, logsTo] = await Promise.all([
@@ -112,19 +113,33 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
             augmintToken.getPastEvents("AugmintTransfer", { filter: { to: account }, fromBlock, toBlock })
         ]);
 
-        return processTransferEvents([...logsFrom, ...logsTo], account);
+        const logs = await Promise.all(
+            [...logsFrom, ...logsTo].map(async logData => lookupBlockTimestamp(logData, web3))
+        );
+
+        return processTransferLogs(logs, account);
     } catch (error) {
         throw new Error("fetchTransferList failed.\n" + error);
     }
 }
 
-export async function processTransferEvents(_events, account) {
+export function processTransferLogs(events, account) {
+    const transfers = events.map(event => formatEvent(event, account));
+
+    return aggregateAndSortTransfers(transfers);
+}
+
+// called from augminTokenProvider, arguments are in ethers event listener format
+export async function processNewTransferEvent(event, account) {
+    const transfers = store.getState().userTransfers.transfers;
     const web3 = store.getState().web3Connect.web3Instance;
+    const eventWithBlockInfo = await lookupBlockTimestamp(event, web3);
+    const newTransfer = formatEvent(eventWithBlockInfo, account);
 
-    const eventsWithBlockInfo = await Promise.all(_events.map(async logData => lookupBlockTimestamp(logData, web3)));
+    return aggregateAndSortTransfers([...transfers, newTransfer]);
+}
 
-    let transfers = eventsWithBlockInfo.map(event => formatEvent(event, account));
-
+function aggregateAndSortTransfers(transfers) {
     transfers = Array.from(new Set(aggregateSameHashes(transfers)));
     transfers.sort((a, b) => b.blockNumber - a.blockNumber);
 
