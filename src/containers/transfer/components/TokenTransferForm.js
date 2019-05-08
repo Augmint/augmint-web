@@ -67,7 +67,7 @@ class TokenTransferForm extends React.Component {
     }
 
     setFeeByAmount(amount) {
-        const fee = getTransferFee(amount);
+        const fee = getTransferFee(amount) || 0;
         this.setState({ feeAmount: fee });
     }
 
@@ -160,9 +160,6 @@ class TokenTransferForm extends React.Component {
                                     min="0"
                                     label="Amount to transfer ..."
                                     name="tokenAmount"
-                                    ref={e => {
-                                        this.input = e;
-                                    }}
                                     onChange={this.onTokenAmountChange}
                                     validate={[
                                         Validations.required,
@@ -250,5 +247,6 @@ TokenTransferForm = connect(mapStateToProps)(TokenTransferForm);
 
 export default reduxForm({
     form: "TokenTransferForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(TokenTransferForm);
