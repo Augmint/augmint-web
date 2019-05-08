@@ -129,7 +129,7 @@ export function processTransferEvents(events, account) {
     return aggregateAndSortTransfers(transfers);
 }
 
-// called from augminTokenProvider, arguments are in ethers event listener format
+// called from augminTokenProvider via userTransfers.js reducer
 export async function processNewTransferEvent(event, account) {
     const transfers = store.getState().userTransfers.transfers;
     const web3 = store.getState().web3Connect.web3Instance;
