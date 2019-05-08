@@ -310,9 +310,6 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={input => {
-                                this.input = input;
-                            }}
                             disabled={submitting || !loanManager.isLoaded}
                             validate={[
                                 Validations.required,
@@ -407,6 +404,7 @@ const mapStateToProps = state => ({
 
 NewLoanForm = reduxForm({
     form: "NewLoanForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(NewLoanForm);
 export default connect(mapStateToProps)(NewLoanForm);
