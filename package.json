@@ -56,6 +56,9 @@
     "pretty-quick": "1.10.0",
     "wait-on": "3.2.0"
   },
+  "resolutions": {
+    "babel-jest": "24.7.1"
+  },
   "greenkeeper": {
     "ignore": [
       "bignumber.js"
