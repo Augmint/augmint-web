@@ -3,7 +3,7 @@ import BN from "bn.js";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx, sendAndProcessTx } from "modules/ethereum/ethHelper";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
+import { BN_ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV } from "utils/constants";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -23,10 +23,13 @@ export async function placeOrderTx(orderDirection, amount, price) {
     let submitAmount;
     let tx;
     let txName;
+    // TODO: these will go into augmint.js toWei() util
+    const ETH_DIV = 1000000; // 6 decimals
+    const BN_ETH_DIV = new BN(ETH_DIV);
 
     switch (orderDirection) {
         case TOKEN_BUY:
-            submitAmount = new BN(ONE_ETH_IN_WEI * amount);
+            submitAmount = new BN(amount * ETH_DIV).mul(BN_ONE_ETH_IN_WEI).div(BN_ETH_DIV);
             txName = "Buy token order";
             tx = exchange.placeBuyTokenOrder(submitPrice, submitAmount);
             break;
