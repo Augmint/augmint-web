@@ -384,10 +384,7 @@ class NewLoanForm extends React.Component {
                                 loading={submitting}
                                 disabled={notEnoughEth || !this.state.loanTokenAmount}
                                 type="submit"
-                                style={{
-                                    height: "50px",
-                                    width: "100%"
-                                }}
+                                className={"fullwidth"}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}
                             </Button>

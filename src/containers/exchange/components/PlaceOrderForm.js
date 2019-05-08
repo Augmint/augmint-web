@@ -305,7 +305,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={pristine}
                             data-testid="submitButton"
                             type="submit"
-                            style={{ width: "100%", height: "50px", marginTop: "1rem" }}
+                            className={"fullwidth"}
                         >
                             {submitting && "Submitting..."}
                             {!submitting &&
