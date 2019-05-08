@@ -100,17 +100,16 @@ export const BaseButton = styledComponent => styledComponent`
     &.ghost {
       font-family: ${theme.typography.fontFamilies.title};
       font-size: ${remCalc(16)};
-      font-weight: 400;
       text-transform: none;
       background: transparent;
-      border: 1px solid ${theme.colors.secondary};
-      color: ${theme.colors.secondary};
+      border: 1px solid ${theme.colors.primary};
+      color: ${theme.colors.primary};
 
       &:hover,
       &:focus {
         background: transparent;
-        color: ${theme.colors.secondaryDark};
-        border-color: ${theme.colors.secondaryDark};
+        background-color: ${theme.colors.primary};
+        color: ${theme.colors.white};
         box-shadow: none;
       }
     }
