@@ -5,7 +5,6 @@ TODO: input formatting: decimals, thousand separators
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { reduxForm, SubmissionError, Field } from "redux-form";
 import store from "modules/store";
@@ -68,7 +67,7 @@ class TokenTransferForm extends React.Component {
     }
 
     setFeeByAmount(amount) {
-        const fee = getTransferFee(amount);
+        const fee = getTransferFee(amount) || 0;
         this.setState({ feeAmount: fee });
     }
 
@@ -119,6 +118,8 @@ class TokenTransferForm extends React.Component {
             submitText
         } = this.props;
 
+        const isDesktop = window.innerWidth > 768;
+
         return (
             <div style={isFunctional && { display: "inline" }}>
                 {submitSucceeded && (
@@ -159,9 +160,6 @@ class TokenTransferForm extends React.Component {
                                     min="0"
                                     label="Amount to transfer ..."
                                     name="tokenAmount"
-                                    ref={e => {
-                                        this.input = e;
-                                    }}
                                     onChange={this.onTokenAmountChange}
                                     validate={[
                                         Validations.required,
@@ -173,7 +171,7 @@ class TokenTransferForm extends React.Component {
                                     data-testid="transferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left, marginBottom: "0" }}
                                     labelAlignRight="A-EUR"
-                                    autoFocus={true}
+                                    autoFocus={isDesktop}
                                 />
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||
@@ -223,11 +221,10 @@ class TokenTransferForm extends React.Component {
                         )}
                         <Button
                             type="submit"
-                            style={{ width: "100%", height: 50, marginTop: "1rem" }}
                             loading={submitting}
                             disabled={!isFunctional && pristine}
                             data-testid="submitTransferButton"
-                            className={submitting ? "loading" : ""}
+                            className={"fullwidth"}
                         >
                             {submitting ? "Submitting..." : submitText || "Send"}
                         </Button>
@@ -249,5 +246,6 @@ TokenTransferForm = connect(mapStateToProps)(TokenTransferForm);
 
 export default reduxForm({
     form: "TokenTransferForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(TokenTransferForm);

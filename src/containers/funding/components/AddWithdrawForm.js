@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
@@ -102,6 +101,8 @@ class AddWithdrawForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const linkToGo =
             orderDirection === ADDFUND
                 ? `${FUNDS[0].buyUrl}${user.address}&amount=${amount}`
@@ -165,16 +166,13 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        ref={input => {
-                            this.input = input;
-                        }}
                         onChange={this.onPriceChange}
                         validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}
                         data-testid={`${orderDirection}Input`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
-                        autoFocus={true}
+                        autoFocus={isDesktop}
                     />
                     <label>Available exchange partner:</label>
 
@@ -184,7 +182,7 @@ class AddWithdrawForm extends React.Component {
 
                     <p style={{ fontSize: "14px" }}>
                         Interested in becoming an Augmint exchange partner?{" "}
-                        <a href="mailto:hello@augmint.cc">Contact us.</a>
+                        <a href="mailto:hello@augmint.org">Contact us.</a>
                     </p>
                 </Form>
             </Pblock>
@@ -194,6 +192,8 @@ class AddWithdrawForm extends React.Component {
 
 AddWithdrawForm = reduxForm({
     form: "AddWithdrawForm",
+    touchOnChange: true,
+    touchOnBlur: false,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check

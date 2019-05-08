@@ -5,7 +5,6 @@ TODO: input formatting: decimals, thousand separators
 /* eslint-disable import/first */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import Button from "components/augmint-ui/button";
@@ -277,6 +276,7 @@ class NewLoanForm extends React.Component {
         const showResults = this.state.repaymentAmount ? true : false;
 
         const notEnoughEth = this.ethValidationError();
+        const isDesktop = window.innerWidth > 768;
 
         return (
             <div>
@@ -311,9 +311,6 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={input => {
-                                this.input = input;
-                            }}
                             disabled={submitting || !loanManager.isLoaded}
                             validate={[
                                 Validations.required,
@@ -326,7 +323,7 @@ class NewLoanForm extends React.Component {
                             data-testid="loanTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         {this.state.productId !== null && this.state.productId !== undefined && (
@@ -387,10 +384,7 @@ class NewLoanForm extends React.Component {
                                 loading={submitting}
                                 disabled={notEnoughEth || !this.state.loanTokenAmount}
                                 type="submit"
-                                style={{
-                                    height: "50px",
-                                    width: "100%"
-                                }}
+                                className={"fullwidth"}
                             >
                                 {submitting ? "Submitting..." : "Get loan"}
                             </Button>
@@ -408,6 +402,7 @@ const mapStateToProps = state => ({
 
 NewLoanForm = reduxForm({
     form: "NewLoanForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(NewLoanForm);
 export default connect(mapStateToProps)(NewLoanForm);

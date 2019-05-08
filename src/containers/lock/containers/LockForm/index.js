@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import store from "modules/store";
 import { connect } from "react-redux";
@@ -218,6 +217,8 @@ class LockContainer extends React.Component {
             unlockBy = this.state.selectedProduct.unlockByDatestring;
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         return (
             <Pblock id="lock-form" noMargin={true} loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
@@ -255,9 +256,6 @@ class LockContainer extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={input => {
-                                this.input = input;
-                            }}
                             onChange={this.lockAmountChange}
                             disabled={submitting || !lockManager.isLoaded}
                             validate={[
@@ -269,7 +267,7 @@ class LockContainer extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                             data-testid="lockAmountInput"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         <Field
@@ -287,7 +285,7 @@ class LockContainer extends React.Component {
 
                         {!!this.state.lockAmount && (
                             <div>
-                                <p style={{ marginTop: 0, marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
+                                <p style={{ marginTop: 0, marginBottom: 10, lineHeight: 1.5, textAlign: "center" }}>
                                     {"On "}
                                     <strong>{unlockBy}</strong>
                                     {" you get back"}
@@ -301,6 +299,18 @@ class LockContainer extends React.Component {
                                     </strong>
                                     {"."}
                                 </p>
+                                <p
+                                    style={{
+                                        color: theme.colors.darkRed,
+                                        fontWeight: "bold",
+                                        fontSize: 14,
+                                        margin: "20px auto 20px auto",
+                                        textAlign: "center",
+                                        lineHeight: "120%"
+                                    }}
+                                >
+                                    Note: amount cannot be unlocked before <br /> {unlockBy}.
+                                </p>
                             </div>
                         )}
 
@@ -310,12 +320,7 @@ class LockContainer extends React.Component {
                             loading={submitting}
                             data-testid="submitButton"
                             type="submit"
-                            style={{
-                                height: "50px",
-                                padding: "10px 55px",
-                                width: "100%",
-                                maxWidth: "500px"
-                            }}
+                            className={"fullwidth"}
                         >
                             {submitting ? "Submitting..." : "Lock"}
                         </Button>
@@ -332,5 +337,6 @@ LockContainer = connect(state => selector(state, "productId", "lockAmount"))(Loc
 
 export default reduxForm({
     form: "LockForm",
-    touchOnBlur: false
+    touchOnBlur: false,
+    touchOnChange: true
 })(LockContainer);

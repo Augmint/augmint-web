@@ -3,7 +3,6 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
-import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
@@ -178,6 +177,8 @@ class PlaceOrderForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const header = (
             <div>
                 {mainHeader}
@@ -244,7 +245,6 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            ref={e => (this.input = e)}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
@@ -252,7 +252,7 @@ class PlaceOrderForm extends React.Component {
                             data-testid="tokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         <Styledlabel style={{ margin: "5px 0 0 0" }}>
@@ -305,7 +305,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={pristine}
                             data-testid="submitButton"
                             type="submit"
-                            style={{ width: "100%", height: "50px", marginTop: "1rem" }}
+                            className={"fullwidth"}
                         >
                             {submitting && "Submitting..."}
                             {!submitting &&
@@ -327,6 +327,7 @@ PlaceOrderForm = connect(state => {
 PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
     touchOnBlur: false,
+    touchOnChange: true,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
