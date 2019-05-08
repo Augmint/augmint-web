@@ -276,6 +276,7 @@ class NewLoanForm extends React.Component {
         const showResults = this.state.repaymentAmount ? true : false;
 
         const notEnoughEth = this.ethValidationError();
+        const isDesktop = window.innerWidth > 768;
 
         return (
             <div>
@@ -325,7 +326,7 @@ class NewLoanForm extends React.Component {
                             data-testid="loanTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         {this.state.productId !== null && this.state.productId !== undefined && (

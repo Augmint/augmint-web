@@ -217,6 +217,8 @@ class LockContainer extends React.Component {
             unlockBy = this.state.selectedProduct.unlockByDatestring;
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         return (
             <Pblock id="lock-form" noMargin={true} loading={lockManager.isLoading && !this.state.initialize}>
                 {submitSucceeded && (
@@ -268,7 +270,7 @@ class LockContainer extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
                             data-testid="lockAmountInput"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         <Field
