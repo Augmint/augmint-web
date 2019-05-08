@@ -101,6 +101,8 @@ class AddWithdrawForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const linkToGo =
             orderDirection === ADDFUND
                 ? `${FUNDS[0].buyUrl}${user.address}&amount=${amount}`
@@ -170,7 +172,7 @@ class AddWithdrawForm extends React.Component {
                         data-testid={`${orderDirection}Input`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
-                        autoFocus={true}
+                        autoFocus={isDesktop}
                     />
                     <label>Available exchange partner:</label>
 
