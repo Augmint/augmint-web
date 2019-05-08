@@ -49,6 +49,11 @@ export const BaseButton = styledComponent => styledComponent`
       color: ${theme.colors.primary};
       background-color: ${theme.colors.secondary};
 
+      &.fullwidth {
+        width: 100%; 
+        height: 50px;
+      }
+
       &:hover,
       &:focus {
         background-color: ${theme.colors.secondaryDark};
