@@ -117,13 +117,13 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
             [...logsFrom, ...logsTo].map(async logData => lookupBlockTimestamp(logData, web3))
         );
 
-        return processTransferLogs(logs, account);
+        return processTransferEvents(logs, account);
     } catch (error) {
         throw new Error("fetchTransferList failed.\n" + error);
     }
 }
 
-export function processTransferLogs(events, account) {
+export function processTransferEvents(events, account) {
     const transfers = events.map(event => formatEvent(event, account));
 
     return aggregateAndSortTransfers(transfers);
