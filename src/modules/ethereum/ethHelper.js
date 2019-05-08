@@ -158,11 +158,14 @@ export async function sendAndProcessTx(tx, txName, formatReceiptDataCb) {
     const transactionHash = await tx
 
         .onConfirmation(confirmationNumber => {
-            store.dispatch(updateTx({ event: "confirmation", txName, transactionHash, confirmationNumber }));
+            if (!tx.sendError) {
+                store.dispatch(updateTx({ event: "confirmation", txName, transactionHash, confirmationNumber }));
+            }
         })
 
-        .onceTxRevert((error, receipt) => {
+        .onceTxRevert((_error, receipt) => {
             // EthereumTxStatus component handles the error
+            const error = new EthereumTransactionError(`${txName} failed`, _error, receipt, tx.sendOptions.gasLimit);
             store.dispatch(updateTx({ event: "error", txName, transactionHash, error }));
         })
 
