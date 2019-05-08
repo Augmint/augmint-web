@@ -321,12 +321,7 @@ class LockContainer extends React.Component {
                             loading={submitting}
                             data-testid="submitButton"
                             type="submit"
-                            style={{
-                                height: "50px",
-                                padding: "10px 55px",
-                                width: "100%",
-                                maxWidth: "500px"
-                            }}
+                            className={"fullwidth"}
                         >
                             {submitting ? "Submitting..." : "Lock"}
                         </Button>

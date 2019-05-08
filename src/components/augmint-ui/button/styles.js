@@ -51,8 +51,7 @@ export const BaseButton = styledComponent => styledComponent`
 
       &.fullwidth {
         width: 100%; 
-        height: 50px; 
-        margin-top: 1rem;
+        height: 50px;
       }
 
       &:hover,
