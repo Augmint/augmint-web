@@ -150,12 +150,13 @@ const DELEGATED_NARRATIVE = "Delegated transfer fee";
 
 // get txData in format of logData returned from web3.getPastEvents or with event from event listener
 function formatEvent(event, account) {
+    const augmintTransferEvent = event.returnValues;
     const logData = Object.assign({}, event, {
-        from: event.returnValues.from.toLowerCase(),
-        to: event.returnValues.to.toLowerCase(),
-        fee: event.returnValues.fee * -1,
-        amount: event.returnValues.amount * 1,
-        narrative: event.returnValues.narrative,
+        from: augmintTransferEvent.from.toLowerCase(),
+        to: augmintTransferEvent.to.toLowerCase(),
+        fee: augmintTransferEvent.fee * -1,
+        amount: augmintTransferEvent.amount * 1,
+        narrative: augmintTransferEvent.narrative,
         key: `${event.transactionHash}-${event.transactionIndex}`
     });
 

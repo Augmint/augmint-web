@@ -123,13 +123,14 @@ export async function fetchLocksForAddressTx(lockManagerInstance, account) {
 export async function processNewLockTx(account, event) {
     // reprdocue an array in same format as getLocksForAddress returnvalue:
     //     [ lockOwner, lockId, amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs]
+    const lockData = event.returnValues;
     const lockArray = [
-        event.returnValues.lockId,
-        event.returnValues.amountLocked,
-        event.returnValues.interestEarned,
-        event.returnValues.lockedUntil,
-        event.returnValues.perTermInterest,
-        event.returnValues.durationInSecs,
+        lockData.lockId,
+        lockData.amountLocked,
+        lockData.interestEarned,
+        lockData.lockedUntil,
+        lockData.perTermInterest,
+        lockData.durationInSecs,
         new BigNumber(1) // we don't get isActive in event data
     ];
 
