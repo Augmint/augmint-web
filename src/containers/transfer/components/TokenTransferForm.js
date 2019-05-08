@@ -118,6 +118,8 @@ class TokenTransferForm extends React.Component {
             submitText
         } = this.props;
 
+        const isDesktop = window.innerWidth > 768;
+
         return (
             <div style={isFunctional && { display: "inline" }}>
                 {submitSucceeded && (
@@ -169,7 +171,7 @@ class TokenTransferForm extends React.Component {
                                     data-testid="transferAmountInput"
                                     style={{ borderRadius: theme.borderRadius.left, marginBottom: "0" }}
                                     labelAlignRight="A-EUR"
-                                    autoFocus={true}
+                                    autoFocus={isDesktop}
                                 />
                                 {(augmintToken.info.feeMax !== 0 ||
                                     augmintToken.info.feeMin !== 0 ||

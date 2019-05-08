@@ -177,6 +177,8 @@ class PlaceOrderForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const header = (
             <div>
                 {mainHeader}
@@ -250,7 +252,7 @@ class PlaceOrderForm extends React.Component {
                             data-testid="tokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
-                            autoFocus={true}
+                            autoFocus={isDesktop}
                         />
 
                         <Styledlabel style={{ margin: "5px 0 0 0" }}>
