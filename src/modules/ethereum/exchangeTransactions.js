@@ -17,7 +17,6 @@ export async function fetchOrders() {
 }
 
 export async function placeOrderTx(orderDirection, amount, price) {
-    const userAccount = store.getState().web3Connect.userAccount;
     const exchange = await store.getState().web3Connect.augmint.exchange;
 
     const submitPrice = new BN(price * PPM_DIV);
