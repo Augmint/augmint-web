@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import ReactDOM from "react-dom";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
@@ -184,7 +183,7 @@ class AddWithdrawForm extends React.Component {
 
                     <p style={{ fontSize: "14px" }}>
                         Interested in becoming an Augmint exchange partner?{" "}
-                        <a href="mailto:hello@augmint.cc">Contact us.</a>
+                        <a href="mailto:hello@augmint.org">Contact us.</a>
                     </p>
                 </Form>
             </Pblock>
