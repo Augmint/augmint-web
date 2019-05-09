@@ -40,15 +40,17 @@ describe("Locks", function() {
 
     it("Should release locked A-EUR", function() {
         getLock(9, 50).then(() => {
+            cy.wait(1000); // to make sure the lock is releasable
             cy.get("[data-testid=lockMenuLink]")
                 .click()
                 .then(() => {
                     cy.get("[data-testid=lockCard] [data-testid=releaseLockButton]")
                         .first()
                         .click();
-                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]", {
-                        timeout: 20000
-                    });
+                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]");
+
+                    cy.get("[data-testid=EthConfirmationReceivedPanel]").contains("confirmation");
+                    cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
                 });
         });
     });

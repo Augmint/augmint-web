@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { fetchTradesTx, processNewTradeTx } from "modules/ethereum/tradeTransactions";
+import { fetchTradesTx, formatTradeEvent } from "modules/ethereum/tradeTransactions";
 
 export const TRADE_FETCH_REQUESTED = "trade/TRADE_FETCH_REQUESTED";
 export const TRADE_FETCH_ERROR = "trade/TRADE_FETCH_ERROR";
@@ -50,8 +50,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 account: action.account,
-                fromBlock: action.fromBlock,
-                toBlock: action.toBlock
+                event: action.event
             };
 
         case TRADE_PROCESS_ERROR:
@@ -99,15 +98,15 @@ export const fetchTrades = (account, fromBlock, toBlock) => {
     };
 };
 
-export const processNewTrade = (account, eventObject, type) => {
+export const processNewTrade = (account, event, type) => {
     return async dispatch => {
         dispatch({
             type: TRADE_PROCESS_REQUESTED,
             account,
-            eventObject
+            event
         });
         try {
-            const newTrade = await processNewTradeTx(account, eventObject, type);
+            const newTrade = await formatTradeEvent(account, event, type);
             let trades = store.getState().trades.trades;
 
             if (!trades) {

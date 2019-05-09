@@ -1,11 +1,5 @@
 import store from "modules/store";
-import {
-    fetchOrders,
-    placeOrderTx,
-    matchOrdersTx,
-    matchMultipleOrdersTx,
-    cancelOrderTx
-} from "modules/ethereum/exchangeTransactions";
+import { fetchOrders, placeOrderTx, matchMultipleOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -17,10 +11,6 @@ export const ORDERS_REFRESH_SUCCESS = "orders/ORDERS_REFRESH_SUCCESS";
 export const PLACE_ORDER_REQUESTED = "orders/PLACE_ORDER_REQUESTED";
 export const PLACE_ORDER_ERROR = "orders/PLACE_ORDER_ERROR";
 export const PLACE_ORDER_SUCCESS = "orders/PLACE_ORDER_SUCCESS";
-
-export const MATCH_ORDERS_REQUESTED = "orders/MATCH_ORDERS_REQUESTED";
-export const MATCH_ORDERS_ERROR = "orders/MATCH_ORDERS_ERROR";
-export const MATCH_ORDERS_SUCCESS = "orders/MATCH_ORDERS_SUCCESS";
 
 export const MATCH_MULTIPLE_ORDERS_REQUESTED = "orders/MATCH_MULTIPLE_ORDERS_REQUESTED";
 export const MATCH_MULTIPLE_ORDERS_ERROR = "orders/MATCH_MULTIPLE_ORDERS_ERROR";
@@ -62,7 +52,7 @@ export default (state = initialState, action) => {
             };
 
         case PLACE_ORDER_ERROR:
-        case MATCH_ORDERS_ERROR:
+        case MATCH_MULTIPLE_ORDERS_ERROR:
         case CANCEL_ORDER_ERROR:
             return {
                 ...state,
@@ -70,7 +60,7 @@ export default (state = initialState, action) => {
             };
 
         case PLACE_ORDER_SUCCESS:
-        case MATCH_ORDERS_SUCCESS:
+        case MATCH_MULTIPLE_ORDERS_SUCCESS:
         case CANCEL_ORDER_SUCCESS:
             return {
                 ...state,
@@ -86,12 +76,10 @@ export default (state = initialState, action) => {
                 direction: action.orderType
             };
 
-        case MATCH_ORDERS_REQUESTED:
+        case MATCH_MULTIPLE_ORDERS_REQUESTED:
             return {
                 ...state,
-                error: null,
-                buyOrder: action.buyOrder,
-                sellOrder: action.sellOrder
+                error: null
             };
 
         case CANCEL_ORDER_REQUESTED:
@@ -148,29 +136,6 @@ export function placeOrder(orderType, amount, price) {
         } catch (error) {
             return dispatch({
                 type: PLACE_ORDER_ERROR,
-                error: error
-            });
-        }
-    };
-}
-
-export function matchOrders(buyOrder, sellOrder) {
-    return async dispatch => {
-        dispatch({
-            type: MATCH_ORDERS_REQUESTED,
-            buyOrder: buyOrder,
-            sellOrder: sellOrder
-        });
-
-        try {
-            const result = await matchOrdersTx(buyOrder.id, sellOrder.id);
-            return dispatch({
-                type: MATCH_ORDERS_SUCCESS,
-                result: result
-            });
-        } catch (error) {
-            return dispatch({
-                type: MATCH_ORDERS_ERROR,
                 error: error
             });
         }
