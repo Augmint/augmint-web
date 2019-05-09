@@ -4,8 +4,6 @@ import SolidityContract from "modules/ethereum/SolidityContract";
 import { Augmint } from "@augmint/js";
 
 export async function fetchLegacyExchangeOrders() {
-    //const legacyExchangeAddresses = LEGACY_EXCHANGE_CONTRACTS[web3.network.id];
-
     const augmint = store.getState().web3Connect.augmint;
 
     const legacyExchangeAddresses = Augmint.constants.SUPPORTED_LEGACY_EXCHANGES[augmint.deployedEnvironment.name];
@@ -14,9 +12,7 @@ export async function fetchLegacyExchangeOrders() {
 
     const userAccount = store.getState().web3Connect.userAccount.toLowerCase();
 
-    const queryTxs = legacyExchanges.map(legacyExchange => {
-        return legacyExchange.getOrderBook();
-    });
+    const queryTxs = legacyExchanges.map(e => e.getOrderBook());
 
     const legacyOrders = await Promise.all(queryTxs);
 

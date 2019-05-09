@@ -118,9 +118,7 @@ const OrderList = props => {
         (sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum),
         0
     );
-    const totalAeurSellAmount = sellOrders.reduce((sum, order) => {
-        return order.amount + sum;
-    }, 0);
+    const totalAeurSellAmount = sellOrders.reduce((sum, order) => order.amount + sum, 0);
     const totalAeurBuyAmount = buyOrders.reduce(
         (sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum),
         0
