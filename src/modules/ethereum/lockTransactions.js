@@ -166,7 +166,7 @@ function parseLocks(locksArray) {
                 .utc()
                 .unix();
             const isActive = bn_isActive.toString() === "1";
-            // TODO: currentTime - 1 is required because of test timing issues. Should  calculate it dynamic on page
+            // TODO: currentTime + 1 is required because of test timing issues. Should calculate it dynamically on page
             const isReleasebale = lockedUntil <= currentTime + 1 && isActive;
 
             let lockStateText;
