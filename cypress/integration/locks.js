@@ -40,7 +40,7 @@ describe("Locks", function() {
 
     it("Should release locked A-EUR", function() {
         getLock(9, 50).then(() => {
-            cy.wait(1000); // to make sure the lock is releasable
+            cy.wait(3000); // to make sure the lock is releasable
             cy.get("[data-testid=lockMenuLink]")
                 .click()
                 .then(() => {
