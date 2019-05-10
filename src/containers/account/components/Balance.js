@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
-import { AEUR } from "components/augmint-ui/currencies";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -16,9 +16,6 @@ const Label = styled.div`
 const TokenBalance = styled.div`
     font-family: ${theme.typography.fontFamilies.currency};
     font-size: ${remCalc(48)};
-    /* .currency {
-        font-size: ${remCalc(24)};
-    } */
     .currency > span {
         font-size: ${remCalc(24)};
     }
@@ -71,7 +68,7 @@ export default class Balance extends React.Component {
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
-                    <div>{userAccount.ethBalance} ETH</div>
+                    <ETH amount={userAccount.ethBalance} decimals={15} />
                 </EthAmount>
                 {children}
             </Pblock>
