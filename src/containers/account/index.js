@@ -22,7 +22,10 @@ class AccountHome extends React.Component {
         lockManagerProvider();
         augmintTokenProvider();
     }
+
     render() {
+        const isDesktop = window.innerWidth > 768;
+
         return (
             <EthereumState>
                 <Psegment>
@@ -33,7 +36,14 @@ class AccountHome extends React.Component {
                     <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ tablet: 2 / 5 }}>
+                            <Pgrid.Column
+                                size={{ tablet: 2 / 5 }}
+                                style={
+                                    isDesktop
+                                        ? { maxWidth: "450px", minWidth: "350px" }
+                                        : { maxWidth: "450px", margin: "auto", marginTop: "1rem", marginBottom: "40px" }
+                                }
+                            >
                                 <Balance
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
