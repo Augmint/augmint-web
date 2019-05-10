@@ -152,7 +152,7 @@ class TransferList extends React.Component {
                         </StyleTable>
                     </div>
                 )}
-                {transfers && transfers.length > 0 && !this.isLastPage() && (
+                {transfers && !this.isLastPage() && (
                     <div style={{ marginTop: 20, paddingLeft: 20, marginBottom: 20 }}>
                         <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
                             <Button onClick={this.showMore} className="ghost" tabIndex="0">
@@ -174,7 +174,7 @@ class TransferList extends React.Component {
 
 TransferList.defaultProps = {
     userAccount: null,
-    noItemMessage: <p style={{ paddingLeft: 20, marginBottom: 60 }}>No recent transactions found.</p>,
+    noItemMessage: <p style={{ paddingLeft: 20 }}>No recent transactions found.</p>,
     header: null,
     limit: 5
 };
