@@ -18,7 +18,7 @@ function Convertible(props) {
     };
 
     return (
-        <div className="convertible" style={containerStyles}>
+        <div className="convertible" style={{ ...containerStyles, ...props.style }}>
             <div>
                 {!simple && <div>1</div>}
                 <div>{from}</div>

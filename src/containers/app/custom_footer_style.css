@@ -4,6 +4,8 @@
     padding: 0;
     position: absolute;
     width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .Site-footer .footer > div {

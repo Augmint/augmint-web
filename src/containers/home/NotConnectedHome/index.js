@@ -10,8 +10,6 @@ import Rail from "components/augmint-ui/rail";
 import { InterchangeIcon } from "components/Icons";
 import Convertible from "./../convertible.js";
 
-import { keyFeatures, howItWorks } from "./helpers.js";
-
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
@@ -24,12 +22,19 @@ export default class NotConnectedHome extends React.Component {
         return (
             <article>
                 <Container className="homePage">
-                    <section style={{ textAlign: "center" }} className="key-features segment">
+                    <section style={{ textAlign: "center", marginBottom: 50 }} className="key-features segment">
                         <StyledLogoContainer>
                             <StyledLogo src={augmintLogo} alt="Augmint logo" />
                         </StyledLogoContainer>
-                        <header className="key-features__header">
-                            <Header textAlign="center" as="h1" size="large">
+
+                        <header>
+                            <Header
+                                textAlign="center"
+                                as="h1"
+                                size="large"
+                                className="homePage-header"
+                                style={{ margin: "30px auto" }}
+                            >
                                 Modern money, beyond states.
                             </Header>
                             <Header
@@ -40,20 +45,13 @@ export default class NotConnectedHome extends React.Component {
                             >
                                 Borderless, secure, transparent.
                                 <br />
-                                  Decentralized cryptocurrency without the volatility.
-                            </Header>
-                            <Header
-                                textAlign="center"
-                                as="h5"
-                                size="large"
-                                style={{ fontSize: 20, lineHeight: "120%", margin: "14px 0" }}
-                            >
+                                Decentralized cryptocurrency without the volatility. <br />
                                 Our first token is A-EUR.
                             </Header>
 
-                            <Convertible from="A-EUR" to="EUR" />
+                            <Convertible from="A-EUR" to="EUR" style={{ margin: "20px 0" }} />
 
-                            <a style={{ textDecoration: "underline" }} href="">
+                            <a className="learn-more" href="">
                                 Learn more about the Augmint concept
                             </a>
                         </header>
@@ -76,46 +74,136 @@ export default class NotConnectedHome extends React.Component {
                             </div>
                         </a>
                     </Rail>
+
                     <Container className="homePage">
-                        <Header as="h2">Actually convertible</Header>
-
                         <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ justifyContent: "space-around" }}>
-                                <Grid.Unit
-                                    className="column"
-                                    size={{ tablet: 1, desktop: 1 / 2 }}
-                                    style={{ textAlign: "left", padding: "0 50px 0 0" }}
-                                >
-                                    <Convertible from="A-EUR" to="EUR" left simple />
+                            <div>
+                                <Grid className="grid homePage-grid">
+                                    <Grid.Unit className="row">
+                                        <Header className="homePage-row-header" as="h3">
+                                            Actually convertible
+                                        </Header>
+                                    </Grid.Unit>
 
-                                    <p className="opac">
-                                        Next-day conversion to and from SEPA
-                                        <br />
-                                        bank accounts via exchange partners.
-                                    </p>
-                                    <Button type="a" href="https://www.mrcoin.eu/en/buy/aeur" className="ghost">
-                                        Buy A-EUR via partner
-                                    </Button>
-                                </Grid.Unit>
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <Convertible from="A-EUR" to="EUR" left simple />
 
-                                <Grid.Unit
-                                    className="column"
-                                    size={{ tablet: 1, desktop: 1 / 2 }}
-                                    style={{ textAlign: "left", padding: 0 }}
-                                >
-                                    <Convertible from="A-EUR" to="ETH" left simple />
+                                        <p className="opac">
+                                            Next-day conversion to and from SEPA
+                                            <br />
+                                            bank accounts via exchange partners.
+                                        </p>
+                                        <Button
+                                            style={{ marginTop: 10 }}
+                                            type="a"
+                                            href="https://www.mrcoin.eu/en/buy/aeur"
+                                            className="ghost"
+                                        >
+                                            Buy A-EUR via partner
+                                        </Button>
+                                    </Grid.Unit>
 
-                                    <p className="opac">
-                                        Buy or sell A-EUR instantly on our
-                                        <br />
-                                        decentralized crypto exchange.
-                                    </p>
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <Convertible from="A-EUR" to="ETH" left simple />
 
-                                    <Button type="a" to="/exchange" className="ghost">
-                                        Exchange crypto
-                                    </Button>
-                                </Grid.Unit>
-                            </Grid>
+                                        <p className="opac">
+                                            Buy or sell A-EUR instantly on our
+                                            <br />
+                                            decentralized crypto exchange.
+                                        </p>
+
+                                        <Button style={{ marginTop: 10 }} type="a" to="/exchange" className="ghost">
+                                            Exchange crypto
+                                        </Button>
+                                    </Grid.Unit>
+                                </Grid>
+
+                                <Grid className="grid homePage-grid">
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <Header className="homepage-column-header" as="h3">
+                                            Have your crypto and <br />
+                                            spend it too
+                                        </Header>
+                                        <p className="opac" style={{ marginBottom: 8 }}>
+                                            Borrow A-EUR against your ETH collateral.
+                                            <br />
+                                             No waiting for approval.
+                                        </p>
+                                        <a className="more-link">Learn more</a>
+                                        <Button
+                                            style={{ marginTop: 26 }}
+                                            type="a"
+                                            href="https://www.mrcoin.eu/en/buy/aeur"
+                                        >
+                                            Start a loan process
+                                        </Button>
+                                    </Grid.Unit>
+
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <div className="product-box">
+                                            <div>
+                                                <Header className="box-header" as="h4">
+                                                    Crypto-backed loans
+                                                </Header>
+                                                <ul>
+                                                    <li className="list-item">
+                                                        for up to <span>6 months</span> at
+                                                    </li>
+                                                    <li className="list-item">
+                                                        <span>4.9%</span> per year (APR) and
+                                                    </li>
+                                                    <li className="list-item">
+                                                        <span>60%</span> loan-to-value.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </Grid.Unit>
+                                </Grid>
+
+                                <Grid className="grid homePage-grid">
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <div className="product-box">
+                                            <div>
+                                                <Header className="box-header" as="h4">
+                                                    Premium on A-EUR
+                                                </Header>
+                                                <ul>
+                                                    <li className="list-item">
+                                                        for up to <span>6 months</span> at
+                                                    </li>
+                                                    <li className="list-item">
+                                                        <span>4.9%</span> per year (APR).
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </Grid.Unit>
+
+                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                        <Header className="homepage-column-header" as="h3">
+                                            Earn by doing nothing
+                                        </Header>
+                                        <p className="opac">
+                                            Park your A-EUR and get a reward.
+                                            <br />
+                                             Your bonus earning is immediately
+                                            <br />
+                                             accounted - not just a promise. 
+                                            <br /> It’s still yours, locked in a smart contract.
+                                            <br />
+                                              Nobody can play with your money.
+                                        </p>
+                                        <Button
+                                            style={{ marginTop: 10 }}
+                                            type="a"
+                                            href="https://www.mrcoin.eu/en/buy/aeur"
+                                        >
+                                            Calculate your bonus
+                                        </Button>
+                                    </Grid.Unit>
+                                </Grid>
+                            </div>
                         </ThemeProvider>
                     </Container>
                 </section>
