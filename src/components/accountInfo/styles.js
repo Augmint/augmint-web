@@ -6,10 +6,9 @@ import { remCalc } from "styles/theme";
 import { Link } from "react-router-dom";
 
 export const StyledAccountDiv = styled.div`
-    font-weight: bolder;
-
     &.accInfoDetail {
         display: none;
+        margin-top: 20px;
     }
 
     ${media.tablet`
@@ -25,11 +24,14 @@ export const StyledAccountDiv = styled.div`
         }
 
         > div {
-            color: ${theme.colors.white};
             font-size: ${remCalc(20)};
+            font-weight: 700;
             line-height: 26px;
-            margin-bottom: 8px;
             margin-top: 0;
+            
+            .symbol {
+                font-weight: 400;
+            }
         }
     `};
 `;
@@ -38,11 +40,11 @@ export const StyledAccountInfo = styled(Pblock)`
     &.accountInfo {
         padding: 20px 10px;
         border: 1px solid ${theme.colors.secondary};
-        border-radius: 0px 0px 5px 5px;
+        border-radius: 0px 0px 5px 5px !important;
         ${media.tablet`
             position: fixed;
             top: 0;
-            left: 16px;
+            left: 0px;
             width: 100%;
             height: 100%;
             background: ${theme.colors.secondary};
@@ -64,13 +66,14 @@ export const StyledAccInfoLink = styled(Link)`
     ${media.tablet`
         display: block;
         margin-bottom: 8px;
-        margin-top: 0;
+        margin-top: 20px;
         color: ${theme.colors.primary};
         font-size: ${remCalc(20)};
-        font-weight: bolder;
+        text-decoration: underline;
         line-height: 26px;
         &:hover {
             color: ${theme.colors.white};
+            text-decoration: underline;
         }
 
         & > i {

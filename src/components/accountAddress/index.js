@@ -5,8 +5,9 @@ import { shortAccountAddresConverter } from "utils/converter";
 import { StyledContainer, StyledClicked, StyledHint } from "./styles";
 
 export default function AccountAddress(props) {
-    const { address, showCopyIcon, title, shortAddress } = props;
+    const { address, showCopyIcon, title, shortAddress, breakToLines } = props;
     const _title = title !== undefined ? title : "Account: ";
+    const _className = breakToLines ? "breakToLines" : "";
 
     function copyAddress(e) {
         let element = e.target;
@@ -34,7 +35,7 @@ export default function AccountAddress(props) {
     }
 
     return (
-        <StyledContainer onClick={copyAddress} onMouseLeave={removeClicked}>
+        <StyledContainer onClick={copyAddress} onMouseLeave={removeClicked} className={_className}>
             {_title + (shortAddress === true ? shortAccountAddresConverter(address) : address)}
             {showCopyIcon && (
                 <Icon name="copy" style={{ paddingLeft: 5 }} onClick={copyAddress} onMouseLeave={removeClicked} />

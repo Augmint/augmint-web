@@ -57,6 +57,11 @@ export const BaseButton = styledComponent => styledComponent`
       &:hover,
       &:focus {
         background-color: ${theme.colors.secondaryDark};
+        
+        &.accInfo {
+          background-color: transparent;
+          border: 1px solid ${theme.colors.primary};
+        }
       }
     }
 

@@ -42,4 +42,11 @@ export const StyledContainer = styled.div`
             content: "Copied!";
         }
     }
+
+    &.breakToLines {
+        @media (max-width: 600px) {
+            display: block;
+            max-width: 260px;
+        }
+    }
 `;

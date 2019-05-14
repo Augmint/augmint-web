@@ -75,6 +75,8 @@ export const StyledAccountInfo = styled(AccountInfo)`
             display: none;
         `};
     }
+
+    margin: 0;
 `;
 
 export const StyledTopNavLi = styled.li`

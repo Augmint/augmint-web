@@ -4,8 +4,12 @@ import { Link } from "react-router-dom";
 import { ConnectionStatus } from "components/MsgPanels";
 import AccountAddress from "components/accountAddress";
 import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { ETHEUR } from "utils/constants";
 import Icon from "components/augmint-ui/icon";
-import WatchAssetButton from "components/watchAssetButton.js";
+import Button from "components/augmint-ui/button";
+import WatchAssetButton from "components/watchAssetButton";
+import { default as theme } from "styles/theme";
 
 export class AccountInfo extends React.Component {
     render() {
@@ -33,27 +37,55 @@ export class AccountInfo extends React.Component {
             >
                 <ConnectionStatus contract={augmintToken} />
                 <StyledAccountDiv>
-                    Account address:
-                    <div style={{ margin: "0px" }}>
+                    <span style={{ fontWeight: "normal" }}>Account address:</span>
+                    <div
+                        style={{
+                            margin: "0px",
+                            fontFamily: theme.typography.fontFamilies.currency,
+                            overflowWrap: "break-word"
+                        }}
+                    >
                         <AccountAddress
                             address={data.account.address}
                             showCopyIcon="true"
                             title=""
-                            style={{ fontWeight: "lighter" }}
+                            breakToLines={window.innerWidth < 768 ? true : false}
                         />
                     </div>
                 </StyledAccountDiv>
                 <br />
                 <StyledAccountDiv>
-                    Balance:
-                    <div style={{ margin: "0px" }}>
-                        ETH: <span data-testid={!hideTestId && "userEthBalance"}>{data.account.ethBalance}</span>
+                    <span style={{ fontWeight: "normal" }}>Balance:</span>
+                    <div>
+                        <AEUR
+                            amount={data.account.tokenBalance}
+                            data-testid={!hideTestId && "userAEurBalance"}
+                            style={{ fontFamily: theme.typography.fontFamilies.currency }}
+                        />
                     </div>
                     <div>
-                        A-EUR: <span data-testid={!hideTestId && "userAEurBalance"}>{data.account.tokenBalance}</span>
+                        <ETH
+                            amount={data.account.ethBalance}
+                            data-testid={!hideTestId && "userEthBalance"}
+                            decimals={15}
+                            style={{ fontFamily: theme.typography.fontFamilies.currency }}
+                        />
                     </div>
                 </StyledAccountDiv>
-                <StyledAccountDiv className="accInfoDetail">€/ETH {data.rates.info.ethFiatRate}</StyledAccountDiv>
+                <StyledAccountDiv className="accInfoDetail">
+                    <span style={{ fontWeight: "normal" }}>{ETHEUR}: </span>
+                    <span style={{ fontFamily: theme.typography.fontFamilies.currency, fontWeight: "700" }}>
+                        {data.rates.info.ethFiatRate}
+                    </span>
+                </StyledAccountDiv>
+                {/* <Button
+                    content={data.web3Connect.network.name}
+                    to="/under-the-hood"
+                    onClick={() => toggleAccInfo(null, null, true)}
+                    icon="connect"
+                    labelposition="left"
+                    size="large"
+                /> */}
                 <StyledAccInfoLink
                     title="Under the hood"
                     to="/under-the-hood"
@@ -63,7 +95,7 @@ export class AccountInfo extends React.Component {
                     {data.web3Connect.network.name}
                 </StyledAccInfoLink>
 
-                <WatchAssetButton />
+                <WatchAssetButton className={"accInfo"} />
 
                 {showMyAccountLink && <Link to="/account">More details</Link>}
             </StyledAccountInfo>

@@ -10,7 +10,7 @@ import Icon from "components/augmint-ui/icon";
 import { shortAccountAddresConverter } from "utils/converter";
 import { ETHEUR } from "utils/constants";
 import { CloseIcon } from "./styles";
-import close from "assets/images/close.svg";
+import closeDark from "assets/images/close-dark.svg";
 import { theme } from "styles/media";
 
 import {
@@ -144,7 +144,7 @@ class TopNav extends React.Component {
                                 toggleAccInfo={this.toggleAccInfo}
                             />
                             <CloseIcon
-                                src={close}
+                                src={closeDark}
                                 onClick={e => this.toggleAccInfo(e)}
                                 className={this.props.showAccInfo ? "opened" : ""}
                             />
