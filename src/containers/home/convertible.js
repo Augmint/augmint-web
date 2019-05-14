@@ -2,17 +2,11 @@ import React from "react";
 import { InterchangeIcon } from "components/Icons";
 
 function Convertible(props) {
-    const { from, to, simple, center, left, right } = props;
-
-    let justify = "center";
-    if (center || left || right) {
-        justify = center || left || right;
-    }
+    const { from, to, simple } = props;
 
     const containerStyles = {
         display: "flex",
         flexDirection: "row",
-        justifyContent: justify,
         color: "white",
         fontSize: 14
     };

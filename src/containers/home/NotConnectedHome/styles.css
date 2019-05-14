@@ -166,7 +166,7 @@ a.try-now {
 
 .homePage-grid {
     justify-content: space-between;
-    margin-top: 70px;
+    margin-top: 120px;
 }
 .homePage-grid .homePage-column {
     text-align: left;
@@ -178,6 +178,7 @@ a.try-now {
 }
 .homePage-header {
     font-weight: bold;
+    margin: 30px auto;
 }
 .homePage-row-header {
     padding-left: 1rem;
@@ -223,6 +224,73 @@ a.try-now {
     font-size: 22px;
     font-weight: 600;
 }
+.box .cta {
+    display: none;
+}
+.desc .cta {
+    display: inline-block;
+}
 .more-link {
     display: block;
+}
+
+@media (max-width: 768px) and (min-width: 320px) {
+    header {
+        margin-bottom: 150px;
+    }
+    h1.homePage-header {
+        font-size: 32px;
+        margin: 10px auto 30px auto;
+    }
+    .homePage-grid {
+        justify-content: flex-start;
+        margin-top: 70px;
+    }
+    .desc .cta {
+        display: none;
+    }
+    .box .cta {
+        display: inline-block;
+        margin-top: 10px !important;
+    }
+    br {
+        display: none;
+    }
+    .homePage-grid.left {
+    }
+    .homePage-grid.right {
+        flex-direction: column-reverse;
+    }
+    .homePage-grid .homePage-column {
+        text-align: center;
+    }
+    .homePage-row-header {
+        padding: 0;
+        text-align: center;
+    }
+    .product-box {
+        padding: 20px;
+        width: calc(100% - 40px);
+        height: auto;
+    }
+
+    .convertible {
+        justify-content: center;
+    }
+    .homePage-column p {
+        font-size: 18px;
+    }
+    .product-box ul .list-item {
+        text-align: left;
+        font-size: 18px;
+    }
+    .product-box ul .list-item span {
+        font-size: 18px;
+    }
+    .more-link {
+        display: none;
+    }
+    .segment.how-to-use {
+        padding-bottom: 50px;
+    }
 }

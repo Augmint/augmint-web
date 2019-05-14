@@ -68,6 +68,9 @@ export const StyledLogoContainer = styled.div`
     display: flex;
     justify-content: center;
     min-height: 80px;
+    ${breakpoint`
+      max-height: 180px;
+    `};
 `;
 
 export const StyledNavLeftSide = styled.div`

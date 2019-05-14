@@ -28,13 +28,7 @@ export default class NotConnectedHome extends React.Component {
                         </StyledLogoContainer>
 
                         <header>
-                            <Header
-                                textAlign="center"
-                                as="h1"
-                                size="large"
-                                className="homePage-header"
-                                style={{ margin: "30px auto" }}
-                            >
+                            <Header textAlign="center" as="h1" size="large" className="homePage-header">
                                 Modern money, beyond states.
                             </Header>
                             <Header
@@ -49,9 +43,9 @@ export default class NotConnectedHome extends React.Component {
                                 Our first token is A-EUR.
                             </Header>
 
-                            <Convertible from="A-EUR" to="EUR" style={{ margin: "20px 0" }} />
+                            <Convertible from="A-EUR" to="EUR" style={{ margin: "20px 0", justifyContent: "center" }} />
 
-                            <a className="learn-more" href="">
+                            <a className="more-link" href="">
                                 Learn more about the Augmint concept
                             </a>
                         </header>
@@ -97,7 +91,7 @@ export default class NotConnectedHome extends React.Component {
                                             style={{ marginTop: 10 }}
                                             type="a"
                                             href="https://www.mrcoin.eu/en/buy/aeur"
-                                            className="ghost"
+                                            className="ghost cta"
                                         >
                                             Buy A-EUR via partner
                                         </Button>
@@ -112,14 +106,17 @@ export default class NotConnectedHome extends React.Component {
                                             decentralized crypto exchange.
                                         </p>
 
-                                        <Button style={{ marginTop: 10 }} type="a" to="/exchange" className="ghost">
+                                        <Button style={{ marginTop: 10 }} type="a" to="/exchange" className="ghost cta">
                                             Exchange crypto
                                         </Button>
                                     </Grid.Unit>
                                 </Grid>
 
-                                <Grid className="grid homePage-grid">
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                <Grid className="grid homePage-grid left">
+                                    <Grid.Unit
+                                        className="column homePage-column desc"
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                    >
                                         <Header className="homepage-column-header" as="h3">
                                             Have your crypto and <br />
                                             spend it too
@@ -133,13 +130,17 @@ export default class NotConnectedHome extends React.Component {
                                         <Button
                                             style={{ marginTop: 26 }}
                                             type="a"
+                                            className="cta"
                                             href="https://www.mrcoin.eu/en/buy/aeur"
                                         >
                                             Start a loan process
                                         </Button>
                                     </Grid.Unit>
 
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                    <Grid.Unit
+                                        className="column homePage-column box"
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                    >
                                         <div className="product-box">
                                             <div>
                                                 <Header className="box-header" as="h4">
@@ -156,13 +157,24 @@ export default class NotConnectedHome extends React.Component {
                                                         <span>60%</span> loan-to-value.
                                                     </li>
                                                 </ul>
+                                                <Button
+                                                    style={{ marginTop: 26 }}
+                                                    type="a"
+                                                    className="cta"
+                                                    href="https://www.mrcoin.eu/en/buy/aeur"
+                                                >
+                                                    Start a loan process
+                                                </Button>
                                             </div>
                                         </div>
                                     </Grid.Unit>
                                 </Grid>
 
-                                <Grid className="grid homePage-grid">
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                <Grid className="grid homePage-grid right">
+                                    <Grid.Unit
+                                        className="column homePage-column box"
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                    >
                                         <div className="product-box">
                                             <div>
                                                 <Header className="box-header" as="h4">
@@ -176,11 +188,22 @@ export default class NotConnectedHome extends React.Component {
                                                         <span>4.9%</span> per year (APR).
                                                     </li>
                                                 </ul>
+                                                <Button
+                                                    style={{ marginTop: 10 }}
+                                                    className="cta"
+                                                    type="a"
+                                                    href="https://www.mrcoin.eu/en/buy/aeur"
+                                                >
+                                                    Calculate your bonus
+                                                </Button>
                                             </div>
                                         </div>
                                     </Grid.Unit>
 
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
+                                    <Grid.Unit
+                                        className="column homePage-column desc"
+                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                    >
                                         <Header className="homepage-column-header" as="h3">
                                             Earn by doing nothing
                                         </Header>
@@ -191,12 +214,12 @@ export default class NotConnectedHome extends React.Component {
                                             <br />
                                              accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />
-                                              Nobody can play with your money.
+                                            <br />  Nobody can play with your money.
                                         </p>
                                         <Button
                                             style={{ marginTop: 10 }}
                                             type="a"
+                                            className="cta"
                                             href="https://www.mrcoin.eu/en/buy/aeur"
                                         >
                                             Calculate your bonus
