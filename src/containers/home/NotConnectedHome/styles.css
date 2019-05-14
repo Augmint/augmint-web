@@ -166,7 +166,7 @@ a.try-now {
 
 .homePage-grid {
     justify-content: space-between;
-    margin-top: 120px;
+    margin-bottom: 200px;
 }
 .homePage-grid .homePage-column {
     text-align: left;
@@ -244,7 +244,7 @@ a.try-now {
     }
     .homePage-grid {
         justify-content: flex-start;
-        margin-top: 70px;
+        margin-bottom: 80px;
     }
     .desc .cta {
         display: none;
