@@ -11,6 +11,17 @@ export const StyledAccountDiv = styled.div`
         margin-top: 20px;
     }
 
+    > div {
+        font-size: ${remCalc(20)};
+        font-weight: 700;
+        line-height: 26px;
+        margin-top: 0;
+
+        .symbol {
+            font-weight: 400;
+        }
+    }
+
     ${media.tablet`
         color: ${theme.colors.primary};
         font-size: ${remCalc(20)};
@@ -21,17 +32,6 @@ export const StyledAccountDiv = styled.div`
 
         &.accInfoDetail > i {
             padding-right: 10px;
-        }
-
-        > div {
-            font-size: ${remCalc(20)};
-            font-weight: 700;
-            line-height: 26px;
-            margin-top: 0;
-            
-            .symbol {
-                font-weight: 400;
-            }
         }
     `};
 `;
