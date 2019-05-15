@@ -132,9 +132,12 @@ Cypress.Commands.add("getUserEthBalance", (account, options = {}) => {
 Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
+    const decimals = 2;
+    const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+
     cy.get("[data-testid=userAEurBalance]")
         .invoke("text")
-        .should("equal", balance.toFixed(2));
+        .should("equal", fmt.format(balance) + " A€");
 });
 
 // assert user balance on UI.
