@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
-import Rail from "components/augmint-ui/rail";
+import { keyFeatures } from "./helpers.js";
 
 import { InterchangeIcon } from "components/Icons";
 import Convertible from "./../convertible.js";
@@ -84,7 +84,7 @@ export default class NotConnectedHome extends React.Component {
                                         </p>
 
                                         <Button style={{ marginTop: 10 }} type="a" to="/exchange" className="ghost cta">
-                                            Exchange crypto
+                                            Exchange A-EUR
                                         </Button>
                                     </Grid.Unit>
                                 </Grid>
@@ -103,12 +103,7 @@ export default class NotConnectedHome extends React.Component {
                                             No waiting for approval.
                                         </p>
                                         <a className="more-link">Learn more</a>
-                                        <Button
-                                            style={{ marginTop: 26 }}
-                                            type="a"
-                                            className="cta"
-                                            href="https://www.mrcoin.eu/en/buy/aeur"
-                                        >
+                                        <Button style={{ marginTop: 26 }} type="a" className="cta" to="/loan/new">
                                             Start a loan process
                                         </Button>
                                     </Grid.Unit>
@@ -137,7 +132,7 @@ export default class NotConnectedHome extends React.Component {
                                                     style={{ marginTop: 26 }}
                                                     type="a"
                                                     className="cta"
-                                                    href="https://www.mrcoin.eu/en/buy/aeur"
+                                                    to="/loan/new"
                                                 >
                                                     Start a loan process
                                                 </Button>
@@ -168,7 +163,7 @@ export default class NotConnectedHome extends React.Component {
                                                     style={{ marginTop: 10 }}
                                                     className="cta"
                                                     type="a"
-                                                    href="https://www.mrcoin.eu/en/buy/aeur"
+                                                    to="/lock/new"
                                                 >
                                                     Calculate your bonus
                                                 </Button>
@@ -188,18 +183,31 @@ export default class NotConnectedHome extends React.Component {
                                             <br /> Your bonus earning is immediately
                                             <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />
-                                              Nobody can play with your money.
+                                            <br />  Nobody can play with your money.
                                         </p>
-                                        <Button
-                                            style={{ marginTop: 10 }}
-                                            type="a"
-                                            className="cta"
-                                            href="https://www.mrcoin.eu/en/buy/aeur"
-                                        >
+                                        <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                             Calculate your bonus
                                         </Button>
                                     </Grid.Unit>
+                                </Grid>
+
+                                <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
+                                    {keyFeatures.map(feature => (
+                                        <Grid.Unit
+                                            className="column"
+                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            style={{ textAlign: "center" }}
+                                            key={feature.title}
+                                        >
+                                            <div style={styles.keyFeaturesSegment} className="segment">
+                                                {feature.image}
+                                            </div>
+                                            <Header as="h3" style={styles.keyFeaturesHeader}>
+                                                {feature.title}
+                                            </Header>
+                                            <p className="opac">{feature.text}</p>
+                                        </Grid.Unit>
+                                    ))}
                                 </Grid>
                             </div>
                         </ThemeProvider>

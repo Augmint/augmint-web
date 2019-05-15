@@ -134,9 +134,8 @@ p {
     }
 }
 
-@media (min-width: 769px) and (max-width: 1455px) {
-    .segment.how-to-use,
-    .segment.team {
+@media (min-width: 769px) {
+    .segment.how-to-use {
         padding-left: 190px;
     }
     .segment.advantages,
