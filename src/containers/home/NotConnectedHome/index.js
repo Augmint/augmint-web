@@ -31,12 +31,7 @@ export default class NotConnectedHome extends React.Component {
                             <Header textAlign="center" as="h1" size="large" className="homePage-header">
                                 Modern money, beyond states.
                             </Header>
-                            <Header
-                                textAlign="center"
-                                as="h5"
-                                size="large"
-                                style={{ fontSize: 20, lineHeight: "120%", margin: "14px 0" }}
-                            >
+                            <Header textAlign="center" as="h5" size="large">
                                 Borderless, secure, transparent.
                                 <br />
                                 Decentralized cryptocurrency without the volatility. <br />
@@ -53,22 +48,6 @@ export default class NotConnectedHome extends React.Component {
                 </Container>
 
                 <section className="how-to-use segment">
-                    <Rail className="noSmallScreen">
-                        <a href="/tryit" tid="useAEurLinkSticky" style={styles.useAEurButton}>
-                            <div style={styles.howItWorksRail}>
-                                <div style={styles.howItWorksRailBox}>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>Euro</div>
-                                </div>
-                                <InterchangeIcon />
-                                <div style={styles.howItWorksRailBox}>
-                                    <div>1</div>
-                                    <div style={styles.howItWorksRailBoxSpan}>A-EUR</div>
-                                </div>
-                            </div>
-                        </a>
-                    </Rail>
-
                     <Container className="homePage">
                         <ThemeProvider theme={theme}>
                             <div>
@@ -83,8 +62,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Convertible from="A-EUR" to="EUR" left simple />
 
                                         <p className="opac">
-                                            Next-day conversion to and from SEPA
-                                            <br />
+                                            Next-day conversion to and from SEPA <br />
                                             bank accounts via exchange partners.
                                         </p>
                                         <Button
@@ -101,8 +79,7 @@ export default class NotConnectedHome extends React.Component {
                                         <Convertible from="A-EUR" to="ETH" left simple />
 
                                         <p className="opac">
-                                            Buy or sell A-EUR instantly on our
-                                            <br />
+                                            Buy or sell A-EUR instantly on our <br />
                                             decentralized crypto exchange.
                                         </p>
 
@@ -122,9 +99,8 @@ export default class NotConnectedHome extends React.Component {
                                             spend it too
                                         </Header>
                                         <p className="opac" style={{ marginBottom: 8 }}>
-                                            Borrow A-EUR against your ETH collateral.
-                                            <br />
-                                             No waiting for approval.
+                                            Borrow A-EUR against your ETH collateral. <br />
+                                            No waiting for approval.
                                         </p>
                                         <a className="more-link">Learn more</a>
                                         <Button
@@ -185,7 +161,7 @@ export default class NotConnectedHome extends React.Component {
                                                         for up to <span>6 months</span> at
                                                     </li>
                                                     <li className="list-item">
-                                                        <span>4.9%</span> per year (APR).
+                                                        <span>4.5%</span> per year (APR).
                                                     </li>
                                                 </ul>
                                                 <Button
@@ -209,12 +185,11 @@ export default class NotConnectedHome extends React.Component {
                                         </Header>
                                         <p className="opac">
                                             Park your A-EUR and get a reward.
-                                            <br />
-                                             Your bonus earning is immediately
-                                            <br />
-                                             accounted - not just a promise. 
+                                            <br /> Your bonus earning is immediately
+                                            <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />  Nobody can play with your money.
+                                            <br />
+                                              Nobody can play with your money.
                                         </p>
                                         <Button
                                             style={{ marginTop: 10 }}

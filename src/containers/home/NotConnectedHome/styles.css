@@ -166,7 +166,7 @@ a.try-now {
 
 .homePage-grid {
     justify-content: space-between;
-    margin-bottom: 200px;
+    margin-bottom: 120px;
 }
 .homePage-grid .homePage-column {
     text-align: left;
@@ -179,6 +179,14 @@ a.try-now {
 .homePage-header {
     font-weight: bold;
     margin: 30px auto;
+}
+.homePage header h5 {
+    font-size: 20px;
+    line-height: 150%;
+    margin: "14px 0";
+}
+.homePage header {
+    margin-bottom: 150px;
 }
 .homePage-row-header {
     padding-left: 1rem;
@@ -196,7 +204,7 @@ a.try-now {
     padding: 40px;
     height: calc(100% - 80px);
     border-radius: 4px;
-    width: 280px;
+    width: 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -235,8 +243,8 @@ a.try-now {
 }
 
 @media (max-width: 768px) and (min-width: 320px) {
-    header {
-        margin-bottom: 150px;
+    .homePage header {
+        margin-bottom: 100px;
     }
     h1.homePage-header {
         font-size: 32px;
@@ -244,16 +252,19 @@ a.try-now {
     }
     .homePage-grid {
         justify-content: flex-start;
-        margin-bottom: 80px;
+        margin-bottom: 60px;
     }
     .desc .cta {
         display: none;
+    }
+    .homePage-grid .homePage-column {
+        padding-bottom: 0;
     }
     .box .cta {
         display: inline-block;
         margin-top: 10px !important;
     }
-    br {
+    .how-to-use br {
         display: none;
     }
     .homePage-grid.left {
@@ -272,6 +283,10 @@ a.try-now {
         padding: 20px;
         width: calc(100% - 40px);
         height: auto;
+    }
+    .homePage-row-header,
+    .homepage-column-header {
+        font-size: 28px;
     }
 
     .convertible {
