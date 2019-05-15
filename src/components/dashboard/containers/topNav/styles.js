@@ -43,7 +43,7 @@ export const TitleWrapper = styled.div`
         font-weight: 700;
         color: ${theme.colors.primary};
 
-        ${media.tablet`
+        ${media.desktop`
             font-size: 1.1rem;
         `};
     }
@@ -85,12 +85,12 @@ export const StyledTopNavLi = styled.li`
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
 
-    &.navLinkRight:hover ${StyledAccount} {
+    /* &.navLinkRight:hover ${StyledAccount} {
         display: block;
         position: absolute;
         right: 64px;
         top: ${TOP_NAV_HEIGHT};
-    }
+    } */
 `;
 
 export const StyledTopNavLink = styled(Link)`
@@ -170,13 +170,20 @@ export const StyledPrice = styled.span`
     margin: 0 11px;
     font-size: ${remCalc(14)};
 
+    ${media.desktop`
+        font-size: ${remCalc(12)};
+    `}
+
     &.accountInfoContainer {
-        ${media.desktop`
+        ${media.tablet`
             display: none;
         `};
     }
 
     &:not(.accountInfoContainer) {
+        ${media.desktop`
+            margin: 0 5px;
+        `}
         ${media.tablet`
             display: none;
         `};
@@ -186,6 +193,10 @@ export const StyledPrice = styled.span`
         ${media.tablet`
             display: none;
         `};
+    }
+
+    > span > span > .symbol {
+        font-weight: 400;
     }
 
     > .last-update {
@@ -199,7 +210,7 @@ export const StyledSeparator = styled.div`
     height: 24px;
     width: 2px;
 
-    ${media.desktop`
+    ${media.tablet`
         display: none;
     `};
 `;

@@ -12,9 +12,9 @@ export const StyledAccountDiv = styled.div`
     }
 
     > div {
-        font-size: ${remCalc(20)};
+        font-size: ${remCalc(16)};
         font-weight: 700;
-        line-height: 26px;
+        line-height: ${remCalc(18)};
         margin-top: 0;
 
         .symbol {
@@ -33,7 +33,19 @@ export const StyledAccountDiv = styled.div`
         &.accInfoDetail > i {
             padding-right: 10px;
         }
+
+        > div {
+            font-size: ${remCalc(20)};
+            line-height: ${remCalc(24)};
+        }
     `};
+
+    ${media.mobile`
+        > div {
+            font-size: ${remCalc(20)};
+            line-height: ${remCalc(24)};
+        }
+    `}
 `;
 
 export const StyledAccountInfo = styled(Pblock)`

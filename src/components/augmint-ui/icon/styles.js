@@ -42,7 +42,7 @@ export const StyledIcon = styled.i`
         width: 1.5rem;
         padding-left: 14px;
 
-        ${media.desktop`
+        ${media.tablet`
             padding-left: 0;
         `};
     }

@@ -9,6 +9,7 @@ import ratesProvider from "modules/ratesProvider";
 import Icon from "components/augmint-ui/icon";
 import { shortAccountAddresConverter } from "utils/converter";
 import { ETHEUR } from "utils/constants";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 import { CloseIcon } from "./styles";
 import closeDark from "assets/images/close-dark.svg";
 import { theme } from "styles/media";
@@ -105,7 +106,7 @@ class TopNav extends React.Component {
                     <StyledTopNavLi>
                         <StyledPrice>
                             <span className="price">
-                                {ETHEUR}: {this.props.rates.info.ethFiatRate}
+                                {ETHEUR}:<span style={{ fontWeight: 700 }}> {this.props.rates.info.ethFiatRate}</span>
                             </span>
                         </StyledPrice>
                     </StyledTopNavLi>
@@ -122,18 +123,28 @@ class TopNav extends React.Component {
                             />
                             <StyledPrice className="accountInfoContainer">
                                 <span className="accountDetailsInfo">
-                                    {ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH
+                                    <ETH
+                                        amount={ethBalance}
+                                        // data-testid={!hideTestId && "userEthBalance"}
+                                        style={{ fontWeight: 700 }}
+                                    />
                                 </span>
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
                                 <span className="accountDetailsInfo">
-                                    {tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€
+                                    <AEUR
+                                        amount={tokenBalance}
+                                        // data-testid={!hideTestId && "userAEurBalance"}
+                                        style={{ fontWeight: 700 }}
+                                    />
                                 </span>
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">{shortAddress}</span>
+                                <span className="accountDetailsInfo" style={{ fontWeight: 700 }}>
+                                    {shortAddress}
+                                </span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
