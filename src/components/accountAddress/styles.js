@@ -24,6 +24,7 @@ export const StyledHint = styled.span`
 export const StyledContainer = styled.div`
     cursor: pointer;
     display: inline-block;
+    font-weight: 700;
 
     &.clicked ${StyledClicked} {
         display: inline-block;

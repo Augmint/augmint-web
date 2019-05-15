@@ -7,7 +7,7 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
-import { shortAccountAddresConverter } from "utils/converter";
+import AccountAddress from "components/accountAddress";
 import { ETHEUR } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 import { CloseIcon } from "./styles";
@@ -61,7 +61,6 @@ class TopNav extends React.Component {
     }
 
     render() {
-        const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
         const { ethBalance, tokenBalance } = this.props.userAccount;
         const transactions = this.props.transactions;
         const accountInfoData = {
@@ -142,7 +141,12 @@ class TopNav extends React.Component {
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <span style={{ fontWeight: 700 }}>{shortAddress}</span>
+                                <AccountAddress
+                                    address={this.props.userAccount.address}
+                                    title=""
+                                    shortAddress
+                                    // style={{ fontWeight: 700 }}
+                                />
                             </StyledPrice>
                         </StyledTopNavLinkRight>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
