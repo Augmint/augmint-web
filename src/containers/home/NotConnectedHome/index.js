@@ -183,7 +183,8 @@ export default class NotConnectedHome extends React.Component {
                                             <br /> Your bonus earning is immediately
                                             <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />  Nobody can play with your money.
+                                            <br />
+                                              Nobody can play with your money.
                                         </p>
                                         <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                             Calculate your bonus
@@ -191,7 +192,10 @@ export default class NotConnectedHome extends React.Component {
                                     </Grid.Unit>
                                 </Grid>
 
-                                <Grid className="grid" style={{ justifyContent: "space-evenly" }}>
+                                <Grid
+                                    className="grid homePage-grid features"
+                                    style={{ justifyContent: "space-evenly" }}
+                                >
                                     {keyFeatures.map(feature => (
                                         <Grid.Unit
                                             className="column"
