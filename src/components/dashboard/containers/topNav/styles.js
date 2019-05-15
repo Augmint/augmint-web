@@ -160,6 +160,10 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
             border-right: solid 1px #fff;
         }
     }
+
+    > i {
+        /* margin-top: 4px; */
+    }
 `;
 
 export const StyledPrice = styled.span`
@@ -167,7 +171,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 0 11px;
+    margin: 4px 11px 0;
     font-size: ${remCalc(14)};
 
     ${media.desktop`
@@ -182,7 +186,7 @@ export const StyledPrice = styled.span`
 
     &:not(.accountInfoContainer) {
         ${media.desktop`
-            margin: 0 5px;
+            margin: 4px 10px 0 0;
         `}
         ${media.tablet`
             display: none;
@@ -209,6 +213,7 @@ export const StyledSeparator = styled.div`
     padding: 0px;
     height: 24px;
     width: 2px;
+    margin: 4px 0 0;
 
     ${media.tablet`
         display: none;

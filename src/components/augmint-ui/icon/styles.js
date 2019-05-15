@@ -41,6 +41,7 @@ export const StyledIcon = styled.i`
         height: 1.5rem;
         width: 1.5rem;
         padding-left: 14px;
+        margin-top: 3px;
 
         ${media.tablet`
             padding-left: 0;

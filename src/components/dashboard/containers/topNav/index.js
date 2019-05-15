@@ -122,7 +122,7 @@ class TopNav extends React.Component {
                                 className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
                             />
                             <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">
+                                <span>
                                     <ETH
                                         amount={ethBalance}
                                         // data-testid={!hideTestId && "userEthBalance"}
@@ -132,7 +132,7 @@ class TopNav extends React.Component {
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">
+                                <span>
                                     <AEUR
                                         amount={tokenBalance}
                                         // data-testid={!hideTestId && "userAEurBalance"}
@@ -142,9 +142,7 @@ class TopNav extends React.Component {
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo" style={{ fontWeight: 700 }}>
-                                    {shortAddress}
-                                </span>
+                                <span style={{ fontWeight: 700 }}>{shortAddress}</span>
                             </StyledPrice>
                         </StyledTopNavLinkRight>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
@@ -173,7 +171,7 @@ class TopNav extends React.Component {
                             }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
-                            <Icon name="notifications" style={{ position: "relative", top: "11px" }} />
+                            <Icon name="notifications" style={{ position: "relative", top: "13px" }} />
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
@@ -183,7 +181,7 @@ class TopNav extends React.Component {
                             to="/under-the-hood"
                             data-testid="underTheHoodLink"
                         >
-                            <Icon name="connect" />
+                            <Icon name="connect" style={{ marginTop: "12px" }} />
                             <span>{this.props.web3Connect.network.name}</span>
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
