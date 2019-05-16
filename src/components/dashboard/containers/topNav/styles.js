@@ -139,18 +139,25 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     flex-direction: column;
     font-size: 11px;
 
-    &:not(.accountDetails) {
-        &:not(.notifications) {
-            ${media.tablet`
-                display: none;
-            `};
-        }
+    &.accountDetails {
+        min-width: 50px;
+
+        ${media.tabletMin`
+            cursor: default;
+            pointer-events: none;
+        `}
     }
 
     &:not(.accountDetails) {
         ${media.mobile`
             display: none;
         `};
+
+        &:not(.notifications) {
+            ${media.tablet`
+                display: none;
+            `};
+        }
     }
 
     &.notifications {
@@ -159,10 +166,6 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
         :hover {
             border-right: solid 1px #fff;
         }
-    }
-
-    > i {
-        /* margin-top: 4px; */
     }
 `;
 
@@ -174,11 +177,16 @@ export const StyledPrice = styled.span`
     margin: 4px 11px 0;
     font-size: ${remCalc(14)};
 
+    :first-of-type {
+        margin-left: 0;
+    }
+
     ${media.desktop`
         font-size: ${remCalc(12)};
     `}
 
     &.accountInfoContainer {
+        margin-top: 25px;
         ${media.tablet`
             display: none;
         `};
@@ -206,6 +214,10 @@ export const StyledPrice = styled.span`
     > .last-update {
         font-size: 0.75rem;
     }
+
+    div {
+        pointer-events: auto;
+    }
 `;
 
 export const StyledSeparator = styled.div`
@@ -213,7 +225,7 @@ export const StyledSeparator = styled.div`
     padding: 0px;
     height: 24px;
     width: 2px;
-    margin: 4px 0 0;
+    margin: 21px 0 0;
 
     ${media.tablet`
         display: none;

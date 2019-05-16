@@ -110,16 +110,18 @@ class TopNav extends React.Component {
                         </StyledPrice>
                     </StyledTopNavLi>
                     <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
-                        <StyledTopNavLinkRight
-                            title="Your account"
-                            to={this.props.showAccInfo ? "" : "/account"}
-                            onClick={e => this.toggleAccInfo(e, true)}
-                            className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
-                        >
-                            <Icon
-                                name="account"
-                                className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
-                            />
+                        <div style={{ display: "flex", backgroundColor: "#ffad00", justifyContent: "center" }}>
+                            <StyledTopNavLinkRight
+                                title="Your account"
+                                to={this.props.showAccInfo ? "" : "/account"}
+                                onClick={e => this.toggleAccInfo(e, true)}
+                                className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
+                            >
+                                <Icon
+                                    name="account"
+                                    className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
+                                />
+                            </StyledTopNavLinkRight>
                             <StyledPrice className="accountInfoContainer">
                                 <span>
                                     <ETH
@@ -141,14 +143,9 @@ class TopNav extends React.Component {
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <AccountAddress
-                                    address={this.props.userAccount.address}
-                                    title=""
-                                    shortAddress
-                                    // style={{ fontWeight: 700 }}
-                                />
+                                <AccountAddress address={this.props.userAccount.address} title="" shortAddress />
                             </StyledPrice>
-                        </StyledTopNavLinkRight>
+                        </div>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
                             <StyledAccountInfo
                                 data={accountInfoData}
