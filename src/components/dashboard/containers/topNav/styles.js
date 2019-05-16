@@ -176,7 +176,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 4px 11px 0;
+    margin: 5px 11px 0;
     font-size: ${remCalc(14)};
 
     :first-of-type {
@@ -189,6 +189,9 @@ export const StyledPrice = styled.span`
 
     &.accountInfoContainer {
         margin-top: 25px;
+        ${media.desktop`
+            margin-top: 26px;
+        `}
         ${media.tablet`
             display: none;
         `};
@@ -196,7 +199,7 @@ export const StyledPrice = styled.span`
 
     &:not(.accountInfoContainer) {
         ${media.desktop`
-            margin: 4px 10px 0 0;
+            margin: 5px 10px 0 0;
         `}
         ${media.tablet`
             display: none;
