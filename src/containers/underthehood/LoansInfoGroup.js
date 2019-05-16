@@ -8,6 +8,7 @@ import { fetchAllLoans } from "modules/reducers/loans";
 import store from "modules/store";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Button from "components/augmint-ui/button";
+import { Pblock } from "components/PageLayout";
 
 const jsonToCsv = json => {
     let csv;
@@ -48,22 +49,24 @@ class LoansInfoGroup extends React.Component {
                     <LoanManagerInfo contractData={this.props.loanManagerData} contract={this.props.loanManager} />
                     <ArrayDump header="Loans for userAccount" items={this.props.loans} />
 
-                    <CopyToClipboard
-                        text={this.state.allLoansCsv ? this.state.allLoansCsv : "<loans not loaded>"}
-                        onCopy={result => {
-                            if (result) {
-                                alert(`${this.props.allLoans.length} loans copied to clipboard`);
-                            } else {
-                                alert("copy failed");
-                            }
-                        }}
-                    >
-                        <Button size="small" disabled={!this.props.allLoans}>
-                            {this.props.allLoans
-                                ? `Copy ${this.props.allLoans.length} loans to clipboard`
-                                : "No loans loaded"}
-                        </Button>
-                    </CopyToClipboard>
+                    <Pblock header="All loans">
+                        <CopyToClipboard
+                            text={this.state.allLoansCsv ? this.state.allLoansCsv : "<loans not loaded>"}
+                            onCopy={result => {
+                                if (result) {
+                                    alert(`${this.props.allLoans.length} loans copied to clipboard`);
+                                } else {
+                                    alert("copy failed");
+                                }
+                            }}
+                        >
+                            <Button size="small" disabled={!this.props.allLoans}>
+                                {this.props.allLoans
+                                    ? `Copy ${this.props.allLoans.length} loans to clipboard`
+                                    : "No loans loaded"}
+                            </Button>
+                        </CopyToClipboard>
+                    </Pblock>
                 </Pgrid.Column>
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
