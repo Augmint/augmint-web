@@ -118,6 +118,9 @@ export const StyledTopNavLink = styled(Link)`
     &.accountDetails {
         background-color: ${theme.colors.secondary};
         flex-direction: row;
+        &:hover {
+            background-color: ${theme.colors.secondaryDark};
+        }
     }
 
     &:hover {
@@ -140,11 +143,10 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     font-size: 11px;
 
     &.accountDetails {
-        min-width: 50px;
-
         ${media.tabletMin`
             cursor: default;
             pointer-events: none;
+            min-width: 50px;
         `}
     }
 
@@ -237,6 +239,7 @@ export const CloseIcon = styled.img`
     visibility: hidden;
     height: 32px;
     width: 32px;
+    cursor: pointer;
 
     &.opened {
         ${media.tablet`
