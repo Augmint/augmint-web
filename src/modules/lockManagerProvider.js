@@ -7,6 +7,7 @@ import { fetchLocksForAddress, processNewLock } from "modules/reducers/locks";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 let isWatchSetup = false;
+let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const lockManager = store.getState().contracts.latest.lockManager;
@@ -14,7 +15,7 @@ export default () => {
 
     if (lockManager && !lockManagerData.isLoading && !lockManagerData.isLoaded) {
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
@@ -24,19 +25,38 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
-    const lockManager = store.getState().contracts.latest.lockManager.ethersInstance;
-    lockManager.on("NewLockProduct", (...args) => {
-        onNewLockProduct(...args);
+const setupContractEventListeners = () => {
+    processedContractEvents = {};
+    // TODO: use augmint-js class when augmint-js exposes it
+    const lockManager = store.getState().contracts.latest.lockManager.web3ContractInstance;
+
+    lockManager.events.NewLockProduct({}, (error, event) => {
+        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewLockProduct(error, event);
+        }
     });
-    lockManager.on("LockProductActiveChange", (...args) => {
-        onLockProductActiveChange(...args);
+
+    lockManager.events.LockProductActiveChange({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLockProductActiveChange(error, event);
+        }
     });
-    lockManager.on("NewLock", (...args) => {
-        onNewLock(...args);
+
+    lockManager.events.NewLock({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewLock(error, event);
+        }
     });
-    lockManager.on("LockReleased", (...args) => {
-        onLockReleased(...args);
+
+    lockManager.events.LockReleased({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLockReleased(error, event);
+        }
     });
 };
 
@@ -61,13 +81,14 @@ const onLockContractChange = (newVal, oldVal) => {
         "lockManagerProvider - new lockManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
     );
     refresh();
-    setupListeners();
+    setupContractEventListeners();
 };
 
-const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive, eventObject) => {
+const onNewLockProduct = (error, event) => {
     // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
     //                         uint32 minimumLockAmount, bool isActive);
     console.debug("lockManagerProvider.onNewLockProduct: dispatching refreshLockManager and fetchLockProducts");
+
     store.dispatch(refreshLockManager()); // to update product count
     store.dispatch(fetchLockProducts()); // to fetch new product
 };
@@ -78,61 +99,47 @@ const onLockProductActiveChange = (lockProductId, newActiveState, eventObject) =
     store.dispatch(fetchLockProducts()); // to refresh product list
 };
 
-const onNewLock = (
-    lockOwner,
-    lockId,
-    amountLocked,
-    interestEarned,
-    lockedUntil,
-    perTermInterest,
-    durationInSecs,
-    eventObject
-) => {
+const onNewLock = (error, event) => {
     // event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
     //                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
     console.debug(
         "lockManagerProvider.onNewLock: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+
     if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (lockOwner.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.lockOwner.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "lockManagerProvider.onNewLock: new lock for current user. Dispatching processNewLock & fetchUserBalance"
         );
-        store.dispatch(
-            processNewLock(userAccount, {
-                lockOwner,
-                lockId,
-                amountLocked,
-                interestEarned,
-                lockedUntil,
-                perTermInterest,
-                durationInSecs
-            })
-        );
+        store.dispatch(processNewLock(userAccount, event));
         store.dispatch(fetchUserBalance(userAccount));
     }
 };
 
-const onLockReleased = (lockOwner, lockId, eventObject) => {
+const onLockReleased = (error, event) => {
     // event LockReleased(address indexed lockOwner, uint lockId);
-
     console.debug(
         "lockManagerProvider.onLockReleased: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+
     if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (lockOwner.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.lockOwner.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "lockManagerProvider.onLockReleased: lock released for current user. Dispatching fetchLocksForAddress & fetchUserBalance"
         );

@@ -122,7 +122,7 @@ class EthTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="ETH"
                                 />
-                                {!isNaN(this.state.amount) && (
+                                {!isNaN(this.state.amount) && this.state.amount > 0.00001 && (
                                     <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
                                         ≈€{amountInEur} (covers ≈{coverdTxs} transactions)
                                     </p>
@@ -133,7 +133,7 @@ class EthTransferForm extends React.Component {
                             type="submit"
                             loading={submitting}
                             data-testid="submitEthTransferButton"
-                            className={submitting ? "loading" : ""}
+                            className={"fullwidth"}
                         >
                             {submitting ? "Submitting..." : submitText || "Send ETH"}
                         </Button>
@@ -156,5 +156,7 @@ EthTransferForm = connect(mapStateToProps)(EthTransferForm);
 
 export default reduxForm({
     form: "EthTransferForm",
-    initialValues: { ethAmount: 0.01 }
+    initialValues: { ethAmount: 0.01 },
+    touchOnBlur: false,
+    touchOnChange: true
 })(EthTransferForm);
