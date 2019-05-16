@@ -39,7 +39,7 @@ export const StyledContainer = styled.div`
         display: block;
 
         &::after {
-            color: ${theme.colors.darkGreen};
+            color: ${theme.colors.lightGreen};
             content: "Copied!";
         }
     }

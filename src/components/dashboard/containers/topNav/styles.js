@@ -117,7 +117,6 @@ export const StyledTopNavLink = styled(Link)`
 
     &.accountDetails {
         background-color: ${theme.colors.secondary};
-        flex-direction: row;
         &:hover {
             background-color: ${theme.colors.secondaryDark};
         }
@@ -148,6 +147,11 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
             pointer-events: none;
             min-width: 50px;
         `}
+        span {
+            ${media.tabletMin`
+                display: none;
+            `}
+        }
     }
 
     &:not(.accountDetails) {

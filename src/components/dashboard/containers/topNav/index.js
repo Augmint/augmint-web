@@ -121,6 +121,7 @@ class TopNav extends React.Component {
                                     name="account"
                                     className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
                                 />
+                                <span>Balance</span>
                             </StyledTopNavLinkRight>
                             <StyledPrice className="accountInfoContainer">
                                 <span>

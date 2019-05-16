@@ -40,8 +40,11 @@ export const StyledIcon = styled.i`
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;
-        /* padding-left: 14px; */
-        margin-top: 3px;
+        margin-top: 14px;
+
+        ${media.tabletMin`
+            margin-top: 3px;
+        `}
 
         ${media.tablet`
             padding-left: 0;
