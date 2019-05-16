@@ -56,13 +56,6 @@ export default (state = initialState, action) => {
                 info: action.info
             };
 
-        case LOANMANAGER_REFRESH_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                loadError: action.error
-            };
-
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
             return {
                 ...state,
@@ -90,6 +83,8 @@ export default (state = initialState, action) => {
                 isLoading: false
             };
 
+        case LOANMANAGER_FETCH_LOANS_TO_COLLECT_ERROR:
+        case LOANMANAGER_REFRESH_ERROR:
         case LOANMANAGER_PRODUCTLIST_ERROR:
             return {
                 ...state,
