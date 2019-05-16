@@ -45,10 +45,6 @@ export const StyledIcon = styled.i`
         ${media.tabletMin`
             margin-top: 3px;
         `}
-
-        ${media.tablet`
-            padding-left: 0;
-        `};
     }
 
     &.empty {

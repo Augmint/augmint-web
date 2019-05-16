@@ -210,18 +210,14 @@ export const StyledPrice = styled.span`
         `};
     }
 
-    > .price {
+    .price {
         ${media.tablet`
             display: none;
         `};
     }
 
-    > span > span > .symbol {
+    span .symbol {
         font-weight: 400;
-    }
-
-    > .last-update {
-        font-size: 0.75rem;
     }
 
     div {

@@ -7,7 +7,6 @@ import { StyledAccountInfo, StyledAccountDiv, StyledAccInfoLink } from "./styles
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 import { ETHEUR } from "utils/constants";
 import Icon from "components/augmint-ui/icon";
-import Button from "components/augmint-ui/button";
 import WatchAssetButton from "components/watchAssetButton";
 import { default as theme } from "styles/theme";
 
@@ -78,14 +77,6 @@ export class AccountInfo extends React.Component {
                         {data.rates.info.ethFiatRate}
                     </span>
                 </StyledAccountDiv>
-                {/* <Button
-                    content={data.web3Connect.network.name}
-                    to="/under-the-hood"
-                    onClick={() => toggleAccInfo(null, null, true)}
-                    icon="connect"
-                    labelposition="left"
-                    size="large"
-                /> */}
                 <StyledAccInfoLink
                     title="Under the hood"
                     to="/under-the-hood"
