@@ -59,7 +59,7 @@ export class CustomTable extends React.Component {
                             ))}
                     </StyleTbody>
                 </StyleTable>
-                {data && data.length > 0 && buttonVisible && (
+                {data && data.length >= PAGING && buttonVisible && (
                     <Button
                         size="big"
                         className="ghost"
