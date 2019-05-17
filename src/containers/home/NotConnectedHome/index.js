@@ -61,7 +61,7 @@ export default class NotConnectedHome extends React.Component {
                                             style={{ marginTop: 10 }}
                                             type="a"
                                             href="https://www.mrcoin.eu/en/buy/aeur"
-                                            className="ghost cta"
+                                            className="ghost orange cta"
                                         >
                                             Buy A-EUR via partner
                                         </Button>
@@ -75,8 +75,13 @@ export default class NotConnectedHome extends React.Component {
                                             decentralized crypto exchange.
                                         </p>
 
-                                        <Button style={{ marginTop: 10 }} type="a" to="/exchange" className="ghost cta">
-                                            Exchange A-EUR
+                                        <Button
+                                            style={{ marginTop: 10 }}
+                                            type="a"
+                                            to="/exchange"
+                                            className="ghost orange cta"
+                                        >
+                                            Buy A-EUR with ETH
                                         </Button>
                                     </Grid.Unit>
                                 </Grid>
@@ -169,8 +174,7 @@ export default class NotConnectedHome extends React.Component {
                                             <br /> Your bonus earning is immediately
                                             <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />
-                                              Nobody can play with your money.
+                                            <br />  Nobody can play with your money.
                                         </p>
                                         <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                             Calculate your bonus

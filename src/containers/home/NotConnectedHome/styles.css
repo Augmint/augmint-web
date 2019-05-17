@@ -191,15 +191,6 @@ a.try-now {
 .homePage header {
     margin-bottom: 150px;
 }
-.homePage .ghost {
-    color: #ffad00;
-    border: 1px solid #ffad00;
-}
-.homePage .ghost:hover {
-    color: #e29a00;
-    border: 1px solid #e29a00;
-    background: none;
-}
 h3.homePage-row-header {
     padding-left: 1rem;
 }
