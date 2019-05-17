@@ -1,19 +1,17 @@
 import React from "react";
 
-import { theme } from "styles/media";
-import * as styles from "./styles.js";
-import "./styles.css";
-
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
-import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
 import { keyFeatures } from "./helpers.js";
-import { InterchangeIcon } from "components/Icons";
 import Convertible from "./../convertible.js";
 import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
 import augmintLogo from "assets/images/logo/augmint.svg";
+
+import { theme } from "styles/media";
+import * as styles from "./styles.js";
+import "./styles.css";
 
 export default class NotConnectedHome extends React.Component {
     render() {
@@ -26,15 +24,13 @@ export default class NotConnectedHome extends React.Component {
                         </StyledLogoContainer>
 
                         <header>
-                            <Header textAlign="center" as="h1" size="large" className="homePage-header">
-                                Modern money, beyond states.
-                            </Header>
-                            <Header textAlign="center" as="h5" size="large">
+                            <h1 className="homePage-header">Modern money, beyond states.</h1>
+                            <h5>
                                 Borderless, secure, transparent.
                                 <br />
                                 Decentralized cryptocurrency without the volatility. <br />
                                 Our first token is A-EUR.
-                            </Header>
+                            </h5>
 
                             <Convertible from="A-EUR" to="EUR" style={{ margin: "20px 0", justifyContent: "center" }} />
 
@@ -51,9 +47,7 @@ export default class NotConnectedHome extends React.Component {
                             <div>
                                 <Grid className="grid homePage-grid">
                                     <Grid.Unit className="row">
-                                        <Header className="homePage-row-header" as="h3">
-                                            Actually convertible
-                                        </Header>
+                                        <h3 className="homePage-row-header">Actually convertible</h3>
                                     </Grid.Unit>
 
                                     <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
@@ -92,10 +86,10 @@ export default class NotConnectedHome extends React.Component {
                                         className="column homePage-column desc"
                                         size={{ tablet: 1, desktop: 1 / 2 }}
                                     >
-                                        <Header className="homepage-column-header" as="h3">
+                                        <h3 className="homepage-column-header">
                                             Have your crypto and <br />
                                             spend it too
-                                        </Header>
+                                        </h3>
                                         <p className="opac" style={{ marginBottom: 8 }}>
                                             Borrow A-EUR against your ETH collateral. <br />
                                             No waiting for approval.
@@ -112,9 +106,7 @@ export default class NotConnectedHome extends React.Component {
                                     >
                                         <div className="product-box">
                                             <div>
-                                                <Header className="box-header" as="h4">
-                                                    Crypto-backed loans
-                                                </Header>
+                                                <h4 className="box-header">Crypto-backed loans</h4>
                                                 <ul>
                                                     <li className="list-item">
                                                         for up to <span>6 months</span> at
@@ -146,9 +138,7 @@ export default class NotConnectedHome extends React.Component {
                                     >
                                         <div className="product-box">
                                             <div>
-                                                <Header className="box-header" as="h4">
-                                                    Premium on A-EUR
-                                                </Header>
+                                                <h4 className="box-header">Premium on A-EUR</h4>
                                                 <ul>
                                                     <li className="list-item">
                                                         for up to <span>6 months</span> at
@@ -173,15 +163,14 @@ export default class NotConnectedHome extends React.Component {
                                         className="column homePage-column desc"
                                         size={{ tablet: 1, desktop: 1 / 2 }}
                                     >
-                                        <Header className="homepage-column-header" as="h3">
-                                            Earn by doing nothing
-                                        </Header>
+                                        <h3 className="homepage-column-header">Earn by doing nothing</h3>
                                         <p className="opac">
                                             Park your A-EUR and get a reward.
                                             <br /> Your bonus earning is immediately
                                             <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />  Nobody can play with your money.
+                                            <br />
+                                              Nobody can play with your money.
                                         </p>
                                         <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                             Calculate your bonus
@@ -203,9 +192,7 @@ export default class NotConnectedHome extends React.Component {
                                             <div style={styles.keyFeaturesSegment} className="segment">
                                                 {feature.image}
                                             </div>
-                                            <Header as="h3" style={styles.keyFeaturesHeader}>
-                                                {feature.title}
-                                            </Header>
+                                            <h3 style={styles.keyFeaturesHeader}>{feature.title}</h3>
                                             <p className="opac">{feature.text}</p>
                                         </Grid.Unit>
                                     ))}

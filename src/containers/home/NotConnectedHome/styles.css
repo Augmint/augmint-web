@@ -181,6 +181,7 @@ a.try-now {
 .homePage-header {
     font-weight: bold;
     margin: 30px auto;
+    font-size: 38px;
 }
 .homePage header h5 {
     font-size: 20px;
@@ -199,7 +200,7 @@ a.try-now {
     border: 1px solid #e29a00;
     background: none;
 }
-.homePage-row-header {
+h3.homePage-row-header {
     padding-left: 1rem;
 }
 .homePage-row-header,
