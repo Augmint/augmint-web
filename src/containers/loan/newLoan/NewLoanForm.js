@@ -353,7 +353,7 @@ class NewLoanForm extends React.Component {
                                         className="box-val"
                                         data-testid="ethAmount"
                                         amount={this.state.ethAmount}
-                                        decimals={5}
+                                        decimals={ETH_DECIMALS}
                                     />
                                     as collateral to secure this loan.
                                 </StyledBox>
@@ -375,7 +375,7 @@ class NewLoanForm extends React.Component {
                                         <strong>{repayBefore}</strong>
                                         <br />
                                         {"to get your "}
-                                        <ETH amount={this.state.ethAmount} decimals={5} />
+                                        <ETH amount={this.state.ethAmount} decimals={ETH_DECIMALS} />
                                         {" collateral back."}
                                     </p>
                                 </div>
