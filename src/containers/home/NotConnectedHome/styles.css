@@ -56,10 +56,8 @@ p {
     margin-bottom: 40px;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    p.opac {
-        opacity: 0.6;
-    }
+p.opac {
+    opacity: 0.6;
 }
 
 .segment.how-to-use {
@@ -118,33 +116,6 @@ p {
     font-weight: 400;
 }
 
-@media (max-width: 768px) and (min-width: 320px) {
-    .team .grid .column > img,
-    .partner .grid .column > img {
-        margin-bottom: 10px;
-    }
-
-    .team .grid .column h3 {
-        margin-top: 35px;
-    }
-
-    .team .grid .column p.description,
-    .partner .grid .column p.description {
-        margin-top: 45px;
-    }
-}
-
-@media (min-width: 769px) {
-    .segment.how-to-use {
-        padding-left: 190px;
-    }
-    .segment.advantages,
-    .segment.team,
-    .segment.partner {
-        padding: 0px 85px;
-    }
-}
-
 .segment.how-to-use .grid.margin {
     margin-bottom: 140px;
 }
@@ -167,12 +138,15 @@ a.try-now {
     justify-content: space-between;
     margin-bottom: 120px;
 }
-.homePage-grid.features {
-    margin-left: -190px;
-}
+
 .homePage-grid .homePage-column {
-    text-align: left;
+    text-align: center;
     padding: 1rem;
+}
+.homePage-grid .homePage-column .grid-cont {
+    text-align: left;
+    width: 350px;
+    margin: 0 auto;
 }
 .homePage-column p {
     font-size: 20px;
@@ -192,10 +166,10 @@ a.try-now {
     margin-bottom: 150px;
 }
 h3.homePage-row-header {
-    padding-left: 1rem;
+    padding-left: calc((50% - 350px) / 2);
 }
 .homePage-row-header,
-.homepage-column-header {
+.homePage-column-header {
     margin-bottom: 10px;
     margin-top: 0;
     line-height: 120%;
@@ -207,11 +181,13 @@ h3.homePage-row-header {
     padding: 40px;
     height: calc(100% - 80px);
     border-radius: 4px;
-    width: 250px;
+    width: 270px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
+    text-align: left;
 }
 .product-box h4.box-header {
     margin-top: 10px;
@@ -257,8 +233,8 @@ h3.homePage-row-header {
         justify-content: flex-start;
         margin-bottom: 100px;
     }
-    .homePage-grid.features {
-        margin-left: 0;
+    .homePage-grid .homePage-column .grid-cont {
+        text-align: center;
     }
     .desc .cta {
         display: none;
@@ -281,9 +257,13 @@ h3.homePage-row-header {
     .homePage-grid .homePage-column {
         text-align: center;
     }
-    .homePage-row-header {
+    .homePage-grid .row {
+        text-align: center;
+    }
+    h3.homePage-row-header {
         padding: 0;
         text-align: center;
+        width: 100%;
     }
     .product-box {
         padding: 20px;
@@ -291,7 +271,7 @@ h3.homePage-row-header {
         height: auto;
     }
     .homePage-row-header,
-    .homepage-column-header {
+    .homePage-column-header {
         font-size: 28px;
     }
 
@@ -313,5 +293,19 @@ h3.homePage-row-header {
     }
     .segment.how-to-use {
         padding-bottom: 50px;
+    }
+
+    .team .grid .column > img,
+    .partner .grid .column > img {
+        margin-bottom: 10px;
+    }
+
+    .team .grid .column h3 {
+        margin-top: 35px;
+    }
+
+    .team .grid .column p.description,
+    .partner .grid .column p.description {
+        margin-top: 45px;
     }
 }

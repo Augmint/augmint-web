@@ -9,9 +9,17 @@ import Convertible from "./../convertible.js";
 import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
 import augmintLogo from "assets/images/logo/augmint.svg";
 
-import { theme } from "styles/media";
 import * as styles from "./styles.js";
 import "./styles.css";
+
+const theme = {
+    breakpoints: {
+        giant: 1285,
+        desktop: 992,
+        tablet: 769,
+        mobile: 376
+    }
+};
 
 export default class NotConnectedHome extends React.Component {
     render() {
@@ -50,64 +58,78 @@ export default class NotConnectedHome extends React.Component {
                                         <h3 className="homePage-row-header">Actually convertible</h3>
                                     </Grid.Unit>
 
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
-                                        <Convertible from="A-EUR" to="EUR" left simple />
+                                    <Grid.Unit
+                                        className="column homePage-column"
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
+                                    >
+                                        <div className="grid-cont">
+                                            <Convertible from="A-EUR" to="EUR" left simple />
 
-                                        <p className="opac">
-                                            Next-day conversion to and from SEPA <br />
-                                            bank accounts via exchange partners.
-                                        </p>
-                                        <Button
-                                            style={{ marginTop: 10 }}
-                                            type="a"
-                                            href="https://www.mrcoin.eu/en/buy/aeur"
-                                            className="ghost orange cta"
-                                        >
-                                            Buy A-EUR via partner
-                                        </Button>
+                                            <p className="opac">
+                                                Next-day conversion to and from SEPA <br />
+                                                bank accounts via exchange partners.
+                                            </p>
+                                            <Button
+                                                style={{ marginTop: 10 }}
+                                                type="a"
+                                                href="https://www.mrcoin.eu/en/buy/aeur"
+                                                className="ghost orange cta"
+                                            >
+                                                Buy A-EUR via partner
+                                            </Button>
+                                        </div>
                                     </Grid.Unit>
 
-                                    <Grid.Unit className="column homePage-column" size={{ tablet: 1, desktop: 1 / 2 }}>
-                                        <Convertible from="A-EUR" to="ETH" left simple />
+                                    <Grid.Unit
+                                        className="column homePage-column"
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
+                                    >
+                                        <div className="grid-cont">
+                                            <Convertible from="A-EUR" to="ETH" left simple />
 
-                                        <p className="opac">
-                                            Buy or sell A-EUR instantly on our <br />
-                                            decentralized crypto exchange.
-                                        </p>
+                                            <p className="opac">
+                                                Buy or sell A-EUR instantly on our <br />
+                                                decentralized crypto exchange.
+                                            </p>
 
-                                        <Button
-                                            style={{ marginTop: 10 }}
-                                            type="a"
-                                            to="/exchange"
-                                            className="ghost orange cta"
-                                        >
-                                            Buy A-EUR with ETH
-                                        </Button>
+                                            <Button
+                                                style={{ marginTop: 10 }}
+                                                type="a"
+                                                to="/exchange"
+                                                className="ghost orange cta"
+                                            >
+                                                Buy A-EUR with ETH
+                                            </Button>
+                                        </div>
                                     </Grid.Unit>
                                 </Grid>
 
                                 <Grid className="grid homePage-grid left">
                                     <Grid.Unit
                                         className="column homePage-column desc"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
                                     >
-                                        <h3 className="homepage-column-header">
-                                            Have your crypto and <br />
-                                            spend it too
-                                        </h3>
-                                        <p className="opac" style={{ marginBottom: 8 }}>
-                                            Borrow A-EUR against your ETH collateral. <br />
-                                            No waiting for approval.
-                                        </p>
-                                        <a className="more-link">Learn more</a>
-                                        <Button style={{ marginTop: 26 }} type="a" className="cta" to="/loan/new">
-                                            Start a loan process
-                                        </Button>
+                                        <div className="grid-cont">
+                                            <h3 className="homePage-column-header">
+                                                Have your crypto and <br />
+                                                spend it too
+                                            </h3>
+                                            <p className="opac" style={{ marginBottom: 8 }}>
+                                                Borrow A-EUR against your ETH collateral. <br />
+                                                No waiting for approval.
+                                            </p>
+                                            <a className="more-link" href="">
+                                                Learn more
+                                            </a>
+                                            <Button style={{ marginTop: 26 }} type="a" className="cta" to="/loan/new">
+                                                Start a loan process
+                                            </Button>
+                                        </div>
                                     </Grid.Unit>
 
                                     <Grid.Unit
                                         className="column homePage-column box"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
                                     >
                                         <div className="product-box">
                                             <div>
@@ -139,7 +161,7 @@ export default class NotConnectedHome extends React.Component {
                                 <Grid className="grid homePage-grid right">
                                     <Grid.Unit
                                         className="column homePage-column box"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
                                     >
                                         <div className="product-box">
                                             <div>
@@ -166,19 +188,22 @@ export default class NotConnectedHome extends React.Component {
 
                                     <Grid.Unit
                                         className="column homePage-column desc"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
+                                        size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
                                     >
-                                        <h3 className="homepage-column-header">Earn by doing nothing</h3>
-                                        <p className="opac">
-                                            Park your A-EUR and get a reward.
-                                            <br /> Your bonus earning is immediately
-                                            <br /> accounted - not just a promise. 
-                                            <br /> It’s still yours, locked in a smart contract.
-                                            <br />  Nobody can play with your money.
-                                        </p>
-                                        <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
-                                            Calculate your bonus
-                                        </Button>
+                                        <div className="grid-cont">
+                                            <h3 className="homePage-column-header">Earn by doing nothing</h3>
+                                            <p className="opac">
+                                                Park your A-EUR and get a reward.
+                                                <br /> Your bonus earning is immediately
+                                                <br /> accounted - not just a promise. 
+                                                <br /> It’s still yours, locked in a smart contract.
+                                                <br />
+                                                  Nobody can play with your money.
+                                            </p>
+                                            <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
+                                                Calculate your bonus
+                                            </Button>
+                                        </div>
                                     </Grid.Unit>
                                 </Grid>
 
@@ -189,7 +214,7 @@ export default class NotConnectedHome extends React.Component {
                                     {keyFeatures.map(feature => (
                                         <Grid.Unit
                                             className="column"
-                                            size={{ tablet: 1, desktop: 5 / 16 }}
+                                            size={{ mobile: 1, tablet: 1 / 2, desktop: 5 / 16 }}
                                             style={{ textAlign: "center" }}
                                             key={feature.title}
                                         >
