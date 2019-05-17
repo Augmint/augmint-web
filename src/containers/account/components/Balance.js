@@ -4,6 +4,7 @@ import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
+import AccountAddress from "components/accountAddress";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -70,6 +71,18 @@ export default class Balance extends React.Component {
                     <Label>ETH balance</Label>
                     <ETH amount={userAccount.ethBalance} decimals={15} />
                 </EthAmount>
+                <div
+                    style={{
+                        // width: "200px",
+                        textAlign: "center",
+                        margin: "auto",
+                        marginTop: "1rem",
+                        overflowWrap: "break-word"
+                    }}
+                >
+                    <Label className="balance">Account address</Label>
+                    <AccountAddress address={userAccount.address} title="" className={"breakToLines"} />
+                </div>
                 {children}
             </Pblock>
         );

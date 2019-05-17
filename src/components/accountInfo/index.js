@@ -48,7 +48,7 @@ export class AccountInfo extends React.Component {
                             address={data.account.address}
                             showCopyIcon="true"
                             title=""
-                            breakToLines={window.innerWidth < 768 ? true : false}
+                            className={"breakToLines bold"}
                         />
                     </div>
                 </StyledAccountDiv>
