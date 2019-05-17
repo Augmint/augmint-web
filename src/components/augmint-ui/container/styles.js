@@ -23,7 +23,7 @@ export const StyledDiv = styled.div`
       max-width: 933px;
     `};
     ${media.tablet`
-      &.homePage { 
+      &.homePage {
         max-width: 60%;
         &.wider {
             max-width: 85%;
@@ -31,7 +31,7 @@ export const StyledDiv = styled.div`
       }
     `};
     ${media.mobile`
-      &.homePage { 
+      &.homePage {
         max-width: 90%;
         &.wider {
           max-width: 98%;

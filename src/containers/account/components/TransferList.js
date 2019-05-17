@@ -100,11 +100,11 @@ class TransferList extends React.Component {
                     info: <TxInfo tx={tx} />,
                     amount: (
                         <Transfer>
-                            <AEUR amount={tx.amount} className="delta" data-testid="txPrice" />
-                            <AEUR amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
+                            <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
+                            <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
                         </Transfer>
                     ),
-                    balance: <AEUR amount={tx.balance} />
+                    balance: <AEUR raw amount={tx.balance} />
                 };
             });
         }
@@ -153,9 +153,9 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <div style={{ marginTop: 20, paddingLeft: 20 }}>
+                    <div style={{ marginTop: 20, paddingLeft: 20, marginBottom: 20 }}>
                         <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
-                            <Button onClick={this.showMore} className="ghost">
+                            <Button onClick={this.showMore} className="ghost" tabIndex="0">
                                 Show older
                             </Button>
                         </Segment>

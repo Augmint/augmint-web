@@ -10,7 +10,7 @@ import BigNumber from "bignumber.js";
 import styled from "styled-components";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS, DECIMALS_DIV, ETHEUR } from "utils/constants";
+import { DECIMALS, ETHEUR } from "utils/constants";
 import { floatNumberConverter } from "utils/converter";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 
@@ -46,19 +46,21 @@ const OrderItem = props => {
 
     const rate = ethFiatRate / parsePrice(displayPrice);
 
+    console.log(order);
+
     if (order.direction === TOKEN_SELL) {
         const ethValue = (order.amount * order.price) / bn_ethFiatRate;
         return (
             <tr>
                 <td>
-                    <AEUR raw amount={order.amount} />
+                    <AEUR amount={order.amount} />
                 </td>
                 <td>
-                    <ETH raw amount={ethValue} />
+                    <ETH amount={ethValue} />
                 </td>
                 <td>{displayPrice}%</td>
                 <td>
-                    <AEUR raw amount={rate} />
+                    <AEUR amount={rate} />
                 </td>
                 <td>
                     <MoreInfoTip id={"more_info-" + order.id}>
@@ -83,14 +85,14 @@ const OrderItem = props => {
         return (
             <tr>
                 <td>
-                    <AEUR raw amount={aeurValue} />
+                    <AEUR amount={aeurValue} />
                 </td>
                 <td>
-                    <ETH raw amount={order.amount} />
+                    <ETH amount={order.amount} />
                 </td>
                 <td>{displayPrice}%</td>
                 <td>
-                    <AEUR raw amount={rate} />
+                    <AEUR amount={rate} />
                 </td>
                 <td>
                     <MoreInfoTip id={"more_info-" + order.id}>
@@ -114,14 +116,12 @@ const OrderItem = props => {
 const OrderList = props => {
     const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0));
+    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bnEthAmount.add(sum), 0));
     const totalEthSellAmount = sellOrders.reduce(
         (sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum),
         0
     );
-    const totalAeurSellAmount = new BigNumber(sellOrders.reduce((sum, order) => order.bn_amount.add(sum), 0)).div(
-        DECIMALS_DIV
-    );
+    const totalAeurSellAmount = sellOrders.reduce((sum, order) => order.amount + sum, 0);
     const totalAeurBuyAmount = buyOrders.reduce(
         (sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum),
         0
@@ -162,10 +162,9 @@ const OrderList = props => {
             <tfoot>
                 <tr>
                     <td>
-                        Total:{" "}
-                        {isSell ? <AEUR raw amount={totalAeurSellAmount} /> : <AEUR raw amount={totalAeurBuyAmount} />}
+                        Total: {isSell ? <AEUR amount={totalAeurSellAmount} /> : <AEUR amount={totalAeurBuyAmount} />}
                     </td>
-                    <td>{isSell ? <ETH raw amount={totalEthSellAmount} /> : <ETH raw amount={totalEthBuyAmount} />}</td>
+                    <td>{isSell ? <ETH amount={totalEthSellAmount} /> : <ETH amount={totalEthBuyAmount} />}</td>
                     <td colSpan="3" />
                 </tr>
             </tfoot>
@@ -196,8 +195,6 @@ export default class OrderBook extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         const orderDirection = orderBookDirection;
 
-        console.log("rates info", this.props.rates.info);
-
         const header = (
             <div>
                 {mainHeader}
@@ -208,6 +205,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Sellers
                     </Menu.Item>
@@ -217,6 +215,7 @@ export default class OrderBook extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyOrdersMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         A-EUR Buyers
                     </Menu.Item>

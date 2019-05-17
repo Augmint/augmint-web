@@ -9,32 +9,13 @@ import Rail from "components/augmint-ui/rail";
 
 import { BalanceIcon, InterchangeIcon } from "components/Icons";
 
-import { keyFeatures, keyBenefits, howItWorks, founders, teamMembers, partners } from "./helpers.js";
-import { Member } from "./member.js";
+import { keyFeatures, keyBenefits, howItWorks } from "./helpers.js";
 
 import { theme } from "styles/media";
 import "./styles.css";
 import * as styles from "./styles.js";
-import slackIcon from "assets/images/slack-icon.svg";
 
 export default class NotConnectedHome extends React.Component {
-    constructor() {
-        super();
-
-        teamMembers.sort(function(a, b) {
-            var nameA = a.lastName.toUpperCase();
-            var nameB = b.lastName.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            // names must be equal
-            return 0;
-        });
-    }
-
     render() {
         return (
             <article>
@@ -266,62 +247,6 @@ export default class NotConnectedHome extends React.Component {
                                 Try now
                             </Button>
                         </div>
-                    </Container>
-                </section>
-                <section style={{ textAlign: "left" }} className="team segment">
-                    <Container className="homePage wider">
-                        <Header as="h2">Team</Header>
-
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid" style={{ marginBottom: 75 }}>
-                                {founders.map(member => (
-                                    <Member member={member} key={member.pk} />
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid">
-                                {teamMembers.map(member => (
-                                    <Member member={member} key={member.pk} />
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
-                    </Container>
-                </section>
-                <section className="partner segment" style={{ marginTop: 50, textAlign: "center" }}>
-                    <Container className="homePage wider">
-                        <ThemeProvider theme={theme}>
-                            <Grid className="grid">
-                                {partners.map(partner => (
-                                    <Grid.Unit
-                                        className="column"
-                                        size={{ tablet: 1, desktop: 1 / 2 }}
-                                        style={{ textAlign: "left" }}
-                                        key={partner.pk}
-                                    >
-                                        <img src={partner.imgSrc} alt={partner.pk} />
-                                        <Header as="h3">{partner.name}</Header>
-                                        {partner.description && (
-                                            <p
-                                                className="description"
-                                                dangerouslySetInnerHTML={{ __html: partner.description }}
-                                                style={{ marginBottom: 3 }}
-                                            />
-                                        )}
-                                        {partner.slackUrl && (
-                                            <a href={partner.slackUrl} target="_blank" rel="noopener noreferrer">
-                                                <img
-                                                    alt="slack icon"
-                                                    src={slackIcon}
-                                                    style={{ height: 14, marginRight: 10, width: 14 }}
-                                                />
-                                                {partner.slackText || "Join our slack."}
-                                            </a>
-                                        )}
-                                    </Grid.Unit>
-                                ))}
-                            </Grid>
-                        </ThemeProvider>
                     </Container>
                 </section>
             </article>

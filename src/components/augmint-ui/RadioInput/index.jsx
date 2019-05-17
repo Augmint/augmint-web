@@ -16,7 +16,7 @@ export default function RadioInput(props) {
                     onChange={props.input.onChange}
                     {...other}
                 />
-                <label for={id}>
+                <label htmlFor={id}>
                     <div data-testid={"label-" + id}>{label}</div>
                 </label>
             </StyledContainer>

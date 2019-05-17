@@ -1,48 +1,61 @@
 import React from "react";
 import styled from "styled-components";
 import { DECIMALS } from "utils/constants";
-import utils from "web3";
 
 const NoWrap = styled.span`
     white-space: nowrap;
 `;
 
+function isEmpty(n) {
+    return n === undefined || n === null;
+}
+
 function signum(n) {
-    /*eslint eqeqeq: 0*/
-    return n == 0 ? "zero" : n > 0 ? "positive" : "negative";
-    /*eslint eqeqeq: 1*/
+    // eslint-disable-next-line eqeqeq
+    return isEmpty(n) ? "empty" : n == 0 ? "zero" : n > 0 ? "positive" : "negative";
+}
+
+function format(n, decimals, symbol) {
+    const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    return (
+        <React.Fragment>
+            {fmt.format(n)}
+            <span className="symbol"> {symbol}</span>
+        </React.Fragment>
+    );
 }
 
 /*
-    amount: amount to display (an integer in the smallest unit of account)
-    raw: set to true, if amount is a floating point num (the number will be printed without unit conversion)
+    amount: amount to display
+    raw: set to true, if amount is an integer in the smallest unit of account
+    decimals: defaults to token decimals
  */
 export class AEUR extends React.Component {
     render() {
-        const { amount, raw, className, ...rest } = this.props;
-        const amt = raw ? amount : amount / Math.pow(10, DECIMALS);
+        const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
+        const amt = isEmpty(amount) ? null : raw ? amount / Math.pow(10, DECIMALS) : amount;
         const cls = ["AEUR", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt.toFixed(DECIMALS)} A€
+                {amt !== null && format(amt, decimals, "A€")}
             </NoWrap>
         );
     }
 }
 
 /*
-    amount: amount to display (an integer in the smallest unit of account, Wei)
-    raw: set to true, if amount is a floating point num (the number will be printed without unit conversion)
-    decimals: default to 5
+    amount: amount to display
+    raw: set to true, if amount is an integer in the smallest unit of account (wei)
+    decimals: defaults to 4
  */
 export class ETH extends React.Component {
     render() {
-        const { amount, raw, className, decimals = 5, ...rest } = this.props;
-        const amt = raw ? amount : utils.fromWei(amount);
+        const { amount, raw, className, decimals = 4, ...rest } = this.props;
+        const amt = isEmpty(amount) ? null : raw ? amount / Math.pow(10, 18) : amount;
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>
-                {amt.toFixed(decimals)} ETH
+                {amt !== null && format(amt, decimals, "ETH")}
             </NoWrap>
         );
     }

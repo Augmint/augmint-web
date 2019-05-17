@@ -2,9 +2,9 @@ import store from "modules/store";
 import {
     fetchOrders,
     placeOrderTx,
-    matchOrdersTx,
     matchMultipleOrdersTx,
-    cancelOrderTx
+    cancelOrderTx,
+    getSimpleBuyCalc
 } from "modules/ethereum/exchangeTransactions";
 
 export const TOKEN_BUY = 0;
@@ -18,10 +18,6 @@ export const PLACE_ORDER_REQUESTED = "orders/PLACE_ORDER_REQUESTED";
 export const PLACE_ORDER_ERROR = "orders/PLACE_ORDER_ERROR";
 export const PLACE_ORDER_SUCCESS = "orders/PLACE_ORDER_SUCCESS";
 
-export const MATCH_ORDERS_REQUESTED = "orders/MATCH_ORDERS_REQUESTED";
-export const MATCH_ORDERS_ERROR = "orders/MATCH_ORDERS_ERROR";
-export const MATCH_ORDERS_SUCCESS = "orders/MATCH_ORDERS_SUCCESS";
-
 export const MATCH_MULTIPLE_ORDERS_REQUESTED = "orders/MATCH_MULTIPLE_ORDERS_REQUESTED";
 export const MATCH_MULTIPLE_ORDERS_ERROR = "orders/MATCH_MULTIPLE_ORDERS_ERROR";
 export const MATCH_MULTIPLE_ORDERS_SUCCESS = "orders/MATCH_MULTIPLE_ORDERS_SUCCESS";
@@ -29,6 +25,10 @@ export const MATCH_MULTIPLE_ORDERS_SUCCESS = "orders/MATCH_MULTIPLE_ORDERS_SUCCE
 export const CANCEL_ORDER_REQUESTED = "orders/CANCEL_ORDER_REQUESTED";
 export const CANCEL_ORDER_ERROR = "orders/CANCEL_ORDER_ERROR";
 export const CANCEL_ORDER_SUCCESS = "orders/CANCEL_ORDER_SUCCESS";
+
+export const SIMPLE_BUY_REQUESTED = "orders/SIMPLE_BUY_REQUESTED";
+export const SIMPLE_BUY_SUCCESS = "orders/SIMPLE_BUY_SUCCESS";
+export const SIMPLE_BUY_ERROR = "orders/SIMPLE_BUY_ERROR";
 
 const initialState = {
     refreshError: null,
@@ -62,16 +62,18 @@ export default (state = initialState, action) => {
             };
 
         case PLACE_ORDER_ERROR:
-        case MATCH_ORDERS_ERROR:
+        case MATCH_MULTIPLE_ORDERS_ERROR:
         case CANCEL_ORDER_ERROR:
+        case SIMPLE_BUY_ERROR:
             return {
                 ...state,
                 error: action.error
             };
 
         case PLACE_ORDER_SUCCESS:
-        case MATCH_ORDERS_SUCCESS:
+        case MATCH_MULTIPLE_ORDERS_SUCCESS:
         case CANCEL_ORDER_SUCCESS:
+        case SIMPLE_BUY_SUCCESS:
             return {
                 ...state,
                 result: action.result
@@ -86,12 +88,10 @@ export default (state = initialState, action) => {
                 direction: action.orderType
             };
 
-        case MATCH_ORDERS_REQUESTED:
+        case MATCH_MULTIPLE_ORDERS_REQUESTED:
             return {
                 ...state,
-                error: null,
-                buyOrder: action.buyOrder,
-                sellOrder: action.sellOrder
+                error: null
             };
 
         case CANCEL_ORDER_REQUESTED:
@@ -100,6 +100,14 @@ export default (state = initialState, action) => {
                 error: null,
                 buyOrder: action.buyOrder,
                 sellOrder: action.sellOrder
+            };
+
+        case SIMPLE_BUY_REQUESTED:
+            return {
+                ...state,
+                tokenAmount: 0,
+                buy: true,
+                rate: 0
             };
 
         default:
@@ -154,29 +162,6 @@ export function placeOrder(orderType, amount, price) {
     };
 }
 
-export function matchOrders(buyOrder, sellOrder) {
-    return async dispatch => {
-        dispatch({
-            type: MATCH_ORDERS_REQUESTED,
-            buyOrder: buyOrder,
-            sellOrder: sellOrder
-        });
-
-        try {
-            const result = await matchOrdersTx(buyOrder.id, sellOrder.id);
-            return dispatch({
-                type: MATCH_ORDERS_SUCCESS,
-                result: result
-            });
-        } catch (error) {
-            return dispatch({
-                type: MATCH_ORDERS_ERROR,
-                error: error
-            });
-        }
-    };
-}
-
 export function matchMultipleOrders() {
     return async dispatch => {
         dispatch({ type: MATCH_MULTIPLE_ORDERS_REQUESTED });
@@ -213,6 +198,30 @@ export function cancelOrder(order) {
         } catch (error) {
             return dispatch({
                 type: CANCEL_ORDER_ERROR,
+                error: error
+            });
+        }
+    };
+}
+
+export function getSimpleBuy(token, isBuy, rate) {
+    return async dispatch => {
+        dispatch({
+            type: SIMPLE_BUY_REQUESTED,
+            token,
+            isBuy,
+            rate
+        });
+
+        try {
+            const result = await getSimpleBuyCalc(token, isBuy, rate);
+            return dispatch({
+                type: SIMPLE_BUY_SUCCESS,
+                result: result
+            });
+        } catch (error) {
+            return dispatch({
+                type: SIMPLE_BUY_ERROR,
                 error: error
             });
         }

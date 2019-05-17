@@ -1,20 +1,15 @@
-export function matchOrders(n, orders, direction, rate) {
-    // buy n amount of aeurotoken for price at rate from orders
+export function matchOrders(n, orders, direction) {
     let tokens = 0;
     let ethers = 0;
     let prices = { total: 0, list: [] };
-    let index = 0;
-    let remains = [];
 
     orders.forEach(i => {
         let amount = 0;
         if (tokens < n) {
             if (i.amount >= n + tokens) {
                 amount = n;
-                remains.push({ price: i.price, amount: i.amount - n });
             } else if (i.amount < n + tokens && n - tokens < i.amount) {
                 amount = n - tokens;
-                remains.push({ price: i.price, amount: i.amount - (n - tokens) });
             } else if (i.amount < n + tokens && n - tokens >= i.amount) {
                 amount = i.amount;
                 ethers += i.ethers;
@@ -23,9 +18,6 @@ export function matchOrders(n, orders, direction, rate) {
             ethers += (i.ethers * amount) / i.amount;
             prices.total += i.price * amount;
             prices.list.push(i.price);
-            index++;
-        } else {
-            remains.push({ price: i.price, amount: i.amount, ethers: i.ethers });
         }
     });
 

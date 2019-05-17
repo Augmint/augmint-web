@@ -1,4 +1,3 @@
-/* TODO: consider moving processTx somewhere else */
 import store from "modules/store";
 import { updateTx, updateTxNonce } from "modules/reducers/submittedTransactions";
 import { getNetworkName } from "utils/helpers";
@@ -37,7 +36,9 @@ export async function getNetworkDetails(web3) {
     };
 }
 
-/* returns a Promise which resolves a transactionHash and then dispatches
+/**
+    This is the deprecated  process tx using web3.js events. Use sendAndProcessTx instead!
+    returns a Promise which resolves a transactionHash and then dispatches
 use onReceipt cb arg to do extra checks on the receipt (throw an EthereumTransactionError or return processed args)
 */
 export function processTx(tx, txName, gasEstimate, onReceipt, payload) {
@@ -138,4 +139,60 @@ function getTxNonce(transactionHash) {
             // TODO
         }
     });
+}
+
+/**
+ *
+ * Use this with new augmint.js transaction (Transaction object style)
+ * Resolves with a transactionHash then dispatches updateTx with confirmations
+ * Throws if error with send (e.g. user denies signature)
+ * If tx reverts then dispatches updateTx with error
+ * @export
+ * @param {ITransaction} tx
+ * @param {string} txName    tx name displayed to user
+ * @param {function} formatReceiptDataCb optional callback fumction to extract and format receipt data
+ */
+export async function sendAndProcessTx(tx, txName, formatReceiptDataCb) {
+    const userAccount = store.getState().web3Connect.userAccount;
+
+    const transactionHash = await tx
+
+        .onConfirmation(confirmationNumber => {
+            if (!tx.sendError) {
+                store.dispatch(updateTx({ event: "confirmation", txName, transactionHash, confirmationNumber }));
+            }
+        })
+
+        .onceTxRevert((_error, receipt) => {
+            // EthereumTxStatus component handles the error
+            const error = new EthereumTransactionError(`${txName} failed`, _error, receipt, tx.sendOptions.gasLimit);
+            store.dispatch(updateTx({ event: "error", txName, transactionHash, error }));
+        })
+
+        .onceReceipt(receipt => {
+            console.debug(
+                `  ${txName} receipt received.  gasUsed: ${receipt.gasUsed} txhash: ${receipt.transactionHash}`,
+                receipt
+            );
+            const formattedReceiptData = formatReceiptDataCb ? formatReceiptDataCb(receipt) : null;
+
+            store.dispatch(
+                updateTx({
+                    event: "receipt",
+                    txName,
+                    transactionHash: receipt.transactionHash,
+                    receipt,
+                    formattedReceiptData
+                })
+            );
+        })
+
+        .send({ from: userAccount })
+
+        .getTxHash();
+
+    store.dispatch(updateTx({ event: "transactionHash", txName, transactionHash }));
+    getTxNonce(transactionHash); // TODO: implement this in augmint-js
+
+    return transactionHash;
 }

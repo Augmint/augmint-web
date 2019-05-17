@@ -1,4 +1,7 @@
+import BN from "bn.js";
+
 export const ONE_ETH_IN_WEI = 1e18;
+export const BN_ONE_ETH_IN_WEI = new BN("1000000000000000000"); //  asserttion failed with this: new BN(ONE_ETH_IN_WEI)
 
 /* augmintToken decimals. used when AugmintToken contract is not yet isConnected
     otherwise available as: store.getState().augmintToken.info.decimalsDiv
@@ -23,6 +26,7 @@ export const MIN_LOAN_AMOUNT_ADJUSTMENT = 1.25;
 
 export const LOAN_STATES = ["Open", "Repaid", "Defaulted", "Collected"];
 
+/* NOTE: These are being migrate to be read from @augmint/js Augmint.constants.SUPPORTED_LEGACY_XXXX
 /* List of old augmint token deploy addresses by network id */
 export const LEGACY_AEUR_CONTRACTS = {
     // mainnet (no deploy yet)
@@ -134,22 +138,6 @@ export const LEGACY_RESERVES_CONTRACTS = {
             tokenAddress: "0x0557183334edc23a666201edc6b0aa2787e2ad3f"
         }
     ]
-};
-
-/* List of old augmint token deploy addresses by network id */
-export const LEGACY_EXCHANGE_CONTRACTS = {
-    // mainnet
-    1: [
-        "0x8b52b019d237d0bbe8Baedf219132D5254e0690b", // initial Exchange, replaced by 0xeae7d30bcd44f27d58985b56add007fcee254abd
-        "0xeae7d30bcd44f27d58985b56add007fcee254abd", // replaced by 0.6.1 at 0xaFEA54baDf7A68F93C2235B5F4cC8F02a2b55Edd
-        "0xafea54badf7a68f93c2235b5f4cc8f02a2b55edd"
-    ],
-
-    // local ganache (migrations deploys it for manual testing)
-    999: ["0xef49d863bd9179da0e96fab02dd498efa149dbdc"],
-
-    // rinkeby
-    4: ["0xdf47d51028daff13424f42523fdac73079ab901b"]
 };
 
 export const AVG_BLOCK_TIME = 14; // 14 sec

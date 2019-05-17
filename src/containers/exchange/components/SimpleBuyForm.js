@@ -10,7 +10,7 @@ import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Field, formValueSelector, reduxForm, SubmissionError } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
-import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
+import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL, getSimpleBuy } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
@@ -58,12 +58,13 @@ class SimpleBuyForm extends React.Component {
             this.state.orderDirection === TOKEN_BUY
                 ? this.props.orders.orders.sellOrders
                 : this.props.orders.orders.buyOrders;
+        const isBuy = this.state.orderDirection === TOKEN_BUY;
         const orders = this.state.orders.length ? this.state.orders : initOrders;
         const { ethFiatRate } = this.props.rates.info;
         const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
 
-        if (this.state.orderList.length) {
-            return matchOrders(token, this.state.orderList);
+        if (this.state.orderList.length > 0) {
+            return matchOrders(token, this.state.orderList, this.state.orderDirection);
         } else {
             const orderList = orders.map(order => {
                 if (this.state.orderDirection === TOKEN_BUY) {
@@ -77,15 +78,34 @@ class SimpleBuyForm extends React.Component {
             });
             this.setState({ orderList });
 
-            return matchOrders(token, orderList, this.state.orderDirection, bn_ethFiatRate);
+            console.log(orderList);
+
+            return matchOrders(token, orderList, this.state.orderDirection);
+        }
+    }
+
+    async getSimpleResult(token) {
+        const { ethFiatRate } = this.props.rates.info;
+        const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
+        const isBuy = this.state.orderDirection === TOKEN_BUY;
+
+        const res = await store.dispatch(getSimpleBuy(token, isBuy, bn_ethFiatRate));
+
+        if (res.type !== PLACE_ORDER_SUCCESS) {
+            throw new SubmissionError({
+                _error: res.error
+            });
+        } else {
+            this.setState({
+                simpleBuyResult: res.result
+            });
+            return;
         }
     }
 
     onTokenAmountChange(e) {
         const value = e.target.value;
         const simpleResult = value > 0 ? this.calcMatchResults(parseFloat(value)) : null;
-
-        console.debug("match result", simpleResult);
 
         this.setState({
             simpleResult

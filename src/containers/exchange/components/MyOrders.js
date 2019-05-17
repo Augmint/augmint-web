@@ -30,13 +30,13 @@ const OrderItem = props => {
             <Col width={2}>{order.direction === TOKEN_SELL ? "Sell A€" : "Buy A€"}</Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_BUY && <ETH raw amount={order.amount} />}
-                {order.direction === TOKEN_SELL && <ETH raw amount={actualValue} />}
+                {order.direction === TOKEN_BUY && <ETH amount={order.amount} />}
+                {order.direction === TOKEN_SELL && <ETH amount={actualValue} />}
             </Col>
 
             <Col width={3}>
-                {order.direction === TOKEN_SELL && <AEUR raw amount={order.amount} />}
-                {order.direction === TOKEN_BUY && <AEUR raw amount={actualValue} />}
+                {order.direction === TOKEN_SELL && <AEUR amount={order.amount} />}
+                {order.direction === TOKEN_BUY && <AEUR amount={actualValue} />}
             </Col>
 
             <Col width={2}>{displayPrice}%</Col>
@@ -123,7 +123,7 @@ export default class OrderBook extends React.Component {
         const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o2.id - o1.id);
 
         const totalBuyAmount = orders
-            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0).toFixed(6))
+            ? parseFloat(buyOrders.reduce((sum, order) => order.bnEthAmount.add(sum), 0).toFixed(6))
             : "?";
         const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.amount + sum, 0).toFixed(2) : "?";
 

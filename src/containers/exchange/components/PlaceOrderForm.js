@@ -3,6 +3,7 @@ TODO: input formatting: decimals, thousand separators
   */
 
 import React from "react";
+
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
@@ -16,6 +17,7 @@ import { PriceToolTip } from "./ExchangeToolTips";
 
 import theme from "styles/theme";
 import styled from "styled-components";
+import "./styles.css";
 
 const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
@@ -175,16 +177,19 @@ class PlaceOrderForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const header = (
             <div>
                 {mainHeader}
-                <Menu style={{ marginBottom: -11 }}>
+                <Menu>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
                         onClick={this.onOrderDirectionChange}
                         data-testid="buyMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -194,6 +199,7 @@ class PlaceOrderForm extends React.Component {
                         onClick={this.onOrderDirectionChange}
                         data-testid="sellMenuLink"
                         className={"buySell"}
+                        tabIndex="0"
                     >
                         Sell A-EUR
                     </Menu.Item>
@@ -202,7 +208,11 @@ class PlaceOrderForm extends React.Component {
         );
 
         return (
-            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
+            <Pblock
+                className="placeOrder-form"
+                loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
+                header={header}
+            >
                 <ConnectionStatus contract={this.props.exchange} />
 
                 {submitSucceeded && (
@@ -222,11 +232,10 @@ class PlaceOrderForm extends React.Component {
                             onDismiss={() => clearSubmitErrors()}
                         />
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: 0 }}>
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
                             </strong>
-                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
                         </Styledlabel>
                         <Field
                             name="tokenAmount"
@@ -243,9 +252,10 @@ class PlaceOrderForm extends React.Component {
                             data-testid="tokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            autoFocus={isDesktop}
                         />
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: "5px 0 0 0" }}>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
 
@@ -257,6 +267,9 @@ class PlaceOrderForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            info={`Calculated on current rate 1 ETH = ${(
+                                rates.info.ethFiatRate / this.parsePrice(this.props.price)
+                            ).toFixed(2)}A€`}
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onPriceChange}
                             validate={Validations.price}
@@ -265,23 +278,9 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="%"
                         />
-                        <div
-                            style={{
-                                marginTop: -10,
-                                marginBottom: 10,
-                                color: "#999",
-                                fontSize: "small",
-                                textAlign: "right"
-                            }}
-                        >
-                            calculated on current rate 1 ETH ={" "}
-                            {(rates.info.ethFiatRate / this.parsePrice(this.props.price)).toFixed(2)} A€
-                        </div>
 
-                        <Styledlabel>
-                            {orderDirection === TOKEN_BUY
-                                ? "ETH amount to sell"
-                                : "ETH amount to buy (calculated on current rate)"}
+                        <Styledlabel style={{ margin: 0 }}>
+                            {orderDirection === TOKEN_BUY ? "ETH amount to sell" : "ETH amount to buy"}
                         </Styledlabel>
 
                         <Field
@@ -306,6 +305,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={pristine}
                             data-testid="submitButton"
                             type="submit"
+                            className={"fullwidth"}
                         >
                             {submitting && "Submitting..."}
                             {!submitting &&
@@ -326,6 +326,8 @@ PlaceOrderForm = connect(state => {
 
 PlaceOrderForm = reduxForm({
     form: "PlaceOrderForm",
+    touchOnBlur: false,
+    touchOnChange: true,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check

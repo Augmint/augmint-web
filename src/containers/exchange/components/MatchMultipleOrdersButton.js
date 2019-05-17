@@ -44,25 +44,29 @@ class MatchMultipleOrdersButton extends React.Component {
         const { submitSucceeded, submitting, error, result } = this.state;
 
         const isMatching = sellOrder && buyOrder && sellOrder.price <= buyOrder.price;
+
         return (
-            <Pblock>
+            <Pblock style={!isMatching ? { display: "none" } : {}}>
                 {error && (
                     <EthSubmissionErrorPanel error={error} header="Order match failed." onDismiss={this.onDismiss}>
                         <p>Error matching the orders.</p>
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!isMatching && isLoaded && <p>No matching orders</p>}
-
                 {!submitSucceeded && isMatching && isLoaded && (
-                    <Button
-                        size={size}
-                        data-testid="matchMultipleOrdersButton"
-                        disabled={submitting === 0}
-                        onClick={this.handleClick}
-                    >
-                        {submitting ? "Submitting..." : label}
-                    </Button>
+                    <p>
+                        Automatic order matching will run soon. If it's taking too long, you may match orders yourself.
+                        <br />
+                        <br />
+                        <Button
+                            size={size}
+                            data-testid="matchMultipleOrdersButton"
+                            disabled={submitting === 0}
+                            onClick={this.handleClick}
+                        >
+                            {submitting ? "Submitting..." : label}
+                        </Button>
+                    </p>
                 )}
 
                 {submitSucceeded && (
