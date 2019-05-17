@@ -80,7 +80,7 @@ export default function LoanCard(props) {
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         {loan.isRepayable ? (
                             <div>
                                 <CardStatusInfo>
@@ -96,7 +96,7 @@ export default function LoanCard(props) {
                             <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
                         )}
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         <DataGroup>
                             <DataRow>
                                 <DataLabel>

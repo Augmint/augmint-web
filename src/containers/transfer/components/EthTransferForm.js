@@ -99,9 +99,12 @@ class EthTransferForm extends React.Component {
                         {!isFunctional && (
                             <div>
                                 <p style={{ display: "block", marginTop: 0, marginBottom: 10, marginLeft: 2 }}>
-                                    The recipient needs ETH to spend A-EUR, but does not have any.
+                                    The recipient needs ETH to spend <br />
+                                    A-EUR, but does not have any.
                                     <br />
-                                    Send a small amount enough for a few transactions:
+                                    Send a small amount enough
+                                    <br />
+                                    for a few transactions:
                                 </p>
                                 <Field
                                     name="ethAmount"
@@ -119,7 +122,7 @@ class EthTransferForm extends React.Component {
                                     style={{ borderRadius: theme.borderRadius.left }}
                                     labelAlignRight="ETH"
                                 />
-                                {!isNaN(this.state.amount) && (
+                                {!isNaN(this.state.amount) && this.state.amount > 0.00001 && (
                                     <p style={{ display: "block", marginTop: 0, marginBottom: 20, marginLeft: 2 }}>
                                         ≈€{amountInEur} (covers ≈{coverdTxs} transactions)
                                     </p>
@@ -130,7 +133,7 @@ class EthTransferForm extends React.Component {
                             type="submit"
                             loading={submitting}
                             data-testid="submitEthTransferButton"
-                            className={submitting ? "loading" : ""}
+                            className={"fullwidth"}
                         >
                             {submitting ? "Submitting..." : submitText || "Send ETH"}
                         </Button>
@@ -153,5 +156,7 @@ EthTransferForm = connect(mapStateToProps)(EthTransferForm);
 
 export default reduxForm({
     form: "EthTransferForm",
-    initialValues: { ethAmount: 0.01 }
+    initialValues: { ethAmount: 0.01 },
+    touchOnBlur: false,
+    touchOnChange: true
 })(EthTransferForm);

@@ -3,13 +3,15 @@ describe("Locks", function() {
         cy.get("[data-testid=lockMenuLink]").click();
         cy.get(`[data-testid=newLockLink]`).click();
 
-        cy.get(`[data-testid=selectLockProduct-${prodId}]`).then(() => {
-            cy.get("[data-testid=lockAmountInput]")
-                .type(disbursedAmount.toString())
-                .should("have.value", disbursedAmount.toString());
-        });
+        cy.wait(50);
+        cy.get(`[data-testid=lock-product-selector]`)
+            .select(prodId.toString(), { force: true })
+            .should("have.value", prodId.toString());
 
-        cy.get(`[data-testid=selectLockProduct-${prodId}]`).click();
+        cy.get("[data-testid=lockAmountInput]")
+            .clear()
+            .type(disbursedAmount.toString())
+            .should("have.value", disbursedAmount.toString());
 
         cy.get(`[data-testid=submitButton]`).click();
         cy.get("[data-testid=EthSubmissionSuccessPanel]").contains("New Lock submitted");
@@ -38,15 +40,17 @@ describe("Locks", function() {
 
     it("Should release locked A-EUR", function() {
         getLock(9, 50).then(() => {
+            cy.wait(1000); // to make sure the lock is releasable
             cy.get("[data-testid=lockMenuLink]")
                 .click()
                 .then(() => {
                     cy.get("[data-testid=lockCard] [data-testid=releaseLockButton]")
                         .first()
                         .click();
-                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]", {
-                        timeout: 20000
-                    });
+                    cy.get("[data-testid=EthSubmissionSuccessPanel] > [data-testid=msgPanelOkButton]");
+
+                    cy.get("[data-testid=EthConfirmationReceivedPanel]").contains("confirmation");
+                    cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
                 });
         });
     });

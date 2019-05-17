@@ -58,14 +58,14 @@ class TxInfo extends React.Component {
         const map = {
             FROM_LOAN: "New loan",
             TO_LOAN: "Loan repayment",
-            FROM_LOCK: "Lock in release",
-            TO_LOCK: "New lock in",
+            FROM_LOCK: "Lock release",
+            TO_LOCK: "New lock",
             FROM_EXCHANGE: "Incoming from Exchange",
             TO_EXCHANGE: "Sell order",
             FROM_TRANSFER: "Incoming transfer",
             TO_TRANSFER: "Outgoing transfer"
         };
-        const type = this.getAddressType(tx.direction > 0 ? tx.args.from : tx.args.to);
+        const type = this.getAddressType(tx.direction > 0 ? tx.from : tx.to);
         return map[`${tx.direction > 0 ? "FROM" : "TO"}_${type}`];
     }
 
@@ -84,13 +84,13 @@ class TxInfo extends React.Component {
                 </div>
                 <TxDetails data-testid="txDetails">
                     <AccountAddress
-                        address={tx.direction < 0 ? tx.args.to : tx.args.from}
+                        address={tx.direction < 0 ? tx.to : tx.from}
                         title={tx.direction < 0 ? "To: " : "From: "}
                         shortAddress={true}
                         showCopyIcon={false}
                     />
                     <br />
-                    {tx.args.narrative}
+                    {tx.narrative}
                 </TxDetails>
             </div>
         );

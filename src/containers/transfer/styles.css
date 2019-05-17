@@ -1,0 +1,22 @@
+.transfer .column {
+    max-width: 350px;
+    flex-basis: 350px;
+    margin: 1rem;
+}
+
+/* tablet */
+@media (max-width: 768px) {
+    .transfer .column {
+        margin: 1em auto 1em auto;
+        max-width: 350px;
+    }
+}
+
+/* mobile */
+@media (max-width: 376px) {
+    .transfer .column {
+        width: 100%;
+        margin: 1em 0;
+        max-width: 100%;
+    }
+}

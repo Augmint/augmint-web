@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { NavLink } from "react-router-dom";
 
@@ -44,7 +45,7 @@ export const SideNav = styled.nav`
     flex-direction: column;
     top: 0;
     left: 0;
-    width: 180px;
+    width: 210px;
     height: 100%;
     z-index: 104;
     padding: 20px 0;
@@ -89,6 +90,7 @@ export const SideNavUl = styled.ul`
     ${breakpoint`
       display: block;
       visibility: visible;
+      margin-top: 50px;
       &.hidden {
         display: none;
         visibility: hidden;
@@ -100,7 +102,7 @@ export const SideNavLi = styled.li`
     margin-bottom: 10px;
     width: 100%;
     ${breakpoint`
-        max-width: 150px;
+        max-width: 260px;
         margin: auto;
         text-align: left;
     `};
@@ -123,6 +125,7 @@ export const SideNavLink = styled(NavLink)`
     opacity: 0.9;
     transition: opacity ${theme.transitions.fast};
     border-left: 3px solid transparent;
+    box-sizing: border-box;
 
     &:hover {
         color: ${theme.colors.secondary};
@@ -152,13 +155,13 @@ export const SideNavLink = styled(NavLink)`
         text-transform: uppercase;
         font-size: 12px;
         ${breakpoint`
-            font-size: ${remCalc(20)};
-            line-height: 2.4rem;
+            font-size: ${remCalc(18)};
+            line-height: 2rem;
         `};
     }
 `;
 
-export default class SiteNav extends React.Component {
+class SiteNav extends React.Component {
     constructor(props) {
         super(props);
         this.toggleMenu = this.toggleMenu.bind(this);
@@ -176,6 +179,17 @@ export default class SiteNav extends React.Component {
     }
 
     render() {
+        const loans = this.props.loans;
+        let hasActiveLoan = false;
+        if (loans.isLoaded) {
+            hasActiveLoan = loans.loans.filter(loan => loan.isRepayable).length;
+        }
+        const locks = this.props.locks;
+        let hasActiveLock = false;
+        if (!locks.isLoading) {
+            hasActiveLock = locks.locks.filter(lock => lock.isActive).length;
+        }
+
         return (
             <SideNav className={this.props.showMenu ? "opened" : "closed"}>
                 <HamburgerMenu
@@ -200,33 +214,47 @@ export default class SiteNav extends React.Component {
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
+                        <SideNavLink to="/transfer" activeClassName="active" data-testid="transferMenuLink">
+                            <Icon name="send" />
+                            <span>Send A-EUR</span>
+                        </SideNavLink>
+                    </SideNavLi>
+                    <SideNavLi>
                         <SideNavLink to="/exchange" activeClassName="active" data-testid="exchangeMenuLink">
                             <Icon name="exchange" />
-                            <span>Buy/Sell</span>
+                            <span>Exchange Crypto</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/transfer" activeClassName="active" data-testid="trasnferMenuLink">
-                            <Icon name="send" />
-                            <span>Send</span>
+                        <SideNavLink to="/exchangeFiat" activeClassName="active" data-testid="fundingMenuLink">
+                            <Icon name="reserves" />
+                            <span>Exchange Fiat</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/loan" activeClassName="active" data-testid="loanMenuLink">
+                        <SideNavLink
+                            to={hasActiveLoan ? "/loan" : "/loan/new"}
+                            activeClassName="active"
+                            data-testid="loanMenuLink"
+                        >
                             <Icon name="loan" />
                             <span>Loan</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
-                        <SideNavLink to="/lock" activeClassName="active" data-testid="lockMenuLink">
+                        <SideNavLink
+                            to={hasActiveLock ? "/lock" : "/lock/new"}
+                            activeClassName="active"
+                            data-testid="lockMenuLink"
+                        >
                             <Icon name="lock" />
                             <span>Lock</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi>
                         <SideNavLink to="/stability" activeClassName="active" data-testid="reservesMenuLink">
-                            <Icon name="reserves" />
-                            <span>Stability</span>
+                            <Icon name="balance-scale" />
+                            <span>Stability Report</span>
                         </SideNavLink>
                     </SideNavLi>
                     <SideNavLi className="notifications">
@@ -248,3 +276,12 @@ export default class SiteNav extends React.Component {
         );
     }
 }
+
+const mapStateToProps = function(state) {
+    return {
+        loans: state.loans,
+        locks: state.locks
+    };
+};
+
+export default connect(mapStateToProps)(SiteNav);
