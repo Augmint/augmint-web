@@ -1,19 +1,17 @@
 import React from "react";
 
+import { theme } from "styles/media";
+import * as styles from "./styles.js";
+import "./styles.css";
+
 import Grid from "styled-components-grid";
 import { ThemeProvider } from "styled-components";
 import Container from "components/augmint-ui/container";
 import Header from "components/augmint-ui/header";
 import Button from "components/augmint-ui/button";
 import { keyFeatures } from "./helpers.js";
-
 import { InterchangeIcon } from "components/Icons";
 import Convertible from "./../convertible.js";
-
-import { theme } from "styles/media";
-import "./styles.css";
-import * as styles from "./styles.js";
-
 import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
 import augmintLogo from "assets/images/logo/augmint.svg";
 
@@ -183,8 +181,7 @@ export default class NotConnectedHome extends React.Component {
                                             <br /> Your bonus earning is immediately
                                             <br /> accounted - not just a promise. 
                                             <br /> It’s still yours, locked in a smart contract.
-                                            <br />
-                                              Nobody can play with your money.
+                                            <br />  Nobody can play with your money.
                                         </p>
                                         <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                             Calculate your bonus
