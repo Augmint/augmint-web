@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { DECIMALS } from "utils/constants";
+import { DECIMALS, ETH_DECIMALS } from "utils/constants";
 
 const NoWrap = styled.span`
     white-space: nowrap;
@@ -46,11 +46,11 @@ export class AEUR extends React.Component {
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account (wei)
-    decimals: defaults to 4
+    decimals: defaults to ETH_DECIMALS
  */
 export class ETH extends React.Component {
     render() {
-        const { amount, raw, className, decimals = 4, ...rest } = this.props;
+        const { amount, raw, className, decimals = ETH_DECIMALS, ...rest } = this.props;
         const amt = isEmpty(amount) ? null : raw ? amount / Math.pow(10, 18) : amount;
         const cls = ["ETH", className, signum(amt)].join(" ");
         return (

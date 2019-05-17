@@ -16,11 +16,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 import theme from "styles/theme";
-import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
-
-const ETH_DECIMALS = 5;
-const TOKEN_DECIMALS = 2;
-const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
+import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR, ETH_DECIMALS, DECIMALS_DIV } from "utils/constants";
 
 const StyledBox = styled.div`
     border-radius: 3px;
@@ -349,12 +345,7 @@ class NewLoanForm extends React.Component {
                             <div className="loan-results">
                                 <StyledBox className={notEnoughEth ? "validation-error" : ""}>
                                     You will need to transfer
-                                    <ETH
-                                        className="box-val"
-                                        data-testid="ethAmount"
-                                        amount={this.state.ethAmount}
-                                        decimals={ETH_DECIMALS}
-                                    />
+                                    <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
                                     as collateral to secure this loan.
                                 </StyledBox>
                                 {notEnoughEth && (
@@ -375,7 +366,7 @@ class NewLoanForm extends React.Component {
                                         <strong>{repayBefore}</strong>
                                         <br />
                                         {"to get your "}
-                                        <ETH amount={this.state.ethAmount} decimals={ETH_DECIMALS} />
+                                        <ETH amount={this.state.ethAmount} />
                                         {" collateral back."}
                                     </p>
                                 </div>
