@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
 
-const ETH_DECIMALS = 4;
+const ETH_DECIMALS = 5;
 const TOKEN_DECIMALS = 2;
 const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
 
@@ -47,12 +47,12 @@ const StyledBox = styled.div`
         }
     }
     &.validation-error {
-      border: 2px solid ${theme.colors.darkRed}
-      background-color: ${theme.colors.lightRed}
-      margin-bottom: 0;
-      & .box-val {
-        color: ${theme.colors.darkRed}
-      }
+        border: 2px solid ${theme.colors.darkRed};
+        background-color: ${theme.colors.lightRed};
+        margin-bottom: 0;
+        & .box-val {
+            color: ${theme.colors.darkRed};
+        }
     }
 `;
 
@@ -349,7 +349,12 @@ class NewLoanForm extends React.Component {
                             <div className="loan-results">
                                 <StyledBox className={notEnoughEth ? "validation-error" : ""}>
                                     You will need to transfer
-                                    <ETH className="box-val" data-testid="ethAmount" amount={this.state.ethAmount} />
+                                    <ETH
+                                        className="box-val"
+                                        data-testid="ethAmount"
+                                        amount={this.state.ethAmount}
+                                        decimals={5}
+                                    />
                                     as collateral to secure this loan.
                                 </StyledBox>
                                 {notEnoughEth && (
@@ -370,7 +375,7 @@ class NewLoanForm extends React.Component {
                                         <strong>{repayBefore}</strong>
                                         <br />
                                         {"to get your "}
-                                        <ETH amount={this.state.ethAmount} />
+                                        <ETH amount={this.state.ethAmount} decimals={5} />
                                         {" collateral back."}
                                     </p>
                                 </div>
