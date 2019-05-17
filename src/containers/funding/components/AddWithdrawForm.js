@@ -7,6 +7,7 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
+import { DECIMALS, ETH_DECIMALS } from "utils/constants";
 
 import theme from "styles/theme";
 
@@ -14,9 +15,6 @@ import { FUNDS } from "./FundList/funds.js";
 
 export const WITHDRAW = "withdraw";
 export const ADDFUND = "addFunds";
-
-const ETH_DECIMALS = 5;
-const TOKEN_DECIMALS = 2;
 
 class AddWithdrawForm extends React.Component {
     constructor(props) {
@@ -55,7 +53,7 @@ class AddWithdrawForm extends React.Component {
             const ethAmount = parseFloat(_ethAmount);
             if (!isNaN(ethAmount) && isFinite(ethAmount)) {
                 const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
-                this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
+                this.props.change("tokenAmount", Number(tokenValue.toFixed(DECIMALS)));
             } else {
                 //  ethAmount is not entered yet
                 this.props.change("tokenAmount", "");

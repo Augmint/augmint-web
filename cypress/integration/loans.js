@@ -35,7 +35,7 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(8, 50, 50.01, 0.0507).then(res => {
+        getLoan(8, 50, 50.01, 0.05062).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                 .first()
                 .click({
@@ -65,7 +65,7 @@ describe("Loans", function() {
     });
 
     it("Should repay a loan", function() {
-        getLoan("0", 51, 59.68, 0.1088).then(() => {
+        getLoan("7", 50, 50.01, 0.05114).then(() => {
             // TODO : little differences between amounts caused by rounding and decimals
             // cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
@@ -85,7 +85,7 @@ describe("Loans", function() {
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
-            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 8.68); // interest
+            cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 0.01); // interest
 
             // TODO loan removed, status etc.
             //cy.get("[data-testid=myAccountMenuLink]").click();
