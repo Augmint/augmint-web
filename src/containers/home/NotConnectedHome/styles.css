@@ -190,6 +190,15 @@ a.try-now {
 .homePage header {
     margin-bottom: 150px;
 }
+.homePage .ghost {
+    color: #ffad00;
+    border: 1px solid #ffad00;
+}
+.homePage .ghost:hover {
+    color: #e29a00;
+    border: 1px solid #e29a00;
+    background: none;
+}
 .homePage-row-header {
     padding-left: 1rem;
 }
@@ -213,7 +222,7 @@ a.try-now {
     align-items: center;
 }
 .product-box h4.box-header {
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 20px;
     font-size: 24px;
 }
