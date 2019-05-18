@@ -22,7 +22,7 @@
     "react-ga": "2.5.7",
     "react-redux": "7.0.2",
     "react-router-dom": "5.0.0",
-    "react-scripts": "3.0.0",
+    "react-scripts": "3.0.1",
     "react-scrollchor": "6.0.0",
     "react-tooltip": "3.10.0",
     "redux": "4.0.1",
@@ -55,9 +55,6 @@
     "prettier": "1.17.0",
     "pretty-quick": "1.10.0",
     "wait-on": "3.2.0"
-  },
-  "resolutions": {
-    "babel-jest": "24.7.1"
   },
   "greenkeeper": {
     "ignore": [
