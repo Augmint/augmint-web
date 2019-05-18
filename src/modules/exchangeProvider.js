@@ -6,6 +6,7 @@ import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 
 let isWatchSetup = false;
+let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const exchange = store.getState().contracts.latest.exchange;
@@ -16,7 +17,7 @@ export default () => {
             "exchangeProvider - first time. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
         );
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
 
     if (!isWatchSetup) {
@@ -28,16 +29,30 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
-    const exchange = store.getState().contracts.latest.exchange.ethersInstance;
-    exchange.on("NewOrder", (...args) => {
-        onNewOrder(...args);
+const setupContractEventListeners = async () => {
+    processedContractEvents = {};
+    const exchange = await store.getState().web3Connect.augmint.exchange;
+
+    // processedContractEvents is a Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
+    exchange.instance.events.NewOrder({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewOrder(error, event);
+        }
     });
-    exchange.on("OrderFill", (...args) => {
-        onOrderFill(...args);
+
+    exchange.instance.events.OrderFill({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onOrderFill(error, event);
+        }
     });
-    exchange.on("CancelledOrder", (...args) => {
-        onCancelledOrder(...args);
+
+    exchange.instance.events.CancelledOrder({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onCancelledOrder(error, event);
+        }
     });
 };
 
@@ -67,20 +82,27 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
             "exchangeProvider - new Exchange contract. Dispatching refreshExchange(), refreshOrders() and fetchTrades()"
         );
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
 };
 
 // event NewOrder(uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount, eventObject) {
+const onNewOrder = (error, event) => {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
+    // TODO: implement processOrder to avoid full orderBook reload
     store.dispatch(refreshOrders());
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade(userAccount, eventObject));
+
+    if (userAccount.toLowerCase() === event.returnValues.maker.toLowerCase()) {
+        store.dispatch(processNewTrade(userAccount, event));
     }
-    if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
+
+    if (
+        event.returnValues.weiAmount.toString() !== "0" &&
+        event.returnValues.maker.toLowerCase() === userAccount.toLowerCase()
+    ) {
         // buy order, no Transfer is emmitted so onNewTransfer is not triggered
         console.debug(
             "exchangeProvider.onNewOrder: new buy tokenOrder for current user, dispatching fetchUserBalance()"
@@ -90,15 +112,20 @@ const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount, event
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
-const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount, eventObject) {
+const onCancelledOrder = function(error, event) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount.toLowerCase() === maker.toLowerCase()) {
-        store.dispatch(processNewTrade(userAccount, eventObject));
+    if (userAccount.toLowerCase() === event.returnValues.maker.toLowerCase()) {
+        store.dispatch(processNewTrade(userAccount, event));
     }
-    if (weiAmount.toString !== "0" && maker.toLowerCase() === userAccount.toLowerCase()) {
+
+    if (
+        event.returnValues.weiAmount.toString() !== "0" &&
+        event.returnValues.maker.toLowerCase() === userAccount.toLowerCase()
+    ) {
         console.debug(
             "exchangeProvider.onCancelledOrder: cancelled buy tokenOrder for current user, dispatching fetchUserBalance()"
         );
@@ -107,46 +134,22 @@ const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount, eventO
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
-const onOrderFill = function(
-    tokenBuyer,
-    tokenSeller,
-    buyTokenOrderId,
-    sellTokenOrderId,
-    publishedRate,
-    price,
-    weiAmount,
-    tokenAmount,
-    eventObject
-) {
+const onOrderFill = function(error, event) {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and refreshOrders()");
-    // FIXME: shouldn't do refresh for each orderFill event becuase multiple orderFills emmitted for one new order
-    //          but newOrder is not emmited when a sell fully covered by orders and
+    // FIXME: shouldn't do full refresh for each orderFill event rather queue them (multiuple Orderfills)
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (userAccount.toLowerCase() === tokenBuyer.toLowerCase()) {
-        store.dispatch(
-            processNewTrade(
-                userAccount,
-                eventObject,
-
-                "buy"
-            )
-        );
+    if (userAccount.toLowerCase() === event.returnValues.tokenBuyer.toLowerCase()) {
+        store.dispatch(processNewTrade(userAccount, event, "buy"));
     }
 
-    if (userAccount.toLowerCase() === tokenSeller.toLowerCase()) {
-        store.dispatch(
-            processNewTrade(
-                userAccount,
-                eventObject,
-
-                "sell"
-            )
-        );
+    if (userAccount.toLowerCase() === event.returnValues.tokenSeller.toLowerCase()) {
+        store.dispatch(processNewTrade(userAccount, event, "sell"));
     }
 
-    if (tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.tokenSeller.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "exchangeProvider.onOrderFill: sell token order filled for current user, dispatching fetchUserBalance()"
         );

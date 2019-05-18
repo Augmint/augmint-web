@@ -123,7 +123,7 @@ export default class OrderBook extends React.Component {
         const myOrders = [...buyOrders, ...sellOrders].sort((o1, o2) => o2.id - o1.id);
 
         const totalBuyAmount = orders
-            ? parseFloat(buyOrders.reduce((sum, order) => order.bn_ethAmount.add(sum), 0).toFixed(6))
+            ? parseFloat(buyOrders.reduce((sum, order) => order.bnEthAmount.add(sum), 0).toFixed(6))
             : "?";
         const totalSellAmount = orders ? sellOrders.reduce((sum, order) => order.amount + sum, 0).toFixed(2) : "?";
 
