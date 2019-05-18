@@ -10,6 +10,7 @@ import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 
 let isWatchSetup = false;
+let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const loanManager = store.getState().contracts.latest.loanManager;
@@ -20,7 +21,7 @@ export default () => {
             "loanManagerProvider - loanManager not connected or loading and web3 already loaded, dispatching refreshLoanManager() "
         );
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
@@ -30,18 +31,47 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
-    const loanManager = store.getState().contracts.latest.loanManager.ethersInstance;
-    loanManager.on("NewLoan", (...args) => {
-        onNewLoan(...args);
+const setupContractEventListeners = () => {
+    processedContractEvents = {};
+
+    // TODO: use augmint-js class when augmint-js exposes it
+    const loanManager = store.getState().contracts.latest.loanManager.web3ContractInstance;
+
+    loanManager.events.NewLoan({}, (error, event) => {
+        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewLoan(error, event);
+        }
     });
-    loanManager.on("LoanRepayed", (...args) => {
-        onLoanRepayed(...args);
+
+    loanManager.events.LoanRepayed({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLoanRepayed(error, event);
+        }
     });
-    loanManager.on("LoanCollected", (...args) => {
-        onLoanCollected(...args);
+
+    loanManager.events.LoanCollected({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLoanCollected(error, event);
+        }
     });
-    // TODO: add & handle loanproduct change events
+
+    loanManager.events.LoanProductAdded({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onNewLoanProduct(error, event);
+        }
+    });
+
+    loanManager.events.LoanProductActiveStateChanged({}, (error, event) => {
+        if (!processedContractEvents[event.id]) {
+            processedContractEvents[event.id] = true;
+            onLoanProductActiveChange(error, event);
+        }
+    });
 };
 
 const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
@@ -49,7 +79,7 @@ const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
         "loanManagerProvider - loanManager Contract changed. Dispatching refreshLoanManager, fetchLoanProducts, fetchLoans"
     );
     refresh();
-    setupListeners();
+    setupContractEventListeners();
 };
 
 const refresh = () => {
@@ -68,7 +98,21 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, repaymentAmount, eventObject) => {
+const onNewLoanProduct = (error, event) => {
+    // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
+    //                         uint32 minimumLockAmount, bool isActive);
+    console.debug("loanManagerProvider.onNewLoanProduct: dispatching refreshLockManager and fetchLockProducts");
+    store.dispatch(refreshLoanManager()); // to update product count
+    store.dispatch(fetchLoanProducts()); // to fetch new product
+};
+
+const onLoanProductActiveChange = (error, event) => {
+    // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+    console.debug("loanManagerProvider.onLoanProductActiveChange: dispatching fetchLockProducts");
+    store.dispatch(fetchLoanProducts()); // to refresh product list
+};
+
+const onNewLoan = (error, event) => {
     // event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount, uint repaymentAmount);
     console.debug(
         "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
@@ -81,7 +125,7 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
-    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -91,7 +135,7 @@ const onNewLoan = (productId, loanId, borrower, collateralAmount, loanAmount, re
     }
 };
 
-const onLoanRepayed = (loanId, borrower, eventObject) => {
+const onLoanRepayed = (error, event) => {
     // event LoanRepayed(uint loanId, address borrower);
     console.debug(
         "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
@@ -103,7 +147,7 @@ const onLoanRepayed = (loanId, borrower, eventObject) => {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
-    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -113,7 +157,7 @@ const onLoanRepayed = (loanId, borrower, eventObject) => {
     }
 };
 
-const onLoanCollected = (loanId, borrower, eventObject) => {
+const onLoanCollected = (error, event) => {
     // event LoanCollected(uint loanId, address borrower);
     console.debug(
         "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"
@@ -125,7 +169,7 @@ const onLoanCollected = (loanId, borrower, eventObject) => {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
     const userAccount = store.getState().web3Connect.userAccount;
-    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans & fetchUserBalance"
         );

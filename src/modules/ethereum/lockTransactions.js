@@ -120,14 +120,15 @@ export async function fetchLocksForAddressTx(lockManagerInstance, account) {
     return locks;
 }
 
-export async function processNewLockTx(account, lockData) {
+export async function processNewLockTx(account, event) {
     // reprdocue an array in same format as getLocksForAddress returnvalue:
     //     [ lockOwner, lockId, amountLocked, interestEarned, lockedUntil, perTermInterest, durationInSecs]
+    const lockData = event.returnValues;
     const lockArray = [
         lockData.lockId,
         lockData.amountLocked,
         lockData.interestEarned,
-        lockData.lockedUntil, // ethers.js passes these args to onnewlock as numbers unlike getLocksForAddress
+        lockData.lockedUntil,
         lockData.perTermInterest,
         lockData.durationInSecs,
         new BigNumber(1) // we don't get isActive in event data
@@ -165,7 +166,8 @@ function parseLocks(locksArray) {
                 .utc()
                 .unix();
             const isActive = bn_isActive.toString() === "1";
-            const isReleasebale = lockedUntil <= currentTime && isActive;
+            // TODO: currentTime + 1 is required because of test timing issues. Should calculate it dynamically on page
+            const isReleasebale = lockedUntil <= currentTime + 1 && isActive;
 
             let lockStateText;
             if (isReleasebale) {

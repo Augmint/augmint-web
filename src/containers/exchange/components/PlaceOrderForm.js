@@ -14,13 +14,11 @@ import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
+import { DECIMALS, ETH_DECIMALS } from "utils/constants";
 
 import theme from "styles/theme";
 import styled from "styled-components";
 import "./styles.css";
-
-const ETH_DECIMALS = 5;
-const TOKEN_DECIMALS = 2;
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -97,7 +95,7 @@ class PlaceOrderForm extends React.Component {
             const ethAmount = parseFloat(_ethAmount);
             if (!isNaN(ethAmount) && isFinite(ethAmount)) {
                 const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
-                this.props.change("tokenAmount", Number(tokenValue.toFixed(TOKEN_DECIMALS)));
+                this.props.change("tokenAmount", Number(tokenValue.toFixed(DECIMALS)));
             } else {
                 //  ethAmount is not entered yet
                 this.props.change("tokenAmount", "");
