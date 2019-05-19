@@ -3,6 +3,8 @@ import BN from "bn.js";
 export const ONE_ETH_IN_WEI = 1e18;
 export const BN_ONE_ETH_IN_WEI = new BN("1000000000000000000"); //  asserttion failed with this: new BN(ONE_ETH_IN_WEI)
 
+export const ETH_DECIMALS = 5;
+
 /* augmintToken decimals. used when AugmintToken contract is not yet isConnected
     otherwise available as: store.getState().augmintToken.info.decimalsDiv
  */
