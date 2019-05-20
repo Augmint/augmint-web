@@ -7,7 +7,7 @@ import Button from "components/augmint-ui/button";
 import { keyFeatures } from "./helpers.js";
 import Convertible from "./../convertible.js";
 import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
-import augmintLogo from "assets/images/logo/augmint.svg";
+import augmintLogo from "assets/images/logo/logo.png";
 
 import * as styles from "./styles.js";
 import "./styles.css";
