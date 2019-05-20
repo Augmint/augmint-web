@@ -63,7 +63,7 @@ p.opac {
 .segment.how-to-use {
     position: relative;
     padding-top: 0px;
-    padding-bottom: 200px;
+    padding-bottom: 0;
     background: linear-gradient(
         rgba(53, 0, 55, 0) 0%,
         rgba(53, 0, 55, 1) 20%,
@@ -137,6 +137,9 @@ a.try-now {
 .homePage-grid {
     justify-content: space-between;
     margin-bottom: 120px;
+}
+.homePage-grid:last-child {
+    margin-bottom: 0;
 }
 
 .homePage-grid .homePage-column {
@@ -295,9 +298,6 @@ h3.homePage-row-header {
     }
     .more-link {
         display: none;
-    }
-    .segment.how-to-use {
-        padding-bottom: 50px;
     }
 
     .team .grid .column > img,
