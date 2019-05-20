@@ -187,7 +187,6 @@ h3.homePage-row-header {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    text-align: left;
 }
 .product-box h4.box-header {
     margin-top: 10px;
@@ -196,6 +195,7 @@ h3.homePage-row-header {
 }
 .product-box ul {
     padding: 0;
+    text-align: left;
 }
 
 .product-box ul .list-item {
@@ -240,7 +240,7 @@ h3.homePage-row-header {
     .desc .cta {
         display: none;
     }
-    .homePage-grid .homePage-column {
+    .homePage-grid {
         padding-bottom: 0;
     }
     .box .cta {
@@ -267,8 +267,9 @@ h3.homePage-row-header {
         width: 100%;
     }
     .product-box {
-        padding: 20px;
-        width: calc(100% - 40px);
+        padding: 20px 20px 30px 20px;
+        max-width: calc(100% - 100px);
+        width: auto;
         height: auto;
     }
     .homePage-row-header,
@@ -308,5 +309,11 @@ h3.homePage-row-header {
     .team .grid .column p.description,
     .partner .grid .column p.description {
         margin-top: 45px;
+    }
+}
+
+@media (max-width: 414px) {
+    .product-box {
+        max-width: calc(100% - 40px);
     }
 }
