@@ -121,8 +121,7 @@ export default class NotConnectedHome extends React.Component {
                                                 and spend it too
                                             </h3>
                                             <p className="opac" style={{ marginBottom: 8 }}>
-                                                Borrow A-EUR against your <br />
-                                                ETH collateral. No waiting for approval.
+                                                Borrow A-EUR against your ETH collateral. No waiting for approval.
                                             </p>
                                             <a className="more-link" href="">
                                                 Learn more
@@ -200,9 +199,8 @@ export default class NotConnectedHome extends React.Component {
                                             <h3 className="homePage-column-header">Time is Money</h3>
                                             <p className="opac">
                                                 Get rewarded for parking your A-EUR. <br />
-                                                Earn a bonus instantly <br />
-                                                while your funds remain safely locked <br />
-                                                in a smart contract.
+                                                Earn a bonus instantly while your funds <br />
+                                                remain safely locked in a smart contract.
                                             </p>
                                             <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                                 Calculate your bonus

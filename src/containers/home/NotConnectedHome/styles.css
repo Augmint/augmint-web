@@ -148,7 +148,7 @@ a.try-now {
 }
 .homePage-grid .homePage-column .grid-cont {
     text-align: left;
-    width: 350px;
+    width: 360px;
     margin: 0 auto;
 }
 .homePage-column p {
@@ -184,7 +184,7 @@ h3.homePage-row-header {
     padding: 40px;
     height: calc(100% - 80px);
     border-radius: 4px;
-    width: 270px;
+    width: 280px;
     display: flex;
     flex-direction: column;
     justify-content: center;
