@@ -8,6 +8,8 @@ import { keyFeatures } from "./helpers.js";
 import Convertible from "./../convertible.js";
 import { StyledLogo, StyledLogoContainer } from "components/navigation/styles";
 import augmintLogo from "assets/images/logo/logo.png";
+import augmintLogo2x from "assets/images/logo/logo@2x.png";
+import augmintLogo3x from "assets/images/logo/logo@3x.png";
 
 import * as styles from "./styles.js";
 import "./styles.css";
@@ -28,7 +30,11 @@ export default class NotConnectedHome extends React.Component {
                 <Container className="homePage">
                     <section style={{ textAlign: "center", marginBottom: 50 }} className="key-features segment">
                         <StyledLogoContainer>
-                            <StyledLogo src={augmintLogo} alt="Augmint logo" />
+                            <StyledLogo
+                                src={augmintLogo}
+                                srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
+                                alt="Augmint logo"
+                            />
                         </StyledLogoContainer>
 
                         <header>

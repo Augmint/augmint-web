@@ -69,7 +69,7 @@ export const StyledLogoContainer = styled.div`
     justify-content: center;
     min-height: 80px;
     ${breakpoint`
-      max-height: 180px;
+      max-height: 200px;
     `};
 `;
 
@@ -100,6 +100,7 @@ export const StyledNavRightSide = styled.div`
 
 export const StyledLogo = styled.img`
     margin-top: 80px;
+    object-fit: contain;
 `;
 
 export const HamburgerMenu = styled.img`
