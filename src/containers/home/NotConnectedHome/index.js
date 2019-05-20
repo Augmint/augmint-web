@@ -199,12 +199,10 @@ export default class NotConnectedHome extends React.Component {
                                         <div className="grid-cont">
                                             <h3 className="homePage-column-header">Earn by doing nothing</h3>
                                             <p className="opac">
-                                                Park your A-EUR and get a reward.
-                                                <br /> Your bonus earning is immediately
-                                                <br /> accounted - not just a promise. 
-                                                <br /> It’s still yours, locked in a smart contract.
-                                                <br />
-                                                 Nobody can play with your money.
+                                                Get rewarded for parking your A-EUR. <br />
+                                                Earn a bonus instantly <br />
+                                                while your funds remain safely locked <br />
+                                                in a smart contract.
                                             </p>
                                             <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                                 Calculate your bonus
