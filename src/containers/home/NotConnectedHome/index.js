@@ -111,12 +111,12 @@ export default class NotConnectedHome extends React.Component {
                                     >
                                         <div className="grid-cont">
                                             <h3 className="homePage-column-header">
-                                                Have your crypto and <br />
-                                                spend it too
+                                                Have your crypto <br />
+                                                and spend it too
                                             </h3>
                                             <p className="opac" style={{ marginBottom: 8 }}>
-                                                Borrow A-EUR against your ETH collateral. <br />
-                                                No waiting for approval.
+                                                Borrow A-EUR against your <br />
+                                                ETH collateral. No waiting for approval.
                                             </p>
                                             <a className="more-link" href="">
                                                 Learn more
@@ -198,7 +198,7 @@ export default class NotConnectedHome extends React.Component {
                                                 <br /> accounted - not just a promise. 
                                                 <br /> It’s still yours, locked in a smart contract.
                                                 <br />
-                                                  Nobody can play with your money.
+                                                 Nobody can play with your money.
                                             </p>
                                             <Button style={{ marginTop: 10 }} type="a" className="cta" to="/lock/new">
                                                 Calculate your bonus

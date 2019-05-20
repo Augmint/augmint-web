@@ -120,7 +120,8 @@ export const BaseButton = styledComponent => styledComponent`
       }
 
       &.orange:hover, &.orange:focus {
-        background-color: ${theme.colors.secondaryDark};
+        border: 1px solid ${theme.colors.secondaryDark};
+        background-color: transparent;
         color: ${theme.colors.secondaryDark};
       }
     }
