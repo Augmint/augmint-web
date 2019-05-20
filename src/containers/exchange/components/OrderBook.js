@@ -157,8 +157,8 @@ const OrderList = props => {
 
 export class MyOrders extends React.Component {
     render() {
-        const { header, userAccountAddress, testid, rates, orderBookDirection } = this.props;
-        const { orders, refreshError, isLoading } = this.props.orders;
+        const { header, userAccountAddress, testid, rates } = this.props;
+        const { orders } = this.props.orders;
         // FIXME should be Tokens already
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
 
@@ -173,7 +173,7 @@ export class MyOrders extends React.Component {
             return null;
         }
         return (
-            <Pblock loading={isLoading} header={header} data-testid={testid}>
+            <Pblock header={header} data-testid={testid}>
                 <OrderList
                     orders={orderList}
                     ethFiatRate={ethFiatRate}
