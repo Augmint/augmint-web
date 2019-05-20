@@ -235,6 +235,7 @@ h3.homePage-row-header {
     }
     .homePage-grid .homePage-column .grid-cont {
         text-align: center;
+        width: 100%;
     }
     .desc .cta {
         display: none;
