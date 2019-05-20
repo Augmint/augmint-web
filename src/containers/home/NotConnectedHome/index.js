@@ -38,11 +38,11 @@ export default class NotConnectedHome extends React.Component {
                         </StyledLogoContainer>
 
                         <header>
-                            <h1 className="homePage-header">Modern money, beyond states.</h1>
+                            <h1 className="homePage-header">Our money, beyond states.</h1>
                             <h5>
+                                Decentralized cryptocurrency without the volatility. <br />
                                 Borderless, secure, transparent.
                                 <br />
-                                Decentralized cryptocurrency without the volatility. <br />
                                 Our first token is A-EUR.
                             </h5>
 
@@ -197,7 +197,7 @@ export default class NotConnectedHome extends React.Component {
                                         size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 2 }}
                                     >
                                         <div className="grid-cont">
-                                            <h3 className="homePage-column-header">Earn by doing nothing</h3>
+                                            <h3 className="homePage-column-header">Time is Money</h3>
                                             <p className="opac">
                                                 Get rewarded for parking your A-EUR. <br />
                                                 Earn a bonus instantly <br />
