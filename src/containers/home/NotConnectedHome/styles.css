@@ -221,7 +221,7 @@ h3.homePage-row-header {
     display: block;
 }
 
-@media (max-width: 768px) and (min-width: 320px) {
+@media (max-width: 768px) {
     .homePage header {
         margin-bottom: 140px;
     }
@@ -316,6 +316,9 @@ h3.homePage-row-header {
 }
 
 @media (max-width: 414px) {
+    .Site-content div.homePage {
+        max-width: 90%;
+    }
     .product-box {
         max-width: calc(100% - 40px);
     }
