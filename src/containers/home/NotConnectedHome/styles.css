@@ -233,6 +233,9 @@ h3.homePage-row-header {
         justify-content: flex-start;
         margin-bottom: 100px;
     }
+    .homePage-grid:nth-of-type(3) {
+        margin-bottom: 0;
+    }
     .homePage-grid .homePage-column .grid-cont {
         text-align: center;
         width: 100%;
@@ -315,5 +318,8 @@ h3.homePage-row-header {
 @media (max-width: 414px) {
     .product-box {
         max-width: calc(100% - 40px);
+    }
+    .homePage-grid:nth-of-type(3) {
+        margin-bottom: 50px;
     }
 }
