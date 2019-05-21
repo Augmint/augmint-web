@@ -222,6 +222,8 @@ class EthereumTxStatus extends React.Component {
                                     error={tx.error}
                                     receipt={tx.receipt}
                                     isNotification={true}
+                                    enableDismissBtn={false}
+                                    className={"notification"}
                                 />
                             )}
                         </MyListGroup.Row>
