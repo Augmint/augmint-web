@@ -128,11 +128,16 @@ export const BaseButton = styledComponent => styledComponent`
       border: transparent;
       color: ${theme.colors.primary};
 
+      &.sanserif {
+        font-family: ${theme.typography.fontFamilies.default};
+      }
+
       &:hover,
       &:focus {
         background: transparent;
-        color: ${theme.colors.secondaryDark};
+        color: ${theme.colors.primary};
         border-color: transparent;
+        text-decoration: underline;
       }
     }
 

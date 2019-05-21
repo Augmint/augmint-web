@@ -73,15 +73,19 @@ export default class Balance extends React.Component {
                 </EthAmount>
                 <div
                     style={{
-                        // width: "200px",
                         textAlign: "center",
-                        margin: "auto",
-                        marginTop: "1rem",
+                        margin: ".5rem auto 0",
                         overflowWrap: "break-word"
                     }}
                 >
                     <Label className="balance">Account address</Label>
-                    <AccountAddress address={userAccount.address} title="" className={"breakToLines"} />
+                    <AccountAddress
+                        address={userAccount.address}
+                        title=""
+                        className={"breakToLines always noClick font"}
+                        showCopyLink
+                        style={{ maxWidth: "190px" }}
+                    />
                 </div>
                 {children}
             </Pblock>

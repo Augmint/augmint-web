@@ -1,77 +1,24 @@
 import React from "react";
 import Icon from "components/augmint-ui/icon";
-import styled from "styled-components";
-import theme from "styles/theme";
+import Button from "components/augmint-ui/button";
 
 import { shortAccountAddresConverter } from "utils/converter";
-// import { StyledContainer, StyledClicked, StyledHint } from "./styles";
-
-const StyledClicked = styled.span`
-    color: ${theme.colors.darkGreen};
-    display: none;
-`;
-
-const StyledHint = styled.span`
-    -webkit-font-smoothing: antialiased;
-    color: ${theme.colors.white};
-    display: none;
-    position: absolute;
-    background-color: ${theme.colors.primary};
-    font-weight: lighter;
-    padding: 5px 10px;
-    border-radius: 5px;
-
-    &::after {
-        content: "Click to copy!";
-    }
-`;
-
-const StyledContainer = styled.div`
-    cursor: pointer;
-    display: inline-block;
-    font-weight: 400;
-
-    &.clicked ${StyledClicked} {
-        display: inline-block;
-        padding-right: 5px;
-    }
-
-    &:hover ${StyledHint} {
-        display: block;
-    }
-
-    &.clicked:hover ${StyledHint} {
-        display: block;
-
-        &::after {
-            color: ${theme.colors.lightGreen};
-            content: "Copied!";
-        }
-    }
-
-    &.breakToLines {
-        .onMobile {
-            @media (max-width: 600px) {
-                display: block;
-                max-width: 260px;
-            }
-        }
-    }
-
-    &.bold {
-        font-weight: 700;
-    }
-`;
+import { StyledContainer, StyledClicked, StyledHint, StyledDiv } from "./styles";
 
 export default function AccountAddress(props) {
-    const { address, showCopyIcon, title, shortAddress, className } = props;
+    const { address, showCopyIcon, title, shortAddress, className, showCopyLink } = props;
     const _title = title !== undefined ? title : "Account: ";
-    // const _className = breakToLines ? (bold ? "breakToLines bold" : "breakToLines") : bold ? "bold" : "";
+    const _className = className + " container";
 
     function copyAddress(e) {
         let element = e.target;
+        let siblingElem;
         if (element.attributes.name && element.attributes.name.nodeValue === "copy") {
             element = element.parentElement;
+        }
+        if (e.target.nextSibling) {
+            siblingElem = e.target.nextSibling;
+            siblingElem.classList.add("show");
         }
         element.classList.add("clicked");
         const el = document.createElement("textarea");
@@ -87,25 +34,63 @@ export default function AccountAddress(props) {
 
     function removeClicked(e) {
         let element = e.target;
+        let siblingElem;
         if (element.attributes.name && element.attributes.name.nodeValue === "copy") {
             element = element.parentElement;
+        }
+        if (e.target.nextSibling) {
+            siblingElem = e.target.nextSibling;
+            setTimeout(() => {
+                siblingElem.classList.remove("show");
+            }, 3000);
         }
         element.classList.remove("clicked");
     }
 
     return (
-        <StyledContainer onClick={copyAddress} onMouseLeave={removeClicked} className={className}>
-            {_title + (shortAddress === true ? shortAccountAddresConverter(address) : address)}
-            {showCopyIcon && (
-                <Icon name="copy" style={{ paddingLeft: 5 }} onClick={copyAddress} onMouseLeave={removeClicked} />
+        <div>
+            {showCopyLink ? (
+                <StyledContainer className={_className}>
+                    {_title + (shortAddress === true ? shortAccountAddresConverter(address) : address)}
+                    {showCopyIcon && (
+                        <Icon
+                            name="copy"
+                            style={{ paddingLeft: 5 }}
+                            onClick={copyAddress}
+                            onMouseLeave={removeClicked}
+                        />
+                    )}
+                    <Button
+                        className="naked sanserif"
+                        onClick={copyAddress}
+                        onMouseLeave={removeClicked}
+                        style={{ display: "block" }}
+                    >
+                        Copy
+                    </Button>
+                    <StyledDiv className={""}>
+                        <Icon name="check" style={{ marginRight: "5px", color: "green" }} />
+                        Copied!
+                    </StyledDiv>
+                </StyledContainer>
+            ) : (
+                <StyledContainer onClick={copyAddress} onMouseLeave={removeClicked} className={className}>
+                    {_title + (shortAddress === true ? shortAccountAddresConverter(address) : address)}
+                    {showCopyIcon && (
+                        <Icon
+                            name="copy"
+                            style={{ paddingLeft: 5 }}
+                            onClick={copyAddress}
+                            onMouseLeave={removeClicked}
+                        />
+                    )}
+                    <StyledHint>
+                        <StyledClicked>
+                            <Icon name="check" />
+                        </StyledClicked>
+                    </StyledHint>
+                </StyledContainer>
             )}
-            {/* {showCopyLink && 
-            } */}
-            <StyledHint>
-                <StyledClicked>
-                    <Icon name="check" />
-                </StyledClicked>
-            </StyledHint>
-        </StyledContainer>
+        </div>
     );
 }

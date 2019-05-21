@@ -84,13 +84,6 @@ export const StyledTopNavLi = styled.li`
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
-
-    /* &.navLinkRight:hover ${StyledAccount} {
-        display: block;
-        position: absolute;
-        right: 64px;
-        top: ${TOP_NAV_HEIGHT};
-    } */
 `;
 
 export const StyledTopNavLink = styled(Link)`

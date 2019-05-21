@@ -124,23 +124,20 @@ class TopNav extends React.Component {
                                 <span>Balance</span>
                             </StyledTopNavLinkRight>
                             <StyledPrice className="accountInfoContainer">
-                                <ETH
-                                    amount={ethBalance}
-                                    // data-testid={!hideTestId && "userEthBalance"}
-                                    style={{ fontWeight: 700 }}
-                                />
+                                <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <AEUR
-                                    amount={tokenBalance}
-                                    // data-testid={!hideTestId && "userAEurBalance"}
-                                    style={{ fontWeight: 700 }}
-                                />
+                                <AEUR amount={tokenBalance} style={{ fontWeight: 700 }} />
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
-                                <AccountAddress address={this.props.userAccount.address} title="" shortAddress />
+                                <AccountAddress
+                                    address={this.props.userAccount.address}
+                                    title=""
+                                    shortAddress
+                                    className={"bold"}
+                                />
                             </StyledPrice>
                         </div>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
