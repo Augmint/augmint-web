@@ -48,7 +48,7 @@ export default class NotConnectedHome extends React.Component {
 
                             <Convertible from="A-EUR" to="EUR" style={{ margin: "20px 0", justifyContent: "center" }} />
 
-                            <a className="more-link" href="">
+                            <a className="more-link" href="/concept">
                                 Learn more about the Augmint concept
                             </a>
                         </header>
@@ -123,9 +123,9 @@ export default class NotConnectedHome extends React.Component {
                                             <p className="opac" style={{ marginBottom: 8 }}>
                                                 Borrow A-EUR against your ETH collateral. No waiting for approval.
                                             </p>
-                                            <a className="more-link" href="">
+                                            {/*a className="more-link" href="">
                                                 Learn more
-                                            </a>
+                                            </a>*/}
                                             <Button style={{ marginTop: 26 }} type="a" className="cta" to="/loan/new">
                                                 Start a loan process
                                             </Button>
