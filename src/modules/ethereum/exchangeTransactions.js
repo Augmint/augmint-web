@@ -124,5 +124,9 @@ export async function cancelOrderTx(exchange, orderDirection, orderId) {
 export async function getSimpleBuyCalc(token, isBuy, rate) {
     const exchange = await store.getState().web3Connect.augmint.exchange;
 
-    return exchange.calculateSimpleBuyData(token, isBuy, rate);
+    if (isBuy) {
+        return exchange.estimateSimpleBuy(token, rate);
+    } else {
+        return exchange.estimateSimpleSell(token, rate);
+    }
 }

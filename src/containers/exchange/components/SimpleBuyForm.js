@@ -20,6 +20,7 @@ import { matchOrders } from "../simplebuy";
 import theme from "styles/theme";
 import styled from "styled-components";
 import { Pgrid } from "../../../components/PageLayout";
+import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -53,37 +54,6 @@ class SimpleBuyForm extends React.Component {
         });
     }
 
-    calcMatchResults(token) {
-        const initOrders =
-            this.state.orderDirection === TOKEN_BUY
-                ? this.props.orders.orders.sellOrders
-                : this.props.orders.orders.buyOrders;
-        const isBuy = this.state.orderDirection === TOKEN_BUY;
-        const orders = this.state.orders.length ? this.state.orders : initOrders;
-        const { ethFiatRate } = this.props.rates.info;
-        const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
-
-        if (this.state.orderList.length > 0) {
-            return matchOrders(token, this.state.orderList, this.state.orderDirection);
-        } else {
-            const orderList = orders.map(order => {
-                if (this.state.orderDirection === TOKEN_BUY) {
-                    order.ethers = (order.amount * order.price) / bn_ethFiatRate;
-                } else {
-                    order.ethers = order.amount;
-                    order.amount = (bn_ethFiatRate / order.price) * order.ethers;
-                }
-
-                return order;
-            });
-            this.setState({ orderList });
-
-            console.log(orderList);
-
-            return matchOrders(token, orderList, this.state.orderDirection);
-        }
-    }
-
     async getSimpleResult(token) {
         const { ethFiatRate } = this.props.rates.info;
         const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
@@ -91,7 +61,7 @@ class SimpleBuyForm extends React.Component {
 
         const res = await store.dispatch(getSimpleBuy(token, isBuy, bn_ethFiatRate));
 
-        if (res.type !== PLACE_ORDER_SUCCESS) {
+        if (res.type !== SIMPLE_BUY_SUCCESS) {
             throw new SubmissionError({
                 _error: res.error
             });
@@ -105,7 +75,7 @@ class SimpleBuyForm extends React.Component {
 
     onTokenAmountChange(e) {
         const value = e.target.value;
-        const simpleResult = value > 0 ? this.calcMatchResults(parseFloat(value)) : null;
+        const simpleResult = value > 0 ? this.getSimpleResult(parseFloat(value)) : null;
 
         this.setState({
             simpleResult

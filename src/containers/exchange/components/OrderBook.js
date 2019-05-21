@@ -46,8 +46,6 @@ const OrderItem = props => {
 
     const rate = ethFiatRate / parsePrice(displayPrice);
 
-    console.log(order);
-
     if (order.direction === TOKEN_SELL) {
         const ethValue = (order.amount * order.price) / bn_ethFiatRate;
         return (
