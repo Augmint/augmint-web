@@ -69,12 +69,15 @@ function enhanceOrder(order, rate, userAccountAddress) {
 }
 
 const OrderItem = props => {
-    const { order, ethFiatRate } = props;
+    const { order, ethFiatRate, showDirection } = props;
 
     return (
         <tr>
             <td className={order.buy ? "estimated" : ""}>
-                <AEUR amount={order.tokens} />
+                <React.Fragment>
+                    {order.tokens && showDirection && (order.buy ? "Buy " : "Sell ")}
+                    <AEUR amount={order.tokens} />
+                </React.Fragment>
             </td>
             <td className={order.buy ? "" : "estimated"}>
                 <ETH amount={order.wei} />
@@ -112,7 +115,7 @@ const OrderItem = props => {
 };
 
 const OrderList = props => {
-    const { orders, ethFiatRate } = props;
+    const { orders, ethFiatRate, showDirection } = props;
 
     const sum = (acc, curr) => acc.add(curr);
     const totalTokens = ethFiatRate ? orders.map(o => o.tokens).reduce(sum) : null;
@@ -135,7 +138,7 @@ const OrderList = props => {
 
             <tbody>
                 {orders.map(order => (
-                    <OrderItem key={order.id} order={order} ethFiatRate={ethFiatRate} />
+                    <OrderItem key={order.id} order={order} ethFiatRate={ethFiatRate} showDirection={showDirection} />
                 ))}
             </tbody>
             {orders.length > 1 && (
@@ -175,6 +178,7 @@ export class MyOrders extends React.Component {
         return (
             <Pblock header={header} data-testid={testid}>
                 <OrderList
+                    showDirection={true}
                     orders={orderList}
                     ethFiatRate={ethFiatRate}
                     userAccountAddress={userAccountAddress}
