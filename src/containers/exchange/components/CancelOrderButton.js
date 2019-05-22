@@ -137,7 +137,7 @@ class CancelOrderButton extends React.Component {
                                 disabled={submitting}
                                 onClick={this.submitCancel}
                                 content={submitting ? "Submitting..." : "Submit order cancellation"}
-                                style={{ marginTop: "10px" }}
+                                style={{ marginTop: "10px", marginLeft: "10px" }}
                             >
                                 <Icon name="trash" style={{ marginRight: "6px" }} />
                             </Button>
