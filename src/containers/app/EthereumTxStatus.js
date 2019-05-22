@@ -100,7 +100,7 @@ class EthereumTxStatus extends React.Component {
                         const repaymentAmount = parseInt(vals.repaymentAmount, 10) / decimalsDiv;
                         const collateralEth = new BigNumber(vals.collateralAmount).div(ONE_ETH_IN_WEI).toString();
                         txInfo = (
-                            <div style={{ overflowX: "auto" }}>
+                            <div>
                                 <p>
                                     You've a new loan. Don't forget to pay it back on maturity to get back your
                                     collateral.
