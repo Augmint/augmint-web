@@ -14,6 +14,7 @@ import {
 } from "modules/reducers/legacyExchanges";
 import HashURL from "components/hash";
 import styled from "styled-components";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 const styleP = { margin: ".5rem 0" };
 
@@ -73,9 +74,9 @@ class LegacyExchanges extends React.Component {
         });
     }
 
-    async submitOrderCancel(legacyExchangeAddress, direction, orderId) {
+    async submitOrderCancel(legacyExchangeAddress, order) {
         this.setState({ submitting: true, error: null, result: null });
-        const res = await this.props.cancelLegacyExchangeOrder(legacyExchangeAddress, direction, orderId);
+        const res = await this.props.cancelLegacyExchangeOrder(legacyExchangeAddress, order.buy, order.id);
         if (res.type !== LEGACY_EXCHANGES_CANCEL_ORDER_SUCCESS) {
             this.setState({
                 submitting: false,
@@ -125,7 +126,7 @@ class LegacyExchanges extends React.Component {
                         <MyListGroup.Col key={`ordersDiv-${contractIndex}-${order.id}`}>
                             <p style={styleP}>
                                 Order id: {order.id} <br />
-                                Amount: {order.amount} {order.direction === 0 ? "ETH" : "A€"}
+                                Amount: {order.buy ? <ETH amount={order.amount} /> : <AEUR amount={order.amount} />}
                             </p>
 
                             {order.isSubmitted ? (
@@ -138,7 +139,7 @@ class LegacyExchanges extends React.Component {
                                     primary
                                     disabled={submitting}
                                     data-testid={`convertLegacyExchangeButton-${contractIndex}-${order.id}`}
-                                    onClick={() => this.submitOrderCancel(contract.address, order.direction, order.id)}
+                                    onClick={() => this.submitOrderCancel(contract.address, order)}
                                 >
                                     {submitting ? "Submitting order cancel..." : "Cancel order"}
                                 </Button>
