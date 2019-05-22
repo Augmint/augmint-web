@@ -5,9 +5,9 @@ import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const augmintToken = store.getState().contracts.latest.augmintToken;
@@ -32,28 +32,10 @@ export default () => {
 };
 
 const setupContractEventListeners = async () => {
-    processedContractEvents = {};
+    const augmintToken = store.getState().contracts.latest.augmintToken.ethersInstance;
 
-    const augmintToken = await store.getState().web3Connect.augmint.token;
-    augmintToken.instance.events.AugmintTransfer({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
-            console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken()");
-            store.dispatch(refreshAugmintToken());
-            const userAccount = store.getState().web3Connect.userAccount;
-            if (
-                event.returnValues.from.toLowerCase() === userAccount.toLowerCase() ||
-                event.returnValues.to.toLowerCase() === userAccount.toLowerCase()
-            ) {
-                console.debug(
-                    "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
-                );
-                store.dispatch(fetchUserBalance(userAccount));
-                store.dispatch(processNewTransfer(event, userAccount));
-            }
-        }
+    augmintToken.on("AugmintTransfer", (...args) => {
+        onAugmintTransfer(...args);
     });
 
     // TODO: monetarySupervisor events: ParamsChanged, AcceptedLegacyAugmintTokenChanged,
@@ -96,5 +78,27 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
         store.dispatch(fetchUserBalance(newVal));
         // TODO: default fromBlock should be the blockNumber of the contract deploy (retrieve it in SolidityContract)
         store.dispatch(fetchLatestTransfers(newVal));
+    }
+};
+
+// event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+const onAugmintTransfer = function(from, to, amount, narrative, fee, ethersEvent) {
+    console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken()");
+
+    const event = patchEthersEvent(ethersEvent);
+
+    store.dispatch(refreshAugmintToken());
+
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (
+        event.returnValues.from.toLowerCase() === userAccount.toLowerCase() ||
+        event.returnValues.to.toLowerCase() === userAccount.toLowerCase()
+    ) {
+        console.debug(
+            "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
+        );
+
+        store.dispatch(fetchUserBalance(userAccount));
+        store.dispatch(processNewTransfer(event, userAccount));
     }
 };

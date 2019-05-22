@@ -53,9 +53,9 @@ export async function formatTradeEvent(account, event, type) {
 
     let orderId;
     if (event.returnValues.orderId) {
-        orderId = event.returnValues.orderId;
+        orderId = event.returnValues.orderId * 1;
     } else {
-        orderId = tokenAmount === 0 ? event.returnValues.buyTokenOrderId : event.returnValues.sellTokenOrderId;
+        orderId = tokenAmount === 0 ? event.returnValues.buyTokenOrderId * 1 : event.returnValues.sellTokenOrderId * 1;
     }
 
     let direction = tokenAmount === 0 ? "buy" : "sell";
