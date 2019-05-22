@@ -5,11 +5,12 @@ import React from "react";
 import { connect } from "react-redux";
 import Container from "components/augmint-ui/container";
 import { StyledP } from "components/augmint-ui/paragraph/styles";
-import Header from "components/augmint-ui/header";
 import { Link } from "react-router-dom";
 import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
 import { DiscordButton } from "components/LinkButtons";
+
+import { HowToConnect } from "containers/home/tryIt/HowToConnect.js";
 
 export class EthereumState extends React.Component {
     render() {
@@ -26,21 +27,7 @@ export class EthereumState extends React.Component {
         if (isConnecting) {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
-            msg = (
-                <WarningPanel header="Can't connect Ethereum network">
-                    <Header as="h4" className={_className}>
-                        See our{" "}
-                        <strong>
-                            <Link to="/tryit">Connection Guide</Link>
-                        </strong>{" "}
-                        on how to connect to Ethereum.
-                    </Header>
-
-                    {web3Connect.error && (
-                        <ErrorDetails header="Web3 connection error details:" details={web3Connect.error} />
-                    )}
-                </WarningPanel>
-            );
+            msg = <HowToConnect />;
         } else if (
             web3Connect.isConnected &&
             !contracts.isLoaded &&
