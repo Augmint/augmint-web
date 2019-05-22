@@ -2,7 +2,6 @@ import React from "react";
 
 import { Tsegment } from "components/TextContent";
 import { DiscordButton, TelegramButton } from "components/LinkButtons";
-import Video from "components/augmint-ui/video";
 import Header from "components/augmint-ui/header";
 
 import { MobileView, DesktopView, StoreBadge } from "./styles";
