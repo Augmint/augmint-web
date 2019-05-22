@@ -100,13 +100,13 @@ class EthereumTxStatus extends React.Component {
                         const repaymentAmount = parseInt(vals.repaymentAmount, 10) / decimalsDiv;
                         const collateralEth = new BigNumber(vals.collateralAmount).div(ONE_ETH_IN_WEI).toString();
                         txInfo = (
-                            <div>
+                            <div style={{ overflowX: "auto" }}>
                                 <p>
                                     You've a new loan. Don't forget to pay it back on maturity to get back your
                                     collateral.
                                 </p>
                                 <p>
-                                    You can always check your the status of your loan on{" "}
+                                    You can always check the status of your loan on{" "}
                                     <Link to="/account">My account page</Link>
                                     <br />
                                     or directly on <Link to={"/loan/" + vals.loanId}>this loan's page</Link>
@@ -115,7 +115,8 @@ class EthereumTxStatus extends React.Component {
                                 <p>To be repaid: {repaymentAmount} A-EUR</p>
                                 <p>Collateral in escrow: {collateralEth} ETH</p>
                                 <p>
-                                    Loan id: {vals.loanId} | Product id: {vals.productId} | borrower: {vals.borrower}
+                                    Loan id: {vals.loanId} | Product id: {vals.productId} | borrower:{" "}
+                                    <span className="small">{vals.borrower}</span>
                                 </p>
                             </div>
                         );
