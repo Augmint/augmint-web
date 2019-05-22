@@ -63,18 +63,18 @@ class LoanDetailsPage extends React.Component {
                         )...
                     </LoadingPanel>
                 )}
-                {!this.state.isLoading &&
-                    !this.state.isLoanFound && (
-                        <ErrorPanel>
-                            Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
-                        </ErrorPanel>
-                    )}
+                {!this.state.isLoading && !this.state.isLoanFound && (
+                    <ErrorPanel>
+                        Can't find loan #{this.state.loanId} for current account {this.props.userAccount}
+                    </ErrorPanel>
+                )}
 
                 {this.state.isLoanFound && (
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
                                 <Pblock
+                                    style={{ marginTop: "1rem" }}
                                     header={this.state.loan.loanStateText + " - loan #" + this.state.loan.id}
                                     className={"tertiaryColor"}
                                 >
@@ -84,6 +84,7 @@ class LoanDetailsPage extends React.Component {
 
                                     {this.state.loan.isCollectable && (
                                         <CollectLoanButton
+                                            className="details-collect-btn"
                                             loanManager={this.props.loanManager}
                                             loansToCollect={[{ id: this.state.loan.id }]}
                                         />

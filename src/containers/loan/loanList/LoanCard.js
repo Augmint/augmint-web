@@ -5,6 +5,7 @@ import { media } from "styles/media";
 import Button from "components/augmint-ui/button";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
+import CollectLoanButton from "../collectLoan/CollectLoanButton";
 
 export const CardHead = styled.div`
     display: flex;
@@ -68,7 +69,7 @@ export const DataLabel = styled.div`
 export const DataValue = styled.div``;
 
 export default function LoanCard(props) {
-    const loan = props.loan;
+    const { loan, loanManager } = props;
 
     return (
         <Card className={loan.dueState}>
@@ -138,6 +139,14 @@ export default function LoanCard(props) {
                     >
                         {loan.isRepayable && (
                             <Button to={"/loan/repay/" + loan.id}>{loan.isDue ? "Repay" : "Repay Early"}</Button>
+                        )}
+
+                        {loan.isCollectable && (
+                            <CollectLoanButton
+                                className="card-collect-btn"
+                                loanManager={loanManager}
+                                loansToCollect={[{ id: loan.id }]}
+                            />
                         )}
                     </Pgrid.Column>
                 </Pgrid.Row>

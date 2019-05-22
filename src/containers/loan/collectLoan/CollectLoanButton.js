@@ -8,6 +8,8 @@ import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/M
 import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 
+import "./CollectLoanButton.css";
+
 class CollectLoanButton extends React.Component {
     async handleSubmit(values) {
         //values.preventDefault();
@@ -42,11 +44,12 @@ class CollectLoanButton extends React.Component {
             submitting,
             reset,
             loanManager,
-            loansToCollect
+            loansToCollect,
+            className
         } = this.props;
         const { isLoading } = loanManager;
         return (
-            <Pblock>
+            <Pblock className={className}>
                 {error && (
                     <EthSubmissionErrorPanel
                         error={error}
@@ -57,20 +60,18 @@ class CollectLoanButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!submitSucceeded &&
-                    !isLoading &&
-                    loansToCollect != null && (
-                        <Form onSubmit={handleSubmit(this.handleSubmit)}>
-                            <Button
-                                size="large"
-                                data-testid="collectLoanButton"
-                                disabled={submitting || isLoading || loansToCollect.length === 0}
-                                type="submit"
-                            >
-                                {submitting ? "Submitting..." : "Collect"}
-                            </Button>
-                        </Form>
-                    )}
+                {!submitSucceeded && !isLoading && loansToCollect != null && (
+                    <Form onSubmit={handleSubmit(this.handleSubmit)}>
+                        <Button
+                            size="large"
+                            data-testid="collectLoanButton"
+                            disabled={submitting || isLoading || loansToCollect.length === 0}
+                            type="submit"
+                        >
+                            {submitting ? "Submitting..." : "Collect"}
+                        </Button>
+                    </Form>
+                )}
 
                 {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
 
