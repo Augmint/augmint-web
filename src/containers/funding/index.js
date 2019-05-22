@@ -7,7 +7,6 @@ import ratesProvider from "modules/ratesProvider";
 import AddWithdrawForm from "./components/AddWithdrawForm";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-import NoTokenAlert from "../account/components/NoTokenAlert";
 
 import "./styles.css";
 
@@ -28,7 +27,6 @@ class WithdrawHome extends React.Component {
                         <Pheader header="Exchange Fiat" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
                     <Pgrid id="funding">
                         <Pgrid.Row className="row">
                             <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>
