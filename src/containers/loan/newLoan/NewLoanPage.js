@@ -7,6 +7,8 @@ import { SubmissionError } from "redux-form";
 import { newLoan, LOANTRANSACTIONS_NEWLOAN_CREATED } from "modules/reducers/loanTransactions";
 import NewLoanForm from "./NewLoanForm";
 import NewLoanSuccess from "./NewLoanSuccess";
+import Button from "components/augmint-ui/button";
+import { withRouter } from "react-router";
 
 class NewLoanPage extends React.Component {
     constructor(props) {
@@ -16,6 +18,12 @@ class NewLoanPage extends React.Component {
             isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.overviewLoans = this.overviewLoans.bind(this);
+    }
+
+    overviewLoans() {
+        console.log(this.state);
+        this.props.history.push("/loan");
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -68,10 +76,16 @@ class NewLoanPage extends React.Component {
                                 onSubmit={this.handleSubmit}
                             />
                         )}
+
                         {this.state.submitSucceeded && (
-                            /* couldn't make this work yet:
-                        <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                            <NewLoanSuccess result={this.state.result} />
+                            <div>
+                                <NewLoanSuccess result={this.state.result} />
+                                <div style={{ textAlign: "center" }}>
+                                    <Button onClick={this.overviewLoans} style={{ margin: "10px auto 0px auto" }}>
+                                        Overview my loans
+                                    </Button>
+                                </div>
+                            </div>
                         )}
                     </Pgrid.Column>
                 </Pgrid.Row>
@@ -87,4 +101,4 @@ const mapStateToProps = state => ({
     userAccount: state.userBalances.account
 });
 
-export default connect(mapStateToProps)(NewLoanPage);
+export default withRouter(connect(mapStateToProps)(NewLoanPage));
