@@ -148,7 +148,8 @@ export function placeOrder(orderType, amount, price) {
         });
 
         try {
-            const result = await placeOrderTx(orderType, amount, price);
+            const buy = orderType === TOKEN_BUY;
+            const result = await placeOrderTx(buy, amount, price);
             return dispatch({
                 type: PLACE_ORDER_SUCCESS,
                 result: result
@@ -190,7 +191,7 @@ export function cancelOrder(order) {
 
         try {
             const exchangeInstance = store.getState().contracts.latest.exchange.web3ContractInstance;
-            const result = await cancelOrderTx(exchangeInstance, order.direction, order.id);
+            const result = await cancelOrderTx(exchangeInstance, order.buy, order.id);
             return dispatch({
                 type: CANCEL_ORDER_SUCCESS,
                 result: result

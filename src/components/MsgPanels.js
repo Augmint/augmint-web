@@ -166,19 +166,20 @@ export function LoadingPanel(props) {
 
 export class EthSubmissionErrorPanel extends React.Component {
     render() {
-        const { children, error, ...other } = this.props;
+        const { children, error, icon = "warning", ...other } = this.props;
         const receipt = error && error.receipt ? error.receipt : null;
         const panel = !error ? null : (
-            <MsgPanel error={!!error} {...other}>
+            <MsgPanel error={!!error} icon={icon} {...other}>
                 {children}
-                {error && error.message}
+                {error && <div style={{ marginLeft: "30px" }}>{error.message}</div>}
                 {receipt && (
                     <div>
-                        <HashURL hash={receipt.transactionHash} type={"tx/"} />
+                        <p>
+                            <HashURL hash={receipt.transactionHash} type={"tx/"} />
+                        </p>
                         <p>Gas used: {receipt.gasUsed}</p>
                     </div>
                 )}
-                {error && <ErrorDetails details={error.details} />}
             </MsgPanel>
         );
         return panel;

@@ -1,26 +1,38 @@
 import React from "react";
 
+import { Tokens, Wei } from "@augmint/js";
 import { Pblock } from "components/PageLayout";
 import { ErrorPanel } from "components/MsgPanels";
 import { MoreInfoTip } from "components/toolTip";
 import { PriceToolTip } from "./ExchangeToolTips";
 import { Menu } from "components/augmint-ui/menu";
 import CancelOrderButton from "./CancelOrderButton";
-import BigNumber from "bignumber.js";
 import styled from "styled-components";
+import theme from "styles/theme";
 
 import { TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
-import { DECIMALS, ETHEUR } from "utils/constants";
-import { floatNumberConverter } from "utils/converter";
-import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { ETHEUR } from "utils/constants";
+import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 
 const StyledTable = styled.table`
     width: 100%;
     border-spacing: 10px 2px;
     white-space: nowrap;
     text-align: right;
+    th.price,
+    th.ops {
+        width: 17%;
+    }
+    th.rate,
+    th.tokens,
+    th.eth {
+        width: 22%;
+    }
     tr td:last-child {
         text-align: left;
+    }
+    td.estimated {
+        color: ${theme.colors.mediumGrey};
     }
     tfoot {
         td {
@@ -33,144 +45,151 @@ const StyledTable = styled.table`
     }
 `;
 
+function toWei(order, rate) {
+    return order.amount instanceof Wei ? order.amount : rate ? order.amount.toWeiAt(rate, order.price) : null;
+}
+
+function toTokens(order, rate) {
+    return order.amount instanceof Tokens ? order.amount : rate ? order.amount.toTokensAt(rate, order.price) : null;
+}
+
+function enhanceOrder(order, rate, userAccountAddress) {
+    return {
+        id: order.id,
+        maker: order.maker,
+        price: order.price,
+        buy: order.amount instanceof Wei,
+
+        tokens: toTokens(order, rate),
+        wei: toWei(order, rate),
+        effectiveRate: rate ? rate.div(order.price) : null,
+
+        isMyOrder: order.maker.toLowerCase() === userAccountAddress.toLowerCase()
+    };
+}
+
 const OrderItem = props => {
-    const { order, ethFiatRate, userAccountAddress } = props;
-    const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
+    const { order, ethFiatRate, showDirection } = props;
 
-    const myOrder = order.maker.toLowerCase() === userAccountAddress.toLowerCase();
-    const displayPrice = floatNumberConverter(order.price, DECIMALS).toFixed(2);
-
-    function parsePrice(price) {
-        return Math.round(price * 100) / 10000;
-    }
-
-    const rate = ethFiatRate / parsePrice(displayPrice);
-
-    if (order.direction === TOKEN_SELL) {
-        const ethValue = (order.amount * order.price) / bn_ethFiatRate;
-        return (
-            <tr>
-                <td>
-                    <AEUR amount={order.amount} />
-                </td>
-                <td>
-                    <ETH amount={ethValue} />
-                </td>
-                <td>{displayPrice}%</td>
-                <td>
-                    <AEUR amount={rate} />
-                </td>
-                <td>
-                    <MoreInfoTip id={"more_info-" + order.id}>
-                        <p>
-                            Sell A€ order: <br />
-                            {order.amount} A€ @{displayPrice}% of current {ETHEUR} = <br />
-                            {order.amount} A€ * {order.price} €/A€ / {ethFiatRate} {ETHEUR} = <br />
-                            {ethValue} ETH
-                        </p>
-                        Maker: {order.maker}
-                        <br />
-                        Order Id: {order.id}
-                    </MoreInfoTip>
-                    {myOrder && <CancelOrderButton order={order} />}
-                </td>
-            </tr>
-        );
-    } else {
-        // TOKEN_BUY
-
-        const aeurValue = (bn_ethFiatRate / order.price) * order.amount;
-        return (
-            <tr>
-                <td>
-                    <AEUR amount={aeurValue} />
-                </td>
-                <td>
-                    <ETH amount={order.amount} />
-                </td>
-                <td>{displayPrice}%</td>
-                <td>
-                    <AEUR amount={rate} />
-                </td>
-                <td>
-                    <MoreInfoTip id={"more_info-" + order.id}>
-                        <p>
-                            Buy A€ Order: <br />
-                            {order.amount} ETH @{displayPrice}% of current {ETHEUR} = <br />
-                            {order.amount} ETH * {ethFiatRate} {ETHEUR} / {order.price} €/A€ = <br />
-                            {aeurValue} A€
-                        </p>
-                        Maker: {order.maker}
-                        <br />
-                        Order Id: {order.id}
-                    </MoreInfoTip>
-                    {myOrder && <CancelOrderButton order={order} />}
-                </td>
-            </tr>
-        );
-    }
+    return (
+        <tr>
+            <td className={order.buy ? "estimated" : ""}>
+                <React.Fragment>
+                    {order.tokens && showDirection && (order.buy ? "Buy " : "Sell ")}
+                    <AEUR amount={order.tokens} />
+                </React.Fragment>
+            </td>
+            <td className={order.buy ? "" : "estimated"}>
+                <ETH amount={order.wei} />
+            </td>
+            <td>
+                <Percent amount={order.price} />
+            </td>
+            <td className="estimated">
+                <AEUR amount={order.effectiveRate} />
+            </td>
+            <td>
+                <MoreInfoTip id={"more_info-" + order.id}>
+                    Order ID: {order.id}
+                    <br />
+                    Maker: {order.maker}
+                    <br />
+                    <br />
+                    {order.buy && (
+                        <div>
+                            <ETH amount={order.wei} /> * <AEUR amount={ethFiatRate} /> /{" "}
+                            <Percent amount={order.price} /> = <AEUR amount={order.tokens} />
+                        </div>
+                    )}
+                    {!order.buy && (
+                        <div>
+                            <AEUR amount={order.tokens} /> * <Percent amount={order.price} /> /{" "}
+                            <AEUR amount={ethFiatRate} /> = <ETH amount={order.wei} />
+                        </div>
+                    )}
+                </MoreInfoTip>
+                {order.isMyOrder && <CancelOrderButton order={order} />}
+            </td>
+        </tr>
+    );
 };
 
 const OrderList = props => {
-    const { sellOrders, buyOrders, userAccountAddress, ethFiatRate, orderDirection } = props;
+    const { orders, ethFiatRate, showDirection } = props;
 
-    const totalEthBuyAmount = parseFloat(buyOrders.reduce((sum, order) => order.bnEthAmount.add(sum), 0));
-    const totalEthSellAmount = sellOrders.reduce(
-        (sum, order) => new BigNumber(((order.amount * order.price) / ethFiatRate).toFixed(5)).add(sum),
-        0
-    );
-    const totalAeurSellAmount = sellOrders.reduce((sum, order) => order.amount + sum, 0);
-    const totalAeurBuyAmount = buyOrders.reduce(
-        (sum, order) => new BigNumber(((ethFiatRate / order.price) * order.amount).toFixed(2)).add(sum),
-        0
-    );
-
-    const isSell = orderDirection === TOKEN_SELL;
-    const orders = isSell ? sellOrders : buyOrders;
-
-    if (orders.length === 0) {
-        return <div style={{ textAlign: "center", margin: "20px" }}>No {isSell ? "sell" : "buy"} orders</div>;
-    }
+    const sum = (acc, curr) => acc.add(curr);
+    const totalTokens = ethFiatRate ? orders.map(o => o.tokens).reduce(sum) : null;
+    const totalEthers = ethFiatRate ? orders.map(o => o.wei).reduce(sum) : null;
 
     return (
         <StyledTable>
             <thead>
                 <tr>
-                    <th>{isSell ? "A-EUR amount" : "Est. A-EUR amount"}</th>
-                    <th>{isSell ? "Est. ETH amount" : "ETH amount"}</th>
-                    <th>
+                    <th className="tokens">A-EUR amount</th>
+                    <th className="eth">ETH amount</th>
+                    <th className="price">
                         Price
-                        <PriceToolTip id={isSell ? "price_sell" : "price_buy"} />
+                        <PriceToolTip />
                     </th>
-                    <th>Est. {ETHEUR}</th>
-                    <th />
+                    <th className="rate">Est. {ETHEUR}</th>
+                    <th className="ops" />
                 </tr>
             </thead>
 
             <tbody>
                 {orders.map(order => (
-                    <OrderItem
-                        key={order.id}
-                        order={order}
-                        ethFiatRate={ethFiatRate}
-                        userAccountAddress={userAccountAddress}
-                    />
+                    <OrderItem key={order.id} order={order} ethFiatRate={ethFiatRate} showDirection={showDirection} />
                 ))}
             </tbody>
-            <tfoot>
-                <tr>
-                    <td>
-                        Total: {isSell ? <AEUR amount={totalAeurSellAmount} /> : <AEUR amount={totalAeurBuyAmount} />}
-                    </td>
-                    <td>{isSell ? <ETH amount={totalEthSellAmount} /> : <ETH amount={totalEthBuyAmount} />}</td>
-                    <td colSpan="3" />
-                </tr>
-            </tfoot>
+            {orders.length > 1 && (
+                <tfoot>
+                    <tr>
+                        <td>
+                            Total: <AEUR amount={totalTokens} />
+                        </td>
+                        <td>
+                            <ETH amount={totalEthers} />
+                        </td>
+                        <td colSpan="3" />
+                    </tr>
+                </tfoot>
+            )}
         </StyledTable>
     );
 };
 
-export default class OrderBook extends React.Component {
+export class MyOrders extends React.Component {
+    render() {
+        const { header, userAccountAddress, testid, rates } = this.props;
+        const { orders } = this.props.orders;
+        // FIXME should be Tokens already
+        const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
+
+        const orderList =
+            orders == null
+                ? []
+                : [...orders.buyOrders, ...orders.sellOrders]
+                      .map(o => enhanceOrder(o, ethFiatRate, userAccountAddress))
+                      .filter(o => o.isMyOrder);
+
+        if (orderList.length === 0) {
+            return null;
+        }
+        return (
+            <Pblock header={header} data-testid={testid}>
+                <OrderList
+                    showDirection={true}
+                    orders={orderList}
+                    ethFiatRate={ethFiatRate}
+                    userAccountAddress={userAccountAddress}
+                    rates={rates}
+                />
+            </Pblock>
+        );
+    }
+}
+
+export class OrderBook extends React.Component {
     constructor(props) {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
@@ -186,11 +205,10 @@ export default class OrderBook extends React.Component {
     }
 
     render() {
-        const { filter, header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
+        const { header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
-        const buyOrders = orders == null ? [] : orders.buyOrders.filter(filter);
-        const sellOrders = orders == null ? [] : orders.sellOrders.filter(filter);
-        const { ethFiatRate } = this.props.rates.info;
+        // FIXME should be Tokens already
+        const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
         const orderDirection = orderBookDirection;
 
         const header = (
@@ -221,22 +239,30 @@ export default class OrderBook extends React.Component {
             </div>
         );
 
+        const buy = orderDirection === TOKEN_BUY;
+        const orderList =
+            orders == null
+                ? null
+                : (buy ? orders.buyOrders : orders.sellOrders).map(o =>
+                      enhanceOrder(o, ethFiatRate, userAccountAddress)
+                  );
+
         return (
             <Pblock loading={isLoading} header={header} data-testid={testid}>
                 {refreshError && (
                     <ErrorPanel header="Error while fetching order list">{refreshError.message}</ErrorPanel>
                 )}
                 {orders == null && !isLoading && <p>Connecting...</p>}
-                {isLoading ? (
-                    <p>Refreshing orders...</p>
-                ) : (
+                {isLoading && <p>Refreshing orders...</p>}
+                {orderList && orderList.length === 0 && (
+                    <div style={{ textAlign: "center", margin: "20px" }}>No {buy ? "buy" : "sell"} orders</div>
+                )}
+                {orderList && orderList.length > 0 && (
                     <OrderList
-                        buyOrders={buyOrders}
-                        sellOrders={sellOrders}
+                        orders={orderList}
                         ethFiatRate={ethFiatRate}
                         userAccountAddress={userAccountAddress}
                         rates={rates}
-                        orderDirection={orderDirection}
                     />
                 )}
             </Pblock>
@@ -247,9 +273,6 @@ export default class OrderBook extends React.Component {
 OrderBook.defaultProps = {
     orders: null,
     userAccountAddress: null,
-    filter: () => {
-        return true; // no filter passed
-    },
     header: <h3>Open orders</h3>,
     rates: null
 };
