@@ -73,7 +73,7 @@ export function HowToConnect(props) {
                 <Tsegment>
                     <Tsegment.Row columns={1}>
                         <Tsegment.Column>
-                            <StyledP className={"primaryColor"}>
+                            <StyledP className={"primaryColor"} style={{ marginBottom: 60 }}>
                                 To use Augmint you need an Ethereum capable browser.
                             </StyledP>
                             <Header as="h4" className={"tertiaryColor"}>
@@ -85,14 +85,6 @@ export function HowToConnect(props) {
                             <Header as="h4" className={"tertiaryColor"}>
                                 2. Connect to Main or Rinkeby test network.
                             </Header>
-                            <StyledP className={"primaryColor"}>
-                                Video about installing MetaMask and getting test A-EUR:
-                            </StyledP>
-                            <Video
-                                title="connect to rinkeby"
-                                src="https://www.youtube.com/embed/0APcMesrZ_U"
-                                host="https://www.youtube.com"
-                            />
                         </Tsegment.Column>
                     </Tsegment.Row>
                     <Tsegment.Row columns={2}>
