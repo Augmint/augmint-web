@@ -79,7 +79,7 @@ export const StyledContainer = styled.div`
     }
 `;
 
-export const StyledDiv = styled.div`
+export const StyledHintBtn = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     display: none;
 
