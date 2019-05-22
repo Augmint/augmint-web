@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 export default class SolidityContract {
     constructor(connection, contractAddress, abiFile) {
         const web3 = connection.web3Instance;
@@ -5,6 +6,9 @@ export default class SolidityContract {
         //   to find source of  "Uncaught (in promise) Error: Couldn't decode uint256 from ABI: 0x"
         //  error in console when incorrect contract address is passed
         this.web3ContractInstance = new web3.eth.Contract(abiFile.abi, contractAddress);
+
+        const provider = connection.ethers.provider;
+        this.ethersInstance = new ethers.Contract(contractAddress, abiFile.abi, provider);
 
         this.address = web3.utils.toChecksumAddress(contractAddress); // format it checksummed
         this.abiVersionHash = abiFile && abiFile.abiHash;

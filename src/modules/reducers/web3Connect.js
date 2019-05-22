@@ -1,4 +1,6 @@
+import store from "modules/store";
 import { default as Web3 } from "web3";
+import { ethers } from "ethers";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
 import { getCookie, setCookie } from "utils/cookie.js";
@@ -18,6 +20,7 @@ const initialState = {
     accounts: null,
     isLoading: false,
     isConnected: false,
+    ethers: { provider: null, signer: null },
     network: { id: "?", name: "?" },
     augmint: null,
     watchAsset: getCookie("watchAsset") || []
@@ -44,6 +47,7 @@ export default (state = initialState, action) => {
                 userAccount: action.accounts[0],
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
+                ethers: action.ethers,
                 network: action.network,
                 info: action.info
             };
@@ -60,7 +64,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 accounts: action.accounts,
-                userAccount: action.userAccount
+                userAccount: action.userAccount,
+                ethers: action.ethers
             };
 
         case WEB3_WATCH_ASSET_CHANGE:
@@ -132,6 +137,11 @@ export const setupWeb3 = () => {
             };
             const augmint = await Augmint.create(connectionConfig);
 
+            // ethers is used as a workaround for wallet providers are not suporting subscriptions via web3
+            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider);
+
+            const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
+
             const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
@@ -140,6 +150,7 @@ export const setupWeb3 = () => {
                 userAccount,
                 accounts,
                 network,
+                ethers: { signer: ethersSigner, provider: ethersProvider },
                 info: { web3Version, gasLimit: lastBlock.gasLimit, gasPrice }
             });
         } catch (error) {
@@ -152,10 +163,13 @@ export const setupWeb3 = () => {
 };
 
 export const accountChange = newAccounts => {
+    const provider = store.getState().web3Connect.ethers.provider;
+    const signer = provider.getSigner(newAccounts[0]);
     return {
         type: WEB3_ACCOUNT_CHANGE,
         userAccount: newAccounts[0],
-        accounts: newAccounts
+        accounts: newAccounts,
+        ethers: { signer, provider }
     };
 };
 
