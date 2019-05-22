@@ -10,11 +10,9 @@ import Button from "components/augmint-ui/button";
 import Icon from "components/augmint-ui/icon";
 import Header from "components/augmint-ui/header";
 import Modal from "components/augmint-ui/modal";
-import { cancelOrder, CANCEL_ORDER_SUCCESS, TOKEN_SELL, TOKEN_BUY } from "modules/reducers/orders";
+import { cancelOrder, CANCEL_ORDER_SUCCESS } from "modules/reducers/orders";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
-
-import { DECIMALS } from "utils/constants";
-import { floatNumberConverter } from "utils/converter";
+import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 
 import theme from "styles/theme";
 
@@ -62,7 +60,6 @@ class CancelOrderButton extends React.Component {
     render() {
         const { order, label = "Cancel" } = this.props;
         const { submitting, error, confirmOpen } = this.state;
-        const price = floatNumberConverter(order.price, DECIMALS);
 
         return (
             <div style={{ display: "inline-block" }}>
@@ -114,14 +111,15 @@ class CancelOrderButton extends React.Component {
                                 </EthSubmissionErrorPanel>
                             )}
                             <p style={{ marginTop: "0" }}>Order id: {order.id}</p>
-                            {order.direction === TOKEN_SELL && (
+                            {!order.buy && (
                                 <p>
-                                    Sell {order.amount} A-EUR @{price}% EUR/ETH rate
+                                    Sell <AEUR amount={order.tokens} /> at <Percent amount={order.price} /> EUR/ETH rate
                                 </p>
                             )}
-                            {order.direction === TOKEN_BUY && (
+                            {order.buy && (
                                 <p>
-                                    Buy A-EUR for {order.amount} ETH @{price}% EUR/ETH rate
+                                    Buy A-EUR for <ETH amount={order.wei} /> at <Percent amount={order.price} /> EUR/ETH
+                                    rate
                                 </p>
                             )}
                             <p style={{ marginBottom: "0" }}>Are you sure you want to cancel your order?</p>
