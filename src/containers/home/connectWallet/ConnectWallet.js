@@ -1,6 +1,5 @@
 import React from "react";
 import { DiscordButton, TelegramButton } from "components/LinkButtons";
-
 import { browserLinks } from "./helper.js";
 
 import "./styles.css";
@@ -13,7 +12,7 @@ function ConnectWallet(props) {
         onMobile.push(
             <li key={i}>
                 <img src={b.image} alt={b.browser} />
-                <a os={b.os} href={b.url}>
+                <a os={b.os} href={b.url} target="_blank">
                     {b.browser}
                 </a>
             </li>
@@ -25,7 +24,9 @@ function ConnectWallet(props) {
         onDesktop.push(
             <li key={i}>
                 <img src={b.image} alt={b.browser} />
-                <a href={b.url}>{b.browser}</a>
+                <a href={b.url} target="_blank">
+                    {b.browser}
+                </a>
             </li>
         );
     });
@@ -35,7 +36,7 @@ function ConnectWallet(props) {
             {showHedaer && <header>Connect wallet</header>}
             <section>
                 <p>
-                    To use <span>Augmint</span> you need an Ethereum capable browser.
+                    To use <span style={{ fontWeight: "bold" }}>Augmint</span> you need an Ethereum capable browser.
                 </p>
                 <div className="content">
                     <div className="column">
