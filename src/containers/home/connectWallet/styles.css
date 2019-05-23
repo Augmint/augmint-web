@@ -1,0 +1,118 @@
+.connect-wallet,
+.connect-wallet * {
+    box-sizing: border-box;
+}
+
+.connect-wallet {
+    background-color: #f3f1f1;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    width: 560px;
+}
+
+.connect-wallet p {
+    font-size: 14px;
+    margin: 0;
+    font-weight: 300;
+}
+
+.connect-wallet p a {
+    color: black;
+    text-decoration: underline;
+}
+
+.connect-wallet header {
+    background-color: white;
+    line-height: 140%;
+}
+
+.connect-wallet .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.connect-wallet section > p {
+    font-weight: 400;
+}
+
+.connect-wallet .content .column {
+    display: flex;
+    flex-direction: column;
+    width: 235px;
+    background-color: white;
+    border-radius: 4px;
+}
+
+.connect-wallet .content .column > div {
+    padding: 15px 20px;
+}
+
+.connect-wallet .content .column header {
+    border-bottom: 2px solid #f3f1f1;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 40px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.connect-wallet ul {
+    padding: 0;
+    text-align: left;
+    font-weight: 500;
+}
+
+.connect-wallet ul li {
+    font-size: 16px;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    text-transform: capitalize;
+    white-space: nowrap;
+    height: 33px;
+}
+
+.connect-wallet ul li img {
+    width: 25px;
+    margin-right: 6px;
+}
+
+.connect-wallet ul li a {
+    position: relative;
+    text-transform: capitalize;
+}
+
+.connect-wallet ul li a:after {
+    content: "";
+    background-image: url("./../../../assets/images/arrow_link.svg");
+    height: 10px;
+    width: 7px;
+    background-position: center;
+    background-size: contain;
+    position: absolute;
+    right: -15px;
+    top: calc(50% - 4px);
+}
+.connect-wallet ul li a[os] {
+    margin-bottom: 5px;
+}
+
+.connect-wallet ul li a[os]:before {
+    content: attr(os);
+    font-size: 10px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: normal;
+    display: block;
+    line-height: 0.9;
+    padding-left: 2px;
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+}

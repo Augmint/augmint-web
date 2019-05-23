@@ -4,6 +4,8 @@ import { Tsegment } from "components/TextContent";
 import { DiscordButton, TelegramButton } from "components/LinkButtons";
 import Header from "components/augmint-ui/header";
 
+import ConnectWallet from "containers/home/connectWallet/ConnectWallet.js";
+
 import { MobileView, DesktopView, StoreBadge } from "./styles";
 import { StyledP } from "components/augmint-ui/paragraph/styles";
 
@@ -70,30 +72,7 @@ export function HowToConnect(props) {
             </MobileView>
             <DesktopView>
                 <Tsegment>
-                    <Tsegment.Row columns={1}>
-                        <Tsegment.Column>
-                            <StyledP className={"primaryColor"} style={{ marginBottom: 60 }}>
-                                To use Augmint you need an Ethereum capable browser.
-                            </StyledP>
-                            <Header as="h4" className={"tertiaryColor"}>
-                                1. Install{" "}
-                                <a href="https://metamask.io" target="_blank" rel="noopener noreferrer">
-                                    <strong>MetaMask browser plugin</strong>
-                                </a>
-                            </Header>
-                            <Header as="h4" className={"tertiaryColor"}>
-                                2. Connect to Main or Rinkeby test network.
-                            </Header>
-                        </Tsegment.Column>
-                    </Tsegment.Row>
-                    <Tsegment.Row columns={2}>
-                        <Tsegment.Column>
-                            <DiscordButton />
-                        </Tsegment.Column>
-                        <Tsegment.Column>
-                            <TelegramButton />
-                        </Tsegment.Column>
-                    </Tsegment.Row>
+                    <ConnectWallet styles={{ margin: "0 auto" }} />
                 </Tsegment>
             </DesktopView>
         </div>
