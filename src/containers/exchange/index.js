@@ -5,8 +5,7 @@ import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
-import OrderBook from "./components/OrderBook";
-import MyOrders from "./components/MyOrders";
+import { OrderBook, MyOrders } from "./components/OrderBook";
 import TradeHistory from "./components/TradeHistory";
 import PlaceOrderForm from "./components/PlaceOrderForm";
 import { EthereumState } from "containers/app/EthereumState";
@@ -55,7 +54,6 @@ class ExchangeHome extends React.Component {
                                 size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}
                             >
                                 <PlaceOrderForm
-                                    orders={orders}
                                     exchange={exchange}
                                     rates={rates}
                                     toggleOrderBook={this.toggleOrderBook}
@@ -65,6 +63,13 @@ class ExchangeHome extends React.Component {
                                 style={{ marginTop: "1rem" }}
                                 size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}
                             >
+                                <MyOrders
+                                    testid="myOrdersBlock"
+                                    orders={orders}
+                                    rates={rates}
+                                    userAccountAddress={userAccount.address}
+                                    header="My open orders"
+                                />
                                 <OrderBook
                                     testid="allOrdersBlock"
                                     orders={orders}
@@ -75,23 +80,8 @@ class ExchangeHome extends React.Component {
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
                                 {orders.orders && (
-                                    <MatchMultipleOrdersButton
-                                        buyOrder={orders.orders.buyOrders[0]}
-                                        sellOrder={orders.orders.sellOrders[0]}
-                                        label="Match orders"
-                                    />
+                                    <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
                                 )}
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 2 / 2, desktop: 3 / 3 }}>
-                                <MyOrders
-                                    testid="myOrdersBlock"
-                                    orders={orders}
-                                    rates={rates}
-                                    userAccountAddress={userAccount.address}
-                                    header="My open orders"
-                                />
                             </Pgrid.Column>
                         </Pgrid.Row>
                         <Pgrid.Row>

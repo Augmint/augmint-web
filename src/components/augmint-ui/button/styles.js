@@ -50,7 +50,7 @@ export const BaseButton = styledComponent => styledComponent`
       background-color: ${theme.colors.secondary};
 
       &.fullwidth {
-        width: 100%; 
+        width: 100%;
         height: 50px;
       }
 
@@ -66,7 +66,7 @@ export const BaseButton = styledComponent => styledComponent`
       text-transform: none;
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
-      
+
       ${media.tabletMin`
         padding: 20px 30px;
         font-size: ${remCalc(16)};
@@ -105,12 +105,24 @@ export const BaseButton = styledComponent => styledComponent`
       border: 1px solid ${theme.colors.primary};
       color: ${theme.colors.primary};
 
+      &.orange {
+        color: ${theme.colors.secondary};
+        background: none;
+        border: 1px solid ${theme.colors.secondary};
+      }
+
       &:hover,
       &:focus {
         background: transparent;
         background-color: ${theme.colors.primary};
         color: ${theme.colors.white};
         box-shadow: none;
+      }
+
+      &.orange:hover, &.orange:focus {
+        border: 1px solid ${theme.colors.secondaryDark};
+        background-color: transparent;
+        color: ${theme.colors.secondaryDark};
       }
     }
 
