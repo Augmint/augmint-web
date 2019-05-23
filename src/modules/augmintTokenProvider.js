@@ -31,7 +31,7 @@ export default () => {
     return;
 };
 
-const setupContractEventListeners = async () => {
+const setupContractEventListeners = () => {
     const augmintToken = store.getState().contracts.latest.augmintToken.ethersInstance;
 
     augmintToken.on("AugmintTransfer", (...args) => {
