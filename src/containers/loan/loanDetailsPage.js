@@ -84,7 +84,7 @@ class LoanDetailsPage extends React.Component {
 
                                     {this.state.loan.isCollectable && (
                                         <CollectLoanButton
-                                            className="details-collect-btn"
+                                            idName="details-collect-btn"
                                             loanManager={this.props.loanManager}
                                             loansToCollect={[{ id: this.state.loan.id }]}
                                         />

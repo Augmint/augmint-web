@@ -131,7 +131,7 @@ export default function LoanCard(props) {
                         size={{ desktop: 1 / 3 }}
                         style={{
                             display: "flex",
-                            alignItems: "flex-end",
+                            alignItems: "flex-start",
                             flexBasis: "unset",
                             marginLeft: "auto",
                             padding: "1rem"
@@ -143,7 +143,7 @@ export default function LoanCard(props) {
 
                         {loan.isCollectable && (
                             <CollectLoanButton
-                                className="card-collect-btn"
+                                idName="card-collect-btn"
                                 loanManager={loanManager}
                                 loansToCollect={[{ id: loan.id }]}
                             />

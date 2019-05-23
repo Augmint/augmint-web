@@ -45,11 +45,11 @@ class CollectLoanButton extends React.Component {
             reset,
             loanManager,
             loansToCollect,
-            className
+            idName
         } = this.props;
         const { isLoading } = loanManager;
         return (
-            <Pblock className={className}>
+            <Pblock id={idName}>
                 {error && (
                     <EthSubmissionErrorPanel
                         error={error}

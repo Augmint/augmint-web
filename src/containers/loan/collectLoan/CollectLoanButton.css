@@ -1,24 +1,27 @@
-.card-collect-btn,
-.details-collect-btn {
+#card-collect-btn.segment,
+#details-collect-btn.segment {
     margin: 0;
 }
 
-.card-collect-btn .dashblock__content,
-.details-collect-btn .dashblock__content {
+#list-collect-btn.segment {
+    margin-top: 5px;
+}
+
+#card-collect-btn.segment .dashblock__content,
+#details-collect-btn.segment .dashblock__content {
     display: flex;
     flex-direction: column;
-}
-
-.card-collect-btn .dashblock__content {
-    padding: 0;
-    align-items: flex-end;
-}
-
-.details-collect-btn .dashblock__content {
-    padding: 10px 0 0 5px;
     align-items: flex-start;
 }
 
-.details-collect-btn .dashblock__content > div {
+#card-collect-btn.segment .dashblock__content {
+    padding: 0;
+}
+
+#details-collect-btn.segment .dashblock__content {
+    padding: 10px 0 0 5px;
+}
+
+#details-collect-btn.segment .dashblock__content > div {
     margin-left: 0;
 }

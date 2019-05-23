@@ -106,7 +106,7 @@ class RepayLoanPage extends React.Component {
                 <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}>
                     <RepayHelp />
                 </Pgrid.Column>
-                <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
+                <Pgrid.Column style={{ marginTop: 5 }} size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
                     {this.props.error && (
                         <EthSubmissionErrorPanel
                             error={this.props.error}
@@ -115,72 +115,66 @@ class RepayLoanPage extends React.Component {
                         />
                     )}
 
-                    {!submitSucceeded &&
-                        !this.state.isLoading && (
-                            <Pblock header="Selected Loan">
-                                <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                    {loan.state !== 5 &&
-                                        loan.state !== 0 && (
-                                            <WarningPanel header="Can't repay">
-                                                This loan is in "{loan.loanStateText}" status.
-                                            </WarningPanel>
-                                        )}
-                                    <LoanDetails loan={loan} />
+                    {!submitSucceeded && !this.state.isLoading && (
+                        <Pblock header="Selected Loan">
+                            <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                {loan.state !== 5 && loan.state !== 0 && (
+                                    <WarningPanel header="Can't repay">
+                                        This loan is in "{loan.loanStateText}" status.
+                                    </WarningPanel>
+                                )}
+                                <LoanDetails loan={loan} />
 
-                                    {this.state.loan.isRepayable &&
-                                        !this.state.loan.isDue && (
-                                            <p>
-                                                This loan is not due soon but you can repay early without any extra fee.
+                                {this.state.loan.isRepayable && !this.state.loan.isDue && (
+                                    <p>This loan is not due soon but you can repay early without any extra fee.</p>
+                                )}
+                                {this.state.loan.isRepayable &&
+                                    (loan.loanAmount < userAccount.tokenBalance ? (
+                                        <Button
+                                            data-testid="confirmRepayButton"
+                                            size="big"
+                                            type="submit"
+                                            disabled={
+                                                this.props.submitting ||
+                                                !this.state.isLoanFound ||
+                                                !this.state.loan.isRepayable
+                                            }
+                                        >
+                                            {this.props.submitting
+                                                ? "Submitting..."
+                                                : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
+                                        </Button>
+                                    ) : (
+                                        <Tsegment style={{ padding: 0 }}>
+                                            <p style={{ textAlign: "left" }}>
+                                                You don't have enough A-EUR to repay this loan.
                                             </p>
-                                        )}
-                                    {this.state.loan.isRepayable &&
-                                        (loan.loanAmount < userAccount.tokenBalance ? (
-                                            <Button
-                                                data-testid="confirmRepayButton"
-                                                size="big"
-                                                type="submit"
-                                                disabled={
-                                                    this.props.submitting ||
-                                                    !this.state.isLoanFound ||
-                                                    !this.state.loan.isRepayable
-                                                }
-                                            >
-                                                {this.props.submitting
-                                                    ? "Submitting..."
-                                                    : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
-                                            </Button>
-                                        ) : (
-                                            <Tsegment style={{ padding: 0 }}>
-                                                <p style={{ textAlign: "left" }}>
-                                                    You don't have enough A-EUR to repay this loan.
+                                            <Tblock header="Get A-EUR" headerStyle={"primaryColor"}>
+                                                <p>
+                                                    <Link to="/loan/new">Take a loan </Link> for leaving your ETH in
+                                                    escrow and receive A-EUR.
                                                 </p>
-                                                <Tblock header="Get A-EUR" headerStyle={"primaryColor"}>
-                                                    <p>
-                                                        <Link to="/loan/new">Take a loan </Link> for leaving your ETH in
-                                                        escrow and receive A-EUR.
-                                                    </p>
-                                                </Tblock>
+                                            </Tblock>
 
-                                                <Tblock header="Buy A-EUR" headerStyle={"primaryColor"}>
-                                                    <p>
-                                                        Buy A-EUR for ETH on{" "}
-                                                        <Link to="/exchange">Augmint's exchange</Link>.
-                                                    </p>
-                                                    <p>
-                                                        Buy A-EUR for fiat EUR on{" "}
-                                                        <MrCoinBuyLink web3Connect={this.props.web3Connect}>
-                                                            MrCoin.eu
-                                                        </MrCoinBuyLink>,
-                                                        {/* Buy A-EUR for fiat EUR on MrCoin.eu, */}
-                                                        our partner exchange.
-                                                    </p>
-                                                </Tblock>
-                                            </Tsegment>
-                                        ))}
-                                    {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
-                                </Form>
-                            </Pblock>
-                        )}
+                                            <Tblock header="Buy A-EUR" headerStyle={"primaryColor"}>
+                                                <p>
+                                                    Buy A-EUR for ETH on <Link to="/exchange">Augmint's exchange</Link>.
+                                                </p>
+                                                <p>
+                                                    Buy A-EUR for fiat EUR on{" "}
+                                                    <MrCoinBuyLink web3Connect={this.props.web3Connect}>
+                                                        MrCoin.eu
+                                                    </MrCoinBuyLink>
+                                                    ,{/* Buy A-EUR for fiat EUR on MrCoin.eu, */}
+                                                    our partner exchange.
+                                                </p>
+                                            </Tblock>
+                                        </Tsegment>
+                                    ))}
+                                {!this.state.loan.isRepayable && <p>This loan is not repayable anymore</p>}
+                            </Form>
+                        </Pblock>
+                    )}
 
                     {submitSucceeded && (
                         <EthSubmissionSuccessPanel
