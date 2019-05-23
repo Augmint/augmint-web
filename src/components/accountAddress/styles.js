@@ -38,7 +38,7 @@ export const StyledContainer = styled.div`
         cursor: default;
     }
 
-    &.clicked ${StyledClicked} {
+    &.showHint ${StyledClicked} {
         display: inline-block;
         padding-right: 5px;
     }
@@ -47,7 +47,7 @@ export const StyledContainer = styled.div`
         display: block;
     }
 
-    &.clicked:hover ${StyledHint} {
+    &.showHint:hover ${StyledHint} {
         display: block;
 
         &::after {
@@ -83,7 +83,7 @@ export const StyledHintBtn = styled.div`
     font-family: ${theme.typography.fontFamilies.default};
     display: none;
 
-    &.show {
+    &.showHint {
         display: block;
         background-color: white;
         border-radius: 3px;
