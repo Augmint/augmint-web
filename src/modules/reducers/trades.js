@@ -115,18 +115,10 @@ export const processNewTrade = (account, event, type) => {
 
             if (
                 !trades.find(a => {
-                    let returnValue;
                     if (a.transactionHash === newTrade.transactionHash) {
-                        if (!newTrade.direction || newTrade.direction !== a.direction) {
-                            returnValue = false;
-                        } else {
-                            returnValue = true;
-                        }
-                    } else {
-                        returnValue = false;
+                        return newTrade.direction && newTrade.direction === a.direction;
                     }
-
-                    return returnValue;
+                    return false;
                 })
             ) {
                 trades.push(newTrade);
