@@ -35,9 +35,7 @@ function ConnectWallet(props) {
             {showHedaer && <header>Connect wallet</header>}
 
             <section>
-                <p>
-                    To use <span style={{ fontWeight: "bold" }}>Augmint</span> you need an Ethereum capable browser.
-                </p>
+                <p>To use Augmint you need an Ethereum capable browser.</p>
 
                 <div className="content">
                     {orderedList.map((card, i) => {

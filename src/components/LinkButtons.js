@@ -8,7 +8,6 @@ import discordSVG from "assets/images/Discord-Logo.svg";
 import telegramSVG from "assets/images/telegram_logo.svg";
 
 const style = {
-    all: "initial",
     color: theme.colors.secondary,
     cursor: "pointer",
     fontFamily: theme.typography.fontFamilies.default,
@@ -19,12 +18,14 @@ const style = {
     margin: "0 auto 10px auto",
     padding: 0,
     alignSelf: "center",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    backgroundColor: "transparent",
+    width: "100%"
 };
 
 export function DiscordButton(props) {
     return (
-        <div style={{ textAlign: "center" }}>
+        <div style={{ width: 220, margin: " 0 auto" }}>
             <Button style={style} href="https://discord.gg/PwDmsnu" target="_blank">
                 <img
                     alt="discord icon"
@@ -39,13 +40,15 @@ export function DiscordButton(props) {
 
 export function TelegramButton(props) {
     return (
-        <Button style={style} href="https://t.me/augmint" target="_blank">
-            <img
-                alt="telegram icon"
-                src={telegramSVG}
-                style={{ display: "inline-block", marginRight: 10, maxWidth: 30 }}
-            />
-            Ask for help on our Telegram
-        </Button>
+        <div style={{ width: 220, margin: " 0 auto" }}>
+            <Button style={style} href="https://t.me/augmint" target="_blank">
+                <img
+                    alt="telegram icon"
+                    src={telegramSVG}
+                    style={{ display: "inline-block", marginRight: 10, maxWidth: 30 }}
+                />
+                Ask for help on our Telegram
+            </Button>
+        </div>
     );
 }

@@ -5,7 +5,7 @@
 
 .connect-wallet {
     background-color: #f3f1f1;
-    color: black;
+    color: #051d2d;
     display: flex;
     flex-direction: column;
     border-radius: 4px;
@@ -18,7 +18,7 @@
 }
 
 .connect-wallet p a {
-    color: black;
+    color: #051d2d;
     text-decoration: underline;
 }
 
@@ -72,7 +72,7 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     height: 40px;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.8);
     line-height: 20px;
     text-transform: capitalize;
 }
