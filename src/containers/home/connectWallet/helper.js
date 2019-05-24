@@ -1,11 +1,20 @@
+import React from "react";
 import chrome from "assets/images/chrome.svg";
 import firefox from "assets/images/firefox.svg";
 import opera from "assets/images/opera.svg";
 import trust from "assets/images/trust.png";
 import coinbase from "assets/images/coinbase.png";
 
-const browserLinks = {
-    desktop: [
+const desktop = {
+    name: "desktop",
+    text: [
+        <span key="0">Install </span>,
+        <a key="1" rel="noopener noreferrer" target="_blank" href="https://metamask.io/">
+            Metamask
+        </a>,
+        <span key="2"> plugin for your browser</span>
+    ],
+    list: [
         {
             browser: "chrome",
             image: chrome,
@@ -21,8 +30,13 @@ const browserLinks = {
             image: opera,
             url: "https://addons.opera.com/en/extensions/details/metamask/"
         }
-    ],
-    mobile: [
+    ]
+};
+
+const ios = {
+    name: "ios",
+    text: "Install Ethereum capable mobile browser for your IOS device",
+    list: [
         {
             browser: "Coinbase wallet",
             os: "IOS",
@@ -30,16 +44,23 @@ const browserLinks = {
             url: "https://itunes.apple.com/app/coinbase-wallet/id1278383455?ls=1&mt=8"
         },
         {
-            browser: "Coinbase wallet",
-            os: "android",
-            image: coinbase,
-            url: "https://play.google.com/store/apps/details?id=org.toshi"
-        },
-        {
             browser: "Trust wallet",
             os: "IOS",
             image: trust,
             url: "https://itunes.apple.com/us/app/trust-ethereum-wallet/id1288339409"
+        }
+    ]
+};
+
+const android = {
+    name: "android",
+    text: "Install Ethereum capable mobile browser for your Android device",
+    list: [
+        {
+            browser: "Coinbase wallet",
+            os: "android",
+            image: coinbase,
+            url: "https://play.google.com/store/apps/details?id=org.toshi"
         },
         {
             browser: "Trust wallet",
@@ -50,4 +71,4 @@ const browserLinks = {
     ]
 };
 
-export { browserLinks };
+export { desktop, ios, android };

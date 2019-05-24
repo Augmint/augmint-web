@@ -110,7 +110,7 @@ export class EthereumState extends React.Component {
         if (msg) {
             msg = (
                 <Tsegment>
-                    <Container>{msg}</Container>
+                    <Container className="conatineeeer">{msg}</Container>
                 </Tsegment>
             );
         } else {

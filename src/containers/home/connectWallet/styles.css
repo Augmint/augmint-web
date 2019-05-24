@@ -8,7 +8,7 @@
     color: black;
     display: flex;
     flex-direction: column;
-    width: 560px;
+    border-radius: 4px;
 }
 
 .connect-wallet p {
@@ -22,28 +22,42 @@
     text-decoration: underline;
 }
 
-.connect-wallet header {
+.connect-wallet > header {
     background-color: white;
     line-height: 140%;
+    height: 50px;
+    font-family: "Roboto slab";
+    text-align: left;
+    padding: 10px 30px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 .connect-wallet .content {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding: 30px;
+    justify-content: center;
+    padding: 30px 0px;
+    flex-wrap: wrap;
+}
+
+.connect-wallet section {
+    padding: 15px;
 }
 
 .connect-wallet section > p {
     font-weight: 400;
+    margin-top: 10px;
+    font-size: 15px;
 }
 
 .connect-wallet .content .column {
     display: flex;
     flex-direction: column;
-    width: 235px;
+    width: 220px;
     background-color: white;
     border-radius: 4px;
+    margin: 15px 15px;
 }
 
 .connect-wallet .content .column > div {
@@ -59,6 +73,12 @@
     border-top-right-radius: 4px;
     height: 40px;
     color: rgba(0, 0, 0, 0.7);
+    line-height: 20px;
+    text-transform: capitalize;
+}
+
+.connect-wallet .content .column header.ios {
+    text-transform: uppercase;
 }
 
 .connect-wallet ul {
@@ -72,7 +92,7 @@
     list-style-type: none;
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-transform: capitalize;
     white-space: nowrap;
     height: 33px;
@@ -80,7 +100,7 @@
 
 .connect-wallet ul li img {
     width: 25px;
-    margin-right: 6px;
+    margin-right: 10px;
 }
 
 .connect-wallet ul li a {
@@ -98,21 +118,4 @@
     position: absolute;
     right: -15px;
     top: calc(50% - 4px);
-}
-.connect-wallet ul li a[os] {
-    margin-bottom: 5px;
-}
-
-.connect-wallet ul li a[os]:before {
-    content: attr(os);
-    font-size: 10px;
-    padding: 0;
-    color: rgba(0, 0, 0, 0.5);
-    font-weight: normal;
-    display: block;
-    line-height: 0.9;
-    padding-left: 2px;
-    position: absolute;
-    left: 0;
-    bottom: -8px;
 }
