@@ -6,7 +6,7 @@ import trust from "assets/images/trust.png";
 import coinbase from "assets/images/coinbase.png";
 
 const desktop = {
-    name: "desktop",
+    name: "Desktop",
     text: [
         <span key="0">Install </span>,
         <a key="1" rel="noopener noreferrer" target="_blank" href="https://metamask.io/">
@@ -34,7 +34,7 @@ const desktop = {
 };
 
 const ios = {
-    name: "ios",
+    name: "iOS",
     text: "Install Ethereum capable mobile browser for your IOS device",
     list: [
         {
@@ -53,7 +53,7 @@ const ios = {
 };
 
 const android = {
-    name: "android",
+    name: "Android",
     text: "Install Ethereum capable mobile browser for your Android device",
     list: [
         {
