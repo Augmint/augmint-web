@@ -115,8 +115,8 @@ class EthereumTxStatus extends React.Component {
                                 <p>To be repaid: {repaymentAmount} A-EUR</p>
                                 <p>Collateral in escrow: {collateralEth} ETH</p>
                                 <p>
-                                    Loan id: {vals.loanId} | Product id: {vals.productId} | borrower:{" "}
-                                    <span className="small">{vals.borrower}</span>
+                                    Loan id: {vals.loanId} | Product id: {vals.productId} | borrower:
+                                    <span className="small"> {vals.borrower}</span>
                                 </p>
                             </div>
                         );
