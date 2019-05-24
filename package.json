@@ -14,6 +14,7 @@
     "bn.js": "4.11.8",
     "chart.js": "2.8.0",
     "ethereumjs-util": "6.1.0",
+    "ethers": "4.0.27",
     "moment": "2.24.0",
     "parse": "2.2.1",
     "react": "16.8.6",
