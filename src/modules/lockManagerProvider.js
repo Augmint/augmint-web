@@ -5,9 +5,9 @@ import { fetchLoanProducts } from "modules/reducers/loanManager";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLocksForAddress, processNewLock } from "modules/reducers/locks";
 import { fetchUserBalance } from "modules/reducers/userBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const lockManager = store.getState().contracts.latest.lockManager;
@@ -26,37 +26,22 @@ export default () => {
 };
 
 const setupContractEventListeners = () => {
-    processedContractEvents = {};
-    // TODO: use augmint-js class when augmint-js exposes it
-    const lockManager = store.getState().contracts.latest.lockManager.web3ContractInstance;
+    const lockManager = store.getState().contracts.latest.lockManager.ethersInstance;
 
-    lockManager.events.NewLockProduct({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewLockProduct(error, event);
-        }
+    lockManager.on("NewLockProduct", (...args) => {
+        onNewLockProduct(...args);
     });
 
-    lockManager.events.LockProductActiveChange({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onLockProductActiveChange(error, event);
-        }
+    lockManager.on("LockProductActiveChange", (...args) => {
+        onLockProductActiveChange(...args);
     });
 
-    lockManager.events.NewLock({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewLock(error, event);
-        }
+    lockManager.on("NewLock", (...args) => {
+        onNewLock(...args);
     });
 
-    lockManager.events.LockReleased({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onLockReleased(error, event);
-        }
+    lockManager.on("LockReleased", (...args) => {
+        onLockReleased(...args);
     });
 };
 
@@ -84,27 +69,37 @@ const onLockContractChange = (newVal, oldVal) => {
     setupContractEventListeners();
 };
 
-const onNewLockProduct = (error, event) => {
-    // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
-    //                         uint32 minimumLockAmount, bool isActive);
+// event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs, uint32 minimumLockAmount, bool isActive);
+const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive, ethersEvent) => {
     console.debug("lockManagerProvider.onNewLockProduct: dispatching refreshLockManager and fetchLockProducts");
 
     store.dispatch(refreshLockManager()); // to update product count
     store.dispatch(fetchLockProducts()); // to fetch new product
 };
 
-const onLockProductActiveChange = (lockProductId, newActiveState, eventObject) => {
-    // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+// event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+const onLockProductActiveChange = (lockProductId, newActiveState, ethersEvent) => {
     console.debug("lockManagerProvider.onLockProductActiveChange: dispatching fetchLockProducts");
     store.dispatch(fetchLockProducts()); // to refresh product list
 };
 
-const onNewLock = (error, event) => {
-    // event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
-    //                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
+// event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
+//                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
+const onNewLock = (
+    lockOwner,
+    lockId,
+    amountLocked,
+    interestEarned,
+    lockedUntil,
+    perTermInterest,
+    durationInSecs,
+    ethersEvent
+) => {
     console.debug(
         "lockManagerProvider.onNewLock: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
 
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
@@ -124,11 +119,13 @@ const onNewLock = (error, event) => {
     }
 };
 
-const onLockReleased = (error, event) => {
-    // event LockReleased(address indexed lockOwner, uint lockId);
+// event LockReleased(address indexed lockOwner, uint lockId);
+const onLockReleased = (lockOwner, lockId, ethersEvent) => {
     console.debug(
         "lockManagerProvider.onLockReleased: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
 
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount

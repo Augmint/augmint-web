@@ -4,9 +4,9 @@ import { refreshExchange } from "modules/reducers/exchange";
 import { fetchTrades, processNewTrade } from "modules/reducers/trades";
 import { refreshOrders } from "modules/reducers/orders";
 import { fetchUserBalance } from "modules/reducers/userBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const exchange = store.getState().contracts.latest.exchange;
@@ -30,29 +30,18 @@ export default () => {
 };
 
 const setupContractEventListeners = async () => {
-    processedContractEvents = {};
-    const exchange = await store.getState().web3Connect.augmint.exchange;
+    const exchange = store.getState().contracts.latest.exchange.ethersInstance;
 
-    // processedContractEvents is a Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-    exchange.instance.events.NewOrder({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewOrder(error, event);
-        }
+    exchange.on("NewOrder", (...args) => {
+        onNewOrder(...args);
     });
 
-    exchange.instance.events.OrderFill({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onOrderFill(error, event);
-        }
+    exchange.on("OrderFill", (...args) => {
+        onOrderFill(...args);
     });
 
-    exchange.instance.events.CancelledOrder({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onCancelledOrder(error, event);
-        }
+    exchange.on("CancelledOrder", (...args) => {
+        onCancelledOrder(...args);
     });
 };
 
@@ -87,8 +76,11 @@ const onExchangeContractChange = (newVal, oldVal, objectPath) => {
 };
 
 // event NewOrder(uint indexed orderId, address indexed maker, uint price, uint tokenAmount, uint weiAmount);
-const onNewOrder = (error, event) => {
+const onNewOrder = function(orderId, maker, price, tokenAmount, weiAmount, ethersEvent) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshExchange());
     // TODO: implement processOrder to avoid full orderBook reload
     store.dispatch(refreshOrders());
@@ -112,8 +104,11 @@ const onNewOrder = (error, event) => {
 };
 
 // CancelledOrder(uint indexed orderId, address indexed maker, uint tokenAmount, uint weiAmount);
-const onCancelledOrder = function(error, event) {
+const onCancelledOrder = function(orderId, maker, tokenAmount, weiAmount, ethersEvent) {
     console.debug("exchangeProvider.onNewOrder: dispatching refreshExchange() and refreshOrders()");
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());
 
@@ -134,8 +129,21 @@ const onCancelledOrder = function(error, event) {
 };
 
 // OrderFill(address indexed tokenBuyer, address indexed tokenSeller, uint buyTokenOrderId, uint sellTokenOrderId, uint price, uint weiAmount, uint tokenAmount);
-const onOrderFill = function(error, event) {
+const onOrderFill = function(
+    tokenBuyer,
+    tokenSeller,
+    buyTokenOrderId,
+    sellTokenOrderId,
+    publishedRate,
+    price,
+    weiAmount,
+    tokenAmount,
+    ethersEvent
+) {
     console.debug("exchangeProvider.onOrderFill: dispatching refreshExchange() and refreshOrders()");
+
+    const event = patchEthersEvent(ethersEvent);
+
     // FIXME: shouldn't do full refresh for each orderFill event rather queue them (multiuple Orderfills)
     store.dispatch(refreshExchange());
     store.dispatch(refreshOrders());

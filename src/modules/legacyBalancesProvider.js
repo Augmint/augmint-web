@@ -1,9 +1,9 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshLegacyBalances } from "modules/reducers/legacyBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const legacyBalances = store.getState().legacyBalances;
@@ -30,29 +30,29 @@ const onMonetarySupervisorContractChange = (newVal, oldVal) => {
 };
 
 const setupContractEventListeners = () => {
-    processedContractEvents = {};
+    const monetarySupervisor = store.getState().contracts.latest.monetarySupervisor.ethersInstance;
 
-    // TODO: use augmint-js class when augmint-js exposes it
-    const monetarySupervisor = store.getState().contracts.latest.monetarySupervisor.web3ContractInstance;
-    monetarySupervisor.events.LegacyTokenConverted({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            const userAccount = store.getState().web3Connect.userAccount;
-
-            if (event.returnValues.account.toLowerCase() === userAccount.toLowerCase()) {
-                console.debug(
-                    "legacyBalancesProvider - LegacyTokenConverted event received for current user account. Dispatching refreshLegacyBalances()"
-                );
-                store.dispatch(refreshLegacyBalances());
-            }
-        }
+    monetarySupervisor.on("LegacyTokenConverted", (...args) => {
+        onLegacyTokenConverted(...args);
     });
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
     if (store.getState().contracts.latest.monetarySupervisor && newVal !== "?") {
         console.debug("legacyBalancesProvider - web3Connect.userAccount changed. Dispatching refreshLegacyBalances() ");
+        store.dispatch(refreshLegacyBalances());
+    }
+};
+
+const onLegacyTokenConverted = (oldTokenAddress, account, amount, ethersEvent) => {
+    const event = patchEthersEvent(ethersEvent);
+
+    const userAccount = store.getState().web3Connect.userAccount;
+
+    if (event.returnValues.account.toLowerCase() === userAccount.toLowerCase()) {
+        console.debug(
+            "legacyBalancesProvider - LegacyTokenConverted event received for current user account. Dispatching refreshLegacyBalances()"
+        );
         store.dispatch(refreshLegacyBalances());
     }
 };

@@ -14,7 +14,7 @@ import LoanProductSelector from "./../newLoan/LoanProductSelector";
 import "./styles.css";
 
 function LoanList(props) {
-    const { location } = props;
+    const { location, loanManager } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
     const isNewLoan = location.pathname === "/loan/new";
@@ -26,7 +26,7 @@ function LoanList(props) {
             .sort((a, b) => {
                 return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
             })
-            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
+            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />);
 
     let content = null;
     if (isNewLoan) {
@@ -83,7 +83,8 @@ function LoanList(props) {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
-    loans: state.loans
+    loans: state.loans,
+    loanManager: state.loanManager
 });
 
 export default withRouter(connect(mapStateToProps)(LoanList));
