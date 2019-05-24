@@ -1,19 +1,16 @@
 import { ethers } from "ethers";
-
-/*  using a mix of 2 different contract abstractions: web3.Contract and ethers.
-    It's a temporary workaround for some issues with web3 1.0 (e.g. getLogs, subscribe etc. )
-TODO: consolidate to use one library (likely web3 will be enough once websocket works with Metamask) */
 export default class SolidityContract {
     constructor(connection, contractAddress, abiFile) {
+        const web3 = connection.web3Instance;
         // TODO: web3.eth.Contract is async now. catch errors
         //   to find source of  "Uncaught (in promise) Error: Couldn't decode uint256 from ABI: 0x"
         //  error in console when incorrect contract address is passed
-        this.web3ContractInstance = new connection.web3Instance.eth.Contract(abiFile.abi, contractAddress);
+        this.web3ContractInstance = new web3.eth.Contract(abiFile.abi, contractAddress);
 
         const provider = connection.ethers.provider;
         this.ethersInstance = new ethers.Contract(contractAddress, abiFile.abi, provider);
 
-        this.address = ethers.utils.getAddress(contractAddress); // format it checksummed
+        this.address = web3.utils.toChecksumAddress(contractAddress); // format it checksummed
         this.abiVersionHash = abiFile && abiFile.abiHash;
         this.abiFile = abiFile;
         this.abi = abiFile.abi; // storing this to be ethereum js lib independent
@@ -35,7 +32,7 @@ export default class SolidityContract {
             default:
                 startBlock = 0;
         }
-        this.deployedAtBlock = ethers.utils.bigNumberify(startBlock).toHexString();
+        this.deployedAtBlock = web3.utils.toHex(startBlock);
         this.connection = connection;
     }
 

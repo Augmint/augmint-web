@@ -156,15 +156,17 @@ Cypress.Commands.add("issueTo", (tokenAmount, to, options = {}) => {
         to = accounts[0];
     }
 
-    monetarySupervisorInstance.methods
-        .issueToReserve(tokenAmount)
-        .send({
-            from: accounts[0],
-            gas: 400000
+    const MONETARY_SUPERVISOR_PERMISSION = web3.utils.asciiToHex("MonetarySupervisor");
+    augmintTokenInstance.methods
+        .grantPermission(accounts[0], MONETARY_SUPERVISOR_PERMISSION)
+        .send({ from: accounts[0] })
+        .then(res => {
+            return augmintTokenInstance.methods.issueTo(to, tokenAmount).send({ from: accounts[0], gas: 500000 });
         })
         .then(res => {
-            augmintReservesInstance.methods
-                .withdraw(augmintTokenInstance._address, to, tokenAmount, 0, "token withdrawal for tests")
-                .send({ from: accounts[0], gas: 200000 });
+            return augmintTokenInstance.methods.revokePermission(
+                accounts[0],
+                web3.utils.asciiToHex("MonetarySupervisor")
+            );
         });
 });

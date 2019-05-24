@@ -135,16 +135,16 @@ export function dismissLegacyExchange(legacyExchangeAddress) {
     };
 }
 
-export function cancelLegacyExchangeOrder(legacyExchangeAddress, direction, orderId) {
+export function cancelLegacyExchangeOrder(legacyExchangeAddress, buy, orderId) {
     return async dispatch => {
         dispatch({
             type: LEGACY_EXCHANGES_CANCEL_ORDER_REQUESTED,
-            request: { legacyExchangeAddress, direction, orderId }
+            request: { legacyExchangeAddress, buy, orderId }
         });
 
         try {
             const contracts = [...store.getState().legacyExchanges.contracts];
-            const result = await cancelLegacyExchangeOrderTx(legacyExchangeAddress, direction, orderId);
+            const result = await cancelLegacyExchangeOrderTx(legacyExchangeAddress, buy, orderId);
 
             const contractIndex = contracts.findIndex(contract => contract.address === legacyExchangeAddress);
             const orderIndex = contracts[contractIndex].userOrders.findIndex(order => order.id === orderId);

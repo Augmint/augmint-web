@@ -1,9 +1,10 @@
 import store from "modules/store";
 import { default as Web3 } from "web3";
+import { ethers } from "ethers";
 import { getNetworkDetails } from "modules/ethereum/ethHelper";
 import { promiseTimeout } from "utils/helpers";
-import { ethers } from "ethers";
 import { getCookie, setCookie } from "utils/cookie.js";
+import { Augmint } from "@augmint/js";
 
 export const WEB3_SETUP_REQUESTED = "WEB3_SETUP_REQUESTED";
 export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
@@ -19,8 +20,9 @@ const initialState = {
     accounts: null,
     isLoading: false,
     isConnected: false,
-    network: { id: "?", name: "?" },
     ethers: { provider: null, signer: null },
+    network: { id: "?", name: "?" },
+    augmint: null,
     watchAsset: getCookie("watchAsset") || []
 };
 
@@ -41,12 +43,13 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 isConnected: true,
                 error: null,
+                augmint: action.augmint,
                 userAccount: action.accounts[0],
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
+                ethers: action.ethers,
                 network: action.network,
-                info: action.info,
-                ethers: action.ethers
+                info: action.info
             };
 
         case WEB3_SETUP_ERROR:
@@ -61,7 +64,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 accounts: action.accounts,
-                userAccount: action.userAccount
+                userAccount: action.userAccount,
+                ethers: action.ethers
             };
 
         case WEB3_WATCH_ASSET_CHANGE:
@@ -92,10 +96,10 @@ export const setupWeb3 = () => {
                 console.debug("Using web3 detected from external source.");
                 web3 = new Web3(window.web3.currentProvider);
             } else {
+                // Connection to locally running node for tests
                 console.debug(
-                    "No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask"
+                    "No web3 detected. Falling back to http://localhost:8545. Don't use this for mainnet transactions (i.e. local geth etc.) becuase it's insecure."
                 );
-                //web3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
                 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
             }
 
@@ -115,18 +119,33 @@ export const setupWeb3 = () => {
             const userAccount = accounts[0];
 
             const web3Version = web3.version.api ? web3.version.api : web3.version;
+            /************************************************************************************
+             * Connect to Ethereum with augmint-js
+             *   NB: transition to augmint-js in progress.
+             *   It's a long journey but once done only EthereumConnection  connection will be required
+             ************************************************************************************/
+            const connectionConfig = {
+                givenProvider: web3.currentProvider,
+                // We assume that Metamask/Trustwallet/Metacoin wallet etc. injected provider takes care of reconnections
+                ETHEREUM_CONNECTION_CHECK_INTERVAL: 0,
+                ETHEREUM_CONNECTION_TIMEOUT: 20000
 
-            // ethers is used as a workaround for at least two issues w/ web3: event handling and filtering events
-            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider, {
-                name: network.name,
-                chainId: network.id
-            });
-            // Ethers: Allow read-only access to the blockchain if no Mist/Metamask/EthersWallet
-            //  provider = ethers.providers.getDefaultProvider(); // TODO: https://github.com/ethers-io/ethers.js/issues/108
+                // To access via Infura without Metamask (and don't pass givenProvider):
+                // PROVIDER_URL: "wss://rinkeby.infura.io/ws/v3/", // or wss://rinkeby.infura.io/ws/v3/ or  ws://localhost:8545
+                // PROVIDER_TYPE: "websocket",
+                // INFURA_PROJECT_ID: "cb1b0d436be24b0fa654ca34ae6a3645" // this should come from env.local or hosting env setting
+            };
+            const augmint = await Augmint.create(connectionConfig);
+
+            // ethers is used as a workaround for wallet providers are not suporting subscriptions via web3
+            const ethersProvider = new ethers.providers.Web3Provider(web3.currentProvider);
+
             const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
+
             const gasPrice = await web3.eth.getGasPrice();
             dispatch({
                 type: WEB3_SETUP_SUCCESS,
+                augmint,
                 web3Instance: web3,
                 userAccount,
                 accounts,

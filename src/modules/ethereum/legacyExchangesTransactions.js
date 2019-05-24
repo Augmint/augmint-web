@@ -1,24 +1,25 @@
 import store from "modules/store";
-import { fetchOrders, cancelOrderTx } from "./exchangeTransactions";
+import { cancelOrderTx } from "./exchangeTransactions";
 import SolidityContract from "modules/ethereum/SolidityContract";
-import { LEGACY_EXCHANGE_CONTRACTS } from "utils/constants";
+import { Augmint } from "@augmint/js";
 
 export async function fetchLegacyExchangeOrders() {
-    const web3 = store.getState().web3Connect;
-    const legacyExchangeAddresses = LEGACY_EXCHANGE_CONTRACTS[web3.network.id];
+    const augmint = store.getState().web3Connect.augmint;
+
+    const legacyExchangeAddresses = Augmint.constants.SUPPORTED_LEGACY_EXCHANGES[augmint.deployedEnvironment.name];
+
+    const legacyExchanges = augmint.getLegacyExchanges(legacyExchangeAddresses);
+
     const userAccount = store.getState().web3Connect.userAccount.toLowerCase();
+    const isMyOrder = order => order.maker.toLowerCase() === userAccount;
 
-    const queryTxs = legacyExchangeAddresses.map(address => {
-        const legacyContract = SolidityContract.connectAt(web3, "Exchange", address);
-
-        return fetchOrders(legacyContract.web3ContractInstance);
-    });
+    const queryTxs = legacyExchanges.map(e => e.getOrderBook());
 
     const legacyOrders = await Promise.all(queryTxs);
 
     const ret = legacyOrders.map((orders, i) => {
-        const userBuyOrders = orders.buyOrders.filter(order => order.maker.toLowerCase() === userAccount);
-        const userSellOrders = orders.sellOrders.filter(order => order.maker.toLowerCase() === userAccount);
+        const userBuyOrders = orders.buyOrders.filter(isMyOrder).map(o => Object.assign(o, { buy: true }));
+        const userSellOrders = orders.sellOrders.filter(isMyOrder).map(o => Object.assign(o, { buy: false }));
         const userOrders = userBuyOrders.concat(userSellOrders);
 
         return {
@@ -30,9 +31,9 @@ export async function fetchLegacyExchangeOrders() {
     return ret;
 }
 
-export async function cancelLegacyExchangeOrderTx(legacyTokenAddress, direction, orderId) {
+export async function cancelLegacyExchangeOrderTx(legacyTokenAddress, buy, orderId) {
     const web3 = store.getState().web3Connect;
     const legacyContract = SolidityContract.connectAt(web3, "Exchange", legacyTokenAddress);
 
-    return cancelOrderTx(legacyContract.web3ContractInstance, direction, orderId);
+    return cancelOrderTx(legacyContract.web3ContractInstance, buy, orderId);
 }

@@ -5,6 +5,7 @@ import { fetchLoanProducts } from "modules/reducers/loanManager";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLocksForAddress, processNewLock } from "modules/reducers/locks";
 import { fetchUserBalance } from "modules/reducers/userBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
 
@@ -14,7 +15,7 @@ export default () => {
 
     if (lockManager && !lockManagerData.isLoading && !lockManagerData.isLoaded) {
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
@@ -24,17 +25,21 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
+const setupContractEventListeners = () => {
     const lockManager = store.getState().contracts.latest.lockManager.ethersInstance;
+
     lockManager.on("NewLockProduct", (...args) => {
         onNewLockProduct(...args);
     });
+
     lockManager.on("LockProductActiveChange", (...args) => {
         onLockProductActiveChange(...args);
     });
+
     lockManager.on("NewLock", (...args) => {
         onNewLock(...args);
     });
+
     lockManager.on("LockReleased", (...args) => {
         onLockReleased(...args);
     });
@@ -61,23 +66,25 @@ const onLockContractChange = (newVal, oldVal) => {
         "lockManagerProvider - new lockManager contract. Dispatching refreshLockManager, fetchProducts, fetchLocksForAddress"
     );
     refresh();
-    setupListeners();
+    setupContractEventListeners();
 };
 
-const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive, eventObject) => {
-    // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
-    //                         uint32 minimumLockAmount, bool isActive);
+// event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs, uint32 minimumLockAmount, bool isActive);
+const onNewLockProduct = (lockProductId, perTermInterest, durationInSecs, minimumLockAmount, isActive, ethersEvent) => {
     console.debug("lockManagerProvider.onNewLockProduct: dispatching refreshLockManager and fetchLockProducts");
+
     store.dispatch(refreshLockManager()); // to update product count
     store.dispatch(fetchLockProducts()); // to fetch new product
 };
 
-const onLockProductActiveChange = (lockProductId, newActiveState, eventObject) => {
-    // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+// event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
+const onLockProductActiveChange = (lockProductId, newActiveState, ethersEvent) => {
     console.debug("lockManagerProvider.onLockProductActiveChange: dispatching fetchLockProducts");
     store.dispatch(fetchLockProducts()); // to refresh product list
 };
 
+// event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
+//                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
 const onNewLock = (
     lockOwner,
     lockId,
@@ -86,53 +93,50 @@ const onNewLock = (
     lockedUntil,
     perTermInterest,
     durationInSecs,
-    eventObject
+    ethersEvent
 ) => {
-    // event NewLock(address indexed lockOwner, uint lockId, uint amountLocked, uint interestEarned,
-    //                 uint40 lockedUntil, uint32 perTermInterest, uint32 durationInSecs);
     console.debug(
         "lockManagerProvider.onNewLock: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+
     if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (lockOwner.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.lockOwner.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "lockManagerProvider.onNewLock: new lock for current user. Dispatching processNewLock & fetchUserBalance"
         );
-        store.dispatch(
-            processNewLock(userAccount, {
-                lockOwner,
-                lockId,
-                amountLocked,
-                interestEarned,
-                lockedUntil,
-                perTermInterest,
-                durationInSecs
-            })
-        );
+        store.dispatch(processNewLock(userAccount, event));
         store.dispatch(fetchUserBalance(userAccount));
     }
 };
 
-const onLockReleased = (lockOwner, lockId, eventObject) => {
-    // event LockReleased(address indexed lockOwner, uint lockId);
-
+// event LockReleased(address indexed lockOwner, uint lockId);
+const onLockReleased = (lockOwner, lockId, ethersEvent) => {
     console.debug(
         "lockManagerProvider.onLockReleased: dispatching refreshLockManager, fetchLockProducts, fetchLoanProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshMonetarySupervisor()); // to update totalLockAmount
     store.dispatch(refreshLockManager()); // to update lockCount
     store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+
     if (store.getState().loanManager.isLoaded) {
         store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (lockOwner.toLowerCase() === userAccount.toLowerCase()) {
+    if (event.returnValues.lockOwner.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "lockManagerProvider.onLockReleased: lock released for current user. Dispatching fetchLocksForAddress & fetchUserBalance"
         );

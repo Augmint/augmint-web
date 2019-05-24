@@ -149,7 +149,7 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
     return { txName, transactionHash };
 }
 
-export async function fetchLoansToCollectTx() {
+export async function fetchAllLoansTx() {
     try {
         const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
         const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
@@ -167,11 +167,21 @@ export async function fetchLoansToCollectTx() {
             const loansArray = isLegacyLoanContract
                 ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
                 : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
-            const defaultedLoans = parseLoans(loansArray).filter(loan => loan.isCollectable);
+            const defaultedLoans = parseLoans(loansArray);
             loansToCollect = loansToCollect.concat(defaultedLoans);
         }
 
         return loansToCollect;
+    } catch (error) {
+        throw new Error("fetchAllLoansTx failed.\n" + error);
+    }
+}
+
+export async function fetchLoansToCollectTx() {
+    try {
+        const allLoans = await fetchAllLoansTx();
+
+        return allLoans.filter(loan => loan.isCollectable);
     } catch (error) {
         throw new Error("fetchLoansToCollectTx failed.\n" + error);
     }

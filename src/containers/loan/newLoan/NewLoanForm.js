@@ -16,11 +16,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 import theme from "styles/theme";
-import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR } from "utils/constants";
-
-const ETH_DECIMALS = 4;
-const TOKEN_DECIMALS = 2;
-const DECIMALS_DIV = 10 ** TOKEN_DECIMALS;
+import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR, ETH_DECIMALS, DECIMALS_DIV } from "utils/constants";
 
 const StyledBox = styled.div`
     border-radius: 3px;
@@ -47,12 +43,12 @@ const StyledBox = styled.div`
         }
     }
     &.validation-error {
-      border: 2px solid ${theme.colors.darkRed}
-      background-color: ${theme.colors.lightRed}
-      margin-bottom: 0;
-      & .box-val {
-        color: ${theme.colors.darkRed}
-      }
+        border: 2px solid ${theme.colors.darkRed};
+        background-color: ${theme.colors.lightRed};
+        margin-bottom: 0;
+        & .box-val {
+            color: ${theme.colors.darkRed};
+        }
     }
 `;
 
