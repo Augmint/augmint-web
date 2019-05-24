@@ -20,6 +20,7 @@
 .connect-wallet p a {
     color: #051d2d;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .connect-wallet > header {
