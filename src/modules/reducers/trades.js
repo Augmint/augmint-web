@@ -123,7 +123,7 @@ export const processNewTrade = (account, event, type) => {
             ) {
                 trades.push(newTrade);
                 trades.sort((trade1, trade2) => {
-                    return trade2.blockData.timestamp - trade1.blockData.timestamp;
+                    return trade2.timestamp - trade1.timestamp;
                 });
             }
 
