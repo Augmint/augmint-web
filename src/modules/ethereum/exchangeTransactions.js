@@ -6,10 +6,7 @@ import { Ratio, Wei, Tokens } from "@augmint/js";
 
 export async function fetchOrders() {
     const exchange = await store.getState().web3Connect.augmint.exchange;
-
-    const orderBook = await exchange.getOrderBook();
-
-    return orderBook;
+    return await exchange.getOrderBook();
 }
 
 export async function placeOrderTx(buy, amount, price) {
@@ -39,8 +36,8 @@ export async function placeOrderTx(buy, amount, price) {
         };
     }
 
-    const transactionHash = await sendAndProcessTx(tx, txName, onReceipt);
-    return { txName, transactionHash };
+    const txHash = await sendAndProcessTx(tx, txName, onReceipt);
+    return { txName, txHash };
 }
 
 export async function matchMultipleOrdersTx() {
@@ -54,7 +51,7 @@ export async function matchMultipleOrdersTx() {
     }
 
     const tx = exchange.matchMultipleOrders(matchingOrders);
-    const transactionHash = await sendAndProcessTx(tx, txName);
+    const txHash = await sendAndProcessTx(tx, txName);
 
     console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${
         matchingOrders.gasEstimate
@@ -62,7 +59,7 @@ export async function matchMultipleOrdersTx() {
         Buy: ${matchingOrders.buyIds}
         Sell: ${matchingOrders.sellIds}`);
 
-    return { txName, transactionHash };
+    return { txName, txHash };
 }
 
 export async function cancelOrderTx(exchange, buy, orderId) {
@@ -74,7 +71,7 @@ export async function cancelOrderTx(exchange, buy, orderId) {
         ? exchange.methods.cancelBuyTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate })
         : exchange.methods.cancelSellTokenOrder(orderId).send({ from: userAccount, gas: gasEstimate });
 
-    const transactionHash = await processTx(tx, txName, gasEstimate);
+    const txHash = await processTx(tx, txName, gasEstimate);
 
-    return { txName, transactionHash };
+    return { txName, txHash };
 }
