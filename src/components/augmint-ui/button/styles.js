@@ -121,16 +121,16 @@ export const BaseButton = styledComponent => styledComponent`
       }
     }
 
+    &.sansserif {
+      font-family: ${theme.typography.fontFamilies.default};
+    }
+
     &.naked {
       font-family: ${theme.typography.fontFamilies.title};
       text-transform: none;
       background: transparent;
       border: transparent;
       color: ${theme.colors.primary};
-
-      &.sanserif {
-        font-family: ${theme.typography.fontFamilies.default};
-      }
 
       &:hover,
       &:focus {
@@ -143,6 +143,36 @@ export const BaseButton = styledComponent => styledComponent`
 
     &.grey {
       background-color: ${theme.colors.grey};
+    }
+
+    &.icon {      
+      
+      &.left {
+        flex-direction: row-reverse;
+
+        i {
+          padding-right: 10px;
+          height: 100%;
+          margin: 0;
+        }
+      }
+
+      &.right {
+
+        i {
+          padding-left: 10px;
+          height: 100%;
+          margin: 0;
+        }
+      }
+
+      i {
+        &.bg {
+          width: 3rem;
+          background-color: rgba(0,0,0,.05);
+        }
+      }
+
     }
 
     &.loading {
@@ -179,6 +209,10 @@ export const BaseButton = styledComponent => styledComponent`
       box-shadow: 0 0 0 1px transparent;
     }
 
+    &[labelposition="left"] {
+      padding-left: 70px;
+    }
+
     &[icon] {
       color: ${theme.colors.opacLighterGrey};
       position: relative;
@@ -204,13 +238,20 @@ export const BaseButton = styledComponent => styledComponent`
     }
 
     &[icon] i:before {
+      [iconsize="small"] {
+        font-size: 1rem;
+      }
+      [iconsize="large"] {
+        font-size: 25px;
+      }
       display: block;
-      font-size: 25px
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       text-align: center;
       width: 100%;
+
+
     }
 
     &[labelposition="right"] i {

@@ -40,7 +40,7 @@ class AccountHome extends React.Component {
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 >
-                                    <div style={{ marginTop: 20 }}>
+                                    <div>
                                         <WatchAssetButton className={"noMargin"} />
                                         <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
                                             <Button to="/exchange" className="primary myAcc">

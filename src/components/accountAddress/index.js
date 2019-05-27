@@ -62,15 +62,34 @@ export default class AccountAddress extends React.Component {
                             onMouseLeave={e => this.toggleHint(e, false)}
                         />
                     )}
-                    <Button
-                        className="naked sanserif"
+                    {/* <Button
+                        className="naked sansserif"
                         onClick={e => this.toggleHint(e, true, true)}
                         // onMouseLeave={this.toggleHint}
                         style={{ display: "block" }}
-                        id="addressBtn"
+                        // id="addressBtn"
                     >
                         Copy
-                    </Button>
+                    </Button> */}
+                    <Button
+                        content="Copy"
+                        data-testid="loansToCollectButton"
+                        onClick={e => this.toggleHint(e, true, true)}
+                        icon="copy"
+                        labelposition="left"
+                        iconsize="small"
+                        style={{ marginTop: "10px", marginBottom: "20px" }}
+                        className="ghost naked icon left"
+                    />
+                    <Button
+                        content="Copy"
+                        data-testid="loansToCollectButton"
+                        onClick={e => this.toggleHint(e, true, true)}
+                        icon="copy"
+                        labelposition="left"
+                        style={{ marginBottom: "20px" }}
+                        className="grey icon left"
+                    />
                     <StyledHintBtn className={_className} id="StyledHinBtn">
                         <Icon name="check" style={{ marginRight: "5px", color: "green" }} />
                         Copied!
