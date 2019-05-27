@@ -12,9 +12,20 @@ let watches = {};
 
 export const connectWeb3 = () => {
     console.log("connect web3");
+
+    if (store) {
+        const web3Connect = store.getState().web3Connect;
+        const disclaimerAccepted = web3Connect.disclaimerAccepted;
+        const documentProps = store.getState().documentProps;
+        const documentLoaded = documentProps.documentLoaded;
+
+        if (disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
+            onLoad();
+        }
+    }
+
     // Deprecated
     // let web3Connect = store.getState().web3Connect;
-    // let disclaimerAccepted = web3Connect.disclaimerAccepted
     //
     // if (!web3Connect.isConnected && !web3Connect.isLoading) {
     //     console.debug(
@@ -28,15 +39,6 @@ export const connectWeb3 = () => {
     //     }
     // }
     // return;
-
-    const web3Connect = store.getState().web3Connect;
-    const disclaimerAccepted = web3Connect.disclaimerAccepted;
-    const documentProps = store.getState().documentProps;
-    const documentLoaded = documentProps.documentLoaded;
-
-    if (disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
-        onLoad();
-    }
 };
 
 // todo remove from here -> setupWatches.js
@@ -82,7 +84,9 @@ export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     if (pendingTransactionsFilter) {
         pendingTransactionsFilter.unsubscribe();
     }
-    if (newVal) {
+    let web3Connect = store.getState().web3Connect;
+
+    if (newVal && !web3Connect.isConnected && !web3Connect.isLoading) {
         store.dispatch(connectContracts());
         console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
         // const web3 = store.getState().web3Connect.web3Instance;

@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { default as Modal, ModalActions, ModalContent, ModalHeader } from "./augmint-ui/modal";
 import Button from "./augmint-ui/button";
@@ -65,7 +66,7 @@ const Styledlabel = styled.label`
 
 let _className = "";
 
-export default class Disclaimer extends React.Component {
+class Disclaimer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -170,3 +171,5 @@ export default class Disclaimer extends React.Component {
         );
     }
 }
+
+export default connect()(Disclaimer);

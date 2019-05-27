@@ -1,4 +1,3 @@
-import store from "modules/store";
 import { connectWeb3, onWeb3NetworkChange } from "./web3Provider";
 import { getCookie } from "utils/cookie.js";
 import { disclaimerChanged } from "modules/reducers/web3Connect";
@@ -6,6 +5,7 @@ import { documentLoaded } from "modules/reducers/documentProps";
 import watch from "redux-watch";
 
 let watches = {};
+let store = null;
 
 export const setupWatch = (stateToWatch, callback) => {
     if (!watches[stateToWatch]) {
@@ -22,7 +22,9 @@ export const setupWatch = (stateToWatch, callback) => {
     return watches[stateToWatch].unsubscribe;
 };
 
-export const startWatches = () => {
+export const initialFunction = _store => {
+    store = _store;
+
     setupWatch("web3Connect.disclaimerAccepted", connectWeb3);
     setupWatch("documentProps.documentLoaded", connectWeb3);
     setupWatch("web3Connect.network", onWeb3NetworkChange);
