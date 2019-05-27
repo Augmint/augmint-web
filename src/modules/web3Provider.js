@@ -11,20 +11,48 @@ let intervalId;
 let watches = {};
 
 export const connectWeb3 = () => {
-    let web3Connect = store.getState().web3Connect;
+    console.log("connect web3");
+    // Deprecated
+    // let web3Connect = store.getState().web3Connect;
+    // let disclaimerAccepted = web3Connect.disclaimerAccepted
+    //
+    // if (!web3Connect.isConnected && !web3Connect.isLoading) {
+    //     console.debug(
+    //         "web3Provider - web3 is not connected and not loading. Setting up watches and dispatching setUpWeb3() for onLoad"
+    //     );
+    //     setupWatch("web3Connect.network", onWeb3NetworkChange);
+    //     if (document.readyState === "complete" && disclaimerAccepted) {
+    //         onLoad();
+    //     } else {
+    //         window.addEventListener("load", onLoad);
+    //     }
+    // }
+    // return;
 
-    if (!web3Connect.isConnected && !web3Connect.isLoading) {
-        console.debug(
-            "web3Provider - web3 is not connected and not loading. Setting up watches and dispatching setUpWeb3() for onLoad"
-        );
-        setupWatch("web3Connect.network", onWeb3NetworkChange);
-        if (document.readyState === "complete") {
-            onLoad();
-        } else {
-            window.addEventListener("load", onLoad);
-        }
+    const web3Connect = store.getState().web3Connect;
+    const disclaimerAccepted = web3Connect.disclaimerAccepted;
+    const documentProps = store.getState().documentProps;
+    const documentLoaded = documentProps.documentLoaded;
+
+    if (disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
+        onLoad();
     }
-    return;
+};
+
+// todo remove from here -> setupWatches.js
+export const setupWatch = (stateToWatch, callback) => {
+    if (!watches[stateToWatch]) {
+        watches[stateToWatch] = {};
+    } else if (watches[stateToWatch].unsubscribe) {
+        //watches[stateToWatch].unsubscribe(); // TODO: do we need to unsubscribe? ie. when network change? if so then we need to track each callback added other wise subsequent setupWatches for the same state var are removing previous watches
+    }
+    const watchConf = watch(store.getState, stateToWatch);
+    watches[stateToWatch].unsubscribe = store.subscribe(
+        watchConf((newVal, oldVal, objectPath) => {
+            callback(newVal, oldVal, objectPath);
+        })
+    );
+    return watches[stateToWatch].unsubscribe;
 };
 
 const onLoad = () => {
@@ -46,22 +74,7 @@ const onLoad = () => {
     }
 };
 
-export const setupWatch = (stateToWatch, callback) => {
-    if (!watches[stateToWatch]) {
-        watches[stateToWatch] = {};
-    } else if (watches[stateToWatch].unsubscribe) {
-        //watches[stateToWatch].unsubscribe(); // TODO: do we need to unsubscribe? ie. when network change? if so then we need to track each callback added other wise subsequent setupWatches for the same state var are removing previous watches
-    }
-    const watchConf = watch(store.getState, stateToWatch);
-    watches[stateToWatch].unsubscribe = store.subscribe(
-        watchConf((newVal, oldVal, objectPath) => {
-            callback(newVal, oldVal, objectPath);
-        })
-    );
-    return watches[stateToWatch].unsubscribe;
-};
-
-const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     // TODO: make filters + subscriptions generic, e.g use an array
     if (newBlockHeadersFilter) {
         newBlockHeadersFilter.unsubscribe();

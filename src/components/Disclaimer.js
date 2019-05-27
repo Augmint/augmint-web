@@ -5,6 +5,8 @@ import Button from "./augmint-ui/button";
 import styled from "styled-components";
 import theme from "styles/theme";
 
+import { disclaimerChanged } from "modules/reducers/web3Connect.js";
+
 const dismissedCookie = "disclaimerDismissed=true";
 
 const StyledDiv = styled.div`
@@ -96,6 +98,7 @@ export default class Disclaimer extends React.Component {
     close() {
         document.cookie = dismissedCookie;
         this.setState({ dismissed: true });
+        this.props.dispatch(disclaimerChanged(true));
     }
 
     handleClick() {

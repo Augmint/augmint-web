@@ -11,6 +11,7 @@ export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
 export const WEB3_SETUP_ERROR = "WEB3_SETUP_ERROR";
 export const WEB3_ACCOUNT_CHANGE = "WEB3_ACCOUNT_CHANGE";
 export const WEB3_WATCH_ASSET_CHANGE = "WEB3_WATCH_ASSET_CHANGE";
+export const WEB3_DISCLAIMER_CHANGE = "WEB3_DISCLAIMER_CHANGE";
 
 const initialState = {
     error: null,
@@ -23,7 +24,8 @@ const initialState = {
     ethers: { provider: null, signer: null },
     network: { id: "?", name: "?" },
     augmint: null,
-    watchAsset: getCookie("watchAsset") || []
+    watchAsset: getCookie("watchAsset") || [],
+    disclaimerAccepted: null
 };
 
 var web3;
@@ -72,6 +74,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 watchAsset: action.watchAsset
+            };
+
+        case WEB3_DISCLAIMER_CHANGE:
+            return {
+                ...state,
+                disclaimerAccepted: action.disclaimerAccepted
             };
 
         default:
@@ -178,5 +186,12 @@ export const watchAssetChange = value => {
     return {
         type: WEB3_WATCH_ASSET_CHANGE,
         watchAsset: value
+    };
+};
+
+export const disclaimerChanged = value => {
+    return {
+        type: WEB3_DISCLAIMER_CHANGE,
+        disclaimerAccepted: value
     };
 };

@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "modules/reducers/rootReducer";
 import { createLogger } from "redux-logger";
+import { startWatches } from "modules/setupWatches.js";
 
 const initialState = {};
 const enhancers = [];
@@ -26,5 +27,6 @@ const composedEnhancers = compose(
 );
 
 const store = createStore(rootReducer, initialState, composedEnhancers);
-
 export default store;
+
+startWatches();
