@@ -1,5 +1,4 @@
 import store from "modules/store";
-import watch from "redux-watch";
 import { setupWeb3, accountChange } from "modules/reducers/web3Connect";
 import { connectContracts } from "modules/reducers/contracts";
 
@@ -8,7 +7,6 @@ import { connectContracts } from "modules/reducers/contracts";
 */
 let newBlockHeadersFilter, pendingTransactionsFilter;
 let intervalId;
-let watches = {};
 
 export const connectWeb3 = () => {
     console.log("connect web3");
@@ -37,22 +35,6 @@ export const connectWeb3 = () => {
     //     }
     // }
     // return;
-};
-
-// todo remove from here -> setupWatches.js
-export const setupWatch = (stateToWatch, callback) => {
-    if (!watches[stateToWatch]) {
-        watches[stateToWatch] = {};
-    } else if (watches[stateToWatch].unsubscribe) {
-        //watches[stateToWatch].unsubscribe(); // TODO: do we need to unsubscribe? ie. when network change? if so then we need to track each callback added other wise subsequent setupWatches for the same state var are removing previous watches
-    }
-    const watchConf = watch(store.getState, stateToWatch);
-    watches[stateToWatch].unsubscribe = store.subscribe(
-        watchConf((newVal, oldVal, objectPath) => {
-            callback(newVal, oldVal, objectPath);
-        })
-    );
-    return watches[stateToWatch].unsubscribe;
 };
 
 const onLoad = () => {
