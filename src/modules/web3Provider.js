@@ -85,10 +85,6 @@ export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
         pendingTransactionsFilter.unsubscribe();
     }
 
-    let web3Connect = store.getState().web3Connect;
-
-    console.log(newVal, web3Connect.isConnected, web3Connect.isLoading);
-
     if (newVal) {
         store.dispatch(connectContracts());
         console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
