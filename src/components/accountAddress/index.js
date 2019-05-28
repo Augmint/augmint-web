@@ -8,28 +8,27 @@ import { StyledContainer, StyledClicked, StyledHint, StyledHintBtn } from "./sty
 export default class AccountAddress extends React.Component {
     constructor(props) {
         super(props);
-        this.toggleHint = this.toggleHint.bind(this);
+        this.showHint = this.showHint.bind(this);
+        this.hideHint = this.hideHint.bind(this);
         this.copyAddress = this.copyAddress.bind(this);
         this.state = {
             showHint: false
         };
     }
 
-    toggleHint(e, toggle, timeout) {
-        if (toggle) {
-            this.setState({ showHint: true });
-            this.copyAddress();
-            timeout &&
-                setTimeout(() => {
-                    this.setState({
-                        showHint: false
-                    });
-                }, 2000);
-        } else {
-            this.setState({
-                showHint: false
-            });
-        }
+    showHint(timeout) {
+        this.setState({ showHint: true });
+        this.copyAddress();
+        timeout &&
+            setTimeout(() => {
+                this.hideHint();
+            }, 2000);
+    }
+
+    hideHint() {
+        this.setState({
+            showHint: false
+        });
     }
 
     copyAddress(e) {
@@ -58,14 +57,14 @@ export default class AccountAddress extends React.Component {
                         <Icon
                             name="copy"
                             style={{ paddingLeft: 5 }}
-                            onClick={e => this.toggleHint(e, true)}
-                            onMouseLeave={e => this.toggleHint(e, false)}
+                            onClick={e => this.showHint(true)}
+                            onMouseLeave={e => this.hideHint()}
                         />
                     )}
                     <Button
                         content="Copy"
                         data-testid="loansToCollectButton"
-                        onClick={e => this.toggleHint(e, true, true)}
+                        onClick={e => this.showHint(true)}
                         icon="copy"
                         labelposition="left"
                         iconsize="small"
@@ -75,7 +74,7 @@ export default class AccountAddress extends React.Component {
                     <Button
                         content="Copy"
                         data-testid="loansToCollectButton"
-                        onClick={e => this.toggleHint(e, true, true)}
+                        onClick={e => this.showHint(true)}
                         icon="copy"
                         labelposition="left"
                         style={{ marginBottom: "20px" }}
@@ -92,8 +91,8 @@ export default class AccountAddress extends React.Component {
         const ContainerWHint = () => {
             return (
                 <StyledContainer
-                    onClick={e => this.toggleHint(e, true)}
-                    onMouseLeave={e => this.toggleHint(e, false)}
+                    onClick={e => this.showHint(true)}
+                    onMouseLeave={e => this.hideHint()}
                     className={_className}
                     id="StyledContainer"
                 >
@@ -102,8 +101,8 @@ export default class AccountAddress extends React.Component {
                         <Icon
                             name="copy"
                             style={{ paddingLeft: 5 }}
-                            onClick={e => this.toggleHint(e, true)}
-                            onMouseLeave={e => this.toggleHint(e, false)}
+                            onClick={e => this.showHint(true)}
+                            onMouseLeave={e => this.hideHint()}
                         />
                     )}
                     <StyledHint>
