@@ -62,15 +62,6 @@ export default class AccountAddress extends React.Component {
                             onMouseLeave={e => this.toggleHint(e, false)}
                         />
                     )}
-                    {/* <Button
-                        className="naked sansserif"
-                        onClick={e => this.toggleHint(e, true, true)}
-                        // onMouseLeave={this.toggleHint}
-                        style={{ display: "block" }}
-                        // id="addressBtn"
-                    >
-                        Copy
-                    </Button> */}
                     <Button
                         content="Copy"
                         data-testid="loansToCollectButton"
