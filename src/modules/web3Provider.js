@@ -13,15 +13,13 @@ let watches = {};
 export const connectWeb3 = () => {
     console.log("connect web3");
 
-    if (store) {
-        const web3Connect = store.getState().web3Connect;
-        const disclaimerAccepted = web3Connect.disclaimerAccepted;
-        const documentProps = store.getState().documentProps;
-        const documentLoaded = documentProps.documentLoaded;
+    const web3Connect = store.getState().web3Connect;
+    const disclaimerAccepted = web3Connect.disclaimerAccepted;
+    const documentProps = store.getState().documentProps;
+    const documentLoaded = documentProps.documentLoaded;
 
-        if (disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
-            onLoad();
-        }
+    if (disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
+        onLoad();
     }
 
     // Deprecated

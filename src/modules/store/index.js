@@ -2,7 +2,6 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "modules/reducers/rootReducer";
 import { createLogger } from "redux-logger";
-import { initialFunction } from "modules/initialFunctions.js";
 
 const initialState = {};
 const enhancers = [];
@@ -28,7 +27,4 @@ const composedEnhancers = compose(
 
 const store = createStore(rootReducer, initialState, composedEnhancers);
 
-// initialFunction(store) <- TODO Is it safe to call this function here? Store hasn't been exported yet when it first calls connectWeb3 in web3Provider.js. Please review
 export default store;
-
-initialFunction(store);
