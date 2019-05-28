@@ -9,7 +9,7 @@
     "yarn": "1.15.2"
   },
   "dependencies": {
-    "@augmint/js": "0.3.1",
+    "@augmint/js": "0.3.2",
     "bignumber.js": "5.0.0",
     "bn.js": "4.11.8",
     "chart.js": "2.8.0",
@@ -21,7 +21,7 @@
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.6",
     "react-ga": "2.5.7",
-    "react-redux": "7.0.2",
+    "react-redux": "7.0.3",
     "react-router-dom": "5.0.0",
     "react-scripts": "3.0.1",
     "react-scrollchor": "6.0.0",
@@ -50,11 +50,11 @@
     "ganache:run": "yarn augmint-cli ganache run --blockTime 1"
   },
   "devDependencies": {
-    "cypress": "3.2.0",
+    "cypress": "3.3.1",
     "eslint-plugin-cypress": "2.2.1",
     "husky": "2.1.0",
     "prettier": "1.17.0",
-    "pretty-quick": "1.10.0",
+    "pretty-quick": "1.11.0",
     "wait-on": "3.2.0"
   },
   "resolutions": {
