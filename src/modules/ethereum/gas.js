@@ -24,8 +24,8 @@ export const cost = {
     MATCH_MULTIPLE_ADDITIONAL_MATCH_GAS: 50000,
 
     // actuals on ganache: sell cancel: 31891-43725 / buy cancel: 24264-28470
-    //  last sell order cancel reverts in ganache with 60000 gas limit despite it runs w/ 31891 gas... 
-    //  similar with  on rinkeby:  
+    //  last sell order cancel reverts in ganache with 60000 gas limit despite it runs w/ 31891 gas...
+    //  similar with  on rinkeby:
     //    reverts with 70k gaslimit: https://rinkeby.etherscan.io/tx/0xd88c7cd447a2365ce328951c07b63b6bf359571e9900c59212678734bff9deee
     //     then succeeds with 90k but consumes ony 55,897 : https://rinkeby.etherscan.io/tx/0x98117244f7a1c015529ac8d310894bdf7c7aa82c8834b9da437b5932f13847a5
     CANCEL_ORDER_GAS: 100000,
