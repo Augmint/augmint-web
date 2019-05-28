@@ -13,7 +13,7 @@ export default () => {
             "stabilityBoardProxyProvider - stabilityBoardProxy not connected or loading and web3 already loaded, dispatching refreshStabilityBoardProxy() "
         );
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
@@ -22,7 +22,7 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
+const setupContractEventListeners = () => {
     const stabilityBoardProxy = store.getState().contracts.latest.stabilityBoardProxy.ethersInstance;
     stabilityBoardProxy.on("SignerAdded", (...args) => {
         onSignerAdded(...args);
@@ -49,7 +49,7 @@ const onStabilityBoardProxyContractChange = (newVal, oldVal, objectPath) => {
         "stabilityBoardProxyProvider - stabilityBoardProxy Contract changed. Dispatching refreshStabilityBoardProxy, fetchSigners, fetchScripts"
     );
     refresh();
-    setupListeners();
+    setupContractEventListeners();
 };
 
 const refresh = () => {

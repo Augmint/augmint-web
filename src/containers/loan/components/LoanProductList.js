@@ -21,7 +21,7 @@ export default function LoanProductList(props) {
     }
 
     return (
-        <Pblock header={props.header}>
+        <Pblock className="loan-product-list" noMargin={true}>
             {listItems}
             {!listItems && <NewLoanPage />}
         </Pblock>

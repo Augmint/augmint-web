@@ -5,19 +5,13 @@ import {
     StyleNavLink,
     StyleNavItem,
     StyleNavList,
-    StyledLogoContainer,
     StyledNavContainer,
     StyledNavLeftSide,
     StyledNavRightSide,
-    StyledLogo,
     HamburgerMenu
 } from "./styles";
 
 import { AugmintIcon } from "components/Icons";
-
-import augmintLogo from "assets/images/logo/logo.png";
-import augmintLogo2x from "assets/images/logo/logo@2x.png";
-import augmintLogo3x from "assets/images/logo/logo@3x.png";
 import hamburgerMenu from "assets/images/menu.svg";
 import close from "assets/images/close.svg";
 import { toggleScroll } from "utils/bodyHelper";
@@ -81,6 +75,13 @@ export default class SiteMenu extends React.Component {
                             >
                                 Roadmap
                             </SiteMenuItem>
+                            <SiteMenuItem
+                                onClick={e => toggleScroll(false)}
+                                isActive={() => currentLocation === "/team"}
+                                to="/team"
+                            >
+                                Team
+                            </SiteMenuItem>
                             <div className="segment" style={{ margin: "15px 0 140px 0", textAlign: "center" }}>
                                 <Button
                                     onClick={e => toggleScroll(false)}
@@ -113,15 +114,6 @@ export default class SiteMenu extends React.Component {
 
                     {showConnection && !isConnected && <div>Not connected</div>}
                 </StyledNavContainer>
-                <StyledLogoContainer>
-                    {!showConnection && (
-                        <StyledLogo
-                            src={augmintLogo}
-                            srcSet={`${augmintLogo2x} 2x, ${augmintLogo3x} 3x,`}
-                            alt="Augmint logo"
-                        />
-                    )}
-                </StyledLogoContainer>
             </div>
         );
     }

@@ -22,16 +22,17 @@ import TransferPage from "containers/transfer";
 import CreateTransferRequest from "containers/transfer/request/CreateTransferRequest";
 import ShowTransferRequest from "containers/transfer/request/ShowTransferRequest";
 import ExchangeHome from "containers/exchange";
+import FundingHome from "containers/funding";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
 import Concept from "containers/home/concept";
 import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import NotConnectedHome from "containers/home/NotConnectedHome";
-import Contact from "containers/contact/contact";
 import Manifesto from "containers/manifesto/manifesto";
 import Disclaimer from "containers/disclaimer/disclaimer";
 import Roadmap from "containers/roadmap";
+import Team from "containers/team";
 import SiteMenu from "components/navigation";
 import { PageNotFound } from "containers/PageNotFound";
 import { AppFooter } from "containers/app/AppFooter";
@@ -180,6 +181,7 @@ class App extends React.Component {
                 "account",
                 "transfer",
                 "exchange",
+                "exchangeFiat",
                 "loan",
                 "stability",
                 "lock",
@@ -215,6 +217,7 @@ class App extends React.Component {
                 />
                 {!showConnection && (
                     <SiteMenu
+                        className="site-menu"
                         web3Connect={this.props.web3Connect}
                         location={this.props.location}
                         showMenu={this.state.showMobileMenu}
@@ -259,6 +262,7 @@ class App extends React.Component {
                         <Route exact path="/transfer/request" component={CreateTransferRequest} />
                         <Route exact path="/transfer/:requestId" component={ShowTransferRequest} />
                         <Route exact path="/exchange" component={ExchangeHome} />
+                        <Route exact path="/exchangeFiat" component={FundingHome} />
                         <Route exact path="/stability" component={AugmintToken} />
                         <Route exact path="/how-to-get" component={HowToGet} />
                         <Route path="/loan" component={LoanMain} />
@@ -266,10 +270,10 @@ class App extends React.Component {
                         <Route exact path="/concept" component={Concept} />
                         <Route exact path="/tryit" component={TryIt} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
-                        <Route exact path="/contact" component={Contact} />
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />
                         <Route exact path="/roadmap" component={Roadmap} />
+                        <Route exact path="/team" component={Team} />
                         <Route path="/lock" component={LockContainer} />
                         <Route component={PageNotFound} />
                     </Switch>

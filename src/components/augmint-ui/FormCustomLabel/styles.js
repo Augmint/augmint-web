@@ -4,8 +4,11 @@ import theme from "styles/theme";
 const BaseLabel = `
     background-color: ${theme.colors.lightGrey};
     color: rgba(0,0,0,.6);
-    padding: 12px;
+    padding: 20px;
     white-space:nowrap;
+    width: 85px;
+    height: 100%;
+    text-align: center;
 `;
 
 export const StyleLabel = styled.label`
