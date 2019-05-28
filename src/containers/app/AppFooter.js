@@ -35,7 +35,7 @@ export function AppFooter(props) {
                 <p className="description">{description}</p>
                 <Segment className="chat-container">
                     <a
-                        className="join-discord"
+                        className="join-discord join"
                         href="https://discord.gg/PwDmsnu"
                         rel="noopener noreferrer"
                         target="_blank"
@@ -45,7 +45,7 @@ export function AppFooter(props) {
                         Talk to us on Discord
                     </a>
                     <a
-                        className="join-telegram"
+                        className="join-telegram join"
                         href="https://t.me/augmint"
                         rel="noopener noreferrer"
                         target="_blank"
@@ -56,7 +56,7 @@ export function AppFooter(props) {
                     </a>
                 </Segment>
 
-                <List className="contact-list" style={{ marginTop: 40 }}>
+                <List className="contact-list">
                     <List.Item>
                         <Icon name="github" style={{ marginRight: 5 }} />
                         <a href="https://github.com/Augmint" target="_blank" rel="noopener noreferrer">
@@ -86,7 +86,7 @@ export function AppFooter(props) {
                         </List.Item>
                     ) : null}
                     <List.Item>
-                        <a href="/contact">CONTACT</a>
+                        <a href="mailto:hello@augmint.org">CONTACT</a>
                     </List.Item>
                 </List>
                 <Subscribe />

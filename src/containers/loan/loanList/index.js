@@ -9,11 +9,16 @@ import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
+import LoanProductSelector from "./../newLoan/LoanProductSelector";
+
+import "./styles.css";
 
 function LoanList(props) {
-    const { location } = props;
+    const { location, loanManager } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
+    const isNewLoan = location.pathname === "/loan/new";
+
     const listItems =
         loans &&
         loans
@@ -21,16 +26,25 @@ function LoanList(props) {
             .sort((a, b) => {
                 return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
             })
-            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} />);
+            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />);
+
+    let content = null;
+    if (isNewLoan) {
+        content = <LoanProductSelector />;
+    } else {
+        content = listItems;
+    }
 
     return (
-        <Psegment>
+        <Psegment id="loans-segment">
             <TopNavTitlePortal>
                 <Pheader header="My loans" />
             </TopNavTitlePortal>
-
-            <Segment className="block">
+            <Segment className="block loans-block">
                 <Menu>
+                    <Menu.Item data-testid="newLoanLink" exact to="/loan/new" activeClassName="active">
+                        New loan
+                    </Menu.Item>
                     <Menu.Item exact to="/loan" activeClassName="active">
                         Active loans
                     </Menu.Item>
@@ -39,9 +53,9 @@ function LoanList(props) {
                     </Menu.Item>
                 </Menu>
 
-                <div className={isLoading ? "loading" : ""}>
+                <div className={isLoading ? "loading" : "loans"}>
                     {error && <ErrorPanel header="Error while fetching loan list">{error.message}</ErrorPanel>}
-                    {listItems && listItems.length === 0 ? (
+                    {listItems && listItems.length === 0 && !isNewLoan ? (
                         <NoItems title={isActivePage ? "You have no active loans." : "You have no old loans."}>
                             <div style={{ margin: "30px 0" }}>
                                 <p>
@@ -54,11 +68,13 @@ function LoanList(props) {
                             </div>
                         </NoItems>
                     ) : (
-                        <div>{listItems}</div>
+                        <div>{content}</div>
                     )}
-                    <div style={{ textAlign: "center" }}>
-                        <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLink" />
-                    </div>
+                    {!isNewLoan && (
+                        <div style={{ textAlign: "center" }}>
+                            <Button content="Get a new loan" to="/loan/new" data-testid="newLoanLinkBtn" />
+                        </div>
+                    )}
                 </div>
             </Segment>
         </Psegment>
@@ -67,7 +83,8 @@ function LoanList(props) {
 
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
-    loans: state.loans
+    loans: state.loans,
+    loanManager: state.loanManager
 });
 
 export default withRouter(connect(mapStateToProps)(LoanList));

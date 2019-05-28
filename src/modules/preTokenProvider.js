@@ -1,6 +1,7 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshPreToken, fetchTransfersForAccount } from "modules/reducers/preToken";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
 
@@ -13,7 +14,7 @@ export default () => {
             "preTokenProvider - preToken not connected or loading and web3 already loaded, dispatching refreshPreToken() "
         );
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
@@ -23,11 +24,13 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
+const setupContractEventListeners = () => {
     const preToken = store.getState().contracts.latest.preToken.ethersInstance;
+
     preToken.on("NewAgreement", (...args) => {
         onNewAgreement(...args);
     });
+
     preToken.on("Transfer", (...args) => {
         onTransfer(...args);
     });
@@ -44,7 +47,7 @@ const onPreTokenContractChange = (newVal, oldVal, objectPath) => {
         "preTokenProvider - preToken Contract changed. Dispatching refreshPreToken, fetchTransfersForAccount"
     );
     refresh();
-    setupListeners();
+    setupContractEventListeners();
 };
 
 const onUserAccountChange = (newVal, oldVal, objectPath) => {
@@ -56,19 +59,25 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewAgreement = (owner, agreementHash, discount, valuationCap, eventObject) => {
-    // event NewAgreement(address owner, bytes32 agreementHash, uint32 discount, uint32 valuationCap);
+// event NewAgreement(address owner, bytes32 agreementHash, uint32 discount, uint32 valuationCap);
+const onNewAgreement = (owner, agreementHash, discount, valuationCap, ethersEvent) => {
     console.debug("preTokenProvider.onNewAgreement: dispatching refreshPretoken TODO:  fetchAgreements");
     store.dispatch(refreshPreToken());
 };
 
-const onTransfer = (from, to, amount, eventObject) => {
-    // event Transfer(address indexed from, address indexed to, uint amount);
+// event Transfer(address indexed from, address indexed to, uint amount);
+const onTransfer = (from, to, amount, ethersEvent) => {
     console.debug("preTokenProvider.onTransfer: dispatching  fetchTransfersForAccount");
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshPreToken());
 
     const userAccount = store.getState().web3Connect.userAccount;
-    if (from.toLowerCase() === userAccount.toLowerCase() || to.toLowerCase() === userAccount.toLowerCase()) {
+    if (
+        event.returnValues.from.toLowerCase() === userAccount.toLowerCase() ||
+        event.returnValuesto.toLowerCase() === userAccount.toLowerCase()
+    ) {
         console.debug(
             "preTokenProvider.onTransfer: transfer from/to current account . Dispatching fetchTransfersForAccount"
         );

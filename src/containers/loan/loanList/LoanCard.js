@@ -5,6 +5,7 @@ import { media } from "styles/media";
 import Button from "components/augmint-ui/button";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
+import CollectLoanButton from "../collectLoan/CollectLoanButton";
 
 export const CardHead = styled.div`
     display: flex;
@@ -68,7 +69,7 @@ export const DataLabel = styled.div`
 export const DataValue = styled.div``;
 
 export default function LoanCard(props) {
-    const loan = props.loan;
+    const { loan, loanManager } = props;
 
     return (
         <Card className={loan.dueState}>
@@ -80,7 +81,7 @@ export default function LoanCard(props) {
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         {loan.isRepayable ? (
                             <div>
                                 <CardStatusInfo>
@@ -96,7 +97,7 @@ export default function LoanCard(props) {
                             <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
                         )}
                     </Pgrid.Column>
-                    <Pgrid.Column size={{ desktop: 1 / 3 }}>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         <DataGroup>
                             <DataRow>
                                 <DataLabel>
@@ -130,7 +131,7 @@ export default function LoanCard(props) {
                         size={{ desktop: 1 / 3 }}
                         style={{
                             display: "flex",
-                            alignItems: "flex-end",
+                            alignItems: "flex-start",
                             flexBasis: "unset",
                             marginLeft: "auto",
                             padding: "1rem"
@@ -138,6 +139,14 @@ export default function LoanCard(props) {
                     >
                         {loan.isRepayable && (
                             <Button to={"/loan/repay/" + loan.id}>{loan.isDue ? "Repay" : "Repay Early"}</Button>
+                        )}
+
+                        {loan.isCollectable && (
+                            <CollectLoanButton
+                                idName="card-collect-btn"
+                                loanManager={loanManager}
+                                loansToCollect={[{ id: loan.id }]}
+                            />
                         )}
                     </Pgrid.Column>
                 </Pgrid.Row>

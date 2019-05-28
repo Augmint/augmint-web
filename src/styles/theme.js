@@ -14,6 +14,7 @@ const theme = {
         opacLightWhite: "rgba(255, 255, 255, 0.1)",
         primary: "#051d2d",
         primaryLight: "#2e3438",
+        secondaryXLight: "#fff3da",
         secondaryLight: "#f9db9c",
         secondary: "#ffad00",
         secondaryDark: "#e29a00",
@@ -51,7 +52,7 @@ const theme = {
             h4: remCalc(24),
             h3: remCalc(26),
             h2: remCalc(34),
-            h1: remCalc(34)
+            h1: remCalc(38)
         }
     },
     borderRadius: {

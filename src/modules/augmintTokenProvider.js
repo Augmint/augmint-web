@@ -5,6 +5,7 @@ import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
 import { fetchUserBalance } from "modules/reducers/userBalances";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
 
@@ -18,7 +19,7 @@ export default () => {
         );
 
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
 
     if (!isWatchSetup) {
@@ -30,7 +31,7 @@ export default () => {
     return;
 };
 
-const setupListeners = () => {
+const setupContractEventListeners = () => {
     const augmintToken = store.getState().contracts.latest.augmintToken.ethersInstance;
 
     augmintToken.on("AugmintTransfer", (...args) => {
@@ -64,7 +65,7 @@ const onAugmintTokenContractChange = (newVal, oldVal, objectPath) => {
         );
 
         refresh();
-        setupListeners();
+        setupContractEventListeners();
     }
 };
 
@@ -80,16 +81,24 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onAugmintTransfer = function(from, to, amount, narrative, fee, eventObject) {
-    // event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+// event AugmintTransfer(address indexed from, address indexed to, uint amount, string narrative, uint fee);
+const onAugmintTransfer = function(from, to, amount, narrative, fee, ethersEvent) {
     console.debug("augmintTokenProvider.onAugmintTransfer: Dispatching refreshAugmintToken()");
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshAugmintToken());
+
     const userAccount = store.getState().web3Connect.userAccount;
-    if (from.toLowerCase() === userAccount.toLowerCase() || to.toLowerCase() === userAccount.toLowerCase()) {
+    if (
+        event.returnValues.from.toLowerCase() === userAccount.toLowerCase() ||
+        event.returnValues.to.toLowerCase() === userAccount.toLowerCase()
+    ) {
         console.debug(
             "augmintTokenProvider.onAugmintTransfer: Transfer to or from for current userAccount. Dispatching processTransfer & fetchUserBalance"
         );
+
         store.dispatch(fetchUserBalance(userAccount));
-        store.dispatch(processNewTransfer(userAccount, eventObject));
+        store.dispatch(processNewTransfer(event, userAccount));
     }
 };

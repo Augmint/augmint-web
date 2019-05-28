@@ -1,99 +1,60 @@
 import store from "modules/store";
-import moment from "moment";
-import BigNumber from "bignumber.js";
-import { ONE_ETH_IN_WEI, DECIMALS_DIV, PPM_DIV, DECIMALS } from "utils/constants";
-import { floatNumberConverter } from "utils/converter";
+import { Ratio, Wei, Tokens } from "@augmint/js";
 
 export async function fetchTradesTx(account, fromBlock, toBlock) {
-    try {
-        const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
+    const exchange = store.getState().contracts.latest.exchange.web3ContractInstance;
 
-        const [logsNewOrder, logsOrderFillBuy, logsOrderFillSell, logsCanceledOrder] = await Promise.all([
-            exchange.getPastEvents("NewOrder", { filter: { maker: account }, fromBlock, toBlock }),
-            exchange.getPastEvents("OrderFill", { filter: { tokenBuyer: account }, fromBlock, toBlock }),
-            exchange.getPastEvents("OrderFill", { filter: { tokenSeller: account }, fromBlock, toBlock }),
-            exchange.getPastEvents("CancelledOrder", { filter: { maker: account }, fromBlock, toBlock })
-        ]);
+    const [logsNewOrder, logsOrderFillBuy, logsOrderFillSell, logsCanceledOrder] = await Promise.all([
+        exchange.getPastEvents("NewOrder", { filter: { maker: account }, fromBlock, toBlock }),
+        exchange.getPastEvents("OrderFill", { filter: { tokenBuyer: account }, fromBlock, toBlock }),
+        exchange.getPastEvents("OrderFill", { filter: { tokenSeller: account }, fromBlock, toBlock }),
+        exchange.getPastEvents("CancelledOrder", { filter: { maker: account }, fromBlock, toBlock })
+    ]);
 
-        const logs = await Promise.all([
-            ...logsNewOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
-            ...logsCanceledOrder.map(async logData => _formatTradeLog(account, logData, logData.returnValues)),
-            ...logsOrderFillBuy.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "buy")),
-            ...logsOrderFillSell.map(async logData => _formatTradeLog(account, logData, logData.returnValues, "sell"))
-        ]);
+    const logs = await Promise.all([
+        ...logsNewOrder.map(async logData => formatTradeEvent(account, logData)),
+        ...logsCanceledOrder.map(async logData => formatTradeEvent(account, logData)),
+        ...logsOrderFillBuy.map(async logData => formatTradeEvent(account, logData, "buy")),
+        ...logsOrderFillSell.map(async logData => formatTradeEvent(account, logData, "sell"))
+    ]);
 
-        logs.sort((log1, log2) => {
-            return log2.blockData.timestamp - log1.blockData.timestamp;
-        });
+    logs.sort((log1, log2) => {
+        return log2.timestamp - log1.timestamp;
+    });
 
-        return logs;
-    } catch (error) {
-        throw new Error("fetchTradesTx failed.\n" + error);
-    }
+    return logs;
 }
 
-// called from exchangeProvider, arguments are in ethers event listener format
-export async function processNewTradeTx(account, eventObject, type) {
-    return _formatTradeLog(account, eventObject, eventObject.args, type);
-}
+export async function formatTradeEvent(account, event, type) {
+    const web3 = store.getState().web3Connect.web3Instance;
+    const blockData = await web3.eth.getBlock(event.blockNumber); // CHECK: block used to be available on Infura later than than tx receipt (Infura node syncing delay). Can't reproduce anymore but requires further tests
 
-// get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
-async function _formatTradeLog(account, txData, args, type) {
-    let blockData;
-    if (typeof txData.getBlock === "function") {
-        // called from event - need to use eventObject.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
-        blockData = await txData.getBlock();
-    } else {
-        // not from event, web3.getBlock  works
-        const web3 = store.getState().web3Connect.web3Instance;
-        blockData = await web3.eth.getBlock(txData.blockNumber);
-    }
+    const timestamp = blockData && (await blockData.timestamp);
 
-    const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
+    const e = event.returnValues;
 
-    const bn_weiAmount = new BigNumber(args.weiAmount.toString());
-    const bn_tokenAmount = args.tokenAmount;
-    const bn_ethAmount = bn_weiAmount.div(ONE_ETH_IN_WEI);
+    const weiAmount = Wei.parse(e.weiAmount).zeroToNull();
+    const tokenAmount = Tokens.parse(e.tokenAmount).zeroToNull();
+    const price = e.price && Ratio.parse(e.price).zeroToNull();
+    const publishedRate = e.publishedRate && Tokens.parse(e.publishedRate).zeroToNull();
 
-    const ethAmount = bn_ethAmount.toString();
-    const ethAmountRounded = parseFloat(bn_ethAmount).toFixed(5);
-    const tokenAmount = parseFloat(bn_tokenAmount / DECIMALS_DIV);
-    const price = parseFloat(args.price / PPM_DIV);
-    const publishedRate = args.publishedRate && parseFloat(args.publishedRate / DECIMALS_DIV).toFixed(2);
-    const effectiveRate = args.publishedRate && parseFloat((args.publishedRate / DECIMALS_DIV) * price).toFixed(2);
+    const effectiveRate = publishedRate && publishedRate.mul(price);
 
-    let orderId;
-    if (args.orderId) {
-        orderId = args.orderId;
-    } else {
-        orderId = tokenAmount === 0 ? args.buyTokenOrderId : args.sellTokenOrderId;
-    }
-    if (typeof orderId.toNumber === "function") {
-        // event listener from ethers returns BigNumber
-        orderId = orderId.toNumber();
-    }
+    const orderId = (e.orderId ? e.orderId : weiAmount ? e.buyTokenOrderId : e.sellTokenOrderId) * 1;
 
-    let direction = tokenAmount === 0 ? "buy" : "sell";
-    if (txData.event === "OrderFill") {
-        direction = type;
-    }
+    const direction = event.name === "OrderFill" ? type : weiAmount ? "buy" : "sell";
 
-    const logData = Object.assign({ args }, txData, {
-        blockData,
+    const trade = Object.assign({}, event, {
+        timestamp,
         direction,
-        blockTimeStampText,
-        bn_weiAmount,
-        bn_tokenAmount,
-        tokenAmount: tokenAmount ? tokenAmount.toFixed(2) : "",
-        ethAmount,
-        ethAmountRounded: ethAmount !== "0" ? ethAmountRounded : "",
-        price: price ? price : "",
-        pricePt: price ? floatNumberConverter(price, DECIMALS).toFixed(2) + "%" : "",
+        weiAmount,
+        tokenAmount,
+        price,
         publishedRate,
         effectiveRate,
         orderId,
-        type: txData.event
+        type: event.event
     });
 
-    return logData;
+    return trade;
 }

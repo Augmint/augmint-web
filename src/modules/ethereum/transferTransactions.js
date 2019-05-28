@@ -42,6 +42,28 @@ export function getMaxTransfer(amount) {
     return maxAmount;
 }
 
+export async function transferEthTx(payload) {
+    const { payee, ethAmount } = payload;
+
+    const gasEstimate = cost.ETH_TRANSFER_GAS; // TODO MAYBE change to & check ETH_GAS?
+    const userAccount = store.getState().web3Connect.userAccount;
+    const web3 = store.getState().web3Connect.web3Instance;
+
+    const amount = ethAmount.toString();
+
+    const weiAmount = web3.utils.toWei(amount);
+
+    const txName = "ETH transfer";
+    const tx = web3.eth.sendTransaction({
+        from: userAccount,
+        to: payee,
+        value: weiAmount
+    });
+
+    const transactionHash = await processTx(tx, txName, gasEstimate, null, payload);
+    return { txName, transactionHash };
+}
+
 export async function transferTokenTx(payload) {
     const { payee, tokenAmount, narrative } = payload;
 
@@ -73,14 +95,7 @@ export async function transferTokenTx(payload) {
 }
 
 async function lookupBlockTimestamp(event, web3) {
-    let blockData;
-    if (typeof event.getBlock === "function") {
-        // called from event - need to use this.getBlock b/c block is available on Infura later than than tx receipt (Infura  node syncing)
-        blockData = await event.getBlock();
-    } else {
-        // not from event, web3.getBlock  works
-        blockData = await web3.eth.getBlock(event.blockNumber);
-    }
+    const blockData = await web3.eth.getBlock(event.blockNumber); // CHECK: block used to be available on Infura later than than tx receipt (Infura node syncing delay). Can't reproduce anymore but requires further tests
 
     const blockTimeStampText = blockData ? moment.unix(await blockData.timestamp).format("D MMM YYYY HH:mm") : "?";
     event.blockData = blockData;
@@ -90,8 +105,8 @@ async function lookupBlockTimestamp(event, web3) {
 
 export async function fetchTransfersTx(account, fromBlock, toBlock) {
     try {
-        const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
         const web3 = store.getState().web3Connect.web3Instance;
+        const augmintToken = store.getState().contracts.latest.augmintToken.web3ContractInstance;
 
         const [logsFrom, logsTo] = await Promise.all([
             augmintToken.getPastEvents("AugmintTransfer", { filter: { from: account }, fromBlock, toBlock }),
@@ -108,31 +123,41 @@ export async function fetchTransfersTx(account, fromBlock, toBlock) {
     }
 }
 
-export function processTransferEvents(eventList, account) {
-    let transfers = eventList.map(event => formatEvent(account, event, event.returnValues));
-    transfers = Array.from(new Set(aggregateSameHashes(transfers)));
-    transfers.sort((a, b) => b.blockNumber - a.blockNumber);
-    return transfers;
+export function processTransferEvents(events, account) {
+    const transfers = events.map(event => formatEvent(event, account));
+
+    return aggregateAndSortTransfers(transfers);
 }
 
-// called from augminTokenProvider, arguments are in ethers event listener format
-export async function processNewTransferTx(account, eventObject) {
+// called from augminTokenProvider via userTransfers.js reducer
+export async function processNewTransferEvent(event, account) {
+    const transfers = store.getState().userTransfers.transfers;
     const web3 = store.getState().web3Connect.web3Instance;
-    eventObject = await lookupBlockTimestamp(eventObject, web3);
-    return formatEvent(account, eventObject, eventObject.args);
+    const eventWithBlockInfo = await lookupBlockTimestamp(event, web3);
+    const newTransfer = formatEvent(eventWithBlockInfo, account);
+
+    return aggregateAndSortTransfers([...transfers, newTransfer]);
+}
+
+function aggregateAndSortTransfers(transfers) {
+    transfers = Array.from(new Set(aggregateSameHashes(transfers)));
+    transfers.sort((a, b) => b.blockNumber - a.blockNumber);
+
+    return transfers;
 }
 
 const DELEGATED_NARRATIVE = "Delegated transfer fee";
 
-// get txData in format of logData returned from web3.getPastEvents or with eventObject passed by ethers event listener
-function formatEvent(account, txData, augmintTransferEvent) {
-    const logData = Object.assign({ args: augmintTransferEvent }, txData, {
+// get txData in format of logData returned from web3.getPastEvents or with event from event listener
+function formatEvent(event, account) {
+    const augmintTransferEvent = event.returnValues;
+    const logData = Object.assign({}, event, {
         from: augmintTransferEvent.from.toLowerCase(),
         to: augmintTransferEvent.to.toLowerCase(),
         fee: augmintTransferEvent.fee * -1,
         amount: augmintTransferEvent.amount * 1,
         narrative: augmintTransferEvent.narrative,
-        key: `${txData.transactionHash}-${txData.transactionIndex}`
+        key: `${event.transactionHash}-${event.transactionIndex}`
     });
 
     if (logData.to === account.toLowerCase()) {
