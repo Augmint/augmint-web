@@ -1,9 +1,9 @@
 import store from "modules/store";
 import { setupWatch } from "./web3Provider";
 import { refreshPreToken, fetchTransfersForAccount } from "modules/reducers/preToken";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const preToken = store.getState().contracts.latest.preToken;
@@ -25,25 +25,14 @@ export default () => {
 };
 
 const setupContractEventListeners = () => {
-    processedContractEvents = {};
+    const preToken = store.getState().contracts.latest.preToken.ethersInstance;
 
-    // TODO: use augmint-js class when augmint-js exposes it
-    const preToken = store.getState().contracts.latest.preToken.web3ContractInstance;
-
-    preToken.events.NewAgreement({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewAgreement(error, event);
-        }
+    preToken.on("NewAgreement", (...args) => {
+        onNewAgreement(...args);
     });
 
-    preToken.events.Transfer({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onTransfer(error, event);
-        }
+    preToken.on("Transfer", (...args) => {
+        onTransfer(...args);
     });
 };
 
@@ -70,15 +59,18 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewAgreement = (error, event) => {
-    // event NewAgreement(address owner, bytes32 agreementHash, uint32 discount, uint32 valuationCap);
+// event NewAgreement(address owner, bytes32 agreementHash, uint32 discount, uint32 valuationCap);
+const onNewAgreement = (owner, agreementHash, discount, valuationCap, ethersEvent) => {
     console.debug("preTokenProvider.onNewAgreement: dispatching refreshPretoken TODO:  fetchAgreements");
     store.dispatch(refreshPreToken());
 };
 
-const onTransfer = (error, event) => {
-    // event Transfer(address indexed from, address indexed to, uint amount);
+// event Transfer(address indexed from, address indexed to, uint amount);
+const onTransfer = (from, to, amount, ethersEvent) => {
     console.debug("preTokenProvider.onTransfer: dispatching  fetchTransfersForAccount");
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshPreToken());
 
     const userAccount = store.getState().web3Connect.userAccount;

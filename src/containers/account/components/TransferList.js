@@ -4,7 +4,8 @@ import store from "modules/store";
 import { fetchLatestTransfers } from "modules/reducers/userTransfers";
 import { TxDate, TxInfo } from "components/transaction";
 import { ErrorPanel } from "components/MsgPanels";
-import { StyleTitle, StyleTable, StyleThead, StyleTbody, StyleTd, StyleTh, StyleTr } from "components/Table/style";
+import { Table } from "components/Table";
+import Header from "components/augmint-ui/header";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { calculateTransfersBalance } from "modules/ethereum/transferTransactions";
@@ -40,6 +41,13 @@ const Transfer = styled.span`
         &.negative::after {
             content: " fee";
         }
+    }
+`;
+
+const TransferTable = styled(Table)`
+    tr :nth-child(3),
+    tr :nth-child(4) {
+        text-align: right;
     }
 `;
 
@@ -91,65 +99,51 @@ class TransferList extends React.Component {
             transfers = transfers.slice(0, this.state.page * this.props.limit);
 
             calculateTransfersBalance(transfers, userAccount.tokenBalance * 100);
-
-            transfers = transfers.map(tx => {
-                return {
-                    data: tx,
-                    key: `${tx.blockNumber}-${tx.key}`,
-                    date: <TxDate>{tx.blockTimeStampText}</TxDate>,
-                    info: <TxInfo tx={tx} />,
-                    amount: (
-                        <Transfer>
-                            <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
-                            <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
-                        </Transfer>
-                    ),
-                    balance: <AEUR raw amount={tx.balance} />
-                };
-            });
         }
 
         return (
             <Segment loading={isLoading && !transfers} style={{ color: "black" }}>
-                {header && <StyleTitle>{header}</StyleTitle>}
+                {header && <Header>{header}</Header>}
                 {error && <ErrorPanel header="Error while fetching transfer list">{error.message}</ErrorPanel>}
                 {!transfers || transfers.length === 0 ? (
                     noItemMessage
                 ) : (
                     <div style={{ overflow: "auto" }}>
-                        <StyleTable>
-                            <StyleThead>
-                                <StyleTr>
-                                    <StyleTh className={"hide-xs"}>Date</StyleTh>
-                                    <StyleTh style={{ textAlign: "right" }}>Transaction</StyleTh>
-                                    <StyleTh style={{ textAlign: "right" }}>Amount</StyleTh>
-                                    <StyleTh style={{ textAlign: "right" }} className={"hide-xs"}>
-                                        Balance
-                                    </StyleTh>
-                                </StyleTr>
-                            </StyleThead>
-                            <StyleTbody>
+                        <TransferTable>
+                            <thead>
+                                <tr>
+                                    <th className={"hide-xs"}>Date</th>
+                                    <th>Transaction</th>
+                                    <th>Amount</th>
+                                    <th className={"hide-xs"}>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {transfers.map(tx => (
-                                    <StyleTr
-                                        key={`txRow-${tx.key}`}
-                                        data-testid={`transferListItem-${tx.data.transactionHash}`}
-                                    >
-                                        <StyleTd className={"hide-xs"}>{tx.date}</StyleTd>
-                                        <StyleTd>
+                                    <tr key={`txRow-${tx.key}`} data-testid={`transferListItem-${tx.transactionHash}`}>
+                                        <td className={"hide-xs"}>
+                                            <TxDate>{tx.blockTimeStampText}</TxDate>
+                                        </td>
+                                        <td>
                                             <div className={"show-xs"}>{tx.date}</div>
-                                            {tx.info}
-                                        </StyleTd>
-                                        <StyleTd style={{ textAlign: "right" }}>
-                                            {tx.amount}
-                                            <div className={"show-xs"}>= {tx.balance}</div>
-                                        </StyleTd>
-                                        <StyleTd style={{ textAlign: "right" }} className={"hide-xs"}>
-                                            {tx.balance}
-                                        </StyleTd>
-                                    </StyleTr>
+                                            <TxInfo tx={tx} />
+                                        </td>
+                                        <td>
+                                            <Transfer>
+                                                <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
+                                                <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
+                                            </Transfer>
+                                            <div className={"show-xs"}>
+                                                = <AEUR raw amount={tx.balance} />
+                                            </div>
+                                        </td>
+                                        <td className={"hide-xs"}>
+                                            <AEUR raw amount={tx.balance} />
+                                        </td>
+                                    </tr>
                                 ))}
-                            </StyleTbody>
-                        </StyleTable>
+                            </tbody>
+                        </TransferTable>
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (

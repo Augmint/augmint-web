@@ -154,9 +154,8 @@ class LockContainer extends React.Component {
         });
     }
 
-    // todo refact
     lockAmountValidation(value, allValues) {
-        const productId = allValues.productId || this.defaultProductId();
+        const productId = allValues.lockTerms || this.defaultProductId();
         const minValue = this.props.lockProducts[productId].minimumLockAmount;
         const maxValue = this.props.lockProducts[productId].maxLockAmount;
         const val = parseFloat(value);
