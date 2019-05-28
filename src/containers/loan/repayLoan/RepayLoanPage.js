@@ -3,7 +3,7 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
+// import { connectWeb3 } from "modules/web3Provider";
 import { Pblock, Pgrid } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
@@ -46,7 +46,7 @@ class RepayLoanPage extends React.Component {
 
     componentDidMount() {
         this.setLoan(); // needed when landing from Link within App
-        connectWeb3();
+        // connectWeb3();
     }
 
     setLoan() {

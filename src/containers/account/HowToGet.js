@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
+// import { connectWeb3 } from "modules/web3Provider";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { media } from "styles/media";
@@ -54,9 +54,9 @@ const StyledTextBlock = styled(TextBlock)`
 const MrCoinBuyButton = BaseButton(styled(MrCoinBuyLink));
 
 class HowToGet extends React.Component {
-    componentDidMount() {
-        connectWeb3();
-    }
+    // componentDidMount() {
+    //     connectWeb3();
+    // }
     render() {
         const web3Connect = this.props.web3Connect;
 

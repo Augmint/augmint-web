@@ -58,6 +58,7 @@ export const setupWatch = (stateToWatch, callback) => {
 };
 
 const onLoad = () => {
+    console.log("LOAD");
     store.dispatch(setupWeb3());
     if (!intervalId) {
         intervalId = setInterval(async function() {
@@ -77,6 +78,7 @@ const onLoad = () => {
 };
 
 export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+    console.log("WEB3 NETWORK CHANGE");
     // TODO: make filters + subscriptions generic, e.g use an array
     if (newBlockHeadersFilter) {
         newBlockHeadersFilter.unsubscribe();
@@ -84,9 +86,12 @@ export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
     if (pendingTransactionsFilter) {
         pendingTransactionsFilter.unsubscribe();
     }
+
     let web3Connect = store.getState().web3Connect;
 
-    if (newVal && !web3Connect.isConnected && !web3Connect.isLoading) {
+    console.log(newVal, web3Connect.isConnected, web3Connect.isLoading);
+
+    if (newVal) {
         store.dispatch(connectContracts());
         console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
         // const web3 = store.getState().web3Connect.web3Instance;

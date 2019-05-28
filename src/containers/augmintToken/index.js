@@ -2,7 +2,7 @@ import React from "react";
 import Chart from "chart.js";
 import { bindActionCreators } from "redux"; // TODO: do we really need this or shall we use the store directly?
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
+// import { connectWeb3 } from "modules/web3Provider";
 import BigNumber from "bignumber.js";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -26,7 +26,7 @@ import { ThemeProvider } from "styled-components";
 
 class AugmintToken extends React.Component {
     componentDidMount() {
-        connectWeb3();
+        // connectWeb3();
         ratesProvider();
         augmintTokenProvider();
         loanManagerProvider();

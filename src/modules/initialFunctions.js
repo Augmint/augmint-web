@@ -25,9 +25,9 @@ export const setupWatch = (stateToWatch, callback) => {
 export const initialFunction = _store => {
     store = _store;
 
+    setupWatch("web3Connect.network", onWeb3NetworkChange);
     setupWatch("web3Connect.disclaimerAccepted", connectWeb3);
     setupWatch("documentProps.documentLoaded", connectWeb3);
-    setupWatch("web3Connect.network", onWeb3NetworkChange);
 
     checkDisclaimer();
     isDocumentLoaded();

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { connectWeb3 } from "modules/web3Provider";
+// import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import { getNetworkName } from "utils/helpers";
 import { getTransferRequest } from "./TransferRequestHelper";
@@ -40,7 +40,7 @@ class ShowTransferRequest extends React.Component {
     }
 
     componentDidMount() {
-        connectWeb3();
+        // connectWeb3();
         augmintTokenProvider();
 
         const request = getTransferRequest(this.state.requestId) || null;

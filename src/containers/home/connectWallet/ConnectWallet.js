@@ -6,7 +6,7 @@ import { getMobilePlatform } from "utils/platformHelper.js";
 import "./styles.css";
 
 function ConnectWallet(props) {
-    const showHedaer = props.landingPage;
+    const showHeader = props.landingPage;
 
     const platform = getMobilePlatform();
     let orderedList = [desktop, ios, android];
@@ -32,7 +32,7 @@ function ConnectWallet(props) {
 
     return (
         <div className="connect-wallet" style={props.styles}>
-            {showHedaer && <header>Connect wallet</header>}
+            {showHeader && <header>Connect wallet</header>}
 
             <section>
                 <p>To use Augmint you need an Ethereum capable browser.</p>
