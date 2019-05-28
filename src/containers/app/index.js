@@ -217,6 +217,7 @@ class App extends React.Component {
                 />
                 {!showConnection && (
                     <SiteMenu
+                        className="site-menu"
                         web3Connect={this.props.web3Connect}
                         location={this.props.location}
                         showMenu={this.state.showMobileMenu}

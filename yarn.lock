@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.0.12.tgz#7a27331e2b85d886c582992c537bdf8e1273c52f"
   integrity sha512-N32R6pPG2aEVH53rwm8ox6AnTZELpZPfduNZ7czhKn95TWM0tUbV96uLbNwJgdpgda2+hg34keUR0lN/rUcOLQ==
 
-"@augmint/js@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.1.tgz#1a2fd1184b4abb13216d09342f6da117653905e9"
-  integrity sha512-PcNM2D3fg2JKy9RKYoGqmK8lZ7ZZLS1G222e/VAololwJmpILdcgqmRhNvE8ejdjGm2fS7ztknVCbzbHdQACfg==
+"@augmint/js@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.2.tgz#25df5c705dc39ea7fe1e8722695c10ba63656c70"
+  integrity sha512-nGCoqSS6QRiFnWbHUd+9YVA3icrh9z/rRyBPvtUWYxBYRhPacrUrNsxf68TX/5qoyBieSbmyAzRg5J/ZRvqm3Q==
   dependencies:
     "@augmint/contracts" "1.0.12"
     bn.js "4.11.8"
@@ -4238,6 +4238,22 @@ ethers@4.0.0-beta.1:
     hash.js "1.1.3"
     js-sha3 "0.5.7"
     scrypt-js "2.0.3"
+    setimmediate "1.0.4"
+    uuid "2.0.1"
+    xmlhttprequest "1.8.0"
+
+ethers@4.0.27:
+  version "4.0.27"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.27.tgz#e570b0da9d805ad65c83d81919abe02b2264c6bf"
+  integrity sha512-+DXZLP/tyFnXWxqr2fXLT67KlGUfLuvDkHSOtSC9TUVG9OIj6yrG5JPeXRMYo15xkOYwnjgdMKrXp5V94rtjJA==
+  dependencies:
+    "@types/node" "^10.3.2"
+    aes-js "3.0.0"
+    bn.js "^4.4.0"
+    elliptic "6.3.3"
+    hash.js "1.1.3"
+    js-sha3 "0.5.7"
+    scrypt-js "2.0.4"
     setimmediate "1.0.4"
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
@@ -9974,6 +9990,11 @@ scrypt-js@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.3.tgz#bb0040be03043da9a012a2cea9fc9f852cfc87d4"
   integrity sha1-uwBAvgMEPamgEqLOqfyfhSz8h9Q=
+
+scrypt-js@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
+  integrity sha512-4KsaGcPnuhtCZQCxFxN3GVYIhKFPTdLd8PLC552XwbMndtD0cjRFAhDuuydXQ0h08ZfPgzqe6EKHozpuH74iDw==
 
 scrypt.js@0.2.0:
   version "0.2.0"

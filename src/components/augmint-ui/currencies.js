@@ -70,7 +70,7 @@ export class ETH extends React.Component {
 export class Percent extends React.Component {
     render() {
         const { amount, raw, className, decimals = 2, ...rest } = this.props;
-        const amt = isEmpty(amount) ? null : raw || amount instanceof Ratio ? amount / Math.pow(10, 4) : amount;
+        const amt = isEmpty(amount) ? null : raw || amount instanceof Ratio ? amount / Math.pow(10, 4) : amount * 100;
         const cls = ["Percent", className, signum(amt)].join(" ");
         return (
             <NoWrap className={cls} {...rest}>

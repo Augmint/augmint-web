@@ -2,7 +2,6 @@ import React from "react";
 
 import { Tsegment } from "components/TextContent";
 import { DiscordButton, TelegramButton } from "components/LinkButtons";
-import Video from "components/augmint-ui/video";
 import Header from "components/augmint-ui/header";
 
 import { MobileView, DesktopView, StoreBadge } from "./styles";
@@ -73,26 +72,18 @@ export function HowToConnect(props) {
                 <Tsegment>
                     <Tsegment.Row columns={1}>
                         <Tsegment.Column>
-                            <StyledP className={"primaryColor"}>
+                            <StyledP className={"primaryColor"} style={{ marginBottom: 60 }}>
                                 To use Augmint you need an Ethereum capable browser.
                             </StyledP>
                             <Header as="h4" className={"tertiaryColor"}>
                                 1. Install{" "}
                                 <a href="https://metamask.io" target="_blank" rel="noopener noreferrer">
-                                    <strong>MetaMask Chrome plugin</strong>
+                                    <strong>MetaMask browser plugin</strong>
                                 </a>
                             </Header>
                             <Header as="h4" className={"tertiaryColor"}>
                                 2. Connect to Main or Rinkeby test network.
                             </Header>
-                            <StyledP className={"primaryColor"}>
-                                Video about installing MetaMask and getting test A-EUR:
-                            </StyledP>
-                            <Video
-                                title="connect to rinkeby"
-                                src="https://www.youtube.com/embed/0APcMesrZ_U"
-                                host="https://www.youtube.com"
-                            />
                         </Tsegment.Column>
                     </Tsegment.Row>
                     <Tsegment.Row columns={2}>

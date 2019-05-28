@@ -50,7 +50,10 @@ const BaseDiv = `
       font-size: ${remCalc(14)};
       line-height: ${remCalc(16)};
       margin: 0;
-
+      & .small {
+        font-size: ${remCalc(10)}
+        line-height: ${remCalc(12)};
+      }
     }
 
     &.notification p.nonce {
@@ -58,7 +61,7 @@ const BaseDiv = `
       padding-bottom: 0.6em;
     }
 
-    &.notification > div > p {
+    &.notification div p {
       margin-left: 30px;
 
       & small {
