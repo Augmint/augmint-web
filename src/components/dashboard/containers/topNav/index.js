@@ -124,7 +124,7 @@ class TopNav extends React.Component {
                                 <span>Balance</span>
                             </StyledTopNavLinkRight>
                             <StyledPrice className="accountInfoContainer">
-                                <ETH amount={ethBalance} decimals={4} style={{ fontWeight: 700 }} />
+                                <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
