@@ -8,7 +8,8 @@ import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
 import AccountAddress from "components/accountAddress";
-import { ETHEUR } from "utils/constants";
+import NetworkAlert from "components/dashboard/components/NetworkAlert";
+// import { ETHEUR } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 import { CloseIcon } from "./styles";
 import closeDark from "assets/images/close-dark.svg";
@@ -102,13 +103,18 @@ class TopNav extends React.Component {
             <StyledTopNav className={this.props.showAccInfo ? this.props.className + " hidden" : this.props.className}>
                 <TitleWrapper id="page-title" />
                 <StyledTopNavUl>
-                    <StyledTopNavLi>
+                    {/* <StyledTopNavLi>
                         <StyledPrice>
                             <span className="price">
                                 {ETHEUR}:<span style={{ fontWeight: 700 }}> {this.props.rates.info.ethFiatRate}</span>
                             </span>
                         </StyledPrice>
-                    </StyledTopNavLi>
+                    </StyledTopNavLi> */}
+                    {/* <StyledTopNavLi>
+                        <StyledPrice>
+                            <NetworkAlert network={this.props.web3Connect.network.name} className="alert" />
+                        </StyledPrice>
+                    </StyledTopNavLi> */}
                     <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
                         <div style={{ display: "flex", backgroundColor: "#ffad00", justifyContent: "center" }}>
                             <StyledTopNavLinkRight

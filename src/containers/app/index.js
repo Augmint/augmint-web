@@ -251,7 +251,7 @@ class App extends React.Component {
                     {showConnection &&
                         !isNaN(this.props.web3Connect.network.id) &&
                         this.props.web3Connect.network.id !== 1 && (
-                            <NetworkAlert network={this.props.web3Connect.network.name} />
+                            <NetworkAlert network={this.props.web3Connect.network.name} className="banner" />
                         )}
                     {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                         <div>

@@ -570,7 +570,7 @@ class AugmintToken extends React.Component {
                 </ThemeProvider>
                 <Button
                     content="Under the hood"
-                    data-testid="underTheHood"
+                    data-testid="underTheHoodLink"
                     to="/under-the-hood"
                     icon="angle-right"
                     labelposition="right"
