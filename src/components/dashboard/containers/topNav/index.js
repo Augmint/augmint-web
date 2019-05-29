@@ -109,7 +109,7 @@ class TopNav extends React.Component {
                             </span>
                         </StyledPrice>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
+                    <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
                         <div style={{ display: "flex", backgroundColor: "#ffad00", justifyContent: "center" }}>
                             <StyledTopNavLinkRight
                                 title="Your account"
@@ -124,7 +124,7 @@ class TopNav extends React.Component {
                                 <span>Balance</span>
                             </StyledTopNavLinkRight>
                             <StyledPrice className="accountInfoContainer">
-                                <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
+                                <ETH amount={ethBalance} decimals={4} style={{ fontWeight: 700 }} />
                             </StyledPrice>
                             <StyledSeparator />
                             <StyledPrice className="accountInfoContainer">
@@ -154,7 +154,7 @@ class TopNav extends React.Component {
                             />
                         </StyledAccount>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
+                    <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"
                             to=""
@@ -170,7 +170,7 @@ class TopNav extends React.Component {
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className="navLinkRight">
+                    <StyledTopNavLi>
                         <StyledTopNavLinkRight
                             title="Under the hood"
                             to="/under-the-hood"

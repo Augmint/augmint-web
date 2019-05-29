@@ -71,6 +71,22 @@ export default class Balance extends React.Component {
                     <Label>ETH balance</Label>
                     <ETH amount={userAccount.ethBalance} decimals={15} />
                 </EthAmount>
+                <div
+                    style={{
+                        textAlign: "center",
+                        margin: ".5rem auto 0",
+                        overflowWrap: "break-word"
+                    }}
+                >
+                    <Label className="balance">Account address</Label>
+                    <AccountAddress
+                        address={userAccount.address}
+                        title=""
+                        className={"breakToLines always noClick font"}
+                        showCopyLink
+                        style={{ maxWidth: "190px" }}
+                    />
+                </div>
                 {children}
             </Pblock>
         );

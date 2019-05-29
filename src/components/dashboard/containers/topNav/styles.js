@@ -92,7 +92,7 @@ export const StyledTopNavLink = styled(Link)`
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
     min-width: ${TOP_NAV_HEIGHT};
-    padding: 0 2px;
+    padding: 0;
     color: ${theme.colors.primary};
     transition: all ${theme.transitions.fast};
     transition-property: background-color, color;
@@ -110,6 +110,7 @@ export const StyledTopNavLink = styled(Link)`
 
     &.accountDetails {
         background-color: ${theme.colors.secondary};
+        padding-left: 4px;
         &:hover {
             background-color: ${theme.colors.secondaryDark};
         }

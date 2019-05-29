@@ -39,6 +39,7 @@ import { AppFooter } from "containers/app/AppFooter";
 
 import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
+import NetworkAlert from "components/dashboard/components/NetworkAlert";
 import DisclaimerModal from "components/Disclaimer";
 import { NotificationPanel } from "components/notifications";
 import { dismissTx } from "modules/reducers/submittedTransactions";
@@ -243,6 +244,9 @@ class App extends React.Component {
                                 toggleNotificationPanel={this.toggleNotificationPanel}
                             />
                         </NotificationPanel>
+                    )}
+                    {showConnection && this.props.web3Connect.network.id !== 1 && (
+                        <NetworkAlert network={this.props.web3Connect.network.name} />
                     )}
                     {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                         <div>
