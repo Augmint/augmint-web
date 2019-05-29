@@ -2,7 +2,8 @@ export const keyFeaturesSegment = {
     minHeight: "125px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginTop: 0
 };
 
 export const keyFeaturesHeader = {

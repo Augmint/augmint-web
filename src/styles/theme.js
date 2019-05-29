@@ -52,7 +52,7 @@ const theme = {
             h4: remCalc(24),
             h3: remCalc(26),
             h2: remCalc(34),
-            h1: remCalc(34)
+            h1: remCalc(38)
         }
     },
     borderRadius: {

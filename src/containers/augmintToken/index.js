@@ -17,7 +17,7 @@ import { MyListGroup } from "components/MyListGroups";
 import { ErrorPanel } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
-import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
@@ -80,9 +80,7 @@ class AugmintToken extends React.Component {
         ) {
             bn_collateralInEscrow = rates.info.bn_ethFiatRate.mul(metrics.loansData.bn_collateralInEscrowEth);
 
-            bn_loanCollateralCoverageRatio = bn_collateralInEscrow
-                .div(metrics.loansData.bn_outstandingLoansAmount)
-                .mul(100);
+            bn_loanCollateralCoverageRatio = bn_collateralInEscrow.div(metrics.loansData.bn_outstandingLoansAmount);
         }
 
         if (
@@ -408,8 +406,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="result">
                                                 <StyledCol width={2 / 3}>Collateral Coverage Ratio</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {bn_loanCollateralCoverageRatio &&
-                                                        bn_loanCollateralCoverageRatio.toFixed(0) + "%"}
+                                                    <Percent amount={bn_loanCollateralCoverageRatio} decimals={0} />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
@@ -448,8 +445,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" className="result">
                                                 <StyledCol width={2 / 3}>Loan To Lock-in Ratio</StyledCol>
                                                 <StyledCol width={1 / 3}>
-                                                    {monetarySupervisor.info.ltdPercent &&
-                                                        (monetarySupervisor.info.ltdPercent * 100).toFixed(0) + "%"}
+                                                    <Percent amount={monetarySupervisor.info.ltdPercent} decimals={0} />
                                                 </StyledCol>
                                             </StyledRow>
                                         </MyListGroup>

@@ -8,9 +8,9 @@ import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
+import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
-let processedContractEvents; //** map of eventIds processed: Workaround for bug that web3 beta 36 fires events 2x with MetaMask */
 
 export default () => {
     const loanManager = store.getState().contracts.latest.loanManager;
@@ -32,46 +32,29 @@ export default () => {
 };
 
 const setupContractEventListeners = () => {
-    processedContractEvents = {};
+    const loanManager = store.getState().contracts.latest.loanManager.ethersInstance;
 
-    // TODO: use augmint-js class when augmint-js exposes it
-    const loanManager = store.getState().contracts.latest.loanManager.web3ContractInstance;
-
-    loanManager.events.NewLoan({}, (error, event) => {
-        // Workaround for bug that web3 beta 36 fires events 2x with MetaMask TODO: check with newer web3 versions if fixed
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewLoan(error, event);
-        }
+    loanManager.on("NewLoan", (...args) => {
+        onNewLoan(...args);
     });
 
-    loanManager.events.LoanRepayed({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onLoanRepayed(error, event);
-        }
+    loanManager.on("LoanRepayed", (...args) => {
+        onLoanRepayed(...args);
     });
 
-    loanManager.events.LoanCollected({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onLoanCollected(error, event);
-        }
+    loanManager.on("LoanCollected", (...args) => {
+        onLoanCollected(...args);
     });
 
-    loanManager.events.LoanProductAdded({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onNewLoanProduct(error, event);
-        }
+    loanManager.on("LoanProductAdded", (...args) => {
+        onLoanProductAdded(...args);
     });
 
-    loanManager.events.LoanProductActiveStateChanged({}, (error, event) => {
-        if (!processedContractEvents[event.id]) {
-            processedContractEvents[event.id] = true;
-            onLoanProductActiveChange(error, event);
-        }
+    loanManager.on("LoanProductActiveStateChanged", (...args) => {
+        onLoanProductActiveStateChanged(...args);
     });
+
+    // TODO: add & handle loanproduct change events
 };
 
 const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
@@ -98,25 +81,37 @@ const onUserAccountChange = (newVal, oldVal, objectPath) => {
     }
 };
 
-const onNewLoanProduct = (error, event) => {
-    // event NewLockProduct(uint32 indexed lockProductId, uint32 perTermInterest, uint32 durationInSecs,
-    //                         uint32 minimumLockAmount, bool isActive);
-    console.debug("loanManagerProvider.onNewLoanProduct: dispatching refreshLockManager and fetchLockProducts");
+//  event LoanProductAdded(uint32 productId);
+const onLoanProductAdded = (productId, ethersEvent) => {
+    console.debug("loanManagerProvider.onLoanProductAdded: dispatching refreshLoanManager and fetchLoanProducts");
     store.dispatch(refreshLoanManager()); // to update product count
     store.dispatch(fetchLoanProducts()); // to fetch new product
 };
 
-const onLoanProductActiveChange = (error, event) => {
-    // event LockProductActiveChange(uint32 indexed lockProductId, bool newActiveState);
-    console.debug("loanManagerProvider.onLoanProductActiveChange: dispatching fetchLockProducts");
+// event LoanProductActiveStateChanged(uint32 productId, bool newState);
+const onLoanProductActiveStateChanged = (productId, newState, ethersEvent) => {
+    console.debug("loanManagerProvider.onLoanProductActiveStateChanged: dispatching fetchLoanProducts");
     store.dispatch(fetchLoanProducts()); // to refresh product list
 };
 
-const onNewLoan = (error, event) => {
-    // event NewLoan(uint8 productId, uint loanId, address borrower, uint collateralAmount, uint loanAmount, uint repaymentAmount);
+// event NewLoan(uint32 productId, uint loanId, address indexed borrower, uint collateralAmount, uint loanAmount,
+//                  uint repaymentAmount, uint40 maturity);
+const onNewLoan = (
+    productId,
+    loanId,
+    borrower,
+    collateralAmount,
+    loanAmount,
+    repaymentAmount,
+    maturity,
+    ethersEvent
+) => {
     console.debug(
         "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
+
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(refreshLoanManager()); // to update loanCount
@@ -124,6 +119,7 @@ const onNewLoan = (error, event) => {
     if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
     if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -135,17 +131,21 @@ const onNewLoan = (error, event) => {
     }
 };
 
-const onLoanRepayed = (error, event) => {
-    // event LoanRepayed(uint loanId, address borrower);
+// event LoanRepayed(uint loanId, address borrower);
+const onLoanRepayed = (loanId, borrower, ethersEvent) => {
     console.debug(
         "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
+
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
     if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
@@ -157,17 +157,21 @@ const onLoanRepayed = (error, event) => {
     }
 };
 
-const onLoanCollected = (error, event) => {
-    // event LoanCollected(uint loanId, address borrower);
+// event LoanCollected(uint loanId, address indexed borrower, uint collectedCollateral, uint releasedCollateral, uint defaultingFee);
+const onLoanCollected = (loanId, borrower, collectedCollateral, releasedCollateral, defaultingFee, ethersEvent) => {
     console.debug(
         "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"
     );
+
+    const event = patchEthersEvent(ethersEvent);
+
     store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
     }
+
     const userAccount = store.getState().web3Connect.userAccount;
     if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
