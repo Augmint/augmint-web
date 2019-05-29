@@ -25,7 +25,17 @@ export class EthereumState extends React.Component {
         const anyConnectionError = web3Connect.error || contracts.error || augmintToken.loadError;
 
         if (isConnecting) {
-            msg = <LoadingPanel header="Connecting to Ethereum network..." />;
+            let metamask;
+            if (window.ethereum && window.ethereum._metamask) {
+                metamask = window.ethereum._metamask.isEnabled();
+            }
+            msg = (
+                <div style={{ maxWidth: 700, margin: "0 auto" }}>
+                    <LoadingPanel header="Unlocking wallet...">
+                        {metamask ? <p style={{ margin: "20px 0 10px 0" }}>Enable Metamask connection!</p> : ""}
+                    </LoadingPanel>
+                </div>
+            );
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
             msg = <ConnectWallet styles={{ margin: "0 auto" }} />;
         } else if (
