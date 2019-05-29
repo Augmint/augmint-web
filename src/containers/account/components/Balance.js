@@ -54,13 +54,13 @@ export default class Balance extends React.Component {
                     </TokenBalance>
                 </div>
                 <Pgrid.Row style={{ textAlign: "center" }}>
-                    <Pgrid.Column size={1} style={{ padding: "1rem 0" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
                         <Label>My total loans</Label>
                         <TokenAmount>
                             <AEUR amount={loansAmount} />
                         </TokenAmount>
                     </Pgrid.Column>
-                    <Pgrid.Column size={1} style={{ padding: "0 0 1rem" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
                         <Label>My total locks</Label>
                         <TokenAmount>
                             <AEUR amount={locksAmount} />
@@ -71,22 +71,6 @@ export default class Balance extends React.Component {
                     <Label>ETH balance</Label>
                     <ETH amount={userAccount.ethBalance} decimals={15} />
                 </EthAmount>
-                <div
-                    style={{
-                        textAlign: "center",
-                        margin: ".5rem auto 0",
-                        overflowWrap: "break-word"
-                    }}
-                >
-                    <Label className="balance">Account address</Label>
-                    <AccountAddress
-                        address={userAccount.address}
-                        title=""
-                        className={"breakToLines always noClick font"}
-                        showCopyLink
-                        style={{ maxWidth: "190px" }}
-                    />
-                </div>
                 {children}
             </Pblock>
         );
