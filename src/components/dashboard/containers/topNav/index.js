@@ -170,16 +170,6 @@ class TopNav extends React.Component {
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
-                    <StyledTopNavLi>
-                        <StyledTopNavLinkRight
-                            title="Under the hood"
-                            to="/under-the-hood"
-                            data-testid="underTheHoodLink"
-                        >
-                            <Icon name="connect" style={{ marginTop: "12px" }} />
-                            <span>{this.props.web3Connect.network.name}</span>
-                        </StyledTopNavLinkRight>
-                    </StyledTopNavLi>
                 </StyledTopNavUl>
             </StyledTopNav>
         );
