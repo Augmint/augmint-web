@@ -572,6 +572,16 @@ class AugmintToken extends React.Component {
                         </Segment>
                     </StyledContainer>
                 </ThemeProvider>
+                <Button
+                    content="Under the hood"
+                    data-testid="underTheHood"
+                    to="/under-the-hood"
+                    icon="angle-right"
+                    labelposition="right"
+                    size="large"
+                    style={{ marginTop: "16px", marginLeft: "40px", marginBottom: "25px" }}
+                    className="grey"
+                />
             </EthereumState>
         );
     }

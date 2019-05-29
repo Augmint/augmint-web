@@ -192,6 +192,8 @@ class App extends React.Component {
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
 
+        console.log("network.id: ", this.props.web3Connect.network.id);
+
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 {/*
@@ -245,9 +247,11 @@ class App extends React.Component {
                             />
                         </NotificationPanel>
                     )}
-                    {showConnection && this.props.web3Connect.network.id !== 1 && (
-                        <NetworkAlert network={this.props.web3Connect.network.name} />
-                    )}
+                    {showConnection &&
+                        !isNaN(this.props.web3Connect.network.id) &&
+                        this.props.web3Connect.network.id !== 1 && (
+                            <NetworkAlert network={this.props.web3Connect.network.name} />
+                        )}
                     {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                         <div>
                             <LegacyLoanManagers />
