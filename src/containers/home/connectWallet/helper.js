@@ -35,7 +35,7 @@ const desktop = {
 
 const ios = {
     name: "iOS",
-    text: "Install Ethereum capable mobile browser for your IOS device",
+    text: "Install an Ethereum capable mobile browser for your iOS device",
     list: [
         {
             browser: "Coinbase wallet",
@@ -54,7 +54,7 @@ const ios = {
 
 const android = {
     name: "Android",
-    text: "Install Ethereum capable mobile browser for your Android device",
+    text: "Install an Ethereum capable mobile browser for your Android device",
     list: [
         {
             browser: "Coinbase wallet",
