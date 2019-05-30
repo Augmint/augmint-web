@@ -40,7 +40,7 @@ export default class SiteMenu extends React.Component {
 
         const currentLocation = location.pathname;
         const showConnection =
-            ["/account", "/exchange", "/loan/new", "/stability", "/lock", "/tryit"].indexOf(currentLocation) > -1;
+            ["/account", "/exchange", "/loan/new", "/stability", "/lock"].indexOf(currentLocation) > -1;
 
         return (
             <div>
@@ -86,7 +86,7 @@ export default class SiteMenu extends React.Component {
                                 <Button
                                     onClick={e => toggleScroll(false)}
                                     type="a"
-                                    to="/tryit"
+                                    to="/account"
                                     color="primary"
                                     className="try-now"
                                 >
@@ -97,7 +97,7 @@ export default class SiteMenu extends React.Component {
                     </StyledNavLeftSide>
 
                     <StyledNavRightSide>
-                        <Button type="a" to="/tryit" color="primary" className="try-now" data-testid="tryItButton">
+                        <Button type="a" to="/account" color="primary" className="try-now" data-testid="tryItButton">
                             Try now
                         </Button>
                         <Button
