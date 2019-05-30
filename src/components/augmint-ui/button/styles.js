@@ -157,6 +157,22 @@ export const BaseButton = styledComponent => styledComponent`
       background-color: ${theme.colors.grey};
     }
 
+    &.uth {
+      margin-left: 101px;
+      margin-bottom: 50px; 
+
+      ${media.tablet`
+        margin-left: 36px;
+        margin-top: 23px;
+      `};
+
+      ${media.mobile`
+        margin-left: 20px;
+        margin-top: 25px;
+        margin-bottom: 30px;
+      `};
+    }
+
     &.icon {      
       
       &.left {

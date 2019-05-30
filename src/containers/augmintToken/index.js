@@ -575,8 +575,7 @@ class AugmintToken extends React.Component {
                     icon="angle-right"
                     labelposition="right"
                     size="large"
-                    style={{ marginTop: "16px", marginLeft: "40px", marginBottom: "25px" }}
-                    className="grey"
+                    className="grey uth"
                 />
             </EthereumState>
         );

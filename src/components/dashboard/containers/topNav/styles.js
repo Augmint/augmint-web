@@ -21,6 +21,7 @@ export const StyledTopNav = styled.nav`
     z-index: 103;
     top: 0;
     position: fixed;
+    border-bottom: 2px solid ${theme.colors.bgGrey};
 
     &.hide {
         display: none;
@@ -109,11 +110,7 @@ export const StyledTopNavLink = styled(Link)`
     }
 
     &.accountDetails {
-        background-color: ${theme.colors.secondary};
         padding-left: 4px;
-        &:hover {
-            background-color: ${theme.colors.secondaryDark};
-        }
     }
 
     &:hover {
@@ -159,14 +156,6 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
             `};
         }
     }
-
-    &.notifications {
-        border-left: solid 1px #fff;
-        border-right: solid 1px #cccccc;
-        :hover {
-            border-right: solid 1px #fff;
-        }
-    }
 `;
 
 export const StyledPrice = styled.span`
@@ -174,7 +163,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 5px 11px 0;
+    margin: 5px 8px 0;
     font-size: ${remCalc(14)};
 
     :first-of-type {
