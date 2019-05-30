@@ -122,7 +122,6 @@ export const StyledTopNavLink = styled(Link)`
         &.open {
             background-color: ${theme.colors.secondaryDark};
             color: ${theme.colors.primary};
-            border-right: solid 1px #fff;
         }
     }
 `;
@@ -163,7 +162,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 5px 8px 0;
+    margin: 4px 8px 0;
     font-size: ${remCalc(14)};
 
     :first-of-type {
@@ -175,10 +174,6 @@ export const StyledPrice = styled.span`
     `}
 
     &.accountInfoContainer {
-        margin-top: 25px;
-        ${media.desktop`
-            margin-top: 26px;
-        `}
         ${media.tablet`
             display: none;
         `};

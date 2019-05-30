@@ -51,7 +51,7 @@ class TransferPage extends React.Component {
                         <Pheader header="Send A-EUR" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
+                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid className="transfer">
                         <Pgrid.Row>
                             <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>

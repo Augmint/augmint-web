@@ -40,7 +40,7 @@ export const StyledIcon = styled.i`
         font-size: 1.5rem;
         height: 1.5rem;
         width: 1.5rem;
-        margin-top: 14px;
+        margin-top: 13px;
 
         ${media.tabletMin`
             margin-top: 3px;

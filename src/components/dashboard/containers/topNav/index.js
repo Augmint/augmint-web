@@ -101,34 +101,32 @@ class TopNav extends React.Component {
                 <TitleWrapper id="page-title" />
                 <StyledTopNavUl>
                     <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
-                        <div style={{ display: "flex", justifyContent: "center" }}>
-                            <StyledTopNavLinkRight
-                                title="Your account"
-                                to=""
-                                onClick={e => this.toggleAccInfo(e, true)}
-                                className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
-                            >
-                                <Icon
-                                    name="account"
-                                    className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
-                                />
-                                <span>Balance</span>
-                            </StyledTopNavLinkRight>
-                            <StyledPrice className="accountInfoContainer">
-                                <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
-                            </StyledPrice>
-                            <StyledPrice className="accountInfoContainer">
-                                <AEUR amount={tokenBalance} style={{ fontWeight: 700 }} />
-                            </StyledPrice>
-                            <StyledPrice className="accountInfoContainer">
-                                <AccountAddress
-                                    address={this.props.userAccount.address}
-                                    title=""
-                                    shortAddress
-                                    className={"bold"}
-                                />
-                            </StyledPrice>
-                        </div>
+                        <StyledTopNavLinkRight
+                            title="Your account"
+                            to=""
+                            onClick={e => this.toggleAccInfo(e, true)}
+                            className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
+                        >
+                            <Icon
+                                name="account"
+                                className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
+                            />
+                            <span>Balance</span>
+                        </StyledTopNavLinkRight>
+                        <StyledPrice className="accountInfoContainer">
+                            <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
+                        </StyledPrice>
+                        <StyledPrice className="accountInfoContainer">
+                            <AEUR amount={tokenBalance} style={{ fontWeight: 700 }} />
+                        </StyledPrice>
+                        <StyledPrice className="accountInfoContainer">
+                            <AccountAddress
+                                address={this.props.userAccount.address}
+                                title=""
+                                shortAddress
+                                className={"bold"}
+                            />
+                        </StyledPrice>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
                             <StyledAccountInfo
                                 data={accountInfoData}
@@ -155,7 +153,7 @@ class TopNav extends React.Component {
                             }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
-                            <Icon name="notifications" style={{ position: "relative", top: "13px" }} />
+                            <Icon name="notifications" style={{ position: "relative", top: "12px" }} />
                             <Icon name={notiIcon} loading={_loading} style={_style} />
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>

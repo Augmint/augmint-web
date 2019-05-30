@@ -31,7 +31,7 @@ class AccountHome extends React.Component {
                         <Pheader header="My Account" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
+                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
