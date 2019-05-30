@@ -29,11 +29,10 @@ export class EthereumState extends React.Component {
             if (window.ethereum && window.ethereum._metamask) {
                 metamask = window.ethereum._metamask.isEnabled();
             }
+            const header = metamask ? "Unlocking Metamask wallet ..." : "Unlocking wallet ...";
             msg = (
                 <div style={{ maxWidth: 700, margin: "0 auto" }}>
-                    <LoadingPanel header="Unlocking wallet...">
-                        {metamask ? <p style={{ margin: "20px 0 10px 0" }}>Enable Metamask connection!</p> : ""}
-                    </LoadingPanel>
+                    <LoadingPanel header={header} />
                 </div>
             );
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
