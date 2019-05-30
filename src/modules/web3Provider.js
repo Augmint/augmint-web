@@ -19,7 +19,10 @@ export const connectWeb3 = () => {
     const mainPath = window.location.pathname.split("/").length > 0 ? "/" + window.location.pathname.split("/")[1] : "";
     const shouldConnect = ["/", "/concept", "/manifesto", "/disclaimer", "/roadmap", "/team"].indexOf(mainPath) < 0;
 
+    console.log(web3Connect, "web3Connect");
+
     if (shouldConnect && disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
+        console.log("LOAD");
         onLoad();
     }
 
