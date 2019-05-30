@@ -26,7 +26,6 @@ import FundingHome from "containers/funding";
 import LoanMain from "containers/loan";
 import AugmintToken from "containers/augmintToken";
 import Concept from "containers/home/concept";
-import TryIt from "containers/home/tryIt";
 import UnderTheHood from "containers/underthehood";
 import NotConnectedHome from "containers/home/NotConnectedHome";
 import Manifesto from "containers/manifesto/manifesto";
@@ -187,7 +186,6 @@ class App extends React.Component {
                 "stability",
                 "lock",
                 "loan",
-                "tryit",
                 "how-to-get",
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
@@ -276,7 +274,6 @@ class App extends React.Component {
                         <Route path="/loan" component={LoanMain} />
 
                         <Route exact path="/concept" component={Concept} />
-                        <Route exact path="/tryit" component={TryIt} />
                         <Route exact path="/under-the-hood" component={UnderTheHood} />
                         <Route exact path="/manifesto" component={Manifesto} />
                         <Route exact path="/disclaimer" component={Disclaimer} />

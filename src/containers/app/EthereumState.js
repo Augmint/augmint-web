@@ -10,7 +10,7 @@ import { ErrorDetails, ErrorPanel, WarningPanel, LoadingPanel } from "components
 import { Tsegment } from "components/TextContent";
 import { DiscordButton } from "components/LinkButtons";
 
-import { HowToConnect } from "containers/home/tryIt/HowToConnect.js";
+import ConnectWallet from "containers/home/connectWallet/ConnectWallet.js";
 
 export class EthereumState extends React.Component {
     render() {
@@ -27,7 +27,7 @@ export class EthereumState extends React.Component {
         if (isConnecting) {
             msg = <LoadingPanel header="Connecting to Ethereum network..." />;
         } else if (!web3Connect.isConnected && !web3Connect.isLoading) {
-            msg = <HowToConnect />;
+            msg = <ConnectWallet styles={{ margin: "0 auto" }} />;
         } else if (
             web3Connect.isConnected &&
             !contracts.isLoaded &&
