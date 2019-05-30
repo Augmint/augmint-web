@@ -50,6 +50,8 @@ import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
 import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 
+import { connectWeb3 } from "modules/web3Provider.js";
+
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono|Roboto+Slab:300,400');
 
@@ -163,6 +165,7 @@ class App extends React.Component {
 
     componentDidMount() {
         this.props.history.listen((location, action) => {
+            connectWeb3();
             this.setState(state => {
                 return {
                     showMobileMenu: false
