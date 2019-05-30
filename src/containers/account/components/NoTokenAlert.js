@@ -59,11 +59,8 @@ class NoTokenAlert extends React.Component {
             ) : (
                 ethBalanceIsNull && (
                     <Box onDismiss={this.dismiss} {...this.props}>
-                        <Link to="/tryit">
-                            <i className="fas fa-exclamation-triangle" style={{ marginRight: 15 }} />
-                            You have no ETH. To send transactions on Ethereum network you need some ETH.{" "}
-                            <u>How to get?</u> »
-                        </Link>
+                        <i className="fas fa-exclamation-triangle" style={{ marginRight: 15 }} />
+                        You have no ETH. To send transactions on Ethereum network you need some ETH.{" "}
                     </Box>
                 )
             ))

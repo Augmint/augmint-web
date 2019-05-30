@@ -77,7 +77,7 @@ export default () => (
                 </Grid>
             </ThemeProvider>
             <div className="segment" style={{ textAlign: "center" }}>
-                <Button content="TRY NOW" to="/tryit" className="try-now" />
+                <Button content="Try now" to="/account" className="try-now" />
             </div>
         </section>
         <section className="green-gradient segment">
@@ -122,7 +122,7 @@ export default () => (
                 grows you will need less and less to exchange Augmint tokens to fiat money.
             </p>
             <div style={{ textAlign: "left" }} className="custom-buttonsegment segment">
-                <Button content="TRY NOW" to="/tryit" className="try-now" />
+                <Button content="Try now" to="/account" className="try-now" />
             </div>
             <h2 className="header segment" id={"governance"}>
                 Governance
