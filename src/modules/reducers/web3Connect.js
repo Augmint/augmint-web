@@ -21,6 +21,7 @@ const initialState = {
     accounts: null,
     isLoading: false,
     isConnected: false,
+    userConnected: false,
     ethers: { provider: null, signer: null },
     network: { id: "?", name: "?" },
     augmint: null,
@@ -40,13 +41,15 @@ export default (state = initialState, action) => {
             };
 
         case WEB3_SETUP_SUCCESS:
+            console.log("succes");
             return {
                 ...state,
                 isLoading: false,
                 isConnected: true,
+                userConnected: action.userConnected,
                 error: null,
                 augmint: action.augmint,
-                userAccount: action.accounts[0],
+                userAccount: action.userAccount,
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
                 ethers: action.ethers,
@@ -156,6 +159,7 @@ export const setupWeb3 = () => {
                 augmint,
                 web3Instance: web3,
                 userAccount,
+                userConnected: !!userAccount,
                 accounts,
                 network,
                 ethers: { signer: ethersSigner, provider: ethersProvider },

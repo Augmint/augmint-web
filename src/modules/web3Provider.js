@@ -19,9 +19,14 @@ export const connectWeb3 = () => {
     const mainPath = window.location.pathname.split("/").length > 0 ? "/" + window.location.pathname.split("/")[1] : "";
     const shouldConnect = ["/", "/concept", "/manifesto", "/disclaimer", "/roadmap", "/team"].indexOf(mainPath) < 0;
 
-    if (shouldConnect && disclaimerAccepted && documentLoaded && !web3Connect.isConnected && !web3Connect.isLoading) {
-        console.log("LOAD");
-        onLoad();
+    if (shouldConnect && disclaimerAccepted && documentLoaded) {
+        if (!web3Connect.isConnected && !web3Connect.isLoading) {
+            // if web3 is not connected
+            onLoad();
+        } else if (web3Connect.isConnected && !web3Connect.isLoading && !web3Connect.userConnected) {
+            // if web3 is connected, but user rejected to connect address to augmint
+            onLoad();
+        }
     }
 
     // Deprecated
