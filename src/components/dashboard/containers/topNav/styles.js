@@ -162,7 +162,7 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 4px 8px 0;
+    margin: 2px 8px 0;
     font-size: ${remCalc(14)};
 
     :first-of-type {
@@ -173,22 +173,11 @@ export const StyledPrice = styled.span`
         font-size: ${remCalc(12)};
     `}
 
+    ${media.tabletMin`
+        margin-top: 3px;
+    `}
+
     &.accountInfoContainer {
-        ${media.tablet`
-            display: none;
-        `};
-    }
-
-    &:not(.accountInfoContainer) {
-        ${media.desktop`
-            margin: 5px 10px 0 0;
-        `}
-        ${media.tablet`
-            display: none;
-        `};
-    }
-
-    .price {
         ${media.tablet`
             display: none;
         `};
@@ -197,22 +186,6 @@ export const StyledPrice = styled.span`
     span .symbol {
         font-weight: 400;
     }
-
-    div {
-        pointer-events: auto;
-    }
-`;
-
-export const StyledSeparator = styled.div`
-    background-color: ${theme.colors.primaryLight};
-    padding: 0px;
-    height: 24px;
-    width: 2px;
-    margin: 21px 0 0;
-
-    ${media.tablet`
-        display: none;
-    `};
 `;
 
 export const CloseIcon = styled.img`

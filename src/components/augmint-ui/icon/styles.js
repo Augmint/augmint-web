@@ -43,7 +43,7 @@ export const StyledIcon = styled.i`
         margin-top: 13px;
 
         ${media.tabletMin`
-            margin-top: 3px;
+            margin-top: 1px;
         `}
     }
 
