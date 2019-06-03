@@ -46,7 +46,7 @@ class ExchangeHome extends React.Component {
                         <Pheader header="Exchange Crypto" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
+                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column

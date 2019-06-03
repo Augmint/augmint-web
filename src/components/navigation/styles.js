@@ -108,6 +108,7 @@ export const HamburgerMenu = styled.img`
     height: 32px;
     width: 32px;
     visibility: hidden;
+    cursor: pointer;
     ${mediaopacity.handheld`opacity: .8`} ${breakpoint`
       display: block;
       visibility: visible;

@@ -23,6 +23,7 @@ export const HamburgerMenu = styled.img`
     width: 32px;
     margin-top: 15px;
     visibility: hidden;
+    cursor: pointer;
 
     ${breakpoint`
       display: block;

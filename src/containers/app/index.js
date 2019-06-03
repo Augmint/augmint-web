@@ -38,6 +38,7 @@ import { AppFooter } from "containers/app/AppFooter";
 
 import TopNav from "components/dashboard/containers/topNav";
 import SideNav from "components/dashboard/components/sideNav";
+import NetworkAlert from "components/dashboard/components/NetworkAlert";
 import DisclaimerModal from "components/Disclaimer";
 import { NotificationPanel } from "components/notifications";
 import { dismissTx } from "modules/reducers/submittedTransactions";
@@ -53,7 +54,7 @@ import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 import { connectWeb3 } from "modules/web3Provider.js";
 
 const GlobalStyle = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono|Roboto+Slab:300,400');
+    @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono:400,700|Roboto+Slab:300,400');
 
     @keyframes icon-loading {
         0% {
@@ -192,6 +193,8 @@ class App extends React.Component {
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
 
+        console.log("network.id: ", this.props.web3Connect.network.id);
+
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 {/*
@@ -246,6 +249,11 @@ class App extends React.Component {
                             />
                         </NotificationPanel>
                     )}
+                    {showConnection &&
+                        !isNaN(this.props.web3Connect.network.id) &&
+                        this.props.web3Connect.network.id !== 1 && (
+                            <NetworkAlert network={this.props.web3Connect.network.name} className="banner" />
+                        )}
                     {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                         <div>
                             <LegacyLoanManagers />

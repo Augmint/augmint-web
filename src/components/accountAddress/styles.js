@@ -19,13 +19,26 @@ export const StyledHint = styled.span`
     &::after {
         content: "Click to copy!";
     }
+
+    &.noHint {
+        display: none;
+    }
 `;
 
 export const StyledContainer = styled.div`
     cursor: pointer;
     display: inline-block;
+    font-weight: 400;
 
-    &.clicked ${StyledClicked} {
+    &.container {
+        position: relative;
+    }
+
+    &.noClick {
+        cursor: default;
+    }
+
+    &.showHint ${StyledClicked} {
         display: inline-block;
         padding-right: 5px;
     }
@@ -34,12 +47,49 @@ export const StyledContainer = styled.div`
         display: block;
     }
 
-    &.clicked:hover ${StyledHint} {
+    &.showHint:hover ${StyledHint} {
         display: block;
 
         &::after {
-            color: ${theme.colors.darkGreen};
+            color: ${theme.colors.lightGreen};
             content: "Copied!";
         }
+    }
+
+    &.breakToLines {
+        &.onMobile {
+            @media (max-width: 600px) {
+                display: block;
+                max-width: 260px;
+            }
+        }
+        &.always {
+            display: block;
+            max-width: 210px;
+            margin: auto;
+        }
+    }
+
+    &.bold {
+        font-weight: 700;
+    }
+
+    &.font {
+        font-family: ${theme.typography.fontFamilies.currency};
+    }
+`;
+
+export const StyledHintBtn = styled.div`
+    font-family: ${theme.typography.fontFamilies.default};
+    display: none;
+
+    &.showHint {
+        display: block;
+        background-color: white;
+        border-radius: 3px;
+        padding: 10px 20px;
+        position: absolute;
+        left: 45px;
+        top: 42px;
     }
 `;

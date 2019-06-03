@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
+import AccountAddress from "components/accountAddress";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -15,7 +17,7 @@ const Label = styled.div`
 const TokenBalance = styled.div`
     font-family: ${theme.typography.fontFamilies.currency};
     font-size: ${remCalc(48)};
-    .currency {
+    .currency > span {
         font-size: ${remCalc(24)};
     }
 `;
@@ -45,30 +47,29 @@ export default class Balance extends React.Component {
 
         return (
             <Pblock className="balance" style={{ marginTop: "1rem" }}>
-                <div style={{ textAlign: "center" }}>
+                <div style={{ textAlign: "center", marginTop: "1rem" }}>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
-                        {userAccount.tokenBalance}
-                        <span className="currency"> A€</span>
+                        <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
                 <Pgrid.Row style={{ textAlign: "center" }}>
-                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
                         <Label>My total loans</Label>
                         <TokenAmount>
-                            {loansAmount} <span className="currency">A€</span>
+                            <AEUR amount={loansAmount} />
                         </TokenAmount>
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
                         <Label>My total locks</Label>
                         <TokenAmount>
-                            {locksAmount} <span className="currency">A€</span>
+                            <AEUR amount={locksAmount} />
                         </TokenAmount>
                     </Pgrid.Column>
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
-                    <div>{userAccount.ethBalance} ETH</div>
+                    <ETH amount={userAccount.ethBalance} />
                 </EthAmount>
                 {children}
             </Pblock>
