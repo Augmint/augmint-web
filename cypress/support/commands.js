@@ -132,22 +132,22 @@ Cypress.Commands.add("getUserEthBalance", (account, options = {}) => {
 Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
+    const decimals = 2;
+    const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+
     cy.get("[data-testid=userAEurBalance]")
         .invoke("text")
-        .should("equal", balance.toFixed(2));
+        .should("equal", fmt.format(balance) + " A€");
 });
 
 // assert user balance on UI.
-Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 12, options = {}) => {
-    const expectedEth = Number(_expectedEth.toFixed(decimals));
+Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 13, options = {}) => {
+    const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
     cy.get("[data-testid=userEthBalance]")
         .invoke("text")
-        .should(val => {
-            // TODO: this throws a lot of console warnings
-            expect(Number(val)).to.be.approximately(expectedEth, 1 / 10 ** decimals);
-        });
+        .should("contain", fmt.format(_expectedEth));
 });
 
 // issue AEUR to account
