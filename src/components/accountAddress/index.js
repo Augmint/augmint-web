@@ -67,18 +67,8 @@ export default class AccountAddress extends React.Component {
                         onClick={e => this.showHint(true)}
                         icon="copy"
                         labelposition="left"
-                        iconsize="small"
-                        style={{ marginTop: "10px", marginBottom: "20px" }}
-                        className="ghost naked icon left"
-                    />
-                    <Button
-                        content="Copy"
-                        data-testid="loansToCollectButton"
-                        onClick={e => this.showHint(true)}
-                        icon="copy"
-                        labelposition="left"
                         style={{ marginBottom: "20px" }}
-                        className="grey icon left"
+                        className="grey icon top"
                     />
                     <StyledHintBtn className={_className} id="StyledHinBtn">
                         <Icon name="check" style={{ marginRight: "5px", color: "green" }} />

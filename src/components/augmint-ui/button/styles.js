@@ -194,6 +194,14 @@ export const BaseButton = styledComponent => styledComponent`
         }
       }
 
+      &.top {
+        flex-direction: column-reverse;
+        font-size: .875rem;
+
+        i {
+        }
+      }
+
       i {
         &.bg {
           width: 3rem;
@@ -288,6 +296,18 @@ export const BaseButton = styledComponent => styledComponent`
       border-radius: 0;
       border-top-right-radius: inherit;
       border-bottom-right-radius: inherit;
+    }
+
+    &[labelposition="top"] {
+      flex-direction: column-reverse;
+      
+      i {
+        position: inherit;
+        font-size: .875rem;
+        margin-top: 6px;
+        margin-bottom: 7px;
+        background-color: transparent;
+      }
     }
 `;
 

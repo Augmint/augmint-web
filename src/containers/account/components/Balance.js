@@ -5,6 +5,8 @@ import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
 import AccountAddress from "components/accountAddress";
+import WatchAssetButton from "components/watchAssetButton";
+import Button from "components/augmint-ui/button";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -66,11 +68,47 @@ export default class Balance extends React.Component {
                             <AEUR amount={locksAmount} />
                         </TokenAmount>
                     </Pgrid.Column>
+                    <div style={{ textAlign: "center", display: "flex" }}>
+                        <WatchAssetButton className="icon top" icon="copy" labelposition="top" />
+                        <Button to="/exchange" icon="copy" className="grey icon top" labelposition="top">
+                            Buy / Sell
+                            <br />
+                            A-EUR
+                        </Button>
+                        <Button
+                            to="/transfer"
+                            className="grey icon top"
+                            icon="copy"
+                            data-testid="transferButton"
+                            style={{ marginBottom: 20 }}
+                            labelposition="top"
+                        >
+                            Send
+                            <br />
+                            A-EUR
+                        </Button>
+                    </div>
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
                     <ETH amount={userAccount.ethBalance} decimals={15} />
                 </EthAmount>
+                <div
+                    style={{
+                        textAlign: "center",
+                        margin: ".5rem auto 0",
+                        overflowWrap: "break-word"
+                    }}
+                >
+                    <Label className="balance">Account address</Label>
+                    <AccountAddress
+                        address={userAccount.address}
+                        title=""
+                        className={"breakToLines always noClick font"}
+                        showCopyLink
+                        style={{ maxWidth: "190px" }}
+                    />
+                </div>
                 {children}
             </Pblock>
         );
