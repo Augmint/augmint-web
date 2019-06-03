@@ -69,7 +69,7 @@ export default class Balance extends React.Component {
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
-                    <ETH amount={userAccount.ethBalance} decimals={15} />
+                    <ETH amount={userAccount.ethBalance} />
                 </EthAmount>
                 {children}
             </Pblock>
