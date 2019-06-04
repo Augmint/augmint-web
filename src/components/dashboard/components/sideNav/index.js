@@ -91,7 +91,7 @@ export const SideNavUl = styled.ul`
     ${breakpoint`
       display: block;
       visibility: visible;
-      margin-top: 50px;
+      margin-top: 0;
       &.hidden {
         display: none;
         visibility: hidden;
