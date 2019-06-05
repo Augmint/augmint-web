@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-// import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import TokenTransferForm from "./components/TokenTransferForm";
 import EthTransferForm from "./components/EthTransferForm";
@@ -37,7 +36,6 @@ class TransferPage extends React.Component {
     }
 
     componentDidMount() {
-        // connectWeb3();
         augmintTokenProvider();
     }
 

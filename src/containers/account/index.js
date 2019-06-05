@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-// import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
@@ -17,7 +16,6 @@ import WatchAssetButton from "components/watchAssetButton";
 
 class AccountHome extends React.Component {
     componentDidMount() {
-        // connectWeb3();
         loanManagerProvider();
         lockManagerProvider();
         augmintTokenProvider();
