@@ -5,12 +5,9 @@ import { connectContracts } from "modules/reducers/contracts";
 /*
     TODO: make it to a HOC
 */
-let newBlockHeadersFilter, pendingTransactionsFilter;
 let intervalId;
 
 export const connectWeb3 = () => {
-    console.log("connect web3");
-
     const web3Connect = store.getState().web3Connect;
     const disclaimerAccepted = web3Connect.disclaimerAccepted;
     const documentProps = store.getState().documentProps;
@@ -31,7 +28,6 @@ export const connectWeb3 = () => {
 };
 
 const onLoad = () => {
-    console.log("LOAD");
     store.dispatch(setupWeb3());
     if (!intervalId) {
         intervalId = setInterval(async function() {
@@ -51,15 +47,7 @@ const onLoad = () => {
 };
 
 export const onWeb3NetworkChange = newVal => {
-    console.log("WEB3 NETWORK CHANGE");
     // TODO: make filters + subscriptions generic, e.g use an array
-    if (newBlockHeadersFilter) {
-        newBlockHeadersFilter.unsubscribe();
-    }
-    if (pendingTransactionsFilter) {
-        pendingTransactionsFilter.unsubscribe();
-    }
-
     if (newVal) {
         store.dispatch(connectContracts());
     }
