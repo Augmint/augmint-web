@@ -26,7 +26,7 @@ const initialState = {
     network: { id: "?", name: "?" },
     augmint: null,
     watchAsset: getCookie("watchAsset") || [],
-    disclaimerAccepted: null
+    disclaimerAccepted: getCookie("disclaimerDismissed") || false
 };
 
 var web3;
@@ -154,7 +154,7 @@ export const setupWeb3 = () => {
             const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
 
             const gasPrice = await web3.eth.getGasPrice();
-            dispatch({
+            return dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 augmint,
                 web3Instance: web3,
@@ -194,6 +194,7 @@ export const watchAssetChange = value => {
 };
 
 export const disclaimerChanged = value => {
+    setCookie("disclaimerDismissed", !!value);
     return {
         type: WEB3_DISCLAIMER_CHANGE,
         disclaimerAccepted: value

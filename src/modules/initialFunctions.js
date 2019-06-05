@@ -35,9 +35,7 @@ export const initialFunction = _store => {
 
 function checkDisclaimer() {
     const disclaimerInitState = getCookie("disclaimerDismissed");
-    if (disclaimerInitState) {
-        store.dispatch(disclaimerChanged(disclaimerInitState));
-    }
+    store.dispatch(disclaimerChanged(disclaimerInitState));
 }
 
 function isDocumentLoaded() {
