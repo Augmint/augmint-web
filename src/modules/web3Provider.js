@@ -52,7 +52,7 @@ const onLoad = () => {
     if (!intervalId) {
         intervalId = setInterval(async function() {
             const web3 = store.getState().web3Connect;
-            if (web3 && web3.isConnected & !web3.isLoading) {
+            if (web3 && web3.isConnected && !web3.isLoading) {
                 const currentAccounts = await web3.web3Instance.eth.getAccounts();
                 const userAccount = store.getState().web3Connect.userAccount;
                 if (currentAccounts[0] !== userAccount) {
