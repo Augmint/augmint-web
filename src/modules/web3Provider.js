@@ -28,22 +28,6 @@ export const connectWeb3 = () => {
             onLoad();
         }
     }
-
-    // Deprecated
-    // let web3Connect = store.getState().web3Connect;
-    //
-    // if (!web3Connect.isConnected && !web3Connect.isLoading) {
-    //     console.debug(
-    //         "web3Provider - web3 is not connected and not loading. Setting up watches and dispatching setUpWeb3() for onLoad"
-    //     );
-    //     setupWatch("web3Connect.network", onWeb3NetworkChange);
-    //     if (document.readyState === "complete" && disclaimerAccepted) {
-    //         onLoad();
-    //     } else {
-    //         window.addEventListener("load", onLoad);
-    //     }
-    // }
-    // return;
 };
 
 const onLoad = () => {
@@ -66,7 +50,7 @@ const onLoad = () => {
     }
 };
 
-export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
+export const onWeb3NetworkChange = newVal => {
     console.log("WEB3 NETWORK CHANGE");
     // TODO: make filters + subscriptions generic, e.g use an array
     if (newBlockHeadersFilter) {
@@ -78,26 +62,5 @@ export const onWeb3NetworkChange = (newVal, oldVal, objectPath) => {
 
     if (newVal) {
         store.dispatch(connectContracts());
-        console.debug("web3Provider - web3Connect.network changed. subscribing to newBlockHeaders event (not working)");
-        // const web3 = store.getState().web3Connect.web3Instance;
-        // FIXME: these are not working b/c: https://github.com/MetaMask/metamask-extension/issues/2393
-        // newBlockHeadersFilter = web3.eth.subscribe("newBlockHeaders", onNewBlock);
-        // pendingTransactionsFilter = web3.eth
-        //     .subscribe("pendingTransactions", (error, tx) => {
-        //         if (error) {
-        //             console.error("pendingTransaction error:", error);
-        //         } else {
-        //             console.debug("pendingTransactions", tx);
-        //         }
-        //     })
-        //     .on("data", tx => onPendingTransaction(tx));
     }
 };
-
-// const onNewBlock = (error, result) => {
-//     console.debug("web3Provider.onNewBlock");
-// };
-//
-// const onPendingTransaction = tx => {
-//     console.debug("onPendingTransaction", tx);
-// };
