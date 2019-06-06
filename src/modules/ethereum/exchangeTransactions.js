@@ -78,3 +78,13 @@ export async function cancelOrderTx(exchange, buy, orderId) {
 
     return { txName, transactionHash };
 }
+
+export async function getSimpleBuyCalc(token, isBuy, rate) {
+    const exchange = await store.getState().web3Connect.augmint.exchange;
+
+    if (isBuy) {
+        return exchange.estimateSimpleBuy(token, rate);
+    } else {
+        return exchange.estimateSimpleSell(token, rate);
+    }
+}

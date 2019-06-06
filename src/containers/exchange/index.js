@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import { OrderBook, MyOrders } from "./components/OrderBook";
 import TradeHistory from "./components/TradeHistory";
 import PlaceOrderForm from "./components/PlaceOrderForm";
+import SimpleBuyForm from "./components/SimpleBuyForm";
 import { EthereumState } from "containers/app/EthereumState";
 import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
@@ -49,10 +50,13 @@ class ExchangeHome extends React.Component {
                     <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column
-                                className="placeorder-column"
-                                size={{ mobile: 1, tablet: 1 / 2, desktop: 6 / 16 }}
-                            >
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
+                                <SimpleBuyForm
+                                    orders={orders}
+                                    exchange={exchange}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                    rates={rates}
+                                />
                                 <PlaceOrderForm
                                     exchange={exchange}
                                     rates={rates}
