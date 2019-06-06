@@ -150,13 +150,13 @@ class SimpleBuyForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu>
+                <Menu className="filled">
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
                         onClick={this.onOrderDirectionChange}
                         data-testid="simpleBuyMenuLink"
-                        className={"buySell"}
+                        className={"buySell filled dark"}
                     >
                         Buy A-EUR
                     </Menu.Item>
@@ -165,7 +165,7 @@ class SimpleBuyForm extends React.Component {
                         data-index={TOKEN_SELL}
                         onClick={this.onOrderDirectionChange}
                         data-testid="simpleSellMenuLink"
-                        className={"buySell"}
+                        className={"buySell filled dark"}
                     >
                         Sell A-EUR
                     </Menu.Item>
@@ -198,7 +198,7 @@ class SimpleBuyForm extends React.Component {
                             onDismiss={() => clearSubmitErrors()}
                         />
 
-                        <Styledlabel>
+                        <Styledlabel style={{ margin: 0 }}>
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
                             </strong>
@@ -223,7 +223,7 @@ class SimpleBuyForm extends React.Component {
                         <Button
                             size="big"
                             loading={submitting}
-                            // disabled={pristine}
+                            disabled={pristine}
                             className="fullwidth"
                             data-testid="simpleSubmitButton"
                             type="submit"

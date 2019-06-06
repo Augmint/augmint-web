@@ -1,12 +1,12 @@
 .segment.dashblock.placeOrder-form {
     max-width: 350px;
     flex-basis: 350px;
-    margin-top: 1rem;
+    margin-top: 0;
 }
 .segment.dashblock.simplebuy-form {
     max-width: 350px;
     flex-basis: 350px;
-    margin-top: 1rem;
+    margin-top: 0;
 }
 /* mobile */
 @media (max-width: 376px) {

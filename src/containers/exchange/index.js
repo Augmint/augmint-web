@@ -14,11 +14,16 @@ import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import { TOKEN_SELL } from "modules/reducers/orders";
+import { Menu } from "components/augmint-ui/menu";
+
+const SIMPLE = "simple";
+const ADVANCED = "advanced";
 
 class ExchangeHome extends React.Component {
     constructor(props) {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
+        this.toggleSimpleBuy = this.toggleSimpleBuy.bind(this);
         this.state = {
             orderBookDirection: TOKEN_SELL,
             simpleBuy: true
@@ -33,10 +38,9 @@ class ExchangeHome extends React.Component {
     }
 
     toggleSimpleBuy(e) {
-        e.persist();
-        let value = parseInt(e.target.value) > 0;
+        const val = e.target.attributes["data-index"].value;
         this.setState({
-            simpleBuy: value
+            simpleBuy: val === SIMPLE
         });
     }
 
@@ -48,7 +52,33 @@ class ExchangeHome extends React.Component {
 
     render() {
         const { userAccount, orders, exchange, rates, trades } = this.props;
-        const simpleValue = this.state.simpleBuy ? 1 : 0;
+
+        const header = (
+            <div>
+                <Menu className="upper">
+                    <Menu.Item
+                        active={this.state.simpleBuy}
+                        data-testid="simplebuy-btn"
+                        data-index={SIMPLE}
+                        className={"simplebuy upper"}
+                        tabIndex="0"
+                        onClick={this.toggleSimpleBuy}
+                    >
+                        Simple
+                    </Menu.Item>
+                    <Menu.Item
+                        active={!this.state.simpleBuy}
+                        data-testid="advancedBuy-btn"
+                        data-index={ADVANCED}
+                        className={"advancedBuy upper"}
+                        tabIndex="0"
+                        onClick={this.toggleSimpleBuy}
+                    >
+                        Advanced
+                    </Menu.Item>
+                </Menu>
+            </div>
+        );
 
         return (
             <EthereumState>
@@ -62,16 +92,16 @@ class ExchangeHome extends React.Component {
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
                                 <div>
-                                    <div className="toggle" style={{ margin: "1rem", color: "black" }}>
-                                        <span>Simple buy</span>
-                                        <input
-                                            type="range"
-                                            min="0"
-                                            max="1"
-                                            value={simpleValue}
-                                            step="1"
-                                            onChange={e => this.toggleSimpleBuy(e)}
-                                        />
+                                    <div
+                                        className="toggle"
+                                        style={{
+                                            margin: "1rem 1rem 0 1rem",
+                                            color: "black",
+                                            background: "white",
+                                            width: 350
+                                        }}
+                                    >
+                                        {header}
                                     </div>
                                     {this.state.simpleBuy && (
                                         <SimpleBuyForm
