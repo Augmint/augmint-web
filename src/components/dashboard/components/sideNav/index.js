@@ -127,7 +127,7 @@ export const SideNavLi = styled.li`
 export const SideNavLink = styled(NavLink)`
     display: flex;
     align-items: center;
-    padding: 5px 10px;
+    padding: 4px 10px;
     width: 100%;
     color: ${theme.colors.white};
     opacity: 0.9;
