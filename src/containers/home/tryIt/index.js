@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import { LoadingPanel } from "components/MsgPanels";
 import { Tsegment } from "components/TextContent";
 import Button from "components/augmint-ui/button";
@@ -11,10 +10,6 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import { Pheader } from "components/PageLayout";
 
 class TryIt extends React.Component {
-    componentDidMount() {
-        connectWeb3();
-    }
-
     render() {
         const { isLoading, isConnected, error } = this.props.web3Connect;
         return (

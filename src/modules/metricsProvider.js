@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { fetchAllData } from "modules/reducers/metrics";
 
 let isWatchSetup = false;
