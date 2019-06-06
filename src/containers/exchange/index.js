@@ -90,52 +90,45 @@ class ExchangeHome extends React.Component {
                     <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <div>
-                                    <div className="toggle">{header}</div>
-                                    {this.state.simpleBuy && (
-                                        <SimpleBuyForm
-                                            orders={orders}
-                                            exchange={exchange}
-                                            toggleOrderBook={this.toggleOrderBook}
-                                            rates={rates}
-                                        />
-                                    )}
-                                    {!this.state.simpleBuy && (
-                                        <PlaceOrderForm
-                                            exchange={exchange}
-                                            rates={rates}
-                                            toggleOrderBook={this.toggleOrderBook}
-                                        />
-                                    )}
-                                </div>
-                            </Pgrid.Column>
-                            <Pgrid.Column
-                                style={{ marginTop: "1rem" }}
-                                size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}
-                            >
-                                <MyOrders
-                                    testid="myOrdersBlock"
-                                    orders={orders}
-                                    rates={rates}
-                                    userAccountAddress={userAccount.address}
-                                    header="My open orders"
-                                />
-                                {!this.state.simpleBuy && (
-                                    <OrderBook
-                                        testid="allOrdersBlock"
+                            <div>
+                                <div className="toggle">{header}</div>
+                                {this.state.simpleBuy && (
+                                    <SimpleBuyForm
                                         orders={orders}
+                                        exchange={exchange}
+                                        toggleOrderBook={this.toggleOrderBook}
                                         rates={rates}
-                                        userAccountAddress={userAccount.address}
-                                        header="Order book"
-                                        orderBookDirection={this.state.orderBookDirection}
+                                    />
+                                )}
+                                {!this.state.simpleBuy && (
+                                    <PlaceOrderForm
+                                        exchange={exchange}
+                                        rates={rates}
                                         toggleOrderBook={this.toggleOrderBook}
                                     />
                                 )}
-                                {orders.orders && (
-                                    <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
-                                )}
-                            </Pgrid.Column>
+                            </div>
+                            <MyOrders
+                                testid="myOrdersBlock"
+                                orders={orders}
+                                rates={rates}
+                                userAccountAddress={userAccount.address}
+                                header="My open orders"
+                            />
+                            {!this.state.simpleBuy && (
+                                <OrderBook
+                                    testid="allOrdersBlock"
+                                    orders={orders}
+                                    rates={rates}
+                                    userAccountAddress={userAccount.address}
+                                    header="Order book"
+                                    orderBookDirection={this.state.orderBookDirection}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                />
+                            )}
+                            {orders.orders && (
+                                <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
+                            )}
                         </Pgrid.Row>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 2 / 2, desktop: 3 / 3 }}>
