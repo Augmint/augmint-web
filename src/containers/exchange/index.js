@@ -92,17 +92,7 @@ class ExchangeHome extends React.Component {
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
                                 <div>
-                                    <div
-                                        className="toggle"
-                                        style={{
-                                            margin: "1rem 1rem 0 1rem",
-                                            color: "black",
-                                            background: "white",
-                                            width: 350
-                                        }}
-                                    >
-                                        {header}
-                                    </div>
+                                    <div className="toggle">{header}</div>
                                     {this.state.simpleBuy && (
                                         <SimpleBuyForm
                                             orders={orders}

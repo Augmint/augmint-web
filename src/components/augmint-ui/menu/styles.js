@@ -31,6 +31,10 @@ export const StyledMenu = styled.div`
         margin-bottom: 0;
         border-bottom: none;
         padding: 0 20px 20px 20px;
+        ${media.mobile`
+          padding: 0;
+          width: 100%;
+        `};
     }
 `;
 
