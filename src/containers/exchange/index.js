@@ -20,7 +20,8 @@ class ExchangeHome extends React.Component {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
         this.state = {
-            orderBookDirection: TOKEN_SELL
+            orderBookDirection: TOKEN_SELL,
+            simpleBuy: true
         };
     }
 
@@ -31,6 +32,14 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
 
+    toggleSimpleBuy(e) {
+        e.persist();
+        let value = parseInt(e.target.value) > 0;
+        this.setState({
+            simpleBuy: value
+        });
+    }
+
     toggleOrderBook(direction) {
         this.setState({
             orderBookDirection: direction
@@ -39,6 +48,7 @@ class ExchangeHome extends React.Component {
 
     render() {
         const { userAccount, orders, exchange, rates, trades } = this.props;
+        const simpleValue = this.state.simpleBuy ? 1 : 0;
 
         return (
             <EthereumState>
@@ -51,17 +61,34 @@ class ExchangeHome extends React.Component {
                     <Pgrid>
                         <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 1 / 3 }}>
-                                <SimpleBuyForm
-                                    orders={orders}
-                                    exchange={exchange}
-                                    toggleOrderBook={this.toggleOrderBook}
-                                    rates={rates}
-                                />
-                                <PlaceOrderForm
-                                    exchange={exchange}
-                                    rates={rates}
-                                    toggleOrderBook={this.toggleOrderBook}
-                                />
+                                <div>
+                                    <div className="toggle" style={{ margin: "1rem", color: "black" }}>
+                                        <span>Simple buy</span>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="1"
+                                            value={simpleValue}
+                                            step="1"
+                                            onChange={e => this.toggleSimpleBuy(e)}
+                                        />
+                                    </div>
+                                    {this.state.simpleBuy && (
+                                        <SimpleBuyForm
+                                            orders={orders}
+                                            exchange={exchange}
+                                            toggleOrderBook={this.toggleOrderBook}
+                                            rates={rates}
+                                        />
+                                    )}
+                                    {!this.state.simpleBuy && (
+                                        <PlaceOrderForm
+                                            exchange={exchange}
+                                            rates={rates}
+                                            toggleOrderBook={this.toggleOrderBook}
+                                        />
+                                    )}
+                                </div>
                             </Pgrid.Column>
                             <Pgrid.Column
                                 style={{ marginTop: "1rem" }}
@@ -74,15 +101,17 @@ class ExchangeHome extends React.Component {
                                     userAccountAddress={userAccount.address}
                                     header="My open orders"
                                 />
-                                <OrderBook
-                                    testid="allOrdersBlock"
-                                    orders={orders}
-                                    rates={rates}
-                                    userAccountAddress={userAccount.address}
-                                    header="Order book"
-                                    orderBookDirection={this.state.orderBookDirection}
-                                    toggleOrderBook={this.toggleOrderBook}
-                                />
+                                {!this.state.simpleBuy && (
+                                    <OrderBook
+                                        testid="allOrdersBlock"
+                                        orders={orders}
+                                        rates={rates}
+                                        userAccountAddress={userAccount.address}
+                                        header="Order book"
+                                        orderBookDirection={this.state.orderBookDirection}
+                                        toggleOrderBook={this.toggleOrderBook}
+                                    />
+                                )}
                                 {orders.orders && (
                                     <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
                                 )}

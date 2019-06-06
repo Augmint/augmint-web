@@ -3,10 +3,19 @@
     flex-basis: 350px;
     margin-top: 1rem;
 }
-
+.segment.dashblock.simplebuy-form {
+    max-width: 350px;
+    flex-basis: 350px;
+    margin-top: 1rem;
+}
 /* mobile */
 @media (max-width: 376px) {
     .segment.dashblock.placeOrder-form {
+        width: 100%;
+        margin: 1rem 0 1rem 0;
+        max-width: 100%;
+    }
+    .segment.dashblock.simplebuy-form {
         width: 100%;
         margin: 1rem 0 1rem 0;
         max-width: 100%;

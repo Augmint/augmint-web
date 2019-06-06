@@ -150,7 +150,7 @@ class SimpleBuyForm extends React.Component {
         const header = (
             <div>
                 {mainHeader}
-                <Menu style={{ marginBottom: -11 }}>
+                <Menu>
                     <Menu.Item
                         active={orderDirection === TOKEN_BUY}
                         data-index={TOKEN_BUY}
@@ -174,7 +174,11 @@ class SimpleBuyForm extends React.Component {
         );
 
         return (
-            <Pblock loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)} header={header}>
+            <Pblock
+                className="simplebuy-form"
+                loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
+                header={header}
+            >
                 <ConnectionStatus contract={exchange} />
 
                 {submitSucceeded && (
@@ -198,7 +202,6 @@ class SimpleBuyForm extends React.Component {
                             <strong>
                                 {orderDirection === TOKEN_BUY ? "A-EUR amount to buy" : "A-EUR amount to sell"}
                             </strong>
-                            {orderDirection === TOKEN_BUY && <span> (calculated on current rate)</span>}
                         </Styledlabel>
                         <Field
                             name="simpleTokenAmount"
@@ -221,6 +224,7 @@ class SimpleBuyForm extends React.Component {
                             size="big"
                             loading={submitting}
                             // disabled={pristine}
+                            className="fullwidth"
                             data-testid="simpleSubmitButton"
                             type="submit"
                         >
