@@ -85,8 +85,20 @@ export async function getSimpleBuyCalc(token, isBuy, rate) {
     let c = await store.getState().web3Connect.augmint;
 
     if (isBuy) {
-        return exchange.estimateSimpleBuy(token, rate);
+        // return exchange.estimateSimpleBuy({});
+        return {
+            tokens: 4,
+            ethers: 0.016165,
+            limitPrice: 1,
+            averagePrice: 1.077673
+        };
     } else {
-        return exchange.estimateSimpleSell(token, rate);
+        // return exchange.estimateSimpleSell({});
+        return {
+            tokens: 4,
+            ethers: 0.016165,
+            limitPrice: 1,
+            averagePrice: 1.077673
+        };
     }
 }
