@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshLegacyBalances } from "modules/reducers/legacyBalances";
 import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 

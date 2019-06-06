@@ -1,6 +1,6 @@
 /* This is for monetarySupervisor too. Which requires LockManager (monetarySupervisor address to be used is comig from there) */
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { fetchLatestTransfers, processNewTransfer } from "modules/reducers/userTransfers";
