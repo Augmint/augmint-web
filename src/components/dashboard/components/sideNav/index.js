@@ -49,7 +49,7 @@ export const SideNav = styled.nav`
     width: 210px;
     height: 100%;
     z-index: 104;
-    padding: 20px 0;
+    padding: 0 0;
 
     &.closed {
         ${breakpoint`
@@ -70,12 +70,17 @@ export const SideNav = styled.nav`
         visibility: visible;
 
         ${breakpoint`
-            margin-top: 40px;
+            margin-top: 60px;
             margin-bottom: 0;
             &.hidden{
                 display: none;
                 visibility: hidden;
             }
+        `};
+
+        ${media.mobile`
+            margin-top: 50px;
+            width: 50px;
         `};
     }
 `;
@@ -92,6 +97,8 @@ export const SideNavUl = styled.ul`
       display: block;
       visibility: visible;
       margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 10px;
       &.hidden {
         display: none;
         visibility: hidden;
