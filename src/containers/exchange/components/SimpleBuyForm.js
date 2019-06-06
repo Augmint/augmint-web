@@ -256,19 +256,19 @@ class SimpleBuyForm extends React.Component {
                                 <StyledBox className={notEnoughEth ? "validation-error" : ""}>
                                     You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
                                     <strong>
-                                        <AEUR
-                                            className="box-val"
-                                            data-testid="aeurAmount"
-                                            amount={simpleResult.tokens}
-                                        />
+                                        <AEUR data-testid="aeurAmount" amount={simpleResult.tokens} />
                                     </strong>
-                                    {" for "}
+                                    {"  for  "}
                                     <strong>
-                                        <ETH className="box-val" data-testid="ethAmount" amount={simpleResult.ethers} />
+                                        <ETH data-testid="ethAmount" amount={simpleResult.ethers} />
                                     </strong>
                                     <br />
-                                    with a limit price of <strong>{simpleResult.limitPrice * 100}% </strong> <br />
-                                    on average <strong>{simpleResult.averagePrice * 100}%</strong>.
+                                    at an estimated exchange rate of <br />
+                                    <strong>
+                                        <ETH className="box-val" amount={1} /> {" = "}
+                                        <AEUR amount={250} /> {/*todo*/}
+                                    </strong>
+                                    .
                                 </StyledBox>
                             </div>
                         )}
