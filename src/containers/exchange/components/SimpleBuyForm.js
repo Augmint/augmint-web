@@ -14,6 +14,7 @@ import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL, getSimpleBuy } 
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
+import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 
 import { matchOrders } from "../simplebuy";
 
@@ -25,6 +26,33 @@ import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 const Styledlabel = styled.label`
     display: inline-block;
     margin-bottom: 5px;
+`;
+
+const StyledBox = styled.div`
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: rgba(232, 232, 232, 0.3);
+
+    text-align: center;
+    font-size: 14px;
+    line-height: 200%;
+    color: rgba(0, 0, 0, 0.7);
+
+    & strong {
+        font-size: 16px;
+    }
+
+    &.validation-error {
+        border: 2px solid ${theme.colors.darkRed};
+        background-color: ${theme.colors.lightRed};
+        margin-bottom: 0;
+        & strong {
+            color: ${theme.colors.darkRed};
+        }
+    }
 `;
 
 class SimpleBuyForm extends React.Component {
@@ -66,8 +94,9 @@ class SimpleBuyForm extends React.Component {
                 _error: res.error
             });
         } else {
+            console.log(res, "res0");
             this.setState({
-                simpleBuyResult: res.result
+                simpleResult: res.result
             });
             return;
         }
@@ -147,6 +176,8 @@ class SimpleBuyForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
 
+        let notEnoughEth; // todo
+
         const header = (
             <div>
                 {mainHeader}
@@ -220,6 +251,28 @@ class SimpleBuyForm extends React.Component {
                             labelAlignRight="A-EUR"
                         />
 
+                        {simpleResult && (
+                            <div>
+                                <StyledBox className={notEnoughEth ? "validation-error" : ""}>
+                                    You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
+                                    <strong>
+                                        <AEUR
+                                            className="box-val"
+                                            data-testid="aeurAmount"
+                                            amount={simpleResult.tokens}
+                                        />
+                                    </strong>
+                                    {" for "}
+                                    <strong>
+                                        <ETH className="box-val" data-testid="ethAmount" amount={simpleResult.ethers} />
+                                    </strong>
+                                    <br />
+                                    with a limit price of <strong>{simpleResult.limitPrice * 100}% </strong> <br />
+                                    on average <strong>{simpleResult.averagePrice * 100}%</strong>.
+                                </StyledBox>
+                            </div>
+                        )}
+
                         <Button
                             size="big"
                             loading={submitting}
@@ -233,16 +286,6 @@ class SimpleBuyForm extends React.Component {
                                 (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
                     </Form>
-                )}
-                {simpleResult && (
-                    <Pgrid>
-                        <p>
-                            you can {orderDirection === TOKEN_BUY ? "buy" : "sell"} {simpleResult.tokens} a-eur
-                        </p>
-                        <p>for {simpleResult.ethers} ethers</p>
-                        <p>with a limitPrice of {simpleResult.limitPrice * 100}%</p>
-                        <p>on average {simpleResult.averagePrice * 100}%</p>
-                    </Pgrid>
                 )}
             </Pblock>
         );
