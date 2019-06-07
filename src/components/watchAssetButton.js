@@ -57,7 +57,7 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user, className, icon, breakToLines, style } = this.props;
+        const { web3, contracts, augmint, user, className, icon, breakToLines, style, circleicon } = this.props;
         let showButton = false;
 
         let _className = className + " watchAssetBtn";
@@ -86,18 +86,20 @@ export class WatchAssetButton extends React.Component {
                         <Button
                             className={_className}
                             icon={icon}
+                            circleicon={circleicon}
                             onClick={() => {
                                 this.addAsset();
                             }}
                         >
-                            Watch A-EUR
+                            Watch
                             <br />
-                            in your wallet
+                            in wallet
                         </Button>
                     ) : (
                         <Button
                             className={_className}
                             icon={icon}
+                            circleicon={circleicon}
                             onClick={() => {
                                 this.addAsset();
                             }}

@@ -315,12 +315,13 @@ export const BaseButton = styledComponent => styledComponent`
 
     &[labelposition="top"] {
       flex-direction: column-reverse;
+      padding-top: 0px;
       
       i {
         position: inherit;
         font-size: .875rem;
         margin-top: 6px;
-        margin-bottom: 7px;
+        margin-bottom: 6px;
         background-color: transparent;
       }
     }

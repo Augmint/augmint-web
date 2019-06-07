@@ -72,32 +72,28 @@ export default class Balance extends React.Component {
                     <Button
                         to="/exchange"
                         icon="copy"
-                        circleIcon
+                        circleicon="true"
                         className="grey icon top"
                         labelposition="top"
                         style={{ width: "20%" }}
                     >
                         Buy/Sell
-                        <br />
-                        A-EUR
                     </Button>
                     <Button
                         to="/transfer"
                         className="grey icon top"
                         icon="copy"
-                        circleIcon
+                        circleicon="true"
                         data-testid="transferButton"
                         labelposition="top"
                         style={{ width: "20%" }}
                     >
                         Send
-                        <br />
-                        A-EUR
                     </Button>
                     <WatchAssetButton
                         className="grey icon top wIcon"
                         icon="copy"
-                        circleIcon
+                        circleicon="true"
                         labelposition="top"
                         style={{ marginTop: "0", width: "30%" }}
                         breakToLines
