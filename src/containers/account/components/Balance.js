@@ -36,6 +36,13 @@ const EthAmount = styled.div`
     font-family: ${theme.typography.fontFamilies.currency};
 `;
 
+const Container = styled.div`
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+`;
+
 const pick = (arr, key) => arr && arr.map(item => item[key]);
 const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
 
@@ -48,13 +55,54 @@ export default class Balance extends React.Component {
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
         return (
-            <Pblock className="balance" style={{ marginTop: "1rem" }}>
-                <div style={{ textAlign: "center", marginTop: "1rem" }}>
+            <Pblock className="balance">
+                <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
+                    {/* <TokenBalance style={{ textAlign: "justify"}}> */}
                     <TokenBalance>
+                        {/* <AEUR 
+                            amount={userAccount.tokenBalance} 
+                            className="currency" 
+                            style={{ display: "inline-block", position: "relative", transform: "translate(-50%)", left: "50%"}}
+                        /> */}
                         <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
+                <Container>
+                    <Button
+                        to="/exchange"
+                        icon="copy"
+                        circleIcon
+                        className="grey icon top"
+                        labelposition="top"
+                        style={{ width: "20%" }}
+                    >
+                        Buy/Sell
+                        <br />
+                        A-EUR
+                    </Button>
+                    <Button
+                        to="/transfer"
+                        className="grey icon top"
+                        icon="copy"
+                        circleIcon
+                        data-testid="transferButton"
+                        labelposition="top"
+                        style={{ width: "20%" }}
+                    >
+                        Send
+                        <br />
+                        A-EUR
+                    </Button>
+                    <WatchAssetButton
+                        className="grey icon top wIcon"
+                        icon="copy"
+                        circleIcon
+                        labelposition="top"
+                        style={{ marginTop: "0", width: "30%" }}
+                        breakToLines
+                    />
+                </Container>
                 <Pgrid.Row style={{ textAlign: "center" }}>
                     <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
                         <Label>My total loans</Label>
@@ -68,26 +116,6 @@ export default class Balance extends React.Component {
                             <AEUR amount={locksAmount} />
                         </TokenAmount>
                     </Pgrid.Column>
-                    <div style={{ textAlign: "center", display: "flex" }}>
-                        <WatchAssetButton className="icon top" icon="copy" labelposition="top" />
-                        <Button to="/exchange" icon="copy" className="grey icon top" labelposition="top">
-                            Buy / Sell
-                            <br />
-                            A-EUR
-                        </Button>
-                        <Button
-                            to="/transfer"
-                            className="grey icon top"
-                            icon="copy"
-                            data-testid="transferButton"
-                            style={{ marginBottom: 20 }}
-                            labelposition="top"
-                        >
-                            Send
-                            <br />
-                            A-EUR
-                        </Button>
-                    </div>
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>

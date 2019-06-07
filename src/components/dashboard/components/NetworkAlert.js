@@ -8,7 +8,6 @@ const StyledDiv = styled.div`
         z-index: 103;
         left: 50%;
         transform: translate(-50%);
-        margin-top: 15px;
         padding: 5px 10px;
         background: rgba(159, 58, 56, 1);
         border-radius: 2px;

@@ -104,6 +104,10 @@ export const BaseButton = styledComponent => styledComponent`
 
     }
 
+    &.wIcon {
+      padding: 10px 15px;
+    }
+
     &.ghost {
       font-family: ${theme.typography.fontFamilies.title};
       font-size: ${remCalc(16)};
@@ -200,6 +204,17 @@ export const BaseButton = styledComponent => styledComponent`
 
         i {
         }
+      }
+
+      .circleBg {
+        color: ${theme.colors.white}
+        background: ${theme.colors.primary};
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        vertical-align: middle;
       }
 
       i {

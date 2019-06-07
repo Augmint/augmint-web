@@ -110,7 +110,7 @@ class TransferList extends React.Component {
                 ) : (
                     <div style={{ overflow: "auto" }}>
                         <TransferTable>
-                            <thead>
+                            <thead className={"hide-t"}>
                                 <tr>
                                     <th className={"hide-xs"}>Date</th>
                                     <th>Transaction</th>
@@ -147,7 +147,7 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <div style={{ marginTop: 20, paddingLeft: 20, marginBottom: 20 }}>
+                    <div style={{ marginTop: 20, marginBottom: 20 }}>
                         <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
                             <Button onClick={this.showMore} className="ghost" tabIndex="0">
                                 Show older

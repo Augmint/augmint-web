@@ -11,9 +11,22 @@ import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
-import WatchAssetButton from "components/watchAssetButton";
+import styled from "styled-components";
+import { media } from "styles/media";
+
+const StyledPgridRow = styled(Pgrid.Row)`
+    width: 60%;
+    justify-content: center;
+    margin: auto;
+
+    &.centered {
+        ${media.desktop`
+            width: 100%;
+            margin: auto;
+        `};
+    }
+`;
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -33,14 +46,14 @@ class AccountHome extends React.Component {
 
                     <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
+                        <Pgrid.Row style={{ justifyContent: "center", maxWidth: "500px", margin: "1rem auto" }}>
+                            <Pgrid.Column>
                                 <Balance
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 >
-                                    <div>
+                                    {/* <div>
                                         <WatchAssetButton className={"noMargin"} />
                                         <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
                                             <Button to="/exchange" className="primary myAcc">
@@ -55,25 +68,25 @@ class AccountHome extends React.Component {
                                                 Send A-EUR
                                             </Button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </Balance>
                             </Pgrid.Column>
                         </Pgrid.Row>
 
-                        <Pgrid.Row>
+                        <StyledPgridRow className={"centered"}>
                             <Pgrid.Column>
                                 <TransferList userAccount={this.props.userAccount} />
                             </Pgrid.Column>
-                        </Pgrid.Row>
+                        </StyledPgridRow>
 
-                        <Pgrid.Row>
+                        {/* <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LoanList header="My active loans" loans={this.props.loans} />
                             </Pgrid.Column>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LockList header="My active locks" locks={this.props.locks} />
                             </Pgrid.Column>
-                        </Pgrid.Row>
+                        </Pgrid.Row> */}
                     </Pgrid>
                 </Psegment>
             </EthereumState>

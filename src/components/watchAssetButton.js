@@ -57,10 +57,10 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user, className } = this.props;
+        const { web3, contracts, augmint, user, className, icon, breakToLines, style } = this.props;
         let showButton = false;
 
-        let _className = className + " primary watchAssetBtn";
+        let _className = className + " watchAssetBtn";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
             this.cookies = web3.watchAsset;
@@ -80,17 +80,31 @@ export class WatchAssetButton extends React.Component {
         }
 
         return (
-            <div style={{ textAlign: "center" }}>
-                {showButton && (
-                    <Button
-                        className={_className}
-                        onClick={() => {
-                            this.addAsset();
-                        }}
-                    >
-                        Watch AEUR in your wallet
-                    </Button>
-                )}
+            <div style={{ ...style, textAlign: "center" }}>
+                {showButton &&
+                    (breakToLines ? (
+                        <Button
+                            className={_className}
+                            icon={icon}
+                            onClick={() => {
+                                this.addAsset();
+                            }}
+                        >
+                            Watch A-EUR
+                            <br />
+                            in your wallet
+                        </Button>
+                    ) : (
+                        <Button
+                            className={_className}
+                            icon={icon}
+                            onClick={() => {
+                                this.addAsset();
+                            }}
+                        >
+                            Watch A-EUR in your wallet
+                        </Button>
+                    ))}
             </div>
         );
     }
