@@ -193,8 +193,6 @@ class App extends React.Component {
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
 
-        console.log("network.id: ", this.props.web3Connect.network.id);
-
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
                 {/*
