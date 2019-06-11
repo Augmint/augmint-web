@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { connectWeb3 } from "modules/web3Provider";
-import { Pgrid, Pheader, Psegment } from "components/PageLayout";
+import { Pheader, Psegment } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
@@ -14,7 +14,7 @@ import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import { TOKEN_SELL } from "modules/reducers/orders";
-import { Menu } from "components/augmint-ui/menu";
+// import Button from 'components/augmint-ui/button'
 
 const SIMPLE = "simple";
 const ADVANCED = "advanced";
@@ -37,8 +37,7 @@ class ExchangeHome extends React.Component {
         ratesProvider();
     }
 
-    toggleSimpleBuy(e) {
-        const val = e.target.attributes["data-index"].value;
+    toggleSimpleBuy(val) {
         this.setState({
             simpleBuy: val === SIMPLE
         });
@@ -53,31 +52,18 @@ class ExchangeHome extends React.Component {
     render() {
         const { userAccount, orders, exchange, rates, trades } = this.props;
 
-        const header = (
-            <div>
-                <Menu className="upper">
-                    <Menu.Item
-                        active={this.state.simpleBuy}
-                        data-testid="simplebuy-btn"
-                        data-index={SIMPLE}
-                        className={"simplebuy upper"}
-                        tabIndex="0"
-                        onClick={this.toggleSimpleBuy}
-                    >
-                        Simple
-                    </Menu.Item>
-                    <Menu.Item
-                        active={!this.state.simpleBuy}
-                        data-testid="advancedBuy-btn"
-                        data-index={ADVANCED}
-                        className={"advancedBuy upper"}
-                        tabIndex="0"
-                        onClick={this.toggleSimpleBuy}
-                    >
-                        Advanced
-                    </Menu.Item>
-                </Menu>
-            </div>
+        const content = this.state.simpleBuy ? "Show advanced setting" : "Hide advanced settings";
+        const mode = this.state.simpleBuy ? ADVANCED : SIMPLE;
+        const switchForms = (
+            <a
+                className="switch"
+                onClick={e => {
+                    e.preventDefault();
+                    this.toggleSimpleBuy(mode);
+                }}
+            >
+                {content}
+            </a>
         );
 
         return (
@@ -91,21 +77,25 @@ class ExchangeHome extends React.Component {
 
                     <div className="exchange-container">
                         <div>
-                            <div className="toggle">{header}</div>
+                            {/*<div className="toggle">{header}</div>*/}
                             {this.state.simpleBuy && (
                                 <SimpleBuyForm
                                     orders={orders}
                                     exchange={exchange}
                                     toggleOrderBook={this.toggleOrderBook}
                                     rates={rates}
-                                />
+                                >
+                                    {switchForms}
+                                </SimpleBuyForm>
                             )}
                             {!this.state.simpleBuy && (
                                 <PlaceOrderForm
                                     exchange={exchange}
                                     rates={rates}
                                     toggleOrderBook={this.toggleOrderBook}
-                                />
+                                >
+                                    {switchForms}
+                                </PlaceOrderForm>
                             )}
                         </div>
 

@@ -16,11 +16,10 @@ import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 
-import { matchOrders } from "../simplebuy";
+// import { matchOrders } from "../simplebuy";
 
 import theme from "styles/theme";
 import styled from "styled-components";
-import { Pgrid } from "../../../components/PageLayout";
 import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 
 const Styledlabel = styled.label`
@@ -94,7 +93,6 @@ class SimpleBuyForm extends React.Component {
                 _error: res.error
             });
         } else {
-            console.log(res, "res0");
             this.setState({
                 simpleResult: res.result
             });
@@ -171,12 +169,20 @@ class SimpleBuyForm extends React.Component {
             ethAmountValidations.push(Validations.ethUserBalance);
         }
 
-        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
+        const tokenAmountValidations = [
+            Validations.required,
+            Validations.tokenAmount,
+            Validations.ethAmount,
+            Validations.minOrderTokenAmount
+        ];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
+        } else {
+            tokenAmountValidations.push(Validations.ethUserBalance);
         }
 
-        let notEnoughEth; // todo
+        // todo button disable
+        let notEnoughEth = simpleResult ? simpleResult.ethers : null;
 
         const header = (
             <div>
@@ -208,8 +214,8 @@ class SimpleBuyForm extends React.Component {
             <Pblock
                 className="simplebuy-form"
                 loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
-                header={header}
             >
+                {header}
                 <ConnectionStatus contract={exchange} />
 
                 {submitSucceeded && (
@@ -253,7 +259,7 @@ class SimpleBuyForm extends React.Component {
 
                         {simpleResult && (
                             <div>
-                                <StyledBox className={notEnoughEth ? "validation-error" : ""}>
+                                <StyledBox>
                                     You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
                                     <strong>
                                         <AEUR data-testid="aeurAmount" amount={simpleResult.tokens} />
@@ -265,13 +271,15 @@ class SimpleBuyForm extends React.Component {
                                     <br />
                                     at an estimated exchange rate of <br />
                                     <strong>
-                                        <ETH className="box-val" amount={1} /> {" = "}
+                                        <span>1 ETH = </span>
                                         <AEUR amount={250} /> {/*todo*/}
                                     </strong>
                                     .
                                 </StyledBox>
                             </div>
                         )}
+
+                        {this.props.children}
 
                         <Button
                             size="big"

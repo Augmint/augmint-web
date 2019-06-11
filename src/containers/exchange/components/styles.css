@@ -16,7 +16,16 @@
     background: white;
     width: 350px;
 }
+.switch {
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+    margin-top: -10px;
+    cursor: pointer;
+    text-decoration: underline;
+}
 .exchange-container {
+    margin-top: 1rem;
     display: flex;
     justify-content: flex-start;
 }

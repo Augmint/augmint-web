@@ -209,8 +209,8 @@ class PlaceOrderForm extends React.Component {
             <Pblock
                 className="placeOrder-form"
                 loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
-                header={header}
             >
+                {header}
                 <ConnectionStatus contract={this.props.exchange} />
 
                 {submitSucceeded && (
@@ -297,6 +297,9 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="ETH"
                         />
+
+                        {this.props.children}
+
                         <Button
                             size="big"
                             loading={submitting}
