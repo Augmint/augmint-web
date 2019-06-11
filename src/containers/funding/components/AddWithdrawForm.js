@@ -101,10 +101,7 @@ class AddWithdrawForm extends React.Component {
 
         const isDesktop = window.innerWidth > 768;
 
-        const linkToGo =
-            orderDirection === ADDFUND
-                ? `${FUNDS[0].buyUrl}${user.address}&amount=${amount}`
-                : `${FUNDS[0].sellUrl}${user.address}&amount=${amount}`;
+        const linkToGo = orderDirection === ADDFUND ? FUNDS[0].buyUrl : FUNDS[0].sellUrl;
 
         const header = (
             <div style={{ marginBottom: "2rem" }}>
