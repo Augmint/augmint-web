@@ -82,20 +82,13 @@ export async function cancelOrderTx(exchange, buy, orderId) {
 export async function getSimpleBuyCalc(token, isBuy, rate) {
     const exchange = await store.getState().web3Connect.augmint.exchange;
     const orderBook = await exchange.getOrderBook();
-    console.log(orderBook.hasMatchingOrders());
-    const result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
+    let result;
 
-    console.debug("buy result", result);
-    // if (isBuy) {
-    //     return exchange.estimateMarketBuy(Tokens.of(token), Tokens.of(rate));
-    // } else {
-    //     return exchange.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
-    // }
+    if (isBuy) {
+        result = orderBook.estimateMarketBuy(Tokens.of(token), Tokens.of(rate));
+    } else {
+        result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
+    }
 
-    return {
-        tokens: 4,
-        ethers: 0.016165,
-        limitPrice: 1,
-        averagePrice: 1.077673
-    };
+    return result;
 }

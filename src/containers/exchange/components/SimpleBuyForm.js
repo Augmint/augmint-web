@@ -91,7 +91,6 @@ class SimpleBuyForm extends React.Component {
                 _error: res.error
             });
         } else {
-            console.log(res, "res0");
             this.setState({
                 simpleResult: res.result
             });
