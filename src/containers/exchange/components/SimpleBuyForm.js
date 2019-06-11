@@ -10,13 +10,11 @@ import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Field, formValueSelector, reduxForm, SubmissionError } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
-import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL, getSimpleBuy } from "modules/reducers/orders";
+import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
-
-// import { matchOrders } from "../simplebuy";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -117,9 +115,9 @@ class SimpleBuyForm extends React.Component {
             try {
                 price = simpleResult.limitPrice;
                 if (orderDirection === TOKEN_BUY) {
-                    amount = simpleResult.ethers;
+                    amount = simpleResult.filledEthers;
                 } else {
-                    amount = simpleResult.tokens;
+                    amount = simpleResult.filledTokens;
                 }
             } catch (error) {
                 throw new SubmissionError({
@@ -262,11 +260,11 @@ class SimpleBuyForm extends React.Component {
                                 <StyledBox>
                                     You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
                                     <strong>
-                                        <AEUR data-testid="aeurAmount" amount={simpleResult.tokens} />
+                                        <AEUR data-testid="aeurAmount" amount={simpleResult.filledTokens} />
                                     </strong>
                                     {"  for  "}
                                     <strong>
-                                        <ETH data-testid="ethAmount" amount={simpleResult.ethers} />
+                                        <ETH data-testid="ethAmount" amount={simpleResult.filledEthers} />
                                     </strong>
                                     <br />
                                     at an estimated exchange rate of <br />
