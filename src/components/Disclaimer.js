@@ -1,11 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { default as Modal, ModalActions, ModalContent, ModalHeader } from "./augmint-ui/modal";
 import Button from "./augmint-ui/button";
 import styled from "styled-components";
 import theme from "styles/theme";
 
-const dismissedCookie = "disclaimerDismissed=true";
+import { disclaimerChanged } from "modules/reducers/web3Connect.js";
 
 const StyledDiv = styled.div`
     overflow: scroll;
@@ -61,41 +62,32 @@ const Styledlabel = styled.label`
     display: inline-block;
 `;
 
-let _className = "";
-
-export default class Disclaimer extends React.Component {
+class Disclaimer extends React.Component {
     constructor(props) {
         super(props);
 
-        const dismissed = document.cookie
-            .split(";")
-            .map(cookie => cookie.trim())
-            .includes(dismissedCookie);
-
-        this.state = {
-            dismissed,
-            checkbox: ""
-        };
         this.validate = this.validate.bind(this);
         this.close = this.close.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            _className: ""
+        };
     }
 
     validate() {
         const checkbox = document.getElementById("disclaimer-chcekbox");
         if (checkbox.checked) {
-            this.setState({ checkbox: "checked" });
             return true;
         } else {
-            this.setState({ checkbox: "unchecked" });
-            _className = "error";
+            this.setState({
+                _className: "error"
+            });
             return false;
         }
     }
 
     close() {
-        document.cookie = dismissedCookie;
-        this.setState({ dismissed: true });
+        this.props.dispatch(disclaimerChanged(true));
     }
 
     handleClick() {
@@ -105,8 +97,9 @@ export default class Disclaimer extends React.Component {
     }
 
     render() {
+        const _className = this.state._className;
         return (
-            !this.state.dismissed && (
+            !this.props.dismissed && (
                 <Modal onCloseRequest={this.close} noEsc={true} className="disclaimer-modal">
                     {/* <ModalContent style={{ height: "calc(100% - 112px)" }}> */}
                     <ModalContent className="disclaimer-modal">
@@ -167,3 +160,7 @@ export default class Disclaimer extends React.Component {
         );
     }
 }
+
+export default connect(state => ({
+    dismissed: state.web3Connect.disclaimerAccepted
+}))(Disclaimer);
