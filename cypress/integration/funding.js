@@ -25,7 +25,7 @@ describe("Augmint funding", function() {
 
         cy.get("[data-testid=addFundsLink]")
             .should("have.attr", "href")
-            .and("include", "buy");
+            .and("include", "EUR/to/Augmint-Euro-Token/AEUR");
     });
 
     it("Should show withdraw input label when withdraw selected", function() {
@@ -39,6 +39,6 @@ describe("Augmint funding", function() {
 
         cy.get("[data-testid=withdrawLink]")
             .should("have.attr", "href")
-            .and("include", "sell");
+            .and("include", "/Augmint-Euro-Token/AEUR/to/Euro");
     });
 });
