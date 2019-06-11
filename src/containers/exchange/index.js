@@ -88,26 +88,28 @@ class ExchangeHome extends React.Component {
                     </TopNavTitlePortal>
 
                     <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
-                    <Pgrid>
-                        <Pgrid.Row>
-                            <div>
-                                <div className="toggle">{header}</div>
-                                {this.state.simpleBuy && (
-                                    <SimpleBuyForm
-                                        orders={orders}
-                                        exchange={exchange}
-                                        toggleOrderBook={this.toggleOrderBook}
-                                        rates={rates}
-                                    />
-                                )}
-                                {!this.state.simpleBuy && (
-                                    <PlaceOrderForm
-                                        exchange={exchange}
-                                        rates={rates}
-                                        toggleOrderBook={this.toggleOrderBook}
-                                    />
-                                )}
-                            </div>
+
+                    <div className="exchange-container">
+                        <div>
+                            <div className="toggle">{header}</div>
+                            {this.state.simpleBuy && (
+                                <SimpleBuyForm
+                                    orders={orders}
+                                    exchange={exchange}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                    rates={rates}
+                                />
+                            )}
+                            {!this.state.simpleBuy && (
+                                <PlaceOrderForm
+                                    exchange={exchange}
+                                    rates={rates}
+                                    toggleOrderBook={this.toggleOrderBook}
+                                />
+                            )}
+                        </div>
+
+                        <div className="exchange-orders">
                             <MyOrders
                                 testid="myOrdersBlock"
                                 orders={orders}
@@ -126,21 +128,17 @@ class ExchangeHome extends React.Component {
                                     toggleOrderBook={this.toggleOrderBook}
                                 />
                             )}
-                            {orders.orders && (
-                                <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
-                            )}
-                        </Pgrid.Row>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 2 / 2, desktop: 3 / 3 }}>
-                                <TradeHistory
-                                    trades={trades}
-                                    orders={orders}
-                                    userAccountAddress={userAccount.address}
-                                    header="My transaction history"
-                                />
-                            </Pgrid.Column>
-                        </Pgrid.Row>
-                    </Pgrid>
+                        </div>
+                    </div>
+
+                    {orders.orders && <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />}
+
+                    <TradeHistory
+                        trades={trades}
+                        orders={orders}
+                        userAccountAddress={userAccount.address}
+                        header="My transaction history"
+                    />
                 </Psegment>
             </EthereumState>
         );

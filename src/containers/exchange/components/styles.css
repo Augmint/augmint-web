@@ -16,6 +16,22 @@
     background: white;
     width: 350px;
 }
+.exchange-container {
+    display: flex;
+    justify-content: flex-start;
+}
+.exchange-orders {
+    margin-top: 1rem;
+    max-width: calc(100% - 382px);
+}
+@media (max-width: 736px) {
+    .exchange-container {
+        flex-direction: column;
+    }
+    .exchange-orders {
+        max-width: 100%;
+    }
+}
 /* mobile */
 @media (max-width: 376px) {
     .segment.dashblock.placeOrder-form {
