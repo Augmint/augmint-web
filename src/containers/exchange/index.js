@@ -52,7 +52,7 @@ class ExchangeHome extends React.Component {
     render() {
         const { userAccount, orders, exchange, rates, trades } = this.props;
 
-        const content = this.state.simpleBuy ? "Show advanced setting" : "Hide advanced settings";
+        const content = this.state.simpleBuy ? "Show advanced settings" : "Hide advanced settings";
         const mode = this.state.simpleBuy ? ADVANCED : SIMPLE;
         const switchForms = (
             <a

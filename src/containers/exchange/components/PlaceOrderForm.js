@@ -253,6 +253,8 @@ class PlaceOrderForm extends React.Component {
                             autoFocus={isDesktop}
                         />
 
+                        {this.props.children}
+
                         <Styledlabel style={{ margin: "5px 0 0 0" }}>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
@@ -297,8 +299,6 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="ETH"
                         />
-
-                        {this.props.children}
 
                         <Button
                             size="big"

@@ -89,6 +89,5 @@ export async function getSimpleBuyCalc(token, isBuy, rate) {
     } else {
         result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
     }
-
     return result;
 }

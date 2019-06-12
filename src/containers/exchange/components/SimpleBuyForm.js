@@ -32,6 +32,7 @@ const StyledBox = styled.div`
     padding: 15px;
     margin-bottom: 20px;
     background: rgba(232, 232, 232, 0.3);
+    border: 2px solid rgba(232, 232, 232, 0.3);
 
     text-align: center;
     font-size: 14px;
@@ -45,7 +46,6 @@ const StyledBox = styled.div`
     &.validation-error {
         border: 2px solid ${theme.colors.darkRed};
         background-color: ${theme.colors.lightRed};
-        margin-bottom: 0;
         & strong {
             color: ${theme.colors.darkRed};
         }
@@ -59,8 +59,9 @@ class SimpleBuyForm extends React.Component {
             simpleResult: null,
             result: null,
             orderDirection: TOKEN_BUY,
-            orders: [],
-            orderList: []
+            liquidityError: null,
+            averagePrice: null,
+            notEnoughtEth: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
@@ -70,12 +71,8 @@ class SimpleBuyForm extends React.Component {
     onOrderDirectionChange(e) {
         const orderDirection = +e.target.attributes["data-index"].value;
 
-        const orders =
-            orderDirection === TOKEN_BUY ? this.props.orders.orders.sellOrders : this.props.orders.orders.buyOrders;
         this.setState({
-            orderDirection,
-            orders,
-            orderList: []
+            orderDirection
         });
     }
 
@@ -91,8 +88,19 @@ class SimpleBuyForm extends React.Component {
                 _error: res.error
             });
         } else {
+            let notEnoughEth = null;
+            const averagePrice = this.props.ethFiatRate / res.result.averagePrice.toNumber();
+
+            if (this.state.orderDirection === TOKEN_BUY) {
+                // TODO
+                // console.log(Validations.ethUserBalance(res.result.filledEthers.amount.toNumber()), 'VALIIID');
+                // notEnoughEth = Validations.ethUserBalance(res.result.filledEthers.amount.toNumber())
+            }
+
             this.setState({
-                simpleResult: res.result
+                simpleResult: res.result,
+                averagePrice: averagePrice,
+                notEnoughEth: notEnoughEth
             });
             return;
         }
@@ -105,6 +113,12 @@ class SimpleBuyForm extends React.Component {
         this.setState({
             simpleResult
         });
+
+        if (this.state.orderDirection === TOKEN_BUY) {
+            this.setState({
+                liquidityError: Validations.maxExchangeValue(value) || null
+            });
+        }
     }
 
     async handleSubmit() {
@@ -162,25 +176,10 @@ class SimpleBuyForm extends React.Component {
         } = this.props;
         const { orderDirection, result, simpleResult } = this.state;
 
-        const ethAmountValidations = [Validations.required, Validations.ethAmount];
-        if (orderDirection === TOKEN_BUY) {
-            ethAmountValidations.push(Validations.ethUserBalance);
-        }
-
-        const tokenAmountValidations = [
-            Validations.required,
-            Validations.tokenAmount,
-            Validations.ethAmount,
-            Validations.minOrderTokenAmount
-        ];
+        const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
-        } else {
-            tokenAmountValidations.push(Validations.ethUserBalance);
         }
-
-        // todo button disable
-        let notEnoughEth = simpleResult ? simpleResult.ethers : null;
 
         const header = (
             <div>
@@ -255,9 +254,17 @@ class SimpleBuyForm extends React.Component {
                             labelAlignRight="A-EUR"
                         />
 
+                        <p>{this.state.notEnoughtEth}</p>
+
                         {simpleResult && (
                             <div>
-                                <StyledBox>
+                                <StyledBox className={this.state.liquidityError ? "validation-error" : ""}>
+                                    {this.state.liquidityError && (
+                                        <strong>
+                                            {this.state.liquidityError}
+                                            <br />
+                                        </strong>
+                                    )}
                                     You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
                                     <strong>
                                         <AEUR data-testid="aeurAmount" amount={simpleResult.filledTokens} />
@@ -270,7 +277,7 @@ class SimpleBuyForm extends React.Component {
                                     at an estimated exchange rate of <br />
                                     <strong>
                                         <span>1 ETH = </span>
-                                        <AEUR amount={250} /> {/*todo*/}
+                                        <AEUR amount={this.state.averagePrice} />
                                     </strong>
                                     .
                                 </StyledBox>
@@ -301,7 +308,9 @@ class SimpleBuyForm extends React.Component {
 const selector = formValueSelector("PlaceOrderForm");
 SimpleBuyForm = connect(state => {
     const { ethAmount, tokenAmount } = selector(state, "ethAmount", "tokenAmount");
-    return { ethAmount, tokenAmount }; // to get amounts for orderHelpText in render
+    const ethFiatRate = state.rates.info.ethFiatRate;
+    // const orderBook = state.orders.orders
+    return { ethAmount, tokenAmount, ethFiatRate }; // to get amounts for orderHelpText in render
 })(SimpleBuyForm);
 
 SimpleBuyForm = reduxForm({
