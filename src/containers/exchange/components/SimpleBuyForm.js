@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
+import { Wei } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -60,12 +61,12 @@ class SimpleBuyForm extends React.Component {
             result: null,
             orderDirection: TOKEN_BUY,
             liquidityError: null,
-            averagePrice: null,
-            notEnoughtEth: null
+            averagePrice: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+        this.validateEthAmount = this.validateEthAmount.bind(this);
     }
 
     onOrderDirectionChange(e) {
@@ -88,19 +89,11 @@ class SimpleBuyForm extends React.Component {
                 _error: res.error
             });
         } else {
-            let notEnoughEth = null;
-            const averagePrice = this.props.ethFiatRate / res.result.averagePrice.toNumber();
-
-            if (this.state.orderDirection === TOKEN_BUY) {
-                // TODO
-                // console.log(Validations.ethUserBalance(res.result.filledEthers.amount.toNumber()), 'VALIIID');
-                // notEnoughEth = Validations.ethUserBalance(res.result.filledEthers.amount.toNumber())
-            }
+            const averagePrice = this.props.rates.info.ethFiatRate / res.result.averagePrice.toNumber();
 
             this.setState({
                 simpleResult: res.result,
-                averagePrice: averagePrice,
-                notEnoughEth: notEnoughEth
+                averagePrice: averagePrice
             });
             return;
         }
@@ -118,6 +111,16 @@ class SimpleBuyForm extends React.Component {
             this.setState({
                 liquidityError: Validations.maxExchangeValue(value) || null
             });
+        }
+    }
+
+    validateEthAmount() {
+        if (this.state.simpleResult && this.state.simpleResult.filledEthers) {
+            const ethValue = this.state.simpleResult.filledEthers;
+            const userBalance = store.getState().userBalances.account.bn_ethBalance;
+            const weiBalance = Wei.parse(userBalance);
+
+            return weiBalance.gte(ethValue) ? null : "Your ETH balance is less than the amount";
         }
     }
 
@@ -179,6 +182,9 @@ class SimpleBuyForm extends React.Component {
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
+        }
+        if (this.state.orderDirection === TOKEN_BUY) {
+            tokenAmountValidations.push(this.validateEthAmount);
         }
 
         const header = (
@@ -254,8 +260,6 @@ class SimpleBuyForm extends React.Component {
                             labelAlignRight="A-EUR"
                         />
 
-                        <p>{this.state.notEnoughtEth}</p>
-
                         {simpleResult && (
                             <div>
                                 <StyledBox className={this.state.liquidityError ? "validation-error" : ""}>
@@ -308,9 +312,7 @@ class SimpleBuyForm extends React.Component {
 const selector = formValueSelector("PlaceOrderForm");
 SimpleBuyForm = connect(state => {
     const { ethAmount, tokenAmount } = selector(state, "ethAmount", "tokenAmount");
-    const ethFiatRate = state.rates.info.ethFiatRate;
-    // const orderBook = state.orders.orders
-    return { ethAmount, tokenAmount, ethFiatRate }; // to get amounts for orderHelpText in render
+    return { ethAmount, tokenAmount }; // to get amounts for orderHelpText in render
 })(SimpleBuyForm);
 
 SimpleBuyForm = reduxForm({

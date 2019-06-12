@@ -19,10 +19,17 @@
 .switch {
     margin-bottom: 10px;
     display: block;
-    text-align: center;
+    text-align: left;
     margin-top: -10px;
     cursor: pointer;
-    text-decoration: underline;
+    color: rgba(0, 0, 0, 0.7);
+}
+.switch:hover {
+    color: rgba(0, 0, 0, 1);
+}
+.switch:after {
+    content: "";
+    /* todo */
 }
 .exchange-container {
     margin-top: 1rem;
