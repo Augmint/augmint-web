@@ -8,7 +8,7 @@ import store from "modules/store";
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { Field, formValueSelector, reduxForm, SubmissionError } from "redux-form";
+import { Field, formValueSelector, reduxForm, SubmissionError, change } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
@@ -76,7 +76,7 @@ class SimpleBuyForm extends React.Component {
             orderDirection
         });
 
-        this.onTokenAmountChange(null, orderDirection);
+        this.onTokenAmountChange(null, orderDirection, this.state.inputValue);
     }
 
     async getSimpleResult(token) {
@@ -101,12 +101,12 @@ class SimpleBuyForm extends React.Component {
         }
     }
 
-    onTokenAmountChange(e, direction) {
-        const value = e ? e.target.value : this.state.inputValue;
+    onTokenAmountChange(e, direction, savedValue) {
+        const value = e ? e.target.value : savedValue;
         const simpleResult = value > 0 ? this.getSimpleResult(parseFloat(value)) : null;
 
         this.setState({
-            simpleResult,
+            simpleResult: simpleResult,
             inputValue: value
         });
 
@@ -164,6 +164,19 @@ class SimpleBuyForm extends React.Component {
             throw new SubmissionError({
                 _error: "no amount"
             });
+        }
+    }
+
+    componentDidUpdate() {
+        const form = store.getState().form.PlaceOrderForm;
+        const thisToken = form && form.values ? form.values.tokenAmount : undefined;
+        if (this.props.token && this.props.token !== thisToken && !this.state.tokenUpdated) {
+            this.props.dispatch(change("SimpleBuyForm", "simpleTokenAmount", this.props.token));
+            this.setState({
+                tokenUpdated: true,
+                inputValue: this.props.token
+            });
+            this.onTokenAmountChange(null, null, this.props.token);
         }
     }
 

@@ -15,6 +15,7 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import { TOKEN_SELL } from "modules/reducers/orders";
 import Icon from "components/augmint-ui/icon";
+import store from "modules/store";
 
 const SIMPLE = "simple";
 const ADVANCED = "advanced";
@@ -38,8 +39,20 @@ class ExchangeHome extends React.Component {
     }
 
     toggleSimpleBuy(val) {
+        let simple, advanced;
+        const form = store.getState().form;
+        if (form) {
+            simple =
+                form.SimpleBuyForm && form.SimpleBuyForm.values
+                    ? form.SimpleBuyForm.values.simpleTokenAmount
+                    : undefined;
+            advanced =
+                form.PlaceOrderForm && form.PlaceOrderForm.values ? form.PlaceOrderForm.values.tokenAmount : undefined;
+        }
+        const tokenValue = val === SIMPLE ? advanced : simple;
         this.setState({
-            simpleBuy: val === SIMPLE
+            simpleBuy: val === SIMPLE,
+            tokenValue: tokenValue
         });
     }
 
@@ -85,6 +98,7 @@ class ExchangeHome extends React.Component {
                                     exchange={exchange}
                                     toggleOrderBook={this.toggleOrderBook}
                                     rates={rates}
+                                    token={this.state.tokenValue}
                                 >
                                     {switchForms}
                                 </SimpleBuyForm>
@@ -94,6 +108,7 @@ class ExchangeHome extends React.Component {
                                     exchange={exchange}
                                     rates={rates}
                                     toggleOrderBook={this.toggleOrderBook}
+                                    token={this.state.tokenValue}
                                 >
                                     {switchForms}
                                 </PlaceOrderForm>

@@ -8,7 +8,7 @@ import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
-import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
+import { reduxForm, Field, SubmissionError, formValueSelector, change } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
@@ -47,6 +47,16 @@ class PlaceOrderForm extends React.Component {
                 this.props.ethAmount
             );
         }
+
+        const form = store.getState().form.PlaceOrderForm;
+        const thisToken = form && form.values ? form.values.tokenAmount : undefined;
+        if (this.props.token && this.props.token !== thisToken && !this.state.tokenUpdated) {
+            this.props.dispatch(change("PlaceOrderForm", "tokenAmount", this.props.token));
+            this.setState({
+                tokenUpdated: true
+            });
+            this.onTokenAmountChange(null, this.props.token);
+        }
     }
 
     toggleOrderBook(e) {
@@ -59,11 +69,12 @@ class PlaceOrderForm extends React.Component {
         this.toggleOrderBook(+e.target.attributes["data-index"].value);
     }
 
-    onTokenAmountChange(e) {
+    onTokenAmountChange(e, savedValue) {
+        const value = e ? e.target.value : savedValue;
         try {
             const lastChangedAmountField = "tokenAmount";
             this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, e.target.value, null);
+            this.reCalcAmounts(lastChangedAmountField, this.props.price, value, null);
         } catch (error) {
             this.props.change("ethAmount", "");
         }
