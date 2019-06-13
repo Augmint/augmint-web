@@ -75,6 +75,8 @@ class SimpleBuyForm extends React.Component {
         this.setState({
             orderDirection
         });
+
+        this.onTokenAmountChange(null, orderDirection);
     }
 
     async getSimpleResult(token) {
@@ -99,15 +101,16 @@ class SimpleBuyForm extends React.Component {
         }
     }
 
-    onTokenAmountChange(e) {
-        const value = e.target.value;
+    onTokenAmountChange(e, direction) {
+        const value = e ? e.target.value : this.state.inputValue;
         const simpleResult = value > 0 ? this.getSimpleResult(parseFloat(value)) : null;
 
         this.setState({
-            simpleResult
+            simpleResult,
+            inputValue: value
         });
 
-        if (this.state.orderDirection === TOKEN_BUY) {
+        if (this.state.orderDirection === TOKEN_BUY || direction === TOKEN_BUY) {
             this.setState({
                 liquidityError: Validations.maxExchangeValue(value) || null
             });
@@ -175,7 +178,8 @@ class SimpleBuyForm extends React.Component {
             submitting,
             submitSucceeded,
             clearSubmitErrors,
-            reset
+            reset,
+            invalid
         } = this.props;
         const { orderDirection, result, simpleResult } = this.state;
 
@@ -183,7 +187,7 @@ class SimpleBuyForm extends React.Component {
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
         }
-        if (this.state.orderDirection === TOKEN_BUY) {
+        if (this.state.orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
             tokenAmountValidations.push(this.validateEthAmount);
         }
 
@@ -262,8 +266,14 @@ class SimpleBuyForm extends React.Component {
 
                         {simpleResult && (
                             <div>
-                                <StyledBox className={this.state.liquidityError ? "validation-error" : ""}>
-                                    {this.state.liquidityError && (
+                                <StyledBox
+                                    className={
+                                        this.state.liquidityError && this.state.orderDirection === TOKEN_BUY
+                                            ? "validation-error"
+                                            : ""
+                                    }
+                                >
+                                    {this.state.liquidityError && this.state.orderDirection === TOKEN_BUY && (
                                         <strong>
                                             {this.state.liquidityError}
                                             <br />
@@ -293,7 +303,7 @@ class SimpleBuyForm extends React.Component {
                         <Button
                             size="big"
                             loading={submitting}
-                            disabled={pristine}
+                            disabled={pristine || this.validateEthAmount() || invalid || this.state.liquidityError}
                             className="fullwidth"
                             data-testid="simpleSubmitButton"
                             type="submit"
