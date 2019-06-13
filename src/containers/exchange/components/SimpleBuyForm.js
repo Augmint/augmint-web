@@ -181,7 +181,7 @@ class SimpleBuyForm extends React.Component {
             reset,
             invalid
         } = this.props;
-        const { orderDirection, result, simpleResult } = this.state;
+        const { orderDirection, result, simpleResult, liquidityError, averagePrice } = this.state;
         let buttonDisable = null;
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
@@ -189,9 +189,9 @@ class SimpleBuyForm extends React.Component {
             tokenAmountValidations.push(Validations.userTokenBalance);
             buttonDisable = null;
         }
-        if (this.state.orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
+        if (orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
             tokenAmountValidations.push(this.validateEthAmount);
-            buttonDisable = this.state.liquidityError || this.validateEthAmount();
+            buttonDisable = liquidityError || this.validateEthAmount();
         }
 
         const header = (
@@ -270,15 +270,11 @@ class SimpleBuyForm extends React.Component {
                         {simpleResult && (
                             <div>
                                 <StyledBox
-                                    className={
-                                        this.state.liquidityError && this.state.orderDirection === TOKEN_BUY
-                                            ? "validation-error"
-                                            : ""
-                                    }
+                                    className={liquidityError && orderDirection === TOKEN_BUY ? "validation-error" : ""}
                                 >
-                                    {this.state.liquidityError && this.state.orderDirection === TOKEN_BUY && (
+                                    {liquidityError && orderDirection === TOKEN_BUY && (
                                         <strong>
-                                            {this.state.liquidityError}
+                                            {liquidityError}
                                             <br />
                                         </strong>
                                     )}
@@ -294,7 +290,7 @@ class SimpleBuyForm extends React.Component {
                                     at an estimated exchange rate of <br />
                                     <strong>
                                         <span>1 ETH = </span>
-                                        <AEUR amount={this.state.averagePrice} />
+                                        <AEUR amount={averagePrice} />
                                     </strong>
                                     .
                                 </StyledBox>

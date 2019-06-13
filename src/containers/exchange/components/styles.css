@@ -18,18 +18,21 @@
 }
 .switch {
     margin-bottom: 10px;
-    display: block;
+    display: inline-block;
+    width: 100%;
+    height: auto;
     text-align: left;
     margin-top: -10px;
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.7);
+    color: #051d2d;
 }
-.switch:hover {
-    color: rgba(0, 0, 0, 1);
+.switch .icon {
+    margin: 5px 7px;
+    opacity: 0.8;
+    transform: rotate(270deg);
 }
-.switch:after {
-    content: "";
-    /* todo */
+.switch .icon.down {
+    transform: rotate(90deg);
 }
 .exchange-container {
     margin-top: 1rem;
