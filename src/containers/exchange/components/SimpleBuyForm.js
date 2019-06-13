@@ -310,8 +310,6 @@ class SimpleBuyForm extends React.Component {
                             </div>
                         )}
 
-                        {this.props.children}
-
                         <Button
                             size="big"
                             loading={submitting}
@@ -324,6 +322,8 @@ class SimpleBuyForm extends React.Component {
                             {!submitting &&
                                 (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
+
+                        {this.props.children}
                     </Form>
                 )}
             </Pblock>

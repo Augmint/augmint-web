@@ -14,7 +14,6 @@ import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
 import { TOKEN_SELL } from "modules/reducers/orders";
-import Icon from "components/augmint-ui/icon";
 import store from "modules/store";
 
 const SIMPLE = "simple";
@@ -66,7 +65,6 @@ class ExchangeHome extends React.Component {
         const { userAccount, orders, exchange, rates, trades } = this.props;
 
         const mode = this.state.simpleBuy ? ADVANCED : SIMPLE;
-        const _className = this.state.simpleBuy ? "icon down" : "icon";
         const switchForms = (
             <a
                 className="switch"
@@ -75,8 +73,7 @@ class ExchangeHome extends React.Component {
                     this.toggleSimpleBuy(mode);
                 }}
             >
-                Advanced settings
-                <Icon className={_className} name={"right chevron"} />
+                {mode === ADVANCED ? "Show advanced settings" : "Hide advanced settings"}
             </a>
         );
 

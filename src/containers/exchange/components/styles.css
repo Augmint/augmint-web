@@ -17,22 +17,14 @@
     width: 350px;
 }
 .switch {
-    margin-bottom: 10px;
     display: inline-block;
     width: 100%;
     height: auto;
     text-align: left;
-    margin-top: -10px;
+    margin-top: 10px;
+    margin-left: 3px;
     cursor: pointer;
     color: #051d2d;
-}
-.switch .icon {
-    margin: 5px 7px;
-    opacity: 0.8;
-    transform: rotate(270deg);
-}
-.switch .icon.down {
-    transform: rotate(90deg);
 }
 .exchange-container {
     margin-top: 1rem;

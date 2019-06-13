@@ -264,8 +264,6 @@ class PlaceOrderForm extends React.Component {
                             autoFocus={isDesktop}
                         />
 
-                        {this.props.children}
-
                         <Styledlabel style={{ margin: "5px 0 0 0" }}>
                             Price <PriceToolTip id={"place_order_form"} />
                         </Styledlabel>
@@ -323,6 +321,8 @@ class PlaceOrderForm extends React.Component {
                             {!submitting &&
                                 (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
+
+                        {this.props.children}
                     </Form>
                 )}
             </Pblock>
