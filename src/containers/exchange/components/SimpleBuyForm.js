@@ -182,13 +182,16 @@ class SimpleBuyForm extends React.Component {
             invalid
         } = this.props;
         const { orderDirection, result, simpleResult } = this.state;
+        let buttonDisable = null;
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
+            buttonDisable = null;
         }
         if (this.state.orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
             tokenAmountValidations.push(this.validateEthAmount);
+            buttonDisable = this.state.liquidityError || this.validateEthAmount();
         }
 
         const header = (
@@ -303,7 +306,7 @@ class SimpleBuyForm extends React.Component {
                         <Button
                             size="big"
                             loading={submitting}
-                            disabled={pristine || this.validateEthAmount() || invalid || this.state.liquidityError}
+                            disabled={pristine || invalid || buttonDisable}
                             className="fullwidth"
                             data-testid="simpleSubmitButton"
                             type="submit"
