@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshStabilityBoardProxy, fetchScripts, fetchSigners } from "modules/reducers/stabilityBoardProxy";
 
 let isWatchSetup = false;

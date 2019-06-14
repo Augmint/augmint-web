@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import BaseInfoGroup from "./BaseInfoGroup";
 import LoansInfoGroup from "./LoansInfoGroup";
 import AugmintInfoGroup from "./AugmintInfoGroup";
-import { connectWeb3 } from "modules/web3Provider";
 import ExchangeInfoGroup from "./ExchangeInfoGroup";
 import LocksInfoGroup from "./LocksInfoGroup";
 import StabilityBoardInfoGroup from "./StabilityBoardInfoGroup";
@@ -23,10 +22,6 @@ class underTheHood extends React.Component {
     }
     handleSelectGroup(e) {
         this.setState({ selectedGroup: e.target.name });
-    }
-
-    componentDidMount() {
-        connectWeb3();
     }
 
     render() {
