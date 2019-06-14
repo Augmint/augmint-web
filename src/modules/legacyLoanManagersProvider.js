@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshLegacyLoanManagers } from "modules/reducers/legacyLoanManagers";
 
 let isWatchSetup = false;
