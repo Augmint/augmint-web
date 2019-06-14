@@ -101,19 +101,6 @@ export const Validations = {
         return parseFloat(value) > maxValue
             ? `Loan amount is greater than currently available maximum of ${maxValue} A-EUR`
             : undefined;
-    },
-    maxExchangeValue: value => {
-        // TODO brigi
-        let maxToBuy =
-            store
-                .getState()
-                .orders.orders.sellOrders.map(order => order.amount.amount)
-                .reduce((acc, curr) => {
-                    return acc.add(curr);
-                }) / 100;
-        if (maxToBuy < parseFloat(value)) {
-            return "There is not enough A-EUR in the system (todo text)";
-        }
     }
 };
 

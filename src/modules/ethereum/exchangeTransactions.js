@@ -80,8 +80,8 @@ export async function cancelOrderTx(exchange, buy, orderId) {
 }
 
 export async function getSimpleBuyCalc(token, isBuy, rate) {
-    const exchange = await store.getState().web3Connect.augmint.exchange;
-    const orderBook = await exchange.getOrderBook();
+    const orderBook = store.getState().orders.orders;
+
     let result;
 
     if (isBuy) {
