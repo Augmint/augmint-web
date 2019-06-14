@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Pheader, Psegment, Pgrid } from "components/PageLayout";
+import { Pheader, Psegment } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
 import augmintTokenProvider from "modules/augmintTokenProvider";

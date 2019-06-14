@@ -1,5 +1,4 @@
 import React from "react";
-import store from "modules/store";
 import { connect } from "react-redux";
 
 import { Tokens, Wei } from "@augmint/js";
@@ -208,7 +207,6 @@ class OrderBook extends React.Component {
 
     render() {
         const { header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
-        console.log(this.props, "pppp");
         const { orders, refreshError, isLoading } = this.props.orders;
         // FIXME should be Tokens already
 

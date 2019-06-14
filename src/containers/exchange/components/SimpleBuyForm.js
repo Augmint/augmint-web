@@ -8,10 +8,9 @@ import store from "modules/store";
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { Field, formValueSelector, reduxForm, SubmissionError, change } from "redux-form";
+import { Field, reduxForm, SubmissionError, change } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
-import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
@@ -335,12 +334,6 @@ class SimpleBuyForm extends React.Component {
         );
     }
 }
-
-const selector = formValueSelector("PlaceOrderForm");
-SimpleBuyForm = connect(state => {
-    const { ethAmount, tokenAmount } = selector(state, "ethAmount", "tokenAmount");
-    return { ethAmount, tokenAmount }; // to get amounts for orderHelpText in render
-})(SimpleBuyForm);
 
 SimpleBuyForm = reduxForm({
     form: "SimpleBuyForm",
