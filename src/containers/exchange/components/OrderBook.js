@@ -1,5 +1,6 @@
 import React from "react";
 import store from "modules/store";
+import { connect } from "react-redux";
 
 import { Tokens, Wei } from "@augmint/js";
 import { Pblock } from "components/PageLayout";
@@ -190,7 +191,7 @@ export class MyOrders extends React.Component {
     }
 }
 
-export class OrderBook extends React.Component {
+class OrderBook extends React.Component {
     constructor(props) {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
@@ -207,9 +208,10 @@ export class OrderBook extends React.Component {
 
     render() {
         const { header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
-        const _orders = store.getState().orders;
-        const { orders, refreshError, isLoading } = _orders;
+        console.log(this.props, "pppp");
+        const { orders, refreshError, isLoading } = this.props.orders;
         // FIXME should be Tokens already
+
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
         const orderDirection = orderBookDirection;
 
@@ -273,8 +275,13 @@ export class OrderBook extends React.Component {
 }
 
 OrderBook.defaultProps = {
-    orders: null,
     userAccountAddress: null,
     header: <h3>Open orders</h3>,
     rates: null
 };
+
+const mapStateToProps = state => ({
+    orders: state.orders
+});
+OrderBook = connect(mapStateToProps)(OrderBook);
+export { OrderBook };
