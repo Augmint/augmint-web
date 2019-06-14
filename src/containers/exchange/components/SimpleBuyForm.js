@@ -4,6 +4,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import store from "modules/store";
+// import { connect } from "react-redux";
 
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
@@ -14,7 +15,7 @@ import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } 
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
-import { Wei, Tokens } from "@augmint/js";
+import { Tokens } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -65,7 +66,6 @@ class SimpleBuyForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-        this.validateEthAmount = this.validateEthAmount.bind(this);
     }
 
     onOrderDirectionChange(e) {
@@ -119,16 +119,6 @@ class SimpleBuyForm extends React.Component {
         const errorMsg = "Insufficient liquidity available.";
         const bn_value = Tokens.of(value);
         return filledTokens.gte(bn_value) ? null : errorMsg;
-    }
-
-    validateEthAmount() {
-        if (this.state.simpleResult && this.state.simpleResult.filledEthers) {
-            const ethValue = this.state.simpleResult.filledEthers;
-            const userBalance = store.getState().userBalances.account.bn_ethBalance;
-            const weiBalance = Wei.parse(userBalance);
-
-            return weiBalance.gte(ethValue) ? null : "Your ETH balance is less than the amount";
-        }
     }
 
     async handleSubmit() {
@@ -207,8 +197,8 @@ class SimpleBuyForm extends React.Component {
             buttonDisable = null;
         }
         if (orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
-            tokenAmountValidations.push(this.validateEthAmount);
-            buttonDisable = liquidityError || this.validateEthAmount();
+            tokenAmountValidations.push(Validations.validateFilledEthers);
+            buttonDisable = liquidityError || Validations.validateFilledEthers();
         }
 
         const header = (
@@ -334,6 +324,13 @@ class SimpleBuyForm extends React.Component {
         );
     }
 }
+
+// const mapStateToProps = state => ({
+//   userBalance: state.userBalances.account.bn_ethBalance,
+//   simpleResult: state.orders.result
+// })
+//
+// SimpleBuyForm = connect(mapStateToProps)(SimpleBuyForm)
 
 SimpleBuyForm = reduxForm({
     form: "SimpleBuyForm",

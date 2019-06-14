@@ -13,6 +13,8 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
+import { Wei } from "@augmint/js";
+
 export const Validations = {
     required: value => {
         return value || (value && value.toString().trim() === "") ? undefined : "Required";
@@ -101,6 +103,19 @@ export const Validations = {
         return parseFloat(value) > maxValue
             ? `Loan amount is greater than currently available maximum of ${maxValue} A-EUR`
             : undefined;
+    },
+    validateFilledEthers: () => {
+        // todo: call getState() inside form validation causes the form registers and unregisters its field.
+
+        const simpleResult = store.getState().orders.result;
+
+        if (simpleResult && simpleResult.filledEthers) {
+            const ethValue = simpleResult.filledEthers;
+            const userBalance = store.getState().userBalances.account.bn_ethBalance;
+            const weiBalance = Wei.parse(userBalance);
+
+            return weiBalance.gte(ethValue) ? null : "Your ETH balance is less than the amount";
+        }
     }
 };
 
