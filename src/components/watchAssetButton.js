@@ -57,7 +57,18 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user, className, icon, breakToLines, style, circleicon } = this.props;
+        const {
+            web3,
+            contracts,
+            augmint,
+            user,
+            className,
+            icon,
+            breakToLines,
+            style,
+            circleicon,
+            labelposition
+        } = this.props;
         let showButton = false;
 
         let _className = className + " watchAssetBtn";
@@ -79,23 +90,10 @@ export class WatchAssetButton extends React.Component {
             showButton = this.isMetamask && !this.isAssetAdded && this.hasAugmint;
         }
 
-        return (
-            <div style={{ ...style, textAlign: "center" }}>
-                {showButton &&
-                    (breakToLines ? (
-                        <Button
-                            className={_className}
-                            icon={icon}
-                            circleicon={circleicon}
-                            onClick={() => {
-                                this.addAsset();
-                            }}
-                        >
-                            Watch
-                            <br />
-                            in wallet
-                        </Button>
-                    ) : (
+        const Centered = () => {
+            return (
+                <div style={{ ...style, textAlign: "center" }}>
+                    {showButton && (
                         <Button
                             className={_className}
                             icon={icon}
@@ -106,9 +104,32 @@ export class WatchAssetButton extends React.Component {
                         >
                             Watch A-EUR in your wallet
                         </Button>
-                    ))}
-            </div>
-        );
+                    )}
+                </div>
+            );
+        };
+
+        const Btn = () => {
+            return (
+                <Button
+                    className={className}
+                    icon={icon}
+                    circleicon={circleicon}
+                    onClick={() => {
+                        this.addAsset();
+                    }}
+                    style={style}
+                    labelposition={labelposition}
+                    // to="/transfer"
+                >
+                    Watch
+                    <br />
+                    in wallet
+                </Button>
+            );
+        };
+
+        return !breakToLines ? <Centered /> : <Btn />;
     }
 }
 

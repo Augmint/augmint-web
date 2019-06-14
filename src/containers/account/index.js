@@ -79,14 +79,14 @@ class AccountHome extends React.Component {
                             </Pgrid.Column>
                         </StyledPgridRow>
 
-                        {/* <Pgrid.Row>
+                        <Pgrid.Row>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LoanList header="My active loans" loans={this.props.loans} />
                             </Pgrid.Column>
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <LockList header="My active locks" locks={this.props.locks} />
                             </Pgrid.Column>
-                        </Pgrid.Row> */}
+                        </Pgrid.Row>
                     </Pgrid>
                 </Psegment>
             </EthereumState>

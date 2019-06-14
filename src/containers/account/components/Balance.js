@@ -54,12 +54,15 @@ export default class Balance extends React.Component {
         const loansAmount = sum(pick(activeLoans, "loanAmount"));
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
+        console.log("locks: ", locks);
+        console.log("loans: ", loans);
+
         return (
             <Pblock className="balance">
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
                     {/* <TokenBalance style={{ textAlign: "justify"}}> */}
-                    <TokenBalance>
+                    <TokenBalance style={{ fontSize: "2rem" }}>
                         {/* <AEUR 
                             amount={userAccount.tokenBalance} 
                             className="currency" 
@@ -68,49 +71,86 @@ export default class Balance extends React.Component {
                         <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
-                <Container>
+                <Container style={{ paddingTop: "10px", minWidth: "250px", width: "60%", margin: "auto" }}>
                     <Button
                         to="/exchange"
                         icon="copy"
                         circleicon="true"
-                        className="grey icon top"
+                        className="naked icon top"
                         labelposition="top"
-                        style={{ width: "20%" }}
+                        // style={{ width: "25%" }}
+                        style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
                     >
                         Buy/Sell
                     </Button>
                     <Button
                         to="/transfer"
-                        className="grey icon top"
+                        className="naked icon top"
                         icon="copy"
                         circleicon="true"
                         data-testid="transferButton"
                         labelposition="top"
-                        style={{ width: "20%" }}
+                        // style={{ width: "25%" }}
+                        style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
                     >
                         Send
                     </Button>
+                    {/* <Button
+                        to="/transfer"
+                        className="naked icon top"
+                        icon="copy"
+                        circleicon="true"
+                        data-testid="transferButton"
+                        labelposition="top"
+                        // style={{ width: "25%" }}
+                        style={{ flex: "1", margin: "0 5px", padding: "0 0 10px"}}
+                    >
+                        Send
+                    </Button> */}
                     <WatchAssetButton
-                        className="grey icon top wIcon"
+                        className="naked icon top"
                         icon="copy"
                         circleicon="true"
                         labelposition="top"
-                        style={{ marginTop: "0", width: "30%" }}
+                        // style={{ marginTop: "0", width: "30%" }}
+                        style={{ flex: "1", margin: "0 5px", alignSelf: "auto", padding: "0 0 10px" }}
                         breakToLines
                     />
                 </Container>
                 <Pgrid.Row style={{ textAlign: "center" }}>
                     <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
-                        <Label>My total loans</Label>
-                        <TokenAmount>
-                            <AEUR amount={loansAmount} />
-                        </TokenAmount>
+                        {loans && loans.isLoaded && loans.loans.length > 0 ? (
+                            <>
+                                <Label>My total loans</Label>
+                                <TokenAmount>
+                                    <AEUR amount={loansAmount} />
+                                </TokenAmount>
+                                <Button className="naked" to="/loan">
+                                    View all
+                                </Button>
+                            </>
+                        ) : (
+                            <Button style={{ width: "100%", margin: "0 4px", padding: "10px" }} to="/loan/new">
+                                Get a new loan
+                            </Button>
+                        )}
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
-                        <Label>My total locks</Label>
-                        <TokenAmount>
-                            <AEUR amount={locksAmount} />
-                        </TokenAmount>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0", display: "flex" }}>
+                        {locks && locks.locks.length > 0 ? (
+                            <>
+                                <Label>My total locks</Label>
+                                <TokenAmount>
+                                    <AEUR amount={locksAmount} />
+                                </TokenAmount>
+                                <Button className="naked" to="/lock">
+                                    View all
+                                </Button>
+                            </>
+                        ) : (
+                            <Button style={{ width: "95%", margin: "0 4px", padding: "10px" }} to="/lock/new">
+                                Lock A-EUR
+                            </Button>
+                        )}
                     </Pgrid.Column>
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>

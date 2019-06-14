@@ -203,6 +203,8 @@ export const BaseButton = styledComponent => styledComponent`
         font-size: .875rem;
 
         i {
+          margin-top: 6px;
+          margin-bottom: 6px;
         }
       }
 
@@ -320,8 +322,6 @@ export const BaseButton = styledComponent => styledComponent`
       i {
         position: inherit;
         font-size: .875rem;
-        margin-top: 6px;
-        margin-bottom: 6px;
         background-color: transparent;
       }
     }
