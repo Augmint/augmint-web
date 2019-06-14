@@ -346,7 +346,6 @@ SimpleBuyForm = reduxForm({
     form: "SimpleBuyForm",
     touchOnBlur: false,
     touchOnChange: true,
-    destroyOnUnmount: false,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check

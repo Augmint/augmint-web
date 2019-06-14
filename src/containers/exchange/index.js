@@ -91,7 +91,6 @@ class ExchangeHome extends React.Component {
                             {/*<div className="toggle">{header}</div>*/}
                             {this.state.simpleBuy && (
                                 <SimpleBuyForm
-                                    orders={orders}
                                     exchange={exchange}
                                     toggleOrderBook={this.toggleOrderBook}
                                     rates={rates}
@@ -123,7 +122,6 @@ class ExchangeHome extends React.Component {
                             {!this.state.simpleBuy && (
                                 <OrderBook
                                     testid="allOrdersBlock"
-                                    orders={orders}
                                     rates={rates}
                                     userAccountAddress={userAccount.address}
                                     header="Order book"
@@ -134,11 +132,10 @@ class ExchangeHome extends React.Component {
                         </div>
                     </div>
 
-                    {orders.orders && <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />}
+                    {orders && <MatchMultipleOrdersButton orderBook={orders} label="Match orders" />}
 
                     <TradeHistory
                         trades={trades}
-                        orders={orders}
                         userAccountAddress={userAccount.address}
                         header="My transaction history"
                     />
@@ -152,7 +149,7 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
-    orders: state.orders,
+    orders: state.orders.orders,
     rates: state.rates,
     trades: state.trades
 });

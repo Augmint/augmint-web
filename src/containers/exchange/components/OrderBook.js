@@ -1,4 +1,5 @@
 import React from "react";
+import store from "modules/store";
 
 import { Tokens, Wei } from "@augmint/js";
 import { Pblock } from "components/PageLayout";
@@ -160,8 +161,8 @@ const OrderList = props => {
 
 export class MyOrders extends React.Component {
     render() {
-        const { header, userAccountAddress, testid, rates } = this.props;
-        const { orders } = this.props.orders;
+        const { header, orders, userAccountAddress, testid, rates } = this.props;
+
         // FIXME should be Tokens already
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
 
@@ -206,7 +207,8 @@ export class OrderBook extends React.Component {
 
     render() {
         const { header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
-        const { orders, refreshError, isLoading } = this.props.orders;
+        const _orders = store.getState().orders;
+        const { orders, refreshError, isLoading } = _orders;
         // FIXME should be Tokens already
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
         const orderDirection = orderBookDirection;
