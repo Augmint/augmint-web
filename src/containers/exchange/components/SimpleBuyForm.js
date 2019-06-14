@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
-import { Wei } from "@augmint/js";
+import { Wei, Tokens } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -47,7 +47,7 @@ const StyledBox = styled.div`
     &.validation-error {
         border: 2px solid ${theme.colors.darkRed};
         background-color: ${theme.colors.lightRed};
-        & strong {
+        & strong.err {
             color: ${theme.colors.darkRed};
         }
     }
@@ -93,6 +93,12 @@ class SimpleBuyForm extends React.Component {
         } else {
             const averagePrice = this.props.rates.info.ethFiatRate / res.result.averagePrice.toNumber();
 
+            if (this.state.orderDirection === TOKEN_BUY) {
+                this.setState({
+                    liquidityError: this.maxExchangeValue(token, res.result.filledTokens)
+                });
+            }
+
             this.setState({
                 simpleResult: res.result,
                 averagePrice: averagePrice
@@ -109,12 +115,12 @@ class SimpleBuyForm extends React.Component {
             simpleResult: simpleResult,
             inputValue: value
         });
+    }
 
-        if (this.state.orderDirection === TOKEN_BUY || direction === TOKEN_BUY) {
-            this.setState({
-                liquidityError: Validations.maxExchangeValue(value) || null
-            });
-        }
+    maxExchangeValue(value, filledTokens) {
+        const errorMsg = "Insufficient liquidity available.";
+        const bn_value = Tokens.of(value);
+        return filledTokens.gte(bn_value) ? null : errorMsg;
     }
 
     validateEthAmount() {
@@ -286,13 +292,13 @@ class SimpleBuyForm extends React.Component {
                                     className={liquidityError && orderDirection === TOKEN_BUY ? "validation-error" : ""}
                                 >
                                     {liquidityError && orderDirection === TOKEN_BUY && (
-                                        <strong>
+                                        <strong className="err">
                                             {liquidityError}
                                             <br />
                                         </strong>
                                     )}
                                     You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
-                                    <strong>
+                                    <strong className="err">
                                         <AEUR data-testid="aeurAmount" amount={simpleResult.filledTokens} />
                                     </strong>
                                     {"  for  "}

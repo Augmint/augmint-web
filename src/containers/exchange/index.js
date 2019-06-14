@@ -73,7 +73,7 @@ class ExchangeHome extends React.Component {
                     this.toggleSimpleBuy(mode);
                 }}
             >
-                {mode === ADVANCED ? "Show advanced settings" : "Hide advanced settings"}
+                {mode === ADVANCED ? "Show advanced order options »" : "Hide advanced order options »"}
             </a>
         );
 
