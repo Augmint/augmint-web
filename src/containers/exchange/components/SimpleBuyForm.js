@@ -75,8 +75,7 @@ class SimpleBuyForm extends React.Component {
         this.setState({
             orderDirection
         });
-
-        this.onTokenAmountChange(null, orderDirection, this.state.inputValue);
+        this.onTokenAmountChange(null, orderDirection, this.state.inputVal);
     }
 
     async getSimpleResult(token) {
@@ -92,16 +91,16 @@ class SimpleBuyForm extends React.Component {
             });
         } else {
             const averagePrice = this.props.rates.info.ethFiatRate / res.result.averagePrice.toNumber();
+            let liquidityError = null;
 
             if (this.state.orderDirection === TOKEN_BUY) {
-                this.setState({
-                    liquidityError: this.maxExchangeValue(token, res.result.filledTokens)
-                });
+                liquidityError = this.maxExchangeValue(token, res.result.filledTokens);
             }
 
             this.setState({
                 simpleResult: res.result,
-                averagePrice: averagePrice
+                averagePrice: averagePrice,
+                liquidityError: liquidityError
             });
             return;
         }
@@ -113,7 +112,7 @@ class SimpleBuyForm extends React.Component {
 
         this.setState({
             simpleResult: simpleResult,
-            inputValue: value
+            inputVal: value
         });
     }
 
@@ -180,7 +179,7 @@ class SimpleBuyForm extends React.Component {
             this.props.dispatch(change("SimpleBuyForm", "simpleTokenAmount", this.props.token));
             this.setState({
                 tokenUpdated: true,
-                inputValue: this.props.token
+                inputVal: this.props.token
             });
             this.onTokenAmountChange(null, null, this.props.token);
         }
@@ -345,6 +344,9 @@ SimpleBuyForm = connect(state => {
 
 SimpleBuyForm = reduxForm({
     form: "SimpleBuyForm",
+    touchOnBlur: false,
+    touchOnChange: true,
+    destroyOnUnmount: false,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
