@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { Field, reduxForm } from "redux-form";
-import { Form, Validations, Normalizations } from "components/BaseComponents";
+import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
 import { DECIMALS, ETH_DECIMALS } from "utils/constants";
@@ -101,7 +101,10 @@ class AddWithdrawForm extends React.Component {
 
         const isDesktop = window.innerWidth > 768;
 
-        const linkToGo = orderDirection === ADDFUND ? FUNDS[0].buyUrl : FUNDS[0].sellUrl;
+        const linkToGo =
+            orderDirection === ADDFUND
+                ? `${FUNDS[0].buyUrl}?to-address=${user.address}&sending-amount=${amount}`
+                : `${FUNDS[0].sellUrl}?from-address=${user.address}&sending-amount=${amount}`;
 
         const header = (
             <div style={{ marginBottom: "2rem" }}>
@@ -133,7 +136,7 @@ class AddWithdrawForm extends React.Component {
         const buttonToGo = (
             <Pgrid.Row>
                 <Button
-                    content={`Go to ${FUNDS[0].name}`}
+                    content={`Send`}
                     href={linkToGo}
                     target="_blank"
                     labelposition="center"
@@ -149,7 +152,7 @@ class AddWithdrawForm extends React.Component {
             <Pblock style={{ margin: 0 }}>
                 {header}
                 <Form error={error ? "true" : "false"}>
-                    <label data-testid={`${orderDirection}Label`}>
+                    <label data-testid={`${orderDirection}AmountLabel`}>
                         {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
 
@@ -164,11 +167,30 @@ class AddWithdrawForm extends React.Component {
                         onChange={this.onPriceChange}
                         validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}
-                        data-testid={`${orderDirection}Input`}
+                        data-testid={`${orderDirection}AmountInput`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                         autoFocus={isDesktop}
                     />
+
+                    <label data-testid={`${orderDirection}AddressLabel`}>
+                        {orderDirection === ADDFUND ? "To address" : "From address"}
+                    </label>
+
+                    <Field
+                        name={orderDirection}
+                        component={Form.Field}
+                        as={Form.Input}
+                        type="text"
+                        inputmode="text"
+                        size="small"
+                        parse={Parsers.trim}
+                        placeholder="0x0..."
+                        data-testid={`${orderDirection}AddressInput`}
+                        // style={{ borderRadius: theme.borderRadius.left }}
+                        autoFocus={isDesktop}
+                    />
+
                     <label>Available exchange partner:</label>
 
                     <FundList user={user} amount={amount} direction={orderDirection} />
