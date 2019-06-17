@@ -92,7 +92,8 @@ class SimpleBuyForm extends React.Component {
             this.setState({
                 simpleResult: simpleResult.result,
                 averagePrice,
-                liquidityError
+                liquidityError,
+                inputVal: value
             });
         }
     }
