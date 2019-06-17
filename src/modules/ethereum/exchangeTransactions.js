@@ -79,7 +79,7 @@ export async function cancelOrderTx(exchange, buy, orderId) {
     return { txName, transactionHash };
 }
 
-export async function getSimpleBuyCalc(token, isBuy, rate) {
+export function getSimpleBuyCalc(token, isBuy, rate) {
     const orderBook = store.getState().orders.orders;
 
     let result;

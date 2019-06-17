@@ -16,6 +16,7 @@ import { Pblock } from "components/PageLayout";
 import BigNumber from "bignumber.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import { Tokens } from "@augmint/js";
+import { getSimpleBuyCalc } from "modules/ethereum/exchangeTransactions";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -77,42 +78,32 @@ class SimpleBuyForm extends React.Component {
         this.onTokenAmountChange(null, orderDirection, this.state.inputVal);
     }
 
-    async getSimpleResult(token) {
+    onTokenAmountChange(e, direction, savedValue) {
+        const value = e ? e.target.value : savedValue;
         const { ethFiatRate } = this.props.rates.info;
         const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
         const isBuy = this.state.orderDirection === TOKEN_BUY;
 
-        const res = await store.dispatch(getSimpleBuy(token, isBuy, bn_ethFiatRate));
+        const simpleResult = getSimpleBuyCalc(value, isBuy, bn_ethFiatRate);
 
-        if (res.type !== SIMPLE_BUY_SUCCESS) {
-            throw new SubmissionError({
-                _error: res.error
-            });
-        } else {
-            const averagePrice = this.props.rates.info.ethFiatRate / res.result.averagePrice.toNumber();
+        console.log(simpleResult);
+
+        if (simpleResult) {
+            const averagePrice = simpleResult.averagePrice
+                ? this.props.rates.info.ethFiatRate / simpleResult.averagePrice.toNumber()
+                : this.props.rates.info.ethFiatRate;
             let liquidityError = null;
 
             if (this.state.orderDirection === TOKEN_BUY) {
-                liquidityError = this.maxExchangeValue(token, res.result.filledTokens);
+                liquidityError = this.maxExchangeValue(value, simpleResult.filledTokens);
             }
 
             this.setState({
-                simpleResult: res.result,
-                averagePrice: averagePrice,
-                liquidityError: liquidityError
+                simpleResult,
+                averagePrice,
+                liquidityError
             });
-            return;
         }
-    }
-
-    onTokenAmountChange(e, direction, savedValue) {
-        const value = e ? e.target.value : savedValue;
-        const simpleResult = value > 0 ? this.getSimpleResult(parseFloat(value)) : null;
-
-        this.setState({
-            simpleResult: simpleResult,
-            inputVal: value
-        });
     }
 
     maxExchangeValue(value, filledTokens) {
