@@ -13,7 +13,6 @@ import { Field, reduxForm, SubmissionError, change } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { Pblock } from "components/PageLayout";
-import BN from "bn.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import { Tokens } from "@augmint/js";
 import { getSimpleBuyCalc } from "modules/ethereum/exchangeTransactions";
@@ -81,16 +80,14 @@ class SimpleBuyForm extends React.Component {
     async onTokenAmountChange(e, savedValue) {
         const value = e ? e.target.value : savedValue;
         const { ethFiatRate } = this.props.rates.info;
-        const bn_ethFiatRate = ethFiatRate !== null && new BN(ethFiatRate);
         const isBuy = this.state.orderDirection === TOKEN_BUY;
 
         //TODO:  access results without store
-        const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, bn_ethFiatRate));
+        const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, ethFiatRate));
 
         if (simpleResult && simpleResult.type === SIMPLE_BUY_SUCCESS) {
             const averagePrice =
-                simpleResult.result.averagePrice &&
-                this.props.rates.info.ethFiatRate / simpleResult.result.averagePrice.toNumber();
+                simpleResult.result.averagePrice && ethFiatRate / simpleResult.result.averagePrice.toNumber();
             const liquidityError = this.maxExchangeValue(value, simpleResult.result.filledTokens);
 
             this.setState({
