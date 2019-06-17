@@ -13,13 +13,14 @@ import { Field, reduxForm, SubmissionError, change } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
 import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { Pblock } from "components/PageLayout";
-import BigNumber from "bignumber.js";
+import BN from "bn.js";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import { Tokens } from "@augmint/js";
 import { getSimpleBuyCalc } from "modules/ethereum/exchangeTransactions";
 
 import theme from "styles/theme";
 import styled from "styled-components";
+import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -74,26 +75,28 @@ class SimpleBuyForm extends React.Component {
         this.setState({
             orderDirection
         });
-        this.onTokenAmountChange(null, orderDirection, this.state.inputVal);
+        this.onTokenAmountChange(null, this.state.inputVal);
     }
 
-    onTokenAmountChange(e, direction, savedValue) {
+    async onTokenAmountChange(e, savedValue) {
         const value = e ? e.target.value : savedValue;
         const { ethFiatRate } = this.props.rates.info;
-        const bn_ethFiatRate = ethFiatRate !== null && new BigNumber(ethFiatRate);
+        const bn_ethFiatRate = ethFiatRate !== null && new BN(ethFiatRate);
         const isBuy = this.state.orderDirection === TOKEN_BUY;
 
-        const simpleResult = getSimpleBuyCalc(value, isBuy, bn_ethFiatRate);
+        //TODO:  access results without store
+        const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, bn_ethFiatRate));
 
-        if (simpleResult) {
-            const averagePrice = simpleResult.averagePrice
-                ? this.props.rates.info.ethFiatRate / simpleResult.averagePrice.toNumber()
-                : this.props.rates.info.ethFiatRate;
+        console.log("sr", simpleResult);
 
-            const liquidityError = this.maxExchangeValue(value, simpleResult.filledTokens);
+        if (simpleResult.type === SIMPLE_BUY_SUCCESS) {
+            const averagePrice =
+                simpleResult.result.averagePrice &&
+                this.props.rates.info.ethFiatRate / simpleResult.result.averagePrice.toNumber();
+            const liquidityError = this.maxExchangeValue(value, simpleResult.result.filledTokens);
 
             this.setState({
-                simpleResult,
+                simpleResult: simpleResult.result,
                 averagePrice,
                 liquidityError
             });
