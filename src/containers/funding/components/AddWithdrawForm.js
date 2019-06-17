@@ -7,7 +7,6 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
 import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
-import { DECIMALS, ETH_DECIMALS } from "utils/constants";
 
 import theme from "styles/theme";
 
@@ -22,8 +21,6 @@ class AddWithdrawForm extends React.Component {
         this.state = { orderDirection: ADDFUND, amount: "", address: "" };
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
-        // this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onInputChange(e) {
@@ -44,31 +41,6 @@ class AddWithdrawForm extends React.Component {
         }
     }
 
-    onSubmit(e) {
-        e.preventDefault();
-        const { amount, address } = this.state;
-        let fetchUrl = "";
-        let data = { "sending-amount": amount };
-        console.log(amount, address, this.state);
-
-        if (this.state.orderDirection === ADDFUND) {
-            fetchUrl = FUNDS[0].buyUrl;
-            data["to-address"] = address;
-        } else {
-            fetchUrl = FUNDS[0].sellUrl;
-            data["from-address"] = address;
-        }
-
-        window.fetch(fetchUrl, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: data
-        });
-    }
-
     render() {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
@@ -83,11 +55,6 @@ class AddWithdrawForm extends React.Component {
         }
 
         const isDesktop = window.innerWidth > 768;
-
-        const linkToGo =
-            orderDirection === ADDFUND
-                ? `${FUNDS[0].buyUrl}?to-address=${user.address}&sending-amount=${amount}`
-                : `${FUNDS[0].sellUrl}?from-address=${user.address}&sending-amount=${amount}`;
 
         const header = (
             <div style={{ marginBottom: "2rem" }}>
@@ -119,17 +86,13 @@ class AddWithdrawForm extends React.Component {
         const buttonToGo = (
             <Pgrid.Row>
                 <Button
-                    // href={linkToGo}
-                    // target="_blank"
                     type="submit"
                     labelposition="center"
                     size="large"
                     className="primary"
                     data-testid={orderDirection === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
                     style={{ width: "100%", padding: "15px 20px" }}
-                    // loading={submitting}
                 >
-                    {/*{submitting ? "Submitting..." : submitText || "Send"}*/}
                     Send
                 </Button>
             </Pgrid.Row>
@@ -138,13 +101,18 @@ class AddWithdrawForm extends React.Component {
         return (
             <Pblock style={{ margin: 0 }}>
                 {header}
-                <Form error={error ? "true" : "false"} onSubmit={this.onSubmit}>
+                <Form
+                    error={error ? "true" : "false"}
+                    action={orderDirection === ADDFUND ? FUNDS[0].buyUrl : FUNDS[0].sellUrl}
+                    method="POST"
+                    target="_blank"
+                >
                     <label data-testid={`${orderDirection}AmountLabel`}>
                         {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
 
                     <Field
-                        name={"amount"}
+                        name={"sending-amount"}
                         component={Form.Field}
                         as={Form.Input}
                         type="number"
@@ -165,7 +133,7 @@ class AddWithdrawForm extends React.Component {
                     </label>
 
                     <Field
-                        name={"address"}
+                        name={orderDirection === ADDFUND ? "to-address" : "from-address"}
                         component={Form.Field}
                         as={Form.Input}
                         type="text"
@@ -175,7 +143,7 @@ class AddWithdrawForm extends React.Component {
                         placeholder="0x0..."
                         data-testid={`${orderDirection}AddressInput`}
                         onChange={this.onInputChange}
-                        // style={{ borderRadius: theme.borderRadius.left }}
+                        style={{ borderRight: `1px solid ${theme.colors.opacGrey}` }}
                     />
 
                     <label>Available exchange partner:</label>
