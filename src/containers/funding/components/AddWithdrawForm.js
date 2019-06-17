@@ -19,59 +19,17 @@ export const ADDFUND = "addFunds";
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { orderDirection: ADDFUND, amount: "" };
+        this.state = { orderDirection: ADDFUND, amount: "", address: "" };
         this.onMenuClick = this.onMenuClick.bind(this);
-        this.onPriceChange = this.onPriceChange.bind(this);
-        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+        this.onInputChange = this.onInputChange.bind(this);
+        // this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
-    onPriceChange(e) {
-        const amount = e.target.value;
+    onInputChange(e) {
         this.setState({
-            amount
+            [e.target.name]: e.target.value
         });
-
-        if (e.target.attributes["name"].value === WITHDRAW) {
-            this.onTokenAmountChange(amount);
-        }
-    }
-
-    onTokenAmountChange(amount) {
-        try {
-            const lastChangedAmountField = "tokenAmount";
-            this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, amount, null);
-        } catch (error) {
-            this.props.change("ethAmount", "");
-        }
-    }
-
-    reCalcAmounts(lastChangedAmountField, _price, _tokenAmount, _ethAmount) {
-        const price = this.parsePrice(_price);
-
-        if (lastChangedAmountField === "ethAmount") {
-            const ethAmount = parseFloat(_ethAmount);
-            if (!isNaN(ethAmount) && isFinite(ethAmount)) {
-                const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
-                this.props.change("tokenAmount", Number(tokenValue.toFixed(DECIMALS)));
-            } else {
-                //  ethAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        } else {
-            const tokenAmount = parseFloat(_tokenAmount);
-            if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
-                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
-                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
-            } else {
-                // tokenAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        }
-    }
-
-    parsePrice(price) {
-        return Math.round(price * 100) / 10000;
     }
 
     onMenuClick(e) {
@@ -84,6 +42,31 @@ class AddWithdrawForm extends React.Component {
                 orderDirection: WITHDRAW
             });
         }
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        const { amount, address } = this.state;
+        let fetchUrl = "";
+        let data = { "sending-amount": amount };
+        console.log(amount, address, this.state);
+
+        if (this.state.orderDirection === ADDFUND) {
+            fetchUrl = FUNDS[0].buyUrl;
+            data["to-address"] = address;
+        } else {
+            fetchUrl = FUNDS[0].sellUrl;
+            data["from-address"] = address;
+        }
+
+        window.fetch(fetchUrl, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: data
+        });
     }
 
     render() {
@@ -136,35 +119,39 @@ class AddWithdrawForm extends React.Component {
         const buttonToGo = (
             <Pgrid.Row>
                 <Button
-                    content={`Send`}
-                    href={linkToGo}
-                    target="_blank"
+                    // href={linkToGo}
+                    // target="_blank"
+                    type="submit"
                     labelposition="center"
                     size="large"
                     className="primary"
                     data-testid={orderDirection === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
                     style={{ width: "100%", padding: "15px 20px" }}
-                />
+                    // loading={submitting}
+                >
+                    {/*{submitting ? "Submitting..." : submitText || "Send"}*/}
+                    Send
+                </Button>
             </Pgrid.Row>
         );
 
         return (
             <Pblock style={{ margin: 0 }}>
                 {header}
-                <Form error={error ? "true" : "false"}>
+                <Form error={error ? "true" : "false"} onSubmit={this.onSubmit}>
                     <label data-testid={`${orderDirection}AmountLabel`}>
                         {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
 
                     <Field
-                        name={orderDirection}
+                        name={"amount"}
                         component={Form.Field}
                         as={Form.Input}
                         type="number"
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        onChange={this.onPriceChange}
+                        onChange={this.onInputChange}
                         validate={tokenAmountValidations}
                         normalize={Normalizations.fiveDecimals}
                         data-testid={`${orderDirection}AmountInput`}
@@ -178,7 +165,7 @@ class AddWithdrawForm extends React.Component {
                     </label>
 
                     <Field
-                        name={orderDirection}
+                        name={"address"}
                         component={Form.Field}
                         as={Form.Input}
                         type="text"
@@ -187,8 +174,8 @@ class AddWithdrawForm extends React.Component {
                         parse={Parsers.trim}
                         placeholder="0x0..."
                         data-testid={`${orderDirection}AddressInput`}
+                        onChange={this.onInputChange}
                         // style={{ borderRadius: theme.borderRadius.left }}
-                        autoFocus={isDesktop}
                     />
 
                     <label>Available exchange partner:</label>
