@@ -252,10 +252,11 @@ class SimpleBuyForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
+                            max="1000000"
                             disabled={submitting}
                             onChange={this.onTokenAmountChange}
                             validate={tokenAmountValidations}
-                            normalize={Normalizations.twoDecimals}
+                            normalize={Normalizations.maxSimpleExchangeValue}
                             data-testid="simpleTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"

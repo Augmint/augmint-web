@@ -84,10 +84,14 @@ export function getSimpleBuyCalc(token, isBuy, rate) {
 
     let result;
 
-    if (isBuy) {
-        result = orderBook.estimateMarketBuy(Tokens.of(token), Tokens.of(rate));
-    } else {
-        result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
+    try {
+        if (isBuy) {
+            result = orderBook.estimateMarketBuy(Tokens.of(token), Tokens.of(rate));
+        } else {
+            result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
+        }
+    } catch (error) {
+        return;
     }
     return result;
 }
