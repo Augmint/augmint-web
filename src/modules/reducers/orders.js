@@ -1,11 +1,6 @@
 import store from "modules/store";
-import {
-    fetchOrders,
-    placeOrderTx,
-    matchMultipleOrdersTx,
-    cancelOrderTx,
-    getSimpleBuyCalc
-} from "modules/ethereum/exchangeTransactions";
+import { fetchOrders, placeOrderTx, matchMultipleOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
+import { Tokens } from "@augmint/js";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
@@ -220,7 +215,10 @@ export function getSimpleBuy(token, isBuy, rate) {
         });
 
         try {
-            const result = await getSimpleBuyCalc(token, isBuy, rate);
+            const orderBook = store.getState().orders.orders;
+            const t = Tokens.of(token);
+            const r = Tokens.of(rate);
+            const result = isBuy ? orderBook.estimateMarketBuy(t, r) : orderBook.estimateMarketSell(t, r);
             return dispatch({
                 type: SIMPLE_BUY_SUCCESS,
                 result: result

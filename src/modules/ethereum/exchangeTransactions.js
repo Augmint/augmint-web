@@ -78,20 +78,3 @@ export async function cancelOrderTx(exchange, buy, orderId) {
 
     return { txName, transactionHash };
 }
-
-export function getSimpleBuyCalc(token, isBuy, rate) {
-    const orderBook = store.getState().orders.orders;
-
-    let result;
-
-    try {
-        if (isBuy) {
-            result = orderBook.estimateMarketBuy(Tokens.of(token), Tokens.of(rate));
-        } else {
-            result = orderBook.estimateMarketSell(Tokens.of(token), Tokens.of(rate));
-        }
-    } catch (error) {
-        return;
-    }
-    return result;
-}

@@ -15,7 +15,6 @@ import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } 
 import { Pblock } from "components/PageLayout";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import { Tokens } from "@augmint/js";
-import { getSimpleBuyCalc } from "modules/ethereum/exchangeTransactions";
 
 import theme from "styles/theme";
 import styled from "styled-components";
