@@ -201,6 +201,8 @@ class SimpleBuyForm extends React.Component {
             buttonDisable = liquidityError || Validations.validateFilledEthers();
         }
 
+        const isDesktop = window.innerWidth > 768;
+
         const header = (
             <div>
                 {mainHeader}
@@ -272,6 +274,7 @@ class SimpleBuyForm extends React.Component {
                             data-testid="simpleTokenAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="A-EUR"
+                            autoFocus={isDesktop}
                         />
 
                         {simpleResult && (
