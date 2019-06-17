@@ -159,9 +159,10 @@ const OrderList = props => {
     );
 };
 
-export class MyOrders extends React.Component {
+class MyOrders extends React.Component {
     render() {
-        const { header, orders, userAccountAddress, testid, rates } = this.props;
+        const { header, userAccountAddress, testid, rates } = this.props;
+        const orders = this.props.orders !== null ? this.props.orders.orders : [];
 
         // FIXME should be Tokens already
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
@@ -176,6 +177,7 @@ export class MyOrders extends React.Component {
         if (orderList.length === 0) {
             return null;
         }
+
         return (
             <Pblock header={header} data-testid={testid}>
                 <OrderList
@@ -189,6 +191,11 @@ export class MyOrders extends React.Component {
         );
     }
 }
+
+const myOrdersProps = state => ({
+    orders: state.orders
+});
+MyOrders = connect(myOrdersProps)(MyOrders);
 
 class OrderBook extends React.Component {
     constructor(props) {
@@ -282,4 +289,5 @@ const mapStateToProps = state => ({
     orders: state.orders
 });
 OrderBook = connect(mapStateToProps)(OrderBook);
-export { OrderBook };
+
+export { OrderBook, MyOrders };
