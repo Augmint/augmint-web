@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
 import { DECIMALS, ETH_DECIMALS } from "utils/constants";
+import { Wei, Ratio, Tokens } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -128,11 +129,11 @@ class PlaceOrderForm extends React.Component {
         const orderDirection = this.state.orderDirection;
 
         try {
-            price = this.parsePrice(values.price);
+            price = Ratio.of(values.price);
             if (orderDirection === TOKEN_BUY) {
-                amount = parseFloat(values.ethAmount);
+                amount = Wei.of(values.ethAmount);
             } else {
-                amount = parseFloat(values.tokenAmount);
+                amount = Tokens.of(values.tokenAmount);
             }
         } catch (error) {
             throw new SubmissionError({
@@ -143,7 +144,7 @@ class PlaceOrderForm extends React.Component {
             });
         }
 
-        const res = await store.dispatch(placeOrder(orderDirection, amount, price));
+        const res = await store.dispatch(placeOrder(orderDirection, Wei.of(amount), price));
 
         if (res.type !== PLACE_ORDER_SUCCESS) {
             throw new SubmissionError({
