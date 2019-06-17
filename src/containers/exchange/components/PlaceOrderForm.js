@@ -4,7 +4,6 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 
-import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -59,16 +58,6 @@ class PlaceOrderForm extends React.Component {
             this.onTokenAmountChange(null, this.props.token);
         }
     }
-
-    // toggleOrderBook(e) {
-    //     const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
-    //     this.props.toggleOrderBook(direction);
-    // }
-
-    // onOrderDirectionChange(e) {
-    //     this.setState({ orderDirection: +e.target.attributes["data-index"].value });
-    //     this.toggleOrderBook(+e.target.attributes["data-index"].value);
-    // }
 
     onTokenAmountChange(e, savedValue) {
         const value = e ? e.target.value : savedValue;
@@ -164,7 +153,6 @@ class PlaceOrderForm extends React.Component {
 
     render() {
         const {
-            header: mainHeader,
             rates,
             exchange,
             error,

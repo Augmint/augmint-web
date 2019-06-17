@@ -2,8 +2,6 @@ import store from "modules/store";
 import { cost } from "./gas";
 import { processTx, sendAndProcessTx } from "modules/ethereum/ethHelper";
 
-import { Tokens } from "@augmint/js";
-
 export async function fetchOrders() {
     const exchange = await store.getState().web3Connect.augmint.exchange;
 
@@ -56,9 +54,7 @@ export async function matchMultipleOrdersTx() {
     const tx = exchange.matchMultipleOrders(matchingOrders);
     const transactionHash = await sendAndProcessTx(tx, txName);
 
-    console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${
-        matchingOrders.gasEstimate
-    }
+    console.debug(`matchMultipleOrdersTx matchCount: ${matchingOrders.sellIds.length} gasEstimate: ${matchingOrders.gasEstimate}
         Buy: ${matchingOrders.buyIds}
         Sell: ${matchingOrders.sellIds}`);
 
