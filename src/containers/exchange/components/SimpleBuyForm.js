@@ -285,7 +285,7 @@ class SimpleBuyForm extends React.Component {
                                             <br />
                                         </strong>
                                     )}
-                                    You can {orderDirection === TOKEN_BUY ? "buy " : "sell "} <br />
+                                    {orderDirection === TOKEN_BUY ? "Buy " : "Sell "}
                                     <strong className="err">
                                         <AEUR data-testid="aeurAmount" amount={simpleResult.filledTokens} />
                                     </strong>
