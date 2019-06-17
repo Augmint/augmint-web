@@ -20,7 +20,6 @@ import { getSimpleBuyCalc } from "modules/ethereum/exchangeTransactions";
 
 import theme from "styles/theme";
 import styled from "styled-components";
-import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 
 const Styledlabel = styled.label`
     display: inline-block;

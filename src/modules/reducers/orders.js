@@ -155,6 +155,7 @@ export function placeOrder(orderType, amount, price) {
                 result: result
             });
         } catch (error) {
+            console.log(error);
             return dispatch({
                 type: PLACE_ORDER_ERROR,
                 error: error
