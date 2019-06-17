@@ -87,9 +87,7 @@ class SimpleBuyForm extends React.Component {
         //TODO:  access results without store
         const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, bn_ethFiatRate));
 
-        console.log("sr", simpleResult);
-
-        if (simpleResult.type === SIMPLE_BUY_SUCCESS) {
+        if (simpleResult && simpleResult.type === SIMPLE_BUY_SUCCESS) {
             const averagePrice =
                 simpleResult.result.averagePrice &&
                 this.props.rates.info.ethFiatRate / simpleResult.result.averagePrice.toNumber();
@@ -265,7 +263,7 @@ class SimpleBuyForm extends React.Component {
                             autoFocus={isDesktop}
                         />
 
-                        {simpleResult && (
+                        {simpleResult && averagePrice && (
                             <div>
                                 <StyledBox className={liquidityError ? "validation-error" : ""}>
                                     {liquidityError && (
