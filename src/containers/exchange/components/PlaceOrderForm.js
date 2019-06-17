@@ -144,7 +144,7 @@ class PlaceOrderForm extends React.Component {
             });
         }
 
-        const res = await store.dispatch(placeOrder(orderDirection, Wei.of(amount), price));
+        const res = await store.dispatch(placeOrder(orderDirection, amount, price));
 
         if (res.type !== PLACE_ORDER_SUCCESS) {
             throw new SubmissionError({
