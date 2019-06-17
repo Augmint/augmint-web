@@ -86,17 +86,12 @@ class SimpleBuyForm extends React.Component {
 
         const simpleResult = getSimpleBuyCalc(value, isBuy, bn_ethFiatRate);
 
-        console.log(simpleResult);
-
         if (simpleResult) {
             const averagePrice = simpleResult.averagePrice
                 ? this.props.rates.info.ethFiatRate / simpleResult.averagePrice.toNumber()
                 : this.props.rates.info.ethFiatRate;
-            let liquidityError = null;
 
-            if (this.state.orderDirection === TOKEN_BUY) {
-                liquidityError = this.maxExchangeValue(value, simpleResult.filledTokens);
-            }
+            const liquidityError = this.maxExchangeValue(value, simpleResult.filledTokens);
 
             this.setState({
                 simpleResult,
@@ -108,8 +103,8 @@ class SimpleBuyForm extends React.Component {
 
     maxExchangeValue(value, filledTokens) {
         const errorMsg = "Insufficient liquidity available.";
-        const bn_value = Tokens.of(value);
-        return filledTokens.gte(bn_value) ? null : errorMsg;
+        const token_value = Tokens.of(value);
+        return filledTokens.gte(token_value) ? null : errorMsg;
     }
 
     async handleSubmit() {
@@ -185,7 +180,7 @@ class SimpleBuyForm extends React.Component {
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
-            buttonDisable = null;
+            buttonDisable = liquidityError;
         }
         if (orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
             tokenAmountValidations.push(Validations.validateFilledEthers);
@@ -270,10 +265,8 @@ class SimpleBuyForm extends React.Component {
 
                         {simpleResult && (
                             <div>
-                                <StyledBox
-                                    className={liquidityError && orderDirection === TOKEN_BUY ? "validation-error" : ""}
-                                >
-                                    {liquidityError && orderDirection === TOKEN_BUY && (
+                                <StyledBox className={liquidityError ? "validation-error" : ""}>
+                                    {liquidityError && (
                                         <strong className="err">
                                             {liquidityError}
                                             <br />
