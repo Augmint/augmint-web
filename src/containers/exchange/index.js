@@ -113,7 +113,6 @@ class ExchangeHome extends React.Component {
                         <div className="exchange-orders">
                             <MyOrders
                                 testid="myOrdersBlock"
-                                orders={orders}
                                 rates={rates}
                                 userAccountAddress={userAccount.address}
                                 header="My open orders"
@@ -131,7 +130,9 @@ class ExchangeHome extends React.Component {
                         </div>
                     </div>
 
-                    {orders && <MatchMultipleOrdersButton orderBook={orders} label="Match orders" />}
+                    {orders && orders.orders && (
+                        <MatchMultipleOrdersButton orderBook={orders.orders} label="Match orders" />
+                    )}
 
                     <TradeHistory
                         trades={trades}
@@ -148,7 +149,7 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect,
     userAccount: state.userBalances.account,
     exchange: state.exchange,
-    orders: state.orders.orders,
+    orders: state.orders,
     rates: state.rates,
     trades: state.trades
 });

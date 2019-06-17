@@ -130,7 +130,6 @@ describe("Augmint exchange", function() {
         let tradeHistoryStartLength;
 
         cy.get("[data-testid=exchangeMenuLink]").click();
-        cy.get("[data-testid=show-advanced-form]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
         cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
@@ -234,7 +233,6 @@ describe("Augmint exchange", function() {
         const price = 101;
 
         cy.get("[data-testid=exchangeMenuLink]").click();
-        cy.get("[data-testid=show-advanced-form]").click();
         cy.get("[data-testid=sellMenuLink]").click();
 
         cy.get("[data-testid=priceInput]")
