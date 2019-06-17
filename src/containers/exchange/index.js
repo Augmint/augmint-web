@@ -12,8 +12,10 @@ import { EthereumState } from "containers/app/EthereumState";
 import MatchMultipleOrdersButton from "./components/MatchMultipleOrdersButton";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "../account/components/NoTokenAlert";
-import { TOKEN_SELL } from "modules/reducers/orders";
 import store from "modules/store";
+
+import { Menu } from "components/augmint-ui/menu";
+import { TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 
 const SIMPLE = "simple";
 const ADVANCED = "advanced";
@@ -23,9 +25,11 @@ class ExchangeHome extends React.Component {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
         this.toggleSimpleBuy = this.toggleSimpleBuy.bind(this);
+        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.state = {
             orderBookDirection: TOKEN_SELL,
-            simpleBuy: true
+            simpleBuy: true,
+            orderDirection: 1
         };
     }
 
@@ -59,6 +63,11 @@ class ExchangeHome extends React.Component {
         });
     }
 
+    onOrderDirectionChange(e) {
+        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
+        this.toggleOrderBook(+e.target.attributes["data-index"].value);
+    }
+
     render() {
         const { userAccount, orders, exchange, rates, trades } = this.props;
 
@@ -76,6 +85,33 @@ class ExchangeHome extends React.Component {
             </a>
         );
 
+        const header = (
+            <div>
+                <Menu className="filled">
+                    <Menu.Item
+                        active={this.state.orderDirection === TOKEN_BUY}
+                        data-index={TOKEN_BUY}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="buyMenuLink"
+                        className={"buySell filled dark"}
+                        tabIndex="0"
+                    >
+                        Buy A-EUR
+                    </Menu.Item>
+                    <Menu.Item
+                        active={this.state.orderDirection === TOKEN_SELL}
+                        data-index={TOKEN_SELL}
+                        onClick={this.onOrderDirectionChange}
+                        data-testid="sellMenuLink"
+                        className={"buySell filled dark"}
+                        tabIndex="0"
+                    >
+                        Sell A-EUR
+                    </Menu.Item>
+                </Menu>
+            </div>
+        );
+
         return (
             <EthereumState>
                 <Psegment>
@@ -87,12 +123,13 @@ class ExchangeHome extends React.Component {
 
                     <div className="exchange-container">
                         <div>
-                            {/*<div className="toggle">{header}</div>*/}
+                            <div className="toggle">{header}</div>
                             {this.state.simpleBuy && (
                                 <SimpleBuyForm
                                     exchange={exchange}
                                     toggleOrderBook={this.toggleOrderBook}
                                     rates={rates}
+                                    orderDirection={this.state.orderDirection}
                                     token={this.state.tokenValue}
                                 >
                                     {switchForms}
@@ -100,6 +137,7 @@ class ExchangeHome extends React.Component {
                             )}
                             {!this.state.simpleBuy && (
                                 <PlaceOrderForm
+                                    orderDirection={this.state.orderDirection}
                                     exchange={exchange}
                                     rates={rates}
                                     toggleOrderBook={this.toggleOrderBook}

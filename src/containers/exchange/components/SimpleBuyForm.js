@@ -63,7 +63,7 @@ class SimpleBuyForm extends React.Component {
             averagePrice: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
+        // this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
@@ -184,32 +184,6 @@ class SimpleBuyForm extends React.Component {
         }
 
         const isDesktop = window.innerWidth > 768;
-
-        const header = (
-            <div>
-                {mainHeader}
-                <Menu className="filled">
-                    <Menu.Item
-                        active={orderDirection === TOKEN_BUY}
-                        data-index={TOKEN_BUY}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="simpleBuyMenuLink"
-                        className={"buySell filled dark"}
-                    >
-                        Buy A-EUR
-                    </Menu.Item>
-                    <Menu.Item
-                        active={orderDirection === TOKEN_SELL}
-                        data-index={TOKEN_SELL}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="simpleSellMenuLink"
-                        className={"buySell filled dark"}
-                    >
-                        Sell A-EUR
-                    </Menu.Item>
-                </Menu>
-            </div>
-        );
 
         return (
             <Pblock
