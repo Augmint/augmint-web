@@ -7,6 +7,8 @@ export const FUNDS = [
         sellUrl: "https://www.mrcoin.eu/en/exchange/Augmint-Euro-Token/AEUR/to/Euro/EUR",
         addFeatures: ["1:1 exchange rate", "0.25% exchange fee", "Additional banking fees may apply"],
         withdrawFeatures: ["1:1 exchange rate", "0.25% exchange fee", "Additional banking fees or taxes may apply"],
-        image: mrCoinImg
+        image: mrCoinImg,
+        aeurLimit: 15,
+        eurLimit: 25
     }
 ];

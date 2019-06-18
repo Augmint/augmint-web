@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { Field, reduxForm } from "redux-form";
-import { Form, Validations, Normalizations, Parsers } from "components/BaseComponents";
+import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
 
@@ -18,7 +18,12 @@ export const ADDFUND = "addFunds";
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { orderDirection: ADDFUND, amount: "" };
+        this.state = {
+            orderDirection: ADDFUND,
+            amount: "",
+            minEUR: Validations.minMrCoinAmount(FUNDS[0].eurLimit, "EUR"),
+            minAEUR: Validations.minMrCoinAmount(FUNDS[0].aeurLimit, "A-EUR")
+        };
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
     }
@@ -45,12 +50,12 @@ class AddWithdrawForm extends React.Component {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
 
-        const eurAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minMrCoinEurAmount];
+        const eurAmountValidations = [Validations.required, Validations.tokenAmount, this.state.minEUR];
 
         const aeurAmountValidations = [
             Validations.required,
             Validations.tokenAmount,
-            Validations.minMrCoinAEurAmount,
+            this.state.minAEUR,
             Validations.userTokenBalance
         ];
 
@@ -134,12 +139,7 @@ class AddWithdrawForm extends React.Component {
                         as={Form.Input}
                         type="hidden"
                         inputmode="text"
-                        size="small"
-                        parse={Parsers.trim}
-                        placeholder="0x0..."
                         data-testid={`${orderDirection}AddressInput`}
-                        onChange={this.onInputChange}
-                        style={{ borderRight: `1px solid ${theme.colors.opacGrey}` }}
                     />
 
                     <label>Available exchange partner:</label>

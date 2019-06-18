@@ -79,12 +79,8 @@ export const Validations = {
         }
     },
 
-    minMrCoinEurAmount: value => {
-        return value < 25 ? `Amount must be at least: 25 EUR` : undefined;
-    },
-
-    minMrCoinAEurAmount: value => {
-        return value < 15 ? `Amount must be at least: 15 A-EUR` : undefined;
+    minMrCoinAmount: (minvalue, currency) => value => {
+        return value < minvalue ? `Amount must be at least: ${minvalue} ${currency}` : undefined;
     },
 
     ethUserBalance: value => {
