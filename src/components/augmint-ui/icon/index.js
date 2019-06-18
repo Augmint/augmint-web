@@ -49,9 +49,6 @@ export default function Icon(props) {
         case "chevron-down":
             className += " fas fa-chevron-circle-down";
             break;
-        case "chevron-down-simple":
-            className += " fas fa-chevron-down";
-            break;
         case "trash":
             className += " fas fa-trash-alt";
             break;
