@@ -13,6 +13,8 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
+import productTermConverter from "utils/productTermConverter";
+
 export const Validations = {
     required: value => {
         return value || (value && value.toString().trim() === "") ? undefined : "Required";
@@ -156,9 +158,10 @@ export const Normalizations = {
 
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
 export function Select(props) {
-    function addOptionsToSelect(options, testId) {
+    function addOptionsToSelect(options, testId, isLoan) {
         let result = [];
         options.forEach(product => {
+            const termText = productTermConverter(product.termInSecs);
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
@@ -166,14 +169,14 @@ export function Select(props) {
                     value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
-                    {product.termText ? "Repay in " + product.termText : "Lock for " + product.durationText}
+                    {isLoan ? "Repay in " + termText : "Lock for " + product.durationText}
                 </option>
             );
         });
         return result;
     }
 
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid, props.isLoan)}</StyledSelect>;
 }
 
 export const formField = ({
@@ -187,6 +190,7 @@ export const formField = ({
     placeholder,
     info,
     isSelect,
+    isLoan,
     selectOptions,
     selectTestId,
     meta: { touched, error, warning },
@@ -213,7 +217,14 @@ export const formField = ({
                 {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
 
                 {isSelect && (
-                    <Select {...input} {...props} value={input.value} testId={selectTestId} options={selectOptions} />
+                    <Select
+                        {...input}
+                        {...props}
+                        isLoan={isLoan}
+                        value={input.value}
+                        testId={selectTestId}
+                        options={selectOptions}
+                    />
                 )}
             </StyledContainer>
             {info && (

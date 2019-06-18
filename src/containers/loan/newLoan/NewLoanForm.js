@@ -331,6 +331,7 @@ class NewLoanForm extends React.Component {
                                 data-testid="loan-product-selector"
                                 className="field-big"
                                 isSelect="true"
+                                isLoan={true}
                                 selectOptions={this.activeProducts}
                                 selectTestId="loan-product"
                                 id={"selectedLoanProduct-" + this.state.productId}
