@@ -144,6 +144,13 @@ export const Normalizations = {
 
     eightDecimals: (value, previousValue) => {
         return normalizeDecimals(8, value);
+    },
+    maxSimpleExchangeValue: (value, previousValue) => {
+        if (value > 1000000) {
+            return normalizeDecimals(2, 1000000);
+        } else {
+            return normalizeDecimals(2, value);
+        }
     }
 };
 

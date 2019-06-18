@@ -13,6 +13,7 @@ describe("Augmint exchange", function() {
         let tradeHistoryStartLength;
 
         cy.get("[data-testid=exchangeMenuLink]").click();
+        cy.get("[data-testid=show-advanced-form]").click();
 
         cy.get("[data-testid=trade-history]").as("tradeHistoryTbody");
         cy.get("@tradeHistoryTbody")
@@ -121,7 +122,7 @@ describe("Augmint exchange", function() {
             });
     });
 
-    it("Should place and cancel sell order on exchange and also check the trade history", function() {
+    it("Should place and cancel sell order on exchange and also check the trade history - advanced", function() {
         const tokenAmount = 100.81;
         const ethAmount = 0.1;
         const price = 99;
