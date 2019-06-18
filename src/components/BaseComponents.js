@@ -13,8 +13,6 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
-import { Wei } from "@augmint/js";
-
 export const Validations = {
     required: value => {
         return value || (value && value.toString().trim() === "") ? undefined : "Required";

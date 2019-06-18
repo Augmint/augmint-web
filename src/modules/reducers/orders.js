@@ -1,6 +1,5 @@
 import store from "modules/store";
 import { fetchOrders, placeOrderTx, matchMultipleOrdersTx, cancelOrderTx } from "modules/ethereum/exchangeTransactions";
-import { Tokens } from "@augmint/js";
 
 export const TOKEN_BUY = 0;
 export const TOKEN_SELL = 1;
