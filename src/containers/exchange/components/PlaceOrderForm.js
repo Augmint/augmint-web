@@ -30,11 +30,9 @@ class PlaceOrderForm extends React.Component {
         super(props);
         this.state = { result: null, orderDirection: TOKEN_BUY, lastChangedAmountField: "" };
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
-        // this.toggleOrderBook = this.toggleOrderBook.bind(this);
     }
 
     componentDidUpdate(prevProps) {
