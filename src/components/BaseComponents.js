@@ -80,7 +80,7 @@ export const Validations = {
     },
 
     minMrCoinTokenAmount: value => {
-        return value < 3 ? `Amount must be at least: 3 A-EUR` : undefined;
+        return value < 25 ? `Amount must be at least: 25 A-EUR` : undefined;
     },
 
     ethUserBalance: value => {
