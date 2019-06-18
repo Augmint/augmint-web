@@ -4,9 +4,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import store from "modules/store";
-// import { connect } from "react-redux";
 
-import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Field, reduxForm, SubmissionError, change } from "redux-form";
@@ -63,23 +61,13 @@ class SimpleBuyForm extends React.Component {
             averagePrice: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
-    }
-
-    onOrderDirectionChange(e) {
-        const orderDirection = +e.target.attributes["data-index"].value;
-
-        this.setState({
-            orderDirection
-        });
-        this.onTokenAmountChange(null, this.state.inputVal);
     }
 
     async onTokenAmountChange(e, savedValue) {
         const value = e ? e.target.value : savedValue;
         const { ethFiatRate } = this.props.rates.info;
-        const isBuy = this.state.orderDirection === TOKEN_BUY;
+        const isBuy = this.props.orderDirection === TOKEN_BUY;
 
         //TODO:  access results without store
         const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, ethFiatRate));
@@ -106,7 +94,8 @@ class SimpleBuyForm extends React.Component {
 
     async handleSubmit() {
         let amount, price;
-        const { orderDirection, simpleResult } = this.state;
+        const { simpleResult } = this.state;
+        const { orderDirection } = this.props;
 
         if (simpleResult) {
             try {
@@ -144,7 +133,7 @@ class SimpleBuyForm extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         const form = store.getState().form.PlaceOrderForm;
         const thisToken = form && form.values ? form.values.tokenAmount : undefined;
         if (this.props.token && this.props.token !== thisToken && !this.state.tokenUpdated) {
@@ -155,11 +144,14 @@ class SimpleBuyForm extends React.Component {
             });
             this.onTokenAmountChange(null, null, this.props.token);
         }
+
+        if (prevProps.orderDirection !== this.props.orderDirection) {
+            this.onTokenAmountChange(null, this.state.inputVal);
+        }
     }
 
     render() {
         const {
-            header: mainHeader,
             error,
             exchange,
             rates,
@@ -169,9 +161,10 @@ class SimpleBuyForm extends React.Component {
             submitSucceeded,
             clearSubmitErrors,
             reset,
-            invalid
+            invalid,
+            orderDirection
         } = this.props;
-        const { orderDirection, result, simpleResult, liquidityError, averagePrice } = this.state;
+        const { result, simpleResult, liquidityError, averagePrice } = this.state;
         let buttonDisable = null;
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
@@ -186,38 +179,11 @@ class SimpleBuyForm extends React.Component {
 
         const isDesktop = window.innerWidth > 768;
 
-        const header = (
-            <div>
-                {mainHeader}
-                <Menu className="filled">
-                    <Menu.Item
-                        active={orderDirection === TOKEN_BUY}
-                        data-index={TOKEN_BUY}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="simpleBuyMenuLink"
-                        className={"buySell filled dark"}
-                    >
-                        Buy A-EUR
-                    </Menu.Item>
-                    <Menu.Item
-                        active={orderDirection === TOKEN_SELL}
-                        data-index={TOKEN_SELL}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="simpleSellMenuLink"
-                        className={"buySell filled dark"}
-                    >
-                        Sell A-EUR
-                    </Menu.Item>
-                </Menu>
-            </div>
-        );
-
         return (
             <Pblock
                 className="simplebuy-form"
                 loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
             >
-                {header}
                 <ConnectionStatus contract={exchange} />
 
                 {submitSucceeded && (
@@ -309,13 +275,6 @@ class SimpleBuyForm extends React.Component {
         );
     }
 }
-
-// const mapStateToProps = state => ({
-//   userBalance: state.userBalances.account.bn_ethBalance,
-//   simpleResult: state.orders.result
-// })
-//
-// SimpleBuyForm = connect(mapStateToProps)(SimpleBuyForm)
 
 SimpleBuyForm = reduxForm({
     form: "SimpleBuyForm",

@@ -4,7 +4,6 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 
-import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
@@ -31,11 +30,11 @@ class PlaceOrderForm extends React.Component {
         super(props);
         this.state = { result: null, orderDirection: TOKEN_BUY, lastChangedAmountField: "" };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
+        // this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
-        this.toggleOrderBook = this.toggleOrderBook.bind(this);
+        // this.toggleOrderBook = this.toggleOrderBook.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -58,16 +57,6 @@ class PlaceOrderForm extends React.Component {
             });
             this.onTokenAmountChange(null, this.props.token);
         }
-    }
-
-    toggleOrderBook(e) {
-        const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
-        this.props.toggleOrderBook(direction);
-    }
-
-    onOrderDirectionChange(e) {
-        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
-        this.toggleOrderBook(+e.target.attributes["data-index"].value);
     }
 
     onTokenAmountChange(e, savedValue) {
@@ -126,7 +115,7 @@ class PlaceOrderForm extends React.Component {
 
     async handleSubmit(values) {
         let amount, price;
-        const orderDirection = this.state.orderDirection;
+        const orderDirection = this.props.orderDirection;
 
         try {
             price = Ratio.of(values.price);
@@ -164,7 +153,6 @@ class PlaceOrderForm extends React.Component {
 
     render() {
         const {
-            header: mainHeader,
             rates,
             exchange,
             error,
@@ -175,7 +163,7 @@ class PlaceOrderForm extends React.Component {
             clearSubmitErrors,
             reset
         } = this.props;
-        const { orderDirection } = this.state;
+        const { orderDirection } = this.props;
 
         const ethAmountValidations = [Validations.required, Validations.ethAmount];
         if (orderDirection === TOKEN_BUY) {
@@ -189,40 +177,11 @@ class PlaceOrderForm extends React.Component {
 
         const isDesktop = window.innerWidth > 768;
 
-        const header = (
-            <div>
-                {mainHeader}
-                <Menu className="filled">
-                    <Menu.Item
-                        active={orderDirection === TOKEN_BUY}
-                        data-index={TOKEN_BUY}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="buyMenuLink"
-                        className={"buySell filled dark"}
-                        tabIndex="0"
-                    >
-                        Buy A-EUR
-                    </Menu.Item>
-                    <Menu.Item
-                        active={orderDirection === TOKEN_SELL}
-                        data-index={TOKEN_SELL}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="sellMenuLink"
-                        className={"buySell filled dark"}
-                        tabIndex="0"
-                    >
-                        Sell A-EUR
-                    </Menu.Item>
-                </Menu>
-            </div>
-        );
-
         return (
             <Pblock
                 className="placeOrder-form"
                 loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
             >
-                {header}
                 <ConnectionStatus contract={this.props.exchange} />
 
                 {submitSucceeded && (
