@@ -79,7 +79,7 @@ export const Validations = {
         }
     },
 
-    minMrCoinAmount: (minvalue, currency) => value => {
+    minAddWithdrawAmount: (minvalue, currency) => value => {
         return value < minvalue ? `Amount must be at least: ${minvalue} ${currency}` : undefined;
     },
 

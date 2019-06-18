@@ -15,14 +15,15 @@ import { FUNDS } from "./FundList/funds.js";
 export const WITHDRAW = "withdraw";
 export const ADDFUND = "addFunds";
 
+const VALIDATE_MIN_EUR = Validations.minAddWithdrawAmount(FUNDS[0].eurLimit, "EUR");
+const VALIDATE_MIN_AEUR = Validations.minAddWithdrawAmount(FUNDS[0].aeurLimit, "A-EUR");
+
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             orderDirection: ADDFUND,
-            amount: "",
-            minEUR: Validations.minMrCoinAmount(FUNDS[0].eurLimit, "EUR"),
-            minAEUR: Validations.minMrCoinAmount(FUNDS[0].aeurLimit, "A-EUR")
+            amount: ""
         };
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onAmountChange = this.onAmountChange.bind(this);
@@ -50,12 +51,12 @@ class AddWithdrawForm extends React.Component {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
 
-        const eurAmountValidations = [Validations.required, Validations.tokenAmount, this.state.minEUR];
+        const eurAmountValidations = [Validations.required, Validations.tokenAmount, VALIDATE_MIN_EUR];
 
         const aeurAmountValidations = [
             Validations.required,
             Validations.tokenAmount,
-            this.state.minAEUR,
+            VALIDATE_MIN_AEUR,
             Validations.userTokenBalance
         ];
 
