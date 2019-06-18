@@ -45,12 +45,12 @@ class AddWithdrawForm extends React.Component {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
 
-        const aeurAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minMrCoinTokenAmount];
+        const eurAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minMrCoinEurAmount];
 
-        const eurAmountValidations = [
+        const aeurAmountValidations = [
             Validations.required,
             Validations.tokenAmount,
-            Validations.minMrCoinEurAmount,
+            Validations.minMrCoinAEurAmount,
             Validations.userTokenBalance
         ];
 
@@ -120,7 +120,7 @@ class AddWithdrawForm extends React.Component {
                         step="any"
                         min="0"
                         onChange={this.onInputChange}
-                        validate={orderDirection === ADDFUND ? aeurAmountValidations : eurAmountValidations}
+                        validate={orderDirection === ADDFUND ? eurAmountValidations : aeurAmountValidations}
                         normalize={Normalizations.fiveDecimals}
                         data-testid={`${orderDirection}AmountInput`}
                         style={{ borderRadius: theme.borderRadius.left }}
