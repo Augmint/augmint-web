@@ -132,7 +132,7 @@ class SimpleBuyForm extends React.Component {
                 tokenUpdated: true,
                 inputVal: this.props.token
             });
-            this.onTokenAmountChange(null, null, this.props.token);
+            this.onTokenAmountChange(null, this.props.token);
         }
 
         if (prevProps.orderDirection !== this.props.orderDirection) {
@@ -155,7 +155,6 @@ class SimpleBuyForm extends React.Component {
             orderDirection
         } = this.props;
         const { result, marketMatch, liquidityError, averageRate } = this.state;
-        let buttonDisable = null;
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
