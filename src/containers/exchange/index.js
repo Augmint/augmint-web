@@ -29,7 +29,7 @@ class ExchangeHome extends React.Component {
         this.state = {
             orderBookDirection: TOKEN_SELL,
             simpleBuy: true,
-            orderDirection: 1
+            orderDirection: 0
         };
     }
 
@@ -64,8 +64,9 @@ class ExchangeHome extends React.Component {
     }
 
     onOrderDirectionChange(e) {
-        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
-        this.toggleOrderBook(+e.target.attributes["data-index"].value);
+        const direction = +e.target.attributes["data-index"].value;
+        this.setState({ orderDirection: direction });
+        this.toggleOrderBook(direction === 0 ? 1 : 0);
     }
 
     render() {
