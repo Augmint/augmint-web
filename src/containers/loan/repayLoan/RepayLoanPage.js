@@ -3,7 +3,6 @@
 */
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import { Pblock, Pgrid } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
@@ -46,7 +45,6 @@ class RepayLoanPage extends React.Component {
 
     componentDidMount() {
         this.setLoan(); // needed when landing from Link within App
-        connectWeb3();
     }
 
     setLoan() {
@@ -129,7 +127,7 @@ class RepayLoanPage extends React.Component {
                                     <p>This loan is not due soon but you can repay early without any extra fee.</p>
                                 )}
                                 {this.state.loan.isRepayable &&
-                                    (loan.loanAmount < userAccount.tokenBalance ? (
+                                    (loan.repaymentAmount <= userAccount.tokenBalance ? (
                                         <Button
                                             data-testid="confirmRepayButton"
                                             size="big"

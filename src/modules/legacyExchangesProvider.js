@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshLegacyExchanges } from "modules/reducers/legacyExchanges";
 
 let isWatchSetup = false;

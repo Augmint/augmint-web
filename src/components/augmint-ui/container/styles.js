@@ -12,7 +12,6 @@ const BaseDiv = `
       font-size: 1.15rem;
       font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
       line-height: 1.5;
-      max-width: 700px;
     }
 `;
 

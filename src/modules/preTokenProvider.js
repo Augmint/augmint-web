@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshPreToken, fetchTransfersForAccount } from "modules/reducers/preToken";
 import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 

@@ -21,6 +21,7 @@ export const StyledTopNav = styled.nav`
     z-index: 103;
     top: 0;
     position: fixed;
+    border-bottom: 2px solid ${theme.colors.bgGrey};
 
     &.hide {
         display: none;
@@ -43,7 +44,7 @@ export const TitleWrapper = styled.div`
         font-weight: 700;
         color: ${theme.colors.primary};
 
-        ${media.tablet`
+        ${media.desktop`
             font-size: 1.1rem;
         `};
     }
@@ -75,6 +76,8 @@ export const StyledAccountInfo = styled(AccountInfo)`
             display: none;
         `};
     }
+
+    margin: 0;
 `;
 
 export const StyledTopNavLi = styled.li`
@@ -82,13 +85,6 @@ export const StyledTopNavLi = styled.li`
     justify-content: center;
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
-
-    &.navLinkRight:hover ${StyledAccount} {
-        display: block;
-        position: absolute;
-        right: 64px;
-        top: ${TOP_NAV_HEIGHT};
-    }
 `;
 
 export const StyledTopNavLink = styled(Link)`
@@ -97,7 +93,7 @@ export const StyledTopNavLink = styled(Link)`
     align-items: center;
     height: ${TOP_NAV_HEIGHT};
     min-width: ${TOP_NAV_HEIGHT};
-    padding: 0 2px;
+    padding: 0;
     color: ${theme.colors.primary};
     transition: all ${theme.transitions.fast};
     transition-property: background-color, color;
@@ -114,8 +110,7 @@ export const StyledTopNavLink = styled(Link)`
     }
 
     &.accountDetails {
-        background-color: ${theme.colors.secondary};
-        flex-direction: row;
+        padding-left: 4px;
     }
 
     &:hover {
@@ -127,7 +122,6 @@ export const StyledTopNavLink = styled(Link)`
         &.open {
             background-color: ${theme.colors.secondaryDark};
             color: ${theme.colors.primary};
-            border-right: solid 1px #fff;
         }
     }
 `;
@@ -137,11 +131,16 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
     flex-direction: column;
     font-size: 11px;
 
-    &:not(.accountDetails) {
-        &:not(.notifications) {
-            ${media.tablet`
+    &.accountDetails {
+        ${media.tabletMin`
+            cursor: default;
+            pointer-events: none;
+            min-width: 50px;
+        `}
+        span {
+            ${media.tabletMin`
                 display: none;
-            `};
+            `}
         }
     }
 
@@ -149,13 +148,11 @@ export const StyledTopNavLinkRight = styled(StyledTopNavLink)`
         ${media.mobile`
             display: none;
         `};
-    }
 
-    &.notifications {
-        border-left: solid 1px #fff;
-        border-right: solid 1px #cccccc;
-        :hover {
-            border-right: solid 1px #fff;
+        &:not(.notifications) {
+            ${media.tablet`
+                display: none;
+            `};
         }
     }
 `;
@@ -165,41 +162,30 @@ export const StyledPrice = styled.span`
     flex-direction: column;
     align-items: flex-end;
     color: ${theme.colors.primary};
-    margin: 0 11px;
+    margin: 2px 8px 0;
     font-size: ${remCalc(14)};
 
-    &.accountInfoContainer {
-        ${media.desktop`
-            display: none;
-        `};
+    :first-of-type {
+        margin-left: 0;
     }
-
-    &:not(.accountInfoContainer) {
-        ${media.tablet`
-            display: none;
-        `};
-    }
-
-    > .price {
-        ${media.tablet`
-            display: none;
-        `};
-    }
-
-    > .last-update {
-        font-size: 0.75rem;
-    }
-`;
-
-export const StyledSeparator = styled.div`
-    background-color: ${theme.colors.primaryLight};
-    padding: 0px;
-    height: 24px;
-    width: 2px;
 
     ${media.desktop`
-        display: none;
-    `};
+        font-size: ${remCalc(12)};
+    `}
+
+    ${media.tabletMin`
+        margin-top: 3px;
+    `}
+
+    &.accountInfoContainer {
+        ${media.tablet`
+            display: none;
+        `};
+    }
+
+    span .symbol {
+        font-weight: 400;
+    }
 `;
 
 export const CloseIcon = styled.img`
@@ -207,6 +193,7 @@ export const CloseIcon = styled.img`
     visibility: hidden;
     height: 32px;
     width: 32px;
+    cursor: pointer;
 
     &.opened {
         ${media.tablet`
