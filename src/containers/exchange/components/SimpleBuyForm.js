@@ -9,14 +9,13 @@ import Button from "components/augmint-ui/button";
 import { ConnectionStatus, EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
 import { Field, reduxForm, SubmissionError, change } from "redux-form";
 import { Form, Normalizations, Validations } from "components/BaseComponents";
-import { getSimpleBuy, PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
+import { PLACE_ORDER_SUCCESS, placeOrder, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { Pblock } from "components/PageLayout";
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
-import { Tokens } from "@augmint/js";
+import { Tokens, Wei } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
-import { SIMPLE_BUY_SUCCESS } from "../../../modules/reducers/orders";
 
 const Styledlabel = styled.label`
     display: inline-block;
@@ -54,13 +53,14 @@ class SimpleBuyForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            simpleResult: null,
+            marketMatch: null,
             result: null,
             orderDirection: TOKEN_BUY,
             liquidityError: null,
-            averagePrice: null
+            averageRate: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.validateFilledEthers = this.validateFilledEthers.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
     }
 
@@ -69,17 +69,18 @@ class SimpleBuyForm extends React.Component {
         const { ethFiatRate } = this.props.rates.info;
         const isBuy = this.props.orderDirection === TOKEN_BUY;
 
-        //TODO:  access results without store
-        const simpleResult = await store.dispatch(getSimpleBuy(value, isBuy, ethFiatRate));
+        const orderBook = store.getState().orders.orders;
+        const t = Tokens.of(value);
+        const r = Tokens.of(ethFiatRate);
+        const marketMatch = isBuy ? orderBook.estimateMarketBuy(t, r) : orderBook.estimateMarketSell(t, r);
 
-        if (simpleResult && simpleResult.type === SIMPLE_BUY_SUCCESS) {
-            const averagePrice =
-                simpleResult.result.averagePrice && ethFiatRate / simpleResult.result.averagePrice.toNumber();
-            const liquidityError = this.maxExchangeValue(value, simpleResult.result.filledTokens);
+        if (marketMatch) {
+            const averageRate = marketMatch.averagePrice && ethFiatRate / marketMatch.averagePrice.toNumber();
+            const liquidityError = this.maxExchangeValue(value, marketMatch.filledTokens);
 
             this.setState({
-                simpleResult: simpleResult.result,
-                averagePrice,
+                marketMatch,
+                averageRate,
                 liquidityError,
                 inputVal: value
             });
@@ -92,43 +93,32 @@ class SimpleBuyForm extends React.Component {
         return filledTokens.gte(token_value) ? null : errorMsg;
     }
 
+    validateFilledEthers() {
+        const { marketMatch } = this.state;
+        if (marketMatch && marketMatch.filledEthers) {
+            const ethValue = marketMatch.filledEthers;
+            const userBalance = store.getState().userBalances.account.bn_ethBalance;
+            const weiBalance = Wei.parse(userBalance);
+            return weiBalance.gte(ethValue) ? null : "Your ETH balance is less than the amount";
+        }
+    }
+
     async handleSubmit() {
-        let amount, price;
-        const { simpleResult } = this.state;
+        const { marketMatch } = this.state;
         const { orderDirection } = this.props;
 
-        if (simpleResult) {
-            try {
-                price = simpleResult.limitPrice;
-                if (orderDirection === TOKEN_BUY) {
-                    amount = simpleResult.filledEthers;
-                } else {
-                    amount = simpleResult.filledTokens;
-                }
-            } catch (error) {
-                throw new SubmissionError({
-                    _error: {
-                        title: "Invalid amount",
-                        details: error
-                    }
-                });
-            }
+        const price = marketMatch.limitPrice;
+        const amount = orderDirection === TOKEN_BUY ? marketMatch.filledEthers : marketMatch.filledTokens;
 
-            const res = await store.dispatch(placeOrder(orderDirection, amount, price));
+        const res = await store.dispatch(placeOrder(orderDirection, amount, price));
 
-            if (res.type !== PLACE_ORDER_SUCCESS) {
-                throw new SubmissionError({
-                    _error: res.error
-                });
-            } else {
-                this.setState({
-                    result: res.result
-                });
-                return;
-            }
-        } else {
+        if (res.type !== PLACE_ORDER_SUCCESS) {
             throw new SubmissionError({
-                _error: "no amount"
+                _error: res.error
+            });
+        } else {
+            this.setState({
+                result: res.result
             });
         }
     }
@@ -164,17 +154,15 @@ class SimpleBuyForm extends React.Component {
             invalid,
             orderDirection
         } = this.props;
-        const { result, simpleResult, liquidityError, averagePrice } = this.state;
+        const { result, marketMatch, liquidityError, averageRate } = this.state;
         let buttonDisable = null;
 
         const tokenAmountValidations = [Validations.required, Validations.tokenAmount, Validations.minOrderTokenAmount];
         if (orderDirection === TOKEN_SELL) {
             tokenAmountValidations.push(Validations.userTokenBalance);
-            buttonDisable = liquidityError;
         }
-        if (orderDirection === TOKEN_BUY && simpleResult && simpleResult.filledEthers) {
-            tokenAmountValidations.push(Validations.validateFilledEthers);
-            buttonDisable = liquidityError || Validations.validateFilledEthers();
+        if (orderDirection === TOKEN_BUY && marketMatch && marketMatch.filledEthers) {
+            tokenAmountValidations.push(this.validateFilledEthers);
         }
 
         const isDesktop = window.innerWidth > 768;
@@ -227,7 +215,7 @@ class SimpleBuyForm extends React.Component {
                             autoFocus={isDesktop}
                         />
 
-                        {simpleResult && averagePrice && (
+                        {marketMatch && averageRate && (
                             <div>
                                 <StyledBox className={liquidityError ? "validation-error" : ""}>
                                     {liquidityError && (
@@ -238,17 +226,17 @@ class SimpleBuyForm extends React.Component {
                                     )}
                                     {orderDirection === TOKEN_BUY ? "Buy " : "Sell "}
                                     <strong className="err">
-                                        <AEUR data-testid="aeurAmount" amount={simpleResult.filledTokens} />
+                                        <AEUR data-testid="aeurAmount" amount={marketMatch.filledTokens} />
                                     </strong>
                                     {"  for  "}
                                     <strong>
-                                        <ETH data-testid="ethAmount" amount={simpleResult.filledEthers} />
+                                        <ETH data-testid="ethAmount" amount={marketMatch.filledEthers} />
                                     </strong>
                                     <br />
                                     at an estimated exchange rate of <br />
                                     <strong>
                                         <span>1 ETH = </span>
-                                        <AEUR amount={averagePrice} />
+                                        <AEUR amount={averageRate} />
                                     </strong>
                                     .
                                 </StyledBox>
@@ -258,7 +246,7 @@ class SimpleBuyForm extends React.Component {
                         <Button
                             size="big"
                             loading={submitting}
-                            disabled={pristine || invalid || buttonDisable}
+                            disabled={pristine || invalid || liquidityError}
                             className="fullwidth"
                             data-testid="simpleSubmitButton"
                             type="submit"

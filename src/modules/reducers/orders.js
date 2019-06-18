@@ -21,10 +21,6 @@ export const CANCEL_ORDER_REQUESTED = "orders/CANCEL_ORDER_REQUESTED";
 export const CANCEL_ORDER_ERROR = "orders/CANCEL_ORDER_ERROR";
 export const CANCEL_ORDER_SUCCESS = "orders/CANCEL_ORDER_SUCCESS";
 
-export const SIMPLE_BUY_REQUESTED = "orders/SIMPLE_BUY_REQUESTED";
-export const SIMPLE_BUY_SUCCESS = "orders/SIMPLE_BUY_SUCCESS";
-export const SIMPLE_BUY_ERROR = "orders/SIMPLE_BUY_ERROR";
-
 const initialState = {
     refreshError: null,
     error: null,
@@ -59,7 +55,6 @@ export default (state = initialState, action) => {
         case PLACE_ORDER_ERROR:
         case MATCH_MULTIPLE_ORDERS_ERROR:
         case CANCEL_ORDER_ERROR:
-        case SIMPLE_BUY_ERROR:
             return {
                 ...state,
                 error: action.error
@@ -68,7 +63,6 @@ export default (state = initialState, action) => {
         case PLACE_ORDER_SUCCESS:
         case MATCH_MULTIPLE_ORDERS_SUCCESS:
         case CANCEL_ORDER_SUCCESS:
-        case SIMPLE_BUY_SUCCESS:
             return {
                 ...state,
                 result: action.result,
@@ -98,15 +92,6 @@ export default (state = initialState, action) => {
                 error: null,
                 buyOrder: action.buyOrder,
                 sellOrder: action.sellOrder,
-                isLoading: true
-            };
-
-        case SIMPLE_BUY_REQUESTED:
-            return {
-                ...state,
-                tokenAmount: 0,
-                buy: true,
-                rate: 0,
                 isLoading: true
             };
 
@@ -199,33 +184,6 @@ export function cancelOrder(order) {
         } catch (error) {
             return dispatch({
                 type: CANCEL_ORDER_ERROR,
-                error: error
-            });
-        }
-    };
-}
-
-export function getSimpleBuy(token, isBuy, rate) {
-    return async dispatch => {
-        dispatch({
-            type: SIMPLE_BUY_REQUESTED,
-            token,
-            isBuy,
-            rate
-        });
-
-        try {
-            const orderBook = store.getState().orders.orders;
-            const t = Tokens.of(token);
-            const r = Tokens.of(rate);
-            const result = isBuy ? orderBook.estimateMarketBuy(t, r) : orderBook.estimateMarketSell(t, r);
-            return dispatch({
-                type: SIMPLE_BUY_SUCCESS,
-                result: result
-            });
-        } catch (error) {
-            return dispatch({
-                type: SIMPLE_BUY_ERROR,
                 error: error
             });
         }
