@@ -18,14 +18,14 @@ export const ADDFUND = "addFunds";
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { orderDirection: ADDFUND, amount: "", address: "" };
+        this.state = { orderDirection: ADDFUND, amount: "" };
         this.onMenuClick = this.onMenuClick.bind(this);
-        this.onInputChange = this.onInputChange.bind(this);
+        this.onAmountChange = this.onAmountChange.bind(this);
     }
 
-    onInputChange(e) {
+    onAmountChange(e) {
         this.setState({
-            [e.target.name]: e.target.value
+            amount: e.target.value
         });
     }
 
@@ -119,7 +119,7 @@ class AddWithdrawForm extends React.Component {
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        onChange={this.onInputChange}
+                        onChange={this.onAmountChange}
                         validate={orderDirection === ADDFUND ? eurAmountValidations : aeurAmountValidations}
                         normalize={Normalizations.fiveDecimals}
                         data-testid={`${orderDirection}AmountInput`}
