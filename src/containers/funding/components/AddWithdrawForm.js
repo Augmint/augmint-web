@@ -93,7 +93,7 @@ class AddWithdrawForm extends React.Component {
                     data-testid={orderDirection === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
                     style={{ width: "100%", padding: "15px 20px" }}
                 >
-                    Send
+                    Go to Mr.Coin
                 </Button>
             </Pgrid.Row>
         );
@@ -128,15 +128,11 @@ class AddWithdrawForm extends React.Component {
                         autoFocus={isDesktop}
                     />
 
-                    <label data-testid={`${orderDirection}AddressLabel`}>
-                        {orderDirection === ADDFUND ? "To address" : "From address"}
-                    </label>
-
                     <Field
                         name={orderDirection === ADDFUND ? "to-address" : "from-address"}
                         component={Form.Field}
                         as={Form.Input}
-                        type="text"
+                        type="hidden"
                         inputmode="text"
                         size="small"
                         parse={Parsers.trim}
@@ -166,6 +162,7 @@ AddWithdrawForm = reduxForm({
     form: "AddWithdrawForm",
     touchOnChange: true,
     touchOnBlur: false,
+    enableReinitialize: true,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
@@ -179,7 +176,8 @@ AddWithdrawForm = reduxForm({
 })(AddWithdrawForm);
 
 function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: 100 } };
+    const address = ownProps.user.address;
+    return { initialValues: { "to-address": address, "from-address": address } };
 }
 
 AddWithdrawForm = connect(mapStateToProps)(AddWithdrawForm);
