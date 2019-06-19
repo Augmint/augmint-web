@@ -108,7 +108,8 @@ export const Validations = {
 };
 
 export const Parsers = {
-    trim: value => value && value.trim()
+    trim: value => value && value.trim(),
+    toWei: value => (isNaN(value) || value.trim() === "" ? null : Wei.of(value))
 };
 function normalizeDecimals(decimalPlaces, value) {
     if (value === null || value === "" || value === undefined) {
@@ -154,16 +155,14 @@ export const Normalizations = {
         } else {
             return normalizeDecimals(2, value);
         }
-    },
-    toWei: value => {
-        return isNaN(value) || value.trim() === "" ? null : Wei.of(value);
     }
 };
 
 const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: 0, maximumFractionDigits: ETH_DECIMALS });
 
 export const Formatters = {
-    fromWei: value => (value === null ? "" : value.isZero() ? 0 : fmt.format(value / Math.pow(10, 18)))
+    fromWei: value =>
+        value === null || value === undefined ? "" : value.isZero() ? 0 : fmt.format(value / Math.pow(10, 18))
 };
 
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
