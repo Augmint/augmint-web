@@ -108,7 +108,8 @@ export const Validations = {
 };
 
 export const Parsers = {
-    trim: value => value && value.trim()
+    trim: value => value && value.trim(),
+    toWei: value => (isNaN(value) || value.trim() === "" ? null : Wei.of(value))
 };
 function normalizeDecimals(decimalPlaces, value) {
     if (value === null || value === "" || value === undefined) {
@@ -176,13 +177,25 @@ const formatInput = (value, decimals) => {
 
 export const Formatters = {
     fromWei: value => {
-        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, 18), ETH_DECIMALS);
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 18), ETH_DECIMALS);
     },
     fromRatio: value => {
-        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, 4), 2);
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 4), 2);
     },
     fromToken: value => {
-        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, DECIMALS), DECIMALS);
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, DECIMALS), DECIMALS);
     }
 };
 
