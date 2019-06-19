@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshExchange } from "modules/reducers/exchange";
 import { fetchTrades, processNewTrade } from "modules/reducers/trades";
 import { refreshOrders } from "modules/reducers/orders";

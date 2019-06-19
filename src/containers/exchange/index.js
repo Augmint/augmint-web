@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import exchangeProvider from "modules/exchangeProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -24,7 +23,6 @@ class ExchangeHome extends React.Component {
     }
 
     componentDidMount() {
-        connectWeb3();
         augmintTokenProvider();
         exchangeProvider();
         ratesProvider();

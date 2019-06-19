@@ -49,7 +49,7 @@ export const SideNav = styled.nav`
     width: 210px;
     height: 100%;
     z-index: 104;
-    padding: 20px 0;
+    padding: 0 0;
 
     &.closed {
         ${breakpoint`
@@ -70,12 +70,17 @@ export const SideNav = styled.nav`
         visibility: visible;
 
         ${breakpoint`
-            margin-top: 40px;
+            margin-top: 60px;
             margin-bottom: 0;
             &.hidden{
                 display: none;
                 visibility: hidden;
             }
+        `};
+
+        ${media.mobile`
+            margin-top: 50px;
+            width: 50px;
         `};
     }
 `;
@@ -91,7 +96,9 @@ export const SideNavUl = styled.ul`
     ${breakpoint`
       display: block;
       visibility: visible;
-      margin-top: 50px;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 10px;
       &.hidden {
         display: none;
         visibility: hidden;
@@ -120,7 +127,7 @@ export const SideNavLi = styled.li`
 export const SideNavLink = styled(NavLink)`
     display: flex;
     align-items: center;
-    padding: 5px 10px;
+    padding: 4px 10px;
     width: 100%;
     color: ${theme.colors.white};
     opacity: 0.9;
