@@ -261,8 +261,7 @@ class PlaceOrderForm extends React.Component {
                             disabled={submitting || !exchange.isLoaded}
                             onChange={this.onEthAmountChange}
                             validate={ethAmountValidations}
-                            normalize={Normalizations.toWei}
-                            format={Formatters.fromWei}
+                            normalize={Normalizations.fiveDecimals}
                             data-testid="ethAmountInput"
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="ETH"
@@ -312,7 +311,14 @@ PlaceOrderForm = reduxForm({
 })(PlaceOrderForm);
 
 function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: 100, ethAmount: Wei.of(0) } };
+    return {
+        initialValues: {
+            price: 100
+            // price: Ratio.of(1),
+            // ethAmount: Wei.of(0),
+            // tokenAmount: Tokens.of(0)
+        }
+    };
 }
 
 PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);

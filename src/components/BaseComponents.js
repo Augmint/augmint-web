@@ -13,8 +13,8 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
-import { ETH_DECIMALS } from "utils/constants";
-import { Wei } from "@augmint/js";
+import { ETH_DECIMALS, DECIMALS } from "utils/constants";
+import { Wei, Tokens, Ratio } from "@augmint/js";
 
 export const Validations = {
     required: value => {
@@ -157,13 +157,33 @@ export const Normalizations = {
     },
     toWei: value => {
         return isNaN(value) || value.trim() === "" ? null : Wei.of(value);
+    },
+    toToken: value => {
+        return isNaN(value) || value.trim() === "" ? null : Tokens.of(value);
+    },
+    toRatio: value => {
+        return isNaN(value) || value.trim() === "" ? null : Ratio.of(value / 100);
     }
 };
 
-const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: 0, maximumFractionDigits: ETH_DECIMALS });
+const formatInput = (value, decimals) => {
+    // TODO
+    // const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+    // return fmt.format(value, decimals)
+
+    return value; // use formatters later
+};
 
 export const Formatters = {
-    fromWei: value => (value === null ? "" : value.isZero() ? 0 : fmt.format(value / Math.pow(10, 18)))
+    fromWei: value => {
+        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, 18), ETH_DECIMALS);
+    },
+    fromRatio: value => {
+        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, 4), 2);
+    },
+    fromToken: value => {
+        return value === null ? "" : value.isZero() ? 0 : formatInput(value / Math.pow(10, DECIMALS), DECIMALS);
+    }
 };
 
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
