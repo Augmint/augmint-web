@@ -63,7 +63,6 @@ export class WatchAssetButton extends React.Component {
             augmint,
             user,
             className,
-            icon,
             breakToLines,
             style,
             circleicon,
@@ -72,6 +71,7 @@ export class WatchAssetButton extends React.Component {
         let showButton = false;
 
         let _className = className + " watchAssetBtn";
+        const icon = "wallet";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
             this.cookies = web3.watchAsset;

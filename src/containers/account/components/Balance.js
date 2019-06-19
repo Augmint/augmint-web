@@ -71,22 +71,33 @@ export default class Balance extends React.Component {
                         <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
-                <Container style={{ paddingTop: "10px", minWidth: "250px", width: "60%", margin: "auto" }}>
+                <Container style={{ paddingTop: "10px", minWidth: "250px", width: "100%", margin: "auto" }}>
                     <Button
                         to="/exchange"
-                        icon="copy"
+                        icon="reserves"
+                        circleicon="true"
+                        className="naked icon top"
+                        labelposition="top"
+                        // style={{ width: "25%" }}
+                        style={{ flex: "1", margin: "0 5px 0 0", padding: "0 0 10px" }}
+                    >
+                        Exchange fiat
+                    </Button>
+                    <Button
+                        to="/exchange"
+                        icon="exchange"
                         circleicon="true"
                         className="naked icon top"
                         labelposition="top"
                         // style={{ width: "25%" }}
                         style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
                     >
-                        Buy/Sell
+                        Exchange crypto
                     </Button>
                     <Button
                         to="/transfer"
                         className="naked icon top"
-                        icon="copy"
+                        icon="send"
                         circleicon="true"
                         data-testid="transferButton"
                         labelposition="top"
@@ -95,30 +106,18 @@ export default class Balance extends React.Component {
                     >
                         Send
                     </Button>
-                    {/* <Button
-                        to="/transfer"
-                        className="naked icon top"
-                        icon="copy"
-                        circleicon="true"
-                        data-testid="transferButton"
-                        labelposition="top"
-                        // style={{ width: "25%" }}
-                        style={{ flex: "1", margin: "0 5px", padding: "0 0 10px"}}
-                    >
-                        Send
-                    </Button> */}
                     <WatchAssetButton
                         className="naked icon top"
-                        icon="copy"
+                        icon="wallet"
                         circleicon="true"
                         labelposition="top"
                         // style={{ marginTop: "0", width: "30%" }}
-                        style={{ flex: "1", margin: "0 5px", alignSelf: "auto", padding: "0 0 10px" }}
+                        style={{ flex: "1", margin: "0 0 0 5px", alignSelf: "auto", padding: "0 0 10px" }}
                         breakToLines
                     />
                 </Container>
                 <Pgrid.Row style={{ textAlign: "center" }}>
-                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0 0" }}>
                         {loans && loans.isLoaded && loans.loans.length > 0 ? (
                             <>
                                 <Label>My total loans</Label>
@@ -135,14 +134,14 @@ export default class Balance extends React.Component {
                             </Button>
                         )}
                     </Pgrid.Column>
-                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0", display: "flex" }}>
+                    <Pgrid.Column size={1 / 2} style={{ padding: "1rem 0 0", display: "flex" }}>
                         {locks && locks.locks.length > 0 ? (
                             <>
                                 <Label>My total locks</Label>
                                 <TokenAmount>
                                     <AEUR amount={locksAmount} />
                                 </TokenAmount>
-                                <Button className="naked" to="/lock">
+                                <Button className="naked" to="/lock" style={{ fontSize: ".875rem" }}>
                                     View all
                                 </Button>
                             </>
@@ -170,7 +169,6 @@ export default class Balance extends React.Component {
                         title=""
                         className={"breakToLines always noClick font"}
                         showCopyLink
-                        style={{ maxWidth: "190px" }}
                     />
                 </div>
                 {children}

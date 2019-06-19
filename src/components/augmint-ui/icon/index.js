@@ -82,6 +82,9 @@ export default function Icon(props) {
         case "balance-scale":
             className += " fa fa-balance-scale";
             break;
+        case "wallet":
+            className += " fas fa-wallet";
+            break;
         default:
             break;
     }

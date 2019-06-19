@@ -46,30 +46,13 @@ class AccountHome extends React.Component {
 
                     <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
-                        <Pgrid.Row style={{ justifyContent: "center", maxWidth: "500px", margin: "1rem auto" }}>
+                        <Pgrid.Row style={{ justifyContent: "center", maxWidth: "500px", margin: "auto" }}>
                             <Pgrid.Column>
                                 <Balance
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
                                     locks={this.props.locks}
-                                >
-                                    {/* <div>
-                                        <WatchAssetButton className={"noMargin"} />
-                                        <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
-                                            <Button to="/exchange" className="primary myAcc">
-                                                Buy / Sell A-EUR
-                                            </Button>
-                                            <Button
-                                                to="/transfer"
-                                                className="primary myAcc"
-                                                data-testid="transferButton"
-                                                style={{ marginBottom: 20 }}
-                                            >
-                                                Send A-EUR
-                                            </Button>
-                                        </div>
-                                    </div> */}
-                                </Balance>
+                                ></Balance>
                             </Pgrid.Column>
                         </Pgrid.Row>
 

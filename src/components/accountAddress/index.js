@@ -44,7 +44,7 @@ export default class AccountAddress extends React.Component {
     }
 
     render() {
-        const { address, showCopyIcon, title, shortAddress, className, showCopyLink } = this.props;
+        const { address, showCopyIcon, title, shortAddress, className, showCopyLink, circleicon } = this.props;
         const _title = title !== undefined ? title : "Account: ";
         const _className = this.state.showHint ? className + " showHint" : className;
         const ShortAddress = () => _title + (shortAddress === true ? shortAccountAddresConverter(address) : address);
@@ -52,7 +52,9 @@ export default class AccountAddress extends React.Component {
         const ContainerWBtn = () => {
             return (
                 <StyledContainer className={className + " container"}>
-                    <ShortAddress />
+                    <span style={{ maxWidth: "210px" }}>
+                        <ShortAddress />
+                    </span>
                     {showCopyIcon && (
                         <Icon
                             name="copy"
@@ -66,9 +68,10 @@ export default class AccountAddress extends React.Component {
                         data-testid="loansToCollectButton"
                         onClick={e => this.showHint(true)}
                         icon="copy"
-                        labelposition="left"
-                        style={{ marginBottom: "20px" }}
-                        className="grey icon top"
+                        // circleicon="true"
+                        // labelposition="left"
+                        // style={{ marginBottom: "20px" }}
+                        className="naked icon top"
                     />
                     <StyledHintBtn className={_className} id="StyledHinBtn">
                         <Icon name="check" style={{ marginRight: "5px", color: "green" }} />
