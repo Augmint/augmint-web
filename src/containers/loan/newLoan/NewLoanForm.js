@@ -7,6 +7,7 @@ TODO: input formatting: decimals, thousand separators
 import React from "react";
 import BigNumber from "bignumber.js";
 import moment from "moment";
+import store from "modules/store";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
@@ -17,6 +18,7 @@ import { connect } from "react-redux";
 
 import theme from "styles/theme";
 import { ONE_ETH_IN_WEI, PPM_DIV, ETHEUR, ETH_DECIMALS, DECIMALS_DIV } from "utils/constants";
+import { Tokens } from "@augmint/js";
 
 const StyledBox = styled.div`
     border-radius: 3px;
@@ -133,55 +135,55 @@ class NewLoanForm extends React.Component {
         this.setState({ isLoading: false, product: product, isProductFound: isProductFound });
     }
 
-    onLoanTokenAmountChange(e) {
-        const amount = e ? e.target.value : this.state.loanTokenAmount;
-        const { error, loanTokenAmount, repaymentAmount, ethAmount } = this.calculateFromToken(amount);
-
-        if (error) {
-            this.props.change("ethAmount", "");
-            this.setState({ repaymentAmount: "" });
-        } else {
-            this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
-            this.setState({
-                ethAmount: ethAmount,
-                loanTokenAmount: loanTokenAmount,
-                repaymentAmount: repaymentAmount,
-                amountChanged: "A-EURO"
-            });
-        }
-    }
-
-    calculateFromToken(amount) {
-        let val;
-        let err;
-        try {
-            val = new BigNumber(amount).mul(DECIMALS_DIV);
-        } catch (error) {
-            return { error: error };
-        }
-
-        const repaymentAmount = val
-            .div(this.state.product.bn_discountRate)
-            .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_UP);
-
-        const weiAmount = repaymentAmount
-            .div(DECIMALS_DIV)
-            .div(this.props.rates.info.bn_ethFiatRate.toNumber())
-            .mul(ONE_ETH_IN_WEI)
-            .div(this.state.product.bn_collateralRatio)
-            .mul(PPM_DIV)
-            .round(0, BigNumber.ROUND_DOWN);
-
-        const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
-
-        return {
-            error: err,
-            repaymentAmount: repaymentAmount / DECIMALS_DIV,
-            loanTokenAmount: amount,
-            ethAmount: ethAmount
-        };
-    }
+    // onLoanTokenAmountChange(e) {
+    //     const amount = e ? e.target.value : this.state.loanTokenAmount;
+    //     const { error, loanTokenAmount, repaymentAmount, ethAmount } = this.calculateFromToken(amount);
+    //
+    //     if (error) {
+    //         this.props.change("ethAmount", "");
+    //         this.setState({ repaymentAmount: "" });
+    //     } else {
+    //         this.props.change("ethAmount", ethAmount.toFixed(ETH_DECIMALS));
+    //         this.setState({
+    //             ethAmount: ethAmount,
+    //             loanTokenAmount: loanTokenAmount,
+    //             repaymentAmount: repaymentAmount,
+    //             amountChanged: "A-EURO"
+    //         });
+    //     }
+    // }
+    //
+    // calculateFromToken(amount) {
+    //     let val;
+    //     let err;
+    //     try {
+    //         val = new BigNumber(amount).mul(DECIMALS_DIV);
+    //     } catch (error) {
+    //         return { error: error };
+    //     }
+    //
+    //     const repaymentAmount = val
+    //         .div(this.state.product.bn_discountRate)
+    //         .mul(PPM_DIV)
+    //         .round(0, BigNumber.ROUND_UP);
+    //
+    //     const weiAmount = repaymentAmount
+    //         .div(DECIMALS_DIV)
+    //         .div(this.props.rates.info.bn_ethFiatRate.toNumber())
+    //         .mul(ONE_ETH_IN_WEI)
+    //         .div(this.state.product.bn_collateralRatio)
+    //         .mul(PPM_DIV)
+    //         .round(0, BigNumber.ROUND_DOWN);
+    //
+    //     const ethAmount = weiAmount.div(ONE_ETH_IN_WEI).round(ETH_DECIMALS, BigNumber.ROUND_UP);
+    //
+    //     return {
+    //         error: err,
+    //         repaymentAmount: repaymentAmount / DECIMALS_DIV,
+    //         loanTokenAmount: amount,
+    //         ethAmount: ethAmount
+    //     };
+    // }
 
     calculateFromEth(amount) {
         let val;
@@ -232,13 +234,53 @@ class NewLoanForm extends React.Component {
         }
     }
 
+    async onLoanTokenAmountChange(e) {
+        const amount = e ? e.target.value : this.state.loanTokenAmount;
+        let { loanTokenAmount, repaymentAmount, ethAmount } = await this.calculateFromToken(amount);
+        ethAmount = (ethAmount.amount / ONE_ETH_IN_WEI).toFixed(15);
+        this.props.change("ethAmount", ethAmount);
+        this.setState({
+            ethAmount: ethAmount,
+            loanTokenAmount: loanTokenAmount,
+            repaymentAmount: repaymentAmount,
+            amountChanged: "A-EURO"
+        });
+    }
+
+    async calculateFromToken(amount) {
+        const loanManager = await store.getState().web3Connect.augmint.loanManager;
+        const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
+        const activeProducts = await loanManager.getActiveProducts();
+        const current = activeProducts.find(loanProduct => loanProduct.id === this.state.product.id);
+        const { repaymentAmount, collateralAmount } = current.calculateLoanFromDisbursedAmount(
+            Tokens.of(amount),
+            ethFiatRate
+        );
+
+        return {
+            repaymentAmount: repaymentAmount,
+            loanTokenAmount: amount,
+            ethAmount: collateralAmount
+        };
+    }
+
     ethValidationError() {
         let balance = this.props.userBalances;
+        console.log(this.state.ethAmount, "ethamount state");
+
         if (!balance.isLoading && this.state.ethAmount) {
-            let ethBalance = balance.account.ethBalance.toFixed(15);
-            return this.state.ethAmount.gt(ethBalance);
+            let ethBalance = balance.account.ethBalance;
+            return this.state.ethAmount > ethBalance;
         }
     }
+    //
+    // ethValidationError() {
+    //     let balance = this.props.userBalances;
+    //     if (!balance.isLoading && this.state.ethAmount) {
+    //         let ethBalance = balance.account.ethBalance.toFixed(15);
+    //         return this.state.ethAmount.gt(ethBalance);
+    //     }
+    // }
 
     onSelectedLoanChange(e) {
         let product = this.products[e.target.value];
