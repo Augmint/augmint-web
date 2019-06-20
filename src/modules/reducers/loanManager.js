@@ -3,7 +3,7 @@
 */
 
 import store from "modules/store";
-import { fetchLoansToCollectTx, getProductsTx } from "modules/ethereum/loanTransactions";
+import { fetchLoansToCollectTx } from "modules/ethereum/loanTransactions";
 
 import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
@@ -165,7 +165,8 @@ export function fetchLoanProducts() {
         });
 
         try {
-            const result = await getProductsTx();
+            const loanManager = store.getState().web3Connect.augmint.loanManager;
+            const result = await await loanManager.getProducts();
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_RECEIVED,
                 products: result
