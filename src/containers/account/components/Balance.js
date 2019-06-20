@@ -58,7 +58,7 @@ export default class Balance extends React.Component {
         console.log("loans: ", loans);
 
         return (
-            <Pblock className="balance">
+            <Pblock className="balance" style={{ marginBottom: 0 }}>
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
                     {/* <TokenBalance style={{ textAlign: "justify"}}> */}
@@ -76,9 +76,8 @@ export default class Balance extends React.Component {
                         to="/exchange"
                         icon="reserves"
                         circleicon="true"
-                        className="naked icon top"
+                        className="naked circle icon top"
                         labelposition="top"
-                        // style={{ width: "25%" }}
                         style={{ flex: "1", margin: "0 5px 0 0", padding: "0 0 10px" }}
                     >
                         Exchange fiat
@@ -87,21 +86,19 @@ export default class Balance extends React.Component {
                         to="/exchange"
                         icon="exchange"
                         circleicon="true"
-                        className="naked icon top"
+                        className="naked circle icon top"
                         labelposition="top"
-                        // style={{ width: "25%" }}
                         style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
                     >
                         Exchange crypto
                     </Button>
                     <Button
                         to="/transfer"
-                        className="naked icon top"
+                        className="naked circle icon top"
                         icon="send"
                         circleicon="true"
                         data-testid="transferButton"
                         labelposition="top"
-                        // style={{ width: "25%" }}
                         style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
                     >
                         Send
@@ -111,7 +108,6 @@ export default class Balance extends React.Component {
                         icon="wallet"
                         circleicon="true"
                         labelposition="top"
-                        // style={{ marginTop: "0", width: "30%" }}
                         style={{ flex: "1", margin: "0 0 0 5px", alignSelf: "auto", padding: "0 0 10px" }}
                         breakToLines
                     />

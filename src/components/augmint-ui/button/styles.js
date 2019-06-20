@@ -269,6 +269,10 @@ export const BaseButton = styledComponent => styledComponent`
     &[icon] {
       color: ${theme.colors.opacLighterGrey};
       position: relative;
+
+      &.circle {
+        color: ${theme.colors.primary};
+      }
     }
 
     &[icon]:hover {
