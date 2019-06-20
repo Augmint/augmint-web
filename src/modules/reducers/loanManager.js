@@ -166,7 +166,7 @@ export function fetchLoanProducts() {
 
         try {
             const loanManager = store.getState().web3Connect.augmint.loanManager;
-            const result = await await loanManager.getProducts();
+            const result = await loanManager.getProducts();
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_RECEIVED,
                 products: result
