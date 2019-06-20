@@ -14,6 +14,8 @@ import {
 } from "components/augmint-ui/baseComponents/styles";
 
 import productTermConverter from "utils/productTermConverter";
+import { ETH_DECIMALS, DECIMALS } from "utils/constants";
+import { Wei, Tokens, Ratio } from "@augmint/js";
 
 export const Validations = {
     required: value => {
@@ -107,7 +109,8 @@ export const Validations = {
 };
 
 export const Parsers = {
-    trim: value => value && value.trim()
+    trim: value => value && value.trim(),
+    toWei: value => (isNaN(value) || value.trim() === "" ? null : Wei.of(value))
 };
 function normalizeDecimals(decimalPlaces, value) {
     if (value === null || value === "" || value === undefined) {
@@ -153,6 +156,47 @@ export const Normalizations = {
         } else {
             return normalizeDecimals(2, value);
         }
+    },
+    toWei: value => {
+        return isNaN(value) || value.trim() === "" ? null : Wei.of(value);
+    },
+    toToken: value => {
+        return isNaN(value) || value.trim() === "" ? null : Tokens.of(value);
+    },
+    toRatio: value => {
+        return isNaN(value) || value.trim() === "" ? null : Ratio.of(value / 100);
+    }
+};
+
+const formatInput = (value, decimals) => {
+    // TODO
+    // const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+    // return fmt.format(value, decimals)
+
+    return value; // use formatters later
+};
+
+export const Formatters = {
+    fromWei: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 18), ETH_DECIMALS);
+    },
+    fromRatio: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 4), 2);
+    },
+    fromToken: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, DECIMALS), DECIMALS);
     }
 };
 
