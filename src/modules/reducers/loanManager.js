@@ -166,7 +166,6 @@ export function fetchLoanProducts() {
 
         try {
             const result = await getProductsTx();
-            console.log(result, "loan products");
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_RECEIVED,
                 products: result

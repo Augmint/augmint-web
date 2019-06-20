@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { media } from "styles/media";
@@ -6,6 +7,8 @@ import Button from "components/augmint-ui/button";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
 import CollectLoanButton from "../collectLoan/CollectLoanButton";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
+// import moment from '../../../modules/ethereum/loanTransactions';
 
 export const CardHead = styled.div`
     display: flex;
@@ -75,7 +78,7 @@ export default function LoanCard(props) {
         <Card className={loan.dueState}>
             <CardHead>
                 <CardTitle>
-                    {loan.loanAmount} A€ loan for {loan.termText}
+                    <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
                 </CardTitle>
                 <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
             </CardHead>
@@ -85,7 +88,7 @@ export default function LoanCard(props) {
                         {loan.isRepayable ? (
                             <div>
                                 <CardStatusInfo>
-                                    <strong>{loan.maturityFromNow}</strong> left to due date
+                                    <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
                                 </CardStatusInfo>
                                 <CardStatusHelp>
                                     {loan.isDue
@@ -103,15 +106,17 @@ export default function LoanCard(props) {
                                 <DataLabel>
                                     <strong>Disbursed</strong>
                                 </DataLabel>
-                                <DataValue>on {loan.disbursementTimeText}</DataValue>
+                                <DataValue>
+                                    on {moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}
+                                </DataValue>
                             </DataRow>
                             <DataRow>
                                 <DataLabel>Amount:</DataLabel>
-                                <DataValue>{loan.loanAmount} A-EUR</DataValue>
+                                <AEUR amount={loan.loanAmount} />
                             </DataRow>
                             <DataRow>
                                 <DataLabel>Collateral:</DataLabel>
-                                <DataValue>{loan.collateralEth} ETH</DataValue>
+                                <ETH amount={loan.collateralAmount} />
                             </DataRow>
                         </DataGroup>
                         <DataGroup>
@@ -119,11 +124,11 @@ export default function LoanCard(props) {
                                 <DataLabel>
                                     <strong>Repayment</strong>
                                 </DataLabel>
-                                <DataValue>on {loan.maturityText}</DataValue>
+                                <DataValue>on {moment.unix(loan.maturity).format("D MMM YYYY HH:mm")}</DataValue>
                             </DataRow>
                             <DataRow>
                                 <DataLabel>Amount:</DataLabel>
-                                <DataValue>{loan.repaymentAmount} A-EUR</DataValue>
+                                <AEUR amount={loan.repaymentAmount} />
                             </DataRow>
                         </DataGroup>
                     </Pgrid.Column>
