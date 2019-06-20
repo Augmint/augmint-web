@@ -156,11 +156,6 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
     return { txName, transactionHash };
 }
 
-export async function getLoansForAccountTx(account) {
-    const loanManager = store.getState().web3Connect.augmint.loanManager;
-    return await loanManager.getLoansForAccount(account);
-}
-
 export async function fetchAllLoansTx() {
     try {
         const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
