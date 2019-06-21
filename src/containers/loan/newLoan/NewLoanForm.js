@@ -64,6 +64,8 @@ class NewLoanForm extends React.Component {
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
 
+        console.log("newform", props.loanManager.products);
+
         this.state = {
             product: this.product,
             minToken: Validations.minTokenAmount(this.product.minDisbursedAmount),

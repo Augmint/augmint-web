@@ -21,6 +21,8 @@ import { RepayHelp } from "./components/RepayHelp";
 import { Tsegment, Tblock } from "components/TextContent";
 import { Link } from "react-router-dom";
 import { MrCoinBuyLink } from "components/ExchangeLinks";
+import { Tokens } from "@augmint/js";
+import { AEUR } from "components/augmint-ui/currencies";
 
 // TODO: push browser history on submit success (check: https://github.com/ReactTraining/react-router/issues/3903 )
 //import { push } from 'react-router-redux'
@@ -69,8 +71,9 @@ class RepayLoanPage extends React.Component {
     }
 
     async handleSubmit(values) {
-        //values.preventDefault();
-        let res = await store.dispatch(repayLoan(this.state.loan.repaymentAmount, this.state.loanId));
+        let res = await store.dispatch(
+            repayLoan(this.state.loan.repaymentAmount, this.state.loan, this.props.userAccount.address)
+        );
         if (res.type !== LOANTRANSACTIONS_REPAY_SUCCESS) {
             throw new SubmissionError({
                 _error: res.error
@@ -127,21 +130,34 @@ class RepayLoanPage extends React.Component {
                                     <p>This loan is not due soon but you can repay early without any extra fee.</p>
                                 )}
                                 {this.state.loan.isRepayable &&
-                                    (loan.repaymentAmount <= userAccount.tokenBalance ? (
-                                        <Button
-                                            data-testid="confirmRepayButton"
-                                            size="big"
-                                            type="submit"
-                                            disabled={
-                                                this.props.submitting ||
-                                                !this.state.isLoanFound ||
-                                                !this.state.loan.isRepayable
-                                            }
-                                        >
-                                            {this.props.submitting
-                                                ? "Submitting..."
-                                                : "Confirm to repay " + this.state.loan.repaymentAmount + " A-EUR"}
-                                        </Button>
+                                    (loan.repaymentAmount.lte(Tokens.of(userAccount.tokenBalance)) ? (
+                                        this.props.submitting ? (
+                                            <Button
+                                                data-testid="confirmRepayButton"
+                                                size="big"
+                                                type="submit"
+                                                disabled={
+                                                    this.props.submitting ||
+                                                    !this.state.isLoanFound ||
+                                                    !this.state.loan.isRepayable
+                                                }
+                                            >
+                                                Submitting...
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                data-testid="confirmRepayButton"
+                                                size="big"
+                                                type="submit"
+                                                disabled={
+                                                    this.props.submitting ||
+                                                    !this.state.isLoanFound ||
+                                                    !this.state.loan.isRepayable
+                                                }
+                                            >
+                                                Confirm to repay: <AEUR amount={this.state.loan.repaymentAmount} />
+                                            </Button>
+                                        )
                                     ) : (
                                         <Tsegment style={{ padding: 0 }}>
                                             <p style={{ textAlign: "left" }}>

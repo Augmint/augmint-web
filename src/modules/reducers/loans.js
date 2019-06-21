@@ -94,8 +94,7 @@ export function fetchLoansForAddress(userAccount) {
         });
 
         try {
-            const loanManager = store.getState().web3Connect.augmint.loanManager;
-            const loans = await loanManager.getLoansForAccount(userAccount);
+            const loans = await store.getState().web3Connect.augmint.getLoansForAccount(userAccount);
 
             return dispatch({
                 type: LOANS_LOANLIST_RECEIVED,

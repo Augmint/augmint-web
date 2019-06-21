@@ -107,21 +107,22 @@ export function newLoan(product, ethAmount, address) {
     };
 }
 
-export function repayLoan(repaymentAmount, loanId) {
+export function repayLoan(repaymentAmount, loan, account) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_REPAY_REQUESTED,
-            request: { loanId, repaymentAmount }
+            request: { loan, repaymentAmount }
         });
 
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const result = await repayLoanTx(loanManagerInstance, repaymentAmount, loanId);
+            const result = await store.getState().web3Connect.augmint.repayLoan(loan, repaymentAmount, account);
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_SUCCESS,
                 result: result
             });
         } catch (error) {
+            console.log(error);
+
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_ERROR,
                 error: error
