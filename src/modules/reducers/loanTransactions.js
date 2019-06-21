@@ -1,6 +1,6 @@
 import store from "modules/store";
 
-import { repayLoanTx, newEthBackedLoanTx, collectLoansTx } from "modules/ethereum/loanTransactions";
+import { newEthBackedLoanTx, collectLoansTx } from "modules/ethereum/loanTransactions";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
 export const LOANTRANSACTIONS_NEWLOAN_CREATED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_CREATED";
