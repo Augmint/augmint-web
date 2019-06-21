@@ -33,9 +33,9 @@ class NewLoanPage extends React.Component {
     }
 
     async handleSubmit(values) {
-        // e.preventDefault(); // not needed with redux-form?
-        // TODO: add productId to Form and change state ref here to values.prodcutId ?
-        const res = await store.dispatch(newLoan(values.productId, values.ethAmount.toNumber())); // TODO augmint.js
+        const product = this.props.products[values.productId];
+        const address = this.props.userAccount.address;
+        const res = await store.dispatch(newLoan(product, values.ethAmount, address));
         if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: res.error
