@@ -6,6 +6,7 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import moment from "moment";
+import store from "modules/store";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
@@ -13,10 +14,10 @@ import { Form, Validations, Normalizations, Formatters } from "components/BaseCo
 import { AEUR, ETH } from "components/augmint-ui/currencies.js";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Wei, Tokens } from "@augmint/js";
 
 import theme from "styles/theme";
 import { ETHEUR } from "utils/constants";
+import { Wei, Tokens } from "@augmint/js";
 
 const StyledBox = styled.div`
     border-radius: 3px;

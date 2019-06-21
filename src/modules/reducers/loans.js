@@ -1,7 +1,7 @@
 /* Loans for one account
     TODO: consider selectors https://github.com/reactjs/reselect */
 import store from "modules/store";
-import { fetchLoansForAddressTx, fetchAllLoansTx } from "modules/ethereum/loanTransactions";
+import { fetchAllLoansTx } from "modules/ethereum/loanTransactions";
 
 export const LOANS_LOANLIST_REQUESTED = "loans/LOANLIST_REQUESTED";
 export const LOANS_LOANLIST_RECEIVED = "loans/LOANLIST_RECEIVED";
@@ -94,8 +94,8 @@ export function fetchLoansForAddress(userAccount) {
         });
 
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const loans = await fetchLoansForAddressTx(loanManagerInstance, userAccount);
+            const loanManager = store.getState().web3Connect.augmint.loanManager;
+            const loans = await loanManager.getLoansForAccount(userAccount);
 
             return dispatch({
                 type: LOANS_LOANLIST_RECEIVED,

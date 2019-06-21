@@ -1,5 +1,7 @@
 import React from "react";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
+import moment from "moment";
 
 export default function LoanDetails(props) {
     const loan = props.loan;
@@ -11,18 +13,20 @@ export default function LoanDetails(props) {
             </Row>
             <Row>
                 <Col>Repayment amount:</Col>
-                <Col>{loan.repaymentAmount} A-EUR</Col>
+                <Col>
+                    <AEUR amount={loan.repaymentAmount} />
+                </Col>
             </Row>
 
             <Row>
                 <Col>Due on:</Col>
-                <Col>{loan.maturityText}</Col>
+                <Col>{moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}</Col>
             </Row>
 
             <Row>
                 <Col>Collateral:</Col>
                 <Col>
-                    {loan.collateralEth} ETH ({loan.collateralStatus})
+                    <ETH amount={loan.collateralAmount} /> ({loan.collateralStatus})
                 </Col>
             </Row>
 
@@ -35,12 +39,14 @@ export default function LoanDetails(props) {
 
             <Row>
                 <Col>Disbursed on:</Col>
-                <Col>{loan.disbursementTimeText}</Col>
+                <Col>{moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}</Col>
             </Row>
 
             <Row>
                 <Col>Loan amount (disbursed):</Col>
-                <Col>{loan.loanAmount} A-EUR</Col>
+                <Col>
+                    <AEUR amount={loan.loanAmount} />
+                </Col>
             </Row>
         </MyGridTable>
     );

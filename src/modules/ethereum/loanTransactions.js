@@ -49,11 +49,6 @@ export async function newEthBackedLoanTx(product, ethAmount, address) {
     return { txName, transactionHash };
 }
 
-export async function getProductsTx() {
-    const loanManager = store.getState().web3Connect.augmint.loanManager;
-    return await loanManager.getProducts();
-}
-
 // deprecated
 // export async function fetchProductsTx() {
 //     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
