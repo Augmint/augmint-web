@@ -1,27 +1,29 @@
 import React from "react";
 import styled from "styled-components";
-import { default as theme, remCalc } from "styles/theme";
 import WatchAssetButton from "components/watchAssetButton";
 import Button from "components/augmint-ui/button";
 
 const Container = styled.div`
     width: 100%;
-    text-align: center;
+    min-width: 250px;
+    padding-top: 10px;
+    margin: auto;
     display: flex;
+    text-align: center;
     justify-content: space-between;
 `;
 
 export default class ButtonGroup extends React.Component {
     render() {
         return (
-            <Container style={{ paddingTop: "10px", minWidth: "250px", width: "100%", margin: "auto" }}>
+            <Container>
                 <Button
                     to="/exchange"
                     icon="reserves"
                     circleicon="true"
                     className="naked circle icon top"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 5px 0 0", padding: "0 0 10px" }}
+                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Exchange fiat
                 </Button>
@@ -31,7 +33,7 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     className="naked circle icon top"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
+                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Exchange crypto
                 </Button>
@@ -42,7 +44,7 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     data-testid="transferButton"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 5px", padding: "0 0 10px" }}
+                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Send
                 </Button>
@@ -51,7 +53,7 @@ export default class ButtonGroup extends React.Component {
                     icon="wallet"
                     circleicon="true"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 0 0 5px", alignSelf: "auto", padding: "0 0 10px" }}
+                    style={{ flex: "1", margin: "0 .2rem", alignSelf: "auto", padding: "0 0 10px" }}
                     breakToLines
                 />
             </Container>

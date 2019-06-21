@@ -120,7 +120,6 @@ export class WatchAssetButton extends React.Component {
                     }}
                     style={style}
                     labelposition={labelposition}
-                    // to="/transfer"
                 >
                     Watch
                     <br />

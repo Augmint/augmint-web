@@ -15,6 +15,7 @@ const Box = styled(Message)`
     color: ${theme.colors.red};
     border-radius: 0;
     box-shadow: none;
+    margin: 10px 15px 15px;
 
     a,
     a:hover,
