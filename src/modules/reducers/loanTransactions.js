@@ -29,6 +29,7 @@ export default (state = initialState, action) => {
                 result: null,
                 ethAmount: action.ethAmount,
                 product: action.product,
+                productId: action.product.id,
                 address: action.address
             };
 
@@ -87,6 +88,7 @@ export function newLoan(product, ethAmount, address) {
             type: LOANTRANSACTIONS_NEWLOAN_REQUESTED,
             ethAmount: ethAmount,
             product: product,
+            productId: product.id,
             address: address
         });
 

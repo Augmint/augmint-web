@@ -61,8 +61,6 @@ class NewLoanForm extends React.Component {
             .filter(product => product.isActive)
             .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
         this.product = props.loanManager.products[this.defaultProductId()];
-        this.onLoanTokenAmountChange = this.onLoanTokenAmountChange.bind(this);
-        this.onSelectedLoanChange = this.onSelectedLoanChange.bind(this);
         this.defaultProductId = this.defaultProductId.bind(this);
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
@@ -94,8 +92,14 @@ class NewLoanForm extends React.Component {
         if (prevProps.loanForm && this.props.loanForm && this.state.product && this.props.rates) {
             const prevToken = prevProps.loanForm.values.loanTokenAmount;
             const token = this.props.loanForm.values.loanTokenAmount;
+            const prevProductId = prevProps.loanForm.values.productId;
+            const productId = this.props.loanForm.values.productId;
+
             if (token !== prevToken) {
                 this.onLoanTokenAmountChange(token);
+            }
+            if (productId !== prevProductId) {
+                this.onSelectedLoanChange(productId);
             }
         }
     }
@@ -139,11 +143,11 @@ class NewLoanForm extends React.Component {
         }
     }
 
-    onSelectedLoanChange(e) {
-        let product = this.products[e.target.value];
+    onSelectedLoanChange(id) {
+        let product = this.products[id];
         this.setState(
             {
-                productId: e.target.value,
+                productId: id,
                 product: product,
                 minToken: Validations.minTokenAmount(product.minDisbursedAmount),
                 maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount)
@@ -217,7 +221,6 @@ class NewLoanForm extends React.Component {
                                 component={Form.Field}
                                 name="productId"
                                 disabled={submitting || !loanManager.isLoaded}
-                                onChange={this.onSelectedLoanChange}
                                 data-testid="loan-product-selector"
                                 className="field-big"
                                 isSelect="true"

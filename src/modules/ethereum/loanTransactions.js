@@ -43,8 +43,9 @@ export async function newEthBackedLoanTx(product, ethAmount, address) {
     const txName = "New loan";
     const loanManager = await store.getState().web3Connect.augmint.loanManager;
     const result = await loanManager.newEthBackedLoan(product, ethAmount, address);
-    const tx = result.send(result.sendOptions);
-    const transactionHash = await processTx(tx, txName, tx.sendOptions.gasLimit);
+    const sendOptions = result.sendOptions;
+    const tx = result.tx.send(sendOptions);
+    const transactionHash = await processTx(tx, txName, sendOptions.gasLimit);
 
     return { txName, transactionHash };
 }
