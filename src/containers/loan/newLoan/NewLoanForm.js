@@ -6,7 +6,6 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 import moment from "moment";
-import store from "modules/store";
 import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";

@@ -9,35 +9,10 @@ import SolidityContract from "modules/ethereum/SolidityContract";
 import {
     ONE_ETH_IN_WEI,
     DECIMALS_DIV,
-    PPM_DIV,
-    MIN_LOAN_AMOUNT_ADJUSTMENT,
     LOAN_STATES,
     CHUNK_SIZE,
     LEGACY_CONTRACTS_CHUNK_SIZE
 } from "../../utils/constants";
-
-// deprecated
-// export async function newEthBackedLoanTx(productId, ethAmount) {
-//     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-//     const txName = "New loan";
-//
-//     let gasEstimate;
-//     if (store.getState().loanManager.info.loanCount === 0) {
-//         gasEstimate = cost.NEW_FIRST_LOAN_GAS;
-//     } else {
-//         gasEstimate = cost.NEW_LOAN_GAS;
-//     }
-//
-//     const userAccount = store.getState().web3Connect.userAccount;
-//     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
-//
-//     const tx = loanManagerInstance.methods
-//         .newEthBackedLoan(productId)
-//         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
-//
-//     const transactionHash = await processTx(tx, txName, gasEstimate);
-//     return { txName, transactionHash };
-// }
 
 export async function newEthBackedLoanTx(product, ethAmount, address) {
     const txName = "New loan";
@@ -49,75 +24,6 @@ export async function newEthBackedLoanTx(product, ethAmount, address) {
 
     return { txName, transactionHash };
 }
-
-// deprecated
-// export async function fetchProductsTx() {
-//     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-//     const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
-//     const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
-//
-//     const productCount = await loanManagerInstance.methods
-//         .getProductCount()
-//         .call()
-//         .then(res => parseInt(res, 10));
-//
-//     let products = [];
-//
-//     const queryCount = Math.ceil(productCount / chunkSize);
-//
-//     for (let i = 0; i < queryCount; i++) {
-//         const productsArray = isLegacyLoanContract
-//             ? await loanManagerInstance.methods.getProducts(i * chunkSize).call()
-//             : await loanManagerInstance.methods.getProducts(i * chunkSize, chunkSize).call();
-//         const parsedProducts = parseProducts(productsArray);
-//         products = products.concat(parsedProducts);
-//     }
-//
-//     return products;
-// }
-
-// deprectaed
-// function parseProducts(productsArray) {
-//     const products = productsArray.reduce((parsed, product) => {
-//         const [
-//             bn_id,
-//             bn_minDisbursedAmount,
-//             bn_term,
-//             bn_discountRate,
-//             bn_collateralRatio,
-//             bn_defaultingFeePt,
-//             bn_maxLoanAmount,
-//             bn_isActive
-//         ] = product;
-//
-//         const termInSecs = parseInt(bn_term, 10);
-//         const termInDays = termInSecs / 60 / 60 / 24;
-//         const discountRate = bn_discountRate / PPM_DIV;
-//         const interestRatePa = ((1 / discountRate - 1) / termInDays) * 365;
-//         if (termInSecs > 0) {
-//             parsed.push({
-//                 id: parseInt(bn_id, 10),
-//                 termInSecs,
-//                 termInDays,
-//                 termText: moment.duration(termInSecs, "seconds").humanize(), // TODO: less precision for duration: https://github.com/jsmreese/moment-duration-format
-//                 bn_discountRate,
-//                 interestRatePa,
-//                 interestRatePaPt: Math.round(interestRatePa * 10000) / 100,
-//                 discountRate,
-//                 bn_collateralRatio,
-//                 collateralRatio: bn_collateralRatio / PPM_DIV,
-//                 minDisbursedAmountInToken: (bn_minDisbursedAmount / DECIMALS_DIV) * MIN_LOAN_AMOUNT_ADJUSTMENT,
-//                 maxLoanAmount: bn_maxLoanAmount / DECIMALS_DIV,
-//                 bn_defaultingFeePt,
-//                 defaultingFeePt: bn_defaultingFeePt / PPM_DIV,
-//                 isActive: bn_isActive === "1"
-//             });
-//         }
-//         return parsed;
-//     }, []);
-//
-//     return products;
-// }
 
 export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) {
     const txName = "Repay loan";
