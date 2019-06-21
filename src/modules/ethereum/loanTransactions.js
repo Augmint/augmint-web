@@ -16,25 +16,36 @@ import {
     LEGACY_CONTRACTS_CHUNK_SIZE
 } from "../../utils/constants";
 
-export async function newEthBackedLoanTx(productId, ethAmount) {
-    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+// deprecated
+// export async function newEthBackedLoanTx(productId, ethAmount) {
+//     const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+//     const txName = "New loan";
+//
+//     let gasEstimate;
+//     if (store.getState().loanManager.info.loanCount === 0) {
+//         gasEstimate = cost.NEW_FIRST_LOAN_GAS;
+//     } else {
+//         gasEstimate = cost.NEW_LOAN_GAS;
+//     }
+//
+//     const userAccount = store.getState().web3Connect.userAccount;
+//     const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
+//
+//     const tx = loanManagerInstance.methods
+//         .newEthBackedLoan(productId)
+//         .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
+//
+//     const transactionHash = await processTx(tx, txName, gasEstimate);
+//     return { txName, transactionHash };
+// }
+
+export async function newEthBackedLoanTx(product, ethAmount, address) {
     const txName = "New loan";
+    const loanManager = await store.getState().web3Connect.augmint.loanManager;
+    const result = await loanManager.newEthBackedLoan(product, ethAmount, address);
+    const tx = result.send(result.sendOptions);
+    const transactionHash = await processTx(tx, txName, tx.sendOptions.gasLimit);
 
-    let gasEstimate;
-    if (store.getState().loanManager.info.loanCount === 0) {
-        gasEstimate = cost.NEW_FIRST_LOAN_GAS;
-    } else {
-        gasEstimate = cost.NEW_LOAN_GAS;
-    }
-
-    const userAccount = store.getState().web3Connect.userAccount;
-    const weiAmount = new BigNumber(ethAmount).mul(ONE_ETH_IN_WEI);
-
-    const tx = loanManagerInstance.methods
-        .newEthBackedLoan(productId)
-        .send({ value: weiAmount, from: userAccount, gas: gasEstimate });
-
-    const transactionHash = await processTx(tx, txName, gasEstimate);
     return { txName, transactionHash };
 }
 

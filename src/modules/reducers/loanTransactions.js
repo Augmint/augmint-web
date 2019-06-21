@@ -28,7 +28,8 @@ export default (state = initialState, action) => {
                 error: null,
                 result: null,
                 ethAmount: action.ethAmount,
-                productId: action.productId
+                product: action.product,
+                address: action.address
             };
 
         case LOANTRANSACTIONS_NEWLOAN_CREATED:
@@ -80,16 +81,17 @@ export default (state = initialState, action) => {
     }
 };
 
-export function newLoan(productId, ethAmount) {
+export function newLoan(product, ethAmount, address) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_NEWLOAN_REQUESTED,
             ethAmount: ethAmount,
-            productId: productId
+            product: product,
+            address: address
         });
 
         try {
-            const result = await newEthBackedLoanTx(productId, ethAmount);
+            const result = await newEthBackedLoanTx(product, ethAmount, address);
             return dispatch({
                 type: LOANTRANSACTIONS_NEWLOAN_CREATED,
                 result: result
