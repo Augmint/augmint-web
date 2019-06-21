@@ -41,6 +41,7 @@ class NewLoanPage extends React.Component {
                 _error: res.error
             });
         } else {
+            console.log("else", "res");
             this.setState({
                 submitSucceeded: true,
                 result: res.result
