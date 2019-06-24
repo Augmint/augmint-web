@@ -1,6 +1,6 @@
 import store from "modules/store";
 
-import { newEthBackedLoanTx, collectLoansTx } from "modules/ethereum/loanTransactions";
+import { newEthBackedLoanTx, collectLoansTx, repayLoanTx } from "modules/ethereum/loanTransactions";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
 export const LOANTRANSACTIONS_NEWLOAN_CREATED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_CREATED";
@@ -115,7 +115,7 @@ export function repayLoan(repaymentAmount, loan, account) {
         });
 
         try {
-            const result = await store.getState().web3Connect.augmint.repayLoan(loan, repaymentAmount, account);
+            const result = await repayLoanTx(loan, repaymentAmount, account);
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_SUCCESS,
                 result: result
