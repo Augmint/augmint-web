@@ -6,6 +6,8 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
+// import {sendAndProcessTx} from 'modules/ethereum/ethHelper'
+
 import {
     ONE_ETH_IN_WEI,
     DECIMALS_DIV,
@@ -14,35 +16,30 @@ import {
     LEGACY_CONTRACTS_CHUNK_SIZE
 } from "../../utils/constants";
 
-export async function newEthBackedLoanTx(product, ethAmount, address) {
-    const txName = "New loan";
-    const loanManager = await store.getState().web3Connect.augmint.loanManager;
-    const result = await loanManager.newEthBackedLoan(product, ethAmount, address);
-    const sendOptions = result.sendOptions;
-    const tx = result.tx.send(sendOptions);
-    const transactionHash = await processTx(tx, txName, sendOptions.gasLimit);
-
-    return { txName, transactionHash };
-}
-
-export async function repayLoanTx(loan, repaymentAmount, account) {
+// deprecated (legacyLoanManagersTransactions uses repayLoanTx)
+export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) {
     const txName = "Repay loan";
-    const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+    const gasEstimate = cost.REPAY_GAS;
 
-    let augmintToken;
+    const userAccount = store.getState().web3Connect.userAccount;
+
+    let augmintTokenInstance;
     if (loanManagerInstance._address !== store.getState().contracts.latest.loanManager.address) {
         // repayment of a legacy loan, need to fetch which augmintToken is it
         const augmintTokenAddress = await loanManagerInstance.methods.augmintToken().call();
         const web3 = store.getState().web3Connect;
-        augmintToken = SolidityContract.connectAt(web3, "TokenAEur", augmintTokenAddress);
+        augmintTokenInstance = SolidityContract.connectAt(web3, "TokenAEur", augmintTokenAddress).web3ContractInstance;
     } else {
-        augmintToken = store.getState().contracts.latest.augmintToken;
+        augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
     }
 
-    const augmint = await store.getState().web3Connect.augmint;
-    const result = await augmint.repayLoan(loan, repaymentAmount, account, augmintToken);
-    const tx = result.tx.send(result.sendOptions);
-    const gasEstimate = result.sendOptions.gasLimit;
+    const tx = augmintTokenInstance.methods
+        .transferAndNotify(
+            loanManagerInstance._address,
+            new BigNumber(repaymentAmount).mul(DECIMALS_DIV).toString(),
+            loanId
+        )
+        .send({ from: userAccount, gas: gasEstimate });
 
     const onReceipt = receipt => {
         // loan repayment called on AugmintToken and web3 is not parsing event emmitted from LoanManager
