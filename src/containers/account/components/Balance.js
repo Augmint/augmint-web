@@ -4,6 +4,7 @@ import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { Tokens } from "@augmint/js";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -34,15 +35,17 @@ const EthAmount = styled.div`
 `;
 
 const pick = (arr, key) => arr && arr.map(item => item[key]);
-const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
+const sumTokens = arr => arr && arr.reduce((acc, item) => acc.add(item), Tokens.of(0));
+const sumNumbers = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
 
 export default class Balance extends React.Component {
     render() {
         const { userAccount, loans, locks, children } = this.props;
         const activeLoans = loans.loans && loans.loans.filter(loan => loan.isRepayable);
         const activeLocks = locks.locks && locks.locks.filter(lock => lock.isReleasebale || lock.isActive);
-        const loansAmount = sum(pick(activeLoans, "loanAmount"));
-        const locksAmount = sum(pick(activeLocks, "amountLocked"));
+
+        const loansAmount = sumTokens(pick(activeLoans, "loanAmount"));
+        const locksAmount = sumNumbers(pick(activeLocks, "amountLocked"));
 
         return (
             <Pblock className="balance" style={{ marginTop: "1rem" }}>
