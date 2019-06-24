@@ -121,7 +121,6 @@ export function repayLoan(repaymentAmount, loan, account) {
         });
 
         try {
-            // const result = await repayLoanTx(loan, repaymentAmount, account);
             const txName = "Repay loan";
             const augmint = await store.getState().web3Connect.augmint;
             const tx = await augmint.repayLoan(loan, repaymentAmount, account);
