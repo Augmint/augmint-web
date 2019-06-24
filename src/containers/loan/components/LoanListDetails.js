@@ -1,8 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import moment from "moment";
 import { default as theme, remCalc } from "styles/theme";
 import { StyledStatusBox } from "components/augmint-ui/baseComponents/styles";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 
 export const CardTitle = styled.h1`
     margin: 0;
@@ -27,16 +29,18 @@ export const Card = styled(StyledStatusBox)`
 export default function LoanListDetails(props) {
     const loan = props.loan;
 
+    console.log("details", loan);
+
     return (
         <NavLink to={`/loan/${loan.id}`} style={{ flex: 1 }}>
             <Card className={loan.dueState}>
                 <CardTitle>
-                    {loan.loanAmount} A€ loan for {loan.termText}
+                    <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
                 </CardTitle>
                 <CardDescription>
                     {loan.isRepayable ? (
                         <span>
-                            <strong>{loan.maturityFromNow}</strong> left to due date
+                            <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
                             {loan.isDue && (
                                 <span>
                                     , please <strong>repay it</strong>
