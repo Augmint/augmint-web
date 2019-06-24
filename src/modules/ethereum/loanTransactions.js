@@ -6,6 +6,8 @@ import moment from "moment";
 import { cost } from "./gas";
 import { EthereumTransactionError, processTx } from "modules/ethereum/ethHelper";
 import SolidityContract from "modules/ethereum/SolidityContract";
+// import {sendAndProcessTx} from 'modules/ethereum/ethHelper'
+
 import {
     ONE_ETH_IN_WEI,
     DECIMALS_DIV,
@@ -13,17 +15,6 @@ import {
     CHUNK_SIZE,
     LEGACY_CONTRACTS_CHUNK_SIZE
 } from "../../utils/constants";
-
-export async function newEthBackedLoanTx(product, ethAmount, address) {
-    const txName = "New loan";
-    const loanManager = await store.getState().web3Connect.augmint.loanManager;
-    const result = await loanManager.newEthBackedLoan(product, ethAmount, address);
-    const sendOptions = result.sendOptions;
-    const tx = result.tx.send(sendOptions);
-    const transactionHash = await processTx(tx, txName, sendOptions.gasLimit);
-
-    return { txName, transactionHash };
-}
 
 export async function repayLoanTx(loan, repaymentAmount, account) {
     const txName = "Repay loan";
