@@ -4,7 +4,7 @@ import styled from "styled-components";
 import moment from "moment";
 import { default as theme, remCalc } from "styles/theme";
 import { StyledStatusBox } from "components/augmint-ui/baseComponents/styles";
-import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { AEUR } from "components/augmint-ui/currencies";
 
 export const CardTitle = styled.h1`
     margin: 0;
