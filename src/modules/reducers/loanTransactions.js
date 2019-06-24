@@ -1,6 +1,6 @@
 import store from "modules/store";
 
-import { collectLoansTx, repayLoanTx } from "modules/ethereum/loanTransactions";
+import { collectLoansTx } from "modules/ethereum/loanTransactions";
 import { sendAndProcessTx } from "modules/ethereum/ethHelper";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
@@ -121,7 +121,13 @@ export function repayLoan(repaymentAmount, loan, account) {
         });
 
         try {
-            const result = await repayLoanTx(loan, repaymentAmount, account);
+            // const result = await repayLoanTx(loan, repaymentAmount, account);
+            const txName = "Repay loan";
+            const augmint = await store.getState().web3Connect.augmint;
+            const tx = await augmint.repayLoan(loan, repaymentAmount, account);
+            const transactionHash = await sendAndProcessTx(tx, txName);
+
+            const result = { txName, transactionHash };
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_SUCCESS,
                 result: result
