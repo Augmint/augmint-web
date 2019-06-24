@@ -29,8 +29,6 @@ export const Card = styled(StyledStatusBox)`
 export default function LoanListDetails(props) {
     const loan = props.loan;
 
-    console.log("details", loan);
-
     return (
         <NavLink to={`/loan/${loan.id}`} style={{ flex: 1 }}>
             <Card className={loan.dueState}>
