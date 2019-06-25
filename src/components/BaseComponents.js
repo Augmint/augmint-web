@@ -204,12 +204,13 @@ export const Formatters = {
 export function Select(props) {
     function addOptionsToSelect(options, testId, isLoan) {
         let result = [];
-        options.forEach(product => {
+        options.forEach((product, i) => {
+            console.log(product);
             const termText = productTermConverter(product.termInSecs);
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
-                    key={product.id}
+                    key={product.id + "_" + i}
                     value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
