@@ -60,44 +60,44 @@ export async function repayLoanTx(loanManagerInstance, repaymentAmount, loanId) 
     const transactionHash = await processTx(tx, txName, gasEstimate, onReceipt);
     return { txName, transactionHash };
 }
+//
+// export async function fetchAllLoansTx() {
+//     try {
+//         const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
+//         const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
+//         const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
+//
+//         const loanCount = await loanManagerInstance.methods
+//             .getLoanCount()
+//             .call()
+//             .then(res => parseInt(res, 10));
+//
+//         let loansToCollect = [];
+//
+//         const queryCount = Math.ceil(loanCount / chunkSize);
+//         for (let i = 0; i < queryCount; i++) {
+//             const loansArray = isLegacyLoanContract
+//                 ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
+//                 : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
+//             const defaultedLoans = parseLoans(loansArray);
+//             loansToCollect = loansToCollect.concat(defaultedLoans);
+//         }
+//
+//         return loansToCollect;
+//     } catch (error) {
+//         throw new Error("fetchAllLoansTx failed.\n" + error);
+//     }
+// }
 
-export async function fetchAllLoansTx() {
-    try {
-        const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-        const isLegacyLoanContract = typeof loanManagerInstance.methods.CHUNK_SIZE === "function";
-        const chunkSize = isLegacyLoanContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
-
-        const loanCount = await loanManagerInstance.methods
-            .getLoanCount()
-            .call()
-            .then(res => parseInt(res, 10));
-
-        let loansToCollect = [];
-
-        const queryCount = Math.ceil(loanCount / chunkSize);
-        for (let i = 0; i < queryCount; i++) {
-            const loansArray = isLegacyLoanContract
-                ? await loanManagerInstance.methods.getLoans(i * chunkSize).call()
-                : await loanManagerInstance.methods.getLoans(i * chunkSize, chunkSize).call();
-            const defaultedLoans = parseLoans(loansArray);
-            loansToCollect = loansToCollect.concat(defaultedLoans);
-        }
-
-        return loansToCollect;
-    } catch (error) {
-        throw new Error("fetchAllLoansTx failed.\n" + error);
-    }
-}
-
-export async function fetchLoansToCollectTx() {
-    try {
-        const allLoans = await fetchAllLoansTx();
-
-        return allLoans.filter(loan => loan.isCollectable);
-    } catch (error) {
-        throw new Error("fetchLoansToCollectTx failed.\n" + error);
-    }
-}
+// export async function fetchLoansToCollectTx() {
+//     try {
+//         const allLoans = await fetchAllLoansTx();
+//
+//         return allLoans.filter(loan => loan.isCollectable);
+//     } catch (error) {
+//         throw new Error("fetchLoansToCollectTx failed.\n" + error);
+//     }
+// }
 
 // loansToCollect is an array : [{loanId: <loanId>}]
 export async function collectLoansTx(loanManagerInstance, loansToCollect) {

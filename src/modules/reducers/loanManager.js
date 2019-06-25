@@ -3,7 +3,6 @@
 */
 
 import store from "modules/store";
-import { fetchLoansToCollectTx } from "modules/ethereum/loanTransactions";
 
 import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
@@ -189,7 +188,8 @@ export function fetchLoansToCollect() {
         });
 
         try {
-            const result = await fetchLoansToCollectTx();
+            const result = await store.getState().web3Connect.augmint.getLoansToCollect();
+
             return dispatch({
                 type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED,
                 result: result

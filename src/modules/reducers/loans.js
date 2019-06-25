@@ -69,7 +69,7 @@ export function fetchAllLoans() {
         });
 
         try {
-            const allLoans = await fetchAllLoansTx();
+            const allLoans = await store.getState().web3Connect.augmint.getAllLoans();
 
             return dispatch({
                 type: LOANS_FETCH_ALL_RECEIVED,

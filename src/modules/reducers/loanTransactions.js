@@ -1,7 +1,8 @@
 import store from "modules/store";
 
 import { collectLoansTx } from "modules/ethereum/loanTransactions";
-import { sendAndProcessTx } from "modules/ethereum/ethHelper";
+import { sendAndProcessTx, processTx } from "modules/ethereum/ethHelper";
+import { cost } from "../ethereum/gas";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
 export const LOANTRANSACTIONS_NEWLOAN_CREATED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_CREATED";
@@ -150,13 +151,26 @@ export function collectLoans(loansToCollect) {
         });
 
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const result = await collectLoansTx(loanManagerInstance, loansToCollect);
+            const txName = "Collect loan(s)";
+            const userAccount = store.getState().web3Connect.userAccount;
+
+            const txs = await store.getState().web3Connect.augmint.collectLoans(loansToCollect, userAccount);
+            // const transactionHash = await sendAndProcessTx(txs, txName);
+            const hashes = Promise.all(
+                txs.map(async tx => {
+                    const txHash = await sendAndProcessTx(tx, txName);
+                    console.log(txHash);
+                })
+            );
+
+            const result = { txName, transactionHash: "transactionHash" };
+
             return dispatch({
                 type: LOANTRANSACTIONS_COLLECT_SUCCESS,
                 result: result
             });
         } catch (error) {
+            console.log(error);
             return dispatch({
                 type: LOANTRANSACTIONS_COLLECT_ERROR,
                 error: error

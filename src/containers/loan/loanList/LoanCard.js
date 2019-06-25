@@ -150,7 +150,7 @@ export default function LoanCard(props) {
                             <CollectLoanButton
                                 idName="card-collect-btn"
                                 loanManager={loanManager}
-                                loansToCollect={[{ id: loan.id }]}
+                                loansToCollect={[loan]}
                             />
                         )}
                     </Pgrid.Column>

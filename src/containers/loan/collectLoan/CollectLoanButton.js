@@ -11,8 +11,7 @@ import { Form } from "components/BaseComponents";
 import "./CollectLoanButton.css";
 
 class CollectLoanButton extends React.Component {
-    async handleSubmit(values) {
-        //values.preventDefault();
+    async handleSubmit() {
         const res = await store.dispatch(collectLoans(this.props.loansToCollect));
 
         if (res.type !== LOANTRANSACTIONS_COLLECT_SUCCESS) {
