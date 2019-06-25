@@ -205,7 +205,6 @@ export function Select(props) {
     function addOptionsToSelect(options, testId, isLoan) {
         let result = [];
         options.forEach((product, i) => {
-            console.log(product);
             const termText = productTermConverter(product.termInSecs);
             result.push(
                 <option
