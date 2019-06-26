@@ -86,7 +86,7 @@ class LoanDetailsPage extends React.Component {
                                         <CollectLoanButton
                                             idName="details-collect-btn"
                                             loanManager={this.props.loanManager}
-                                            loansToCollect={[{ id: this.state.loan.id }]}
+                                            loansToCollect={[this.state.loan]}
                                         />
                                     )}
                                 </Pblock>
@@ -105,4 +105,4 @@ const mapStateToProps = state => ({
     userAccount: state.web3Connect.userAccount
 });
 
-export default (LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage));
+export default LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage);

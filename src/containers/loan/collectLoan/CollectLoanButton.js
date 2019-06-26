@@ -12,7 +12,7 @@ import "./CollectLoanButton.css";
 
 class CollectLoanButton extends React.Component {
     async handleSubmit() {
-        const res = await store.dispatch(collectLoans(this.props.loansToCollect));
+        const res = collectLoans(this.props.loansToCollect);
 
         if (res.type !== LOANTRANSACTIONS_COLLECT_SUCCESS) {
             throw new SubmissionError({
@@ -74,13 +74,14 @@ class CollectLoanButton extends React.Component {
 
                 {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
 
-                {submitSucceeded && (
-                    <EthSubmissionSuccessPanel
-                        header="Collect loan(s) submitted"
-                        onDismiss={() => reset()}
-                        result={this.state.result}
-                    />
-                )}
+                {submitSucceeded &&
+                    this.state.result.map(result => (
+                        <EthSubmissionSuccessPanel
+                            header="Collect loan(s) submitted"
+                            onDismiss={() => reset()}
+                            result={result}
+                        />
+                    ))}
             </Pblock>
         );
     }

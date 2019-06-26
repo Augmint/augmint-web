@@ -143,38 +143,27 @@ export function repayLoan(repaymentAmount, loan, account) {
     };
 }
 
-export function collectLoans(loansToCollect) {
-    return async dispatch => {
-        dispatch({
-            type: LOANTRANSACTIONS_COLLECT_REQUESTED,
-            loansToCollect: loansToCollect
-        });
+export async function collectLoans(loansToCollect) {
+    try {
+        const txName = "Collect loan(s)";
+        const userAccount = store.getState().web3Connect.userAccount;
+        const txs = await store.getState().web3Connect.augmint.collectLoans(loansToCollect, userAccount);
+        const hashes = [];
 
-        try {
-            const txName = "Collect loan(s)";
-            const userAccount = store.getState().web3Connect.userAccount;
-
-            const txs = await store.getState().web3Connect.augmint.collectLoans(loansToCollect, userAccount);
-            // const transactionHash = await sendAndProcessTx(txs, txName);
-            const hashes = Promise.all(
-                txs.map(async tx => {
-                    const txHash = await sendAndProcessTx(tx, txName);
-                    console.log(txHash);
-                })
-            );
-
-            const result = { txName, transactionHash: "transactionHash" };
-
-            return dispatch({
-                type: LOANTRANSACTIONS_COLLECT_SUCCESS,
-                result: result
-            });
-        } catch (error) {
-            console.log(error);
-            return dispatch({
-                type: LOANTRANSACTIONS_COLLECT_ERROR,
-                error: error
-            });
+        for (let i = 0; i < txs.length; i++) {
+            hashes.push(await sendAndProcessTx(txs[i], txName));
         }
-    };
+
+        const result = hashes.map(hash => ({ txName, transactionHash: hash }));
+
+        return {
+            type: LOANTRANSACTIONS_COLLECT_SUCCESS,
+            result: result
+        };
+    } catch (error) {
+        return {
+            type: LOANTRANSACTIONS_COLLECT_ERROR,
+            error: error
+        };
+    }
 }
