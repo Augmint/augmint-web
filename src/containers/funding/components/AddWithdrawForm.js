@@ -7,7 +7,6 @@ import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { Pblock, Pgrid } from "components/PageLayout";
 import FundList from "./FundList/index";
-import { DECIMALS, ETH_DECIMALS } from "utils/constants";
 
 import theme from "styles/theme";
 
@@ -16,62 +15,24 @@ import { FUNDS } from "./FundList/funds.js";
 export const WITHDRAW = "withdraw";
 export const ADDFUND = "addFunds";
 
+const VALIDATE_MIN_EUR = Validations.minAddWithdrawAmount(FUNDS[0].eurLimit, "EUR");
+const VALIDATE_MIN_AEUR = Validations.minAddWithdrawAmount(FUNDS[0].aeurLimit, "A-EUR");
+
 class AddWithdrawForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { orderDirection: ADDFUND, amount: "" };
+        this.state = {
+            orderDirection: ADDFUND,
+            amount: ""
+        };
         this.onMenuClick = this.onMenuClick.bind(this);
-        this.onPriceChange = this.onPriceChange.bind(this);
-        this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
+        this.onAmountChange = this.onAmountChange.bind(this);
     }
 
-    onPriceChange(e) {
-        const amount = e.target.value;
+    onAmountChange(e) {
         this.setState({
-            amount
+            amount: e.target.value
         });
-
-        if (e.target.attributes["name"].value === WITHDRAW) {
-            this.onTokenAmountChange(amount);
-        }
-    }
-
-    onTokenAmountChange(amount) {
-        try {
-            const lastChangedAmountField = "tokenAmount";
-            this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, amount, null);
-        } catch (error) {
-            this.props.change("ethAmount", "");
-        }
-    }
-
-    reCalcAmounts(lastChangedAmountField, _price, _tokenAmount, _ethAmount) {
-        const price = this.parsePrice(_price);
-
-        if (lastChangedAmountField === "ethAmount") {
-            const ethAmount = parseFloat(_ethAmount);
-            if (!isNaN(ethAmount) && isFinite(ethAmount)) {
-                const tokenValue = (ethAmount * this.props.rates.info.ethFiatRate) / price;
-                this.props.change("tokenAmount", Number(tokenValue.toFixed(DECIMALS)));
-            } else {
-                //  ethAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        } else {
-            const tokenAmount = parseFloat(_tokenAmount);
-            if (!isNaN(tokenAmount) && isFinite(tokenAmount)) {
-                const ethValue = (tokenAmount / this.props.rates.info.ethFiatRate) * price;
-                this.props.change("ethAmount", Number(ethValue.toFixed(ETH_DECIMALS)));
-            } else {
-                // tokenAmount is not entered yet
-                this.props.change("tokenAmount", "");
-            }
-        }
-    }
-
-    parsePrice(price) {
-        return Math.round(price * 100) / 10000;
     }
 
     onMenuClick(e) {
@@ -90,21 +51,16 @@ class AddWithdrawForm extends React.Component {
         const { error, user } = this.props;
         const { orderDirection, amount } = this.state;
 
-        const tokenAmountValidations = [
+        const eurAmountValidations = [Validations.required, Validations.tokenAmount, VALIDATE_MIN_EUR];
+
+        const aeurAmountValidations = [
             Validations.required,
             Validations.tokenAmount,
-            Validations.minMrCoinTokenAmount
+            VALIDATE_MIN_AEUR,
+            Validations.userTokenBalance
         ];
-        if (orderDirection === WITHDRAW) {
-            tokenAmountValidations.push(Validations.userTokenBalance);
-        }
 
         const isDesktop = window.innerWidth > 768;
-
-        const linkToGo =
-            orderDirection === ADDFUND
-                ? `${FUNDS[0].buyUrl}${user.address}&amount=${amount}`
-                : `${FUNDS[0].sellUrl}${user.address}&amount=${amount}`;
 
         const header = (
             <div style={{ marginBottom: "2rem" }}>
@@ -136,42 +92,57 @@ class AddWithdrawForm extends React.Component {
         const buttonToGo = (
             <Pgrid.Row>
                 <Button
-                    content={`Go to ${FUNDS[0].name}`}
-                    href={linkToGo}
-                    target="_blank"
+                    type="submit"
                     labelposition="center"
                     size="large"
                     className="primary"
                     data-testid={orderDirection === ADDFUND ? `${ADDFUND}Link` : `${WITHDRAW}Link`}
                     style={{ width: "100%", padding: "15px 20px" }}
-                />
+                >
+                    Go to Mr.Coin
+                </Button>
             </Pgrid.Row>
         );
 
         return (
             <Pblock style={{ margin: 0 }}>
                 {header}
-                <Form error={error ? "true" : "false"}>
-                    <label data-testid={`${orderDirection}Label`}>
+                <Form
+                    error={error ? "true" : "false"}
+                    action={orderDirection === ADDFUND ? FUNDS[0].buyUrl : FUNDS[0].sellUrl}
+                    method="POST"
+                    target="_blank"
+                >
+                    <label data-testid={`${orderDirection}AmountLabel`}>
                         {orderDirection === ADDFUND ? "Send from bank account ..." : "Send to bank account ..."}
                     </label>
 
                     <Field
-                        name={orderDirection}
+                        name={"sending-amount"}
                         component={Form.Field}
                         as={Form.Input}
                         type="number"
                         inputmode="numeric"
                         step="any"
                         min="0"
-                        onChange={this.onPriceChange}
-                        validate={tokenAmountValidations}
+                        onChange={this.onAmountChange}
+                        validate={orderDirection === ADDFUND ? eurAmountValidations : aeurAmountValidations}
                         normalize={Normalizations.fiveDecimals}
-                        data-testid={`${orderDirection}Input`}
+                        data-testid={`${orderDirection}AmountInput`}
                         style={{ borderRadius: theme.borderRadius.left }}
                         labelAlignRight={orderDirection === ADDFUND ? "EUR" : "A-EUR"}
                         autoFocus={isDesktop}
                     />
+
+                    <Field
+                        name={orderDirection === ADDFUND ? "to-address" : "from-address"}
+                        component={Form.Field}
+                        as={Form.Input}
+                        type="hidden"
+                        inputmode="text"
+                        data-testid={`${orderDirection}AddressInput`}
+                    />
+
                     <label>Available exchange partner:</label>
 
                     <FundList user={user} amount={amount} direction={orderDirection} />
@@ -192,6 +163,7 @@ AddWithdrawForm = reduxForm({
     form: "AddWithdrawForm",
     touchOnChange: true,
     touchOnBlur: false,
+    enableReinitialize: true,
     shouldValidate: params => {
         // workaround for issue that validations are not triggered when changing orderDirection in menu.
         // TODO: this is hack, not perfect, eg. user clicks back and forth b/w sell&buy then balance check
@@ -205,7 +177,8 @@ AddWithdrawForm = reduxForm({
 })(AddWithdrawForm);
 
 function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: 100 } };
+    const address = ownProps.user.address;
+    return { initialValues: { "to-address": address, "from-address": address } };
 }
 
 AddWithdrawForm = connect(mapStateToProps)(AddWithdrawForm);

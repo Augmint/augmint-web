@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { Tokens, Wei } from "@augmint/js";
 import { Pblock } from "components/PageLayout";
@@ -158,10 +159,11 @@ const OrderList = props => {
     );
 };
 
-export class MyOrders extends React.Component {
+class MyOrders extends React.Component {
     render() {
         const { header, userAccountAddress, testid, rates } = this.props;
-        const { orders } = this.props.orders;
+        const orders = this.props.orders !== null ? this.props.orders.orders : [];
+
         // FIXME should be Tokens already
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
 
@@ -175,6 +177,7 @@ export class MyOrders extends React.Component {
         if (orderList.length === 0) {
             return null;
         }
+
         return (
             <Pblock header={header} data-testid={testid}>
                 <OrderList
@@ -189,7 +192,12 @@ export class MyOrders extends React.Component {
     }
 }
 
-export class OrderBook extends React.Component {
+const myOrdersProps = state => ({
+    orders: state.orders
+});
+MyOrders = connect(myOrdersProps)(MyOrders);
+
+class OrderBook extends React.Component {
     constructor(props) {
         super(props);
         this.toggleOrderBook = this.toggleOrderBook.bind(this);
@@ -208,6 +216,7 @@ export class OrderBook extends React.Component {
         const { header: mainHeader, userAccountAddress, testid, rates, orderBookDirection } = this.props;
         const { orders, refreshError, isLoading } = this.props.orders;
         // FIXME should be Tokens already
+
         const ethFiatRate = this.props.rates.info.ethFiatRate ? Tokens.of(this.props.rates.info.ethFiatRate) : null;
         const orderDirection = orderBookDirection;
 
@@ -271,8 +280,14 @@ export class OrderBook extends React.Component {
 }
 
 OrderBook.defaultProps = {
-    orders: null,
     userAccountAddress: null,
     header: <h3>Open orders</h3>,
     rates: null
 };
+
+const mapStateToProps = state => ({
+    orders: state.orders
+});
+OrderBook = connect(mapStateToProps)(OrderBook);
+
+export { OrderBook, MyOrders };
