@@ -48,10 +48,12 @@ export default class Balance extends React.Component {
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
         return (
-            <Pblock className="balance" style={{ marginBottom: 0 }}>
+            <Pblock
+                className="balance"
+                style={{ justifyContent: "center", maxWidth: "500px", margin: "auto", marginBottom: 0 }}
+            >
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
-                    {/* <TokenBalance style={{ textAlign: "justify"}}> */}
                     <TokenBalance style={{ fontSize: "2rem" }}>
                         {/* <AEUR 
                             amount={userAccount.tokenBalance} 
@@ -86,17 +88,13 @@ export default class Balance extends React.Component {
                                 </>
                             ) : (
                                 <>
-                                    {/* <Label>My total loans</Label>
-                                    <TokenAmount>
-                                        <AEUR amount={loansAmount} />
-                                    </TokenAmount> */}
                                     <Button
-                                        style={{ width: "90%", boxSizing: "border-box", padding: "10px" }}
+                                        style={{ width: "95%", boxSizing: "border-box", padding: "10px" }}
                                         to="/loan/new"
                                     >
                                         Get a new loan
                                     </Button>
-                                    <Button className="naked" to="/loan" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/loan/archive" style={{ fontSize: ".875rem" }}>
                                         View old loans
                                     </Button>
                                 </>
@@ -108,12 +106,11 @@ export default class Balance extends React.Component {
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                justifyContent: "center",
-                                textAlign: "center",
+                                textAlign: "-webkit-center",
                                 padding: "1rem 0 .5rem"
                             }}
                         >
-                            <Button style={{ width: "90%", boxSizing: "border-box", padding: "10px" }} to="/loan/new">
+                            <Button style={{ width: "95%", boxSizing: "border-box", padding: "10px" }} to="/loan/new">
                                 Get a new loan
                             </Button>
                         </Pgrid.Column>
@@ -141,17 +138,13 @@ export default class Balance extends React.Component {
                                 </>
                             ) : (
                                 <>
-                                    {/* <Label>My total locks</Label>
-                                    <TokenAmount>
-                                        <AEUR amount={locksAmount} />
-                                    </TokenAmount> */}
                                     <Button
-                                        style={{ width: "90%", boxSizing: "border-box", padding: "10px" }}
+                                        style={{ width: "95%", boxSizing: "border-box", padding: "10px" }}
                                         to="/lock/new"
                                     >
                                         Lock A-EUR
                                     </Button>
-                                    <Button className="naked" to="/lock" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/lock/archive" style={{ fontSize: ".875rem" }}>
                                         View old locks
                                     </Button>
                                 </>
@@ -163,12 +156,11 @@ export default class Balance extends React.Component {
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                justifyContent: "center",
-                                textAlign: "center",
+                                textAlign: "-webkit-center",
                                 padding: "1rem 0 .5rem"
                             }}
                         >
-                            <Button style={{ width: "90%", boxSizing: "border-box", padding: "10px" }} to="/lock/new">
+                            <Button style={{ width: "95%", boxSizing: "border-box", padding: "10px" }} to="/lock/new">
                                 Lock A-EUR
                             </Button>
                         </Pgrid.Column>

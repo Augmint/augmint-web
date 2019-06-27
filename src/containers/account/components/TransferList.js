@@ -12,6 +12,7 @@ import { calculateTransfersBalance } from "modules/ethereum/transferTransactions
 import { AEUR } from "components/augmint-ui/currencies";
 import styled from "styled-components";
 import { default as theme } from "styles/theme";
+import { media } from "styles/media";
 
 const Transfer = styled.span`
     .positive::before {
@@ -42,6 +43,15 @@ const Transfer = styled.span`
             content: " fee";
         }
     }
+`;
+const StyledSegment = styled(Segment)`
+    color: black;
+    display: inline-block;
+    margin: 20px 0 20px;
+
+    ${media.mobile`
+        margin: 20px;
+    `};
 `;
 
 const TransferTable = styled(Table)`
@@ -147,13 +157,11 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <div style={{ marginTop: 20, marginBottom: 20 }}>
-                        <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
-                            <Button onClick={this.showMore} className="ghost" tabIndex="0">
-                                Show older
-                            </Button>
-                        </Segment>
-                    </div>
+                    <StyledSegment loading={isLoading}>
+                        <Button onClick={this.showMore} className="ghost" tabIndex="0">
+                            Show older
+                        </Button>
+                    </StyledSegment>
                 )}
             </Segment>
         );

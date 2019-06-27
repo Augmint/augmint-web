@@ -203,7 +203,7 @@ export const BaseButton = styledComponent => styledComponent`
         font-size: .875rem;
 
         i {
-          margin-top: 6px;
+          margin-top: 3px;
           margin-bottom: 6px;
         }
       }
