@@ -75,6 +75,7 @@ class ExchangeHome extends React.Component {
         const mode = this.state.simpleBuy ? ADVANCED : SIMPLE;
         const switchForms = (
             <a
+                href="/"
                 className="switch"
                 data-testid={mode === ADVANCED ? "show-advanced-form" : "show-simple-form"}
                 onClick={e => {
