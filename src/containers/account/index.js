@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
@@ -17,11 +16,11 @@ import WatchAssetButton from "components/watchAssetButton";
 
 class AccountHome extends React.Component {
     componentDidMount() {
-        connectWeb3();
         loanManagerProvider();
         lockManagerProvider();
         augmintTokenProvider();
     }
+
     render() {
         return (
             <EthereumState>
@@ -30,16 +29,16 @@ class AccountHome extends React.Component {
                         <Pheader header="My Account" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
+                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid>
                         <Pgrid.Row>
-                            <Pgrid.Column size={{ tablet: 2 / 5 }}>
+                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
                                 <Balance
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
                                     locks={this.props.locks}
                                 >
-                                    <div style={{ marginTop: 20 }}>
+                                    <div>
                                         <WatchAssetButton className={"noMargin"} />
                                         <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
                                             <Button to="/exchange" className="primary myAcc">

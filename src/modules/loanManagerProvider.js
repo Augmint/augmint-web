@@ -1,7 +1,7 @@
 /* TODO: maintain loan state instead of full refresh on loan repay, newloan, loancollected events */
 
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshLoanManager, fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
 import { fetchLockProducts } from "modules/reducers/lockManager";
 import { fetchLoansForAddress } from "modules/reducers/loans";

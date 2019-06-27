@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import { Pgrid, Pheader, Psegment } from "components/PageLayout";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
@@ -12,7 +11,6 @@ import "./styles.css";
 
 class WithdrawHome extends React.Component {
     componentDidMount() {
-        connectWeb3();
         augmintTokenProvider();
         ratesProvider();
     }

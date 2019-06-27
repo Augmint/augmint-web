@@ -17,28 +17,28 @@ describe("Augmint funding", function() {
     it("Should show fund input label when add funds selected", function() {
         getAddFundsTab();
 
-        cy.get("[data-testid=addFundsLabel]").should("contain", "Send from bank account");
-    });
-
-    it("Should go to buy link when add funds selected", function() {
-        getAddFundsTab();
-
-        cy.get("[data-testid=addFundsLink]")
-            .should("have.attr", "href")
-            .and("include", "buy");
+        cy.get("[data-testid=addFundsAmountLabel]").should("contain", "Send from bank account");
     });
 
     it("Should show withdraw input label when withdraw selected", function() {
         getWithdrawTab();
 
-        cy.get("[data-testid=withdrawLabel]").should("contain", "Send to bank account");
+        cy.get("[data-testid=withdrawAmountLabel]").should("contain", "Send to bank account");
     });
 
-    it("Should go to sell link when withdraw selected", function() {
-        getWithdrawTab();
+    // it("Should go to buy link when add funds selected", function() {
+    //     getAddFundsTab();
+    //
+    //     cy.get("[data-testid=addFundsLink]")
+    //         .should("have.attr", "href")
+    //         .and("include", "EUR/to/Augmint-Euro-Token/AEUR");
+    // });
 
-        cy.get("[data-testid=withdrawLink]")
-            .should("have.attr", "href")
-            .and("include", "sell");
-    });
+    // it("Should go to sell link when withdraw selected", function() {
+    //     getWithdrawTab();
+    //
+    //     cy.get("[data-testid=withdrawLink]")
+    //         .should("have.attr", "href")
+    //         .and("include", "/Augmint-Euro-Token/AEUR/to/Euro");
+    // });
 });

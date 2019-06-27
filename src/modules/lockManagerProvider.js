@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshLockManager, fetchLockProducts } from "modules/reducers/lockManager";
 import { fetchLoanProducts } from "modules/reducers/loanManager";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
