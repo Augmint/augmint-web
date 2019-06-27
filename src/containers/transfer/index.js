@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { connectWeb3 } from "modules/web3Provider";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import TokenTransferForm from "./components/TokenTransferForm";
 import EthTransferForm from "./components/EthTransferForm";
@@ -37,7 +36,6 @@ class TransferPage extends React.Component {
     }
 
     componentDidMount() {
-        connectWeb3();
         augmintTokenProvider();
     }
 
@@ -51,7 +49,7 @@ class TransferPage extends React.Component {
                         <Pheader header="Send A-EUR" />
                     </TopNavTitlePortal>
 
-                    <NoTokenAlert style={{ margin: "0 15px 5px" }} />
+                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
                     <Pgrid className="transfer">
                         <Pgrid.Row>
                             <Pgrid.Column className="column" size={{ mobile: 1, tablet: 1, desktop: 2 / 5 }}>

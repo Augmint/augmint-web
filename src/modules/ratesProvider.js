@@ -1,5 +1,5 @@
 import store from "modules/store";
-import { setupWatch } from "./web3Provider";
+import { setupWatch } from "./initialFunctions.js";
 import { refreshRates } from "modules/reducers/rates";
 
 let isWatchSetup = false;

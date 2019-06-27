@@ -18,10 +18,10 @@ const initialState = {
     account: {
         address: "?",
 
-        ethBalance: "?",
+        ethBalance: null,
         bn_ethBalance: null,
 
-        tokenBalance: "?",
+        tokenBalance: null,
         bn_tokenBalance: null
     }
 };

@@ -1,5 +1,6 @@
 describe("Augmint base", function() {
     it("Under the hood", function() {
+        cy.get("[data-testid=reservesMenuLink]").click();
         cy.get("[data-testid=underTheHoodLink]").click();
 
         cy.get("[data-testid=baseInfoLink]").click();
