@@ -54,7 +54,7 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     labelposition="top"
                     style={{ flex: "1", margin: "0 .2rem", alignSelf: "auto", padding: "0 0 10px" }}
-                    breakToLines
+                    btn
                 />
             </Container>
         );

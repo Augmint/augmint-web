@@ -57,20 +57,10 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const {
-            web3,
-            contracts,
-            augmint,
-            user,
-            className,
-            breakToLines,
-            style,
-            circleicon,
-            labelposition
-        } = this.props;
+        const { web3, contracts, augmint, user, className, btn, style, circleicon, labelposition } = this.props;
         let showButton = false;
 
-        let _className = className + " watchAssetBtn";
+        let _className = className + " primary watchAssetBtn";
         const icon = "wallet";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
@@ -96,8 +86,6 @@ export class WatchAssetButton extends React.Component {
                     {showButton && (
                         <Button
                             className={_className}
-                            icon={icon}
-                            circleicon={circleicon}
                             onClick={() => {
                                 this.addAsset();
                             }}
@@ -128,7 +116,7 @@ export class WatchAssetButton extends React.Component {
             );
         };
 
-        return !breakToLines ? <Centered /> : <Btn />;
+        return !btn ? <Centered /> : <Btn />;
     }
 }
 
