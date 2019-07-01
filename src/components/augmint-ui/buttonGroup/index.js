@@ -13,7 +13,7 @@ const Container = styled.div`
     text-align: center;
     justify-content: space-between;
 
-    [Button] {
+    a {
         flex: 1;
         margin: 0 0.2rem;
         padding: 0 0 10px;
@@ -33,7 +33,6 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     className="naked circle icon top"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Exchange fiat
                 </Button>
@@ -43,7 +42,6 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     className="naked circle icon top"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Exchange crypto
                 </Button>
@@ -54,7 +52,6 @@ export default class ButtonGroup extends React.Component {
                     circleicon="true"
                     data-testid="transferButton"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 .2rem", padding: "0 0 10px" }}
                 >
                     Send
                 </Button>
@@ -63,7 +60,7 @@ export default class ButtonGroup extends React.Component {
                     icon="wallet"
                     circleicon="true"
                     labelposition="top"
-                    style={{ flex: "1", margin: "0 .2rem", alignSelf: "auto", padding: "0 0 10px" }}
+                    // style={{ flex: "1", margin: "0 .2rem", alignSelf: "auto", padding: "0 0 10px" }}
                     btn
                 />
             </Container>

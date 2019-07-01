@@ -9,9 +9,7 @@ export const TxDate = styled.span`
     font-size: ${remCalc(12)};
 `;
 
-export const TxTitle = styled.span`
-    font-weight: bold;
-`;
+export const TxTitle = styled.span``;
 
 export const TxDetails = styled.span`
     font-size: ${remCalc(12)};

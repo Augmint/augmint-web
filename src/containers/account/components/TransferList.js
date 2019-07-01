@@ -59,6 +59,15 @@ const TransferTable = styled(Table)`
     tr :nth-child(4) {
         text-align: right;
     }
+
+    ${media.mobile`
+        .mobilePaddingRight {
+            padding-right: 0px;
+        };
+        .mobilePaddingLeft {
+            padding-left: 0px;
+        };
+    `};
 `;
 
 class TransferList extends React.Component {
@@ -134,11 +143,11 @@ class TransferList extends React.Component {
                                         <td className={"hide-xs"}>
                                             <TxDate>{tx.blockTimeStampText}</TxDate>
                                         </td>
-                                        <td>
+                                        <td className="mobilePaddingRight">
                                             <div className={"show-xs"}>{tx.date}</div>
                                             <TxInfo tx={tx} />
                                         </td>
-                                        <td>
+                                        <td className="mobilePaddingLeft">
                                             <Transfer>
                                                 <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
                                                 <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
