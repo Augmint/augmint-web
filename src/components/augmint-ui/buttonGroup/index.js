@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import WatchAssetButton from "components/watchAssetButton";
 import Button from "components/augmint-ui/button";
+import { media } from "styles/media";
 
 const Container = styled.div`
     width: 100%;
@@ -11,6 +12,15 @@ const Container = styled.div`
     display: flex;
     text-align: center;
     justify-content: space-between;
+
+    [Button] {
+        flex: 1;
+        margin: 0 0.2rem;
+        padding: 0 0 10px;
+        ${media.tabletMin`
+            font-size: 1rem;
+        `};
+    }
 `;
 
 export default class ButtonGroup extends React.Component {

@@ -177,6 +177,12 @@ export const BaseButton = styledComponent => styledComponent`
       `};
     }
 
+    &.balanceBtn{
+      width: 95%;
+      box-sizing: border-box; 
+      padding: 10px;
+    }
+
     &.icon {      
       
       &.left {

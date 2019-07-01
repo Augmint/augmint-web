@@ -7,6 +7,7 @@ import { AEUR, ETH } from "components/augmint-ui/currencies";
 import AccountAddress from "components/accountAddress";
 import Button from "components/augmint-ui/button";
 import ButtonGroup from "components/augmint-ui/buttonGroup";
+import { media } from "styles/media";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};
@@ -18,7 +19,10 @@ const Label = styled.div`
 
 const TokenBalance = styled.div`
     font-family: ${theme.typography.fontFamilies.currency};
-    font-size: ${remCalc(48)};
+    font-size: ${remCalc(32)};
+    ${media.tabletMin`
+            font-size: ${remCalc(48)};
+        `};
     .currency > span {
         font-size: ${remCalc(24)};
     }
@@ -54,7 +58,7 @@ export default class Balance extends React.Component {
             >
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
-                    <TokenBalance style={{ fontSize: "2rem" }}>
+                    <TokenBalance>
                         {/* <AEUR 
                             amount={userAccount.tokenBalance} 
                             className="currency" 
@@ -82,19 +86,16 @@ export default class Balance extends React.Component {
                                     <TokenAmount>
                                         <AEUR amount={loansAmount} />
                                     </TokenAmount>
-                                    <Button className="naked" to="/loan" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/loan" style={{ padding: "10px" }}>
                                         View all
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button
-                                        style={{ width: "95%", boxSizing: "border-box", padding: "10px" }}
-                                        to="/loan/new"
-                                    >
+                                    <Button to="/loan/new" className="balanceBtn">
                                         Get a new loan
                                     </Button>
-                                    <Button className="naked" to="/loan/archive" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/loan/archive" style={{ padding: "10px" }}>
                                         View old loans
                                     </Button>
                                 </>
@@ -110,7 +111,7 @@ export default class Balance extends React.Component {
                                 padding: "1rem 0 .5rem"
                             }}
                         >
-                            <Button style={{ width: "95%", boxSizing: "border-box", padding: "10px" }} to="/loan/new">
+                            <Button to="/loan/new" className="balanceBtn">
                                 Get a new loan
                             </Button>
                         </Pgrid.Column>
@@ -132,19 +133,16 @@ export default class Balance extends React.Component {
                                     <TokenAmount>
                                         <AEUR amount={locksAmount} />
                                     </TokenAmount>
-                                    <Button className="naked" to="/lock" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/lock" style={{ padding: "10px" }}>
                                         View all
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button
-                                        style={{ width: "95%", boxSizing: "border-box", padding: "10px" }}
-                                        to="/lock/new"
-                                    >
+                                    <Button to="/lock/new" className="balanceBtn">
                                         Lock A-EUR
                                     </Button>
-                                    <Button className="naked" to="/lock/archive" style={{ fontSize: ".875rem" }}>
+                                    <Button className="naked" to="/lock/archive" style={{ padding: "10px" }}>
                                         View old locks
                                     </Button>
                                 </>
@@ -160,7 +158,7 @@ export default class Balance extends React.Component {
                                 padding: "1rem 0 .5rem"
                             }}
                         >
-                            <Button style={{ width: "95%", boxSizing: "border-box", padding: "10px" }} to="/lock/new">
+                            <Button to="/lock/new" className="balanceBtn">
                                 Lock A-EUR
                             </Button>
                         </Pgrid.Column>
