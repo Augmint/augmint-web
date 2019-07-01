@@ -11,6 +11,7 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "./components/NoTokenAlert";
 import styled from "styled-components";
 import { media } from "styles/media";
+import WatchAssetButton from "components/watchAssetButton";
 
 const StyledPgridRow = styled(Pgrid.Row)`
     &.balance {

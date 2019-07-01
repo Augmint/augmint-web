@@ -99,20 +99,24 @@ export class WatchAssetButton extends React.Component {
 
         const Btn = () => {
             return (
-                <Button
-                    className={className}
-                    icon={icon}
-                    circleicon={circleicon}
-                    onClick={() => {
-                        this.addAsset();
-                    }}
-                    style={style}
-                    labelposition={labelposition}
-                >
-                    Watch
-                    <br />
-                    in wallet
-                </Button>
+                <>
+                    {showButton && (
+                        <Button
+                            className={className}
+                            icon={icon}
+                            circleicon={circleicon}
+                            onClick={() => {
+                                this.addAsset();
+                            }}
+                            style={style}
+                            labelposition={labelposition}
+                        >
+                            Watch
+                            <br />
+                            in wallet
+                        </Button>
+                    )}
+                </>
             );
         };
 
