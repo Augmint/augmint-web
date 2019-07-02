@@ -11,7 +11,6 @@ import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
 import NoTokenAlert from "./components/NoTokenAlert";
 import styled from "styled-components";
 import { media } from "styles/media";
-import WatchAssetButton from "components/watchAssetButton";
 
 const StyledPgridRow = styled(Pgrid.Row)`
     &.balance {
@@ -64,15 +63,6 @@ class AccountHome extends React.Component {
                                 <TransferList userAccount={this.props.userAccount} />
                             </Pgrid.Column>
                         </StyledPgridRow>
-
-                        {/* <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LoanList header="My active loans" loans={this.props.loans} />
-                            </Pgrid.Column>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LockList header="My active locks" locks={this.props.locks} />
-                            </Pgrid.Column>
-                        </Pgrid.Row> */}
                     </Pgrid>
                 </Psegment>
             </EthereumState>

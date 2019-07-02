@@ -183,6 +183,11 @@ export const BaseButton = styledComponent => styledComponent`
       padding: 10px;
     }
 
+    &.danger {
+      background: ${theme.colors.red};
+      color: ${theme.colors.white};
+    }
+
     &.icon {      
       
       &.left {

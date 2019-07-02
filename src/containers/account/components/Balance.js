@@ -48,8 +48,12 @@ export default class Balance extends React.Component {
         const { userAccount, loans, locks, children } = this.props;
         const activeLoans = loans.loans && loans.loans.filter(loan => loan.isRepayable);
         const activeLocks = locks.locks && locks.locks.filter(lock => lock.isReleasebale || lock.isActive);
+        const releaseBtn = locks.locks && locks.locks.filter(lock => lock.isReleasebale).length > 0;
+        const repayBtn = loans.loans && loans.loans.filter(loan => loan.dueState !== undefined).length > 0;
         const loansAmount = sum(pick(activeLoans, "loanAmount"));
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
+
+        console.log("releasebale: ", releaseBtn);
 
         return (
             <Pblock
@@ -86,8 +90,13 @@ export default class Balance extends React.Component {
                                     <TokenAmount>
                                         <AEUR amount={loansAmount} />
                                     </TokenAmount>
+                                    {releaseBtn && (
+                                        <Button to="/loan" className="balanceBtn danger" style={{ marginTop: "5px" }}>
+                                            Repay due loans
+                                        </Button>
+                                    )}
                                     <Button className="naked" to="/loan" style={{ padding: "10px" }}>
-                                        View all locks
+                                        View all loans
                                     </Button>
                                 </>
                             ) : (
@@ -133,6 +142,11 @@ export default class Balance extends React.Component {
                                     <TokenAmount>
                                         <AEUR amount={locksAmount} />
                                     </TokenAmount>
+                                    {releaseBtn && (
+                                        <Button to="/lock" className="balanceBtn" style={{ marginTop: "5px" }}>
+                                            Release funds
+                                        </Button>
+                                    )}
                                     <Button className="naked" to="/lock" style={{ padding: "10px" }}>
                                         View all locks
                                     </Button>
