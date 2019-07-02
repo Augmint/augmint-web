@@ -206,7 +206,10 @@ export const BaseButton = styledComponent => styledComponent`
 
       &.top {
         flex-direction: column-reverse;
-        font-size: .875rem;
+        font-size: 1rem;
+        ${media.mobile`
+          font-size: .875rem;
+        `};
 
         i {
           margin-top: 3px;
@@ -215,8 +218,8 @@ export const BaseButton = styledComponent => styledComponent`
       }
 
       .circleBg {
-        color: ${theme.colors.white}
-        background: ${theme.colors.primary};
+        color: ${theme.colors.primary}
+        background: ${theme.colors.secondary};
         width: 30px;
         height: 30px;
         border-radius: 50%;

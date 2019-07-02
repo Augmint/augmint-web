@@ -77,7 +77,7 @@ export default class Balance extends React.Component {
                                 flexDirection: "column",
                                 justifyContent: "flex-end",
                                 textAlign: "-webkit-center",
-                                padding: "1rem 0 0"
+                                padding: ".5rem 0 0"
                             }}
                         >
                             {parseFloat(loansAmount) !== 0 ? (
@@ -87,7 +87,7 @@ export default class Balance extends React.Component {
                                         <AEUR amount={loansAmount} />
                                     </TokenAmount>
                                     <Button className="naked" to="/loan" style={{ padding: "10px" }}>
-                                        View all
+                                        View all locks
                                     </Button>
                                 </>
                             ) : (
@@ -108,7 +108,7 @@ export default class Balance extends React.Component {
                                 display: "flex",
                                 flexDirection: "column",
                                 textAlign: "-webkit-center",
-                                padding: "1rem 0 .5rem"
+                                padding: ".5rem 0 .5rem"
                             }}
                         >
                             <Button to="/loan/new" className="balanceBtn">
@@ -124,7 +124,7 @@ export default class Balance extends React.Component {
                                 flexDirection: "column",
                                 justifyContent: "flex-end",
                                 textAlign: "-webkit-center",
-                                padding: "1rem 0 0"
+                                padding: ".5rem 0 0"
                             }}
                         >
                             {parseFloat(locksAmount) !== 0 ? (
@@ -134,7 +134,7 @@ export default class Balance extends React.Component {
                                         <AEUR amount={locksAmount} />
                                     </TokenAmount>
                                     <Button className="naked" to="/lock" style={{ padding: "10px" }}>
-                                        View all
+                                        View all locks
                                     </Button>
                                 </>
                             ) : (
@@ -155,7 +155,7 @@ export default class Balance extends React.Component {
                                 display: "flex",
                                 flexDirection: "column",
                                 textAlign: "-webkit-center",
-                                padding: "1rem 0 .5rem"
+                                padding: ".5rem 0 .5rem"
                             }}
                         >
                             <Button to="/lock/new" className="balanceBtn">

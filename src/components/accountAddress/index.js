@@ -68,7 +68,7 @@ export default class AccountAddress extends React.Component {
                         data-testid="loansToCollectButton"
                         onClick={e => this.showHint(true)}
                         icon="copy"
-                        style={{ padding: "0 0 0 5px" }}
+                        style={{ padding: "0 0 0 5px", fontSize: ".875rem" }}
                         className="naked icon top"
                     />
                     <StyledHintBtn className={_className} id="StyledHinBtn">
