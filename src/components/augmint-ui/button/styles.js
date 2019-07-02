@@ -186,6 +186,10 @@ export const BaseButton = styledComponent => styledComponent`
     &.danger {
       background: ${theme.colors.red};
       color: ${theme.colors.white};
+      padding: 10px 5px;
+      :hover {
+        background: ${theme.colors.darkRed};
+      }
     }
 
     &.icon {      
