@@ -7,10 +7,10 @@ import augmintTokenProvider from "modules/augmintTokenProvider";
 import ratesProvider from "modules/ratesProvider";
 
 import Icon from "components/augmint-ui/icon";
-import { shortAccountAddresConverter } from "utils/converter";
-import { ETHEUR } from "utils/constants";
+import AccountAddress from "components/accountAddress";
+import { AEUR, ETH } from "components/augmint-ui/currencies";
 import { CloseIcon } from "./styles";
-import close from "assets/images/close.svg";
+import closeDark from "assets/images/close-dark.svg";
 import { theme } from "styles/media";
 
 import {
@@ -21,7 +21,6 @@ import {
     StyledTopNavLinkRight,
     StyledPrice,
     StyledAccount,
-    StyledSeparator,
     StyledAccountInfo
 } from "./styles";
 
@@ -60,7 +59,6 @@ class TopNav extends React.Component {
     }
 
     render() {
-        const shortAddress = shortAccountAddresConverter(this.props.userAccount.address);
         const { ethBalance, tokenBalance } = this.props.userAccount;
         const transactions = this.props.transactions;
         const accountInfoData = {
@@ -102,17 +100,10 @@ class TopNav extends React.Component {
             <StyledTopNav className={this.props.showAccInfo ? this.props.className + " hidden" : this.props.className}>
                 <TitleWrapper id="page-title" />
                 <StyledTopNavUl>
-                    <StyledTopNavLi>
-                        <StyledPrice>
-                            <span className="price">
-                                {ETHEUR}: {this.props.rates.info.ethFiatRate}
-                            </span>
-                        </StyledPrice>
-                    </StyledTopNavLi>
-                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
+                    <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
                         <StyledTopNavLinkRight
                             title="Your account"
-                            to={this.props.showAccInfo ? "" : "/account"}
+                            to=""
                             onClick={e => this.toggleAccInfo(e, true)}
                             className={this.props.showAccInfo ? "accountDetails opened" : "accountDetails"}
                         >
@@ -120,22 +111,22 @@ class TopNav extends React.Component {
                                 name="account"
                                 className={this.props.showAccInfo ? "accountIcon opened" : "accountIcon"}
                             />
-                            <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">
-                                    {ethBalance > 0 ? Number(ethBalance).toFixed(4) : 0} ETH
-                                </span>
-                            </StyledPrice>
-                            <StyledSeparator />
-                            <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">
-                                    {tokenBalance > 0 ? Number(tokenBalance).toFixed(2) : 0} A€
-                                </span>
-                            </StyledPrice>
-                            <StyledSeparator />
-                            <StyledPrice className="accountInfoContainer">
-                                <span className="accountDetailsInfo">{shortAddress}</span>
-                            </StyledPrice>
+                            <span>Balance</span>
                         </StyledTopNavLinkRight>
+                        <StyledPrice className="accountInfoContainer">
+                            <ETH amount={ethBalance} style={{ fontWeight: 700 }} />
+                        </StyledPrice>
+                        <StyledPrice className="accountInfoContainer">
+                            <AEUR amount={tokenBalance} style={{ fontWeight: 700 }} />
+                        </StyledPrice>
+                        <StyledPrice className="accountInfoContainer">
+                            <AccountAddress
+                                address={this.props.userAccount.address}
+                                title=""
+                                shortAddress
+                                className={"bold"}
+                            />
+                        </StyledPrice>
                         <StyledAccount className={this.props.showAccInfo ? "opened" : ""}>
                             <StyledAccountInfo
                                 data={accountInfoData}
@@ -144,13 +135,13 @@ class TopNav extends React.Component {
                                 toggleAccInfo={this.toggleAccInfo}
                             />
                             <CloseIcon
-                                src={close}
+                                src={closeDark}
                                 onClick={e => this.toggleAccInfo(e)}
                                 className={this.props.showAccInfo ? "opened" : ""}
                             />
                         </StyledAccount>
                     </StyledTopNavLi>
-                    <StyledTopNavLi className={this.props.showAccInfo ? "navLinkRight" : "navLinkRight hidden"}>
+                    <StyledTopNavLi className={this.props.showAccInfo ? "" : "hidden"}>
                         <StyledTopNavLinkRight
                             title="Notifications"
                             to=""
@@ -162,18 +153,8 @@ class TopNav extends React.Component {
                             }}
                             className={this.props.showNotificationPanel ? "notifications open" : "notifications"}
                         >
-                            <Icon name="notifications" style={{ position: "relative", top: "11px" }} />
+                            <Icon name="notifications" style={{ position: "relative", top: "12px" }} />
                             <Icon name={notiIcon} loading={_loading} style={_style} />
-                        </StyledTopNavLinkRight>
-                    </StyledTopNavLi>
-                    <StyledTopNavLi className="navLinkRight">
-                        <StyledTopNavLinkRight
-                            title="Under the hood"
-                            to="/under-the-hood"
-                            data-testid="underTheHoodLink"
-                        >
-                            <Icon name="connect" />
-                            <span>{this.props.web3Connect.network.name}</span>
                         </StyledTopNavLinkRight>
                     </StyledTopNavLi>
                 </StyledTopNavUl>
