@@ -9,8 +9,6 @@ export const TxDate = styled.span`
     font-size: ${remCalc(12)};
 `;
 
-export const TxTitle = styled.span``;
-
 export const TxDetails = styled.span`
     font-size: ${remCalc(12)};
     color: ${theme.colors.mediumGrey};
@@ -74,10 +72,10 @@ class TxInfo extends React.Component {
             <div>
                 <div>
                     <HashURL hash={tx.transactionHash} type={"tx/"} title="Transaction details">
-                        <TxTitle>
+                        <span>
                             <span style={{ color: "black" }}>{this.getTitleText(tx)}</span>
                             <br />»<small> Details</small>
-                        </TxTitle>
+                        </span>
                     </HashURL>
                 </div>
                 <TxDetails data-testid="txDetails">
