@@ -4,17 +4,17 @@ TODO: input formatting: decimals, thousand separators
 
 import React from "react";
 
-import { Menu } from "components/augmint-ui/menu";
 import Button from "components/augmint-ui/button";
 import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
-import { reduxForm, Field, SubmissionError, formValueSelector } from "redux-form";
+import { reduxForm, Field, SubmissionError, formValueSelector, change } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
 import { PriceToolTip } from "./ExchangeToolTips";
 import { DECIMALS, ETH_DECIMALS } from "utils/constants";
+import { Wei, Ratio, Tokens } from "@augmint/js";
 
 import theme from "styles/theme";
 import styled from "styled-components";
@@ -30,11 +30,9 @@ class PlaceOrderForm extends React.Component {
         super(props);
         this.state = { result: null, orderDirection: TOKEN_BUY, lastChangedAmountField: "" };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onOrderDirectionChange = this.onOrderDirectionChange.bind(this);
         this.onTokenAmountChange = this.onTokenAmountChange.bind(this);
         this.onEthAmountChange = this.onEthAmountChange.bind(this);
         this.onPriceChange = this.onPriceChange.bind(this);
-        this.toggleOrderBook = this.toggleOrderBook.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -47,23 +45,24 @@ class PlaceOrderForm extends React.Component {
                 this.props.ethAmount
             );
         }
+
+        const form = store.getState().form.PlaceOrderForm;
+        const thisToken = form && form.values ? form.values.tokenAmount : undefined;
+        if (this.props.token && this.props.token !== thisToken && !this.state.tokenUpdated) {
+            this.props.dispatch(change("PlaceOrderForm", "tokenAmount", this.props.token));
+            this.setState({
+                tokenUpdated: true
+            });
+            this.onTokenAmountChange(null, this.props.token);
+        }
     }
 
-    toggleOrderBook(e) {
-        const direction = e === TOKEN_SELL ? TOKEN_BUY : TOKEN_SELL;
-        this.props.toggleOrderBook(direction);
-    }
-
-    onOrderDirectionChange(e) {
-        this.setState({ orderDirection: +e.target.attributes["data-index"].value });
-        this.toggleOrderBook(+e.target.attributes["data-index"].value);
-    }
-
-    onTokenAmountChange(e) {
+    onTokenAmountChange(e, savedValue) {
+        const value = e ? e.target.value : savedValue;
         try {
             const lastChangedAmountField = "tokenAmount";
             this.setState({ lastChangedAmountField });
-            this.reCalcAmounts(lastChangedAmountField, this.props.price, e.target.value, null);
+            this.reCalcAmounts(lastChangedAmountField, this.props.price, value, null);
         } catch (error) {
             this.props.change("ethAmount", "");
         }
@@ -114,14 +113,14 @@ class PlaceOrderForm extends React.Component {
 
     async handleSubmit(values) {
         let amount, price;
-        const orderDirection = this.state.orderDirection;
+        const orderDirection = this.props.orderDirection;
 
         try {
-            price = this.parsePrice(values.price);
+            price = Ratio.of(this.parsePrice(values.price));
             if (orderDirection === TOKEN_BUY) {
-                amount = parseFloat(values.ethAmount);
+                amount = Wei.of(values.ethAmount);
             } else {
-                amount = parseFloat(values.tokenAmount);
+                amount = Tokens.of(values.tokenAmount);
             }
         } catch (error) {
             throw new SubmissionError({
@@ -152,7 +151,6 @@ class PlaceOrderForm extends React.Component {
 
     render() {
         const {
-            header: mainHeader,
             rates,
             exchange,
             error,
@@ -163,7 +161,7 @@ class PlaceOrderForm extends React.Component {
             clearSubmitErrors,
             reset
         } = this.props;
-        const { orderDirection } = this.state;
+        const { orderDirection } = this.props;
 
         const ethAmountValidations = [Validations.required, Validations.ethAmount];
         if (orderDirection === TOKEN_BUY) {
@@ -177,39 +175,10 @@ class PlaceOrderForm extends React.Component {
 
         const isDesktop = window.innerWidth > 768;
 
-        const header = (
-            <div>
-                {mainHeader}
-                <Menu>
-                    <Menu.Item
-                        active={orderDirection === TOKEN_BUY}
-                        data-index={TOKEN_BUY}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="buyMenuLink"
-                        className={"buySell"}
-                        tabIndex="0"
-                    >
-                        Buy A-EUR
-                    </Menu.Item>
-                    <Menu.Item
-                        active={orderDirection === TOKEN_SELL}
-                        data-index={TOKEN_SELL}
-                        onClick={this.onOrderDirectionChange}
-                        data-testid="sellMenuLink"
-                        className={"buySell"}
-                        tabIndex="0"
-                    >
-                        Sell A-EUR
-                    </Menu.Item>
-                </Menu>
-            </div>
-        );
-
         return (
             <Pblock
                 className="placeOrder-form"
                 loading={exchange.isLoading || !rates.isLoaded || (pristine && rates.isLoading)}
-                header={header}
             >
                 <ConnectionStatus contract={this.props.exchange} />
 
@@ -297,6 +266,7 @@ class PlaceOrderForm extends React.Component {
                             style={{ borderRadius: theme.borderRadius.left }}
                             labelAlignRight="ETH"
                         />
+
                         <Button
                             size="big"
                             loading={submitting}
@@ -309,6 +279,8 @@ class PlaceOrderForm extends React.Component {
                             {!submitting &&
                                 (orderDirection === TOKEN_BUY ? "Submit buy A-EUR order" : "Submit sell A-EUR order")}
                         </Button>
+
+                        {this.props.children}
                     </Form>
                 )}
             </Pblock>
