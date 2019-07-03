@@ -53,7 +53,123 @@ export default class Balance extends React.Component {
         const loansAmount = sum(pick(activeLoans, "loanAmount"));
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
 
-        console.log("releasebale: ", releaseBtn);
+        const LoansUIBlock = () => {
+            return (
+                <Pgrid.Column
+                    size={1 / 2}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-end",
+                        textAlign: "-webkit-center",
+                        padding: ".5rem 0 0"
+                    }}
+                >
+                    {parseFloat(loansAmount) !== 0 ? (
+                        <>
+                            <Label>My total loans</Label>
+                            <TokenAmount>
+                                <AEUR amount={loansAmount} />
+                            </TokenAmount>
+                            {repayBtn && (
+                                <Button to="/loan" className="balanceBtn danger" style={{ marginTop: "5px" }}>
+                                    Repay due loans
+                                </Button>
+                            )}
+                            <Button className="naked" to="/loan" style={{ padding: "10px" }}>
+                                View all loans
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button to="/loan/new" className="balanceBtn">
+                                Get a new loan
+                            </Button>
+                            <Button className="naked" to="/loan/archive" style={{ padding: "10px" }}>
+                                View old loans
+                            </Button>
+                        </>
+                    )}
+                </Pgrid.Column>
+            );
+        };
+
+        const NoLoansUIBlock = () => {
+            return (
+                <Pgrid.Column
+                    size={1 / 2}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        textAlign: "-webkit-center",
+                        padding: ".5rem 0 .5rem"
+                    }}
+                >
+                    <Button to="/loan/new" className="balanceBtn">
+                        Get a new loan
+                    </Button>
+                </Pgrid.Column>
+            );
+        };
+
+        const LocksUIBlock = () => {
+            return (
+                <Pgrid.Column
+                    size={1 / 2}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-end",
+                        textAlign: "-webkit-center",
+                        padding: ".5rem 0 0"
+                    }}
+                >
+                    {parseFloat(locksAmount) !== 0 ? (
+                        <>
+                            <Label>My total locks</Label>
+                            <TokenAmount>
+                                <AEUR amount={locksAmount} />
+                            </TokenAmount>
+                            {releaseBtn && (
+                                <Button to="/lock" className="balanceBtn" style={{ marginTop: "5px" }}>
+                                    Release funds
+                                </Button>
+                            )}
+                            <Button className="naked" to="/lock" style={{ padding: "10px" }}>
+                                View all locks
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button to="/lock/new" className="balanceBtn">
+                                Lock A-EUR
+                            </Button>
+                            <Button className="naked" to="/lock/archive" style={{ padding: "10px" }}>
+                                View old locks
+                            </Button>
+                        </>
+                    )}
+                </Pgrid.Column>
+            );
+        };
+
+        const NoLocksUIBlock = () => {
+            return (
+                <Pgrid.Column
+                    size={1 / 2}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        textAlign: "-webkit-center",
+                        padding: ".5rem 0 .5rem"
+                    }}
+                >
+                    <Button to="/lock/new" className="balanceBtn">
+                        Lock A-EUR
+                    </Button>
+                </Pgrid.Column>
+            );
+        };
 
         return (
             <Pblock
@@ -63,120 +179,13 @@ export default class Balance extends React.Component {
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
                     <TokenBalance>
-                        {/* <AEUR 
-                            amount={userAccount.tokenBalance} 
-                            className="currency" 
-                            style={{ display: "inline-block", position: "relative", transform: "translate(-50%)", left: "50%"}}
-                        /> */}
                         <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
                 <ButtonGroup />
                 <Pgrid.Row style={{ textAlign: "center" }}>
-                    {loans && loans.isLoaded && loans.loans.length > 0 ? (
-                        <Pgrid.Column
-                            size={1 / 2}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "flex-end",
-                                textAlign: "-webkit-center",
-                                padding: ".5rem 0 0"
-                            }}
-                        >
-                            {parseFloat(loansAmount) !== 0 ? (
-                                <>
-                                    <Label>My total loans</Label>
-                                    <TokenAmount>
-                                        <AEUR amount={loansAmount} />
-                                    </TokenAmount>
-                                    {releaseBtn && (
-                                        <Button to="/loan" className="balanceBtn danger" style={{ marginTop: "5px" }}>
-                                            Repay due loans
-                                        </Button>
-                                    )}
-                                    <Button className="naked" to="/loan" style={{ padding: "10px" }}>
-                                        View all loans
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button to="/loan/new" className="balanceBtn">
-                                        Get a new loan
-                                    </Button>
-                                    <Button className="naked" to="/loan/archive" style={{ padding: "10px" }}>
-                                        View old loans
-                                    </Button>
-                                </>
-                            )}
-                        </Pgrid.Column>
-                    ) : (
-                        <Pgrid.Column
-                            size={1 / 2}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                textAlign: "-webkit-center",
-                                padding: ".5rem 0 .5rem"
-                            }}
-                        >
-                            <Button to="/loan/new" className="balanceBtn">
-                                Get a new loan
-                            </Button>
-                        </Pgrid.Column>
-                    )}
-                    {locks && locks.locks.length > 0 ? (
-                        <Pgrid.Column
-                            size={1 / 2}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "flex-end",
-                                textAlign: "-webkit-center",
-                                padding: ".5rem 0 0"
-                            }}
-                        >
-                            {parseFloat(locksAmount) !== 0 ? (
-                                <>
-                                    <Label>My total locks</Label>
-                                    <TokenAmount>
-                                        <AEUR amount={locksAmount} />
-                                    </TokenAmount>
-                                    {releaseBtn && (
-                                        <Button to="/lock" className="balanceBtn" style={{ marginTop: "5px" }}>
-                                            Release funds
-                                        </Button>
-                                    )}
-                                    <Button className="naked" to="/lock" style={{ padding: "10px" }}>
-                                        View all locks
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button to="/lock/new" className="balanceBtn">
-                                        Lock A-EUR
-                                    </Button>
-                                    <Button className="naked" to="/lock/archive" style={{ padding: "10px" }}>
-                                        View old locks
-                                    </Button>
-                                </>
-                            )}
-                        </Pgrid.Column>
-                    ) : (
-                        <Pgrid.Column
-                            size={1 / 2}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                textAlign: "-webkit-center",
-                                padding: ".5rem 0 .5rem"
-                            }}
-                        >
-                            <Button to="/lock/new" className="balanceBtn">
-                                Lock A-EUR
-                            </Button>
-                        </Pgrid.Column>
-                    )}
+                    {loans && loans.isLoaded && loans.loans.length > 0 ? <LoansUIBlock /> : <NoLoansUIBlock />}
+                    {locks && locks.locks.length > 0 ? <LocksUIBlock /> : <NoLocksUIBlock />}
                 </Pgrid.Row>
                 <EthAmount style={{ textAlign: "center" }}>
                     <Label>ETH balance</Label>
