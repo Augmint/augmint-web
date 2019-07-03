@@ -25,44 +25,34 @@ const Container = styled.div`
 
 export default class ButtonGroup extends React.Component {
     render() {
+        const buttons = this.props.buttons;
+
         return (
             <Container>
-                <Button
-                    to="/exchange"
-                    icon="reserves"
-                    circleicon="true"
-                    className="naked circle icon top"
-                    labelposition="top"
-                >
-                    Exchange fiat
-                </Button>
-                <Button
-                    to="/exchange"
-                    icon="exchange"
-                    circleicon="true"
-                    className="naked circle icon top"
-                    labelposition="top"
-                >
-                    Exchange crypto
-                </Button>
-                <Button
-                    to="/transfer"
-                    className="naked circle icon top"
-                    icon="send"
-                    circleicon="true"
-                    data-testid="transferButton"
-                    labelposition="top"
-                >
-                    Send
-                </Button>
-                <WatchAssetButton
-                    className="naked icon top"
-                    icon="wallet"
-                    circleicon="true"
-                    labelposition="top"
-                    // style={{ flex: "1", margin: "0 .2rem", alignSelf: "auto", padding: "0 0 10px" }}
-                    btn
-                />
+                {buttons.map((button, index) =>
+                    button.type === "watchAssetButton" ? (
+                        <WatchAssetButton
+                            key={index}
+                            icon={button.icon}
+                            circleicon={button.circleicon}
+                            className={button.className}
+                            labelposition={button.labelposition}
+                        >
+                            {button.content}
+                        </WatchAssetButton>
+                    ) : (
+                        <Button
+                            key={index}
+                            to={button.to}
+                            icon={button.icon}
+                            circleicon={button.circleicon}
+                            className={button.className}
+                            labelposition={button.labelposition}
+                        >
+                            {button.content}
+                        </Button>
+                    )
+                )}
             </Container>
         );
     }

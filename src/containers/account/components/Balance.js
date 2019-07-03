@@ -52,6 +52,40 @@ export default class Balance extends React.Component {
         const repayBtn = loans.loans && loans.loans.filter(loan => loan.dueState !== undefined).length > 0;
         const loansAmount = sum(pick(activeLoans, "loanAmount"));
         const locksAmount = sum(pick(activeLocks, "amountLocked"));
+        const buttons = [
+            {
+                to: "/exchangeFiat",
+                icon: "reserves",
+                circleicon: "true",
+                className: "naked circle icon top",
+                labelposition: "top",
+                content: "Exchange fiat"
+            },
+            {
+                to: "/exchange",
+                icon: "exchange",
+                circleicon: "true",
+                className: "naked circle icon top",
+                labelposition: "top",
+                content: "Exchange crypto"
+            },
+            {
+                to: "/transfer",
+                className: "naked circle icon top",
+                icon: "send",
+                circleicon: "true",
+                dataTestid: "transferButton",
+                labelposition: "top",
+                content: "Send"
+            },
+            {
+                className: "naked icon top",
+                icon: "wallet",
+                circleicon: "true",
+                labelposition: "top",
+                type: "watchAssetButton"
+            }
+        ];
 
         const LoansUIBlock = () => {
             return (
@@ -175,6 +209,7 @@ export default class Balance extends React.Component {
             <Pblock
                 className="balance"
                 style={{ justifyContent: "center", maxWidth: "500px", margin: "auto", marginBottom: 0 }}
+                balanceBlock
             >
                 <div style={{ textAlign: "center" }}>
                     <Label className="balance">Current balance</Label>
@@ -182,7 +217,7 @@ export default class Balance extends React.Component {
                         <AEUR amount={userAccount.tokenBalance} className="currency" />
                     </TokenBalance>
                 </div>
-                <ButtonGroup />
+                <ButtonGroup buttons={buttons} />
                 <Pgrid.Row style={{ textAlign: "center" }}>
                     {loans && loans.isLoaded && loans.loans.length > 0 ? <LoansUIBlock /> : <NoLoansUIBlock />}
                     {locks && locks.locks.length > 0 ? <LocksUIBlock /> : <NoLocksUIBlock />}
