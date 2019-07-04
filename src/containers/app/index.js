@@ -299,4 +299,4 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect
 });
 
-export default (App = withRouter(connect(mapStateToProps)(App)));
+export default App = withRouter(connect(mapStateToProps)(App));
