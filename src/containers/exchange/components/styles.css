@@ -1,14 +1,66 @@
 .segment.dashblock.placeOrder-form {
     max-width: 350px;
     flex-basis: 350px;
-    margin-top: 1rem;
+    margin-top: 0;
+    width: 350px;
 }
-
+.segment.dashblock.simplebuy-form {
+    max-width: 350px;
+    flex-basis: 350px;
+    margin-top: 0;
+    width: 350px;
+}
+.toggle {
+    margin: 0 1rem -1rem 1rem;
+    padding: 1rem;
+    color: black;
+    background: white;
+    width: 350px;
+    background: white;
+    box-sizing: border-box;
+}
+.switch {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 3px;
+    cursor: pointer;
+    color: #051d2d;
+}
+.exchange-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-start;
+}
+.exchange-orders {
+    max-width: calc(100% - 382px);
+}
+@media (max-width: 736px) {
+    .exchange-container {
+        flex-direction: column;
+    }
+    .exchange-orders {
+        max-width: 100%;
+    }
+}
 /* mobile */
 @media (max-width: 376px) {
     .segment.dashblock.placeOrder-form {
         width: 100%;
-        margin: 1rem 0 1rem 0;
+        margin: 0 0 1rem 0;
         max-width: 100%;
+        padding-top: 1rem;
+    }
+    .segment.dashblock.simplebuy-form {
+        width: 100%;
+        margin: 0 0 1rem 0;
+        max-width: 100%;
+        padding-top: 1rem;
+    }
+    .toggle {
+        margin: 1rem 0 0 0;
+        width: 100%;
     }
 }

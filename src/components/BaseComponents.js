@@ -79,8 +79,8 @@ export const Validations = {
         }
     },
 
-    minMrCoinTokenAmount: value => {
-        return value < 3 ? `Amount must be at least: 3 A-EUR` : undefined;
+    minAddWithdrawAmount: (minvalue, currency) => value => {
+        return value < minvalue ? `Amount must be at least: ${minvalue} ${currency}` : undefined;
     },
 
     ethUserBalance: value => {
@@ -144,6 +144,13 @@ export const Normalizations = {
 
     eightDecimals: (value, previousValue) => {
         return normalizeDecimals(8, value);
+    },
+    maxSimpleExchangeValue: (value, previousValue) => {
+        if (value > 1000000) {
+            return normalizeDecimals(2, 1000000);
+        } else {
+            return normalizeDecimals(2, value);
+        }
     }
 };
 
