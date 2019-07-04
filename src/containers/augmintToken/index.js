@@ -19,7 +19,7 @@ import Button from "components/augmint-ui/button";
 import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 import { ETHEUR } from "utils/constants";
 
-import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
+import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol, StyledDiv } from "./styles";
 import theme from "styles/theme";
 import { theme as mediaTheme } from "styles/media";
 import { ThemeProvider } from "styled-components";
@@ -218,12 +218,12 @@ class AugmintToken extends React.Component {
                             {(metrics.error || monetarySupervisor.loadError || augmintToken.error) && (
                                 <ErrorPanel header="Error while fetching data">{aurSupplyError.message}</ErrorPanel>
                             )}
-                            <div style={{ padding: "25px 0 0 45px" }}>
+                            <StyledDiv>
                                 <span style={{ fontWeight: "normal" }}>{ETHEUR}: </span>
                                 <span style={{ fontFamily: theme.typography.fontFamilies.currency, fontWeight: "700" }}>
                                     {rates.info.ethFiatRate}
                                 </span>
-                            </div>
+                            </StyledDiv>
                             <StyledHeader as="h3">A-EUR Supply</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow wrap={true} valign="stretch">
