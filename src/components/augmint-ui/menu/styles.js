@@ -27,6 +27,15 @@ export const StyledMenu = styled.div`
         border-bottom: none;
         margin-bottom: 20px;
     }
+    &.upper {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding: 0 20px 20px 20px;
+        ${media.mobile`
+          padding: 0;
+          width: 100%;
+        `};
+    }
 `;
 
 export const BaseMenuItem = styledComponent => styledComponent`
@@ -38,6 +47,7 @@ export const BaseMenuItem = styledComponent => styledComponent`
     line-height: ${remCalc(18)};
     text-align: center;
     width: auto;
+    outline: none;
 
     ${media.mobileMin`
       padding: ${remCalc(16)} ${remCalc(16)};
@@ -52,6 +62,16 @@ export const BaseMenuItem = styledComponent => styledComponent`
 
     &.filled {
       background-color: ${theme.colors.lightGrey};
+      width: 50%;
+      height: 60px;
+      font-family: ${theme.typography.fontFamilies.default};
+      text-align: center;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    &.upper {
       width: 50%;
       height: 60px;
       font-family: ${theme.typography.fontFamilies.default};
@@ -86,6 +106,10 @@ export const BaseMenuItem = styledComponent => styledComponent`
             background-color: ${theme.colors.secondary};
             border-bottom: none;
             margin-bottom: 0;
+          }
+          &.filled.dark {
+            background-color: ${theme.colors.primary};
+            color: white;
           }
         }
 

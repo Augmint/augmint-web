@@ -64,7 +64,8 @@ export default (state = initialState, action) => {
         case CANCEL_ORDER_SUCCESS:
             return {
                 ...state,
-                result: action.result
+                result: action.result,
+                isLoading: false
             };
 
         case PLACE_ORDER_REQUESTED:
@@ -73,13 +74,15 @@ export default (state = initialState, action) => {
                 error: null,
                 amount: action.amount,
                 price: action.price,
-                direction: action.orderType
+                direction: action.orderType,
+                isLoading: true
             };
 
         case MATCH_MULTIPLE_ORDERS_REQUESTED:
             return {
                 ...state,
-                error: null
+                error: null,
+                isLoading: true
             };
 
         case CANCEL_ORDER_REQUESTED:
@@ -87,7 +90,8 @@ export default (state = initialState, action) => {
                 ...state,
                 error: null,
                 buyOrder: action.buyOrder,
-                sellOrder: action.sellOrder
+                sellOrder: action.sellOrder,
+                isLoading: true
             };
 
         default:
