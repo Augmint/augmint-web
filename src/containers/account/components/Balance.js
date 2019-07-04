@@ -4,7 +4,6 @@ import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
-import AccountAddress from "components/accountAddress";
 
 const Label = styled.div`
     font-size: ${remCalc(14)};

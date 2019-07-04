@@ -11,6 +11,7 @@ export const WEB3_SETUP_SUCCESS = "WEB3_SETUP_SUCCESS";
 export const WEB3_SETUP_ERROR = "WEB3_SETUP_ERROR";
 export const WEB3_ACCOUNT_CHANGE = "WEB3_ACCOUNT_CHANGE";
 export const WEB3_WATCH_ASSET_CHANGE = "WEB3_WATCH_ASSET_CHANGE";
+export const WEB3_DISCLAIMER_CHANGE = "WEB3_DISCLAIMER_CHANGE";
 
 const initialState = {
     error: null,
@@ -20,10 +21,12 @@ const initialState = {
     accounts: null,
     isLoading: false,
     isConnected: false,
+    userConnected: false,
     ethers: { provider: null, signer: null },
     network: { id: "?", name: "?" },
     augmint: null,
-    watchAsset: getCookie("watchAsset") || []
+    watchAsset: getCookie("watchAsset") || [],
+    disclaimerAccepted: getCookie("disclaimerDismissed") || false
 };
 
 var web3;
@@ -38,13 +41,15 @@ export default (state = initialState, action) => {
             };
 
         case WEB3_SETUP_SUCCESS:
+            console.log("succes");
             return {
                 ...state,
                 isLoading: false,
                 isConnected: true,
+                userConnected: action.userConnected,
                 error: null,
                 augmint: action.augmint,
-                userAccount: action.accounts[0],
+                userAccount: action.userAccount,
                 accounts: action.accounts,
                 web3Instance: action.web3Instance,
                 ethers: action.ethers,
@@ -72,6 +77,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 watchAsset: action.watchAsset
+            };
+
+        case WEB3_DISCLAIMER_CHANGE:
+            return {
+                ...state,
+                disclaimerAccepted: action.disclaimerAccepted
             };
 
         default:
@@ -143,11 +154,12 @@ export const setupWeb3 = () => {
             const ethersSigner = network.id === 999 ? null : ethersProvider.getSigner(); // only null signer works on local ganache
 
             const gasPrice = await web3.eth.getGasPrice();
-            dispatch({
+            return dispatch({
                 type: WEB3_SETUP_SUCCESS,
                 augmint,
                 web3Instance: web3,
                 userAccount,
+                userConnected: !!userAccount,
                 accounts,
                 network,
                 ethers: { signer: ethersSigner, provider: ethersProvider },
@@ -178,5 +190,13 @@ export const watchAssetChange = value => {
     return {
         type: WEB3_WATCH_ASSET_CHANGE,
         watchAsset: value
+    };
+};
+
+export const disclaimerChanged = value => {
+    setCookie("disclaimerDismissed", !!value);
+    return {
+        type: WEB3_DISCLAIMER_CHANGE,
+        disclaimerAccepted: value
     };
 };

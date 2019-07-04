@@ -51,6 +51,8 @@ import LegacyLockers from "./LegacyLockers";
 import LegacyLoanManagers from "./LegacyLoanManagers";
 import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 
+import { connectWeb3 } from "modules/web3Provider.js";
+
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Mono:400,700|Roboto+Slab:300,400');
 
@@ -164,6 +166,7 @@ class App extends React.Component {
 
     componentDidMount() {
         this.props.history.listen((location, action) => {
+            connectWeb3();
             this.setState(state => {
                 return {
                     showMobileMenu: false
@@ -189,8 +192,6 @@ class App extends React.Component {
                 "how-to-get",
                 "under-the-hood"
             ].indexOf(mainPath) > -1;
-
-        console.log("network.id: ", this.props.web3Connect.network.id);
 
         return (
             <div className={showConnection ? "Site App" : "Site"} onClick={this.handleNotificationPanelClose}>
@@ -298,4 +299,4 @@ const mapStateToProps = state => ({
     web3Connect: state.web3Connect
 });
 
-export default (App = withRouter(connect(mapStateToProps)(App)));
+export default App = withRouter(connect(mapStateToProps)(App));
