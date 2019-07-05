@@ -227,7 +227,7 @@ class AugmintToken extends React.Component {
                                 </span>
                                 <span style={{ fontWeight: "normal", color: theme.colors.mediumGrey }}>
                                     <br />
-                                    {ratesLastUpdated.toLocaleString()}
+                                    <small>Last updated: {ratesLastUpdated.toLocaleString()}</small>
                                 </span>
                             </StyledDiv>
                             <StyledHeader as="h3">A-EUR Supply</StyledHeader>
