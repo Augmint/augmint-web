@@ -20,7 +20,7 @@ import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 import { ETHEUR } from "utils/constants";
 import moment from "moment";
 
-import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol, StyledDiv } from "./styles";
+import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
 import { theme as mediaTheme } from "styles/media";
 import { ThemeProvider } from "styled-components";
