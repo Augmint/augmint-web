@@ -53,7 +53,10 @@ class AugmintToken extends React.Component {
         const ethReservesError = monetarySupervisor.loadError || metrics.error;
         const stabilityRatiosError = rates.loadError || metrics.error || monetarySupervisor.loadError;
 
-        const ratesLastUpdated = new Date(rates.info.lastUpdated);
+        const ratesSinceLastUpdated = moment(
+            new Date(rates.info.lastUpdated).toLocaleString(),
+            "DDMMYYYY, hh:mm:ss"
+        ).fromNow();
 
         if (Object.keys(metrics.loansData).length) {
             bn_loansCollected = metrics.loansData.bn_collectedLoansAmount.plus(
@@ -223,7 +226,7 @@ class AugmintToken extends React.Component {
                                             <StyledRow halign="justify" style={{ alignItems: "start" }}>
                                                 <StyledCol width={2 / 3}>
                                                     {ETHEUR}:<br />
-                                                    <small>Last updated: {ratesLastUpdated.toLocaleString()}</small>
+                                                    <small>Last updated: {ratesSinceLastUpdated}</small>
                                                 </StyledCol>
                                                 <StyledCol width={1 / 3}>{rates.info.ethFiatRate}</StyledCol>
                                             </StyledRow>
