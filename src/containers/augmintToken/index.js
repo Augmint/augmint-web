@@ -18,6 +18,7 @@ import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 import { ETHEUR } from "utils/constants";
+import moment from "moment";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol, StyledDiv } from "./styles";
 import theme from "styles/theme";
@@ -213,6 +214,24 @@ class AugmintToken extends React.Component {
                         <TopNavTitlePortal>
                             <Pheader header="Stability Report" />
                         </TopNavTitlePortal>
+                        <Segment loading={rates.isLoading} style={{ color: "black" }}>
+                            <StyledHeader as="h3">Rates feed</StyledHeader>
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" style={{ alignItems: "start" }}>
+                                                <StyledCol width={2 / 3}>
+                                                    {ETHEUR}:<br />
+                                                    <small>Last updated: {ratesLastUpdated.toLocaleString()}</small>
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate}</StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                         <Segment
                             loading={metrics.isLoading || monetarySupervisor.isLoading || augmintToken.isLoading}
                             style={{ color: "black" }}
@@ -220,16 +239,6 @@ class AugmintToken extends React.Component {
                             {(metrics.error || monetarySupervisor.loadError || augmintToken.error) && (
                                 <ErrorPanel header="Error while fetching data">{aurSupplyError.message}</ErrorPanel>
                             )}
-                            <StyledDiv>
-                                <span style={{ fontWeight: "normal" }}>{ETHEUR}: </span>
-                                <span style={{ fontFamily: theme.typography.fontFamilies.currency, fontWeight: "700" }}>
-                                    {rates.info.ethFiatRate}
-                                </span>
-                                <span style={{ fontWeight: "normal", color: theme.colors.mediumGrey }}>
-                                    <br />
-                                    <small>Last updated: {ratesLastUpdated.toLocaleString()}</small>
-                                </span>
-                            </StyledDiv>
                             <StyledHeader as="h3">A-EUR Supply</StyledHeader>
                             <StyledMyListGroup>
                                 <StyledRow wrap={true} valign="stretch">
