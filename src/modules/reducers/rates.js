@@ -63,14 +63,18 @@ export const refreshRates = () => {
             const web3 = store.getState().web3Connect.web3Instance;
             const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
             const bytes32_peggedSymbol = await augmintTokenInstance.methods.peggedSymbol().call();
+            const augmintRates = store.getState().web3Connect.augmint.rates;
 
             const ratesInstance = store.getState().contracts.latest.rates.web3ContractInstance;
 
-            const [bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
+            const [rates, bn_ethFiatRate, bn_tokenBalance, bn_weiBalance] = await Promise.all([
+                augmintRates.getAugmintRate("EUR"),
                 ratesInstance.methods.convertFromWei(bytes32_peggedSymbol, ONE_ETH_IN_WEI.toString()).call(),
                 augmintTokenInstance.methods.balanceOf(ratesInstance._address).call(),
                 web3.eth.getBalance(ratesInstance._address)
             ]);
+
+            console.log(rates);
 
             return dispatch({
                 type: RATES_REFRESHED,
@@ -81,7 +85,8 @@ export const refreshRates = () => {
                     tokenBalance: bn_tokenBalance / DECIMALS_DIV,
                     bn_ethFiatRate: new BigNumber(bn_ethFiatRate / DECIMALS_DIV),
                     ethFiatRate: bn_ethFiatRate / DECIMALS_DIV,
-                    fiatEthRate: (1 / bn_ethFiatRate) * DECIMALS_DIV
+                    fiatEthRate: (1 / bn_ethFiatRate) * DECIMALS_DIV,
+                    lastUpdated: rates.lastUpdated
                 }
             });
         } catch (error) {

@@ -52,6 +52,8 @@ class AugmintToken extends React.Component {
         const ethReservesError = monetarySupervisor.loadError || metrics.error;
         const stabilityRatiosError = rates.loadError || metrics.error || monetarySupervisor.loadError;
 
+        const ratesLastUpdated = new Date(rates.info.lastUpdated);
+
         if (Object.keys(metrics.loansData).length) {
             bn_loansCollected = metrics.loansData.bn_collectedLoansAmount.plus(
                 metrics.loansData.bn_defaultedLoansAmount
@@ -222,6 +224,10 @@ class AugmintToken extends React.Component {
                                 <span style={{ fontWeight: "normal" }}>{ETHEUR}: </span>
                                 <span style={{ fontFamily: theme.typography.fontFamilies.currency, fontWeight: "700" }}>
                                     {rates.info.ethFiatRate}
+                                </span>
+                                <span style={{ fontWeight: "normal", color: theme.colors.mediumGrey }}>
+                                    <br />
+                                    {ratesLastUpdated.toLocaleString()}
                                 </span>
                             </StyledDiv>
                             <StyledHeader as="h3">A-EUR Supply</StyledHeader>
