@@ -74,8 +74,6 @@ export const refreshRates = () => {
                 web3.eth.getBalance(ratesInstance._address)
             ]);
 
-            console.log(rates);
-
             return dispatch({
                 type: RATES_REFRESHED,
                 result: {

@@ -17,7 +17,6 @@ import { ErrorPanel } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
-import { ETHEUR } from "utils/constants";
 import moment from "moment";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
@@ -224,10 +223,13 @@ class AugmintToken extends React.Component {
                                         <MyListGroup>
                                             <StyledRow halign="justify" style={{ alignItems: "start" }}>
                                                 <StyledCol width={2 / 3}>
-                                                    {ETHEUR}:<br />
-                                                    <small>Last updated: {ratesSinceLastUpdated}</small>
+                                                    1 ETH:
+                                                    <br />
+                                                    <small style={{ color: theme.colors.mediumGrey }}>
+                                                        Last updated: {ratesSinceLastUpdated}
+                                                    </small>
                                                 </StyledCol>
-                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate}</StyledCol>
+                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate}€</StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
                                     </StyledCol>
