@@ -229,7 +229,7 @@ class AugmintToken extends React.Component {
                                                         Last updated: {ratesSinceLastUpdated}
                                                     </small>
                                                 </StyledCol>
-                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate}€</StyledCol>
+                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate} €</StyledCol>
                                             </StyledRow>
                                         </MyListGroup>
                                     </StyledCol>
