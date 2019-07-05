@@ -223,7 +223,7 @@ class AugmintToken extends React.Component {
                                         <MyListGroup>
                                             <StyledRow halign="justify" style={{ alignItems: "start" }}>
                                                 <StyledCol width={2 / 3}>
-                                                    1 ETH:
+                                                    1 ETH
                                                     <br />
                                                     <small style={{ color: theme.colors.mediumGrey }}>
                                                         Last updated: {ratesSinceLastUpdated}
