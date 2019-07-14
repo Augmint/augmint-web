@@ -10597,10 +10597,10 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-stringifier@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/stringifier/-/stringifier-2.0.0.tgz#dd1718e0d67e5ee355861ccd4ba2fe0007539c26"
-  integrity sha512-WaJ0zgVy16iT/lEWw3dPczyMHnpeAXPoWSwdwV/Gkxij38dpFFS+5vcJXEYoEZKVhdP2a3HCRHmwZQ85qFKgfQ==
+stringifier@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/stringifier/-/stringifier-2.1.0.tgz#44f0364a3c02f7aa0c3c6ea455da25cea8c12dd9"
+  integrity sha512-ThhjcKQHR3x7gVV9p90bm2MO+VVl9wbcgMltn6Luzq83OzgEUkaYJrd6HK0B3d1o3iaX1Laz42Blx16kcS/tWQ==
   dependencies:
     traverse "^0.6.6"
     type-name "^2.0.1"
