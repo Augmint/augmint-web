@@ -1,21 +1,45 @@
 import React from "react";
-import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import { ContractBaseInfo } from "./ContractBaseInfo";
-import { refreshLoanManager } from "modules/reducers/loanManager";
+import { connect } from "react-redux";
 
-export function LoanManagerInfo(props) {
-    const { contractData } = props;
+class LoanManagerInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { loanCounts: [] };
+        this.handleRefreshClick = this.handleRefreshClick.bind(this);
+    }
 
-    const handleRefreshClick = e => {
+    async refreshCounts() {
+        const augmint = this.props.augmint;
+        const loanCounts = await augmint.getLoanCounts();
+        this.setState({ loanCounts });
+    }
+
+    handleRefreshClick(e) {
         e.preventDefault();
-        store.dispatch(refreshLoanManager());
-    };
+        this.refreshCounts();
+    }
 
-    return (
-        <Pblock header="LoanManager">
-            <p>LoanCount: {contractData.info.loanCount} </p>
-            <ContractBaseInfo refreshCb={handleRefreshClick} {...props} />
-        </Pblock>
-    );
+    componentDidMount() {
+        this.refreshCounts();
+    }
+
+    render() {
+        return (
+            <Pblock header="LoanManager">
+                <p>LoanCount: </p>
+                {this.state.loanCounts.map(li => (
+                    <p>
+                        {li.loanManagerAddress}: {li.loanCount}
+                    </p>
+                ))}
+                <ContractBaseInfo refreshCb={this.handleRefreshClick} {...this.props} />
+            </Pblock>
+        );
+    }
 }
+
+export default connect(state => ({
+    augmint: state.web3Connect.augmint
+}))(LoanManagerInfo);

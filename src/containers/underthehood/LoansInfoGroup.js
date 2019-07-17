@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
-import { LoanManagerInfo } from "./components/LoanManagerInfo";
+import LoanManagerInfo from "./components/LoanManagerInfo";
 import { ArrayDump } from "./components/ArrayDump";
 import loanManagerProvider from "modules/loanManagerProvider";
 import { fetchAllLoans } from "modules/reducers/loans";
