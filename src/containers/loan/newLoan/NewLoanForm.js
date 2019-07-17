@@ -59,7 +59,6 @@ class NewLoanForm extends React.Component {
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
             .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
-        console.log(props.loanManager.products);
         this.product = props.loanManager.products[0];
         this.defaultProductId = this.defaultProductId.bind(this);
         // this a a workaround for validations with parameters causing issues,
@@ -87,7 +86,13 @@ class NewLoanForm extends React.Component {
             this.setProduct(); // needed when landing from on URL directly
         }
 
-        if (prevProps.loanForm && this.props.loanForm && this.state.product && this.props.rates) {
+        if (
+            prevProps.loanForm &&
+            prevProps.loanForm.values &&
+            this.props.loanForm &&
+            this.state.product &&
+            this.props.rates
+        ) {
             const prevToken = prevProps.loanForm.values.loanTokenAmount;
             const token = this.props.loanForm.values.loanTokenAmount;
             const prevProductId = prevProps.loanForm.values.productId;
@@ -142,7 +147,10 @@ class NewLoanForm extends React.Component {
     }
 
     onSelectedLoanChange(id) {
-        let product = this.products[id];
+        const [productId, loanManagerAddress] = id.split("_");
+        const product = this.products.find(
+            item => item.id === parseInt(productId) && item.loanManagerAddress === loanManagerAddress
+        );
         this.setState(
             {
                 productId: id,
