@@ -59,7 +59,8 @@ class NewLoanForm extends React.Component {
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
             .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
-        this.product = props.loanManager.products[this.defaultProductId()];
+        console.log(props.loanManager.products);
+        this.product = props.loanManager.products[0];
         this.defaultProductId = this.defaultProductId.bind(this);
         // this a a workaround for validations with parameters causing issues,
         //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784

@@ -200,6 +200,7 @@ export const Formatters = {
     }
 };
 
+const getKey = product => `${product.id}_${product.loanManagerAddress}`;
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
 export function Select(props) {
     function addOptionsToSelect(options, testId, isLoan) {
@@ -209,8 +210,8 @@ export function Select(props) {
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
-                    key={product.id + "_" + i}
-                    value={product.id}
+                    key={isLoan ? getKey(product) : product.id + "_" + i}
+                    value={isLoan ? getKey(product) : product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
                     {isLoan ? "Repay in " + termText : "Lock for " + product.durationText}
