@@ -43,6 +43,15 @@ class LoansInfoGroup extends React.Component {
     }
 
     render() {
+        const products = (this.props.loanProducts || []).reduce((acc, current) => {
+            const address = current.loanManagerAddress;
+            if (!acc[address]) {
+                acc[address] = [];
+            }
+            acc[address].push(current);
+            console.log(current.isMarginLoan);
+            return acc;
+        }, {});
         return (
             <Pgrid.Row>
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
@@ -70,7 +79,12 @@ class LoansInfoGroup extends React.Component {
                 </Pgrid.Column>
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
-                    <ArrayDump header="Loan Products" items={this.props.loanProducts} />
+                    {Object.keys(products).map(address => (
+                        <div key={address}>
+                            <div>{address}</div>
+                            <ArrayDump header="Loan Products" items={products[address]} />
+                        </div>
+                    ))}
                 </Pgrid.Column>
             </Pgrid.Row>
         );

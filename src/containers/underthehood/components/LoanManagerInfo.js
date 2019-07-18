@@ -29,8 +29,8 @@ class LoanManagerInfo extends React.Component {
         return (
             <Pblock header="LoanManager">
                 <p>LoanCount: </p>
-                {this.state.loanCounts.map(li => (
-                    <p>
+                {this.state.loanCounts.map((li, i) => (
+                    <p key={i}>
                         {li.loanManagerAddress}: {li.loanCount}
                     </p>
                 ))}
