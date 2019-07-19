@@ -52,6 +52,8 @@ const StyledBox = styled.div`
     }
 `;
 
+const MARGIN = 0.6; // TODO
+
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
@@ -126,6 +128,7 @@ class NewLoanForm extends React.Component {
         const amount = token ? token : this.props.loanForm.values.loanTokenAmount || Tokens.of(0);
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
         const result = this.state.product.calculateLoanFromDisbursedAmount(amount, ethFiat);
+        const marginRate = this.props.rates.info.bn_ethFiatRate.mul(MARGIN);
 
         this.props.change("ethAmount", result.collateralAmount);
 
@@ -156,7 +159,8 @@ class NewLoanForm extends React.Component {
                 productId: id,
                 product: product,
                 minToken: Validations.minTokenAmount(product.minDisbursedAmount),
-                maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount)
+                maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
+                marginLoan: product.isMarginLoan
             },
             () => {
                 this.onLoanTokenAmountChange();
@@ -170,6 +174,7 @@ class NewLoanForm extends React.Component {
         const repayBefore = this.state.repayBefore ? moment(this.state.repayBefore).format("D MMM YYYY") : null;
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
         const showResults = this.state.repaymentAmount ? !!this.state.repaymentAmount.toNumber() : false;
+        const marginRate = this.props.rates.info.bn_ethFiatRate.mul(MARGIN);
 
         const notEnoughEth = this.ethValidationError();
         const isDesktop = window.innerWidth > 768;
@@ -239,6 +244,13 @@ class NewLoanForm extends React.Component {
                                     return;
                                 }}
                             />
+                        )}
+
+                        {this.state.marginLoan && (
+                            <div style={{ textAlign: "center" }}>
+                                <h3 style={{ marginBottom: 0 }}>This is a margin loan</h3>
+                                <p>Margin rate: {marginRate.toNumber()}</p>
+                            </div>
                         )}
 
                         {showResults && (
