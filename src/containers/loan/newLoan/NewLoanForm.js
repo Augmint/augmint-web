@@ -61,15 +61,13 @@ class NewLoanForm extends React.Component {
         this.activeProducts = this.props.loanManager.products
             .filter(product => product.isActive)
             .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
-        this.product = props.loanManager.products[0];
-        this.defaultProductId = this.defaultProductId.bind(this);
-        // this a a workaround for validations with parameters causing issues,
-        //    see https://github.com/erikras/redux-form/issues/2453#issuecomment-272483784
+
+        const defaultProduct = this.activeProducts[0];
 
         this.state = {
-            product: this.product,
-            minToken: Validations.minTokenAmount(this.product.minDisbursedAmount),
-            maxLoanAmount: Validations.maxLoanAmount(this.product.maxLoanAmount),
+            product: defaultProduct,
+            minToken: Validations.minTokenAmount(defaultProduct.minDisbursedAmount),
+            maxLoanAmount: Validations.maxLoanAmount(defaultProduct.maxLoanAmount),
             repaymentAmount: Tokens.of(0),
             ethAmount: Wei.of(0),
             loanTokenAmount: Tokens.of(0),
@@ -81,6 +79,8 @@ class NewLoanForm extends React.Component {
 
     componentDidMount() {
         this.setProduct(); // needed when landing from Link within App
+        this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
+        this.props.change("product", this.state.product);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -109,12 +109,6 @@ class NewLoanForm extends React.Component {
         }
     }
 
-    defaultProductId() {
-        let productId = this.activeProducts[0].id;
-        this.props.change("productId", productId);
-        return productId;
-    }
-
     setProduct() {
         // workaround b/c landing directly on URL and from LoanSelector triggers different events.
         if (this.props.products == null) {
@@ -128,9 +122,16 @@ class NewLoanForm extends React.Component {
         const amount = token ? token : this.props.loanForm.values.loanTokenAmount || Tokens.of(0);
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
         const result = this.state.product.calculateLoanFromDisbursedAmount(amount, ethFiat);
-        const marginRate = this.props.rates.info.bn_ethFiatRate.mul(MARGIN);
 
         this.props.change("ethAmount", result.collateralAmount);
+
+        console.log(ethFiat, "fiat");
+
+        if (this.state.marginLoan) {
+            const marginRate = ethFiat.amount.mul(MARGIN);
+            this.setState({ marginRate: marginRate });
+            this.props.change("minRate", marginRate);
+        }
 
         this.setState({
             ethAmount: result.collateralAmount,
@@ -154,6 +155,7 @@ class NewLoanForm extends React.Component {
         const product = this.products.find(
             item => item.id === parseInt(productId) && item.loanManagerAddress === loanManagerAddress
         );
+        this.props.change("product", product);
         this.setState(
             {
                 productId: id,
@@ -174,7 +176,6 @@ class NewLoanForm extends React.Component {
         const repayBefore = this.state.repayBefore ? moment(this.state.repayBefore).format("D MMM YYYY") : null;
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
         const showResults = this.state.repaymentAmount ? !!this.state.repaymentAmount.toNumber() : false;
-        const marginRate = this.props.rates.info.bn_ethFiatRate.mul(MARGIN);
 
         const notEnoughEth = this.ethValidationError();
         const isDesktop = window.innerWidth > 768;
@@ -234,7 +235,7 @@ class NewLoanForm extends React.Component {
                                 disabled={submitting || !loanManager.isLoaded}
                                 data-testid="loan-product-selector"
                                 className="field-big"
-                                isSelect="true"
+                                isSelect={true}
                                 isLoan={true}
                                 selectOptions={this.activeProducts}
                                 selectTestId="loan-product"
@@ -249,7 +250,7 @@ class NewLoanForm extends React.Component {
                         {this.state.marginLoan && (
                             <div style={{ textAlign: "center" }}>
                                 <h3 style={{ marginBottom: 0 }}>This is a margin loan</h3>
-                                <p>Margin rate: {marginRate.toNumber()}</p>
+                                <p>Margin rate: {this.state.marginRate ? this.state.marginRate.toNumber() : "?"}</p>
                             </div>
                         )}
 

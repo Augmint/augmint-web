@@ -210,18 +210,39 @@ export function Select(props) {
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
-                    key={isLoan ? getKey(product) : product.id + "_" + i}
-                    value={isLoan ? getKey(product) : product.id}
+                    key={product.id + "_" + i}
+                    value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
-                    {isLoan ? "Repay in " + termText : "Lock for " + product.durationText}
+                    {"Lock for " + product.durationText}
                 </option>
             );
         });
         return result;
     }
 
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid, props.isLoan)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
+}
+
+function LoanSelect(props) {
+    function addOptionsToSelect(options, testId, defaulProduct) {
+        let result = [];
+        options.forEach((product, i) => {
+            const termText = productTermConverter(product.termInSecs);
+            result.push(
+                <option
+                    style={{ width: "100%", height: 50 }}
+                    key={getKey(product)}
+                    value={getKey(product)}
+                    data-testid={getKey(product)}
+                >
+                    {"Repay in " + termText}
+                </option>
+            );
+        });
+        return result;
+    }
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
 }
 
 export const formField = ({
@@ -261,11 +282,14 @@ export const formField = ({
                 )}
                 {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
 
-                {isSelect && (
-                    <Select
+                {isSelect && !isLoan && (
+                    <Select {...input} {...props} value={input.value} testId={selectTestId} options={selectOptions} />
+                )}
+
+                {isSelect && isLoan && (
+                    <LoanSelect
                         {...input}
                         {...props}
-                        isLoan={isLoan}
                         value={input.value}
                         testId={selectTestId}
                         options={selectOptions}

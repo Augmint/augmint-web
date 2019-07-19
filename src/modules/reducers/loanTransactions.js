@@ -84,7 +84,7 @@ export default (state = initialState, action) => {
     }
 };
 
-export function newLoan(product, ethAmount, address) {
+export function newLoan(product, ethAmount, address, minRate) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_NEWLOAN_REQUESTED,
@@ -97,7 +97,7 @@ export function newLoan(product, ethAmount, address) {
         try {
             const txName = "New loan";
             const augmint = await store.getState().web3Connect.augmint;
-            const tx = await augmint.newEthBackedLoan(product, ethAmount, address);
+            const tx = await augmint.newEthBackedLoan(product, ethAmount, address, minRate);
             const transactionHash = await sendAndProcessTx(tx, txName);
 
             const result = { txName, transactionHash };

@@ -33,12 +33,12 @@ class NewLoanPage extends React.Component {
     }
 
     async handleSubmit(values) {
-        const [productId, loanManagerAddress] = values.productId.split("_");
-        const product = this.props.products.find(
-            item => item.id === parseInt(productId) && item.loanManagerAddress === loanManagerAddress
-        );
+        console.log(values, "values");
+        const productId = values.product.id;
+        const product = values.product;
+        const minRate = values.minRate;
         const address = this.props.userAccount.address;
-        const res = await store.dispatch(newLoan(product, values.ethAmount, address));
+        const res = await store.dispatch(newLoan(product, values.ethAmount, address, minRate));
         if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: res.error
