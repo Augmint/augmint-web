@@ -80,10 +80,7 @@ class LoansInfoGroup extends React.Component {
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                     {Object.keys(products).map(address => (
-                        <div key={address}>
-                            <div>{address}</div>
-                            <ArrayDump header="Loan Products" items={products[address]} />
-                        </div>
+                        <ArrayDump key={address} header={"Loan products - " + address} items={products[address]} />
                     ))}
                 </Pgrid.Column>
             </Pgrid.Row>
