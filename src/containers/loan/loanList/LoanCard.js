@@ -8,7 +8,7 @@ import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseCom
 import { Pgrid } from "components/PageLayout";
 import CollectLoanButton from "../collectLoan/CollectLoanButton";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
-// import moment from '../../../modules/ethereum/loanTransactions';
+import AddCollateralButton from "../components/AddCollateralButton";
 
 export const CardHead = styled.div`
     display: flex;
@@ -148,15 +148,22 @@ export default function LoanCard(props) {
                         size={{ desktop: 1 / 3 }}
                         style={{
                             display: "flex",
-                            alignItems: "flex-start",
                             flexBasis: "unset",
                             marginLeft: "auto",
-                            padding: "1rem"
+                            padding: "1rem",
+                            flexDirection: "column"
                         }}
                     >
                         {loan.isRepayable && (
-                            <Button to={"/loan/repay/" + loan.id}>{loan.isDue ? "Repay" : "Repay Early"}</Button>
+                            <Button
+                                style={{ marginBottom: "10px", alignSelf: "flex-end" }}
+                                to={"/loan/repay/" + loan.id}
+                            >
+                                {loan.isDue ? "Repay" : "Repay Early"}
+                            </Button>
                         )}
+
+                        {loan.isMarginLoan && <AddCollateralButton loan={loan} />}
 
                         {loan.isCollectable && (
                             <CollectLoanButton
