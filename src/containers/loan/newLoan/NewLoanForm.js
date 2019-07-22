@@ -73,7 +73,8 @@ class NewLoanForm extends React.Component {
             loanTokenAmount: Tokens.of(0),
             productId: this.activeProducts[0].id,
             repayBefore: null,
-            interestAmount: null
+            interestAmount: null,
+            minRate: null
         };
     }
 
@@ -90,6 +91,8 @@ class NewLoanForm extends React.Component {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
         }
+
+        this.updateMinRate();
 
         if (
             prevProps.loanForm &&
@@ -125,7 +128,7 @@ class NewLoanForm extends React.Component {
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
         const minRate = ethFiat.mul(Ratio.of(COL_RATIO));
 
-        if (minRate !== this.state.minRate) {
+        if (!this.state.minRate || minRate.toNumber() !== this.state.minRate.toNumber()) {
             this.setState({ minRate: minRate });
             this.props.change("minRate", minRate);
         }
@@ -147,8 +150,6 @@ class NewLoanForm extends React.Component {
             repayBefore: result.repayBefore,
             interestAmount: result.interestAmount
         });
-
-        this.updateMinRate();
     }
 
     ethValidationError() {
@@ -177,8 +178,6 @@ class NewLoanForm extends React.Component {
                 this.onLoanTokenAmountChange();
             }
         );
-
-        this.updateMinRate();
     }
 
     render() {
