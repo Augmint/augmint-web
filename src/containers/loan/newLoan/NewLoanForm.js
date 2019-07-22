@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 
 import theme from "styles/theme";
 import { ETHEUR } from "utils/constants";
-import { Wei, Tokens } from "@augmint/js";
+import { Wei, Tokens, Ratio } from "@augmint/js";
 
 const StyledBox = styled.div`
     border-radius: 3px;
@@ -52,7 +52,7 @@ const StyledBox = styled.div`
     }
 `;
 
-const MARGIN = 0.6; // TODO
+const COL_RATIO = 0.9; // TODO
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -118,20 +118,24 @@ class NewLoanForm extends React.Component {
         this.setState({ isLoading: false, product: product });
     }
 
+    updateMinRate() {
+        const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
+        const minRate = ethFiat.mul(Ratio.of(COL_RATIO));
+
+        if (minRate !== this.state.minRate) {
+            this.setState({ minRate: minRate });
+            this.props.change("minRate", minRate);
+        }
+
+        return minRate;
+    }
+
     onLoanTokenAmountChange(token) {
         const amount = token ? token : this.props.loanForm.values.loanTokenAmount || Tokens.of(0);
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
         const result = this.state.product.calculateLoanFromDisbursedAmount(amount, ethFiat);
 
         this.props.change("ethAmount", result.collateralAmount);
-
-        console.log(ethFiat, "fiat");
-
-        if (this.state.marginLoan) {
-            const marginRate = ethFiat.amount.mul(MARGIN);
-            this.setState({ marginRate: marginRate });
-            this.props.change("minRate", marginRate);
-        }
 
         this.setState({
             ethAmount: result.collateralAmount,
@@ -140,6 +144,8 @@ class NewLoanForm extends React.Component {
             repayBefore: result.repayBefore,
             interestAmount: result.interestAmount
         });
+
+        this.updateMinRate();
     }
 
     ethValidationError() {
@@ -168,6 +174,8 @@ class NewLoanForm extends React.Component {
                 this.onLoanTokenAmountChange();
             }
         );
+
+        this.updateMinRate();
     }
 
     render() {
@@ -250,7 +258,7 @@ class NewLoanForm extends React.Component {
                         {this.state.marginLoan && (
                             <div style={{ textAlign: "center" }}>
                                 <h3 style={{ marginBottom: 0 }}>This is a margin loan</h3>
-                                <p>Margin rate: {this.state.marginRate ? this.state.marginRate.toNumber() : "?"}</p>
+                                <p>Margin rate: {this.state.minRate ? this.state.minRate.toNumber() : "?"}</p>
                             </div>
                         )}
 
