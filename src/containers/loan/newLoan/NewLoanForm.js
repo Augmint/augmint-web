@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 
 import theme from "styles/theme";
 import { ETHEUR } from "utils/constants";
-import { Wei, Tokens } from "@augmint/js";
+import { Wei, Tokens, Ratio } from "@augmint/js";
 
 const StyledBox = styled.div`
     border-radius: 3px;
@@ -52,7 +52,7 @@ const StyledBox = styled.div`
     }
 `;
 
-const MARGIN = 0.6; // TODO
+const COL_RATIO = 0.9; // TODO: this is just a test number
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -73,7 +73,8 @@ class NewLoanForm extends React.Component {
             loanTokenAmount: Tokens.of(0),
             productId: this.activeProducts[0].id,
             repayBefore: null,
-            interestAmount: null
+            interestAmount: null,
+            minRate: null
         };
     }
 
@@ -81,12 +82,17 @@ class NewLoanForm extends React.Component {
         this.setProduct(); // needed when landing from Link within App
         this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
         this.props.change("product", this.state.product);
+        this.setState({
+            marginLoan: this.state.product.isMarginLoan
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.products !== this.props.products) {
             this.setProduct(); // needed when landing from on URL directly
         }
+
+        this.updateMinRate();
 
         if (
             prevProps.loanForm &&
@@ -118,20 +124,24 @@ class NewLoanForm extends React.Component {
         this.setState({ isLoading: false, product: product });
     }
 
+    updateMinRate() {
+        const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
+        const minRate = ethFiat.mul(Ratio.of(COL_RATIO));
+
+        if (!this.state.minRate || minRate.toNumber() !== this.state.minRate.toNumber()) {
+            this.setState({ minRate: minRate });
+            this.props.change("minRate", minRate);
+        }
+
+        return minRate;
+    }
+
     onLoanTokenAmountChange(token) {
         const amount = token ? token : this.props.loanForm.values.loanTokenAmount || Tokens.of(0);
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
         const result = this.state.product.calculateLoanFromDisbursedAmount(amount, ethFiat);
 
         this.props.change("ethAmount", result.collateralAmount);
-
-        console.log(ethFiat, "fiat");
-
-        if (this.state.marginLoan) {
-            const marginRate = ethFiat.amount.mul(MARGIN);
-            this.setState({ marginRate: marginRate });
-            this.props.change("minRate", marginRate);
-        }
 
         this.setState({
             ethAmount: result.collateralAmount,
@@ -247,10 +257,12 @@ class NewLoanForm extends React.Component {
                             />
                         )}
 
-                        {this.state.marginLoan && (
+                        {this.state.marginLoan && this.state.loanTokenAmount.toNumber() > 0 && (
                             <div style={{ textAlign: "center" }}>
-                                <h3 style={{ marginBottom: 0 }}>This is a margin loan</h3>
-                                <p>Margin rate: {this.state.marginRate ? this.state.marginRate.toNumber() : "?"}</p>
+                                <p style={{ marginBottom: 5, fontWeight: "bold" }}>This is a margin loan</p>
+                                <p style={{ marginTop: 0 }}>
+                                    Minimum rate: {this.state.minRate ? this.state.minRate.toNumber() : "?"}
+                                </p>
                             </div>
                         )}
 
