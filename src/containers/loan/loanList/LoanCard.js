@@ -41,6 +41,17 @@ export const CardStatusInfo = styled(StyledStatusBox)`
 
 export const CardStatusHelp = styled(StyledStatusText)``;
 
+export const CardStatusBottom = styled.div`
+    position: absolute;
+    right: 20px;
+    bottom: 30px;
+    font-size: ${remCalc(14)};
+    text-transform: uppercase;
+    color: ${theme.colors.mediumGrey};
+    padding: 5px 8px;
+    border: 1px solid ${theme.colors.mediumGrey};
+`;
+
 export const Card = styled.section`
     position: relative;
     margin-top: 30px;
@@ -81,6 +92,7 @@ export default function LoanCard(props) {
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
                 </CardTitle>
                 <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
+                {loan.isMarginLoan && <CardStatusBottom>Margin Loan</CardStatusBottom>}
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
