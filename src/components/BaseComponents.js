@@ -203,7 +203,7 @@ export const Formatters = {
 const getKey = product => `${product.id}_${product.loanManagerAddress}`;
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
 export function Select(props) {
-    function addOptionsToSelect(options, testId, isLoan) {
+    function addOptionsToSelect(options, testId) {
         let result = [];
         options.forEach((product, i) => {
             const termText = productTermConverter(product.termInSecs);
@@ -221,28 +221,29 @@ export function Select(props) {
         return result;
     }
 
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testId)}</StyledSelect>;
 }
 
 function LoanSelect(props) {
-    function addOptionsToSelect(options, testId, defaulProduct) {
+    function addOptionsToSelect(options, testId) {
         let result = [];
         options.forEach((product, i) => {
             const termText = productTermConverter(product.termInSecs);
+            const marginLoan = product.isMarginLoan ? "*" : "";
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
                     key={getKey(product)}
                     value={getKey(product)}
-                    data-testid={getKey(product)}
+                    data-testid={`${testId}_${getKey(product)}`}
                 >
-                    {"Repay in " + termText}
+                    {`Repay in ${termText} ${marginLoan}`}
                 </option>
             );
         });
         return result;
     }
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testId)}</StyledSelect>;
 }
 
 export const formField = ({

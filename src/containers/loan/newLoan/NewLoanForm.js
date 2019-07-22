@@ -52,7 +52,7 @@ const StyledBox = styled.div`
     }
 `;
 
-const COL_RATIO = 0.9; // TODO
+const COL_RATIO = 0.9; // TODO: this is just a test number
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -81,6 +81,9 @@ class NewLoanForm extends React.Component {
         this.setProduct(); // needed when landing from Link within App
         this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
         this.props.change("product", this.state.product);
+        this.setState({
+            marginLoan: this.state.product.isMarginLoan
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -255,10 +258,12 @@ class NewLoanForm extends React.Component {
                             />
                         )}
 
-                        {this.state.marginLoan && (
+                        {this.state.marginLoan && this.state.loanTokenAmount.toNumber() > 0 && (
                             <div style={{ textAlign: "center" }}>
-                                <h3 style={{ marginBottom: 0 }}>This is a margin loan</h3>
-                                <p>Margin rate: {this.state.minRate ? this.state.minRate.toNumber() : "?"}</p>
+                                <p style={{ marginBottom: 5, fontWeight: "bold" }}>This is a margin loan</p>
+                                <p style={{ marginTop: 0 }}>
+                                    Minimum rate: {this.state.minRate ? this.state.minRate.toNumber() : "?"}
+                                </p>
                             </div>
                         )}
 
