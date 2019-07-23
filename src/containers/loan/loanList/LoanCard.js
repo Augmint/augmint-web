@@ -162,8 +162,7 @@ export default function LoanCard(props) {
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>
                         )}
-
-                        {loan.isMarginLoan && <AddCollateralButton loan={loan} />}
+                        {loan.isMarginLoan && loan.isRepayable && <AddCollateralButton loan={loan} />}
 
                         {loan.isCollectable && (
                             <CollectLoanButton

@@ -15,7 +15,9 @@ import Icon from "components/augmint-ui/icon";
 import Header from "components/augmint-ui/header";
 import Modal from "components/augmint-ui/modal";
 import { EthSubmissionErrorPanel } from "components/MsgPanels";
-import { StyledInput, StyledLabel } from "components/augmint-ui/baseComponents/styles";
+import { Validations } from "components/BaseComponents";
+import { StyledInput, StyledError, StyledContainer } from "components/augmint-ui/baseComponents/styles";
+import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 
 import { Wei } from "@augmint/js";
 
@@ -25,7 +27,7 @@ class AddCollateralButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            confirmOpen: false,
+            popupOpen: false,
             submitting: false,
             error: null,
             result: null,
@@ -37,8 +39,15 @@ class AddCollateralButton extends React.Component {
     }
 
     onInputChange(e) {
+        const value = e.target.value;
+
+        const ethAmountError = Validations.ethAmount(value);
+        const ethBalaceError = Validations.ethUserBalance(value);
+        const error = [ethAmountError, ethBalaceError].find(i => !!i);
+
         this.setState({
-            ethAmount: e.target.value
+            ethAmount: value,
+            error
         });
     }
 
@@ -53,41 +62,42 @@ class AddCollateralButton extends React.Component {
             const tx = await store
                 .getState()
                 .web3Connect.augmint.addExtraCollateral(loan, Wei.of(this.state.ethAmount), userAccount);
+
             const transactionHash = await sendAndProcessTx(tx, "AddExtraCollateral");
 
             this.handleClose();
 
             return transactionHash;
         } catch {
-            this.setState({ submitting: false });
+            this.setState({ submitting: false, transactionError: true });
         }
     }
 
     handleClose() {
         this.setState({
             error: null,
-            confirmOpen: false
+            popupOpen: false
         });
     }
 
     render() {
-        const { submitting, error, confirmOpen } = this.state;
+        const { submitting, error, popupOpen, transactionError } = this.state;
 
         return (
             <div style={{ display: "block" }}>
                 <Button
                     data-testid={`addCollateralButton`}
                     onClick={() => {
-                        this.setState({ confirmOpen: true });
+                        this.setState({ popupOpen: true });
                         return false;
                     }}
                 >
                     Add extra collateral
                 </Button>
-                {this.state.confirmOpen && (
+                {this.state.popupOpen && (
                     <Modal
                         size="small"
-                        open={confirmOpen}
+                        open={popupOpen}
                         closeOnDimmerClick={false}
                         onClose={this.handleClose}
                         onCloseRequest={this.handleClose}
@@ -101,31 +111,33 @@ class AddCollateralButton extends React.Component {
                                 padding: "20px",
                                 margin: 0
                             }}
-                        ></Header>
+                        />
 
                         <Modal.Content>
-                            {error && (
+                            {transactionError && (
                                 <EthSubmissionErrorPanel
                                     onDismiss={() => {
-                                        this.setState({ error: null });
+                                        this.setState({ transactionError: null });
                                     }}
-                                    error={error}
+                                    error={transactionError}
                                     header="Transaction failed."
-                                >
-                                    <p>Error fulfilling the transaction.</p>
-                                </EthSubmissionErrorPanel>
+                                />
                             )}
                             <form onSubmit={this.handleSubmit}>
-                                <StyledLabel style={{ marginRight: "10px" }}>Amount of ETH to add</StyledLabel>
-                                <StyledInput
-                                    type="number"
-                                    inputmode="numeric"
-                                    name="addCollateralAmount"
-                                    disabled={submitting}
-                                    style={{ borderRight: `1px solid ${theme.colors.opacGrey}` }}
-                                    data-testid="addCollateralAmountInput"
-                                    onChange={this.onInputChange}
-                                />
+                                <StyledContainer style={{ maxWidth: 280 }}>
+                                    <StyledInput
+                                        type="number"
+                                        inputmode="numeric"
+                                        name="addCollateralAmount"
+                                        disabled={submitting}
+                                        data-testid="addCollateralAmountInput"
+                                        onChange={this.onInputChange}
+                                        placeholder="0"
+                                        style={{ border: error && "1px solid #9f3a38" }}
+                                    />
+                                    <StyleLabel align="right">ETH</StyleLabel>
+                                </StyledContainer>
+                                <StyledError>{error}</StyledError>
                             </form>
                         </Modal.Content>
 
@@ -138,10 +150,10 @@ class AddCollateralButton extends React.Component {
                             <Button
                                 data-testid={`ConfirmExtraCollateral`}
                                 id={`ConfirmExtraCollateral`}
-                                disabled={submitting}
                                 onClick={this.handleSubmit}
                                 content={submitting ? "Submitting..." : "Add collateral"}
                                 style={{ marginTop: "10px", marginLeft: "10px" }}
+                                disabled={error || submitting}
                             />
                         </Modal.Actions>
                     </Modal>
