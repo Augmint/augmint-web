@@ -118,7 +118,7 @@ class PlaceOrderForm extends React.Component {
         const orderDirection = this.props.orderDirection;
 
         try {
-            price = Ratio.of(values.price);
+            price = Ratio.of(this.parsePrice(values.price));
             if (orderDirection === TOKEN_BUY) {
                 amount = Wei.of(values.ethAmount);
             } else {

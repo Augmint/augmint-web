@@ -59,6 +59,10 @@ export const SideNav = styled.nav`
         `};
     }
 
+    ${media.desktopMin`
+        padding-top: 20px;
+    `}
+
     &.opened {
         ${mediaopacity.handheld`opacity: .97`} width: 100%;
     }
