@@ -1,8 +1,6 @@
 import store from "modules/store";
 
-import { collectLoansTx } from "modules/ethereum/loanTransactions";
-import { sendAndProcessTx, processTx } from "modules/ethereum/ethHelper";
-import { cost } from "../ethereum/gas";
+import { sendAndProcessTx } from "modules/ethereum/ethHelper";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
 export const LOANTRANSACTIONS_NEWLOAN_CREATED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_CREATED";

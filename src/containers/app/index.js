@@ -48,7 +48,6 @@ import EthereumTxStatus from "./EthereumTxStatus";
 import LegacyTokens from "./LegacyTokens";
 import LegacyExchanges from "./LegacyExchanges";
 import LegacyLockers from "./LegacyLockers";
-import LegacyLoanManagers from "./LegacyLoanManagers";
 import TransferRequestAlert from "../transfer/request/TransferRequestAlert";
 
 import { connectWeb3 } from "modules/web3Provider.js";
@@ -254,7 +253,6 @@ class App extends React.Component {
                         )}
                     {showConnection && ["stability", "under-the-hood"].indexOf(mainPath) < 0 && (
                         <div>
-                            <LegacyLoanManagers />
                             <LegacyLockers />
                             <LegacyExchanges />
                             <LegacyTokens />
