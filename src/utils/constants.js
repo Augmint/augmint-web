@@ -154,3 +154,5 @@ export const NETWORKS = {
     4447: "TruffleLocal",
     1976: "PrivateChain"
 };
+
+export const MARGIN_TRASHOLD = 0.9;
