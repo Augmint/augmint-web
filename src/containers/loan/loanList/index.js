@@ -10,14 +10,23 @@ import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
+import { MARGIN_TRASHOLD } from "utils/constants.js";
+import { Tokens, Ratio } from "@augmint/js";
 
 import "./styles.css";
 
 function LoanList(props) {
-    const { location, loanManager } = props;
+    const { location, loanManager, ethFiatRate } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
     const isNewLoan = location.pathname === "/loan/new";
+
+    function calculateMargin(marginCallRate) {
+        const ethFiat = Tokens.of(ethFiatRate);
+        const margin = ethFiat.mul(Ratio.of(MARGIN_TRASHOLD));
+
+        return marginCallRate.toNumber() >= margin.toNumber();
+    }
 
     const listItems =
         loans &&
@@ -26,7 +35,12 @@ function LoanList(props) {
             .sort((a, b) => {
                 return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
             })
-            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />);
+            .map(loan => {
+                if (loan.isMarginLoan && loan.marginCallRate) {
+                    loan.marginWarning = calculateMargin(loan.marginCallRate);
+                }
+                return <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />;
+            });
 
     let content = null;
     if (isNewLoan) {
@@ -84,7 +98,8 @@ function LoanList(props) {
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
-    loanManager: state.loanManager
+    loanManager: state.loanManager,
+    ethFiatRate: state.rates.info.ethFiatRate
 });
 
 export default withRouter(connect(mapStateToProps)(LoanList));
