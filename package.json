@@ -20,9 +20,9 @@
     "react": "16.8.6",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.6",
-    "react-ga": "2.5.7",
-    "react-redux": "7.0.3",
-    "react-router-dom": "5.0.0",
+    "react-router-dom": "5.0.1",
+    "react-ga": "2.6.0",
+    "react-redux": "7.1.0",
     "react-scripts": "3.0.1",
     "react-scrollchor": "6.0.0",
     "react-tooltip": "3.10.0",
@@ -32,7 +32,7 @@
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
     "stringifier": "2.0.0",
-    "styled-components": "4.2.0",
+    "styled-components": "4.3.2",
     "styled-components-grid": "2.2.2",
     "styled-tools": "1.7.1",
     "web3": "1.0.0-beta.36"
@@ -50,11 +50,11 @@
     "ganache:run": "yarn augmint-cli ganache run --blockTime 1"
   },
   "devDependencies": {
-    "cypress": "3.3.1",
+    "cypress": "3.3.2",
     "eslint-plugin-cypress": "2.2.1",
-    "husky": "2.1.0",
+    "husky": "3.0.0",
     "prettier": "1.18.0",
-    "pretty-quick": "1.11.0",
+    "pretty-quick": "1.11.1",
     "wait-on": "3.2.0"
   },
   "resolutions": {
