@@ -57,8 +57,8 @@ const COL_RATIO = 0.9; // TODO: this is just a test number
 class NewLoanForm extends React.Component {
     constructor(props) {
         super(props);
-        this.products = this.props.loanManager.products;
-        this.activeProducts = this.props.loanManager.products
+        this.products = this.props.products;
+        this.activeProducts = this.props.products
             .filter(product => product.isActive)
             .sort((p1, p2) => p2.termInSecs - p1.termInSecs);
 
@@ -181,7 +181,7 @@ class NewLoanForm extends React.Component {
     }
 
     render() {
-        const { error, handleSubmit, submitting, clearSubmitErrors, loanManager, onSubmit } = this.props;
+        const { error, handleSubmit, submitting, clearSubmitErrors, onSubmit, products } = this.props;
         const isRatesAvailable = this.props.rates && this.props.rates.info.bn_ethFiatRate * 1 > 0;
         const repayBefore = this.state.repayBefore ? moment(this.state.repayBefore).format("D MMM YYYY") : null;
         const interestRate = Math.round(this.state.product.interestRatePa * 10000) / 100;
@@ -223,7 +223,7 @@ class NewLoanForm extends React.Component {
                             inputmode="numeric"
                             step="any"
                             min="0"
-                            disabled={submitting || !loanManager.isLoaded}
+                            disabled={submitting || products === null}
                             validate={[
                                 Validations.required,
                                 Validations.tokenAmount,
@@ -242,7 +242,7 @@ class NewLoanForm extends React.Component {
                             <Field
                                 component={Form.Field}
                                 name="productId"
-                                disabled={submitting || !loanManager.isLoaded}
+                                disabled={submitting || products === null}
                                 data-testid="loan-product-selector"
                                 className="field-big"
                                 isSelect={true}

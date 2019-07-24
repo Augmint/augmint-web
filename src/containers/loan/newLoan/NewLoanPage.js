@@ -67,7 +67,7 @@ class NewLoanPage extends React.Component {
                         {!this.state.submitSucceeded && (
                             <NewLoanForm
                                 rates={this.props.rates}
-                                loanManager={this.props.loanManager}
+                                products={this.props.products}
                                 onSubmit={this.handleSubmit}
                             />
                         )}
