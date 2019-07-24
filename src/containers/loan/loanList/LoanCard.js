@@ -50,6 +50,13 @@ export const CardStatusBottom = styled.div`
     color: ${theme.colors.mediumGrey};
     padding: 5px 8px;
     border: 1px solid ${theme.colors.mediumGrey};
+    &.warning {
+        background-color: ${theme.colors.darkRed};
+        color: white;
+        border: ${theme.colors.darkRed};
+        position: initial;
+        display: inline-block;
+    }
 `;
 
 export const Card = styled.section`
@@ -107,6 +114,9 @@ export default function LoanCard(props) {
                                         ? "Near to due date. You will have to pay back soon."
                                         : "You can repay at any time."}
                                 </CardStatusHelp>
+                                {loan.isMarginLoan && loan.marginWarning && (
+                                    <CardStatusBottom className="warning">Margin Warning</CardStatusBottom>
+                                )}
                             </div>
                         ) : (
                             <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>

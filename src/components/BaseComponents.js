@@ -206,7 +206,6 @@ export function Select(props) {
     function addOptionsToSelect(options, testId) {
         let result = [];
         options.forEach((product, i) => {
-            const termText = productTermConverter(product.termInSecs);
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}

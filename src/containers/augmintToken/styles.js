@@ -114,3 +114,11 @@ export const StyledRow = styled(Row)`
         font-size: ${remCalc(18)};
     }
 `;
+
+export const StyledDiv = styled.div`
+    padding-top: 25px;
+    padding-left: 45px;
+    ${media.tablet`
+        padding-left: 20px;
+    `};
+`;

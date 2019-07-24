@@ -134,4 +134,4 @@ const mapStateToProps = state => ({
     contracts: state.contracts
 });
 
-export default (EthereumState = connect(mapStateToProps)(EthereumState));
+export default EthereumState = connect(mapStateToProps)(EthereumState);

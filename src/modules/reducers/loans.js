@@ -1,7 +1,6 @@
 /* Loans for one account
     TODO: consider selectors https://github.com/reactjs/reselect */
 import store from "modules/store";
-import { fetchAllLoansTx } from "modules/ethereum/loanTransactions";
 
 export const LOANS_LOANLIST_REQUESTED = "loans/LOANLIST_REQUESTED";
 export const LOANS_LOANLIST_RECEIVED = "loans/LOANLIST_RECEIVED";
