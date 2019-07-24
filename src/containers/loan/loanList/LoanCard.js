@@ -90,7 +90,7 @@ export const DataLabel = styled.div`
 export const DataValue = styled.div``;
 
 export default function LoanCard(props) {
-    const { loan, loanManager } = props;
+    const { loan } = props;
 
     return (
         <Card className={loan.dueState}>
@@ -174,13 +174,7 @@ export default function LoanCard(props) {
                         )}
                         {loan.isMarginLoan && loan.isRepayable && <AddCollateralButton loan={loan} />}
 
-                        {loan.isCollectable && (
-                            <CollectLoanButton
-                                idName="card-collect-btn"
-                                loanManager={loanManager}
-                                loansToCollect={[loan]}
-                            />
-                        )}
+                        {loan.isCollectable && <CollectLoanButton idName="card-collect-btn" loansToCollect={[loan]} />}
                     </Pgrid.Column>
                 </Pgrid.Row>
             </Pgrid>

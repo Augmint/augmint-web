@@ -41,11 +41,9 @@ class CollectLoanButton extends React.Component {
             clearSubmitErrors,
             submitting,
             reset,
-            loanManager,
             loansToCollect,
             idName
         } = this.props;
-        const { isLoading } = loanManager;
         return (
             <Pblock id={idName}>
                 {error && (
@@ -58,20 +56,18 @@ class CollectLoanButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!submitSucceeded && !isLoading && loansToCollect != null && (
+                {!submitSucceeded && loansToCollect !== null && (
                     <Form onSubmit={handleSubmit(this.handleSubmit)}>
                         <Button
                             size="large"
                             data-testid="collectLoanButton"
-                            disabled={submitting || isLoading || loansToCollect.length === 0}
+                            disabled={submitting || loansToCollect.length === 0}
                             type="submit"
                         >
                             {submitting ? "Submitting..." : "Collect"}
                         </Button>
                     </Form>
                 )}
-
-                {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
 
                 {submitSucceeded &&
                     this.state.result.map(result => (
