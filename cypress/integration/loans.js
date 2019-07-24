@@ -1,5 +1,11 @@
 describe("Loans", function() {
+    const loanManagerAddressMarginLoan = "0x213135c85437C23bC529A2eE9c2980646c332fCB";
+    // const loanManagerAddressOld = '0xf7b8384c392fc333d3858a506c4f1506af44d53c'
+
     const getLoan = (prodId, disbursedAmount, repaymentAmount, ethAmount) => {
+        const marginLoanSelector = `loan-product_${prodId.toString()}_${loanManagerAddressMarginLoan}`;
+        const marginLoanValue = `${prodId.toString()}_${loanManagerAddressMarginLoan}`;
+
         cy.get("[data-testid=loanMenuLink]").click();
         cy.get("[data-testid=newLoanLink]").click();
 
@@ -8,8 +14,8 @@ describe("Loans", function() {
             .type(disbursedAmount.toString())
             .should("have.value", disbursedAmount.toString());
         cy.get(`[data-testid=loan-product-selector]`)
-            .select(prodId.toString(), { force: true })
-            .should("have.value", prodId.toString());
+            .select(marginLoanValue, { force: true })
+            .should("have.value", marginLoanValue);
         cy.get("[data-testid=repaymentAmount]").should("contain", repaymentAmount.toString());
         cy.get("[data-testid=ethAmount]").should("contain", ethAmount.toString());
 
@@ -35,7 +41,7 @@ describe("Loans", function() {
 
     it("Should get and collect a loan", function() {
         //get a loan which defaults in 1 sec
-        getLoan(8, 50, 50.01, 0.05062).then(res => {
+        getLoan(8, 50, 50.01, 0.05061).then(res => {
             cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
                 .first()
                 .click({
@@ -65,7 +71,7 @@ describe("Loans", function() {
     });
 
     it("Should repay a loan", function() {
-        getLoan("7", 50, 50.01, 0.05114).then(() => {
+        getLoan("7", 50, 50.01, 0.05113).then(() => {
             // TODO : little differences between amounts caused by rounding and decimals
             // cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
