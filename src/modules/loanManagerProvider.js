@@ -43,6 +43,8 @@ const onAugmintChanged = newVal => {
     }
 };
 
+const makeEventObject = arr => arr.pop();
+
 const setupContractEventListeners = () => {
     const connection = store.getState().web3Connect;
     const augmint = connection.augmint;
@@ -52,23 +54,23 @@ const setupContractEventListeners = () => {
         const loanManager = loanManagerContract.connectWithEthers(ethers, connection.ethers.provider);
 
         loanManager.on("NewLoan", (...args) => {
-            onNewLoan(...args);
+            onNewLoan(makeEventObject(Array.from(args)));
         });
 
         if (loanManager.interface.events.LoanRepayed) {
             loanManager.on("LoanRepayed", (...args) => {
-                onLoanRepayed(...args);
+                onLoanRepayed(makeEventObject(Array.from(args)));
             });
         }
 
         if (loanManager.interface.events.LoanRepaid) {
             loanManager.on("LoanRepaid", (...args) => {
-                onLoanRepayed(...args);
+                onLoanRepayed(makeEventObject(Array.from(args)));
             });
         }
 
         loanManager.on("LoanCollected", (...args) => {
-            onLoanCollected(...args);
+            onLoanCollected(makeEventObject(Array.from(args)));
         });
 
         loanManager.on("LoanProductAdded", (...args) => {
@@ -114,21 +116,13 @@ const onLoanProductActiveStateChanged = (productId, newState, ethersEvent) => {
 
 // event NewLoan(uint32 productId, uint loanId, address indexed borrower, uint collateralAmount, uint loanAmount,
 //                  uint repaymentAmount, uint40 maturity);
-const onNewLoan = (
-    productId,
-    loanId,
-    borrower,
-    collateralAmount,
-    loanAmount,
-    repaymentAmount,
-    maturity,
-    ethersEvent
-) => {
+const onNewLoan = ethersEvent => {
     console.debug(
         "loanManagerProvider.onNewLoan: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
 
-    const event = patchEthersEvent(ethersEvent);
+    const { borrower } = ethersEvent.args;
+    console.log("onNewLoan Event", ethersEvent);
 
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
@@ -149,12 +143,12 @@ const onNewLoan = (
 };
 
 // event LoanRepayed(uint loanId, address borrower);
-const onLoanRepayed = (loanId, borrower, ethersEvent) => {
+const onLoanRepayed = ethersEvent => {
     console.debug(
         "loanManagerProvider.onRepayed:: Dispatching fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
     );
 
-    const event = patchEthersEvent(ethersEvent);
+    const { borrower } = ethersEvent.args;
 
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
@@ -164,7 +158,7 @@ const onLoanRepayed = (loanId, borrower, ethersEvent) => {
     }
 
     const userAccount = store.getState().web3Connect.userAccount;
-    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onRepayed: loan repayed for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -175,10 +169,12 @@ const onLoanRepayed = (loanId, borrower, ethersEvent) => {
 };
 
 // event LoanCollected(uint loanId, address indexed borrower, uint collectedCollateral, uint releasedCollateral, uint defaultingFee);
-const onLoanCollected = (loanId, borrower, collectedCollateral, releasedCollateral, defaultingFee, ethersEvent) => {
+const onLoanCollected = ethersEvent => {
     console.debug(
         "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"
     );
+
+    const { borrower } = ethersEvent.args;
 
     store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
