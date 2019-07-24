@@ -1,8 +1,9 @@
 /* TODO: maintain loan state instead of full refresh on loan repay, newloan, loancollected events */
 
+import { ethers } from "ethers";
 import store from "modules/store";
 import { setupWatch } from "./initialFunctions.js";
-import { refreshLoanManager, fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
+import { fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
 import { fetchLockProducts } from "modules/reducers/lockManager";
 import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
@@ -11,80 +12,93 @@ import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
 import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
+let inited = false;
+
+const init = () => {
+    inited = true;
+    refresh();
+    setupContractEventListeners();
+};
 
 export default () => {
-    const loanManager = store.getState().contracts.latest.loanManager;
-    const loanManagerData = store.getState().loanManager;
+    const augmint = store.getState().web3Connect.augmint;
 
-    if (loanManager && !loanManagerData.isLoading && !loanManagerData.isLoaded) {
-        console.debug(
-            "loanManagerProvider - loanManager not connected or loading and web3 already loaded, dispatching refreshLoanManager() "
-        );
-        refresh();
-        setupContractEventListeners();
+    if (augmint && !inited) {
+        init();
     }
     if (!isWatchSetup) {
         isWatchSetup = true;
-        setupWatch("contracts.latest.loanManager", onLoanManagerContractChange);
+        setupWatch("web3Connect.augmint", onAugmintChanged);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
     }
-    return;
+};
+
+const onAugmintChanged = newVal => {
+    console.log("augmintChanged");
+    if (newVal) {
+        init();
+    }
 };
 
 const setupContractEventListeners = () => {
-    const loanManager = store.getState().contracts.latest.loanManager.ethersInstance;
+    const connection = store.getState().web3Connect;
+    const augmint = connection.augmint;
+    const loanManagerContracts = augmint.deployedEnvironment.contracts.LoanManager;
 
-    loanManager.on("NewLoan", (...args) => {
-        onNewLoan(...args);
-    });
+    loanManagerContracts.forEach(loanManagerContract => {
+        const loanManager = loanManagerContract.connectWithEthers(ethers, connection.ethers.provider);
 
-    loanManager.on("LoanRepayed", (...args) => {
-        onLoanRepayed(...args);
-    });
+        loanManager.on("NewLoan", (...args) => {
+            onNewLoan(...args);
+        });
 
-    loanManager.on("LoanCollected", (...args) => {
-        onLoanCollected(...args);
-    });
+        if (loanManager.interface.events.LoanRepayed) {
+            loanManager.on("LoanRepayed", (...args) => {
+                onLoanRepayed(...args);
+            });
+        }
 
-    loanManager.on("LoanProductAdded", (...args) => {
-        onLoanProductAdded(...args);
-    });
+        if (loanManager.interface.events.LoanRepaid) {
+            loanManager.on("LoanRepaid", (...args) => {
+                onLoanRepayed(...args);
+            });
+        }
 
-    loanManager.on("LoanProductActiveStateChanged", (...args) => {
-        onLoanProductActiveStateChanged(...args);
+        loanManager.on("LoanCollected", (...args) => {
+            onLoanCollected(...args);
+        });
+
+        loanManager.on("LoanProductAdded", (...args) => {
+            onLoanProductAdded(...args);
+        });
+
+        loanManager.on("LoanProductActiveStateChanged", (...args) => {
+            onLoanProductActiveStateChanged(...args);
+        });
     });
 
     // TODO: add & handle loanproduct change events
 };
 
-const onLoanManagerContractChange = (newVal, oldVal, objectPath) => {
-    console.debug(
-        "loanManagerProvider - loanManager Contract changed. Dispatching refreshLoanManager, fetchLoanProducts, fetchLoans"
-    );
-    refresh();
-    setupContractEventListeners();
-};
-
 const refresh = () => {
     const userAccount = store.getState().web3Connect.userAccount;
-    store.dispatch(refreshLoanManager());
     store.dispatch(fetchLoanProducts());
     store.dispatch(fetchLoansForAddress(userAccount));
 };
 
-const onUserAccountChange = (newVal, oldVal, objectPath) => {
-    const loanManager = store.getState().contracts.latest.loanManager;
-    if (loanManager && newVal !== "?") {
-        console.debug("loanManagerProvider - web3Connect.userAccount changed. Dispatching fetchLoansForAddress()");
-        const userAccount = store.getState().web3Connect.userAccount;
-        store.dispatch(fetchLoansForAddress(userAccount));
+const onUserAccountChange = newVal => {
+    console.log("userAccountChanged");
+    const augmint = store.getState().web3Connect.augmint;
+    if (augmint && newVal !== "?") {
+        refresh();
     }
 };
+
+// contract events ----
 
 //  event LoanProductAdded(uint32 productId);
 const onLoanProductAdded = (productId, ethersEvent) => {
     console.debug("loanManagerProvider.onLoanProductAdded: dispatching refreshLoanManager and fetchLoanProducts");
-    store.dispatch(refreshLoanManager()); // to update product count
     store.dispatch(fetchLoanProducts()); // to fetch new product
 };
 
@@ -114,7 +128,6 @@ const onNewLoan = (
 
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
-    store.dispatch(refreshLoanManager()); // to update loanCount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
     if (store.getState().lockManager.isLoaded) {
         store.dispatch(fetchLockProducts()); // to update maxLockAmounts
@@ -182,12 +195,5 @@ const onLoanCollected = (loanId, borrower, collectedCollateral, releasedCollater
         store.dispatch(fetchUserBalance(userAccount));
     }
 
-    const loansToCollect = store.getState().loanManager.loansToCollect;
-    if (loansToCollect && loansToCollect.length > 0) {
-        console.debug(
-            "loanManagerProvider.onCollected: loan collected and we already had loans to collect fetched . Dispatching fetchLoansToCollect"
-        );
-
-        store.dispatch(fetchLoansToCollect());
-    }
+    store.dispatch(fetchLoansToCollect());
 };

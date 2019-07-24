@@ -4,7 +4,7 @@
 
 import store from "modules/store";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
+// import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 export const LOANMANAGER_REFRESH_REQUESTED = "loanManager/LOANMANAGER_REFRESH_REQUESTED";
 export const LOANMANAGER_REFRESHED = "loanManager/LOANMANAGER_REFRESHED";
@@ -102,11 +102,9 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
-                info
+                info: {}
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -120,6 +118,7 @@ export const refreshLoanManager = () => {
     };
 };
 
+/*
 async function getLoanManagerInfo(loanManagerInstance) {
     const web3 = store.getState().web3Connect.web3Instance;
     const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
@@ -156,6 +155,7 @@ async function getLoanManagerInfo(loanManagerInstance) {
         monetarySupervisorAddress
     };
 }
+*/
 
 export function fetchLoanProducts() {
     return async dispatch => {
