@@ -15,15 +15,18 @@ let isWatchSetup = false;
 let inited = false;
 
 const init = () => {
-    inited = true;
-    refresh();
-    setupContractEventListeners();
+    if (!inited) {
+        console.log("loanmanager provider init");
+        inited = true;
+        refresh();
+        setupContractEventListeners();
+    }
 };
 
 export default () => {
     const augmint = store.getState().web3Connect.augmint;
 
-    if (augmint && !inited) {
+    if (augmint) {
         init();
     }
     if (!isWatchSetup) {
