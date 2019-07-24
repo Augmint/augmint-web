@@ -18,6 +18,7 @@ import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 import moment from "moment";
+import productTermConverter from "utils/productTermConverter";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
@@ -106,12 +107,14 @@ class AugmintToken extends React.Component {
                 if (product.maxLoanAmount < loanLimit) {
                     loanLimit = product.maxLoanAmount;
                 }
+                const termText = productTermConverter(product.termInSecs);
+                const interestRatePa = +(product.interestRatePa * 100).toFixed(2);
                 return (
                     <div key={"reserv-page-loan-" + index}>
                         {product.isActive && (
                             <StyledRow halign="justify">
-                                <StyledCol width={1 / 2}>{product.termText}</StyledCol>
-                                <StyledCol width={1 / 2}>{product.interestRatePaPt}%</StyledCol>
+                                <StyledCol width={1 / 2}>{termText}</StyledCol>
+                                <StyledCol width={1 / 2}>{interestRatePa}%</StyledCol>
                             </StyledRow>
                         )}
                     </div>
