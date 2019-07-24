@@ -3,8 +3,8 @@
 import { ethers } from "ethers";
 import store from "modules/store";
 import { setupWatch } from "./initialFunctions.js";
-import { fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
 import { fetchLockProducts } from "modules/reducers/lockManager";
+import { refreshLoanManager, fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
 import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
@@ -85,6 +85,7 @@ const setupContractEventListeners = () => {
 
 const refresh = () => {
     const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(refreshLoanManager());
     store.dispatch(fetchLoanProducts());
     store.dispatch(fetchLoansForAddress(userAccount));
 };
@@ -137,7 +138,7 @@ const onNewLoan = (
     }
 
     const userAccount = store.getState().web3Connect.userAccount;
-    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onNewLoan: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
         );
@@ -179,8 +180,6 @@ const onLoanCollected = (loanId, borrower, collectedCollateral, releasedCollater
         "loanManagerProvider.onCollected: Dispatching fetchLoanProducts, fetchLockProducts, refreshAugmintToken & refreshMonetarySupervisor"
     );
 
-    const event = patchEthersEvent(ethersEvent);
-
     store.dispatch(refreshAugmintToken()); // update fee accounts (no AugmintTransfer on loan collection tx)
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
     store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
@@ -189,7 +188,7 @@ const onLoanCollected = (loanId, borrower, collectedCollateral, releasedCollater
     }
 
     const userAccount = store.getState().web3Connect.userAccount;
-    if (event.returnValues.borrower.toLowerCase() === userAccount.toLowerCase()) {
+    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
         console.debug(
             "loanManagerProvider.onCollected: loan collected for current user. Dispatching fetchLoans & fetchUserBalance"
         );
