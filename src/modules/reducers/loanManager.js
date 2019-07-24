@@ -24,19 +24,7 @@ const initialState = {
     loadError: null,
     result: null,
     error: null,
-    products: null,
-    info: {
-        bn_weiBalance: null,
-        ethBalance: "?",
-        bn_tokenBalance: null,
-        tokenBalance: "?",
-        loanCount: null,
-        productCount: null,
-
-        ratesAddress: "?",
-        augmintTokenAddress: "?",
-        monetarySupervisorAddress: "?"
-    }
+    products: null
 };
 
 export default (state = initialState, action) => {
@@ -51,8 +39,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                isLoaded: true,
-                info: action.info
+                isLoaded: true
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:

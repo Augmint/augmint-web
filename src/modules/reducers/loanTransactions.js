@@ -93,9 +93,15 @@ export function newLoan(product, ethAmount, address, minRate) {
         });
 
         try {
+            let tx;
             const txName = "New loan";
             const augmint = await store.getState().web3Connect.augmint;
-            const tx = await augmint.newEthBackedLoan(product, ethAmount, address, minRate);
+            if (product.isMarginLoan) {
+                tx = await augmint.newEthBackedLoan(product, ethAmount, address, minRate);
+            } else {
+                tx = await augmint.newEthBackedLoan(product, ethAmount, address);
+            }
+
             const transactionHash = await sendAndProcessTx(tx, txName);
 
             const result = { txName, transactionHash };
