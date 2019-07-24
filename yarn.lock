@@ -2,18 +2,18 @@
 # yarn lockfile v1
 
 
-"@augmint/contracts@1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.0.12.tgz#7a27331e2b85d886c582992c537bdf8e1273c52f"
-  integrity sha512-N32R6pPG2aEVH53rwm8ox6AnTZELpZPfduNZ7czhKn95TWM0tUbV96uLbNwJgdpgda2+hg34keUR0lN/rUcOLQ==
+"@augmint/contracts@1.1.0-pre5":
+  version "1.1.0-pre5"
+  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.0-pre5.tgz#4e19a8f27dcff911c1d645bdf8e1d7f9d6955482"
+  integrity sha512-KecmuuFc9pO83DAFqxmVucxYEs+gmAscQiydDvPDTbssNdAvJ3i7gRljdAjSpErOdyVJ2Bcx77r6ml45YXV1vA==
 
-"@augmint/js@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.3.tgz#ffca5e52a9376c99805eb9be623a7c48245149c7"
-  integrity sha512-1hXl5dQZMPKbxedME4L05SvBURfmYCn62FhJBhpO1it5fOAI1/7mmvGYBRA9PG31Oe6ezxnrRNp9tp9W8p7qgw==
+"@augmint/js@0.3.4-pre1":
+  version "0.3.4-pre1"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.4-pre1.tgz#3903053979b0bfc11010f9f9b9fc962fed113baf"
+  integrity sha512-Y1ZxfIKk+pF0yC0DtZ1C2/tynbEIdIv2uX4M+gHH077qxHLXouOyyycaouzZSB6l5LXpdJ2N+Tre8TXAFzZaZg==
   dependencies:
-    "@augmint/contracts" "1.0.12"
-    bn.js "4.11.8"
+    "@augmint/contracts" "1.1.0-pre5"
+    bn.js "5.0.0"
     dotenv "8.0.0"
     ulog "2.0.0-beta.6"
     web3 "1.0.0-beta.36"
@@ -2199,6 +2199,11 @@ bn.js@4.11.8, bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.11.0, bn.js@^4.
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
   integrity sha512-ItfYfPLkWHUjckQCk8xC+LwxgK8NYcXywGigJgSwOP8Y2iyWT4f2vsZnoOXTTbo+o5yXmIUJ4gn5538SO5S3gA==
+
+bn.js@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.0.0.tgz#5c3d398021b3ddb548c1296a16f857e908f35c70"
+  integrity sha512-bVwDX8AF+72fIUNuARelKAlQUNtPOfG2fRxorbVvFk4zpHbqLrPdOGfVg5vrKwVzLLePqPBiATaOZNELQzmS0A==
 
 body-parser@1.19.0, body-parser@^1.16.0:
   version "1.19.0"
