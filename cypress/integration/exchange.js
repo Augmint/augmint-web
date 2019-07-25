@@ -175,7 +175,7 @@ describe("Augmint exchange", function() {
 
                 const expectedEthBalance =
                     parseFloat(this.startingEthBalance) - parseInt(this.orderGasUsed) * this.gasPriceInEth;
-                const expectedAEurBalance = Math.round((this.startingAeurBalance - tokenAmount) * 100) / 100; // 2397.99 - 997 = 1400.9899999999998
+                const expectedAEurBalance = ((this.startingAeurBalance - tokenAmount) * 100) / 100; // 2397.99 - 997 = 1400.9899999999998
                 cy.assertUserAEurBalanceOnUI(expectedAEurBalance);
                 cy.assertUserEthBalanceOnUI(expectedEthBalance);
 
