@@ -39,7 +39,13 @@ function LoanList(props) {
                 if (loan.isMarginLoan && loan.marginCallRate) {
                     loan.marginWarning = calculateMargin(loan.marginCallRate);
                 }
-                return <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />;
+                return (
+                    <LoanCard
+                        key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                        loan={loan}
+                        loanManager={loanManager}
+                    />
+                );
             });
 
     let content = null;
