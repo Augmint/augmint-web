@@ -79,7 +79,6 @@ class NewLoanForm extends React.Component {
     }
 
     componentDidMount() {
-        this.setProduct(); // needed when landing from Link within App
         this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
         this.props.change("product", this.state.product);
         this.setState({
@@ -88,10 +87,6 @@ class NewLoanForm extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.products !== this.props.products) {
-            this.setProduct(); // needed when landing from on URL directly
-        }
-
         this.updateMinRate();
 
         if (
@@ -109,19 +104,10 @@ class NewLoanForm extends React.Component {
             if (token !== prevToken) {
                 this.onLoanTokenAmountChange(token);
             }
-            if (productId !== prevProductId) {
+            if (productId !== prevProductId && productId) {
                 this.onSelectedLoanChange(productId);
             }
         }
-    }
-
-    setProduct() {
-        // workaround b/c landing directly on URL and from LoanSelector triggers different events.
-        if (this.props.products == null) {
-            return;
-        } // not loaded yet
-        let product = this.props.products[this.state.productId];
-        this.setState({ isLoading: false, product: product });
     }
 
     updateMinRate() {
