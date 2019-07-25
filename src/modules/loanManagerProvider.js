@@ -5,7 +5,7 @@ import store from "modules/store";
 import { setupWatch } from "./initialFunctions.js";
 import { fetchLockProducts } from "modules/reducers/lockManager";
 import { refreshLoanManager, fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
-import { fetchLoansForAddress } from "modules/reducers/loans";
+import { fetchAllLoans, fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
@@ -32,6 +32,7 @@ export default () => {
         isWatchSetup = true;
         setupWatch("web3Connect.augmint", onAugmintChanged);
         setupWatch("web3Connect.userAccount", onUserAccountChange);
+        setupWatch("rates.info.lastUpdated", onRateChange);
     }
 };
 
@@ -97,6 +98,10 @@ const onUserAccountChange = newVal => {
     if (augmint && newVal !== "?") {
         refresh();
     }
+};
+
+const onRateChange = newVal => {
+    store.dispatch(fetchAllLoans());
 };
 
 // contract events ----
