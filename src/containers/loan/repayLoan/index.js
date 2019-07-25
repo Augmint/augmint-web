@@ -15,5 +15,5 @@ const repayLoanMain = () => (
         <Route path="/loan/repay/:loanId/:loanManagerAddress" component={RepayLoanPage} />
     </Psegment>
 );
-//TODO: loanamanger param
+
 export default repayLoanMain;
