@@ -15,7 +15,6 @@ let inited = false;
 
 const init = () => {
     if (!inited) {
-        console.log("loanmanager provider init");
         inited = true;
         refresh();
         setupContractEventListeners();
@@ -37,7 +36,6 @@ export default () => {
 };
 
 const onAugmintChanged = newVal => {
-    console.log("augmintChanged");
     if (newVal) {
         init();
     }
@@ -80,6 +78,12 @@ const setupContractEventListeners = () => {
         loanManager.on("LoanProductActiveStateChanged", (...args) => {
             onLoanProductActiveStateChanged(...args);
         });
+
+        if (loanManager.interface.events.LoanChanged) {
+            loanManager.on("LoanChanged", (...args) => {
+                onLoanChanged(makeEventObject(Array.from(args)));
+            });
+        }
     });
 
     // TODO: add & handle loanproduct change events
@@ -93,7 +97,6 @@ const refresh = () => {
 };
 
 const onUserAccountChange = newVal => {
-    console.log("userAccountChanged");
     const augmint = store.getState().web3Connect.augmint;
     if (augmint && newVal !== "?") {
         refresh();
@@ -126,7 +129,6 @@ const onNewLoan = ethersEvent => {
     );
 
     const { borrower } = ethersEvent.args;
-    console.log("onNewLoan Event", ethersEvent);
 
     // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
     store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
@@ -198,4 +200,31 @@ const onLoanCollected = ethersEvent => {
     }
 
     store.dispatch(fetchLoansToCollect());
+};
+
+const onLoanChanged = ethersEvent => {
+    // TODO: this is taken from the newLoan eventhandler!
+
+    console.debug(
+        "loanManagerProvider.onLoanChanged: dispatching refreshLoanManager, fetchLoanProducts, fetchLockProducts & refreshMonetarySupervisor"
+    );
+
+    const { borrower } = ethersEvent.args;
+
+    // AugmintTokenPropvider does it on AugmintTransfer: store.dispatch(refreshAugmintToken()); // update totalSupply
+    store.dispatch(refreshMonetarySupervisor()); // update totalLoanAmount
+    store.dispatch(fetchLoanProducts()); // to update maxLoanAmounts
+    if (store.getState().lockManager.isLoaded) {
+        store.dispatch(fetchLockProducts()); // to update maxLockAmounts
+    }
+
+    const userAccount = store.getState().web3Connect.userAccount;
+    if (borrower.toLowerCase() === userAccount.toLowerCase()) {
+        console.debug(
+            "loanManagerProvider.loanChanged: new loan for current user. Dispatching fetchLoans & fetchUserBalance"
+        );
+        // TODO: it can be expensive, should create a separate single fetchLoan action
+        store.dispatch(fetchLoansForAddress(userAccount));
+        store.dispatch(fetchUserBalance(userAccount));
+    }
 };
