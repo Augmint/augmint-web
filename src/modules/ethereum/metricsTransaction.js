@@ -117,15 +117,15 @@ export async function fetchAllLoansInfo() {
         const loanState = LOAN_STATES[loan.state];
         switch (loanState) {
             case "Open":
-                bn_outstandingLoansAmount = bn_outstandingLoansAmount.plus(loan.loanAmount);
+                bn_outstandingLoansAmount = bn_outstandingLoansAmount.plus(loan.loanAmount.toNumber());
                 break;
 
             case "Defaulted":
-                bn_defaultedLoansAmount = bn_defaultedLoansAmount.plus(loan.loanAmount);
+                bn_defaultedLoansAmount = bn_defaultedLoansAmount.plus(loan.loanAmount.toNumber());
                 break;
 
             case "Collected":
-                bn_collectedLoansAmount = bn_collectedLoansAmount.plus(loan.loanAmount);
+                bn_collectedLoansAmount = bn_collectedLoansAmount.plus(loan.loanAmount.toNumber());
                 break;
 
             default:
