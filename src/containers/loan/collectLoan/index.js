@@ -63,8 +63,7 @@ class CollectLoanMain extends React.Component {
 
 const mapStateToProps = state => ({
     loanManager: state.loanManager,
-    loanManagerContract: state.contracts.latest.loanManager,
     augmintToken: state.augmintToken
 });
 
-export default (CollectLoanMain = connect(mapStateToProps)(CollectLoanMain));
+export default CollectLoanMain = connect(mapStateToProps)(CollectLoanMain);

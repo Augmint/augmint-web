@@ -4,7 +4,6 @@ import Button from "components/augmint-ui/button";
 import { SubmissionError, reduxForm } from "redux-form";
 import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 
 import "./CollectLoanButton.css";
@@ -56,7 +55,7 @@ class CollectLoanButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!submitSucceeded && loansToCollect !== null && (
+                {!submitSucceeded && loansToCollect && (
                     <Form onSubmit={handleSubmit(this.handleSubmit)}>
                         <Button
                             size="large"
