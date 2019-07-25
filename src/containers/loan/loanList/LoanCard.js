@@ -167,7 +167,7 @@ export default function LoanCard(props) {
                         {loan.isRepayable && (
                             <Button
                                 style={{ marginBottom: "10px", alignSelf: "flex-end" }}
-                                to={"/loan/repay/" + loan.id}
+                                to={`/loan/repay/${loan.id}/${loan.loanManagerAddress}`}
                             >
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>
