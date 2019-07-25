@@ -9,7 +9,6 @@ import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
-import { patchEthersEvent } from "modules/ethereum/ethersHelper";
 
 let isWatchSetup = false;
 let inited = false;
