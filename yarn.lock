@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@augmint/contracts@1.1.0-pre5":
-  version "1.1.0-pre5"
-  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.0-pre5.tgz#4e19a8f27dcff911c1d645bdf8e1d7f9d6955482"
-  integrity sha512-KecmuuFc9pO83DAFqxmVucxYEs+gmAscQiydDvPDTbssNdAvJ3i7gRljdAjSpErOdyVJ2Bcx77r6ml45YXV1vA==
+"@augmint/contracts@1.1.0-pre7":
+  version "1.1.0-pre7"
+  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.0-pre7.tgz#095156ae0f794c5c9f054c17ec5a594e1aab9303"
+  integrity sha512-BMQ9uRXR7N+IZvHY8JIAfZb4eaiQoXcpjRR+4K/1u0IlnXBsaZKywl/J66WtUD6sf0nOJ872n/EoCDgeCewkTg==
 
-"@augmint/js@0.3.4-pre1":
-  version "0.3.4-pre1"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.4-pre1.tgz#3903053979b0bfc11010f9f9b9fc962fed113baf"
-  integrity sha512-Y1ZxfIKk+pF0yC0DtZ1C2/tynbEIdIv2uX4M+gHH077qxHLXouOyyycaouzZSB6l5LXpdJ2N+Tre8TXAFzZaZg==
+"@augmint/js@0.3.4-pre2":
+  version "0.3.4-pre2"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.4-pre2.tgz#8cd82fe871b9b8143fcaf98aec55f2f612222c9a"
+  integrity sha512-wddarulqBMjOY14PQReA4i4S4xOO8uAP2B6V77RLKHkOl6wgzE+mVvXt8Gm8jgQOf33xYu1EgoAt8tNL+M1Kzw==
   dependencies:
-    "@augmint/contracts" "1.1.0-pre5"
+    "@augmint/contracts" "1.1.0-pre7"
     bn.js "5.0.0"
     dotenv "8.0.0"
     ulog "2.0.0-beta.6"
