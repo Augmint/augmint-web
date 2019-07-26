@@ -75,13 +75,8 @@ describe("Loans", function() {
             // TODO : little differences between amounts caused by rounding and decimals
             // cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
-            cy.contains("this loan's page")
-                .click({ force: true })
-                .then(() => {
-                    cy.get("[data-testid=EthConfirmationReceivedPanel]")
-                        .first()
-                        .click();
-                });
+            cy.contains("this loan's page").click({ force: true });
+            cy.get("#DismissAllBtn").click();
 
             cy.get("[data-testid=repayLoanButton]").click();
             cy.get("[data-testid=confirmRepayButton]").click();
