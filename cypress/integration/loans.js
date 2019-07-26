@@ -21,6 +21,7 @@ describe("Loans", function() {
 
         return cy
             .get("[data-testid=EthConfirmationReceivedPanel]")
+            .first()
             .click()
             .within(() => {
                 cy.contains("New loan");
@@ -53,13 +54,11 @@ describe("Loans", function() {
             cy.get("[data-testid=loansToCollectButton]").click();
             cy.get("[data-testid=collectLoanButton]").click();
 
-            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
-            cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
+            //            cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Collect loan(s) submitted");
+            //            cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]")
-                .first()
-                .click();
+            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click();
 
             cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }).should(
                 "contain",
