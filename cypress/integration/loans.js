@@ -81,7 +81,6 @@ describe("Loans", function() {
                     cy.get("[data-testid=EthConfirmationReceivedPanel]")
                         .first()
                         .click();
-                    cy.get("#DismissAllBtn").click();
                 });
 
             cy.get("[data-testid=repayLoanButton]").click();
