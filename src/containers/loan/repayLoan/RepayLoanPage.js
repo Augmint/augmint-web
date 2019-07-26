@@ -34,6 +34,7 @@ class RepayLoanPage extends React.Component {
         this.state = {
             loan: null,
             loanId: this.props.match.params.loanId,
+            loanManagerAddress: this.props.match.params.loanManagerAddress,
             isLoading: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -56,7 +57,9 @@ class RepayLoanPage extends React.Component {
         } // not loaded yet
         let isLoanFound;
         let loan = this.props.loans.find(item => {
-            return item.id.toString() === this.state.loanId;
+            return (
+                item.id.toString() === this.state.loanId && item.loanManagerAddress === this.state.loanManagerAddress
+            );
         });
         if (typeof loan === "undefined") {
             isLoanFound = false;

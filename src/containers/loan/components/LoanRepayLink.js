@@ -3,8 +3,8 @@ import Button from "components/augmint-ui/button";
 
 export function LoanRepayLink(props) {
     const {
-        to = "/loan/repay/" + props.loan.id,
-        key = "repaybtn-" + props.loan.id,
+        to = `/loan/repay/${props.loan.id}/${props.loan.loanManagerAddress}`,
+        key = `repaybtn-${props.loan.id}_${props.loan.loanManagerAddress}`,
         className = props.loan.isDue ? "repayButton" : "repayEarlyButton",
         content = props.loan.isDue ? "Repay" : "Repay Early",
         icon = "right chevron",
