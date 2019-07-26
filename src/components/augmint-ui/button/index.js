@@ -4,7 +4,7 @@ import Icon from "../icon";
 import { StyledLink, StyledA, StyledButton } from "./styles";
 
 export default function Button(props) {
-    const { children, to, type, content, icon, className } = props;
+    const { children, to, type, content, icon, className, circleicon } = props;
 
     let _className = className + " dashboardColors";
     let elementType = StyledA,
@@ -16,7 +16,7 @@ export default function Button(props) {
         elementType = StyledLink;
     }
     if (icon) {
-        _icon = <Icon name={icon} />;
+        _icon = <Icon name={icon} className={circleicon ? "circleBg" : ""} />;
     }
 
     return React.createElement(elementType, { ...props, className: _className }, children, content, _icon);

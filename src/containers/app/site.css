@@ -146,6 +146,12 @@ label {
     padding: 20px;
 }
 
+@media (max-width: 768px) {
+    .dashblock__content.balance {
+        padding: 20px 10px;
+    }
+}
+
 .dashblock__head,
 .dashblock__content,
 .dashblock__content p {

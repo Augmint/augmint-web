@@ -66,7 +66,6 @@ export class AccountInfo extends React.Component {
                         <ETH
                             amount={data.account.ethBalance}
                             data-testid={!hideTestId && "userEthBalance"}
-                            decimals={15}
                             style={{ fontFamily: theme.typography.fontFamilies.currency }}
                         />
                     </div>

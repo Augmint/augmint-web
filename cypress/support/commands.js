@@ -135,13 +135,13 @@ Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
     const decimals = 2;
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
-    cy.get("[data-testid=userAEurBalance]")
+    cy.get("[data-testid=userAEurBalance]", { timeout: 8000 })
         .invoke("text")
         .should("equal", fmt.format(balance) + " A€");
 });
 
 // assert user balance on UI.
-Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 15, options = {}) => {
+Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 5, options = {}) => {
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
