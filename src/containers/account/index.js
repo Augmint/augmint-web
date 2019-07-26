@@ -3,16 +3,34 @@ import { connect } from "react-redux";
 import augmintTokenProvider from "modules/augmintTokenProvider";
 import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
-import LoanList from "containers/loan/components/LoanList";
-import LockList from "containers/lock/components/LockList";
 import Balance from "./components/Balance";
 import TransferList from "./components/TransferList";
 import { Pheader, Psegment, Pgrid } from "components/PageLayout";
 import { EthereumState } from "containers/app/EthereumState";
 import TopNavTitlePortal from "components/portals/TopNavTitlePortal";
-import Button from "components/augmint-ui/button";
 import NoTokenAlert from "./components/NoTokenAlert";
-import WatchAssetButton from "components/watchAssetButton";
+import styled from "styled-components";
+import { media } from "styles/media";
+
+const StyledPgridRow = styled(Pgrid.Row)`
+    &.balance {
+        justify-content: center;
+        max-width: 100%;
+        background-color: white;
+        margin: 1rem 1rem 0;
+
+        ${media.mobile`
+            margin: 0;
+        `};
+    }
+
+    &.transferlist {
+        ${media.desktop`
+            width: 100%;
+            margin: auto;
+        `};
+    }
+`;
 
 class AccountHome extends React.Component {
     componentDidMount() {
@@ -28,50 +46,23 @@ class AccountHome extends React.Component {
                     <TopNavTitlePortal>
                         <Pheader header="My Account" />
                     </TopNavTitlePortal>
-
-                    <NoTokenAlert style={{ margin: "10px 15px 5px" }} />
+                    <NoTokenAlert />
                     <Pgrid>
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
+                        <StyledPgridRow className={"balance"}>
+                            <Pgrid.Column>
                                 <Balance
                                     userAccount={this.props.userAccount}
                                     loans={this.props.loans}
                                     locks={this.props.locks}
-                                >
-                                    <div>
-                                        <WatchAssetButton className={"noMargin"} />
-                                        <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
-                                            <Button to="/exchange" className="primary myAcc">
-                                                Buy / Sell A-EUR
-                                            </Button>
-                                            <Button
-                                                to="/transfer"
-                                                className="primary myAcc"
-                                                data-testid="transferButton"
-                                                style={{ marginBottom: 20 }}
-                                            >
-                                                Send A-EUR
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Balance>
+                                ></Balance>
                             </Pgrid.Column>
-                        </Pgrid.Row>
+                        </StyledPgridRow>
 
-                        <Pgrid.Row>
+                        <StyledPgridRow className={"transferlist"}>
                             <Pgrid.Column>
-                                <TransferList userAccount={this.props.userAccount} header="My account history" />
+                                <TransferList userAccount={this.props.userAccount} />
                             </Pgrid.Column>
-                        </Pgrid.Row>
-
-                        <Pgrid.Row>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LoanList header="My active loans" loans={this.props.loans} />
-                            </Pgrid.Column>
-                            <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2 }}>
-                                <LockList header="My active locks" locks={this.props.locks} />
-                            </Pgrid.Column>
-                        </Pgrid.Row>
+                        </StyledPgridRow>
                     </Pgrid>
                 </Psegment>
             </EthereumState>
