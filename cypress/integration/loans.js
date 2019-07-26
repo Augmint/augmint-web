@@ -41,10 +41,10 @@ describe("Loans", function() {
         //get a loan which defaults in 1 sec
         const loanManagerAddress = "0x213135c85437C23bC529A2eE9c2980646c332fCB";
         getLoan(8, 50, 50.05, 0.05567, loanManagerAddress).then(res => {
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click({
-                force: true,
-                multiple: true
-            });
+            cy.get("[data-testid=EthConfirmationReceivedPanel]")
+                .first()
+                .click();
+            cy.get("#DismissAllBtn").click();
 
             // TODO : little differences between amounts caused by rounding and decimals
             // cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 50);
@@ -57,9 +57,10 @@ describe("Loans", function() {
             //            cy.get("[data-testid=EthSubmissionSuccessPanel] >[data-testid=msgPanelOkButton]").click();
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click({
-                multiple: true
-            });
+            cy.get("[data-testid=EthConfirmationReceivedPanel]")
+                .first()
+                .click();
+            cy.get("#DismissAllBtn").click();
 
             cy.get("[data-testid=loansToCollectBlock]", { timeout: 8000 }).should(
                 "contain",
@@ -77,9 +78,10 @@ describe("Loans", function() {
             cy.contains("this loan's page")
                 .click({ force: true })
                 .then(() => {
-                    cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click({
-                        multiple: true
-                    });
+                    cy.get("[data-testid=EthConfirmationReceivedPanel]")
+                        .first()
+                        .click();
+                    cy.get("#DismissAllBtn").click();
                 });
 
             cy.get("[data-testid=repayLoanButton]").click();
@@ -88,9 +90,10 @@ describe("Loans", function() {
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Repayment submitted");
 
             cy.get("[data-testid=EthConfirmationReceivedPanel]").should("contain", "confirmation");
-            cy.get("[data-testid=EthConfirmationReceivedPanel] > [data-testid=msgPanelClose]").click({
-                multiple: true
-            });
+            cy.get("[data-testid=EthConfirmationReceivedPanel]")
+                .first()
+                .click();
+            cy.get("#DismissAllBtn").click();
 
             cy.assertUserAEurBalanceOnUI(this.startingAeurBalance - 0.05); // interest
 
