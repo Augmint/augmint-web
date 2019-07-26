@@ -141,7 +141,7 @@ Cypress.Commands.add("assertUserAEurBalanceOnUI", (balance, options = {}) => {
 });
 
 // assert user balance on UI.
-Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 13, options = {}) => {
+Cypress.Commands.add("assertUserEthBalanceOnUI", (_expectedEth, decimals = 15, options = {}) => {
     const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     cy.get("[data-testid=accountInfoBlock]").should("not.have.class", "loading");
 
