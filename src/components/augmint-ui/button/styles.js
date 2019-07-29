@@ -104,6 +104,10 @@ export const BaseButton = styledComponent => styledComponent`
 
     }
 
+    &.wIcon {
+      padding: 10px 15px;
+    }
+
     &.ghost {
       font-family: ${theme.typography.fontFamilies.title};
       font-size: ${remCalc(16)};
@@ -173,6 +177,21 @@ export const BaseButton = styledComponent => styledComponent`
       `};
     }
 
+    &.balanceBtn{
+      width: 95%;
+      box-sizing: border-box; 
+      padding: 10px;
+    }
+
+    &.danger {
+      background: ${theme.colors.red};
+      color: ${theme.colors.white};
+      padding: 10px 5px;
+      :hover {
+        background: ${theme.colors.darkRed};
+      }
+    }
+
     &.icon {      
       
       &.left {
@@ -192,6 +211,30 @@ export const BaseButton = styledComponent => styledComponent`
           height: 100%;
           margin: 0;
         }
+      }
+
+      &.top {
+        flex-direction: column-reverse;
+        font-size: 1rem;
+        ${media.mobile`
+          font-size: .875rem;
+        `};
+
+        i {
+          margin-top: 3px;
+          margin-bottom: 6px;
+        }
+      }
+
+      .circleBg {
+        color: ${theme.colors.primary}
+        background: ${theme.colors.secondary};
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        vertical-align: middle;
       }
 
       i {
@@ -244,6 +287,10 @@ export const BaseButton = styledComponent => styledComponent`
     &[icon] {
       color: ${theme.colors.opacLighterGrey};
       position: relative;
+
+      &.circle {
+        color: ${theme.colors.primary};
+      }
     }
 
     &[icon]:hover {
@@ -288,6 +335,17 @@ export const BaseButton = styledComponent => styledComponent`
       border-radius: 0;
       border-top-right-radius: inherit;
       border-bottom-right-radius: inherit;
+    }
+
+    &[labelposition="top"] {
+      flex-direction: column-reverse;
+      padding-top: 0px;
+      
+      i {
+        position: inherit;
+        font-size: .875rem;
+        background-color: transparent;
+      }
     }
 `;
 

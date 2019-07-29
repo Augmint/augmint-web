@@ -15,7 +15,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 import theme from "styles/theme";
-import { ETHEUR } from "utils/constants";
+import { ETHEUR, MINRATE_RATIO } from "utils/constants";
 import { Wei, Tokens, Ratio } from "@augmint/js";
 
 const StyledBox = styled.div`
@@ -51,8 +51,6 @@ const StyledBox = styled.div`
         }
     }
 `;
-
-const COL_RATIO = 0.9; // TODO: this is just a test number
 
 class NewLoanForm extends React.Component {
     constructor(props) {
@@ -112,7 +110,7 @@ class NewLoanForm extends React.Component {
 
     updateMinRate() {
         const ethFiat = Tokens.of(this.props.rates.info.ethFiatRate);
-        const minRate = ethFiat.mul(Ratio.of(COL_RATIO));
+        const minRate = ethFiat.mul(Ratio.of(MINRATE_RATIO));
 
         if (!this.state.minRate || minRate.toNumber() !== this.state.minRate.toNumber()) {
             this.setState({ minRate: minRate });

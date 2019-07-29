@@ -12,6 +12,7 @@ import { calculateTransfersBalance } from "modules/ethereum/transferTransactions
 import { AEUR } from "components/augmint-ui/currencies";
 import styled from "styled-components";
 import { default as theme } from "styles/theme";
+import { media } from "styles/media";
 
 const Transfer = styled.span`
     .positive::before {
@@ -43,12 +44,30 @@ const Transfer = styled.span`
         }
     }
 `;
+const StyledSegment = styled(Segment)`
+    color: black;
+    display: inline-block;
+    margin: 20px 0 20px;
+
+    ${media.mobile`
+        margin: 20px;
+    `};
+`;
 
 const TransferTable = styled(Table)`
     tr :nth-child(3),
     tr :nth-child(4) {
         text-align: right;
     }
+
+    ${media.mobile`
+        .mobilePaddingRight {
+            padding-right: 0px;
+        };
+        .mobilePaddingLeft {
+            padding-left: 0px;
+        };
+    `};
 `;
 
 class TransferList extends React.Component {
@@ -110,7 +129,7 @@ class TransferList extends React.Component {
                 ) : (
                     <div style={{ overflow: "auto" }}>
                         <TransferTable>
-                            <thead>
+                            <thead className={"hide-t"}>
                                 <tr>
                                     <th className={"hide-xs"}>Date</th>
                                     <th>Transaction</th>
@@ -124,11 +143,11 @@ class TransferList extends React.Component {
                                         <td className={"hide-xs"}>
                                             <TxDate>{tx.blockTimeStampText}</TxDate>
                                         </td>
-                                        <td>
+                                        <td className="mobilePaddingRight">
                                             <div className={"show-xs"}>{tx.date}</div>
                                             <TxInfo tx={tx} />
                                         </td>
-                                        <td>
+                                        <td className="mobilePaddingLeft">
                                             <Transfer>
                                                 <AEUR raw amount={tx.amount} className="delta" data-testid="txPrice" />
                                                 <AEUR raw amount={tx.fee} className="feeOrBounty" data-testid="txFee" />
@@ -147,13 +166,11 @@ class TransferList extends React.Component {
                     </div>
                 )}
                 {transfers && !this.isLastPage() && (
-                    <div style={{ marginTop: 20, paddingLeft: 20, marginBottom: 20 }}>
-                        <Segment loading={isLoading} style={{ color: "black", display: "inline-block" }}>
-                            <Button onClick={this.showMore} className="ghost" tabIndex="0">
-                                Show older
-                            </Button>
-                        </Segment>
-                    </div>
+                    <StyledSegment loading={isLoading}>
+                        <Button onClick={this.showMore} className="ghost" tabIndex="0">
+                            Show older
+                        </Button>
+                    </StyledSegment>
                 )}
             </Segment>
         );

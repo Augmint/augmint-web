@@ -91,6 +91,7 @@ export const DataValue = styled.div``;
 
 export default function LoanCard(props) {
     const { loan } = props;
+    const loanManagerAddress = loan.loanManagerAddress;
 
     return (
         <Card className={loan.dueState}>
@@ -167,7 +168,7 @@ export default function LoanCard(props) {
                         {loan.isRepayable && (
                             <Button
                                 style={{ marginBottom: "10px", alignSelf: "flex-end" }}
-                                to={`/loan/repay/${loan.id}/${loan.loanManagerAddress}`}
+                                to={`/loan/repay/${loan.id}/${loanManagerAddress}`}
                             >
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>

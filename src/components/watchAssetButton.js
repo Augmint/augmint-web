@@ -57,10 +57,11 @@ export class WatchAssetButton extends React.Component {
     }
 
     render() {
-        const { web3, contracts, augmint, user, className } = this.props;
+        const { web3, contracts, augmint, user, className, btn, style, circleicon, labelposition } = this.props;
         let showButton = false;
 
         let _className = className + " primary watchAssetBtn";
+        const icon = "wallet";
 
         if (web3.isConnected && contracts.isConnected && augmint.isLoaded && !user.isLoading) {
             this.cookies = web3.watchAsset;
@@ -79,20 +80,47 @@ export class WatchAssetButton extends React.Component {
             showButton = this.isMetamask && !this.isAssetAdded && this.hasAugmint;
         }
 
-        return (
-            <div style={{ textAlign: "center" }}>
-                {showButton && (
-                    <Button
-                        className={_className}
-                        onClick={() => {
-                            this.addAsset();
-                        }}
-                    >
-                        Watch AEUR in your wallet
-                    </Button>
-                )}
-            </div>
-        );
+        const Centered = () => {
+            return (
+                <div style={{ ...style, textAlign: "center" }}>
+                    {showButton && (
+                        <Button
+                            className={_className}
+                            onClick={() => {
+                                this.addAsset();
+                            }}
+                        >
+                            Watch A-EUR in your wallet
+                        </Button>
+                    )}
+                </div>
+            );
+        };
+
+        const Btn = () => {
+            return (
+                <>
+                    {showButton && (
+                        <Button
+                            className={className}
+                            icon={icon}
+                            circleicon={circleicon}
+                            onClick={() => {
+                                this.addAsset();
+                            }}
+                            style={style}
+                            labelposition={labelposition}
+                        >
+                            Watch
+                            <br />
+                            in wallet
+                        </Button>
+                    )}
+                </>
+            );
+        };
+
+        return !btn ? <Centered /> : <Btn />;
     }
 }
 

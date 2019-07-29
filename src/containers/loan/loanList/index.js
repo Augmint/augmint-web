@@ -10,8 +10,8 @@ import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import LoanCard from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
-import { MARGIN_TRASHOLD } from "utils/constants.js";
-import { Tokens, Ratio } from "@augmint/js";
+import { MARGIN_THRESHOLD } from "utils/constants.js";
+import { Ratio } from "@augmint/js";
 
 import "./styles.css";
 
@@ -21,11 +21,9 @@ function LoanList(props) {
     const isActivePage = location.pathname === "/loan";
     const isNewLoan = location.pathname === "/loan/new";
 
-    function calculateMargin(marginCallRate) {
-        const ethFiat = Tokens.of(ethFiatRate);
-        const margin = ethFiat.mul(Ratio.of(MARGIN_TRASHOLD));
-
-        return marginCallRate.toNumber() >= margin.toNumber();
+    function isMarginWarning(marginCallRate) {
+        const warningLevel = marginCallRate.mul(Ratio.of(MARGIN_THRESHOLD));
+        return ethFiatRate <= warningLevel.toNumber();
     }
 
     const listItems =
@@ -37,9 +35,15 @@ function LoanList(props) {
             })
             .map(loan => {
                 if (loan.isMarginLoan && loan.marginCallRate) {
-                    loan.marginWarning = calculateMargin(loan.marginCallRate);
+                    loan.marginWarning = isMarginWarning(loan.marginCallRate);
                 }
-                return <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />;
+                return (
+                    <LoanCard
+                        key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                        loan={loan}
+                        loanManager={loanManager}
+                    />
+                );
             });
 
     let content = null;
