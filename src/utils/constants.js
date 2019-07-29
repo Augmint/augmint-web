@@ -156,3 +156,5 @@ export const NETWORKS = {
 };
 
 export const MARGIN_THRESHOLD = 1.25;
+
+export const MINRATE_RATIO = 0.95;
