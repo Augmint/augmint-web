@@ -156,7 +156,8 @@ class NewLoanForm extends React.Component {
                 product: product,
                 minToken: Validations.minTokenAmount(product.minDisbursedAmount),
                 maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
-                marginLoan: product.isMarginLoan
+                marginLoan: product.isMarginLoan,
+                marginCallRate: product.calculateMarginCallRate(Tokens.of(this.props.ethFiatRate))
             },
             () => {
                 this.onLoanTokenAmountChange();
@@ -245,7 +246,7 @@ class NewLoanForm extends React.Component {
                             <div style={{ textAlign: "center" }}>
                                 <p style={{ marginBottom: 5, fontWeight: "bold" }}>This is a margin loan</p>
                                 <p style={{ marginTop: 0 }}>
-                                    Minimum rate: {this.state.minRate ? this.state.minRate.toNumber() : "?"}
+                                    Margin call rate: <AEUR isRate={true} amount={this.state.marginCallRate} />
                                 </p>
                             </div>
                         )}
@@ -307,7 +308,8 @@ class NewLoanForm extends React.Component {
 
 const mapStateToProps = state => ({
     userBalances: state.userBalances,
-    loanForm: state.form.NewLoanForm
+    loanForm: state.form.NewLoanForm,
+    ethFiatRate: state.rates.info.ethFiatRate
 });
 
 NewLoanForm = reduxForm({

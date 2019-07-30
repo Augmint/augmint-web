@@ -155,6 +155,6 @@ export const NETWORKS = {
     1976: "PrivateChain"
 };
 
-export const MARGIN_THRESHOLD = 1.25;
+export const MARGIN_THRESHOLD = 2.5;
 
 export const MINRATE_RATIO = 0.95;

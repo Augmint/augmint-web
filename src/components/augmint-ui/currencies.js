@@ -33,12 +33,13 @@ function format(n, decimals, symbol) {
  */
 export class AEUR extends React.Component {
     render() {
-        const { amount, raw, className, decimals = DECIMALS, ...rest } = this.props;
+        const { amount, raw, className, decimals = DECIMALS, isRate, ...rest } = this.props;
         const amt = isEmpty(amount) ? null : raw || amount instanceof Tokens ? amount / Math.pow(10, DECIMALS) : amount;
         const cls = ["AEUR", className, signum(amt)].join(" ");
+        const label = isRate ? " ETHEUR" : " A€";
         return (
             <NoWrap className={cls} {...rest}>
-                {amt !== null && format(amt, decimals, " A€")}
+                {amt !== null && format(amt, decimals, label)}
             </NoWrap>
         );
     }

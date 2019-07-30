@@ -7,8 +7,9 @@ import Button from "components/augmint-ui/button";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
 import CollectLoanButton from "../collectLoan/CollectLoanButton";
-import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
 import AddCollateralButton from "../components/AddCollateralButton";
+import { Tokens } from "@augmint/js";
 
 export const CardHead = styled.div`
     display: flex;
@@ -50,12 +51,16 @@ export const CardStatusBottom = styled.div`
     color: ${theme.colors.mediumGrey};
     padding: 5px 8px;
     border: 1px solid ${theme.colors.mediumGrey};
+    box-sizing: border-box;
+
     &.warning {
-        background-color: ${theme.colors.darkRed};
-        color: white;
-        border: ${theme.colors.darkRed};
-        position: initial;
         display: inline-block;
+        width: 100%;
+        position: initial;
+        margin-bottom: 10px;
+        color: ${theme.colors.red};
+        border: 1px solid ${theme.colors.red};
+        text-transform: none;
     }
 `;
 
@@ -90,8 +95,16 @@ export const DataLabel = styled.div`
 export const DataValue = styled.div``;
 
 export default function LoanCard(props) {
-    const { loan } = props;
+    const { loan, products, rate } = props;
     const loanManagerAddress = loan.loanManagerAddress;
+    const loanProductId = loan.productId;
+    const product = products.find(
+        product => product.id === loanProductId && product.loanManagerAddress === loanManagerAddress
+    );
+    const currentCollateralRatio = loan.calculateCollateralRatio(Tokens.of(rate));
+    const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
+    const collateralWarning = currentCollateralRatio.toNumber() < product.minCollateralRatio.toNumber() * 1.25;
+    const marginCallRate = product.calculateMarginCallRate(Tokens.of(rate));
 
     return (
         <Card className={loan.dueState}>
@@ -112,19 +125,45 @@ export default function LoanCard(props) {
                                 </CardStatusInfo>
                                 <CardStatusHelp>
                                     {loan.isDue
-                                        ? "Near to due date. You will have to pay back soon."
+                                        ? "Near due date. You will have to pay back soon."
                                         : "You can repay at any time."}
                                 </CardStatusHelp>
                                 {loan.isMarginLoan && loan.marginWarning && (
-                                    <CardStatusBottom className="warning">Margin Warning</CardStatusBottom>
+                                    <CardStatusBottom className="warning">
+                                        The rate is close to margin: <AEUR isRate={true} amount={marginCallRate} />
+                                    </CardStatusBottom>
                                 )}
                             </div>
                         ) : (
                             <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
                         )}
+                        {collateralWarning && (
+                            <div>
+                                <CardStatusInfo>
+                                    <p>Collateralization Ratio:</p>
+                                    <strong>
+                                        <Percent amount={product.initialCollateralRatio} />
+                                    </strong>
+                                </CardStatusInfo>
+                                <CardStatusHelp>
+                                    for safety add <ETH amount={addCollateralAmount} /> collateral to reach inital
+                                    collateral ratio
+                                </CardStatusHelp>
+                            </div>
+                        )}
                     </Pgrid.Column>
                     <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         <DataGroup>
+                            {loan.isMarginLoan && loan.isRepayable && (
+                                <DataRow>
+                                    <DataLabel>
+                                        <strong>Current collateral ratio:</strong>
+                                    </DataLabel>
+                                    <DataValue>
+                                        <Percent amount={currentCollateralRatio} />
+                                    </DataValue>
+                                </DataRow>
+                            )}
                             <DataRow>
                                 <DataLabel>
                                     <strong>Disbursed</strong>

@@ -16,7 +16,7 @@ import { Ratio } from "@augmint/js";
 import "./styles.css";
 
 function LoanList(props) {
-    const { location, loanManager, ethFiatRate } = props;
+    const { location, loanManager, ethFiatRate, products } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
     const isNewLoan = location.pathname === "/loan/new";
@@ -42,6 +42,8 @@ function LoanList(props) {
                         key={`loan-${loan.id}-${loan.loanManagerAddress}`}
                         loan={loan}
                         loanManager={loanManager}
+                        products={products}
+                        rate={ethFiatRate}
                     />
                 );
             });
@@ -103,7 +105,8 @@ const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
     loanManager: state.loanManager,
-    ethFiatRate: state.rates.info.ethFiatRate
+    ethFiatRate: state.rates.info.ethFiatRate,
+    products: state.loanManager.products
 });
 
 export default withRouter(connect(mapStateToProps)(LoanList));
