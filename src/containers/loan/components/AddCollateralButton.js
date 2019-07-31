@@ -19,7 +19,8 @@ import { Validations } from "components/BaseComponents";
 import { StyledInput, StyledError, StyledContainer } from "components/augmint-ui/baseComponents/styles";
 import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 
-import { Wei } from "@augmint/js";
+import { Tokens, Wei } from "@augmint/js";
+import { Percent } from "components/augmint-ui/currencies";
 
 import theme from "styles/theme";
 
@@ -31,23 +32,26 @@ class AddCollateralButton extends React.Component {
             submitting: false,
             error: null,
             result: null,
-            ethAmount: null
+            ethAmount: null,
+            targetRatio: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
     }
 
-    onInputChange(e) {
+    onInputChange(e, loan) {
         const value = e.target.value;
 
         const ethAmountError = Validations.ethAmount(value);
         const ethBalaceError = Validations.ethUserBalance(value);
         const error = [ethAmountError, ethBalaceError].find(i => !!i);
+        const targetRatio = loan.calculateCollateralRatioChange(Tokens.of(this.props.rate), Wei.of(value));
 
         this.setState({
             ethAmount: value,
-            error
+            error,
+            targetRatio
         });
     }
 
@@ -124,20 +128,23 @@ class AddCollateralButton extends React.Component {
                                 />
                             )}
                             <form onSubmit={this.handleSubmit}>
-                                <StyledContainer style={{ maxWidth: 280 }}>
+                                <StyledContainer style={{ maxWidth: 320, marginBottom: 10 }}>
                                     <StyledInput
                                         type="number"
                                         inputmode="numeric"
                                         name="addCollateralAmount"
                                         disabled={submitting}
                                         data-testid="addCollateralAmountInput"
-                                        onChange={this.onInputChange}
-                                        placeholder="0"
+                                        onChange={e => this.onInputChange(e, this.props.loan)}
+                                        defaultValue={this.props.value}
                                         style={{ border: error && "1px solid #9f3a38" }}
                                     />
                                     <StyleLabel align="right">ETH</StyleLabel>
                                 </StyledContainer>
                                 <StyledError>{error}</StyledError>
+                                <p>
+                                    The target collateral ratio is: <Percent amount={this.state.targetRatio} />{" "}
+                                </p>
                             </form>
                         </Modal.Content>
 
