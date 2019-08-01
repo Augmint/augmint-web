@@ -33,7 +33,7 @@ class AddCollateralButton extends React.Component {
             error: null,
             result: null,
             ethAmount: null,
-            targetRatio: null
+            targetRatio: props.loan.calculateCollateralRatioChange(Tokens.of(this.props.rate), Wei.of(props.value))
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -143,7 +143,10 @@ class AddCollateralButton extends React.Component {
                                 </StyledContainer>
                                 <StyledError>{error}</StyledError>
                                 <p>
-                                    The target collateral ratio is: <Percent amount={this.state.targetRatio} />{" "}
+                                    The target collateral ratio is:{" "}
+                                    <strong>
+                                        <Percent amount={this.state.targetRatio} />
+                                    </strong>
                                 </p>
                             </form>
                         </Modal.Content>

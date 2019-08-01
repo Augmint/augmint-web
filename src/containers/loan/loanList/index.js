@@ -8,7 +8,7 @@ import { Menu } from "components/augmint-ui/menu";
 import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
-import LoanCard from "./LoanCard";
+import { LoanCard, MarginLoanCard } from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
 import { MARGIN_THRESHOLD } from "utils/constants.js";
 import { Ratio } from "@augmint/js";
@@ -36,16 +36,25 @@ function LoanList(props) {
             .map(loan => {
                 if (loan.isMarginLoan && loan.marginCallRate) {
                     loan.marginWarning = isMarginWarning(loan.marginCallRate);
+                    return (
+                        <MarginLoanCard
+                            key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                            loan={loan}
+                            loanManager={loanManager}
+                            products={products}
+                            rate={ethFiatRate}
+                        />
+                    );
+                } else {
+                    return (
+                        <LoanCard
+                            key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                            loan={loan}
+                            loanManager={loanManager}
+                            rate={ethFiatRate}
+                        />
+                    );
                 }
-                return (
-                    <LoanCard
-                        key={`loan-${loan.id}-${loan.loanManagerAddress}`}
-                        loan={loan}
-                        loanManager={loanManager}
-                        products={products}
-                        rate={ethFiatRate}
-                    />
-                );
             });
 
     let content = null;

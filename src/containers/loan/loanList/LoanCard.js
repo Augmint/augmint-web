@@ -37,16 +37,11 @@ export const CardStatusInfo = styled(StyledStatusBox)`
     strong {
         display: block;
         font-size: ${remCalc(24)};
+        margin-bottom: 5px;
     }
 
-    &.info {
-        color: ${theme.colors.mediumGrey};
-        border-color: ${theme.colors.mediumGrey};
-    }
-
-    &.warning {
-        color: ${theme.colors.red};
-        border-color: ${theme.colors.red};
+    .margin-loan & strong {
+        font-size: ${remCalc(16)};
     }
 `;
 
@@ -104,31 +99,23 @@ export const DataLabel = styled.div`
 `;
 export const DataValue = styled.div``;
 
-export default function LoanCard(props) {
-    const { loan, products, rate } = props;
+export function LoanCard(props) {
+    const { loan } = props;
     const loanManagerAddress = loan.loanManagerAddress;
-    const loanProductId = loan.productId;
-    const product = products.find(
-        product => product.id === loanProductId && product.loanManagerAddress === loanManagerAddress
-    );
-    const currentCollateralRatio = loan.calculateCollateralRatio(Tokens.of(rate));
-    const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
-    const isWarningInfoClass = loan.marginWarning ? "warning" : "";
 
     return (
-        <Card className={loan.dueState}>
+        <Card>
             <CardHead>
                 <CardTitle>
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
                 </CardTitle>
                 <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
-                {loan.isMarginLoan && <CardStatusBottom>Margin Loan</CardStatusBottom>}
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
                     <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
                         {loan.isRepayable ? (
-                            <div>
+                            <div className={loan.dueState}>
                                 <CardStatusInfo>
                                     <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
                                 </CardStatusInfo>
@@ -141,23 +128,114 @@ export default function LoanCard(props) {
                         ) : (
                             <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
                         )}
-                        {loan.isMarginLoan && loan.isRepayable && (
-                            <div>
-                                <CardStatusInfo className={["info", isWarningInfoClass].join(" ")}>
-                                    <p>Margin Call rate:</p>
+                    </Pgrid.Column>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
+                        <DataGroup>
+                            <DataRow>
+                                <DataLabel>
+                                    <strong>Disbursed</strong>
+                                </DataLabel>
+                                <DataValue>
+                                    on {moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}
+                                </DataValue>
+                            </DataRow>
+                            <DataRow>
+                                <DataLabel>Amount:</DataLabel>
+                                <AEUR amount={loan.loanAmount} />
+                            </DataRow>
+                            <DataRow>
+                                <DataLabel>Collateral:</DataLabel>
+                                <ETH amount={loan.collateralAmount} />
+                            </DataRow>
+                        </DataGroup>
+                        <DataGroup>
+                            <DataRow>
+                                <DataLabel>
+                                    <strong>Repayment</strong>
+                                </DataLabel>
+                                <DataValue>on {moment.unix(loan.maturity).format("D MMM YYYY HH:mm")}</DataValue>
+                            </DataRow>
+                            <DataRow>
+                                <DataLabel>Amount:</DataLabel>
+                                <AEUR amount={loan.repaymentAmount} />
+                            </DataRow>
+                        </DataGroup>
+                    </Pgrid.Column>
+                    <Pgrid.Column
+                        size={{ desktop: 1 / 3 }}
+                        style={{
+                            display: "flex",
+                            flexBasis: "unset",
+                            marginLeft: "auto",
+                            padding: "1rem",
+                            flexDirection: "column"
+                        }}
+                    >
+                        {loan.isRepayable && (
+                            <Button
+                                style={{ marginBottom: "10px", alignSelf: "flex-end" }}
+                                to={`/loan/repay/${loan.id}/${loanManagerAddress}`}
+                            >
+                                {loan.isDue ? "Repay" : "Repay Early"}
+                            </Button>
+                        )}
+                        {loan.isCollectable && <CollectLoanButton idName="card-collect-btn" loansToCollect={[loan]} />}
+                    </Pgrid.Column>
+                </Pgrid.Row>
+            </Pgrid>
+        </Card>
+    );
+}
+export function MarginLoanCard(props) {
+    const { loan, products, rate } = props;
+    const loanManagerAddress = loan.loanManagerAddress;
+    const loanProductId = loan.productId;
+    const product = products.find(
+        product => product.id === loanProductId && product.loanManagerAddress === loanManagerAddress
+    );
+    const currentCollateralRatio = loan.calculateCollateralRatio(Tokens.of(rate));
+    const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
+
+    return (
+        <Card className="margin-loan">
+            <CardHead>
+                <CardTitle>
+                    <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
+                </CardTitle>
+                <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
+                <CardStatusBottom>Margin Loan</CardStatusBottom>
+            </CardHead>
+            <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
+                <Pgrid.Row>
+                    <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
+                        {loan.isRepayable ? (
+                            <div className={loan.dueState}>
+                                <CardStatusInfo>
+                                    <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
+                                </CardStatusInfo>
+                                <CardStatusHelp>
+                                    {loan.isDue
+                                        ? "Near due date. You will have to pay back soon."
+                                        : "You can repay at any time."}
+                                </CardStatusHelp>
+                            </div>
+                        ) : (
+                            <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
+                        )}
+                        {loan.isRepayable && (
+                            <div className={loan.marginWarning ? "warning" : ""}>
+                                <CardStatusInfo>
                                     <strong>
-                                        <AEUR isRate={true} amount={loan.marginCallRate} />
+                                        Current collateralization ratio is <Percent amount={currentCollateralRatio} />{" "}
+                                        at <AEUR isRate={true} amount={rate} />
                                     </strong>
-                                    <p>Minimum Collateralization Ratio:</p>
-                                    <strong>
-                                        <Percent amount={product.minCollateralRatio} />
-                                    </strong>
+                                    Minimum collateralization ratio is <Percent amount={product.minCollateralRatio} />{" "}
+                                    at <AEUR isRate={true} amount={loan.marginCallRate} />
                                 </CardStatusInfo>
                                 {loan.marginWarning && (
                                     <CardStatusHelp className="warning">
-                                        Warning! The current rate is getting close to margin rate. The current
-                                        collateral ratio is <Percent amount={currentCollateralRatio} />. Add extra
-                                        collateral for safety.
+                                        The current rate is getting close to margin rate. Add extra collateral for
+                                        safety.
                                     </CardStatusHelp>
                                 )}
                             </div>
@@ -213,7 +291,7 @@ export default function LoanCard(props) {
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>
                         )}
-                        {loan.isMarginLoan && loan.isRepayable && (
+                        {loan.isRepayable && (
                             <AddCollateralButton loan={loan} rate={rate} value={addCollateralAmount.toNumber()} />
                         )}
 
