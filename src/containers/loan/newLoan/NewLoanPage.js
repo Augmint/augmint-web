@@ -46,7 +46,8 @@ class NewLoanPage extends React.Component {
         } else {
             this.setState({
                 submitSucceeded: true,
-                result: res.result
+                result: res.result,
+                ethAmount: ethAmount
             });
             return res;
         }
@@ -74,7 +75,7 @@ class NewLoanPage extends React.Component {
                         {this.state.submitSucceeded && (
                             /* couldn't make this work yet:
                         <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                            <NewLoanSuccess result={this.state.result} />
+                            <NewLoanSuccess result={this.state.result} ethAmount={this.state.ethAmount} />
                         )}
                     </Pgrid.Column>
                 </Pgrid.Row>
