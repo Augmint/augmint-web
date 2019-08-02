@@ -40,34 +40,31 @@ export const CardStatusInfo = styled(StyledStatusBox)`
         margin-bottom: 5px;
     }
 
+    .margin-loan &,
     .margin-loan & strong {
         font-size: ${remCalc(16)};
+    }
+
+    h1 {
+        margin: 0 0 15px;
+        font-size: ${remCalc(20)};
+    }
+
+    .percent {
+        font-size: ${remCalc(22)};
+    }
+
+    .bold {
+        color: ${theme.colors.black};
+        margin-bottom: 15px;
+    }
+
+    .warning & .bold {
+        color: ${theme.colors.red};
     }
 `;
 
 export const CardStatusHelp = styled(StyledStatusText)``;
-
-export const CardStatusBottom = styled.div`
-    position: absolute;
-    right: 20px;
-    bottom: 30px;
-    font-size: ${remCalc(14)};
-    text-transform: uppercase;
-    color: ${theme.colors.mediumGrey};
-    padding: 5px 8px;
-    border: 1px solid ${theme.colors.mediumGrey};
-    box-sizing: border-box;
-
-    &.warning {
-        display: inline-block;
-        width: 100%;
-        position: initial;
-        margin-bottom: 10px;
-        color: ${theme.colors.red};
-        border: 1px solid ${theme.colors.red};
-        text-transform: none;
-    }
-`;
 
 export const Card = styled.section`
     position: relative;
@@ -195,6 +192,7 @@ export function MarginLoanCard(props) {
     );
     const currentCollateralRatio = loan.calculateCollateralRatio(Tokens.of(rate));
     const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
+    const addCollateralValue = addCollateralAmount.toNumber() > 0 ? addCollateralAmount.toNumber() : 0;
 
     return (
         <Card className="margin-loan">
@@ -202,8 +200,7 @@ export function MarginLoanCard(props) {
                 <CardTitle>
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
                 </CardTitle>
-                <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
-                <CardStatusBottom>Margin Loan</CardStatusBottom>
+                <CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
             </CardHead>
             <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                 <Pgrid.Row>
@@ -225,19 +222,28 @@ export function MarginLoanCard(props) {
                         {loan.isRepayable && (
                             <div className={loan.marginWarning ? "warning" : ""}>
                                 <CardStatusInfo>
-                                    <strong>
-                                        Current collateralization ratio is <Percent amount={currentCollateralRatio} />{" "}
+                                    <h1>Collateralization Ratios</h1>
+                                    <strong className="bold">
+                                        current is{" "}
+                                        <span className="percent">
+                                            <Percent amount={currentCollateralRatio} />
+                                        </span>{" "}
                                         at <AEUR isRate={true} amount={rate} />
                                     </strong>
-                                    Minimum collateralization ratio is <Percent amount={product.minCollateralRatio} />{" "}
+                                    minimum is{" "}
+                                    <span className="percent">
+                                        <Percent amount={product.minCollateralRatio} />
+                                    </span>{" "}
                                     at <AEUR isRate={true} amount={loan.marginCallRate} />
                                 </CardStatusInfo>
                                 {loan.marginWarning && (
-                                    <CardStatusHelp className="warning">
-                                        The current rate is getting close to margin rate. Add extra collateral for
-                                        safety.
-                                    </CardStatusHelp>
+                                    <div>
+                                        <CardStatusHelp className="warning">
+                                            The current rate is getting close to margin rate.
+                                        </CardStatusHelp>
+                                    </div>
                                 )}
+                                <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
                             </div>
                         )}
                     </Pgrid.Column>
@@ -291,10 +297,6 @@ export function MarginLoanCard(props) {
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>
                         )}
-                        {loan.isRepayable && (
-                            <AddCollateralButton loan={loan} rate={rate} value={addCollateralAmount.toNumber()} />
-                        )}
-
                         {loan.isCollectable && <CollectLoanButton idName="card-collect-btn" loansToCollect={[loan]} />}
                     </Pgrid.Column>
                 </Pgrid.Row>

@@ -88,7 +88,7 @@ class AddCollateralButton extends React.Component {
         const { submitting, error, popupOpen, transactionError } = this.state;
 
         return (
-            <div style={{ display: "block" }}>
+            <div style={{ display: "block", margin: "20px 0" }}>
                 <Button
                     data-testid={`addCollateralButton`}
                     onClick={() => {
@@ -96,7 +96,7 @@ class AddCollateralButton extends React.Component {
                         return false;
                     }}
                 >
-                    Add extra collateral
+                    Add more collateral
                 </Button>
                 {this.state.popupOpen && (
                     <Modal
@@ -142,12 +142,15 @@ class AddCollateralButton extends React.Component {
                                     <StyleLabel align="right">ETH</StyleLabel>
                                 </StyledContainer>
                                 <StyledError>{error}</StyledError>
-                                <p>
-                                    The target collateral ratio is:{" "}
-                                    <strong>
-                                        <Percent amount={this.state.targetRatio} />
-                                    </strong>
-                                </p>
+
+                                {(this.props.value || this.state.ethAmount) && (
+                                    <p>
+                                        The target collateral ratio is:{" "}
+                                        <strong>
+                                            <Percent amount={this.state.targetRatio} />
+                                        </strong>
+                                    </p>
+                                )}
                             </form>
                         </Modal.Content>
 
