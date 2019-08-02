@@ -7,7 +7,7 @@ import Button from "components/augmint-ui/button";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
 import CollectLoanButton from "../collectLoan/CollectLoanButton";
-import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
+import { AEUR, ETH, Percent, Rate } from "components/augmint-ui/currencies";
 import AddCollateralButton from "../components/AddCollateralButton";
 import { Tokens } from "@augmint/js";
 
@@ -230,14 +230,14 @@ export function MarginLoanCard(props) {
                                                 <Percent amount={currentCollateralRatio} />
                                             </span>
                                             <br />
-                                            at <AEUR isRate={true} amount={rate} />
+                                            <Rate amount={rate} />
                                         </strong>
+                                        Margin call at{" "}
                                         <span className="percent">
                                             <Percent amount={product.minCollateralRatio} />
-                                        </span>{" "}
-                                        minimum
+                                        </span>
                                         <br />
-                                        Margin call below <AEUR isRate={true} amount={loan.marginCallRate} />
+                                        <Rate amount={loan.marginCallRate} />
                                         {loan.marginWarning && (
                                             <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
                                         )}
