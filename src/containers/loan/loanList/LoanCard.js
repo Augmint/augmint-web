@@ -308,5 +308,7 @@ export function MarginLoanCard(props) {
                 </Pgrid>
             </Card>
         );
+    } else {
+        return <div></div>;
     }
 }

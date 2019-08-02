@@ -113,7 +113,8 @@ class AddCollateralButton extends React.Component {
                                 borderBottom: "1px solid",
                                 borderBottomColor: theme.colors.opacGrey,
                                 padding: "20px",
-                                margin: 0
+                                margin: 0,
+                                textAlign: "left"
                             }}
                         />
 
@@ -127,7 +128,7 @@ class AddCollateralButton extends React.Component {
                                     header="Transaction failed."
                                 />
                             )}
-                            <form onSubmit={this.handleSubmit}>
+                            <form onSubmit={this.handleSubmit} style={{ textAlign: "left" }}>
                                 <StyledContainer style={{ maxWidth: 320, marginBottom: 10 }}>
                                     <StyledInput
                                         type="number"
@@ -144,9 +145,9 @@ class AddCollateralButton extends React.Component {
                                 <StyledError>{error}</StyledError>
 
                                 {(this.props.value || this.state.ethAmount) && (
-                                    <p>
-                                        The target collateral ratio is:{" "}
-                                        <strong>
+                                    <p style={{ textAlign: "left" }}>
+                                        <span>The target collateral ratio is: </span>
+                                        <strong style={{ display: "inline-block" }}>
                                             <Percent amount={this.state.targetRatio} />
                                         </strong>
                                     </p>
