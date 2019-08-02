@@ -224,28 +224,29 @@ export function MarginLoanCard(props) {
                             {loan.isRepayable && (
                                 <div className={loan.marginWarning ? "warning" : ""}>
                                     <CardStatusInfo>
-                                        <h1>Collateralization Ratios</h1>
+                                        <h1>Collateralization Ratio</h1>
                                         <strong className="bold">
-                                            current is{" "}
                                             <span className="percent">
                                                 <Percent amount={currentCollateralRatio} />
-                                            </span>{" "}
+                                            </span>
+                                            <br />
                                             at <AEUR isRate={true} amount={rate} />
                                         </strong>
-                                        minimum is{" "}
                                         <span className="percent">
                                             <Percent amount={product.minCollateralRatio} />
                                         </span>{" "}
-                                        at <AEUR isRate={true} amount={loan.marginCallRate} />
+                                        minimum
+                                        <br />
+                                        Margin call below <AEUR isRate={true} amount={loan.marginCallRate} />
+                                        {loan.marginWarning && (
+                                            <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
+                                        )}
                                     </CardStatusInfo>
                                     {loan.marginWarning && (
-                                        <div>
-                                            <CardStatusHelp className="warning">
-                                                The current rate is getting close to margin rate.
-                                            </CardStatusHelp>
-                                        </div>
+                                        <CardStatusHelp className="warning">
+                                            The current rate is getting close to margin rate.
+                                        </CardStatusHelp>
                                     )}
-                                    <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
                                 </div>
                             )}
                         </Pgrid.Column>
