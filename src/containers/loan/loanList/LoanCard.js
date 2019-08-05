@@ -247,18 +247,19 @@ export function MarginLoanCard(props) {
                                     <CardStatusInfo>
                                         <h1>Collateralization Ratio</h1>
                                         <strong className="bold">
+                                            Currently{" "}
                                             <span className="percent">
                                                 <Percent amount={currentCollateralRatio} />
                                             </span>
                                             <br />
-                                            <Rate amount={rate} />
+                                            at <Rate amount={rate} />
                                         </strong>
                                         Margin call at{" "}
                                         <span className="percent">
                                             <Percent amount={product.minCollateralRatio} />
                                         </span>
                                         <br />
-                                        <Rate amount={loan.marginCallRate} />
+                                        below <Rate amount={loan.marginCallRate} />
                                         {loan.marginWarning && (
                                             <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
                                         )}

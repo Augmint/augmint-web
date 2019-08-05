@@ -13,7 +13,7 @@ import HashURL from "components/hash";
 import styled from "styled-components";
 import theme from "styles/theme";
 import { ExchangeIconDark } from "components/Icons";
-import { AEUR, ETH } from "components/augmint-ui/currencies.js";
+import { ETH } from "components/augmint-ui/currencies.js";
 
 const StyledLoadingPanel = styled(LoadingPanel)`
     display: none;
