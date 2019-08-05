@@ -232,7 +232,7 @@ export function MarginLoanCard(props) {
                 <CardHead>
                     <CardTitle>
                         <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                        {loan.isRepayable && (
+                        {loan.isRepayable && !!eventLink && (
                             <a
                                 href={eventLink}
                                 download="loan_repay.ics"
