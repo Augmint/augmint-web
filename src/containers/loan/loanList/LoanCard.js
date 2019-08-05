@@ -212,10 +212,12 @@ export function MarginLoanCard(props) {
             url: "https://www.augmint.org/loan/"
         };
         const eventObject = ics.createEvent(eventData);
-        if (eventObject.error) {
-            console.log("error creating calendar link");
+        let eventLink = "data:text/calendar,";
+        if (eventObject.value && !eventObject.error) {
+            eventLink += encodeURIComponent(eventObject.value);
+        } else {
+            console.log("error creating calendar link:", eventObject.error);
         }
-        const eventLink = "data:text/calendar," + encodeURIComponent(eventObject.value);
 
         return (
             <Card className="margin-loan">
