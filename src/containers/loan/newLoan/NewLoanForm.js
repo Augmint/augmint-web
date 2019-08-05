@@ -64,7 +64,7 @@ class NewLoanForm extends React.Component {
 
         this.state = {
             product: defaultProduct,
-            minToken: Validations.minTokenAmount(defaultProduct.minDisbursedAmount),
+            minToken: Validations.minTokenAmount(defaultProduct.adjustedMinDisbursedAmount),
             maxLoanAmount: Validations.maxLoanAmount(defaultProduct.maxLoanAmount),
             repaymentAmount: Tokens.of(0),
             ethAmount: Wei.of(0),
@@ -155,7 +155,7 @@ class NewLoanForm extends React.Component {
             {
                 productId: id,
                 product: product,
-                minToken: Validations.minTokenAmount(product.minDisbursedAmount),
+                minToken: Validations.minTokenAmount(product.adjustedMinDisbursedAmount),
                 maxLoanAmount: Validations.maxLoanAmount(product.maxLoanAmount),
                 marginLoan: product.isMarginLoan,
                 marginCallRate: product.calculateMarginCallRate(Tokens.of(this.props.ethFiatRate))
