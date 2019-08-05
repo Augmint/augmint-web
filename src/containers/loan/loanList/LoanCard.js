@@ -244,7 +244,7 @@ export function MarginLoanCard(props) {
                             </a>
                         )}
                     </CardTitle>
-                    }<CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
+                    <CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
                 </CardHead>
                 <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                     <Pgrid.Row>
