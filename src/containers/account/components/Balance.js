@@ -72,7 +72,7 @@ export default class Balance extends React.Component {
         const loansAmount = sumTokens(pick(activeLoans, "loanAmount"));
         const locksAmount = sumNumbers(pick(activeLocks, "amountLocked"));
         const releaseBtn = locks.locks && locks.locks.filter(lock => lock.isReleasebale).length > 0;
-        const repayBtn = loans.loans && loans.loans.filter(loan => loan.isDue).length > 0;
+        const repayBtn = loans.loans && loans.loans.filter(loan => loan.isDue && loan.isRepayable).length > 0;
 
         const LoansUIBlock = () => {
             return (
