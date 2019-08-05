@@ -226,6 +226,7 @@ export function MarginLoanCard(props) {
                                     <CardStatusInfo>
                                         <h1>Collateralization Ratio</h1>
                                         <strong className="bold">
+                                            Currently{" "}
                                             <span className="percent">
                                                 <Percent amount={currentCollateralRatio} />
                                             </span>
