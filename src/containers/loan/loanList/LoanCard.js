@@ -10,6 +10,7 @@ import CollectLoanButton from "../collectLoan/CollectLoanButton";
 import { AEUR, ETH, Percent, Rate } from "components/augmint-ui/currencies";
 import AddCollateralButton from "../components/AddCollateralButton";
 import { Tokens } from "@augmint/js";
+import * as ics from "ics";
 
 export const CardHead = styled.div`
     display: flex;
@@ -196,6 +197,26 @@ export function MarginLoanCard(props) {
         const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
         const addCollateralValue = addCollateralAmount.toNumber() > 0 ? addCollateralAmount.toNumber() : 0;
 
+        const maturity = moment(loan.maturity, "X");
+        const eventStart = maturity.subtract(7, "days");
+        const eventData = {
+            start: eventStart.format("YYYY-M-D").split("-"),
+            end: eventStart
+                .add(1, "day")
+                .format("YYYY-M-D")
+                .split("-"),
+            startInputType: "local",
+            endInputType: "local",
+            title: "Repay loan",
+            description: "Your AEUR loan is near due date. You will have to pay back soon.",
+            url: "https://www.augmint.org/loan/"
+        };
+        const eventObject = ics.createEvent(eventData);
+        if (eventObject.error) {
+            console.log("error creating calendar link");
+        }
+        const eventLink = "data:text/calendar," + encodeURIComponent(eventObject.value);
+
         return (
             <Card className="margin-loan">
                 <CardHead>
@@ -276,6 +297,9 @@ export function MarginLoanCard(props) {
                                     </DataLabel>
                                     <DataValue>on {moment.unix(loan.maturity).format("D MMM YYYY HH:mm")}</DataValue>
                                 </DataRow>
+                                <a href={eventLink} download="loan_repay.ics">
+                                    Add to my calendar
+                                </a>
                                 <DataRow>
                                     <DataLabel>Amount:</DataLabel>
                                     <AEUR amount={loan.repaymentAmount} />
