@@ -80,7 +80,8 @@ class NewLoanForm extends React.Component {
         this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
         this.props.change("product", this.state.product);
         this.setState({
-            marginLoan: this.state.product.isMarginLoan
+            marginLoan: this.state.product.isMarginLoan,
+            marginCallRate: this.state.product.calculateMarginCallRate(Tokens.of(this.props.ethFiatRate))
         });
     }
 
