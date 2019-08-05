@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { default as theme, remCalc } from "styles/theme";
 import { media } from "styles/media";
 import Button from "components/augmint-ui/button";
+import Icon from "components/augmint-ui/icon";
 import { StyledStatusBox, StyledStatusText } from "components/augmint-ui/baseComponents/styles";
 import { Pgrid } from "components/PageLayout";
 import CollectLoanButton from "../collectLoan/CollectLoanButton";
@@ -97,15 +98,42 @@ export const DataLabel = styled.div`
 `;
 export const DataValue = styled.div``;
 
+const getEventLink = loan => {
+    const maturity = moment(loan.maturity, "X");
+    const eventStart = maturity.subtract(7, "days");
+    const eventData = {
+        start: eventStart.format("YYYY-M-D").split("-"),
+        end: eventStart
+            .add(1, "day")
+            .format("YYYY-M-D")
+            .split("-"),
+        startInputType: "local",
+        endInputType: "local",
+        title: "Repay loan",
+        description: "Your AEUR loan is near due date. You will have to pay back soon.",
+        url: "https://www.augmint.org/loan/"
+    };
+    const eventObject = ics.createEvent(eventData);
+    if (eventObject.error) {
+        console.log("error creating calendar link");
+    }
+    return `data:text/calendar${encodeURIComponent(eventObject.value)}`;
+};
+
 export function LoanCard(props) {
     const { loan } = props;
     const loanManagerAddress = loan.loanManagerAddress;
+    const eventLink = getEventLink(loan);
 
     return (
         <Card>
             <CardHead>
                 <CardTitle>
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
+                    <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
+                        <Icon name="calendar" style={{ marginRight: 10 }} />
+                        Add to calendar
+                    </a>
                 </CardTitle>
                 <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
             </CardHead>
@@ -196,32 +224,17 @@ export function MarginLoanCard(props) {
         const currentCollateralRatio = loan.calculateCollateralRatio(Tokens.of(rate));
         const addCollateralAmount = loan.calculateCollateralChange(Tokens.of(rate), product.initialCollateralRatio);
         const addCollateralValue = addCollateralAmount.toNumber() > 0 ? addCollateralAmount.toNumber() : 0;
-
-        const maturity = moment(loan.maturity, "X");
-        const eventStart = maturity.subtract(7, "days");
-        const eventData = {
-            start: eventStart.format("YYYY-M-D").split("-"),
-            end: eventStart
-                .add(1, "day")
-                .format("YYYY-M-D")
-                .split("-"),
-            startInputType: "local",
-            endInputType: "local",
-            title: "Repay loan",
-            description: "Your AEUR loan is near due date. You will have to pay back soon.",
-            url: "https://www.augmint.org/loan/"
-        };
-        const eventObject = ics.createEvent(eventData);
-        if (eventObject.error) {
-            console.log("error creating calendar link");
-        }
-        const eventLink = "data:text/calendar," + encodeURIComponent(eventObject.value);
+        const eventLink = getEventLink(loan);
 
         return (
             <Card className="margin-loan">
                 <CardHead>
                     <CardTitle>
                         <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
+                        <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
+                            <Icon name="calendar" style={{ marginRight: 10 }} />
+                            Add to calendar
+                        </a>
                     </CardTitle>
                     <CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
                 </CardHead>
@@ -298,9 +311,6 @@ export function MarginLoanCard(props) {
                                     </DataLabel>
                                     <DataValue>on {moment.unix(loan.maturity).format("D MMM YYYY HH:mm")}</DataValue>
                                 </DataRow>
-                                <a href={eventLink} download="loan_repay.ics">
-                                    Add to my calendar
-                                </a>
                                 <DataRow>
                                     <DataLabel>Amount:</DataLabel>
                                     <AEUR amount={loan.repaymentAmount} />
