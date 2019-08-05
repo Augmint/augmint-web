@@ -105,7 +105,10 @@ const getEventLink = loan => {
         end: maturity.format("YYYY-M-D-H-m").split("-"),
         startInputType: "local",
         endInputType: "local",
-        alarms: [{ action: "display", trigger: { days: 7, before: true } }],
+        alarms: [
+            { action: "display", trigger: { days: 7, before: true } },
+            { action: "display", trigger: { days: 1, before: true } }
+        ],
         title: "Repay loan",
         description: "Your AEUR loan is near due date. You will have to pay back soon.",
         url: "https://www.augmint.org/loan/"
