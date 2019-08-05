@@ -130,10 +130,12 @@ export function LoanCard(props) {
             <CardHead>
                 <CardTitle>
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                    <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
-                        <Icon name="calendar" style={{ marginRight: 10 }} />
-                        Add to calendar
-                    </a>
+                    {loan.isRepayable && (
+                        <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
+                            <Icon name="calendar" style={{ marginRight: 10 }} />
+                            Add to calendar
+                        </a>
+                    )}
                 </CardTitle>
                 <CardStatus>{loan.isRepayable ? "Active" : "Expired"} loan</CardStatus>
             </CardHead>
@@ -231,12 +233,18 @@ export function MarginLoanCard(props) {
                 <CardHead>
                     <CardTitle>
                         <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                        <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
-                            <Icon name="calendar" style={{ marginRight: 10 }} />
-                            Add to calendar
-                        </a>
+                        {loan.isRepayable && (
+                            <a
+                                href={eventLink}
+                                download="loan_repay.ics"
+                                style={{ display: "block", marginBottom: 10 }}
+                            >
+                                <Icon name="calendar" style={{ marginRight: 10 }} />
+                                Add to calendar
+                            </a>
+                        )}
                     </CardTitle>
-                    <CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
+                    }<CardStatus>{loan.isRepayable ? "Active" : "Expired"} margin loan</CardStatus>
                 </CardHead>
                 <Pgrid style={{ marginLeft: -15, marginRight: -15 }}>
                     <Pgrid.Row>
