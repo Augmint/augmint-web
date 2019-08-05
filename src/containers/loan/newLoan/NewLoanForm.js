@@ -10,7 +10,7 @@ import Button from "components/augmint-ui/button";
 import { EthSubmissionErrorPanel, ErrorPanel } from "components/MsgPanels";
 import { Field, reduxForm } from "redux-form";
 import { Form, Validations, Normalizations, Formatters } from "components/BaseComponents";
-import { AEUR, ETH } from "components/augmint-ui/currencies.js";
+import { AEUR, ETH, Rate } from "components/augmint-ui/currencies.js";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -80,7 +80,8 @@ class NewLoanForm extends React.Component {
         this.props.change("productId", `${this.state.product.id}_${this.state.product.loanManagerAddress}`);
         this.props.change("product", this.state.product);
         this.setState({
-            marginLoan: this.state.product.isMarginLoan
+            marginLoan: this.state.product.isMarginLoan,
+            marginCallRate: this.state.product.calculateMarginCallRate(Tokens.of(this.props.ethFiatRate))
         });
     }
 
@@ -242,15 +243,6 @@ class NewLoanForm extends React.Component {
                             />
                         )}
 
-                        {this.state.marginLoan && this.state.loanTokenAmount.toNumber() > 0 && (
-                            <div style={{ textAlign: "center" }}>
-                                <p style={{ marginBottom: 5, fontWeight: "bold" }}>This is a margin loan</p>
-                                <p style={{ marginTop: 0 }}>
-                                    Margin call rate: <AEUR isRate={true} amount={this.state.marginCallRate} />
-                                </p>
-                            </div>
-                        )}
-
                         {showResults && (
                             <div className="loan-results">
                                 <StyledBox className={notEnoughEth ? "validation-error" : ""}>
@@ -284,6 +276,14 @@ class NewLoanForm extends React.Component {
                                         {" collateral back."}
                                     </p>
                                 </div>
+
+                                {this.state.marginLoan && this.state.loanTokenAmount.toNumber() > 0 && (
+                                    <div style={{ textAlign: "center" }}>
+                                        <p style={{ marginTop: 0 }}>
+                                            Margin call below <Rate amount={this.state.marginCallRate} />
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         )}
 
