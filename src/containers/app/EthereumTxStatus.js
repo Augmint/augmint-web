@@ -108,9 +108,7 @@ class EthereumTxStatus extends React.Component {
                                 </p>
                                 <p>
                                     You can always check the status of your loan on{" "}
-                                    <Link to="/account">My account page</Link>
-                                    <br />
-                                    or directly on <Link to={"/loan/" + vals.loanId}>this loan's page</Link>
+                                    <Link to={"/loan"}>the loan page</Link>
                                 </p>
                                 <p>Disbursed: {loanAmount} A-EUR</p>
                                 <p>To be repaid: {repaymentAmount} A-EUR</p>
