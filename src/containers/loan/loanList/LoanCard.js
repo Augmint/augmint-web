@@ -100,28 +100,23 @@ export const DataValue = styled.div``;
 
 const getEventLink = loan => {
     const maturity = moment(loan.maturity, "X");
-    const eventStart = maturity.subtract(7, "days");
     const eventData = {
-        start: eventStart.format("YYYY-M-D").split("-"),
-        end: eventStart
-            .add(1, "day")
-            .format("YYYY-M-D")
-            .split("-"),
+        start: maturity.format("YYYY-M-D-H-m").split("-"),
+        end: maturity.format("YYYY-M-D-H-m").split("-"),
         startInputType: "local",
         endInputType: "local",
+        alarms: [{ action: "display", trigger: { days: 7, before: true } }],
         title: "Repay loan",
         description: "Your AEUR loan is near due date. You will have to pay back soon.",
         url: "https://www.augmint.org/loan/"
     };
     const eventObject = ics.createEvent(eventData);
-    let eventLink = "data:text/calendar,";
     if (eventObject.value && !eventObject.error) {
-        eventLink += encodeURIComponent(eventObject.value);
+        return "data:text/calendar," + encodeURIComponent(eventObject.value);
     } else {
         console.log("error creating calendar link:", eventObject.error);
+        return null;
     }
-
-    return eventLink;
 };
 
 export function LoanCard(props) {
@@ -134,7 +129,7 @@ export function LoanCard(props) {
             <CardHead>
                 <CardTitle>
                     <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                    {loan.isRepayable && (
+                    {loan.isRepayable && !!eventLink && (
                         <a href={eventLink} download="loan_repay.ics" style={{ display: "block", marginBottom: 10 }}>
                             <Icon name="calendar" style={{ marginRight: 10 }} />
                             Add to calendar
@@ -237,7 +232,7 @@ export function MarginLoanCard(props) {
                 <CardHead>
                     <CardTitle>
                         <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                        {loan.isRepayable && (
+                        {loan.isRepayable && !!eventLink && (
                             <a
                                 href={eventLink}
                                 download="loan_repay.ics"
