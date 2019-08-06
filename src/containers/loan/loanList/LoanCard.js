@@ -205,6 +205,7 @@ export function LoanCard(props) {
                             <Button
                                 style={{ marginBottom: "10px", alignSelf: "flex-end" }}
                                 to={`/loan/repay/${loan.id}/${loanManagerAddress}`}
+                                data-testid="repayLoanButton"
                             >
                                 {loan.isDue ? "Repay" : "Repay Early"}
                             </Button>
