@@ -78,7 +78,9 @@ describe("Loans", function() {
             cy.contains("the loan page").click({ force: true });
             cy.get("#DismissAllBtn").click();
 
-            cy.get("[data-testid=repayLoanButton]").click();
+            cy.get("[data-testid=repayLoanButton]")
+                .first()
+                .click();
             cy.get("[data-testid=confirmRepayButton]").click();
 
             cy.get("[data-testid=EthSubmissionSuccessPanel]").should("contain", "Repayment submitted");
