@@ -70,15 +70,16 @@ describe("Loans", function() {
     });
 
     it("Should repay a margin loan", function() {
+        const prodId = 7;
         const loanManagerAddress = "0x213135c85437C23bC529A2eE9c2980646c332fCB";
-        getLoan(7, 50, 50.05, 0.06169, loanManagerAddress).then(() => {
+        getLoan(prodId, 50, 50.05, 0.06169, loanManagerAddress).then(() => {
             // TODO : little differences between amounts caused by rounding and decimals
             // cy.assertUserAEurBalanceOnUI(this.startingAeurBalance + 51);
 
             cy.contains("the loan page").click({ force: true });
             cy.get("#DismissAllBtn").click();
 
-            cy.get("[data-testid=repayLoanButton]")
+            cy.get(`[data-testid=repayLoanButton_${prodId}_${loanManagerAddress}]`)
                 .first()
                 .click();
             cy.get("[data-testid=confirmRepayButton]").click();

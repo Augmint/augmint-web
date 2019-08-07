@@ -358,7 +358,7 @@ export function MarginLoanCard(props) {
                                 <Button
                                     style={{ marginBottom: "10px", alignSelf: "flex-end" }}
                                     to={`/loan/repay/${loan.id}/${loanManagerAddress}`}
-                                    data-testid="repayLoanButton"
+                                    data-testid={`repayLoanButton_${loanProductId}_${loanManagerAddress}`}
                                 >
                                     {loan.isDue ? "Repay" : "Repay Early"}
                                 </Button>
