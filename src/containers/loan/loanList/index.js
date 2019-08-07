@@ -30,7 +30,9 @@ function LoanList(props) {
         loans &&
         loans
             .filter(loan => loan.isRepayable === isActivePage)
-            .sort((a, b) => a.maturity - b.maturity)
+            .sort((a, b) => {
+                return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
+            })
             .map(loan => {
                 if (loan.isMarginLoan && loan.marginCallRate) {
                     loan.marginWarning = isMarginWarning(loan.marginCallRate);
