@@ -122,9 +122,14 @@ class RepayLoanPage extends React.Component {
                     {!submitSucceeded && !this.state.isLoading && (
                         <Pblock header="Selected Loan">
                             <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                {loan.state !== 5 && loan.state !== 0 && (
+                                {!loan.isRepayable && (
                                     <WarningPanel header="Can't repay">
-                                        This loan is in "{loan.loanStateText}" status.
+                                        This loan{" "}
+                                        {loan.isRepaid
+                                            ? "has been already repaid."
+                                            : loan.isCollected
+                                            ? "has been collected."
+                                            : "is expired."}
                                     </WarningPanel>
                                 )}
                                 <LoanDetails loan={loan} />

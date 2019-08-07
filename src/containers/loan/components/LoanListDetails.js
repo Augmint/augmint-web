@@ -46,7 +46,7 @@ export default function LoanListDetails(props) {
                             )}
                         </span>
                     ) : (
-                        loan.loanStateText
+                        ""
                     )}
                 </CardDescription>
             </Card>

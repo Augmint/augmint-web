@@ -75,7 +75,7 @@ class LoanDetailsPage extends React.Component {
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
                                 <Pblock
                                     style={{ marginTop: "1rem" }}
-                                    header={this.state.loan.loanStateText + " - loan #" + this.state.loan.id}
+                                    header={"loan #" + this.state.loan.id}
                                     className={"tertiaryColor"}
                                 >
                                     <LoanDetails loan={this.state.loan} />

@@ -156,7 +156,15 @@ export function LoanCard(props) {
                                 </CardStatusHelp>
                             </div>
                         ) : (
-                            <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
+                            <CardStatusInfo>
+                                {loan.isRepaid
+                                    ? "Repaid"
+                                    : loan.isCollected
+                                    ? "Defaulted and collected"
+                                    : loan.isExpired
+                                    ? "Expired"
+                                    : "Open"}
+                            </CardStatusInfo>
                         )}
                     </Pgrid.Column>
                     <Pgrid.Column style={{ padding: "1rem" }} size={{ desktop: 1 / 3 }}>
@@ -264,7 +272,15 @@ export function MarginLoanCard(props) {
                                     </CardStatusHelp>
                                 </div>
                             ) : (
-                                <CardStatusInfo>{loan.loanStateText}</CardStatusInfo>
+                                <CardStatusInfo>
+                                    {loan.isRepaid
+                                        ? "Repaid"
+                                        : loan.isCollected
+                                        ? "Defaulted and collected"
+                                        : loan.isExpired
+                                        ? "Expired"
+                                        : "Open"}
+                                </CardStatusInfo>
                             )}
                             {loan.isRepayable && (
                                 <div className={loan.marginWarning ? "warning" : ""}>

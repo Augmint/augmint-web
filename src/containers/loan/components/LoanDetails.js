@@ -9,7 +9,9 @@ export default function LoanDetails(props) {
         <MyGridTable>
             <Row>
                 <Col>Status: </Col>
-                <Col>{loan.loanStateText}</Col>
+                <Col>
+                    {loan.isRepaid ? "Repaid" : loan.isCollected ? "Collected" : loan.isExpired ? "Expired" : "Open"}
+                </Col>
             </Row>
             <Row>
                 <Col>Repayment amount:</Col>
@@ -20,7 +22,10 @@ export default function LoanDetails(props) {
 
             <Row>
                 <Col>Due on:</Col>
-                <Col>{moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}</Col>
+                <Col>
+                    {moment.unix(loan.disbursementTime).format("D MMM YYYY HH:mm")}
+                    {loan.isDue ? " (payment due)" : ""}
+                </Col>
             </Row>
 
             <Row>
