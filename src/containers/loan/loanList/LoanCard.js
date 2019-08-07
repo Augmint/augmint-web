@@ -228,7 +228,7 @@ export function LoanCard(props) {
 export function MarginLoanCard(props) {
     const { loan, products, rate } = props;
 
-    if (products && products.length > 0) {
+    if (rate && products && products.length > 0) {
         const loanManagerAddress = loan.loanManagerAddress;
         const loanProductId = loan.productId;
         const product = products.find(
