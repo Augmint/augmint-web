@@ -104,7 +104,8 @@ const onUserAccountChange = newVal => {
 };
 
 const onRateChange = newVal => {
-    store.dispatch(fetchAllLoans());
+    const userAccount = store.getState().web3Connect.userAccount;
+    store.dispatch(fetchLoansForAddress(userAccount));
 };
 
 // contract events ----
