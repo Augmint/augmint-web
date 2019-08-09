@@ -3,9 +3,8 @@
 */
 
 import store from "modules/store";
-import { fetchLoansToCollectTx, fetchProductsTx } from "modules/ethereum/loanTransactions";
 
-import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
+// import { ONE_ETH_IN_WEI, DECIMALS_DIV } from "utils/constants";
 
 export const LOANMANAGER_REFRESH_REQUESTED = "loanManager/LOANMANAGER_REFRESH_REQUESTED";
 export const LOANMANAGER_REFRESHED = "loanManager/LOANMANAGER_REFRESHED";
@@ -26,18 +25,7 @@ const initialState = {
     result: null,
     error: null,
     products: null,
-    info: {
-        bn_weiBalance: null,
-        ethBalance: "?",
-        bn_tokenBalance: null,
-        tokenBalance: "?",
-        loanCount: null,
-        productCount: null,
-
-        ratesAddress: "?",
-        augmintTokenAddress: "?",
-        monetarySupervisorAddress: "?"
-    }
+    loansToCollect: null
 };
 
 export default (state = initialState, action) => {
@@ -52,8 +40,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                isLoaded: true,
-                info: action.info
+                isLoaded: true
             };
 
         case LOANMANAGER_PRODUCTLIST_REQUESTED:
@@ -103,11 +90,9 @@ export const refreshLoanManager = () => {
             type: LOANMANAGER_REFRESH_REQUESTED
         });
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const info = await getLoanManagerInfo(loanManagerInstance);
             return dispatch({
                 type: LOANMANAGER_REFRESHED,
-                info
+                info: {}
             });
         } catch (error) {
             if (process.env.NODE_ENV !== "production") {
@@ -121,43 +106,6 @@ export const refreshLoanManager = () => {
     };
 };
 
-async function getLoanManagerInfo(loanManagerInstance) {
-    const web3 = store.getState().web3Connect.web3Instance;
-    const augmintTokenInstance = store.getState().contracts.latest.augmintToken.web3ContractInstance;
-
-    const [
-        loanCount,
-        productCount,
-        augmintTokenAddress,
-        ratesAddress,
-        monetarySupervisorAddress,
-        bn_weiBalance,
-        bn_tokenBalance
-    ] = await Promise.all([
-        loanManagerInstance.methods.getLoanCount().call(),
-        loanManagerInstance.methods.getProductCount().call(),
-
-        loanManagerInstance.methods.augmintToken().call(),
-        loanManagerInstance.methods.rates().call(),
-        loanManagerInstance.methods.monetarySupervisor().call(),
-
-        web3.eth.getBalance(loanManagerInstance._address),
-        augmintTokenInstance.methods.balanceOf(loanManagerInstance._address).call()
-    ]);
-
-    return {
-        bn_weiBalance,
-        ethBalance: bn_weiBalance / ONE_ETH_IN_WEI,
-        bn_tokenBalance,
-        tokenBalance: bn_tokenBalance / DECIMALS_DIV,
-        loanCount: parseInt(loanCount, 10),
-        productCount: parseInt(productCount, 10),
-        augmintTokenAddress,
-        ratesAddress,
-        monetarySupervisorAddress
-    };
-}
-
 export function fetchLoanProducts() {
     return async dispatch => {
         dispatch({
@@ -165,7 +113,7 @@ export function fetchLoanProducts() {
         });
 
         try {
-            const result = await fetchProductsTx();
+            const result = await store.getState().web3Connect.augmint.getLoanProducts(false);
             return dispatch({
                 type: LOANMANAGER_PRODUCTLIST_RECEIVED,
                 products: result
@@ -189,7 +137,8 @@ export function fetchLoansToCollect() {
         });
 
         try {
-            const result = await fetchLoansToCollectTx();
+            const result = await store.getState().web3Connect.augmint.getLoansToCollect();
+
             return dispatch({
                 type: LOANMANAGER_FETCH_LOANS_TO_COLLECT_RECEIVED,
                 result: result

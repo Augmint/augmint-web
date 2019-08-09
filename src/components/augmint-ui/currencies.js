@@ -44,6 +44,16 @@ export class AEUR extends React.Component {
     }
 }
 
+export class Rate extends React.Component {
+    render() {
+        return (
+            <React.Fragment>
+                1 ETH = <AEUR {...this.props} />
+            </React.Fragment>
+        );
+    }
+}
+
 /*
     amount: amount to display
     raw: set to true, if amount is an integer in the smallest unit of account (wei)

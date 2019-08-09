@@ -4,6 +4,7 @@ import { default as theme, remCalc } from "styles/theme";
 import { Pgrid, Pblock } from "components/PageLayout";
 import { DECIMALS } from "utils/constants";
 import { AEUR, ETH } from "components/augmint-ui/currencies";
+import { Tokens } from "@augmint/js";
 import AccountAddress from "components/accountAddress";
 import Button from "components/augmint-ui/button";
 import WatchAssetButton from "components/watchAssetButton";
@@ -60,17 +61,18 @@ const Container = styled.div`
 `;
 
 const pick = (arr, key) => arr && arr.map(item => item[key]);
-const sum = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
+const sumTokens = arr => arr && arr.reduce((acc, item) => acc.add(item), Tokens.of(0));
+const sumNumbers = arr => arr && arr.reduce((acc, item) => acc + item, 0).toFixed(DECIMALS);
 
 export default class Balance extends React.Component {
     render() {
         const { userAccount, loans, locks, children } = this.props;
         const activeLoans = loans.loans && loans.loans.filter(loan => loan.isRepayable);
         const activeLocks = locks.locks && locks.locks.filter(lock => lock.isReleasebale || lock.isActive);
+        const loansAmount = sumTokens(pick(activeLoans, "loanAmount"));
+        const locksAmount = sumNumbers(pick(activeLocks, "amountLocked"));
         const releaseBtn = locks.locks && locks.locks.filter(lock => lock.isReleasebale).length > 0;
-        const repayBtn = loans.loans && loans.loans.filter(loan => loan.dueState !== undefined).length > 0;
-        const loansAmount = sum(pick(activeLoans, "loanAmount"));
-        const locksAmount = sum(pick(activeLocks, "amountLocked"));
+        const repayBtn = loans.loans && loans.loans.filter(loan => loan.isDue && loan.isRepayable).length > 0;
 
         const LoansUIBlock = () => {
             return (

@@ -44,11 +44,7 @@ class CollectLoanMain extends React.Component {
                         </Message>
                     </Pgrid.Column>
                     <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 10 / 16 }}>
-                        <CollectLoanButton
-                            idName="list-collect-btn"
-                            loanManager={loanManager}
-                            loansToCollect={loanManager.loansToCollect}
-                        />
+                        <CollectLoanButton idName="list-collect-btn" loansToCollect={loanManager.loansToCollect} />
                         <LoansToCollectList
                             header="Loans to collect"
                             noItemMessage={<p>No defaulted and uncollected loan.</p>}
@@ -63,8 +59,7 @@ class CollectLoanMain extends React.Component {
 
 const mapStateToProps = state => ({
     loanManager: state.loanManager,
-    loanManagerContract: state.contracts.latest.loanManager,
     augmintToken: state.augmintToken
 });
 
-export default (CollectLoanMain = connect(mapStateToProps)(CollectLoanMain));
+export default CollectLoanMain = connect(mapStateToProps)(CollectLoanMain);

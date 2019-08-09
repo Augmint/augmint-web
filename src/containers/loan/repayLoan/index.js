@@ -12,7 +12,7 @@ const repayLoanMain = () => (
         </TopNavTitlePortal>
 
         <Route exact path="/loan/repay" component={LoanSelector} />
-        <Route path="/loan/repay/:loanId" component={RepayLoanPage} />
+        <Route path="/loan/repay/:loanId/:loanManagerAddress" component={RepayLoanPage} />
     </Psegment>
 );
 

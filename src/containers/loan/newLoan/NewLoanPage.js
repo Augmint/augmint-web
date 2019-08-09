@@ -33,9 +33,12 @@ class NewLoanPage extends React.Component {
     }
 
     async handleSubmit(values) {
-        // e.preventDefault(); // not needed with redux-form?
-        // TODO: add productId to Form and change state ref here to values.prodcutId ?
-        const res = await store.dispatch(newLoan(values.productId, values.ethAmount));
+        const product = values.product;
+        const ethAmount = values.ethAmount;
+        const minRate = values.minRate;
+        const address = this.props.userAccount.address;
+
+        const res = await store.dispatch(newLoan(product, ethAmount, address, minRate));
         if (res.type !== LOANTRANSACTIONS_NEWLOAN_CREATED) {
             throw new SubmissionError({
                 _error: res.error
@@ -43,7 +46,8 @@ class NewLoanPage extends React.Component {
         } else {
             this.setState({
                 submitSucceeded: true,
-                result: res.result
+                result: res.result,
+                ethAmount: ethAmount
             });
             return res;
         }
@@ -64,14 +68,14 @@ class NewLoanPage extends React.Component {
                         {!this.state.submitSucceeded && (
                             <NewLoanForm
                                 rates={this.props.rates}
-                                loanManager={this.props.loanManager}
+                                products={this.props.products}
                                 onSubmit={this.handleSubmit}
                             />
                         )}
                         {this.state.submitSucceeded && (
                             /* couldn't make this work yet:
                         <Redirect path="/getLoan/fetchLoansuccess" push component={fetchLoansuccess}/> */
-                            <NewLoanSuccess result={this.state.result} />
+                            <NewLoanSuccess result={this.state.result} ethAmount={this.state.ethAmount} />
                         )}
                     </Pgrid.Column>
                 </Pgrid.Row>

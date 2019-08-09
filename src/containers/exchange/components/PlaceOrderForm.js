@@ -9,6 +9,7 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector, change } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
+// import { Form, Validations, Normalizations, Formatters, Parsers } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
@@ -58,6 +59,7 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e, savedValue) {
+        console.log(e.target.value, "exchange");
         const value = e ? e.target.value : savedValue;
         try {
             const lastChangedAmountField = "tokenAmount";
@@ -311,7 +313,14 @@ PlaceOrderForm = reduxForm({
 })(PlaceOrderForm);
 
 function mapStateToProps(state, ownProps) {
-    return { initialValues: { price: 100 } };
+    return {
+        initialValues: {
+            price: 100
+            // price: Ratio.of(1),
+            // ethAmount: Wei.of(0),
+            // tokenAmount: Tokens.of(0)
+        }
+    };
 }
 
 PlaceOrderForm = connect(mapStateToProps)(PlaceOrderForm);

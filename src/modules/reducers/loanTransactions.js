@@ -1,6 +1,6 @@
 import store from "modules/store";
 
-import { repayLoanTx, newEthBackedLoanTx, collectLoansTx } from "modules/ethereum/loanTransactions";
+import { sendAndProcessTx } from "modules/ethereum/ethHelper";
 
 export const LOANTRANSACTIONS_NEWLOAN_REQUESTED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_REQUESTED";
 export const LOANTRANSACTIONS_NEWLOAN_CREATED = "loanTransactions/LOANTRANSACTIONS_NEWLOAN_CREATED";
@@ -28,7 +28,9 @@ export default (state = initialState, action) => {
                 error: null,
                 result: null,
                 ethAmount: action.ethAmount,
-                productId: action.productId
+                product: action.product,
+                productId: action.product.id,
+                address: action.address
             };
 
         case LOANTRANSACTIONS_NEWLOAN_CREATED:
@@ -80,16 +82,29 @@ export default (state = initialState, action) => {
     }
 };
 
-export function newLoan(productId, ethAmount) {
+export function newLoan(product, ethAmount, address, minRate) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_NEWLOAN_REQUESTED,
             ethAmount: ethAmount,
-            productId: productId
+            product: product,
+            productId: product.id,
+            address: address
         });
 
         try {
-            const result = await newEthBackedLoanTx(productId, ethAmount);
+            let tx;
+            const txName = "New loan";
+            const augmint = await store.getState().web3Connect.augmint;
+            if (product.isMarginLoan) {
+                tx = await augmint.newEthBackedLoan(product, ethAmount, address, minRate);
+            } else {
+                tx = await augmint.newEthBackedLoan(product, ethAmount, address);
+            }
+
+            const transactionHash = await sendAndProcessTx(tx, txName);
+
+            const result = { txName, transactionHash };
             return dispatch({
                 type: LOANTRANSACTIONS_NEWLOAN_CREATED,
                 result: result
@@ -103,21 +118,27 @@ export function newLoan(productId, ethAmount) {
     };
 }
 
-export function repayLoan(repaymentAmount, loanId) {
+export function repayLoan(repaymentAmount, loan, account) {
     return async dispatch => {
         dispatch({
             type: LOANTRANSACTIONS_REPAY_REQUESTED,
-            request: { loanId, repaymentAmount }
+            request: { loan, repaymentAmount }
         });
 
         try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const result = await repayLoanTx(loanManagerInstance, repaymentAmount, loanId);
+            const txName = "Repay loan";
+            const augmint = await store.getState().web3Connect.augmint;
+            const tx = await augmint.repayLoan(loan, repaymentAmount, account);
+            const transactionHash = await sendAndProcessTx(tx, txName);
+
+            const result = { txName, transactionHash };
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_SUCCESS,
                 result: result
             });
         } catch (error) {
+            console.log(error);
+
             return dispatch({
                 type: LOANTRANSACTIONS_REPAY_ERROR,
                 error: error
@@ -126,25 +147,27 @@ export function repayLoan(repaymentAmount, loanId) {
     };
 }
 
-export function collectLoans(loansToCollect) {
-    return async dispatch => {
-        dispatch({
-            type: LOANTRANSACTIONS_COLLECT_REQUESTED,
-            loansToCollect: loansToCollect
-        });
+export async function collectLoans(loansToCollect) {
+    try {
+        const txName = "Collect loan(s)";
+        const userAccount = store.getState().web3Connect.userAccount;
+        const txs = await store.getState().web3Connect.augmint.collectLoans(loansToCollect, userAccount);
+        const hashes = [];
 
-        try {
-            const loanManagerInstance = store.getState().contracts.latest.loanManager.web3ContractInstance;
-            const result = await collectLoansTx(loanManagerInstance, loansToCollect);
-            return dispatch({
-                type: LOANTRANSACTIONS_COLLECT_SUCCESS,
-                result: result
-            });
-        } catch (error) {
-            return dispatch({
-                type: LOANTRANSACTIONS_COLLECT_ERROR,
-                error: error
-            });
+        for (let i = 0; i < txs.length; i++) {
+            hashes.push(await sendAndProcessTx(txs[i], txName));
         }
-    };
+
+        const result = hashes.map(hash => ({ txName, transactionHash: hash }));
+
+        return {
+            type: LOANTRANSACTIONS_COLLECT_SUCCESS,
+            result: result
+        };
+    } catch (error) {
+        return {
+            type: LOANTRANSACTIONS_COLLECT_ERROR,
+            error: error
+        };
+    }
 }

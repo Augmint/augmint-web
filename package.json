@@ -6,15 +6,16 @@
   "private": true,
   "engines": {
     "node": "10.15.3",
-    "yarn": "1.15.2"
+    "yarn": ">=1.15.2"
   },
   "dependencies": {
-    "@augmint/js": "0.3.3",
+    "@augmint/js": "0.3.4",
     "bignumber.js": "5.0.0",
     "bn.js": "4.11.8",
     "chart.js": "2.8.0",
     "ethereumjs-util": "6.1.0",
     "ethers": "4.0.27",
+    "ics": "2.15.1",
     "moment": "2.24.0",
     "parse": "2.4.0",
     "react": "16.8.6",
@@ -44,7 +45,7 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:runrecord": "$(yarn bin)/cypress run --record --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
+    "cypress:runrecord": "cypress run --record true --key 42b3c18f-e1cf-4c27-85ed-c223e420bd4a",
     "ganache:start": "yarn augmint-cli ganache start --blockTime 1",
     "ganache:stop": "yarn augmint-cli ganache stop",
     "ganache:run": "yarn augmint-cli ganache run --blockTime 1"

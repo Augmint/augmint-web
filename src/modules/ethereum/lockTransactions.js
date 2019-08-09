@@ -1,4 +1,4 @@
-/* Loan ethereum functions
+/* Lock ethereum functions
 Use only from reducers.  */
 import store from "modules/store";
 import BigNumber from "bignumber.js";
@@ -97,18 +97,17 @@ export async function releaseFundsTx(lockManagerInstance, lockId) {
 }
 
 export async function fetchLocksForAddressTx(lockManagerInstance, account) {
-    // TODO: resolve timing of loanManager refresh in order to get chunkSize from loanManager
-    // const chunkSize = store.getState().loanManager.info.chunkSize;
+    // TODO: resolve timing of lockManager refresh in order to get chunkSize from lockManager
     const isLegacyLockContract = typeof lockManagerInstance.methods.CHUNK_SIZE === "function";
     const chunkSize = isLegacyLockContract ? LEGACY_CONTRACTS_CHUNK_SIZE : CHUNK_SIZE;
-    const loanCount = await lockManagerInstance.methods
+    const lockCount = await lockManagerInstance.methods
         .getLockCountForAddress(account)
         .call()
         .then(res => parseInt(res, 10));
 
     let locks = [];
 
-    const queryCount = Math.ceil(loanCount / chunkSize);
+    const queryCount = Math.ceil(lockCount / chunkSize);
 
     for (let i = 0; i < queryCount; i++) {
         const locksArray = isLegacyLockContract

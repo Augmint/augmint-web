@@ -22,7 +22,8 @@ const initialState = {
 
         bn_ethFiatRate: null,
         ethFiatRate: null,
-        fiatEthRate: null
+        fiatEthRate: null,
+        lastUpdated: null
     }
 };
 

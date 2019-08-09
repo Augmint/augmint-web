@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
-import { LoanManagerInfo } from "./components/LoanManagerInfo";
+import LoanManagerInfo from "./components/LoanManagerInfo";
 import { ArrayDump } from "./components/ArrayDump";
 import loanManagerProvider from "modules/loanManagerProvider";
 import { fetchAllLoans } from "modules/reducers/loans";
@@ -43,6 +43,15 @@ class LoansInfoGroup extends React.Component {
     }
 
     render() {
+        const products = (this.props.loanProducts || []).reduce((acc, current) => {
+            const address = current.loanManagerAddress;
+            if (!acc[address]) {
+                acc[address] = [];
+            }
+            acc[address].push(current);
+            console.log(current.isMarginLoan);
+            return acc;
+        }, {});
         return (
             <Pgrid.Row>
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
@@ -70,7 +79,9 @@ class LoansInfoGroup extends React.Component {
                 </Pgrid.Column>
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
-                    <ArrayDump header="Loan Products" items={this.props.loanProducts} />
+                    {Object.keys(products).map(address => (
+                        <ArrayDump key={address} header={"Loan products - " + address} items={products[address]} />
+                    ))}
                 </Pgrid.Column>
             </Pgrid.Row>
         );
