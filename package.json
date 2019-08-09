@@ -9,7 +9,7 @@
     "yarn": ">=1.15.2"
   },
   "dependencies": {
-    "@augmint/js": "0.3.4-pre10",
+    "@augmint/js": "0.3.4",
     "bignumber.js": "5.0.0",
     "bn.js": "4.11.8",
     "chart.js": "2.8.0",
