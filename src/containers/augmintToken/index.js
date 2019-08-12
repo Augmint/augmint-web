@@ -53,9 +53,7 @@ class AugmintToken extends React.Component {
         const ethReservesError = monetarySupervisor.loadError || metrics.error;
         const stabilityRatiosError = rates.loadError || metrics.error || monetarySupervisor.loadError;
 
-        const ratesSinceLastUpdated =
-            rates.info.lastUpdated &&
-            moment(new Date(rates.info.lastUpdated).toLocaleString(), "DDMMYYYY, hh:mm:ss").fromNow();
+        const ratesSinceLastUpdated = rates.info.lastUpdated && moment(rates.info.lastUpdated).fromNow();
 
         if (Object.keys(metrics.loansData).length) {
             bn_loansCollected = metrics.loansData.bn_collectedLoansAmount.plus(
