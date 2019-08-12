@@ -8,16 +8,23 @@ import { Menu } from "components/augmint-ui/menu";
 import { NoItems } from "components/augmint-ui/list";
 import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
-import LoanCard from "./LoanCard";
+import { LoanCard, MarginLoanCard } from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
+import { MARGIN_THRESHOLD } from "utils/constants.js";
+import { Ratio } from "@augmint/js";
 
 import "./styles.css";
 
 function LoanList(props) {
-    const { location, loanManager } = props;
+    const { location, loanManager, ethFiatRate, products } = props;
     const { isLoading, error, loans } = props.loans;
     const isActivePage = location.pathname === "/loan";
     const isNewLoan = location.pathname === "/loan/new";
+
+    function isMarginWarning(marginCallRate) {
+        const warningLevel = marginCallRate.mul(Ratio.of(MARGIN_THRESHOLD));
+        return ethFiatRate <= warningLevel.toNumber();
+    }
 
     const listItems =
         loans &&
@@ -26,7 +33,29 @@ function LoanList(props) {
             .sort((a, b) => {
                 return isActivePage ? a.maturity - b.maturity : b.maturity - a.maturity;
             })
-            .map(loan => <LoanCard key={`loan-${loan.id}`} loan={loan} loanManager={loanManager} />);
+            .map(loan => {
+                if (loan.isMarginLoan && loan.marginCallRate) {
+                    loan.marginWarning = isMarginWarning(loan.marginCallRate);
+                    return (
+                        <MarginLoanCard
+                            key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                            loan={loan}
+                            loanManager={loanManager}
+                            products={products}
+                            rate={ethFiatRate}
+                        />
+                    );
+                } else {
+                    return (
+                        <LoanCard
+                            key={`loan-${loan.id}-${loan.loanManagerAddress}`}
+                            loan={loan}
+                            loanManager={loanManager}
+                            rate={ethFiatRate}
+                        />
+                    );
+                }
+            });
 
     let content = null;
     if (isNewLoan) {
@@ -84,7 +113,9 @@ function LoanList(props) {
 const mapStateToProps = state => ({
     userAccount: state.userBalances.account,
     loans: state.loans,
-    loanManager: state.loanManager
+    loanManager: state.loanManager,
+    ethFiatRate: state.rates.info.ethFiatRate,
+    products: state.loanManager.products
 });
 
 export default withRouter(connect(mapStateToProps)(LoanList));

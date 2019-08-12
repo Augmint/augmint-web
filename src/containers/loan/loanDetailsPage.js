@@ -75,7 +75,7 @@ class LoanDetailsPage extends React.Component {
                             <Pgrid.Column size={{ mobile: 1, tablet: 1 / 2, desktop: 8 / 16 }}>
                                 <Pblock
                                     style={{ marginTop: "1rem" }}
-                                    header={this.state.loan.loanStateText + " - loan #" + this.state.loan.id}
+                                    header={"loan #" + this.state.loan.id}
                                     className={"tertiaryColor"}
                                 >
                                     <LoanDetails loan={this.state.loan} />
@@ -86,7 +86,7 @@ class LoanDetailsPage extends React.Component {
                                         <CollectLoanButton
                                             idName="details-collect-btn"
                                             loanManager={this.props.loanManager}
-                                            loansToCollect={[{ id: this.state.loan.id }]}
+                                            loansToCollect={[this.state.loan]}
                                         />
                                     )}
                                 </Pblock>
@@ -105,4 +105,4 @@ const mapStateToProps = state => ({
     userAccount: state.web3Connect.userAccount
 });
 
-export default (LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage));
+export default LoanDetailsPage = connect(mapStateToProps)(LoanDetailsPage);

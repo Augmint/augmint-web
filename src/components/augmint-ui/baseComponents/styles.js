@@ -117,6 +117,10 @@ export const StyledStatusBox = styled.div`
         border-color: ${theme.colors.green};
         color: ${theme.colors.green};
     }
+
+    .margin-loan & {
+        font-size: ${remCalc(12)};
+    }
 `;
 
 export const StyledStatusText = styled.p`

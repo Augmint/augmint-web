@@ -154,7 +154,6 @@ function getTxNonce(transactionHash) {
  */
 export async function sendAndProcessTx(tx, txName, formatReceiptDataCb) {
     const userAccount = store.getState().web3Connect.userAccount;
-
     const transactionHash = await tx
 
         .onConfirmation(confirmationNumber => {

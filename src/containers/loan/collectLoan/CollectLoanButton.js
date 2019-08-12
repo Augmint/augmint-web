@@ -1,19 +1,16 @@
 import React from "react";
-import store from "modules/store";
 import { Pblock } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 import { SubmissionError, reduxForm } from "redux-form";
 import { collectLoans, LOANTRANSACTIONS_COLLECT_SUCCESS } from "modules/reducers/loanTransactions";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel } from "components/MsgPanels";
-import { LoadingPanel } from "components/MsgPanels";
 import { Form } from "components/BaseComponents";
 
 import "./CollectLoanButton.css";
 
 class CollectLoanButton extends React.Component {
-    async handleSubmit(values) {
-        //values.preventDefault();
-        const res = await store.dispatch(collectLoans(this.props.loansToCollect));
+    async handleSubmit() {
+        const res = collectLoans(this.props.loansToCollect);
 
         if (res.type !== LOANTRANSACTIONS_COLLECT_SUCCESS) {
             throw new SubmissionError({
@@ -43,11 +40,9 @@ class CollectLoanButton extends React.Component {
             clearSubmitErrors,
             submitting,
             reset,
-            loanManager,
             loansToCollect,
             idName
         } = this.props;
-        const { isLoading } = loanManager;
         return (
             <Pblock id={idName}>
                 {error && (
@@ -60,12 +55,12 @@ class CollectLoanButton extends React.Component {
                     </EthSubmissionErrorPanel>
                 )}
 
-                {!submitSucceeded && !isLoading && loansToCollect != null && (
+                {!submitSucceeded && loansToCollect && (
                     <Form onSubmit={handleSubmit(this.handleSubmit)}>
                         <Button
                             size="large"
                             data-testid="collectLoanButton"
-                            disabled={submitting || isLoading || loansToCollect.length === 0}
+                            disabled={submitting || loansToCollect.length === 0}
                             type="submit"
                         >
                             {submitting ? "Submitting..." : "Collect"}
@@ -73,15 +68,14 @@ class CollectLoanButton extends React.Component {
                     </Form>
                 )}
 
-                {isLoading && <LoadingPanel>Refreshing list of loans to collect...</LoadingPanel>}
-
-                {submitSucceeded && (
-                    <EthSubmissionSuccessPanel
-                        header="Collect loan(s) submitted"
-                        onDismiss={() => reset()}
-                        result={this.state.result}
-                    />
-                )}
+                {submitSucceeded &&
+                    this.state.result.map(result => (
+                        <EthSubmissionSuccessPanel
+                            header="Collect loan(s) submitted"
+                            onDismiss={() => reset()}
+                            result={result}
+                        />
+                    ))}
             </Pblock>
         );
     }

@@ -17,6 +17,8 @@ import { ErrorPanel } from "components/MsgPanels";
 import Segment from "components/augmint-ui/segment";
 import Button from "components/augmint-ui/button";
 import { AEUR, ETH, Percent } from "components/augmint-ui/currencies";
+import moment from "moment";
+import productTermConverter from "utils/productTermConverter";
 
 import { StyledContainer, StyledHeader, StyledMyListGroup, StyledRow, StyledCol } from "./styles";
 import theme from "styles/theme";
@@ -50,6 +52,10 @@ class AugmintToken extends React.Component {
         const aurSupplyError = metrics.error || monetarySupervisor.loadError || augmintToken.error;
         const ethReservesError = monetarySupervisor.loadError || metrics.error;
         const stabilityRatiosError = rates.loadError || metrics.error || monetarySupervisor.loadError;
+
+        const ratesSinceLastUpdated =
+            rates.info.lastUpdated &&
+            moment(new Date(rates.info.lastUpdated).toLocaleString(), "DDMMYYYY, hh:mm:ss").fromNow();
 
         if (Object.keys(metrics.loansData).length) {
             bn_loansCollected = metrics.loansData.bn_collectedLoansAmount.plus(
@@ -101,12 +107,14 @@ class AugmintToken extends React.Component {
                 if (product.maxLoanAmount < loanLimit) {
                     loanLimit = product.maxLoanAmount;
                 }
+                const termText = productTermConverter(product.termInSecs);
+                const interestRatePa = +(product.interestRatePa * 100).toFixed(2);
                 return (
                     <div key={"reserv-page-loan-" + index}>
                         {product.isActive && (
                             <StyledRow halign="justify">
-                                <StyledCol width={1 / 2}>{product.termText}</StyledCol>
-                                <StyledCol width={1 / 2}>{product.interestRatePaPt}%</StyledCol>
+                                <StyledCol width={1 / 2}>{termText}</StyledCol>
+                                <StyledCol width={1 / 2}>{interestRatePa}%</StyledCol>
                             </StyledRow>
                         )}
                     </div>
@@ -210,6 +218,27 @@ class AugmintToken extends React.Component {
                         <TopNavTitlePortal>
                             <Pheader header="Stability Report" />
                         </TopNavTitlePortal>
+                        <Segment loading={rates.isLoading} style={{ color: "black" }}>
+                            <StyledHeader as="h3">Rates feed</StyledHeader>
+                            <StyledMyListGroup>
+                                <StyledRow>
+                                    <StyledCol width={{ tablet: 1, desktop: 3 / 5, giant: 2 / 5 }}>
+                                        <MyListGroup>
+                                            <StyledRow halign="justify" style={{ alignItems: "start" }}>
+                                                <StyledCol width={2 / 3}>
+                                                    1 ETH
+                                                    <br />
+                                                    <small style={{ color: theme.colors.mediumGrey }}>
+                                                        Last updated: {ratesSinceLastUpdated}
+                                                    </small>
+                                                </StyledCol>
+                                                <StyledCol width={1 / 3}>{rates.info.ethFiatRate} €</StyledCol>
+                                            </StyledRow>
+                                        </MyListGroup>
+                                    </StyledCol>
+                                </StyledRow>
+                            </StyledMyListGroup>
+                        </Segment>
                         <Segment
                             loading={metrics.isLoading || monetarySupervisor.isLoading || augmintToken.isLoading}
                             style={{ color: "black" }}

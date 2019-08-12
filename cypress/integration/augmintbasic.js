@@ -36,6 +36,7 @@ describe("Augmint base", function() {
         cy.get("[data-testid=interestEarnedAccountTokenBalance]").should("not.contain", "?");
 
         cy.get("[data-testid=loansToCollectButton]").click();
-        cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
+        cy.get("[data-testid=loansToCollectBlock]").should("contain", "Loans to collect");
+        cy.get("[data-testid=loansToCollectBlock]").should("contain", "98.79 A€ loan for a few seconds");
     });
 });

@@ -82,6 +82,11 @@ export default function Icon(props) {
         case "balance-scale":
             className += " fa fa-balance-scale";
             break;
+        case "wallet":
+            className += " fas fa-wallet";
+            break;
+        case "calendar":
+            className += " fa fa-calendar-alt";
         default:
             break;
     }

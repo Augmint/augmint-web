@@ -9,10 +9,6 @@ export const TxDate = styled.span`
     font-size: ${remCalc(12)};
 `;
 
-export const TxTitle = styled.span`
-    font-weight: bold;
-`;
-
 export const TxDetails = styled.span`
     font-size: ${remCalc(12)};
     color: ${theme.colors.mediumGrey};
@@ -35,7 +31,7 @@ class TxInfo extends React.Component {
         const props = this.props;
         const getAddr = manager => manager.address.toLowerCase();
 
-        const loanAddresses = [props.loanManager, ...props.legacyLoanManagers].map(getAddr);
+        const loanAddresses = [props.loanManager].map(getAddr);
         const lockAddresses = [props.lockManager, ...props.legacyLockManagers].map(getAddr);
         const exchangeAddresses = [props.exchangeManager, ...props.legacyExchangeManagers].map(getAddr);
 
@@ -76,10 +72,10 @@ class TxInfo extends React.Component {
             <div>
                 <div>
                     <HashURL hash={tx.transactionHash} type={"tx/"} title="Transaction details">
-                        <TxTitle>
+                        <span>
                             <span style={{ color: "black" }}>{this.getTitleText(tx)}</span>
                             <br />»<small> Details</small>
-                        </TxTitle>
+                        </span>
                     </HashURL>
                 </div>
                 <TxDetails data-testid="txDetails">
@@ -101,7 +97,6 @@ TxInfo = connect(state => ({
     loanManager: state.contracts.latest.loanManager,
     lockManager: state.contracts.latest.lockManager,
     exchangeManager: state.contracts.latest.exchange,
-    legacyLoanManagers: state.legacyLoanManagers.contracts,
     legacyLockManagers: state.legacyLockers.contracts,
     legacyExchangeManagers: state.legacyExchanges.contracts
 }))(TxInfo);

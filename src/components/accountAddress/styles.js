@@ -32,6 +32,8 @@ export const StyledContainer = styled.div`
 
     &.container {
         position: relative;
+        display: flex;
+        justify-content: center;
     }
 
     &.noClick {
@@ -64,8 +66,8 @@ export const StyledContainer = styled.div`
             }
         }
         &.always {
-            display: block;
-            max-width: 210px;
+            display: flex;
+            justify-content: center;
             margin: auto;
         }
     }
