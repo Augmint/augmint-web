@@ -228,7 +228,6 @@ function LoanSelect(props) {
         let result = [];
         options.forEach((product, i) => {
             const termText = productTermConverter(product.termInSecs);
-            const marginLoan = product.isMarginLoan ? "*" : "";
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
@@ -236,7 +235,7 @@ function LoanSelect(props) {
                     value={getKey(product)}
                     data-testid={`${testId}_${getKey(product)}`}
                 >
-                    {`Repay in ${termText} ${marginLoan}`}
+                    {`Repay in ${termText}`}
                 </option>
             );
         });

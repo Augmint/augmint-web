@@ -41,7 +41,6 @@ export default (state = initialState, action) => {
             };
 
         case WEB3_SETUP_SUCCESS:
-            console.log("succes");
             return {
                 ...state,
                 isLoading: false,

@@ -59,7 +59,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     onTokenAmountChange(e, savedValue) {
-        console.log(e.target.value, "exchange");
         const value = e ? e.target.value : savedValue;
         try {
             const lastChangedAmountField = "tokenAmount";

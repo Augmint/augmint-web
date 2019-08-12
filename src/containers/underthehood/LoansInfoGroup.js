@@ -49,7 +49,6 @@ class LoansInfoGroup extends React.Component {
                 acc[address] = [];
             }
             acc[address].push(current);
-            console.log(current.isMarginLoan);
             return acc;
         }, {});
         return (
