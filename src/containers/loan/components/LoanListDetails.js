@@ -30,26 +30,24 @@ export default function LoanListDetails(props) {
     const loan = props.loan;
 
     return (
-        <NavLink to={`/loan/${loan.id}`} style={{ flex: 1 }}>
-            <Card className={loan.dueState}>
-                <CardTitle>
-                    <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
-                </CardTitle>
-                <CardDescription>
-                    {loan.isRepayable ? (
-                        <span>
-                            <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
-                            {loan.isDue && (
-                                <span>
-                                    , please <strong>repay it</strong>
-                                </span>
-                            )}
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                </CardDescription>
-            </Card>
-        </NavLink>
+        <Card className={loan.dueState}>
+            <CardTitle>
+                <AEUR amount={loan.loanAmount} /> loan for {moment.duration(loan.term, "seconds").humanize()}
+            </CardTitle>
+            <CardDescription>
+                {loan.isRepayable ? (
+                    <span>
+                        <strong>{moment.unix(loan.maturity).fromNow(true)}</strong> left to due date
+                        {loan.isDue && (
+                            <span>
+                                , please <strong>repay it</strong>
+                            </span>
+                        )}
+                    </span>
+                ) : (
+                    ""
+                )}
+            </CardDescription>
+        </Card>
     );
 }
