@@ -9,7 +9,6 @@ import store from "modules/store";
 import { EthSubmissionErrorPanel, EthSubmissionSuccessPanel, ConnectionStatus } from "components/MsgPanels";
 import { reduxForm, Field, SubmissionError, formValueSelector, change } from "redux-form";
 import { Form, Validations, Normalizations } from "components/BaseComponents";
-// import { Form, Validations, Normalizations, Formatters, Parsers } from "components/BaseComponents";
 import { placeOrder, PLACE_ORDER_SUCCESS, TOKEN_BUY, TOKEN_SELL } from "modules/reducers/orders";
 import { connect } from "react-redux";
 import { Pblock } from "components/PageLayout";
@@ -37,7 +36,6 @@ class PlaceOrderForm extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // recaluclate amounts displayed when published ETH/EUR rates changed
         if (prevProps.rates && prevProps.rates.info.ethFiatRate !== this.props.rates.info.ethFiatRate) {
             this.reCalcAmounts(
                 this.state.lastChangedAmountField,
@@ -311,13 +309,10 @@ PlaceOrderForm = reduxForm({
     }
 })(PlaceOrderForm);
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps() {
     return {
         initialValues: {
             price: 100
-            // price: Ratio.of(1),
-            // ethAmount: Wei.of(0),
-            // tokenAmount: Tokens.of(0)
         }
     };
 }
