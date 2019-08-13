@@ -8,7 +8,7 @@ export default function LoansToCollectList(props) {
     const { isLoading, error, loansToCollect } = props.loanManager;
     const listItems =
         loansToCollect &&
-        loansToCollect.map((loan, index) => (
+        loansToCollect.map(loan => (
             <MyListGroup.Row key={`loanToCollect-${loan.id}`}>
                 <LoanListDetails loan={loan} />
                 {props.selectComponent && <props.selectComponent loanId={loan.id} />}

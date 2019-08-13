@@ -5,9 +5,8 @@ import loanManagerProvider from "modules/loanManagerProvider";
 import lockManagerProvider from "modules/lockManagerProvider";
 import ratesProvider from "modules/ratesProvider";
 import loanList from "./loanList";
-// import newLoanMain from "./newLoan";
+
 import repayLoanMain from "./repayLoan";
-import loanDetails from "./loanDetailsPage";
 import CollectLoanMain from "./collectLoan";
 import { PageNotFound } from "containers/PageNotFound";
 import { EthereumState } from "containers/app/EthereumState";
@@ -32,7 +31,6 @@ export default class LoanMain extends React.Component {
                         <Route path="/loan/new" component={loanList} />
                         <Route path="/loan/repay" component={repayLoanMain} />
                         <Route exact path="/loan/collect" component={CollectLoanMain} />
-                        <Route path="/loan/:loanId" component={loanDetails} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </EthereumState>

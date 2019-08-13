@@ -10,7 +10,7 @@ import Button from "components/augmint-ui/button";
 import { ErrorPanel } from "components/MsgPanels";
 import { LoanCard, MarginLoanCard } from "./LoanCard";
 import LoanProductSelector from "./../newLoan/LoanProductSelector";
-import { MARGIN_THRESHOLD } from "utils/constants.js";
+import { MARGIN_THRESHOLD } from "../../../utils/constants.js";
 import { Ratio } from "@augmint/js";
 
 import "./styles.css";
