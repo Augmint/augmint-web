@@ -19,7 +19,6 @@ import { media } from "styles/media";
 import AccountHome from "containers/account";
 import HowToGet from "containers/account/HowToGet";
 import TransferPage from "containers/transfer";
-import CreateTransferRequest from "containers/transfer/request/CreateTransferRequest";
 import ShowTransferRequest from "containers/transfer/request/ShowTransferRequest";
 import ExchangeHome from "containers/exchange";
 import FundingHome from "containers/funding";
@@ -270,7 +269,6 @@ class App extends React.Component {
                         <Route exact path="/" component={NotConnectedHome} />
                         <Route exact path="/account" component={AccountHome} />
                         <Route exact path="/transfer" component={TransferPage} />
-                        <Route exact path="/transfer/request" component={CreateTransferRequest} />
                         <Route exact path="/transfer/:requestId" component={ShowTransferRequest} />
                         <Route exact path="/exchange" component={ExchangeHome} />
                         <Route exact path="/exchangeFiat" component={FundingHome} />
