@@ -1,9 +1,37 @@
 import React from "react";
 import stringifier from "stringifier";
+import * as strf from "stringifier/strategies";
 import { Pblock } from "components/PageLayout";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 
-const stringify = stringifier({ maxDepth: 3, indent: "   " });
+const unitsHandler = (typeName, label = "", digits = 2) =>
+    strf.flow.compose(
+        next => {
+            return (acc, x) => {
+                acc.push(typeName);
+                acc.push("[");
+                acc.push(x.toString());
+                acc.push(" = ");
+                acc.push(x.toNumber().toFixed(digits));
+                acc.push(label);
+                acc.push("]");
+                return next(acc, x);
+            };
+        },
+        strf.flow.end()
+    );
+
+const stringifierConfig = {
+    maxDepth: 3,
+    indent: "    ",
+    handlers: {
+        Ratio: unitsHandler("Ratio"),
+        Tokens: unitsHandler("Tokens", " AEUR"),
+        Wei: unitsHandler("Wei", " ETH", 6)
+    }
+};
+
+const stringify = stringifier(stringifierConfig);
 
 export function ArrayDump(props) {
     const { items, header } = props;
