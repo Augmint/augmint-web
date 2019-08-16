@@ -31,7 +31,7 @@ const stringifierConfig = {
     }
 };
 
-const stringify = stringifier(stringifierConfig);
+export const stringify = stringifier(stringifierConfig);
 
 export function ArrayDump(props) {
     const { items, header } = props;
