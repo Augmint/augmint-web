@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import store from "modules/store";
+import { utils } from "@augmint/js";
 import { Pblock, Psegment } from "components/PageLayout";
-import { ArrayDump, stringify } from "./ArrayDump";
-import { ContractBaseInfo } from "./ContractBaseInfo";
+import Button from "components/augmint-ui/button";
 import loanManagerProvider from "modules/loanManagerProvider";
 import { fetchAllLoans } from "modules/reducers/loans";
-import { utils } from "@augmint/js";
+import { stringify } from "./ArrayDump";
 
 class LoanManagerInfo extends React.Component {
     constructor(props) {
@@ -44,6 +45,13 @@ class LoanManagerInfo extends React.Component {
         }
 
         const loanManagerAddresses = this.state.loanManagers.map(m => m.address);
+        const abiHashes = new Map(
+            this.state.loanManagers.map(m => [
+                m.address,
+                this.props.augmint.deployedEnvironment.getAbiHash("LoanManager", m.address)
+            ])
+        );
+        const abis = new Map(this.state.loanManagers.map(m => [m.address, m.instance._jsonInterface]));
 
         const activeProdCounts = countOf(this.state.loanProducts, prod => prod.isActive);
         const disabledProdCounts = countOf(this.state.loanProducts, prod => !prod.isActive);
@@ -56,14 +64,22 @@ class LoanManagerInfo extends React.Component {
 
         const segments = loanManagerAddresses.map(m => (
             <Psegment key={m}>
-                Address: {m}
-                <br />
-                ABI: ...
+                Address: <b>{m}</b>
                 <br />
                 Products: {activeProdCounts.get(m)} active, {disabledProdCounts.get(m)} disabled
                 <br />
                 Loans: {loanCounts.get(m)} total, {repaidLoanCounts.get(m)} repaid, {collectedLoanCounts.get(m)}{" "}
                 collected, {collectableLoanCounts.get(m)} collectable, {repayableLoanCounts.get(m)} repayable
+                <br />
+                <br />
+                ABI hash: {abiHashes.get(m)}
+                <br />
+                <CopyToClipboard
+                    text={JSON.stringify(abis.get(m), null, 2)}
+                    onCopy={() => alert(`ABI ${abiHashes.get(m)} copied to clipboard`)}
+                >
+                    <Button size="small">Copy ABI to clipboard</Button>
+                </CopyToClipboard>
             </Psegment>
         ));
         return <Pblock header="LoanManagers">{segments}</Pblock>;
