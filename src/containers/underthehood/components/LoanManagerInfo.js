@@ -45,14 +45,14 @@ class LoanManagerInfo extends React.Component {
 
         const loanManagerAddresses = this.state.loanManagers.map(m => m.address);
 
-        const activeProdCounts = utils.mapMap(this.state.loanProducts, val => val.filter(p => p.isActive).length);
-        const disabledProdCounts = utils.mapMap(this.state.loanProducts, val => val.filter(p => !p.isActive).length);
+        const activeProdCounts = countOf(this.state.loanProducts, prod => prod.isActive);
+        const disabledProdCounts = countOf(this.state.loanProducts, prod => !prod.isActive);
 
-        const loanCounts = utils.mapMap(this.state.loans, val => val.length);
-        const repaidLoanCounts = utils.mapMap(this.state.loans, val => val.filter(l => l.isRepaid).length);
-        const collectedLoanCounts = utils.mapMap(this.state.loans, val => val.filter(l => l.isCollected).length);
-        const collectableLoanCounts = utils.mapMap(this.state.loans, val => val.filter(l => l.isCollectable).length);
-        const repayableLoanCounts = utils.mapMap(this.state.loans, val => val.filter(l => l.isRepayable).length);
+        const loanCounts = countOf(this.state.loans, loan => true);
+        const repaidLoanCounts = countOf(this.state.loans, loan => loan.isRepaid);
+        const collectedLoanCounts = countOf(this.state.loans, loan => loan.isCollected);
+        const collectableLoanCounts = countOf(this.state.loans, loan => loan.isCollectable);
+        const repayableLoanCounts = countOf(this.state.loans, loan => loan.isRepayable);
 
         const segments = loanManagerAddresses.map(m => (
             <Psegment key={m}>
@@ -69,6 +69,8 @@ class LoanManagerInfo extends React.Component {
         return <Pblock header="LoanManagers">{segments}</Pblock>;
     }
 }
+
+const countOf = (map, filter) => utils.mapMap(map, val => val.filter(filter).length);
 
 const mapStateToProps = state => ({
     augmint: state.web3Connect.augmint,
