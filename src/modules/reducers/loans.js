@@ -69,7 +69,14 @@ export function fetchAllLoans() {
 
         try {
             const augmint = store.getState().web3Connect.augmint;
-            const allLoans = augmint && (await augmint.getAllLoans());
+            if (!augmint) {
+                return dispatch({
+                    type: LOANS_FETCH_ALL_ERROR,
+                    error: "No augmint environment"
+                });
+            }
+
+            const allLoans = await augmint.getAllLoans();
 
             return dispatch({
                 type: LOANS_FETCH_ALL_RECEIVED,
