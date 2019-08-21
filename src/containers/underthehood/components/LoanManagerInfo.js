@@ -1,31 +1,26 @@
 import React from "react";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import store from "modules/store";
 import { utils } from "@augmint/js";
 import { Pblock, Psegment } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
-import loanManagerProvider from "modules/loanManagerProvider";
-import { fetchAllLoans } from "modules/reducers/loans";
-import { stringify } from "./ArrayDump";
 
 class LoanManagerInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isLoaded: false, loanCounts: [], loanManagers: [], loanProducts: {}, loans: {} };
+        this.state = { isLoaded: false, loanManagers: [], loanProducts: {}, loans: {} };
         this.handleRefreshClick = this.handleRefreshClick.bind(this);
     }
 
     async refresh() {
         const augmint = this.props.augmint;
         const isLoaded = true;
-        const loanCounts = await augmint.getLoanCounts();
-        const loanManagers = augmint.getAllLoanManagers();
+        const loanManagers = (augmint && augmint.getAllLoanManagers()) || [];
         const loanProducts = new Map(
             await Promise.all(loanManagers.map(async m => [m.address, await m.getAllProducts()]))
         );
         const loans = new Map(await Promise.all(loanManagers.map(async m => [m.address, await m.getAllLoans()])));
-        this.setState({ isLoaded, loanCounts, loanManagers, loanProducts, loans });
+        this.setState({ isLoaded, loanManagers, loanProducts, loans });
     }
 
     handleRefreshClick(e) {
@@ -34,14 +29,30 @@ class LoanManagerInfo extends React.Component {
     }
 
     componentDidMount() {
-        loanManagerProvider();
-        store.dispatch(fetchAllLoans());
         this.refresh();
     }
 
     render() {
         if (!this.state.isLoaded) {
-            return <p>Loading...</p>;
+            return (
+                <Pblock header="LoanManagers">
+                    <p>Loading...</p>
+                </Pblock>
+            );
+        }
+        if (!this.props.augmint) {
+            return (
+                <Pblock header="LoanManagers">
+                    <p>Error: No augmint environment</p>
+                </Pblock>
+            );
+        }
+        if (this.state.loanManagers.length === 0) {
+            return (
+                <Pblock header="LoanManagers">
+                    <p>Error: No loanmanagers</p>
+                </Pblock>
+            );
         }
 
         const loanManagerAddresses = this.state.loanManagers.map(m => m.address);
