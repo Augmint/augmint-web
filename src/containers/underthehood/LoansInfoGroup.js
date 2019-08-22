@@ -69,7 +69,7 @@ class LoansInfoGroup extends React.Component {
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                     <LoanManagerInfo />
 
-                    <Pblock header="All loans">
+                    <Pblock header="All loans" headerStyle={{ fontSize: "1.5em", fontWeight: 300 }}>
                         <CopyToClipboard
                             text={this.state.allLoansCsv ? this.state.allLoansCsv : "<loans not loaded>"}
                             onCopy={result => {

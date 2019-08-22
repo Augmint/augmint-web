@@ -5,6 +5,8 @@ import { utils } from "@augmint/js";
 import { Pblock, Psegment } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
 
+const blockHeaderStyle = { fontSize: "1.5em", fontWeight: 300 };
+
 class LoanManagerInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -35,21 +37,21 @@ class LoanManagerInfo extends React.Component {
     render() {
         if (!this.state.isLoaded) {
             return (
-                <Pblock header="LoanManagers">
+                <Pblock header="LoanManagers" headerStyle={blockHeaderStyle}>
                     <p>Loading...</p>
                 </Pblock>
             );
         }
         if (!this.props.augmint) {
             return (
-                <Pblock header="LoanManagers">
+                <Pblock header="LoanManagers" headerStyle={blockHeaderStyle}>
                     <p>Error: No augmint environment</p>
                 </Pblock>
             );
         }
         if (this.state.loanManagers.length === 0) {
             return (
-                <Pblock header="LoanManagers">
+                <Pblock header="LoanManagers" headerStyle={blockHeaderStyle}>
                     <p>Error: No loanmanagers</p>
                 </Pblock>
             );
@@ -75,7 +77,7 @@ class LoanManagerInfo extends React.Component {
 
         const segments = loanManagerAddresses.map(m => (
             <Psegment key={m}>
-                Address: <b>{m}</b>
+                Address: <strong>{m}</strong>
                 <br />
                 Products: {activeProdCounts.get(m)} active, {disabledProdCounts.get(m)} disabled
                 <br />
@@ -99,7 +101,11 @@ class LoanManagerInfo extends React.Component {
             </Button>
         );
 
-        return <Pblock header="LoanManagers">{segments}</Pblock>;
+        return (
+            <Pblock header="LoanManagers" headerStyle={blockHeaderStyle}>
+                {segments}
+            </Pblock>
+        );
     }
 }
 

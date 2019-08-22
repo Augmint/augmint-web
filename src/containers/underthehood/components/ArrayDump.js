@@ -49,7 +49,7 @@ export function ArrayDump(props) {
             : items.map((item, index) => (
                   <Row key={index} columns={1}>
                       <Col>
-                          <pre style={{ fontSize: "0.8em", overflow: "auto" }}>
+                          <pre style={{ fontSize: "0.8em" }}>
                               [{index}] {stringify(item)}
                           </pre>
                       </Col>
@@ -57,7 +57,7 @@ export function ArrayDump(props) {
               ));
 
     return (
-        <Pblock header={header}>
+        <Pblock header={header} headerStyle={{ fontSize: "1.2em", fontWeight: "normal" }}>
             <MyGridTable>{listItems}</MyGridTable>
         </Pblock>
     );
