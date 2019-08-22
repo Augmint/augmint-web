@@ -93,6 +93,12 @@ class LoanManagerInfo extends React.Component {
                 </CopyToClipboard>
             </Psegment>
         ));
+        segments.push(
+            <Button size="small" onClick={this.handleRefreshClick}>
+                Refresh
+            </Button>
+        );
+
         return <Pblock header="LoanManagers">{segments}</Pblock>;
     }
 }
