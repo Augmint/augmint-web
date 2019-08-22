@@ -34,11 +34,13 @@ const stringifierConfig = {
 };
 
 const jsonifierConfig = {
-    indent: "    ",
+    indent: "  ",
     handlers: {
         Ratio: strf.toStr(),
         Tokens: strf.toStr(),
-        Wei: strf.toStr()
+        Wei: strf.toStr(),
+        LoanProduct: strf.json(),
+        Loan: strf.json()
     }
 };
 
