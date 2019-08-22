@@ -20,6 +20,7 @@ class underTheHood extends React.Component {
         };
         this.handleSelectGroup = this.handleSelectGroup.bind(this);
     }
+
     handleSelectGroup(e) {
         this.setState({ selectedGroup: e.target.name });
     }
