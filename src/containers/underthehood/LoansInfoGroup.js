@@ -88,19 +88,12 @@ class LoansInfoGroup extends React.Component {
                         </CopyToClipboard>
                     </Pblock>
 
-                    <ArrayDump
-                        header={"Loans for userAccount (" + (this.props.loans && this.props.loans.length) + ")"}
-                        items={this.props.loans}
-                    />
+                    <ArrayDump header={"Loans for userAccount"} items={this.props.loans} />
                 </Pgrid.Column>
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
                     {Object.keys(products).map(address => (
-                        <ArrayDump
-                            key={address}
-                            header={"LoanProducts - " + address + " - (" + products[address].length + ")"}
-                            items={products[address]}
-                        />
+                        <ArrayDump key={address} header={"Loan products in " + address} items={products[address]} />
                     ))}
                 </Pgrid.Column>
             </Pgrid.Row>

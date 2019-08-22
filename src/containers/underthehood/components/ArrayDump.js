@@ -71,7 +71,7 @@ export function ArrayDump(props) {
     return (
         <Pblock header={header} headerStyle={{ fontSize: "1.2em", fontWeight: "normal" }}>
             <CopyToClipboard text={jsonify(items)} onCopy={() => alert("JSON data copied to clipboard")}>
-                <Button size="small">Copy to clipboard as JSON</Button>
+                <Button size="small">Copy {items.length} items to clipboard</Button>
             </CopyToClipboard>
 
             <MyGridTable>{listItems}</MyGridTable>
