@@ -1,6 +1,8 @@
 import React from "react";
 import stringifier from "stringifier";
 import * as strf from "stringifier/strategies";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Button from "components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
 
@@ -31,7 +33,17 @@ const stringifierConfig = {
     }
 };
 
+const jsonifierConfig = {
+    indent: "    ",
+    handlers: {
+        Ratio: strf.toStr(),
+        Tokens: strf.toStr(),
+        Wei: strf.toStr()
+    }
+};
+
 export const stringify = stringifier(stringifierConfig);
+export const jsonify = stringifier(jsonifierConfig);
 
 export function ArrayDump(props) {
     const { items, header } = props;
@@ -58,6 +70,10 @@ export function ArrayDump(props) {
 
     return (
         <Pblock header={header} headerStyle={{ fontSize: "1.2em", fontWeight: "normal" }}>
+            <CopyToClipboard text={jsonify(items)} onCopy={() => alert("JSON data copied to clipboard")}>
+                <Button size="small">Copy to clipboard as JSON</Button>
+            </CopyToClipboard>
+
             <MyGridTable>{listItems}</MyGridTable>
         </Pblock>
     );
