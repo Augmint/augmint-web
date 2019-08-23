@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.0.tgz#22dd8a189c5e97974c6bac1a74acab4ccd1aa3d8"
   integrity sha512-xdkXlK5k2f1wtXotjjLyCj9m42qj98izgigHVHBGy2a8omAPASaHv1flgYrxz6nr0IrIFU76GcoJ0dkRMuaQlA==
 
-"@augmint/js@0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.4.tgz#f74e2dfa128838715247957caa5bd9adf6574bf3"
-  integrity sha512-53rLoEfYiSz5kVIOukv4wiJMDkgjvRh23QzQnVpx0LVe9YnfwgDUI+2vTo5TQlm8TQViHMh6s74M8UIrpFA7VA==
+"@augmint/js@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.5.tgz#5c6c3f433e5c07000732d626bfecea4e61240842"
+  integrity sha512-PZ/Tbg/2ipR2sJOsQZ/qMbvxS6GYhLqGDbhTZQdiHaBaaiKQ1miN8gdFYP3x92WtzjZPO7D8pmOkIPx/Z6f+0g==
   dependencies:
     "@augmint/contracts" "1.1.0"
     bn.js "5.0.0"
