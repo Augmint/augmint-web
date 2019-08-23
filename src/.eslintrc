@@ -2,6 +2,6 @@
   "extends": "react-app",
   "rules": {
     "max-len": "off",
-    "no-unused-vars": "error"
+    "no-unused-vars": "warn"
   }
 }

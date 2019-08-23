@@ -4,13 +4,15 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { utils } from "@augmint/js";
 import { Pblock, Psegment } from "components/PageLayout";
 import Button from "components/augmint-ui/button";
+import userBalances from "modules/reducers/userBalances";
+import legacyBalances from "modules/reducers/legacyBalances";
 
 const blockHeaderStyle = { fontSize: "1.5em", fontWeight: 300 };
 
 class LoanManagerInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isLoaded: false, loanManagers: [], loanProducts: {}, loans: {} };
+        this.state = { isLoaded: false, loanManagers: [], tokenAdresses: {}, loanProducts: {}, loans: {} };
         this.handleRefreshClick = this.handleRefreshClick.bind(this);
     }
 
@@ -18,11 +20,14 @@ class LoanManagerInfo extends React.Component {
         const augmint = this.props.augmint;
         const isLoaded = true;
         const loanManagers = (augmint && augmint.getAllLoanManagers()) || [];
+        const tokenAddresses = new Map(
+            await Promise.all(loanManagers.map(async m => [m.address, await m.augmintTokenAddress]))
+        );
         const loanProducts = new Map(
             await Promise.all(loanManagers.map(async m => [m.address, await m.getAllProducts()]))
         );
         const loans = new Map(await Promise.all(loanManagers.map(async m => [m.address, await m.getAllLoans()])));
-        this.setState({ isLoaded, loanManagers, loanProducts, loans });
+        this.setState({ isLoaded, loanManagers, tokenAddresses, loanProducts, loans });
     }
 
     handleRefreshClick(e) {
@@ -85,7 +90,9 @@ class LoanManagerInfo extends React.Component {
                 collected, {collectableLoanCounts.get(m)} collectable, {repayableLoanCounts.get(m)} repayable
                 <br />
                 <br />
-                ABI hash: {abiHashes.get(m)}
+                Token: <strong>{this.state.tokenAddresses.get(m)}</strong>
+                <br />
+                ABI hash: <strong>{abiHashes.get(m)}</strong>
                 <br />
                 <CopyToClipboard
                     text={JSON.stringify(abis.get(m), null, 2)}
