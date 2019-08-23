@@ -130,7 +130,7 @@ class LoanManagerInfo extends React.Component {
         );
 
         return (
-            <Pblock header="LoanManagers" headerStyle={blockHeaderStyle}>
+            <Pblock header="LoanManagers" headerStyle={blockHeaderStyle} data-testid={"loanmanagers"}>
                 {segments}
             </Pblock>
         );
