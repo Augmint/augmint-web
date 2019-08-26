@@ -1,10 +1,29 @@
 import React from "react";
 import stringifier from "stringifier";
 import * as strf from "stringifier/strategies";
+import typeName from "type-name";
+import { Ratio, Tokens, Wei, Augmint } from "@augmint/js";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Button from "components/augmint-ui/button";
 import { Pblock } from "components/PageLayout";
 import { MyGridTable, MyGridTableRow as Row, MyGridTableColumn as Col } from "components/MyListGroups";
+
+const typeFun = o => {
+    if (typeof o === "object") {
+        if (o instanceof Ratio) {
+            return "Ratio";
+        } else if (o instanceof Tokens) {
+            return "Tokens";
+        } else if (o instanceof Wei) {
+            return "Wei";
+        } else if (o instanceof Augmint.LoanManager.LoanProduct) {
+            return "LoanProduct";
+        } else if (o instanceof Augmint.LoanManager.Loan) {
+            return "Loan";
+        }
+    }
+    return typeName(o);
+};
 
 const unitsHandler = (typeName, label = "", digits = 2) =>
     strf.flow.compose(
@@ -30,7 +49,8 @@ const stringifierConfig = {
         Ratio: unitsHandler("Ratio"),
         Tokens: unitsHandler("Tokens", " AEUR"),
         Wei: unitsHandler("Wei", " ETH", 6)
-    }
+    },
+    typeFun: typeFun
 };
 
 const jsonifierConfig = {
@@ -41,7 +61,8 @@ const jsonifierConfig = {
         Wei: strf.toStr(),
         LoanProduct: strf.json(),
         Loan: strf.json()
-    }
+    },
+    typeFun: typeFun
 };
 
 export const stringify = stringifier(stringifierConfig);
