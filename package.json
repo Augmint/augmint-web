@@ -26,7 +26,7 @@
     "react-redux": "7.1.0",
     "react-scripts": "3.0.1",
     "react-scrollchor": "6.0.0",
-    "react-tooltip": "3.10.0",
+    "react-tooltip": "3.10.1",
     "redux": "4.0.1",
     "redux-form": "8.2.3",
     "redux-logger": "3.0.6",
