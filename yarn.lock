@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@augmint/contracts@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.0.tgz#22dd8a189c5e97974c6bac1a74acab4ccd1aa3d8"
-  integrity sha512-xdkXlK5k2f1wtXotjjLyCj9m42qj98izgigHVHBGy2a8omAPASaHv1flgYrxz6nr0IrIFU76GcoJ0dkRMuaQlA==
+"@augmint/contracts@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@augmint/contracts/-/contracts-1.1.1.tgz#2b93d815ad803e678cbe61a152538347fccbd461"
+  integrity sha512-peiemRgbTvI8rptBVwFMnp6beqNC4naUbPc1IXzUX+Vx2iRCRrYgtXTOSl0vNuw32oqe9schvWwvj0hgQNNdUg==
 
-"@augmint/js@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.5.tgz#5c6c3f433e5c07000732d626bfecea4e61240842"
-  integrity sha512-PZ/Tbg/2ipR2sJOsQZ/qMbvxS6GYhLqGDbhTZQdiHaBaaiKQ1miN8gdFYP3x92WtzjZPO7D8pmOkIPx/Z6f+0g==
+"@augmint/js@0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@augmint/js/-/js-0.3.6.tgz#145d818e0f33beefb1f4c500f25745a4073d4aa0"
+  integrity sha512-iJME5O/HBZqBw7pMkiHdqxzOI9B3sCt0ablqOJVkh/IhKJiRbCEemONhu2r1bbtQr/slc99+Xrdbx+rVUW8fCg==
   dependencies:
-    "@augmint/contracts" "1.1.0"
+    "@augmint/contracts" "1.1.1"
     bn.js "5.0.0"
     dotenv "8.0.0"
     ulog "2.0.0-beta.6"
