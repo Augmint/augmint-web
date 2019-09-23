@@ -33,7 +33,7 @@
     "redux-thunk": "2.3.0",
     "redux-watch": "1.1.1",
     "stringifier": "2.0.0",
-    "styled-components": "4.3.2",
+    "styled-components": "4.4.0",
     "styled-components-grid": "2.2.2",
     "styled-tools": "1.7.1",
     "web3": "1.0.0-beta.36"
