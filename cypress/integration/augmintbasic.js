@@ -14,8 +14,11 @@ describe("Augmint base", function() {
         cy.get("[data-testid=MonetarySupervisor-dataStatus]").should("contain", expectedLoadStatus);
         cy.get("[data-testid=TokenAEur-dataStatus]").should("contain", "Loaded | not loading | No load error");
 
+        const loanManagerAddress = "0x213135c85437C23bC529A2eE9c2980646c332fCB";
+        const legacyLoanManagerAddress = "0xF7B8384c392fc333d3858a506c4F1506af44D53c";
         cy.get("[data-testid=loansInfoLink]").click();
-        cy.get("[data-testid=LoanManager-dataStatus]").should("contain", expectedLoadStatus);
+        cy.get("[data-testid=loanmanagers]").should("contain", loanManagerAddress);
+        cy.get("[data-testid=loanmanagers]").should("contain", legacyLoanManagerAddress);
 
         cy.get("[data-testid=locksInfoLink]").click();
         cy.get("[data-testid=Locker-dataStatus]").should("contain", expectedLoadStatus);
@@ -36,6 +39,7 @@ describe("Augmint base", function() {
         cy.get("[data-testid=interestEarnedAccountTokenBalance]").should("not.contain", "?");
 
         cy.get("[data-testid=loansToCollectButton]").click();
-        cy.get("[data-testid=loansToCollectBlock]").should("contain", "No defaulted and uncollected loan.");
+        cy.get("[data-testid=loansToCollectBlock]").should("contain", "Loans to collect");
+        cy.get("[data-testid=loansToCollectBlock]").should("contain", "98.79 A€ loan for a few seconds");
     });
 });

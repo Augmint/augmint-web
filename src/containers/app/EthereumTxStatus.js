@@ -13,6 +13,7 @@ import HashURL from "components/hash";
 import styled from "styled-components";
 import theme from "styles/theme";
 import { ExchangeIconDark } from "components/Icons";
+import { ETH } from "components/augmint-ui/currencies.js";
 
 const StyledLoadingPanel = styled(LoadingPanel)`
     display: none;
@@ -107,13 +108,13 @@ class EthereumTxStatus extends React.Component {
                                 </p>
                                 <p>
                                     You can always check the status of your loan on{" "}
-                                    <Link to="/account">My account page</Link>
-                                    <br />
-                                    or directly on <Link to={"/loan/" + vals.loanId}>this loan's page</Link>
+                                    <Link to={"/loan"}>the loan page</Link>
                                 </p>
                                 <p>Disbursed: {loanAmount} A-EUR</p>
                                 <p>To be repaid: {repaymentAmount} A-EUR</p>
-                                <p>Collateral in escrow: {collateralEth} ETH</p>
+                                <p>
+                                    Collateral in escrow: <ETH amount={collateralEth}></ETH>
+                                </p>
                                 <p>
                                     Loan id: {vals.loanId} | Product id: {vals.productId} | borrower:
                                     <span className="small"> {vals.borrower}</span>

@@ -20,6 +20,7 @@ class underTheHood extends React.Component {
         };
         this.handleSelectGroup = this.handleSelectGroup.bind(this);
     }
+
     handleSelectGroup(e) {
         this.setState({ selectedGroup: e.target.name });
     }
@@ -39,7 +40,7 @@ class underTheHood extends React.Component {
                     )}
                     <Pgrid.Row>
                         <Pgrid.Column>
-                            <Menu style={{ overflow: "scroll" }}>
+                            <Menu style={{ overflow: "auto" }}>
                                 <Menu.Item
                                     data-testid="baseInfoLink"
                                     active={selectedGroup === "baseinfo"}

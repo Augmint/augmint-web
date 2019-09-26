@@ -13,6 +13,10 @@ import {
     StyledError
 } from "components/augmint-ui/baseComponents/styles";
 
+import productTermConverter from "utils/productTermConverter";
+import { ETH_DECIMALS, DECIMALS } from "utils/constants";
+import { Wei, Tokens, Ratio } from "@augmint/js";
+
 export const Validations = {
     required: value => {
         return value || (value && value.toString().trim() === "") ? undefined : "Required";
@@ -94,18 +98,19 @@ export const Validations = {
     },
 
     minTokenAmount: minValue => value => {
-        return parseFloat(value) < minValue ? `Amount must be at least ${minValue} A-EUR` : undefined;
+        return value.gte(minValue) ? undefined : `Amount must be at least ${minValue.toNumber()} A-EUR`;
     },
 
     maxLoanAmount: maxValue => value => {
-        return parseFloat(value) > maxValue
-            ? `Loan amount is greater than currently available maximum of ${maxValue} A-EUR`
-            : undefined;
+        return maxValue.gte(value)
+            ? undefined
+            : `Loan amount is greater than currently available maximum of ${maxValue.toNumber()} A-EUR`;
     }
 };
 
 export const Parsers = {
-    trim: value => value && value.trim()
+    trim: value => value && value.trim(),
+    toWei: value => (isNaN(value) || value.trim() === "" ? null : Wei.of(value))
 };
 function normalizeDecimals(decimalPlaces, value) {
     if (value === null || value === "" || value === undefined) {
@@ -151,29 +156,92 @@ export const Normalizations = {
         } else {
             return normalizeDecimals(2, value);
         }
+    },
+    toWei: value => {
+        return isNaN(value) || value.trim() === "" ? null : Wei.of(value);
+    },
+    toToken: value => {
+        return isNaN(value) || value.trim() === "" ? null : Tokens.of(value);
+    },
+    toRatio: value => {
+        return isNaN(value) || value.trim() === "" ? null : Ratio.of(value / 100);
     }
 };
 
+const formatInput = (value, decimals) => {
+    // TODO
+    // const fmt = new Intl.NumberFormat("en", { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+    // return fmt.format(value, decimals)
+
+    return value; // use formatters later
+};
+
+export const Formatters = {
+    fromWei: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 18), ETH_DECIMALS);
+    },
+    fromRatio: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, 4), 2);
+    },
+    fromToken: value => {
+        return value === null || value === undefined
+            ? ""
+            : value.isZero()
+            ? 0
+            : formatInput(value / Math.pow(10, DECIMALS), DECIMALS);
+    }
+};
+
+const getKey = product => `${product.id}_${product.loanManagerAddress}`;
 // todo: right now we onyl use this in lock/loan forms. For other cases option content needs to be refactored
 export function Select(props) {
     function addOptionsToSelect(options, testId) {
         let result = [];
-        options.forEach(product => {
+        options.forEach((product, i) => {
             result.push(
                 <option
                     style={{ width: "100%", height: 50 }}
-                    key={product.id}
+                    key={product.id + "_" + i}
                     value={product.id}
                     data-testid={`${testId}-${product.id}`}
                 >
-                    {product.termText ? "Repay in " + product.termText : "Lock for " + product.durationText}
+                    {"Lock for " + product.durationText}
                 </option>
             );
         });
         return result;
     }
 
-    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testid)}</StyledSelect>;
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testId)}</StyledSelect>;
+}
+
+function LoanSelect(props) {
+    function addOptionsToSelect(options, testId) {
+        let result = [];
+        options.forEach((product, i) => {
+            const termText = productTermConverter(product.termInSecs);
+            result.push(
+                <option
+                    style={{ width: "100%", height: 50 }}
+                    key={getKey(product)}
+                    value={getKey(product)}
+                    data-testid={`${testId}_${getKey(product)}`}
+                >
+                    {`Repay in ${termText}`}
+                </option>
+            );
+        });
+        return result;
+    }
+    return <StyledSelect {...props}>{addOptionsToSelect(props.options, props.testId)}</StyledSelect>;
 }
 
 export const formField = ({
@@ -187,6 +255,7 @@ export const formField = ({
     placeholder,
     info,
     isSelect,
+    isLoan,
     selectOptions,
     selectTestId,
     meta: { touched, error, warning },
@@ -212,8 +281,18 @@ export const formField = ({
                 )}
                 {labelAlignRight && !isSelect && <StyleLabel align="right">{labelAlignRight}</StyleLabel>}
 
-                {isSelect && (
+                {isSelect && !isLoan && (
                     <Select {...input} {...props} value={input.value} testId={selectTestId} options={selectOptions} />
+                )}
+
+                {isSelect && isLoan && (
+                    <LoanSelect
+                        {...input}
+                        {...props}
+                        value={input.value}
+                        testId={selectTestId}
+                        options={selectOptions}
+                    />
                 )}
             </StyledContainer>
             {info && (

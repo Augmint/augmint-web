@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Pgrid } from "components/PageLayout";
-import { LoanManagerInfo } from "./components/LoanManagerInfo";
-import { ArrayDump } from "./components/ArrayDump";
+import LoanManagerInfo from "./components/LoanManagerInfo";
+import { ArrayDump, stringify } from "./components/ArrayDump";
 import loanManagerProvider from "modules/loanManagerProvider";
 import { fetchAllLoans } from "modules/reducers/loans";
 import store from "modules/store";
@@ -22,13 +22,16 @@ const jsonToCsv = json => {
     }
     return csv;
 };
+
 class LoansInfoGroup extends React.Component {
     constructor() {
         super();
         this.state = {
+            isLoaded: false,
             allLoansCsv: null
         };
     }
+
     componentDidMount() {
         loanManagerProvider();
         store.dispatch(fetchAllLoans());
@@ -37,19 +40,36 @@ class LoansInfoGroup extends React.Component {
     shouldComponentUpdate(nextProps) {
         if (nextProps.allLoans !== this.props.allLoans) {
             const allLoansCsv = jsonToCsv(nextProps.allLoans);
-            this.setState({ allLoansCsv });
+            const isLoaded = true;
+            this.setState({ isLoaded, allLoansCsv });
         }
         return true;
     }
 
     render() {
+        if (!this.state.isLoaded) {
+            return (
+                <Pblock header="Loans">
+                    <p>Loading...</p>
+                </Pblock>
+            );
+        }
+
+        const products = (this.props.loanProducts || []).reduce((acc, current) => {
+            const address = current.loanManagerAddress;
+            if (!acc[address]) {
+                acc[address] = [];
+            }
+            acc[address].push(current);
+            return acc;
+        }, {});
+
         return (
             <Pgrid.Row>
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
-                    <LoanManagerInfo contractData={this.props.loanManagerData} contract={this.props.loanManager} />
-                    <ArrayDump header="Loans for userAccount" items={this.props.loans} />
+                    <LoanManagerInfo />
 
-                    <Pblock header="All loans">
+                    <Pblock header="All loans" headerStyle={{ fontSize: "1.5em", fontWeight: 300 }}>
                         <CopyToClipboard
                             text={this.state.allLoansCsv ? this.state.allLoansCsv : "<loans not loaded>"}
                             onCopy={result => {
@@ -67,10 +87,14 @@ class LoansInfoGroup extends React.Component {
                             </Button>
                         </CopyToClipboard>
                     </Pblock>
+
+                    <ArrayDump header={"Loans for userAccount"} items={this.props.loans} />
                 </Pgrid.Column>
 
                 <Pgrid.Column size={{ mobile: 1, tablet: 1, desktop: 1 / 2 }}>
-                    <ArrayDump header="Loan Products" items={this.props.loanProducts} />
+                    {Object.keys(products).map(address => (
+                        <ArrayDump key={address} header={"Loan products in " + address} items={products[address]} />
+                    ))}
                 </Pgrid.Column>
             </Pgrid.Row>
         );
