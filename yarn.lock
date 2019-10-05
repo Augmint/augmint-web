@@ -5489,10 +5489,10 @@ iconv-lite@0.4.24, iconv-lite@^0.4.24, iconv-lite@^0.4.4:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-ics@2.15.1:
-  version "2.15.1"
-  resolved "https://registry.yarnpkg.com/ics/-/ics-2.15.1.tgz#a326b9626b9e45642b05c81c1de4ef6405dd36d7"
-  integrity sha512-F5/WW1ZVi7yG2zRw9Ninxz58bDOAxuhlWk4vztj25M/b7KQc1dMUzhuPOjLK170/q3oevNTt07nLRnWd7rbptA==
+ics@2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/ics/-/ics-2.17.0.tgz#dd0dc201c4e53f7ed7c8d74163a6699e505ff09f"
+  integrity sha512-olizTO4v3Et8WIza+4dBncRuMgg4GZB29FbL+UwF+9NaBjvsHuph0GMJXvIVIE1v3fBcmSHu26k2nFtG9UDggw==
   dependencies:
     "@hapi/joi" "^15.0.3"
     lodash "^4.17.11"
