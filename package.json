@@ -19,7 +19,7 @@
     "moment": "2.24.0",
     "parse": "2.4.0",
     "react": "16.8.6",
-    "react-copy-to-clipboard": "5.0.1",
+    "react-copy-to-clipboard": "5.0.2",
     "react-dom": "16.8.6",
     "react-router-dom": "5.0.1",
     "react-ga": "2.6.0",
