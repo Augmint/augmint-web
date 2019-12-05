@@ -39,3 +39,7 @@ export function createUrl(url, params) {
     const search = qs.toString();
     return origPath + (search ? "?" + search : "");
 }
+
+export function fixAmount(amount) {
+    return amount.split(",").join(".");
+}
