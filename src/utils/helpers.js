@@ -41,5 +41,5 @@ export function createUrl(url, params) {
 }
 
 export function fixAmount(amount) {
-    return amount.split(",").join(".");
+    return parseFloat(amount.split(",").join("."));
 }

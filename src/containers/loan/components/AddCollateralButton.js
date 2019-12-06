@@ -34,7 +34,7 @@ class AddCollateralButton extends React.Component {
             submitting: false,
             error: null,
             result: null,
-            ethAmount: null,
+            ethAmount: this.props.value.toString() || null,
             targetRatio: props.loan.calculateCollateralRatioChange(Tokens.of(this.props.rate), Wei.of(props.value))
         };
         this.handleSubmit = this.handleSubmit.bind(this);
