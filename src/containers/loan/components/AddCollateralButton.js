@@ -32,7 +32,7 @@ class AddCollateralButton extends React.Component {
             submitting: false,
             error: null,
             result: null,
-            ethAmount: this.props.value.toString() || null,
+            ethAmount: this.props.value || null,
             targetRatio: props.loan.calculateCollateralRatioChange(Tokens.of(this.props.rate), Wei.of(props.value))
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,10 +62,11 @@ class AddCollateralButton extends React.Component {
             submitting: true
         });
 
+        let ethAmount = parseFloat(this.state.ethAmount);
         try {
             const tx = await store
                 .getState()
-                .web3Connect.augmint.addExtraCollateral(loan, Wei.of(this.state.ethAmount), userAccount);
+                .web3Connect.augmint.addExtraCollateral(loan, Wei.of(ethAmount), userAccount);
 
             const transactionHash = await sendAndProcessTx(tx, "AddExtraCollateral");
 
