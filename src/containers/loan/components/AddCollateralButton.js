@@ -22,8 +22,6 @@ import { StyleLabel } from "components/augmint-ui/FormCustomLabel/styles";
 import { Tokens, Wei } from "@augmint/js";
 import { Percent } from "components/augmint-ui/currencies";
 
-import { fixAmount } from "utils/helpers.js";
-
 import theme from "styles/theme";
 
 class AddCollateralButton extends React.Component {
@@ -65,10 +63,9 @@ class AddCollateralButton extends React.Component {
         });
 
         try {
-            let ethAmount = fixAmount(this.state.ethAmount);
             const tx = await store
                 .getState()
-                .web3Connect.augmint.addExtraCollateral(loan, Wei.of(ethAmount), userAccount);
+                .web3Connect.augmint.addExtraCollateral(loan, Wei.of(this.state.ethAmount), userAccount);
 
             const transactionHash = await sendAndProcessTx(tx, "AddExtraCollateral");
 
