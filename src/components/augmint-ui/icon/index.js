@@ -87,6 +87,7 @@ export default function Icon(props) {
             break;
         case "calendar":
             className += " fa fa-calendar-alt";
+            break;
         default:
             break;
     }
