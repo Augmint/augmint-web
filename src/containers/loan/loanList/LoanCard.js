@@ -300,9 +300,7 @@ export function MarginLoanCard(props) {
                                         </span>
                                         <br />
                                         below <Rate amount={loan.marginCallRate} />
-                                        {loan.marginWarning && (
-                                            <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
-                                        )}
+                                        <AddCollateralButton loan={loan} rate={rate} value={addCollateralValue} />
                                     </CardStatusInfo>
                                     {loan.marginWarning && (
                                         <CardStatusHelp className="warning">
