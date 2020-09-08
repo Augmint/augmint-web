@@ -5,7 +5,7 @@ import store from "modules/store";
 import { setupWatch } from "./initialFunctions.js";
 import { fetchLockProducts } from "modules/reducers/lockManager";
 import { refreshLoanManager, fetchLoanProducts, fetchLoansToCollect } from "modules/reducers/loanManager";
-import { fetchAllLoans, fetchLoansForAddress } from "modules/reducers/loans";
+import { fetchLoansForAddress } from "modules/reducers/loans";
 import { refreshAugmintToken } from "modules/reducers/augmintToken";
 import { fetchUserBalance } from "modules/reducers/userBalances";
 import { refreshMonetarySupervisor } from "modules/reducers/monetarySupervisor";
