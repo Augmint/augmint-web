@@ -17,7 +17,7 @@ These instructions are about the dev environment for frontend development. For c
     n <node version, eg: 10.15.3>
     ```
 
-1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>`  
+1.  Install yarn if you don't have it: `npm install -g yarn@<version>`  
     NB: check required `yarn` version in [package.json](../package.json)
 1.  [Docker cli](https://hub.docker.com/search/?type=edition&offering=community) - Optional but required for running tests
 1.  ```
@@ -41,7 +41,7 @@ _Note: windows install was not tested since a while, update on it is welcome_
     nvm use 10.15.3
     ```
 
-1.  Install yarn if you don't have it: `npm install -g yarn@<yarn version, e.g. 1.15.2>` NB: check required yarn version in [package.json](../package.json)
+1.  Install yarn if you don't have it: `npm install -g yarn@<version>` NB: check required yarn version in [package.json](../package.json)
 1.  If you want to run on local test blockchain (eg. for tests) then Install [docker cli](https://hub.docker.com/search/?type=edition&offering=community)
 1.  in Git bash:
     ```
