@@ -98,7 +98,6 @@ export const setupWeb3 = () => {
         try {
             // Modern dapp browsers...
             if (window.ethereum) {
-                console.log("window.ethereum exists");
                 web3 = new Web3(window.ethereum);
                 await window.ethereum.enable();
             }
