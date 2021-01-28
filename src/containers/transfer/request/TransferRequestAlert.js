@@ -10,7 +10,7 @@ import { getNetworkName } from "utils/helpers";
 import { default as theme, remCalc } from "styles/theme";
 
 class TransferRequestAlert extends React.Component {
-    componentDidMount() {
+    componentWillMount() {
         this.unlisten = this.props.history.listen(() => {
             this.forceUpdate();
         });
