@@ -72,8 +72,7 @@ export class WatchAssetButton extends React.Component {
                 account: web3.userAccount
             };
 
-            const metamask = web3.web3Instance.currentProvider._metamask;
-            this.isMetamask = metamask ? metamask.isEnabled() : null;
+            this.isMetamask = window.ethereum?.isMetamask || null;
             this.hasAugmint = user.account.tokenBalance > 0;
 
             this.isAssetAdded = this.isAssetAlreadyAdded();
